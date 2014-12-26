@@ -10,11 +10,33 @@ public class PlayerController : MonoBehaviour {
 
 	private WallMode wallMode;
 
+	/// <summary>
+	/// The amount in degrees past the threshold of changing wall mode that the player
+	/// can go.
+	/// </summary>
+	private const float WallModeAngleThreshold = 10.0f;
+
+	/// <summary>
+	/// The speed at which the player must be moving to be able to switch wall modes.
+	/// </summary>
+	private const float WallModeSpeedThreshold = 0.5f;
+
+	/// <summary>
+	/// The maximum change in angle between two surfaces that the player can walk in.
+	/// </summary>
+	private const float SurfaceAngleThreshold = 70.0f;
+
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
 
+	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
+	
+
 	[SerializeField]
 	private float gravity;
+
+	[SerializeField]
+	private float acceleration;
 
 	// Sensors
 	[SerializeField]
@@ -39,6 +61,7 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		grounded = false;
 		vx = vy = vg = 0.0f;
+		leftKeyDown = rightKeyDown = jumpKeyDown = false;
 		wallMode = WallMode.Floor;
 		surfaceAngle = 0.0f;
 		terrainMask = 1 << LayerMask.NameToLayer("Terrain");
@@ -48,13 +71,23 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		HandleInput ();
+	}
 
+
+	private void HandleInput()
+	{
+		leftKeyDown = Input.GetKey (Settings.LeftKey);
+		rightKeyDown = Input.GetKey (Settings.RightKey);
+		if(!jumpKeyDown) jumpKeyDown = Input.GetKeyDown (Settings.JumpKey);
 	}
 	
 
 	void FixedUpdate()
 	{
 		transform.position = new Vector3 (transform.position.x + (vx * Time.fixedDeltaTime), transform.position.y + (vy * Time.fixedDeltaTime));
+
+		bool justLanded = false;
 
 		if(!grounded)
 		{
@@ -66,12 +99,13 @@ public class PlayerController : MonoBehaviour {
 			{
 				// If so, set vertical velocity to zero
 				vy = 0;
-
+				justLanded = true;
 				Debug.DrawLine (sensorGroundLeft.position, sensorGroundRight.position, Color.red);
 			} else {
 				// Otherwise, apply gravity and keep the player pointing straight down
 				transform.eulerAngles = new Vector3();
 				vy -= gravity;
+				surfaceAngle = 0.0f;
 
 				Debug.DrawLine (sensorGroundLeft.position, sensorGroundRight.position, Color.green);
 			}
@@ -83,59 +117,108 @@ public class PlayerController : MonoBehaviour {
 			
 			if(s.hit)
 			{
-				if(s.footing == Footing.Left)
+				float prevSurfaceAngle = surfaceAngle;
+				surfaceAngle = AMath.Modp((s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f, 360.0f);
+
+				// Can only stay on the surface if angle difference is low enough
+				if(justLanded || Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
 				{
-					// Rotate the player to the surface on its left foot
-					transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+					justLanded = false;
 
-					// Overlap routine - if the player's right foot is submerged, correct the player's rotation
-					RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position, terrainMask);
-
-					Debug.DrawLine(sensorSideRight.position, sensorTileRight.position, Color.gray);
-
-					if(overlapCheck) 
+					// Prevent fluctuating wall mode when standing still due to different sensor angles
+					if(Mathf.Abs(vg) > WallModeSpeedThreshold)
 					{
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, 
-						                                    (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
+						if(wallMode == WallMode.Floor)
+						{
+							if(surfaceAngle > 45.0f + WallModeAngleThreshold && surfaceAngle < 180.0f) wallMode = WallMode.Right;
+							else if(surfaceAngle < 315.0f - WallModeAngleThreshold && surfaceAngle > 180.0f) wallMode = WallMode.Left;
+						} else if(wallMode == WallMode.Right)
+						{
+							if(surfaceAngle > 135.0f + WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+							else if(surfaceAngle < 45.0f - WallModeAngleThreshold) wallMode = WallMode.Floor;
+						} else if(wallMode == WallMode.Ceiling)
+						{
+							if(surfaceAngle > 225.0f + WallModeAngleThreshold) wallMode = WallMode.Left;
+							else if(surfaceAngle < 135.0f - WallModeAngleThreshold) wallMode = WallMode.Right;
+						} else if(wallMode == WallMode.Left)
+						{
+							if(surfaceAngle > 315.0f + WallModeAngleThreshold || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
+							else if(surfaceAngle < 225.0f - WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+						}
+					}
 
-						Debug.DrawLine(sensorTileRight.position, overlapCheck.point, Color.red);
-                    }
-
-					// Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
-                    
-                    Debug.DrawLine(sensorSideLeft.position, s.raycast.point, Color.green);
-					Debug.DrawLine(s.raycast.point, sensorTileLeft.position, Color.red);
-
-                } else if(s.footing == Footing.Right)
-				{
-					// Rotate the player to the surface on its right foot
-					transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
-
-					// Overlap routine - if the player's left foot is submerged, correct the player's rotation
-					RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position, terrainMask);
-
-					Debug.DrawLine(sensorSideLeft.position, sensorTileLeft.position, Color.gray);
-
-					if(overlapCheck) 
+					// Input
+					if(leftKeyDown) vg -= acceleration;
+					else if(rightKeyDown) vg += acceleration;
+					
+					if(s.footing == Footing.Left)
 					{
+						// Rotate the player to the surface on its left foot
+						transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+						
+						// Overlap routine - if the player's right foot is submerged, correct the player's rotation
+						RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideRight.position, sensorTileRight.position, terrainMask);
+						
+						Debug.DrawLine(sensorSideRight.position, sensorTileRight.position, Color.gray);
+						
+						if(overlapCheck)
+						{
+							// Correct rotation of the two sensors have similarly oriented surfaces
+							if(Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
+								transform.eulerAngles = new Vector3(0.0f, 0.0f, 
+								                                    (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
+							
+							Debug.DrawLine(sensorTileRight.position, overlapCheck.point, Color.red);
+						}
+						
+						// Keep the player on the surface
+						transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
+						
+						Debug.DrawLine(sensorSideLeft.position, s.raycast.point, Color.green);
+						Debug.DrawLine(s.raycast.point, sensorTileLeft.position, Color.red);
+						
+					} else if(s.footing == Footing.Right)
+					{
+						// Rotate the player to the surface on its right foot
+						transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+						
+						// Overlap routine - if the player's left foot is submerged, correct the player's rotation
+						RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideLeft.position, sensorTileLeft.position, terrainMask);
+						
+						Debug.DrawLine(sensorSideLeft.position, sensorTileLeft.position, Color.gray);
+						
+						if(overlapCheck) 
+						{
+							// Correct rotation of the two sensors have similarly oriented surfaces
+							if(Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
+								transform.eulerAngles = new Vector3(0.0f, 0.0f, 
+								                                    (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
+							
+							Debug.DrawLine(sensorTileLeft.position, overlapCheck.point, Color.red);
+						}
+						
+						// Keep the player on the surface
+						transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
+						
+						Debug.DrawLine(sensorSideRight.position, s.raycast.point, Color.green);
+						Debug.DrawLine(s.raycast.point, sensorTileRight.position, Color.red);
+					}
 
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, 
-						                                    (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
-
-						Debug.DrawLine(sensorTileLeft.position, overlapCheck.point, Color.red);
-                    }
-                    
-					// Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
-
-					Debug.DrawLine(sensorSideRight.position, s.raycast.point, Color.green);
-					Debug.DrawLine(s.raycast.point, sensorTileRight.position, Color.red);
-                }
+					vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
+					vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
+				} else {
+					vg = 0;
+					surfaceAngle = 0.0f;
+					grounded = false;
+				}
             } else {
+				vg = 0;
+				surfaceAngle = 0.0f;
 				grounded = false;
 			}
 		}
+
+		Camera.main.transform.position = new Vector3 (transform.position.x, transform.position.y, Camera.main.transform.position.z);
 	}
 
 	/// <summary>
@@ -150,12 +233,12 @@ public class PlayerController : MonoBehaviour {
 
 		if(checkLeft && checkRight)
 		{
-			if(AMath.Highest(checkLeft.point, checkRight.point, wallMode.Normal()) > 0.0f)
-			{
+			if(wallMode == WallMode.Floor && checkLeft.point.y > checkRight.point.y || 
+			   wallMode == WallMode.Ceiling && checkLeft.point.y < checkRight.point.y || 
+			   wallMode == WallMode.Right && checkLeft.point.x < checkRight.point.x || 
+			   wallMode == WallMode.Left && checkLeft.point.x > checkRight.point.x)
 				return new SurfaceInfo(true, checkLeft, Footing.Left);
-			} else {
-                return new SurfaceInfo(true, checkRight, Footing.Right);
-            }
+			else return new SurfaceInfo(true, checkRight, Footing.Right);
 		} else if(checkLeft)
 		{
 			return new SurfaceInfo(true, checkLeft, Footing.Left);
