@@ -134,6 +134,28 @@ public static class AMath
 	}
 
 	/// <summary>
+	/// Returns the signed angle between two vectors.
+	/// </summary>
+	/// <returns>The angle.</returns>
+	/// <param name="a">The first vector.</param>
+	/// <param name="b">The second vector.</param>
+	public static float AngleDiff(Vector2 a, Vector2 b)
+	{
+		return AngleDiff (a.Angle (), b.Angle ());
+    }
+
+	/// <summary>
+	/// Returns the angle between two rays pointing in the specified direction.
+	/// </summary>
+	/// <returns>The angle between two rays pointing in the specified direction.</returns>
+	/// <param name="a">The angle of the first ray.</param>
+	/// <param name="b">The angle of the second ray.</param>
+	public static float AngleDiff(float a, float b)
+	{
+		return AMath.Modp(b - a + Mathf.PI, Mathf.PI * 2.0f) - Mathf.PI;
+	}
+
+	/// <summary>
 	/// Inclusive floor. If the value is a whole number, the value is reduced
 	/// by one. Otherwise the floor of the value is returned.
 	/// </summary>
