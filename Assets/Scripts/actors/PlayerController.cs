@@ -49,6 +49,9 @@ public class PlayerController : MonoBehaviour {
 	private float groundDeceleration;
 
 	[SerializeField]
+	private float jumpSpeed;
+
+	[SerializeField]
 	private float airAcceleration;
 
 	// Sensors
@@ -93,7 +96,7 @@ public class PlayerController : MonoBehaviour {
 	{
 		leftKeyDown = Input.GetKey (Settings.LeftKey);
 		rightKeyDown = Input.GetKey (Settings.RightKey);
-		if(!jumpKeyDown) jumpKeyDown = Input.GetKeyDown (Settings.JumpKey);
+		if(!jumpKeyDown && grounded) jumpKeyDown = Input.GetKeyDown (Settings.JumpKey);
 	}
 	
 
@@ -138,9 +141,10 @@ public class PlayerController : MonoBehaviour {
 				surfaceAngle = AMath.Modp((s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f, 360.0f);
 
 				// Can only stay on the surface if angle difference is low enough
-				if(justLanded || Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
+				if(!jumpKeyDown && 
+				   (justLanded ||
+				 	Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
 				{
-
 					// Prevent fluctuating wall mode when standing still due to different sensor angles
 					if(Mathf.Abs(vg) > WallModeSpeedThreshold)
 					{
@@ -242,17 +246,30 @@ public class PlayerController : MonoBehaviour {
 					vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
 
 					justLanded = false;
+				} else if(jumpKeyDown) 
+				{
+					jumpKeyDown = false;
+
+					float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
+					vx += jumpSpeed * Mathf.Cos(surfaceNormal);
+					vy += jumpSpeed * Mathf.Sin(surfaceNormal);
+
+					Detach();
 				} else {
-					vg = 0;
-					surfaceAngle = 0.0f;
-					grounded = false;
+					Detach();
 				}
             } else {
-				vg = 0;
-				surfaceAngle = 0.0f;
-				grounded = false;
+				Detach();
 			}
 		}
+	}
+
+	private void Detach()
+	{
+		vg = 0.0f;
+		surfaceAngle = 0.0f;
+		grounded = false;
+		wallMode = WallMode.Floor;
 	}
 
 	/// <summary>
