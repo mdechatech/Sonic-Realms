@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour {
 
 	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
 	
+	[SerializeField]
+	private Vector2 size;
 
 	[SerializeField]
 	private float gravity;
@@ -123,7 +125,6 @@ public class PlayerController : MonoBehaviour {
 				// Can only stay on the surface if angle difference is low enough
 				if(justLanded || Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
 				{
-					justLanded = false;
 
 					// Prevent fluctuating wall mode when standing still due to different sensor angles
 					if(Mathf.Abs(vg) > WallModeSpeedThreshold)
@@ -153,22 +154,22 @@ public class PlayerController : MonoBehaviour {
 					
 					if(s.footing == Footing.Left)
 					{
-						// Rotate the player to the surface on its left foot
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
-						
 						// Overlap routine - if the player's right foot is submerged, correct the player's rotation
 						RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideRight.position, sensorTileRight.position, terrainMask);
 						
 						Debug.DrawLine(sensorSideRight.position, sensorTileRight.position, Color.gray);
-						
-						if(overlapCheck)
+
+						if(justLanded || !overlapCheck || 
+						   (Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg > SurfaceAngleThreshold))
 						{
-							// Correct rotation of the two sensors have similarly oriented surfaces
-							if(Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
-								transform.eulerAngles = new Vector3(0.0f, 0.0f, 
-								                                    (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
-							
+							// Rotate the player to the surface on its left foot
+							transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+
+						} else {
 							Debug.DrawLine(sensorTileRight.position, overlapCheck.point, Color.red);
+
+							// Correct rotation of the two sensors have similarly oriented surfaces
+							transform.eulerAngles = new Vector3(0.0f, 0.0f, (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
 						}
 						
 						// Keep the player on the surface
@@ -179,22 +180,21 @@ public class PlayerController : MonoBehaviour {
 						
 					} else if(s.footing == Footing.Right)
 					{
-						// Rotate the player to the surface on its right foot
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
 						
 						// Overlap routine - if the player's left foot is submerged, correct the player's rotation
 						RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideLeft.position, sensorTileLeft.position, terrainMask);
 						
 						Debug.DrawLine(sensorSideLeft.position, sensorTileLeft.position, Color.gray);
-						
-						if(overlapCheck) 
+
+						if(justLanded || !overlapCheck || 
+						   (Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg > SurfaceAngleThreshold))
 						{
-							// Correct rotation of the two sensors have similarly oriented surfaces
-							if(Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg < SurfaceAngleThreshold)
-								transform.eulerAngles = new Vector3(0.0f, 0.0f, 
-								                                    (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
-							
+							// Rotate the player to the surface on its right foot
+							transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+						} else {
 							Debug.DrawLine(sensorTileLeft.position, overlapCheck.point, Color.red);
+
+							transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
 						}
 						
 						// Keep the player on the surface
@@ -206,6 +206,8 @@ public class PlayerController : MonoBehaviour {
 
 					vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
 					vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
+
+					justLanded = false;
 				} else {
 					vg = 0;
 					surfaceAngle = 0.0f;
@@ -228,8 +230,20 @@ public class PlayerController : MonoBehaviour {
 	/// <param name="layerMask">A mask indicating what layers are surfaces.</param>
 	private SurfaceInfo GetSurface(int layerMask)
 	{
-		RaycastHit2D checkLeft = Physics2D.Linecast (sensorSideLeft.position, sensorTileLeft.position, layerMask);
-		RaycastHit2D checkRight = Physics2D.Linecast (sensorSideRight.position, sensorTileRight.position, layerMask);
+		RaycastHit2D checkLeft, checkRight;
+
+		if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
+		{
+			checkLeft = Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.y / 2,
+			                               (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.y / 2);
+			checkRight = Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.y / 2,
+			                                (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.y / 2);
+		} else {
+			checkLeft = Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.x / 2,
+			                               (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.x / 2);
+			checkRight = Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.x / 2,
+			                                (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.x / 2);
+		}
 
 		if(checkLeft && checkRight)
 		{
