@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	private void Start () {
 		grounded = false;
 		vx = vy = vg = 0.0f;
 		leftKeyDown = rightKeyDown = jumpKeyDown = false;
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	private void Update () {
 		HandleInput ();
 	}
 
@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 
-	void FixedUpdate()
+	private void FixedUpdate()
 	{
 		transform.position = new Vector3 (transform.position.x + (vx * Time.fixedDeltaTime), transform.position.y + (vy * Time.fixedDeltaTime));
 
@@ -253,8 +253,6 @@ public class PlayerController : MonoBehaviour {
 				grounded = false;
 			}
 		}
-
-		Camera.main.transform.position = new Vector3 (transform.position.x, transform.position.y, Camera.main.transform.position.z);
 	}
 
 	/// <summary>
