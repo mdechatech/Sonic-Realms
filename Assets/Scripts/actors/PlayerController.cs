@@ -4,10 +4,14 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	private bool grounded;
 	private float vx, vy, vg;
+	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
 
 	// If grounded, the angle of the incline the player is standing on
 	private float surfaceAngle;
 
+	/// <summary>
+	/// Represents the current orientation of the player.
+	/// </summary>
 	private WallMode wallMode;
 
 	/// <summary>
@@ -28,8 +32,6 @@ public class PlayerController : MonoBehaviour {
 
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
-
-	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
 	
 	[SerializeField]
 	private Vector2 size;
@@ -38,7 +40,16 @@ public class PlayerController : MonoBehaviour {
 	private float gravity;
 
 	[SerializeField]
-	private float acceleration;
+	private float maxSpeed;
+
+	[SerializeField]
+	private float groundAcceleration;
+
+	[SerializeField]
+	private float groundDeceleration;
+
+	[SerializeField]
+	private float airAcceleration;
 
 	// Sensors
 	[SerializeField]
@@ -68,6 +79,7 @@ public class PlayerController : MonoBehaviour {
 		surfaceAngle = 0.0f;
 		terrainMask = 1 << LayerMask.NameToLayer("Terrain");
 
+		// Enable later for ragdoll ?
 		collider2D.enabled = false;
 	}
 	
@@ -109,6 +121,9 @@ public class PlayerController : MonoBehaviour {
 				vy -= gravity;
 				surfaceAngle = 0.0f;
 
+				if(leftKeyDown) vx -= airAcceleration;
+				else if(rightKeyDown) vx += airAcceleration;
+
 				Debug.DrawLine (sensorGroundLeft.position, sensorGroundRight.position, Color.green);
 			}
 		}
@@ -149,8 +164,24 @@ public class PlayerController : MonoBehaviour {
 					}
 
 					// Input
-					if(leftKeyDown) vg -= acceleration;
-					else if(rightKeyDown) vg += acceleration;
+					if(leftKeyDown)
+					{
+						vg -= groundAcceleration;
+						if(vg > 0) vg -= groundDeceleration;
+					} else if(rightKeyDown)
+					{
+						vg += groundAcceleration;
+						if(vg < 0) vg += groundDeceleration;
+					} else if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
+					{
+						vg = 0.0f;
+					} else if(vg > 0.0f)
+					{
+						vg -= groundDeceleration;
+					} else if(vg < 0.0f)
+					{
+						vg += groundDeceleration;
+					}
 					
 					if(s.footing == Footing.Left)
 					{
@@ -204,6 +235,9 @@ public class PlayerController : MonoBehaviour {
 						Debug.DrawLine(s.raycast.point, sensorTileRight.position, Color.red);
 					}
 
+					if(vg > maxSpeed) vg = maxSpeed;
+					else if(vg < -maxSpeed) vg = -maxSpeed;
+
 					vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
 					vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
 
@@ -232,6 +266,7 @@ public class PlayerController : MonoBehaviour {
 	{
 		RaycastHit2D checkLeft, checkRight;
 
+		// Linecasts are straight vertical or horizontal from the ground sensors
 		if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
 		{
 			checkLeft = Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.y / 2,
@@ -247,6 +282,7 @@ public class PlayerController : MonoBehaviour {
 
 		if(checkLeft && checkRight)
 		{
+			// If both sensors have surfaces, return the one with the highest based on wallmode
 			if(wallMode == WallMode.Floor && checkLeft.point.y > checkRight.point.y || 
 			   wallMode == WallMode.Ceiling && checkLeft.point.y < checkRight.point.y || 
 			   wallMode == WallMode.Right && checkLeft.point.x < checkRight.point.x || 
