@@ -30,6 +30,12 @@ public class PlayerController : MonoBehaviour {
 	/// </summary>
 	private const float SurfaceAngleThreshold = 70.0f;
 
+	/// <summary>
+	/// The minimum difference in angle between the surface sensor and the overlap sensor
+	/// to have the player's rotation account for it.
+	/// </summary>
+	private const float OverlapAngleThreshold = -30.0f;
+
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
 	
@@ -194,8 +200,7 @@ public class PlayerController : MonoBehaviour {
 						
 						Debug.DrawLine(sensorSideRight.position, sensorTileRight.position, Color.gray);
 
-						if(justLanded || !overlapCheck || 
-						   (Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg > SurfaceAngleThreshold))
+						if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 						{
 							// Rotate the player to the surface on its left foot
 							transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
@@ -221,8 +226,9 @@ public class PlayerController : MonoBehaviour {
 						
 						Debug.DrawLine(sensorSideLeft.position, sensorTileLeft.position, Color.gray);
 
-						if(justLanded || !overlapCheck || 
-						   (Mathf.Abs(AMath.AngleDiff(s.raycast.normal, overlapCheck.normal)) * Mathf.Rad2Deg > SurfaceAngleThreshold))
+						float angleDiff = (overlapCheck) ? AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg : 0.0f;
+
+						if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 						{
 							// Rotate the player to the surface on its right foot
 							transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
