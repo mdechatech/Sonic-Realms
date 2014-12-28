@@ -147,8 +147,7 @@ public class PlayerController : MonoBehaviour {
 				surfaceAngle = AMath.Modp((s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f, 360.0f);
 
 				// Can only stay on the surface if angle difference is low enough
-				if(!jumpKeyDown && 
-				   (justLanded ||
+				if((justLanded ||
 				 	Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
 				{
 					// Prevent fluctuating wall mode when standing still due to different sensor angles
@@ -208,9 +207,11 @@ public class PlayerController : MonoBehaviour {
 						} else {
 							Debug.DrawLine(sensorTileRight.position, overlapCheck.point, Color.red);
 
-							// Correct rotation of the two sensors have similarly oriented surfaces
+							// Correct rotation if the two sensors have similarly oriented surfaces
 							transform.eulerAngles = new Vector3(0.0f, 0.0f, (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
 						}
+
+						surfaceAngle = transform.eulerAngles.z;
 						
 						// Keep the player on the surface
 						transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
@@ -226,8 +227,6 @@ public class PlayerController : MonoBehaviour {
 						
 						Debug.DrawLine(sensorSideLeft.position, sensorTileLeft.position, Color.gray);
 
-						float angleDiff = (overlapCheck) ? AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg : 0.0f;
-
 						if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 						{
 							// Rotate the player to the surface on its right foot
@@ -235,8 +234,11 @@ public class PlayerController : MonoBehaviour {
 						} else {
 							Debug.DrawLine(sensorTileLeft.position, overlapCheck.point, Color.red);
 
+							// Correct rotation if the two sensors have similarly oriented surfaces
 							transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
 						}
+
+						surfaceAngle = transform.eulerAngles.z;
 						
 						// Keep the player on the surface
 						transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
@@ -252,15 +254,17 @@ public class PlayerController : MonoBehaviour {
 					vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
 
 					justLanded = false;
-				} else if(jumpKeyDown) 
-				{
-					jumpKeyDown = false;
 
-					float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
-					vx += jumpSpeed * Mathf.Cos(surfaceNormal);
-					vy += jumpSpeed * Mathf.Sin(surfaceNormal);
-
-					Detach();
+					if(jumpKeyDown) 
+					{
+						jumpKeyDown = false;
+						
+						float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
+						vx += jumpSpeed * Mathf.Cos(surfaceNormal);
+                        vy += jumpSpeed * Mathf.Sin(surfaceNormal);
+                        
+						Detach();
+					}
 				} else {
 					Detach();
 				}
