@@ -135,6 +135,9 @@ public static class AMath
 
 	/// <summary>
 	/// Returns the signed angle between two vectors.
+	/// 
+	/// If the shortest arc from a to b is counterclockwise (increasing in angle),
+	/// the sign is positive; otherwise the sign is negative.
 	/// </summary>
 	/// <returns>The angle.</returns>
 	/// <param name="a">The first vector.</param>
@@ -145,7 +148,10 @@ public static class AMath
     }
 
 	/// <summary>
-	/// Returns the angle between two rays pointing in the specified direction.
+	/// Returns the signed angle difference between two rays pointing in the specified direction.
+	/// 
+	/// If the shortest arc from a to b is counterclockwise (increasing in angle),
+	/// the sign is positive; otherwise the sign is negative.
 	/// </summary>
 	/// <returns>The angle between two rays pointing in the specified direction.</returns>
 	/// <param name="a">The angle of the first ray.</param>
