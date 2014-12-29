@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour {
 	private void FixedUpdate()
 	{
         HandleInput();
+        if(!grounded) vy -= gravity;
 
         // Stagger routine - if the player's gotta go fast, move it in increments of StaggerSpeedThreshold to prevent tunneling
         float vt = Mathf.Sqrt(vx * vx + vy * vy);
@@ -166,7 +167,7 @@ public class PlayerController : MonoBehaviour {
                 float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
                 vx += jumpSpeed * Mathf.Cos(surfaceNormal);
                 vy += jumpSpeed * Mathf.Sin(surfaceNormal);
-                
+
                 Detach();
             }
             
@@ -206,9 +207,7 @@ public class PlayerController : MonoBehaviour {
 
         if(!grounded)
         {   
-            // Otherwise, apply gravity and keep the player pointing straight down
             transform.eulerAngles = new Vector3();
-            vy -= gravity;
             surfaceAngle = 0.0f;
             
             //Side check
@@ -232,7 +231,7 @@ public class PlayerController : MonoBehaviour {
             }
 
             // See if the player landed
-            grounded = Physics2D.OverlapPointNonAlloc(sensorGroundLeft.position, cmem, terrainMask) > 0 || 
+            if(vy < 0.0f) grounded = Physics2D.OverlapPointNonAlloc(sensorGroundLeft.position, cmem, terrainMask) > 0 || 
                 Physics2D.OverlapPointNonAlloc(sensorGroundRight.position, cmem, terrainMask) > 0;
         }
         
