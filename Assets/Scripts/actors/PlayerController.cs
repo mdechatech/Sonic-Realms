@@ -207,11 +207,10 @@ public class PlayerController : MonoBehaviour {
 					{
 						// Rotate the player to the surface on its left foot
                         transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, sensorGroundLeft.position);
-						//transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
 						
 					} else {
 						// Correct rotation if the two sensors have similarly oriented surfaces
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
+                        transform.RotateTo((overlapCheck.point - s.raycast.point).Angle(), overlapCheck.point);
 					}
 
                     // Keep the player on the surface
@@ -227,10 +226,10 @@ public class PlayerController : MonoBehaviour {
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
 						// Rotate the player to the surface on its right foot
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+                        transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, sensorGroundRight.position);
                     } else {
                         // Correct rotation if the two sensors have similarly oriented surfaces
-                        transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
+                        transform.RotateTo((s.raycast.point - overlapCheck.point).Angle(), overlapCheck.point);
                     }
 
                     // Keep the player on the surface
