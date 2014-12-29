@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour {
 		wallMode = WallMode.Floor;
 		surfaceAngle = 0.0f;
 		terrainMask = 1 << LayerMask.NameToLayer("Terrain");
+
 		// Enable later for ragdoll ?
 		collider2D.enabled = false;
 	}
@@ -201,19 +202,20 @@ public class PlayerController : MonoBehaviour {
 				{
 					// Overlap routine - if the player's right foot is submerged, correct the player's rotation
 					RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
-
-                    // Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
 					
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
 						// Rotate the player to the surface on its left foot
-						transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
+                        transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, sensorGroundLeft.position);
+						//transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.normal.Angle() * Mathf.Rad2Deg) - 90.0f);
 						
 					} else {
 						// Correct rotation if the two sensors have similarly oriented surfaces
 						transform.eulerAngles = new Vector3(0.0f, 0.0f, (overlapCheck.point - s.raycast.point).Angle() * Mathf.Rad2Deg);
 					}
+
+                    // Keep the player on the surface
+                    transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
 					
 					surfaceAngle = transform.eulerAngles.z;
 					
@@ -221,9 +223,6 @@ public class PlayerController : MonoBehaviour {
 				{
 					// Overlap routine - if the player's left foot is submerged, correct the player's rotation
 					RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
-
-                    // Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
 					
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
@@ -233,6 +232,9 @@ public class PlayerController : MonoBehaviour {
                         // Correct rotation if the two sensors have similarly oriented surfaces
                         transform.eulerAngles = new Vector3(0.0f, 0.0f, (s.raycast.point - overlapCheck.point).Angle() * Mathf.Rad2Deg);
                     }
+
+                    // Keep the player on the surface
+                    transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
                     
                     surfaceAngle = transform.eulerAngles.z;
                 }
