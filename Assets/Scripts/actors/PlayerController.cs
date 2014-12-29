@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour {
 		wallMode = WallMode.Floor;
 		surfaceAngle = 0.0f;
 		terrainMask = 1 << LayerMask.NameToLayer("Terrain");
-
 		// Enable later for ragdoll ?
 		collider2D.enabled = false;
 	}
@@ -117,11 +116,7 @@ public class PlayerController : MonoBehaviour {
 		bool justLanded = false;
 
 		if(!grounded)
-		{
-			// See if the player landed
-			RaycastHit2D groundCheck = Physics2D.Linecast(sensorGroundLeft.position, sensorGroundRight.position, terrainMask);
-			grounded = groundCheck;
-			
+		{	
 			if(grounded)
 			{
 				// If so, set vertical velocity to zero
@@ -133,9 +128,33 @@ public class PlayerController : MonoBehaviour {
 				vy -= gravity;
 				surfaceAngle = 0.0f;
 
+                //Side check
+                Vector2 sideMidpoint = Vector2.Lerp(sensorSideLeft.position, sensorSideRight.position, 0.5f);
+                RaycastHit2D leftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
+                RaycastHit2D rightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+                
+                if(leftCheck && rightCheck)
+                {
+                    // not sure what to do here yet
+                    vx = 0;
+                    transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
+                } else if(leftCheck)
+                {
+                    vx = 0;
+                    transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
+                } else if(rightCheck)
+                {
+                    vx = 0;
+                    transform.position += (Vector3)rightCheck.point - sensorSideRight.position;
+                }
+
 				if(leftKeyDown) vx -= airAcceleration;
 				else if(rightKeyDown) vx += airAcceleration;
 			}
+
+            // See if the player landed
+            RaycastHit2D groundCheck = Physics2D.Linecast(sensorGroundLeft.position, sensorGroundRight.position, terrainMask);
+            grounded = groundCheck;
 		}
 
 		if(grounded)
@@ -157,7 +176,9 @@ public class PlayerController : MonoBehaviour {
 
             if(leftCheck && rightCheck)
             {
-                // What do I do here?
+                // not sure what to do here yet
+                vg = 0;
+                transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
             } else if(leftCheck)
             {
                 vg = 0;
@@ -180,6 +201,9 @@ public class PlayerController : MonoBehaviour {
 				{
 					// Overlap routine - if the player's right foot is submerged, correct the player's rotation
 					RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
+
+                    // Keep the player on the surface
+                    transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
 					
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
@@ -193,13 +217,13 @@ public class PlayerController : MonoBehaviour {
 					
 					surfaceAngle = transform.eulerAngles.z;
 					
-					// Keep the player on the surface
-					transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
-					
 				} else if(s.footing == Footing.Right)
 				{
 					// Overlap routine - if the player's left foot is submerged, correct the player's rotation
 					RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
+
+                    // Keep the player on the surface
+                    transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
 					
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
@@ -211,9 +235,6 @@ public class PlayerController : MonoBehaviour {
                     }
                     
                     surfaceAngle = transform.eulerAngles.z;
-                    
-                    // Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
                 }
                 
                 // Can only stay on the surface if angle difference is low enough
