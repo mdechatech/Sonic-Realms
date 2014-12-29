@@ -123,6 +123,97 @@ public static class AMath
 		return lineA + ((Vector2.Dot (q - lineA, ab) / Vector2.Dot (ab, ab)) * ab);
 	}
 
+    /// <summary>
+    /// Rotates the point by the angle about (0, 0).
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static Vector2 RotateBy(Vector2 point, float angle)
+    {
+        return RotateBy(point, angle, new Vector2(0.0f, 0.0f));
+    }
+    
+    /// <summary>
+    /// Rotates the point by the angle about the specified origin.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static Vector2 RotateBy(Vector2 point, float angle, Vector2 origin)
+    {
+        float s = Mathf.Sin(angle);
+        float c = Mathf.Cos(angle);
+
+        Vector2 npoint = point - origin;
+
+        return new Vector2(npoint.x * c - npoint.y * s + origin.x, npoint.x * s + npoint.y * c + origin.y);
+    }
+
+    /// <summary>
+    /// Rotates the transform by the angle about (0, 0).
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static void RotateBy(this Transform transform, float angle)
+    {
+        RotateBy(transform, angle, transform.position);
+    }
+
+    /// <summary>
+    /// Rotates the transform by the angle about the specified origin.
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static void RotateBy(this Transform transform, float angle, Vector2 origin)
+    {
+        transform.position = RotateBy(transform.position, angle, origin);
+        transform.eulerAngles = new Vector3(0.0f, 0.0f, transform.eulerAngles.z + (angle * Mathf.Rad2Deg));
+    }
+
+    /// <summary>
+    /// Rotates the point to the angle about (0, 0).
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static Vector2 RotateTo(Vector2 point, float angle)
+    {
+        return RotateBy(point, angle - point.Angle());
+    }
+
+    /// <summary>
+    /// Rotates the point to the angle about the specified origin.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static Vector2 RotateTo(Vector2 point, float angle, Vector2 origin)
+    {
+        return RotateBy(point, angle - Mathf.Atan2(point.x - origin.x, point.y - origin.y), origin);
+    }
+
+    /// <summary>
+    /// Rotates the transform to the angle about (0, 0).
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static void RotateTo(this Transform transform, float angle)
+    {
+        RotateTo(transform, angle, transform.position);
+    }
+
+    /// <summary>
+    /// Rotates the transform to the angle about the specified origin.
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static void RotateTo(this Transform transform, float angle, Vector2 origin)
+    {
+        transform.position = RotateTo(transform.position, angle, origin);
+        transform.eulerAngles = new Vector3(0.0f, 0.0f, angle * Mathf.Rad2Deg);
+    }
+
 	/// <summary>
 	/// Checks for approximate equality between two floats with an epsilon value.
 	/// </summary>
