@@ -36,6 +36,12 @@ public class PlayerController : MonoBehaviour {
 	/// </summary>
 	private const float OverlapAngleThreshold = -40.0f;
 
+    /// <summary>
+    /// The minimum speed the player must be moving at to stagger each physics update,
+    /// processing the movement in fractions.
+    /// </summary>
+    private const float StaggerSpeedThreshold = 5.0f;
+
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
 	
@@ -98,11 +104,11 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	private void Update () {
-		HandleInput ();
+		GetInput ();
 	}
 
 
-	private void HandleInput()
+	private void GetInput()
 	{
 		leftKeyDown = Input.GetKey (Settings.LeftKey);
 		rightKeyDown = Input.GetKey (Settings.RightKey);
@@ -112,69 +118,139 @@ public class PlayerController : MonoBehaviour {
 
 	private void FixedUpdate()
 	{
-		transform.position = new Vector3 (transform.position.x + (vx * Time.fixedDeltaTime), transform.position.y + (vy * Time.fixedDeltaTime));
+        HandleInput();
 
-		bool justLanded = false;
+        // Stagger routine - if the player's gotta go fast, move it in increments of StaggerSpeedThreshold to prevent tunneling
+        float vt = Mathf.Sqrt(vx * vx + vy * vy);
 
-		if(!grounded)
-		{	
-			if(grounded)
-			{
-				// If so, set vertical velocity to zero
-				vy = 0;
-				justLanded = true;
-			} else {
-				// Otherwise, apply gravity and keep the player pointing straight down
-				transform.eulerAngles = new Vector3();
-				vy -= gravity;
-				surfaceAngle = 0.0f;
-
-                //Side check
-                Vector2 sideMidpoint = Vector2.Lerp(sensorSideLeft.position, sensorSideRight.position, 0.5f);
-                RaycastHit2D leftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
-                RaycastHit2D rightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
-                
-                if(leftCheck && rightCheck)
+        if (vt < StaggerSpeedThreshold)
+        {
+            transform.position = new Vector2(transform.position.x + (vx * Time.fixedDeltaTime), transform.position.y + (vy * Time.fixedDeltaTime));
+            UpdatePhysics();
+        } else {
+            // Stagger by lerping with vc / vt while reducing vc with each stagger
+            float vc = vt;
+            while(vc > 0.0f)
+            {
+                if(vc > StaggerSpeedThreshold)
                 {
-                    // not sure what to do here yet
-                    vx = 0;
-                    transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
-                } else if(leftCheck)
-                {
-                    vx = 0;
-                    transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
-                } else if(rightCheck)
-                {
-                    vx = 0;
-                    transform.position += (Vector3)rightCheck.point - sensorSideRight.position;
+                    transform.position += Vector3.Lerp(new Vector3(0.0f, 0.0f),
+                                                       new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime),
+                                                       StaggerSpeedThreshold / vt);
+                    vc -= StaggerSpeedThreshold;
+                } else {
+                    transform.position += Vector3.Lerp(new Vector3(0.0f, 0.0f),
+                                                       new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime),
+                                                       vc / vt);
+                    vc = 0.0f;
                 }
 
-				if(leftKeyDown) vx -= airAcceleration;
-				else if(rightKeyDown) vx += airAcceleration;
-			}
+                UpdatePhysics();
+
+                // If the player's speed changes mid-stagger recalculate current velocity and total velocity
+                float vn = Mathf.Sqrt(vx * vx + vy * vy);
+                vc *= vn / vt;
+                vt *= vn / vt;
+            }
+        }
+	}
+
+    private void HandleInput()
+    {
+        if (grounded)
+        {
+            if(jumpKeyDown) 
+            {
+                jumpKeyDown = false;
+                
+                float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
+                vx += jumpSpeed * Mathf.Cos(surfaceNormal);
+                vy += jumpSpeed * Mathf.Sin(surfaceNormal);
+                
+                Detach();
+            }
+            
+            if(leftKeyDown)
+            {
+                vg -= groundAcceleration;
+                if(vg > 0) vg -= groundDeceleration;
+            } else if(rightKeyDown)
+            {
+                vg += groundAcceleration;
+                if(vg < 0) vg += groundDeceleration;
+            } else if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
+            {
+                vg = 0.0f;
+            } else if(vg > 0.0f)
+            {
+                vg -= groundDeceleration;
+            } else if(vg < 0.0f)
+            {
+                vg += groundDeceleration;
+            }
+            
+            if(vg > maxSpeed) vg = maxSpeed;
+            else if(vg < -maxSpeed) vg = -maxSpeed;
+        } else {
+            if(leftKeyDown) vx -= airAcceleration;
+            else if(rightKeyDown) vx += airAcceleration;
+        }
+    }
+
+    private void UpdatePhysics()
+    {
+        bool justLanded = false;
+
+        // To save memory when doing overlaps
+        Collider2D[] cmem = new Collider2D[1];
+
+        if(!grounded)
+        {   
+            // Otherwise, apply gravity and keep the player pointing straight down
+            transform.eulerAngles = new Vector3();
+            vy -= gravity;
+            surfaceAngle = 0.0f;
+            
+            //Side check
+            Vector2 sideMidpoint = Vector2.Lerp(sensorSideLeft.position, sensorSideRight.position, 0.5f);
+            RaycastHit2D leftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
+            RaycastHit2D rightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+            
+            if(leftCheck && rightCheck)
+            {
+                // not sure what to do here yet
+                vx = 0;
+                transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
+            } else if(leftCheck)
+            {
+                vx = 0;
+                transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
+            } else if(rightCheck)
+            {
+                vx = 0;
+                transform.position += (Vector3)rightCheck.point - sensorSideRight.position;
+            }
 
             // See if the player landed
-            RaycastHit2D groundCheck = Physics2D.Linecast(sensorGroundLeft.position, sensorGroundRight.position, terrainMask);
-            grounded = groundCheck;
-		}
-
-		if(grounded)
-		{
-			Collider2D[] cmem = new Collider2D[1];
-
-			//Crush check - might not even put this in?
-			if((Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0 &&
+            grounded = Physics2D.OverlapPointNonAlloc(sensorGroundLeft.position, cmem, terrainMask) > 0 || 
+                Physics2D.OverlapPointNonAlloc(sensorGroundRight.position, cmem, terrainMask) > 0;
+        }
+        
+        if(grounded)
+        {
+            //Crush check - might not even put this in?
+            if((Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0 &&
                 Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0))
-			{
-				Debug.Log("ded");
-				// TODO kill him!
-			}
-
-			//Side check
+            {
+                Debug.Log("ded");
+                // TODO kill him!
+            }
+            
+            //Side check
             Vector2 ceilMidpoint = AMath.Midpoint(sensorCeilLeft.position, sensorCeilRight.position);
             RaycastHit2D ceilLeftCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilLeft.position, terrainMask);
             RaycastHit2D ceilRightCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilRight.position, terrainMask);
-
+            
             if(ceilLeftCheck && ceilRightCheck)
             {
                 // not sure what to do here yet
@@ -189,12 +265,12 @@ public class PlayerController : MonoBehaviour {
                 vg = 0;
                 transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position;
             }
-
-
-			Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
+            
+            
+            Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
             RaycastHit2D sideLeftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
             RaycastHit2D sideRightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
-
+            
             if(sideLeftCheck && sideRightCheck)
             {
                 // not sure what to do here yet
@@ -209,49 +285,49 @@ public class PlayerController : MonoBehaviour {
                 vg = 0;
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position;
             }
-
-
-			//Surface check
-			SurfaceInfo s = GetSurface(terrainMask);
-			
-			if(s.hit)
-			{
-				float prevSurfaceAngle = surfaceAngle;
-
-				if(s.footing == Footing.Left)
-				{
-					// Overlap routine - if the player's right foot is submerged, correct the player's rotation
-					RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
-					
-					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
-					{
-						// Rotate the player to the surface on its left foot
+            
+            
+            //Surface check
+            SurfaceInfo s = GetSurface(terrainMask);
+            
+            if(s.hit)
+            {
+                float prevSurfaceAngle = surfaceAngle;
+                
+                if(s.footing == Footing.Left)
+                {
+                    // Overlap routine - if the player's right foot is submerged, correct the player's rotation
+                    RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
+                    
+                    if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
+                    {
+                        // Rotate the player to the surface on its left foot
                         transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, sensorGroundLeft.position);
-						
-					} else {
-						// Correct rotation if the two sensors have similarly oriented surfaces
+                        
+                    } else {
+                        // Correct rotation if the two sensors have similarly oriented surfaces
                         transform.RotateTo((overlapCheck.point - s.raycast.point).Angle(), overlapCheck.point);
-					}
-
+                    }
+                    
                     // Keep the player on the surface
                     transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
-					
-					surfaceAngle = transform.eulerAngles.z;
-					
-				} else if(s.footing == Footing.Right)
-				{
-					// Overlap routine - if the player's left foot is submerged, correct the player's rotation
-					RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
-					
-					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
-					{
-						// Rotate the player to the surface on its right foot
+                    
+                    surfaceAngle = transform.eulerAngles.z;
+                    
+                } else if(s.footing == Footing.Right)
+                {
+                    // Overlap routine - if the player's left foot is submerged, correct the player's rotation
+                    RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
+                    
+                    if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
+                    {
+                        // Rotate the player to the surface on its right foot
                         transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, sensorGroundRight.position);
                     } else {
                         // Correct rotation if the two sensors have similarly oriented surfaces
                         transform.RotateTo((s.raycast.point - overlapCheck.point).Angle(), overlapCheck.point);
                     }
-
+                    
                     // Keep the player on the surface
                     transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
                     
@@ -259,73 +335,39 @@ public class PlayerController : MonoBehaviour {
                 }
                 
                 // Can only stay on the surface if angle difference is low enough
-				if((justLanded ||
-				 	Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
-				{
-					if(wallMode == WallMode.Floor)
-					{
-						if(surfaceAngle > 45.0f + WallModeAngleThreshold && surfaceAngle < 180.0f) wallMode = WallMode.Right;
-						else if(surfaceAngle < 315.0f - WallModeAngleThreshold && surfaceAngle > 180.0f) wallMode = WallMode.Left;
-					} else if(wallMode == WallMode.Right)
-					{
-						if(surfaceAngle > 135.0f + WallModeAngleThreshold) wallMode = WallMode.Ceiling;
-						else if(surfaceAngle < 45.0f - WallModeAngleThreshold) wallMode = WallMode.Floor;
-					} else if(wallMode == WallMode.Ceiling)
-					{
-						if(surfaceAngle > 225.0f + WallModeAngleThreshold) wallMode = WallMode.Left;
-						else if(surfaceAngle < 135.0f - WallModeAngleThreshold) wallMode = WallMode.Right;
-					} else if(wallMode == WallMode.Left)
-					{
-						if(surfaceAngle > 315.0f + WallModeAngleThreshold || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
-						else if(surfaceAngle < 225.0f - WallModeAngleThreshold) wallMode = WallMode.Ceiling;
-					}
-
-					// Input
-					if(leftKeyDown)
-					{
-						vg -= groundAcceleration;
-						if(vg > 0) vg -= groundDeceleration;
-					} else if(rightKeyDown)
-					{
-						vg += groundAcceleration;
-						if(vg < 0) vg += groundDeceleration;
-					} else if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
-					{
-						vg = 0.0f;
-					} else if(vg > 0.0f)
-					{
-						vg -= groundDeceleration;
-					} else if(vg < 0.0f)
-					{
-						vg += groundDeceleration;
-					}
-
-					if(vg > maxSpeed) vg = maxSpeed;
-					else if(vg < -maxSpeed) vg = -maxSpeed;
-
-					vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
-					vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
-
-					justLanded = false;
-
-					if(jumpKeyDown) 
-					{
-						jumpKeyDown = false;
-						
-						float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
-						vx += jumpSpeed * Mathf.Cos(surfaceNormal);
-                        vy += jumpSpeed * Mathf.Sin(surfaceNormal);
-                        
-						Detach();
-					}
-				} else {
-					Detach();
-				}
+                if((justLanded ||
+                    Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
+                {
+                    if(wallMode == WallMode.Floor)
+                    {
+                        if(surfaceAngle > 45.0f + WallModeAngleThreshold && surfaceAngle < 180.0f) wallMode = WallMode.Right;
+                        else if(surfaceAngle < 315.0f - WallModeAngleThreshold && surfaceAngle > 180.0f) wallMode = WallMode.Left;
+                    } else if(wallMode == WallMode.Right)
+                    {
+                        if(surfaceAngle > 135.0f + WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+                        else if(surfaceAngle < 45.0f - WallModeAngleThreshold) wallMode = WallMode.Floor;
+                    } else if(wallMode == WallMode.Ceiling)
+                    {
+                        if(surfaceAngle > 225.0f + WallModeAngleThreshold) wallMode = WallMode.Left;
+                        else if(surfaceAngle < 135.0f - WallModeAngleThreshold) wallMode = WallMode.Right;
+                    } else if(wallMode == WallMode.Left)
+                    {
+                        if(surfaceAngle > 315.0f + WallModeAngleThreshold || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
+                        else if(surfaceAngle < 225.0f - WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+                    }
+                    
+                    vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
+                    vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
+                    
+                    justLanded = false;
+                } else {
+                    Detach();
+                }
             } else {
-				Detach();
-			}
-		}
-	}
+                Detach();
+            }
+        }
+    }
 
 	private void Detach()
 	{
