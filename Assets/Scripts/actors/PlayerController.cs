@@ -171,23 +171,43 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			//Side check
-			Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
-            RaycastHit2D leftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
-            RaycastHit2D rightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+            Vector2 ceilMidpoint = AMath.Midpoint(sensorCeilLeft.position, sensorCeilRight.position);
+            RaycastHit2D ceilLeftCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilLeft.position, terrainMask);
+            RaycastHit2D ceilRightCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilRight.position, terrainMask);
 
-            if(leftCheck && rightCheck)
+            if(ceilLeftCheck && ceilRightCheck)
             {
                 // not sure what to do here yet
                 vg = 0;
-                transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
-            } else if(leftCheck)
+                transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position;
+            } else if(ceilLeftCheck)
             {
                 vg = 0;
-                transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
-            } else if(rightCheck)
+                transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position;
+            } else if(ceilRightCheck)
             {
                 vg = 0;
-                transform.position += (Vector3)rightCheck.point - sensorSideRight.position;
+                transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position;
+            }
+
+
+			Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
+            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
+            RaycastHit2D sideRightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+
+            if(sideLeftCheck && sideRightCheck)
+            {
+                // not sure what to do here yet
+                vg = 0;
+                transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position;
+            } else if(sideLeftCheck)
+            {
+                vg = 0;
+                transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position;
+            } else if(sideRightCheck)
+            {
+                vg = 0;
+                transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position;
             }
 
 
