@@ -214,6 +214,16 @@ public static class AMath
         transform.eulerAngles = new Vector3(0.0f, 0.0f, angle * Mathf.Rad2Deg);
     }
 
+    /// <summary>
+    /// Returns the midpoint between two points.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    public static Vector2 Midpoint(Vector2 a, Vector2 b)
+    {
+        return (a + b) / 2.0f;
+    }
+
 	/// <summary>
 	/// Checks for approximate equality between two floats with an epsilon value.
 	/// </summary>

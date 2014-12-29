@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour {
 			}
 
 			//Side check
-			Vector2 sideMidpoint = Vector2.Lerp(sensorSideLeft.position, sensorSideRight.position, 0.5f);
+			Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
             RaycastHit2D leftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
             RaycastHit2D rightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
 
