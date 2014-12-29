@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	private Transform sensorGroundLeft;
 	[SerializeField]
+	private Transform sensorGroundMid;
+	[SerializeField]
 	private Transform sensorGroundRight;
 	[SerializeField]
 	private Transform sensorSideLeft;
@@ -71,6 +73,8 @@ public class PlayerController : MonoBehaviour {
 	private Transform sensorSideRight;
 	[SerializeField]
 	private Transform sensorCeilLeft;
+	[SerializeField]
+	private Transform sensorCeilMid;
 	[SerializeField]
 	private Transform sensorCeilRight;
 	[SerializeField]
@@ -136,6 +140,36 @@ public class PlayerController : MonoBehaviour {
 
 		if(grounded)
 		{
+			Collider2D[] cmem = new Collider2D[1];
+
+			//Crush check - might not even put this in?
+			if((Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0 &&
+                Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0))
+			{
+				Debug.Log("ded");
+				// TODO kill him!
+			}
+
+			//Side check
+			Vector2 sideMidpoint = Vector2.Lerp(sensorSideLeft.position, sensorSideRight.position, 0.5f);
+            RaycastHit2D leftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
+            RaycastHit2D rightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+
+            if(leftCheck && rightCheck)
+            {
+                // What do I do here?
+            } else if(leftCheck)
+            {
+                vg = 0;
+                transform.position += (Vector3)leftCheck.point - sensorSideLeft.position;
+            } else if(rightCheck)
+            {
+                vg = 0;
+                transform.position += (Vector3)rightCheck.point - sensorSideRight.position;
+            }
+
+
+			//Surface check
 			SurfaceInfo s = GetSurface(terrainMask);
 			
 			if(s.hit)
@@ -145,7 +179,7 @@ public class PlayerController : MonoBehaviour {
 				if(s.footing == Footing.Left)
 				{
 					// Overlap routine - if the player's right foot is submerged, correct the player's rotation
-					RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideRight.position, sensorTileRight.position, terrainMask);
+					RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
 					
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
@@ -165,7 +199,7 @@ public class PlayerController : MonoBehaviour {
 				} else if(s.footing == Footing.Right)
 				{
 					// Overlap routine - if the player's left foot is submerged, correct the player's rotation
-					RaycastHit2D overlapCheck = Physics2D.Linecast(sensorSideLeft.position, sensorTileLeft.position, terrainMask);
+					RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
 					
 					if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
 					{
@@ -269,30 +303,9 @@ public class PlayerController : MonoBehaviour {
 		RaycastHit2D checkLeft, checkRight;
 
 		// Linecasts are straight vertical or horizontal from the ground sensors
-		if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
-		{
-			checkLeft = Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.y / 2,
-			                               (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.y / 2);
-			checkRight = Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.y / 2,
-			                                (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.y / 2);
-
-			Debug.DrawLine((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.y / 2,
-			               (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.y / 2);
-			Debug.DrawLine((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.y / 2,
-			               (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.y / 2);
-       	} else {
-           	checkLeft = Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.x / 2,
-			                               (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.x / 2);
-			checkRight = Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.x / 2,
-			                                (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.x / 2);
-
-			Debug.DrawLine((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.x / 2,
-			               (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.x / 2);
-			Debug.DrawLine((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.x / 2,
-			               (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.x / 2);
-        }
+		checkLeft = SurfaceCast(Footing.Left); checkRight = SurfaceCast(Footing.Right);
         
-                           if(checkLeft && checkRight)
+        if(checkLeft && checkRight)
 		{
 			// If both sensors have surfaces, return the one with the highest based on wallmode
 			if(wallMode == WallMode.Floor && checkLeft.point.y > checkRight.point.y || 
@@ -311,6 +324,34 @@ public class PlayerController : MonoBehaviour {
 
 		return default(SurfaceInfo);
 	}
+
+    private RaycastHit2D SurfaceCast(Footing footing)
+    {
+        if (footing == Footing.Left)
+        {
+            if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
+            {
+                return Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.y / 2.0f,
+                                          (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.y / 2.0f,
+                                          terrainMask);
+            } else {
+                return Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.x / 2.0f,
+                                          (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.x / 2.0f,
+                                          terrainMask);
+            }
+        } else {
+            if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
+            {
+                return Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.y / 2.0f,
+                                          (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.y / 2.0f,
+                                          terrainMask);
+            } else {
+                return Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.x / 2.0f,
+                                          (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.x / 2.0f,
+                                          terrainMask);
+            }
+        }
+    }
 
 	/// <summary>
 	/// A collection of data about the surface at the player's feet.
