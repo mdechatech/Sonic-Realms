@@ -38,6 +38,12 @@ public class PlayerController : MonoBehaviour {
 	private const float OverlapAngleThreshold = -40.0f;
 
     /// <summary>
+    /// The minimum absoulte difference in angle between the surface sensor and the overlap
+    /// sensor to have the player's rotation account for it.
+    /// </summary>
+    private const float OverlapAngleMinimum = 7.5f;
+
+    /// <summary>
     /// The minimum speed the player must be moving at to stagger each physics update,
     /// processing the movement in fractions.
     /// </summary>
@@ -296,8 +302,9 @@ public class PlayerController : MonoBehaviour {
                 {
                     // Overlap routine - if the player's right foot is submerged, correct the player's rotation
                     RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
+                    float angleDiff = AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg;
                     
-                    if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
+                    if(justLanded || !overlapCheck || angleDiff < OverlapAngleThreshold || Mathf.Abs(angleDiff) < OverlapAngleMinimum)
                     {
                         // Rotate the player to the surface on its left foot
                         transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
@@ -314,12 +321,11 @@ public class PlayerController : MonoBehaviour {
                     
                 } else if(s.footing == Footing.Right)
                 {
-
-
                     // Overlap routine - if the player's left foot is submerged, correct the player's rotation
                     RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
+                    float angleDiff = AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg;
                     
-                    if(justLanded || !overlapCheck || AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg < OverlapAngleThreshold)
+                    if(justLanded || !overlapCheck || angleDiff < OverlapAngleThreshold || Mathf.Abs(angleDiff) < OverlapAngleMinimum)
                     {
                         // Rotate the player to the surface on its right foot
                         transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
