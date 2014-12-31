@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour {
 	private float vx, vy, vg;
 	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
     private bool justLanded, justJumped;
+    private float lastSurfaceAngle;
 
 	// If grounded, the angle of the incline the player is standing on
 	private float surfaceAngle;
@@ -35,19 +36,21 @@ public class PlayerController : MonoBehaviour {
 	/// The minimum difference in angle between the surface sensor and the overlap sensor
 	/// to have the player's rotation account for it.
 	/// </summary>
-	private const float OverlapAngleThreshold = -40.0f;
+	private const float OverlapAngleMinimum = -40.0f;
 
     /// <summary>
-    /// The minimum absoulte difference in angle between the surface sensor and the overlap
+    /// The minimum absolute difference in angle between the surface sensor and the overlap
     /// sensor to have the player's rotation account for it.
     /// </summary>
-    private const float OverlapAngleMinimum = 7.5f;
+    private const float OverlapAngleThreshold = 7.5f;
 
     /// <summary>
     /// The minimum speed the player must be moving at to stagger each physics update,
     /// processing the movement in fractions.
     /// </summary>
     private const float StaggerSpeedThreshold = 5.0f;
+
+    private const float SlopeFactor = 1.0f;
 
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
@@ -100,6 +103,7 @@ public class PlayerController : MonoBehaviour {
 	private void Start () {
 		grounded = false;
 		vx = vy = vg = 0.0f;
+        lastSurfaceAngle = 0.0f;
 		leftKeyDown = rightKeyDown = jumpKeyDown = false;
         justJumped = justLanded = false;
 		wallMode = WallMode.Floor;
@@ -143,14 +147,10 @@ public class PlayerController : MonoBehaviour {
             {
                 if(vc > StaggerSpeedThreshold)
                 {
-                    transform.position += Vector3.Lerp(new Vector3(0.0f, 0.0f),
-                                                       new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime),
-                                                       StaggerSpeedThreshold / vt);
+                    transform.position += (new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime)) * (StaggerSpeedThreshold / vt);
                     vc -= StaggerSpeedThreshold;
                 } else {
-                    transform.position += Vector3.Lerp(new Vector3(0.0f, 0.0f),
-                                                       new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime),
-                                                       vc / vt);
+                    transform.position += (new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime)) * (vc / vt);
                     vc = 0.0f;
                 }
 
@@ -293,85 +293,78 @@ public class PlayerController : MonoBehaviour {
             //Surface check
             SurfaceInfo s = GetSurface(terrainMask);
             
-            if(s.hit)
+            if(s.leftCast || s.rightCast)
             {
-                float prevSurfaceAngle = surfaceAngle;
                 Vector2 groundMidpoint = AMath.Midpoint(sensorGroundLeft.position, sensorGroundRight.position);
-                
-                if(s.footing == Footing.Left)
-                {
-                    // Overlap routine - if the player's right foot is submerged, correct the player's rotation
-                    RaycastHit2D overlapCheck = SurfaceCast(Footing.Right);
-                    float angleDiff = AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg;
-                    
-                    if(justLanded || !overlapCheck || angleDiff < OverlapAngleThreshold || Mathf.Abs(angleDiff) < OverlapAngleMinimum)
-                    {
-                        // Rotate the player to the surface on its left foot
-                        transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
-                        
-                    } else {
-                        // Correct rotation if the two sensors have similarly oriented surfaces
-                        transform.RotateTo((overlapCheck.point - s.raycast.point).Angle(), groundMidpoint);
-                    }
 
-                    // Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundLeft.position;
-                    
-                    surfaceAngle = transform.eulerAngles.z;
-                    
-                } else if(s.footing == Footing.Right)
+                if(s.leftCast && s.rightCast)
                 {
-                    // Overlap routine - if the player's left foot is submerged, correct the player's rotation
-                    RaycastHit2D overlapCheck = SurfaceCast(Footing.Left);
-                    float angleDiff = AMath.AngleDiff(s.raycast.normal, overlapCheck.normal) * Mathf.Rad2Deg;
-                    
-                    if(justLanded || !overlapCheck || angleDiff < OverlapAngleThreshold || Mathf.Abs(angleDiff) < OverlapAngleMinimum)
+                    float rightDiff = AMath.AngleDiff(s.rightSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    float leftDiff = AMath.AngleDiff(s.leftSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    float overlapDiff;
+                    if(s.footing == Footing.Left)
                     {
-                        // Rotate the player to the surface on its right foot
-                        transform.RotateTo(s.raycast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
-                    } else {
-                        // Correct rotation if the two sensors have similarly oriented surfaces
-                        transform.RotateTo((s.raycast.point - overlapCheck.point).Angle(), groundMidpoint);
-                    }
+                        if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleThreshold)
+                        {
+                            overlapDiff = AMath.AngleDiff(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
 
-                    // Keep the player on the surface
-                    transform.position += (Vector3)s.raycast.point - sensorGroundRight.position;
-                    
-                    surfaceAngle = transform.eulerAngles.z;
-                }
+                            if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
+                            {
+                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
+                                transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                            } else {
+                                transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, s.leftCast.point);
+                                transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                            }
 
-                // Can only stay on the surface if angle difference is low enough
-                if((justLanded ||
-                    Mathf.Abs(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
-                {
-                    if(wallMode == WallMode.Floor)
-                    {
-                        if(surfaceAngle > 45.0f + WallModeAngleThreshold && surfaceAngle < 180.0f) wallMode = WallMode.Right;
-                        else if(surfaceAngle < 315.0f - WallModeAngleThreshold && surfaceAngle > 180.0f) wallMode = WallMode.Left;
-                    } else if(wallMode == WallMode.Right)
-                    {
-                        if(surfaceAngle > 135.0f + WallModeAngleThreshold) wallMode = WallMode.Ceiling;
-                        else if(surfaceAngle < 45.0f - WallModeAngleThreshold) wallMode = WallMode.Floor;
-                    } else if(wallMode == WallMode.Ceiling)
-                    {
-                        if(surfaceAngle > 225.0f + WallModeAngleThreshold) wallMode = WallMode.Left;
-                        else if(surfaceAngle < 135.0f - WallModeAngleThreshold) wallMode = WallMode.Right;
-                    } else if(wallMode == WallMode.Left)
-                    {
-                        if(surfaceAngle > 315.0f + WallModeAngleThreshold || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
-                        else if(surfaceAngle < 225.0f - WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+                        } else if(Mathf.Abs(rightDiff) < SurfaceAngleThreshold) {
+                            transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
+                            transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                        } else {
+                            Debug.Log("left: " + leftDiff + ", right: " + rightDiff);
+                            Detach();
+                        }
                     }
-                    
-                    vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
-                    vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
-                    
-                    justLanded = false;
-                } else {
-                    Detach();
                 }
             } else {
                 Detach();
             }
+
+            lastSurfaceAngle = surfaceAngle;
+            surfaceAngle = transform.eulerAngles.z;
+
+            // Can only stay on the surface if angle difference is low enough
+            //Debug.Log(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg);
+            if((justLanded ||
+                Mathf.Abs(AMath.AngleDiff(lastSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
+            {
+                if(wallMode == WallMode.Floor)
+                {
+                    if(surfaceAngle > 45.0f + WallModeAngleThreshold && surfaceAngle < 180.0f) wallMode = WallMode.Right;
+                    else if(surfaceAngle < 315.0f - WallModeAngleThreshold && surfaceAngle > 180.0f) wallMode = WallMode.Left;
+                } else if(wallMode == WallMode.Right)
+                {
+                    if(surfaceAngle > 135.0f + WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+                    else if(surfaceAngle < 45.0f - WallModeAngleThreshold) wallMode = WallMode.Floor;
+                } else if(wallMode == WallMode.Ceiling)
+                {
+                    if(surfaceAngle > 225.0f + WallModeAngleThreshold) wallMode = WallMode.Left;
+                    else if(surfaceAngle < 135.0f - WallModeAngleThreshold) wallMode = WallMode.Right;
+                } else if(wallMode == WallMode.Left)
+                {
+                    if(surfaceAngle > 315.0f + WallModeAngleThreshold || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
+                    else if(surfaceAngle < 225.0f - WallModeAngleThreshold) wallMode = WallMode.Ceiling;
+                }
+                
+                vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
+                vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
+                
+                justLanded = false;
+            } else {
+                Detach();
+            }
+        } else {
+            Detach();
         }
     }
 
@@ -382,6 +375,11 @@ public class PlayerController : MonoBehaviour {
 		grounded = false;
 		wallMode = WallMode.Floor;
 	}
+
+    private void ResolveImpact(float surfaceAngle)
+    {
+
+    }
 
 	/// <summary>
 	/// Gets data about the surface closest to the player's feet, including its footing and raycast info.
@@ -402,14 +400,14 @@ public class PlayerController : MonoBehaviour {
 			   wallMode == WallMode.Ceiling && checkLeft.point.y < checkRight.point.y || 
 			   wallMode == WallMode.Right && checkLeft.point.x < checkRight.point.x || 
 			   wallMode == WallMode.Left && checkLeft.point.x > checkRight.point.x)
-				return new SurfaceInfo(true, checkLeft, Footing.Left);
-			else return new SurfaceInfo(true, checkRight, Footing.Right);
+				return new SurfaceInfo(checkLeft, checkRight, Footing.Left);
+			else return new SurfaceInfo(checkLeft, checkRight, Footing.Right);
 		} else if(checkLeft)
 		{
-			return new SurfaceInfo(true, checkLeft, Footing.Left);
+			return new SurfaceInfo(checkLeft, checkRight, Footing.Left);
 		} else if(checkRight)
 		{
-			return new SurfaceInfo(true, checkRight, Footing.Right);
+			return new SurfaceInfo(checkLeft, checkRight, Footing.Right);
 		}
 
 		return default(SurfaceInfo);
@@ -449,22 +447,38 @@ public class PlayerController : MonoBehaviour {
 	private struct SurfaceInfo
 	{
 		/// <summary>
-		/// Whether or not there is a surface.
-		/// </summary>
-		public bool hit;
-
-		/// <summary>
 		/// If there is a surface, which foot of the player it is  beneath. Otherwise, Footing.none.
 		/// </summary>
 		public Footing footing;
 
 		/// <summary>
-		/// The result of the raycast onto the surface at the player's closest foot. This includes the normal
-		/// of the surface and its location.
+		/// The result of the raycast onto the surface at the player's left foot.
 		/// </summary>
-		public RaycastHit2D raycast;
-		public SurfaceInfo(bool hit, RaycastHit2D raycast, Footing footing)
-			{ this.hit = hit; this.raycast = raycast; this.footing = footing; }
+		public RaycastHit2D leftCast;
+
+        /// <summary>
+        /// The angle, in radians, of the surface on the player's left foot, or 0 if there is none.
+        /// </summary>
+        public float leftSurfaceAngle;
+
+        /// <summary>
+        /// The result of the raycast onto the surface at the player's right foot.
+        /// </summary>
+        public RaycastHit2D rightCast;
+
+        /// <summary>
+        /// The angle, in , of the surface on the player's right foot, or 0 if there is none.
+        /// </summary>
+        public float rightSurfaceAngle;
+
+		public SurfaceInfo(RaycastHit2D leftCast, RaycastHit2D rightCast, Footing footing)
+        {   
+            this.leftCast = leftCast;
+            this.leftSurfaceAngle = (leftCast) ? leftCast.normal.Angle() - Mathf.PI / 2 : 0.0f;
+            this.rightCast = rightCast;
+            this.rightSurfaceAngle = (rightCast) ? rightCast.normal.Angle() - Mathf.PI / 2 : 0.0f;
+            this.footing = footing;
+        }
 	}
 
 	private enum Footing
