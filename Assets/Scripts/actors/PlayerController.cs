@@ -321,11 +321,31 @@ public class PlayerController : MonoBehaviour {
                             transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
                             transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                         } else {
-                            Debug.Log("left: " + leftDiff + ", right: " + rightDiff);
+                            Detach();
+                        }
+                    } else if(s.footing == Footing.Right)
+                    {
+                        if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleThreshold)
+                        {
+                            overlapDiff = AMath.AngleDiff(s.rightSurfaceAngle, s.leftSurfaceAngle) * Mathf.Rad2Deg;
+                            
+                            if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
+                            {
+                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
+                                transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                            } else {
+                                transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, s.rightCast.point);
+                                transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                            }
+                            
+                        } else if(Mathf.Abs(leftDiff) < SurfaceAngleThreshold) {
+                            transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
+                            transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                        } else {
                             Detach();
                         }
                     }
-                }
+                } 
             } else {
                 Detach();
             }
