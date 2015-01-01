@@ -94,6 +94,8 @@ public class PlayerController : MonoBehaviour {
 	private Transform sensorGroundRight;
 	[SerializeField]
 	private Transform sensorSideLeft;
+    [SerializeField]
+    private Transform sensorSideMid;
 	[SerializeField]
 	private Transform sensorSideRight;
 	[SerializeField]
@@ -283,9 +285,8 @@ public class PlayerController : MonoBehaviour {
             }
             
             // Side check
-            Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
-            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
-            RaycastHit2D sideRightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
+            RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
 
             if(sideLeftCheck)
             {
