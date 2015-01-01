@@ -353,17 +353,38 @@ public class PlayerController : MonoBehaviour {
                             Detach();
                         }
                     }
+                } else if(s.leftCast)
+                {
+                    float leftDiff = AMath.AngleDiff(s.leftSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleThreshold)
+                    {
+                        transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, s.leftCast.point);
+                        transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                        footing = Footing.Left;
+                    } else {
+                        Detach();
+                    }
+                } else {
+                    float rightDiff = AMath.AngleDiff(s.rightSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleThreshold)
+                    {
+                        transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, s.rightCast.point);
+                        transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                        footing = Footing.Right;
+                    } else {
+                        Detach();
+                    }
                 }
             } else {
                 Detach();
             }
 
-            lastSurfaceAngle = surfaceAngle;
+            if(!justLanded) lastSurfaceAngle = surfaceAngle;
             surfaceAngle = transform.eulerAngles.z;
+            if(justLanded) lastSurfaceAngle = surfaceAngle;
 
             // Can only stay on the surface if angle difference is low enough
-            //Debug.Log(AMath.AngleDiff(prevSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg);
-            if((justLanded ||
+            if(grounded && (justLanded ||
                 Mathf.Abs(AMath.AngleDiff(lastSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleThreshold))
             {
                 if(wallMode == WallMode.Floor)
@@ -383,26 +404,25 @@ public class PlayerController : MonoBehaviour {
                     if(surfaceAngle > 315.0f + WallModeAngleThreshold || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
                     else if(surfaceAngle < 225.0f - WallModeAngleThreshold) wallMode = WallMode.Ceiling;
                 }
-                
+
                 vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
                 vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
-                
+
                 justLanded = false;
             } else {
                 Detach();
             }
-        } else {
-            Detach();
         }
     }
 
 	private void Detach()
 	{
 		vg = 0.0f;
+        lastSurfaceAngle = 0.0f;
 		surfaceAngle = 0.0f;
 		grounded = false;
 		wallMode = WallMode.Floor;
-        footing = Footing.None
+        footing = Footing.None;
 	}
 
     private void ResolveImpact(float surfaceAngle)
