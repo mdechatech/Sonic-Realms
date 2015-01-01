@@ -54,7 +54,12 @@ public class PlayerController : MonoBehaviour {
     /// <summary>
     /// The magnitude of the force applied to the player when going up or down slopes.
     /// </summary>
-    private const float SlopeFactor = 0.4f;
+    private const float SlopeFactor = 0.3f;
+
+    /// <summary>
+    /// The minimum
+    /// </summary>
+    private const float SlopeGravityAngleMinimum = 10.0f;
 
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
@@ -124,6 +129,9 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
+    /// <summary>
+    /// Stores keyboard input for the next fixed update (and HandleInput).
+    /// </summary>
 	private void GetInput()
 	{
 		leftKeyDown = Input.GetKey (Settings.LeftKey);
@@ -135,7 +143,7 @@ public class PlayerController : MonoBehaviour {
 	private void FixedUpdate()
 	{
         HandleInput();
-        if(!grounded) vy -= gravity;
+        HandleForces();
 
         // Stagger routine - if the player's gotta go fast, move it in increments of StaggerSpeedThreshold to prevent tunneling
         float vt = Mathf.Sqrt(vx * vx + vy * vy);
@@ -143,7 +151,7 @@ public class PlayerController : MonoBehaviour {
         if (vt < StaggerSpeedThreshold)
         {
             transform.position = new Vector2(transform.position.x + (vx * Time.fixedDeltaTime), transform.position.y + (vy * Time.fixedDeltaTime));
-            UpdatePhysics();
+            HandleCollisions();
         } else {
             // Stagger by lerping with vc / vt while reducing vc with each stagger
             float vc = vt;
@@ -158,7 +166,7 @@ public class PlayerController : MonoBehaviour {
                     vc = 0.0f;
                 }
 
-                UpdatePhysics();
+                HandleCollisions();
 
                 // If the player's speed changes mid-stagger recalculate current velocity and total velocity
                 float vn = Mathf.Sqrt(vx * vx + vy * vy);
@@ -168,6 +176,9 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Handles the input from the previous update and also applies 
+    /// </summary>
     private void HandleInput()
     {
         if (grounded)
@@ -192,7 +203,27 @@ public class PlayerController : MonoBehaviour {
             {
                 vg += groundAcceleration;
                 if(vg < 0) vg += groundDeceleration;
-            } else if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
+            }
+            
+            if(vg > maxSpeed) vg = maxSpeed;
+            else if(vg < -maxSpeed) vg = -maxSpeed;
+        } else {
+            vy -= gravity;
+
+            if(leftKeyDown) vx -= airAcceleration;
+            else if(rightKeyDown) vx += airAcceleration;
+        }
+    }
+
+    /// <summary>
+    /// Applies forces on the player and also handles speed-based conditions, such as detaching the player if it is too slow on
+    /// an incline.
+    /// </summary>
+    private void HandleForces()
+    {
+        if (!leftKeyDown && !rightKeyDown)
+        {
+            if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
             {
                 vg = 0.0f;
             } else if(vg > 0.0f)
@@ -202,18 +233,17 @@ public class PlayerController : MonoBehaviour {
             {
                 vg += groundDeceleration;
             }
-
-            vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
-            
-            if(vg > maxSpeed) vg = maxSpeed;
-            else if(vg < -maxSpeed) vg = -maxSpeed;
-        } else {
-            if(leftKeyDown) vx -= airAcceleration;
-            else if(rightKeyDown) vx += airAcceleration;
         }
+
+
+        vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
     }
 
-    private void UpdatePhysics()
+    /// <summary>
+    /// Checks for collision with all sensors, changing position, velocity, and rotation if necessary. This should be called each time
+    /// the player changes position.
+    /// </summary>
+    private void HandleCollisions()
     {
         // To save memory when doing overlaps
         Collider2D[] cmem = new Collider2D[1];
@@ -320,13 +350,13 @@ public class PlayerController : MonoBehaviour {
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                                 footing = Footing.Left;
                             } else {
-                                transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, s.leftCast.point);
+                                transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                                 footing = Footing.Left;
                             }
 
                         } else if(Mathf.Abs(rightDiff) < SurfaceAngleThreshold) {
-                            transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
+                            transform.RotateTo(s.rightSurfaceAngle, groundMidpoint);
                             transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                             footing = Footing.Right;
 
@@ -345,13 +375,13 @@ public class PlayerController : MonoBehaviour {
                                 transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                                 footing = Footing.Right;
                             } else {
-                                transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, s.rightCast.point);
+                                transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
                                 transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                                 footing = Footing.Right;
                             }
                             
                         } else if(Mathf.Abs(leftDiff) < SurfaceAngleThreshold) {
-                            transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
+                            transform.RotateTo(s.leftSurfaceAngle, groundMidpoint);
                             transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                             footing = Footing.Left;
                         } else {
@@ -363,7 +393,7 @@ public class PlayerController : MonoBehaviour {
                     float leftDiff = AMath.AngleDiff(s.leftSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
                     if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleThreshold)
                     {
-                        transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, s.leftCast.point);
+                        transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
                         transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                         footing = Footing.Left;
                     } else {
@@ -373,7 +403,7 @@ public class PlayerController : MonoBehaviour {
                     float rightDiff = AMath.AngleDiff(s.rightSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
                     if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleThreshold)
                     {
-                        transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, s.rightCast.point);
+                        transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
                         transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                         footing = Footing.Right;
                     } else {
@@ -384,9 +414,14 @@ public class PlayerController : MonoBehaviour {
                 Detach();
             }
 
-            if(!justLanded) lastSurfaceAngle = surfaceAngle;
-            surfaceAngle = transform.eulerAngles.z;
-            if(justLanded) lastSurfaceAngle = surfaceAngle;
+            if(justLanded)
+            {
+                surfaceAngle = transform.eulerAngles.z;
+                lastSurfaceAngle = surfaceAngle;
+            } else {
+                lastSurfaceAngle = surfaceAngle;
+                surfaceAngle = transform.eulerAngles.z;
+            }
 
             // Can only stay on the surface if angle difference is low enough
             if(grounded && (justLanded ||
@@ -420,6 +455,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Detaches the player from whatever surface it is on. If the player is not grounded this has no effect.
+    /// </summary>
 	private void Detach()
 	{
 		vg = 0.0f;
@@ -467,6 +505,11 @@ public class PlayerController : MonoBehaviour {
 		return default(SurfaceInfo);
 	}
 
+    /// <summary>
+    /// Returns the result of a linecast from the specified footing onto the surface based on wallmode.
+    /// </summary>
+    /// <returns>The result of the linecast.</returns>
+    /// <param name="footing">The footing to linecast from.</param>
     private RaycastHit2D SurfaceCast(Footing footing)
     {
         if (footing == Footing.Left)
@@ -521,7 +564,7 @@ public class PlayerController : MonoBehaviour {
         public RaycastHit2D rightCast;
 
         /// <summary>
-        /// The angle, in , of the surface on the player's right foot, or 0 if there is none.
+        /// The angle, in radians, of the surface on the player's right foot, or 0 if there is none.
         /// </summary>
         public float rightSurfaceAngle;
 
@@ -535,6 +578,9 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Represents each sensor on the bottom of the player.
+    /// </summary>
 	private enum Footing
 	{
 		None, Left, Right,
