@@ -323,9 +323,8 @@ public class PlayerController : MonoBehaviour {
             }
             
             // Side check
-            Vector2 ceilMidpoint = AMath.Midpoint(sensorCeilLeft.position, sensorCeilRight.position);
-            RaycastHit2D ceilLeftCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilLeft.position, terrainMask);
-            RaycastHit2D ceilRightCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilRight.position, terrainMask);
+            RaycastHit2D ceilLeftCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
+            RaycastHit2D ceilRightCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
 
             if(ceilLeftCheck)
             {
@@ -338,10 +337,9 @@ public class PlayerController : MonoBehaviour {
                 transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position +
                     ((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
             }
-            
-            Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
-            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
-            RaycastHit2D sideRightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
+
+            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
+            RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
             
             if(sideLeftCheck)
             {
@@ -361,8 +359,6 @@ public class PlayerController : MonoBehaviour {
             
             if(s.leftCast || s.rightCast)
             {
-                Vector2 groundMidpoint = AMath.Midpoint(sensorGroundLeft.position, sensorGroundRight.position);
-
                 // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
                 if(s.leftCast && s.rightCast)
                 {
@@ -376,7 +372,7 @@ public class PlayerController : MonoBehaviour {
                         {
                             if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
                             {
-                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
+                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                                 footing = Footing.Left;
                             } else {
@@ -386,7 +382,7 @@ public class PlayerController : MonoBehaviour {
                             }
 
                         } else if(Mathf.Abs(rightDiff) < SurfaceAngleThreshold) {
-                            transform.RotateTo(s.rightSurfaceAngle, groundMidpoint);
+                            transform.RotateTo(s.rightSurfaceAngle, sensorGroundMid.position);
                             transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                             footing = Footing.Right;
 
@@ -399,7 +395,7 @@ public class PlayerController : MonoBehaviour {
                         {
                             if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
                             {
-                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
+                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
                                 transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                                 footing = Footing.Right;
                             } else {
@@ -409,7 +405,7 @@ public class PlayerController : MonoBehaviour {
                             }
                             
                         } else if(Mathf.Abs(leftDiff) < SurfaceAngleThreshold) {
-                            transform.RotateTo(s.leftSurfaceAngle, groundMidpoint);
+                            transform.RotateTo(s.leftSurfaceAngle, sensorGroundMid.position);
                             transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                             footing = Footing.Left;
                         } else {
