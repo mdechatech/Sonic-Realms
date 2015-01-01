@@ -51,7 +51,10 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private const float StaggerSpeedThreshold = 5.0f;
 
-    private const float SlopeFactor = 1.0f;
+    /// <summary>
+    /// The magnitude of the force applied to the player when going up or down slopes.
+    /// </summary>
+    private const float SlopeFactor = 0.4f;
 
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
@@ -199,6 +202,8 @@ public class PlayerController : MonoBehaviour {
             {
                 vg += groundDeceleration;
             }
+
+            vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
             
             if(vg > maxSpeed) vg = maxSpeed;
             else if(vg < -maxSpeed) vg = -maxSpeed;
