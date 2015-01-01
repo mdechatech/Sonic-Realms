@@ -252,9 +252,38 @@ public class PlayerController : MonoBehaviour {
         {   
             transform.eulerAngles = new Vector3();
             surfaceAngle = 0.0f;
+
+            // Ceiling check - either pushes out vertically or horizontally based on the closest distance in either direction to the surface
+            if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
+            {
+                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position);
+                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position);
+
+                if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
+                {
+                    transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
+                    vx = 0;
+                } else {
+                    transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
+                    if(vy > 0) vy = 0;
+                }
+            } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
+            {
+                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
+                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position);
+                
+                if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
+                {
+                    transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
+                    vx = 0;
+                } else {
+                    transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
+                    if(vy > 0) vy = 0;
+                }
+            }
             
-            //Side check
-            Vector2 sideMidpoint = Vector2.Lerp(sensorSideLeft.position, sensorSideRight.position, 0.5f);
+            // Side check
+            Vector2 sideMidpoint = AMath.Midpoint(sensorSideLeft.position, sensorSideRight.position);
             RaycastHit2D sideLeftCheck = Physics2D.Linecast(sideMidpoint, sensorSideLeft.position, terrainMask);
             RaycastHit2D sideRightCheck = Physics2D.Linecast(sideMidpoint, sensorSideRight.position, terrainMask);
 
@@ -284,7 +313,7 @@ public class PlayerController : MonoBehaviour {
         
         if(grounded)
         {
-            //Crush check - might not even put this in?
+            // Crush check - might not even put this in?
             if((Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0 &&
                 Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0))
             {
@@ -292,7 +321,7 @@ public class PlayerController : MonoBehaviour {
                 // TODO kill him!
             }
             
-            //Side check
+            // Side check
             Vector2 ceilMidpoint = AMath.Midpoint(sensorCeilLeft.position, sensorCeilRight.position);
             RaycastHit2D ceilLeftCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilLeft.position, terrainMask);
             RaycastHit2D ceilRightCheck = Physics2D.Linecast(ceilMidpoint, sensorCeilRight.position, terrainMask);
@@ -326,24 +355,24 @@ public class PlayerController : MonoBehaviour {
             }
             
             
-            //Surface check
+            // Surface check
             SurfaceInfo s = GetSurface(terrainMask);
             
             if(s.leftCast || s.rightCast)
             {
                 Vector2 groundMidpoint = AMath.Midpoint(sensorGroundLeft.position, sensorGroundRight.position);
 
+                // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
                 if(s.leftCast && s.rightCast)
                 {
                     float rightDiff = AMath.AngleDiff(s.rightSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
                     float leftDiff = AMath.AngleDiff(s.leftSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
-                    float overlapDiff;
+                    float overlapDiff = AMath.AngleDiff(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
+
                     if(s.footing == Footing.Left)
                     {
                         if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleThreshold)
                         {
-                            overlapDiff = AMath.AngleDiff(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
-
                             if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
                             {
                                 transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
@@ -367,8 +396,6 @@ public class PlayerController : MonoBehaviour {
                     {
                         if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleThreshold)
                         {
-                            overlapDiff = AMath.AngleDiff(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
-
                             if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
                             {
                                 transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
