@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	private bool grounded;
+    private Footing footing;
 	private float vx, vy, vg;
 	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
     private bool justLanded, justJumped;
@@ -312,14 +313,18 @@ public class PlayerController : MonoBehaviour {
                             {
                                 transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                                footing = Footing.Left;
                             } else {
                                 transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, s.leftCast.point);
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                                footing = Footing.Left;
                             }
 
                         } else if(Mathf.Abs(rightDiff) < SurfaceAngleThreshold) {
                             transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
                             transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                            footing = Footing.Right;
+
                         } else {
                             Detach();
                         }
@@ -327,25 +332,28 @@ public class PlayerController : MonoBehaviour {
                     {
                         if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleThreshold)
                         {
-                            overlapDiff = AMath.AngleDiff(s.rightSurfaceAngle, s.leftSurfaceAngle) * Mathf.Rad2Deg;
-                            
+                            overlapDiff = AMath.AngleDiff(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
+
                             if(Mathf.Abs(overlapDiff) > OverlapAngleThreshold && overlapDiff > OverlapAngleMinimum)
                             {
                                 transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), groundMidpoint);
                                 transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                                footing = Footing.Right;
                             } else {
                                 transform.RotateTo(s.rightCast.normal.Angle() - Mathf.PI / 2.0f, s.rightCast.point);
                                 transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+                                footing = Footing.Right;
                             }
                             
                         } else if(Mathf.Abs(leftDiff) < SurfaceAngleThreshold) {
                             transform.RotateTo(s.leftCast.normal.Angle() - Mathf.PI / 2.0f, groundMidpoint);
                             transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+                            footing = Footing.Left;
                         } else {
                             Detach();
                         }
                     }
-                } 
+                }
             } else {
                 Detach();
             }
@@ -394,6 +402,7 @@ public class PlayerController : MonoBehaviour {
 		surfaceAngle = 0.0f;
 		grounded = false;
 		wallMode = WallMode.Floor;
+        footing = Footing.None
 	}
 
     private void ResolveImpact(float surfaceAngle)
