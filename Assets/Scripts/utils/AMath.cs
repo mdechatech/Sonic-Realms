@@ -240,7 +240,7 @@ public static class AMath
 	}
 
 	/// <summary>
-	/// Returns the signed angle between two vectors.
+	/// Returns the signed angle, in radians, between two vectors.
 	/// 
 	/// If the shortest arc from a to b is counterclockwise (increasing in angle),
 	/// the sign is positive; otherwise the sign is negative.
@@ -248,24 +248,52 @@ public static class AMath
 	/// <returns>The angle.</returns>
 	/// <param name="a">The first vector.</param>
 	/// <param name="b">The second vector.</param>
-	public static float AngleDiff(Vector2 a, Vector2 b)
+	public static float AngleDiffr(Vector2 a, Vector2 b)
 	{
-		return AngleDiff (a.Angle (), b.Angle ());
+		return AngleDiffr (a.Angle (), b.Angle ());
     }
 
 	/// <summary>
-	/// Returns the signed angle difference between two rays pointing in the specified direction.
+	/// Returns the signed angle difference between two rays pointing in the specified direction, in radians.
 	/// 
 	/// If the shortest arc from a to b is counterclockwise (increasing in angle),
 	/// the sign is positive; otherwise the sign is negative.
 	/// </summary>
-	/// <returns>The angle between two rays pointing in the specified direction.</returns>
-	/// <param name="a">The angle of the first ray.</param>
-	/// <param name="b">The angle of the second ray.</param>
-	public static float AngleDiff(float a, float b)
+	/// <returns>The angle in radians between two rays pointing in the specified direction.</returns>
+	/// <param name="a">The angle of the first ray, in radians.</param>
+	/// <param name="b">The angle of the second ray, in radians.</param>
+	public static float AngleDiffr(float a, float b)
 	{
 		return AMath.Modp(b - a + Mathf.PI, Mathf.PI * 2.0f) - Mathf.PI;
 	}
+
+    /// <summary>
+    /// Returns the signed angle, in degrees, between two vectors.
+    /// 
+    /// If the shortest arc from a to b is counterclockwise (increasing in angle),
+    /// the sign is positive; otherwise the sign is negative.
+    /// </summary>
+    /// <returns>The angle.</returns>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
+    public static float AngleDiffd(Vector2 a, Vector2 b)
+    {
+        return AngleDiffd(a.Angle() * Mathf.Rad2Deg, b.Angle() * Mathf.Rad2Deg);
+    }
+
+    /// <summary>
+    /// Returns the signed angle difference between two rays pointing in the specified direction, in degrees.
+    /// 
+    /// If the shortest arc from a to b is counterclockwise (increasing in angle),
+    /// the sign is positive; otherwise the sign is negative.
+    /// </summary>
+    /// <returns>The angle in degrees between two rays pointing in the specified direction.</returns>
+    /// <param name="a">The angle of the first ray, in degrees.</param>
+    /// <param name="b">The angle of the second ray, in degrees.</param>
+    public static float AngleDiffd(float a, float b)
+    {
+        return AMath.Modp(b - a + 180.0f, 360.0f) - 180.0f;
+    }
 
 	/// <summary>
 	/// Inclusive floor. If the value is a whole number, the value is reduced
