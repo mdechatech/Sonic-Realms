@@ -144,14 +144,14 @@ public class PlayerController : MonoBehaviour {
 
 	private void FixedUpdate()
 	{
-        HandleInput();
-        HandleForces();
+        HandleInput(Time.fixedDeltaTime);
 
         // Stagger routine - if the player's gotta go fast, move it in increments of StaggerSpeedThreshold to prevent tunneling
         float vt = Mathf.Sqrt(vx * vx + vy * vy);
 
         if (vt < StaggerSpeedThreshold)
         {
+            HandleForces();
             transform.position = new Vector2(transform.position.x + (vx * Time.fixedDeltaTime), transform.position.y + (vy * Time.fixedDeltaTime));
             HandleCollisions();
         } else {
@@ -161,9 +161,11 @@ public class PlayerController : MonoBehaviour {
             {
                 if(vc > StaggerSpeedThreshold)
                 {
+                    HandleForces(Time.fixedDeltaTime * (StaggerSpeedThreshold / vt));
                     transform.position += (new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime)) * (StaggerSpeedThreshold / vt);
                     vc -= StaggerSpeedThreshold;
                 } else {
+                    HandleForces(Time.fixedDeltaTime * (vc / vt));
                     transform.position += (new Vector3(vx * Time.fixedDeltaTime, vy * Time.fixedDeltaTime)) * (vc / vt);
                     vc = 0.0f;
                 }
@@ -178,11 +180,18 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
-    /// <summary>
-    /// Handles the input from the previous update and also applies 
-    /// </summary>
     private void HandleInput()
     {
+        HandleInput(Time.fixedDeltaTime);
+    }
+
+    /// <summary>
+    /// Handles the input from the previous update.
+    /// </summary>
+    private void HandleInput(float timeStep)
+    {
+        float timeScale = timeStep / Settings.DefaultFixedDeltaTime;
+
         if (grounded)
         {
             if(jumpKeyDown) 
@@ -191,59 +200,73 @@ public class PlayerController : MonoBehaviour {
                 justJumped = true;
                 
                 float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
-                vx += jumpSpeed * Mathf.Cos(surfaceNormal);
-                vy += jumpSpeed * Mathf.Sin(surfaceNormal);
+                vx += jumpSpeed * Mathf.Cos(surfaceNormal) * timeScale;
+                vy += jumpSpeed * Mathf.Sin(surfaceNormal) * timeScale;
 
                 Detach();
             }
             
             if(leftKeyDown)
             {
-                vg -= groundAcceleration;
-                if(vg > 0) vg -= groundDeceleration;
+                vg -= groundAcceleration * timeScale;
+                if(vg > 0) vg -= groundDeceleration * timeScale;
             } else if(rightKeyDown)
             {
-                vg += groundAcceleration;
-                if(vg < 0) vg += groundDeceleration;
+                vg += groundAcceleration * timeScale;
+                if(vg < 0) vg += groundDeceleration * timeScale;
             }
-            
-            if(vg > maxSpeed) vg = maxSpeed;
-            else if(vg < -maxSpeed) vg = -maxSpeed;
         } else {
-            vy -= gravity;
-
-            if(leftKeyDown) vx -= airAcceleration;
-            else if(rightKeyDown) vx += airAcceleration;
+            if(leftKeyDown) vx -= airAcceleration * timeScale;
+            else if(rightKeyDown) vx += airAcceleration * timeScale;
         }
+    }
+
+    /// <summary>
+    /// Uses Time.fixedDeltaTime as the timestep. Applies forces on the player and also handles speed-based conditions,
+    /// such as detaching the player if it is too slow on an incline.
+    /// </summary>
+    private void HandleForces()
+    {
+        HandleForces(Time.fixedDeltaTime);
     }
 
     /// <summary>
     /// Applies forces on the player and also handles speed-based conditions, such as detaching the player if it is too slow on
     /// an incline.
     /// </summary>
-    private void HandleForces()
+    private void HandleForces(float timeStep)
     {
-        if (!leftKeyDown && !rightKeyDown)
+        float timeScale = timeStep / Settings.DefaultFixedDeltaTime;
+
+        if (grounded)
         {
-            if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
+            if (!leftKeyDown && !rightKeyDown)
             {
-                vg = 0.0f;
-            } else if(vg > 0.0f)
-            {
-                vg -= groundDeceleration;
-            } else if(vg < 0.0f)
-            {
-                vg += groundDeceleration;
+                if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
+                {
+                    vg = 0.0f;
+                } else if(vg > 0.0f)
+                {
+                    vg -= groundDeceleration * timeScale;
+                } else if(vg < 0.0f)
+                {
+                    vg += groundDeceleration * timeScale;
+                }
             }
+
+            vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad) * timeScale;
+
+            if(vg > maxSpeed) vg = maxSpeed;
+            else if(vg < -maxSpeed) vg = -maxSpeed;
+        } else {
+            vy -= gravity * timeScale;
         }
-
-
-        vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
     }
 
     /// <summary>
     /// Checks for collision with all sensors, changing position, velocity, and rotation if necessary. This should be called each time
-    /// the player changes position.
+    /// the player changes position. This method does not require a timestep because it resolves collisions by directly translating
+    /// the player and setting its velocity, often to 0, rather than adding to it.
     /// </summary>
     private void HandleCollisions()
     {
