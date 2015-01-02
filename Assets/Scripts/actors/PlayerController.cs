@@ -180,6 +180,9 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Handles the input from the previous update using Time.fixedDeltaTime as the timestep.
+    /// </summary>
     private void HandleInput()
     {
         HandleInput(Time.fixedDeltaTime);
@@ -287,11 +290,14 @@ public class PlayerController : MonoBehaviour {
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
-                    vx = 0;
+                    ResolveImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
+                    ResolveImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
                     if(vy > 0) vy = 0;
                 }
+
             } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
             {
                 RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
@@ -300,9 +306,11 @@ public class PlayerController : MonoBehaviour {
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
-                    vx = 0;
+                    ResolveImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
+                    ResolveImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
                     if(vy > 0) vy = 0;
                 }
             }
@@ -329,9 +337,29 @@ public class PlayerController : MonoBehaviour {
                 justJumped = Physics2D.OverlapPointNonAlloc(sensorGroundLeft.position, cmem, terrainMask) > 0 || 
                     Physics2D.OverlapPointNonAlloc(sensorGroundRight.position, cmem, terrainMask) > 0;
             } else {
-                justLanded = Physics2D.OverlapPointNonAlloc(sensorGroundLeft.position, cmem, terrainMask) > 0 || 
-                    Physics2D.OverlapPointNonAlloc(sensorGroundRight.position, cmem, terrainMask) > 0;
-                grounded = justLanded;
+                RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position);
+                RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position);
+
+                if(groundLeftCheck || groundRightCheck)
+                {
+                    if(groundLeftCheck && groundRightCheck)
+                    {
+                        if(groundLeftCheck.point.y > groundRightCheck.point.y)
+                        {
+                            ResolveImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+                        } else {
+                            ResolveImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+                        }
+                    } else if(groundLeftCheck)
+                    {
+                        ResolveImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+                    } else {
+                        ResolveImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+                    }
+
+                    justLanded = true;
+                    grounded = true;
+                }
             }
         }
         
@@ -515,9 +543,17 @@ public class PlayerController : MonoBehaviour {
         footing = Footing.None;
 	}
 
-    private void ResolveImpact(float surfaceAngle)
+    /// <summary>
+    /// Calculates the ground velocity as the result of an impact on the specified surface angle.
+    /// </summary>
+    /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
+    private void ResolveImpact(float angleRadians)
     {
-
+        float angle = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+        if (angle < 90.0f || angle > 270.0f)
+        {
+            vg = vx;
+        }
     }
 
 	/// <summary>
@@ -618,9 +654,9 @@ public class PlayerController : MonoBehaviour {
 		public SurfaceInfo(RaycastHit2D leftCast, RaycastHit2D rightCast, Footing footing)
         {   
             this.leftCast = leftCast;
-            this.leftSurfaceAngle = (leftCast) ? leftCast.normal.Angle() - Mathf.PI / 2 : 0.0f;
+            this.leftSurfaceAngle = (leftCast) ? leftCast.normal.Angle() - AMath.HALF_PI : 0.0f;
             this.rightCast = rightCast;
-            this.rightSurfaceAngle = (rightCast) ? rightCast.normal.Angle() - Mathf.PI / 2 : 0.0f;
+            this.rightSurfaceAngle = (rightCast) ? rightCast.normal.Angle() - AMath.HALF_PI : 0.0f;
             this.footing = footing;
         }
 	}

@@ -10,6 +10,11 @@ public static class AMath
 	/// </summary>
 	public const float Epsilon = 0.0001f;
 
+    /// <summary>
+    /// Half of pi.
+    /// </summary>
+    public const float HALF_PI = Mathf.PI / 2.0f;
+
 	/// <summary>
 	/// Performs a modulus that is positive as long as the divisor is positive.
 	/// </summary>
