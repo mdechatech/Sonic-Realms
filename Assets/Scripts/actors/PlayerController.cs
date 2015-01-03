@@ -57,9 +57,15 @@ public class PlayerController : MonoBehaviour {
     private const float SlopeFactor = 0.3f;
 
     /// <summary>
-    /// The minimum
+    /// The minimum angle of an incline at which slope gravity is applied.
     /// </summary>
     private const float SlopeGravityAngleMinimum = 10.0f;
+
+    /// <summary>
+    /// The minimum angle of an incline from a ceiling or left or right wall for a player to be able to
+    /// attach to it from the air.
+    /// </summary>
+    private const float AttachAngleMinimum = 5.0f;
 
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
@@ -290,11 +296,11 @@ public class PlayerController : MonoBehaviour {
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
-                    ResolveImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
-                    ResolveImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
                     if(vy > 0) vy = 0;
                 }
 
@@ -306,11 +312,11 @@ public class PlayerController : MonoBehaviour {
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
-                    ResolveImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
-                    ResolveImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
                     if(vy > 0) vy = 0;
                 }
             }
@@ -342,19 +348,21 @@ public class PlayerController : MonoBehaviour {
 
                 if(groundLeftCheck || groundRightCheck)
                 {
+                    Debug.Log("left: " + (groundLeftCheck.normal.Angle() * Mathf.Rad2Deg - 90.0f) + 
+                              ", right: " + (groundRightCheck.normal.Angle() * Mathf.Rad2Deg - 90.0f));
                     if(groundLeftCheck && groundRightCheck)
                     {
                         if(groundLeftCheck.point.y > groundRightCheck.point.y)
                         {
-                            ResolveImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+                            HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
                         } else {
-                            ResolveImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+                            HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
                         }
                     } else if(groundLeftCheck)
                     {
-                        ResolveImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+                        HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
                     } else {
-                        ResolveImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+                        HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
                     }
 
                     justLanded = true;
@@ -544,18 +552,46 @@ public class PlayerController : MonoBehaviour {
 	}
 
     /// <summary>
+    /// Attaches the player to a surface within the reach of its surface sensors. The angle of attachment
+    /// need not be perfect; the method works reliably for angles within 45 degrees of the one specified.
+    /// </summary>
+    /// <param name="groundSpeed">The ground speed of the player after attaching.</param>
+    /// <param name="angleRadians">The angle of the surface, in radians.</param>
+    private void Attach(float groundSpeed, float angleRadians)
+    {
+        float angleDegrees = angleRadians * Mathf.Rad2Deg;
+        vg = groundSpeed;
+        surfaceAngle = lastSurfaceAngle = angleDegrees;
+        grounded = justLanded = true;
+        wallMode = (Mathf.Abs(AMath.AngleDiffd(angleDegrees, 0.0f)) < Mathf.Abs(AMath.AngleDiffd(angleDegrees, 180.0f))) ? 
+            WallMode.Floor : WallMode.Ceiling;
+
+        transform.RotateTo(angleRadians);
+    }
+
+    /// <summary>
     /// Calculates the ground velocity as the result of an impact on the specified surface angle.
     /// </summary>
+    /// <returns>Whether the player should attach to the specified incline.</returns>
     /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
-    private void ResolveImpact(float angleRadians)
+    private bool HandleImpact(float angleRadians)
     {
-        float angle = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
-        float airAngle = AMath.Modp(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, 360.0f);
-        if (angle < 90.0f || angle > 270.0f)
-        {
+        float sAngle = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
 
-            vg = vx;
+        // Ground attachment
+        if (Mathf.Abs(AMath.AngleDiffd(sAngle, 180.0f)) > AttachAngleMinimum && 
+            Mathf.Abs(AMath.AngleDiffd(sAngle, 90.0f)) > AttachAngleMinimum &&
+            Mathf.Abs(AMath.AngleDiffd(sAngle, 270.0f)) > AttachAngleMinimum)    
+        {
+            // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
+            Attach(Mathf.Sqrt(vx * vx + vy * vy) * 
+                        -(AMath.AngleDiffd(AMath.Modp(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, 360.0f),
+                               sAngle - 90.0f) / 90.0f),
+                   sAngle * Mathf.Deg2Rad);
+            return true;
         }
+
+        return false;
     }
 
 	/// <summary>
