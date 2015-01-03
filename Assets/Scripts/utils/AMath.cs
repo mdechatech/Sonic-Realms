@@ -15,6 +15,11 @@ public static class AMath
     /// </summary>
     public const float HALF_PI = Mathf.PI / 2.0f;
 
+    /// <summary>
+    /// Double pi.
+    /// </summary>
+    public const float DOUBLE_PI = Mathf.PI * 2.0f;
+
 	/// <summary>
 	/// Performs a modulus that is positive as long as the divisor is positive.
 	/// </summary>
