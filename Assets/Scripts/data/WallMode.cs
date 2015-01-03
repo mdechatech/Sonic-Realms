@@ -9,10 +9,30 @@ public enum WallMode : int {
 };
 
 /// <summary>
-/// Contains extension methods for WallMode.
+/// Contains extension and utility methods for WallMode.
 /// </summary>
-public static class WallModeExtensions
+public static class WallModeUtils
 {
+
+    /// <summary>
+    /// Returns the wall mode of a surface with the specified angle.
+    /// </summary>
+    /// <returns>The wall mode.</returns>
+    /// <param name="angleRadians">The surface angle in radians.</param>
+    public static WallMode FromSurfaceAngle(float angleRadians)
+    {
+        float angle = AMath.Modp(angleRadians, AMath.DOUBLE_PI);
+
+        if (angle <= Mathf.PI * 0.25f || angle > Mathf.PI * 1.75f)
+            return WallMode.Floor;
+        else if (angle > Mathf.PI * 0.25f && angle <= Mathf.PI * 0.75f)
+            return WallMode.Right;
+        else if (angle > Mathf.PI * 0.75f && angle <= Mathf.PI * 1.25f)
+            return WallMode.Ceiling;
+        else
+            return WallMode.Left;
+    }
+
 	/// <summary>
 	/// Returns a unit vector which represents the direction in which a wall mode points.
 	/// </summary>
@@ -40,7 +60,7 @@ public static class WallModeExtensions
 	}
 
 	/// <summary>
-	/// Returns the normal of a flat wall in the specified wall mode.
+	/// Returns the normal angle in radians (-pi to pi) of a flat wall in the specified wall mode.
 	/// </summary>
 	/// <param name="wallMode">The wall mode.</param>
 	public static float Normal(this WallMode wallMode)
@@ -48,13 +68,13 @@ public static class WallModeExtensions
 		switch(wallMode)
 		{
 		case WallMode.Floor : 
-			return Mathf.PI / 2;
+			return AMath.HALF_PI;
 		
 		case WallMode.Right : 
 			return Mathf.PI;
 
 		case WallMode.Ceiling : 
-			return -Mathf.PI / 2;
+			return -AMath.HALF_PI;
 
 		case WallMode.Left : 
 			return 0.0f;
