@@ -288,40 +288,6 @@ public class PlayerController : MonoBehaviour {
             transform.eulerAngles = new Vector3();
             surfaceAngle = 0.0f;
 
-            // Ceiling check - either pushes out vertically or horizontally based on the closest distance in either direction to the surface
-            if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
-            {
-                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position);
-                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position);
-
-                if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
-                {
-                    transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
-                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
-                    if(vy > 0) vy = 0;
-                } else {
-                    transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
-                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
-                    if(vy > 0) vy = 0;
-                }
-
-            } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
-            {
-                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
-                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position);
-
-                if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
-                {
-                    transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
-                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);   
-                    if(vy > 0) vy = 0;
-                } else {
-                    transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
-                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
-                    if(vy > 0) vy = 0;
-                }
-            }
-            
             // Side check
             RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
             RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
@@ -336,6 +302,40 @@ public class PlayerController : MonoBehaviour {
                 vx = 0;
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
                     ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
+            }
+
+            // Ceiling check - either pushes out vertically or horizontally based on the closest distance in either direction to the surface
+            if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
+            {
+                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position);
+                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position);
+                
+                if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
+                {
+                    transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
+                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    if(vy > 0) vy = 0;
+                } else {
+                    transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
+                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                    if(vy > 0) vy = 0;
+                }
+                
+            } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
+            {
+                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
+                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position);
+                
+                if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
+                {
+                    transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
+                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);   
+                    if(vy > 0) vy = 0;
+                } else {
+                    transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
+                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                    if(vy > 0) vy = 0;
+                }
             }
 
             // See if the player landed
@@ -381,21 +381,6 @@ public class PlayerController : MonoBehaviour {
             }
             
             // Side check
-            RaycastHit2D ceilLeftCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
-            RaycastHit2D ceilRightCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
-
-            if(ceilLeftCheck)
-            {
-                vg = 0;
-                transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position + 
-                    ((Vector3)ceilLeftCheck.point - sensorCeilLeft.position).normalized * AMath.Epsilon;
-            } else if(ceilRightCheck)
-            {
-                vg = 0;
-                transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position +
-                    ((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
-            }
-
             RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
             RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
             
@@ -410,7 +395,22 @@ public class PlayerController : MonoBehaviour {
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
                     ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
             }
+
+            // Ceiling-side check
+            RaycastHit2D ceilLeftCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
+            RaycastHit2D ceilRightCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
             
+            if(ceilLeftCheck)
+            {
+                vg = 0;
+                transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position + 
+                    ((Vector3)ceilLeftCheck.point - sensorCeilLeft.position).normalized * AMath.Epsilon;
+            } else if(ceilRightCheck)
+            {
+                vg = 0;
+                transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position +
+                    ((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
+            }
             
             // Surface check
             SurfaceInfo s = GetSurface(terrainMask);
@@ -558,12 +558,20 @@ public class PlayerController : MonoBehaviour {
     /// <param name="angleRadians">The angle of the surface, in radians.</param>
     private void Attach(float groundSpeed, float angleRadians)
     {
-        float angleDegrees = angleRadians * Mathf.Rad2Deg;
+        float angleDegrees = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
         vg = groundSpeed;
         surfaceAngle = lastSurfaceAngle = angleDegrees;
         grounded = justLanded = true;
-        wallMode = (Mathf.Abs(AMath.AngleDiffd(angleDegrees, 0.0f)) < Mathf.Abs(AMath.AngleDiffd(angleDegrees, 180.0f))) ? 
-            WallMode.Floor : WallMode.Ceiling;
+
+        // Wallmode here is biased toward floor/ceiling; only needs to be right/left at extreme angles
+        if (surfaceAngle < 45.0f + WallModeAngleThreshold || surfaceAngle > 315.0f - WallModeAngleThreshold)
+            wallMode = WallMode.Floor;
+        else if (surfaceAngle > 135.0f - WallModeAngleThreshold && surfaceAngle < 225.0 + WallModeAngleThreshold)
+            wallMode = WallMode.Ceiling;
+        else if (surfaceAngle > 45.0f + WallModeAngleThreshold && surfaceAngle < 135.0f - WallModeAngleThreshold)
+            wallMode = WallMode.Right;
+        else 
+            wallMode = WallMode.Left;
 
         transform.RotateTo(angleRadians);
     }
@@ -584,7 +592,7 @@ public class PlayerController : MonoBehaviour {
         {
             if(vy > 0.0f && (AMath.Equalsf(sAngle, 0.0f) || sAngle > 180.0f))
             {
-                Attach(0.0f, sAngle * Mathf.Deg2Rad);
+                Attach(vx, sAngle * Mathf.Deg2Rad);
             } else {
                 // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
                 Attach(Mathf.Sqrt(vx * vx + vy * vy) * 
