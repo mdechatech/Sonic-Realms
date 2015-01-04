@@ -224,6 +224,7 @@ public class PlayerController : MonoBehaviour {
                 vg += groundAcceleration * timeScale;
                 if(vg < 0) vg += groundDeceleration * timeScale;
             }
+            if(Input.GetKey(KeyCode.Space)) vg = maxSpeed * Mathf.Sign(vg);
         } else {
             if(leftKeyDown) vx -= airAcceleration * timeScale;
             else if(rightKeyDown) vx += airAcceleration * timeScale;
@@ -308,11 +309,11 @@ public class PlayerController : MonoBehaviour {
             {
                 RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
                 RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position);
-                
+
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
-                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);   
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
@@ -348,8 +349,6 @@ public class PlayerController : MonoBehaviour {
 
                 if(groundLeftCheck || groundRightCheck)
                 {
-                    Debug.Log("left: " + (groundLeftCheck.normal.Angle() * Mathf.Rad2Deg - 90.0f) + 
-                              ", right: " + (groundRightCheck.normal.Angle() * Mathf.Rad2Deg - 90.0f));
                     if(groundLeftCheck && groundRightCheck)
                     {
                         if(groundLeftCheck.point.y > groundRightCheck.point.y)
@@ -583,11 +582,16 @@ public class PlayerController : MonoBehaviour {
             Mathf.Abs(AMath.AngleDiffd(sAngle, 90.0f)) > AttachAngleMinimum &&
             Mathf.Abs(AMath.AngleDiffd(sAngle, 270.0f)) > AttachAngleMinimum)    
         {
-            // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
-            Attach(Mathf.Sqrt(vx * vx + vy * vy) * 
-                        -(AMath.AngleDiffd(AMath.Modp(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, 360.0f),
-                               sAngle - 90.0f) / 90.0f),
-                   sAngle * Mathf.Deg2Rad);
+            if(vy > 0.0f && (AMath.Equalsf(sAngle, 0.0f) || sAngle > 180.0f))
+            {
+                Attach(0.0f, sAngle * Mathf.Deg2Rad);
+            } else {
+                // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
+                Attach(Mathf.Sqrt(vx * vx + vy * vy) * 
+                       -AMath.Clamp(AMath.AngleDiffd(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, sAngle - 90.0f) / 90.0f, -1.0f, 1.0f),
+                       sAngle * Mathf.Deg2Rad);
+            }
+
             return true;
         }
 
