@@ -244,6 +244,17 @@ public static class AMath
 		return (a >= b - Epsilon && a <= b + Epsilon);
 	}
 
+    /// <summary>
+    /// Clamps the number to the specified range.
+    /// </summary>
+    /// <param name="number">The number.</param>
+    /// <param name="min">The range minimum.</param>
+    /// <param name="max">The range maximum.</param>
+    public static float Clamp(float number, float min, float max)
+    {
+        return (number < min) ? min : (number > max) ? max : number;
+    }
+
 	/// <summary>
 	/// Returns the signed angle, in radians, between two vectors.
 	/// 
