@@ -547,8 +547,8 @@ public class PlayerController : MonoBehaviour {
                 // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
                 if(s.leftCast && s.rightCast)
                 {
-                    float rightDiff = AMath.AngleDiffr(s.rightSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
-                    float leftDiff = AMath.AngleDiffr(s.leftSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
+                    float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
                     float overlapDiff = AMath.AngleDiffr(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
 
                     if(s.footing == Footing.Left)
@@ -599,7 +599,7 @@ public class PlayerController : MonoBehaviour {
                     }
                 } else if(s.leftCast)
                 {
-                    float leftDiff = AMath.AngleDiffr(s.leftSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
                     if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleDiffMax)
                     {
                         transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
@@ -609,7 +609,7 @@ public class PlayerController : MonoBehaviour {
                         Detach();
                     }
                 } else {
-                    float rightDiff = AMath.AngleDiffr(s.rightSurfaceAngle, lastSurfaceAngle * Mathf.Deg2Rad) * Mathf.Rad2Deg;
+                    float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
                     if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleDiffMax)
                     {
                         transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
@@ -634,7 +634,7 @@ public class PlayerController : MonoBehaviour {
 
             // Can only stay on the surface if angle difference is low enough
             if(grounded && (justLanded ||
-                Mathf.Abs(AMath.AngleDiffr(lastSurfaceAngle * Mathf.Deg2Rad, surfaceAngle * Mathf.Deg2Rad)) * Mathf.Rad2Deg < SurfaceAngleDiffMax))
+                Mathf.Abs(AMath.AngleDiffd(lastSurfaceAngle, surfaceAngle)) < SurfaceAngleDiffMax))
             {
                 if(wallMode == WallMode.Floor)
                 {
