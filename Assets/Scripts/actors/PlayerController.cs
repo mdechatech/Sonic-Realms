@@ -662,7 +662,10 @@ public class PlayerController : MonoBehaviour {
                                       (Vector2)sensorGroundLeft.position + wallMode.UnitVector() * SurfaceDepthMax,
                                       terrainMask);
 
-            if(AMath.Equalsf(cast.fraction, 0.0f))
+            if(!cast)
+            {
+                return default(RaycastHit2D);
+            } else if(AMath.Equalsf(cast.fraction, 0.0f))
             {
                 for(WallMode check = wallMode.AdjacentCW(); check != wallMode; check = check.AdjacentCW())
                 {
@@ -671,9 +674,7 @@ public class PlayerController : MonoBehaviour {
                                               terrainMask);
 
                     if(cast && !AMath.Equalsf(cast.fraction, 0.0f))
-                    {
                         return cast;
-                    }
                 }
 
                 return default(RaycastHit2D);
@@ -685,7 +686,10 @@ public class PlayerController : MonoBehaviour {
                                       (Vector2)sensorGroundRight.position + wallMode.UnitVector() * SurfaceDepthMax,
                                       terrainMask);
 
-            if(AMath.Equalsf(cast.fraction, 0.0f))
+            if(!cast)
+            {
+                return default(RaycastHit2D);
+            } else if(AMath.Equalsf(cast.fraction, 0.0f))
             {
                 for(WallMode check = wallMode.AdjacentCW(); check != wallMode; check = check.AdjacentCW())
                 {
@@ -699,7 +703,7 @@ public class PlayerController : MonoBehaviour {
                 
                 return default(RaycastHit2D);
             }
-            
+
             return cast;
         }
     }
