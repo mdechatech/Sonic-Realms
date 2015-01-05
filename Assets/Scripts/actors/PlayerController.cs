@@ -21,12 +21,22 @@ public class PlayerController : MonoBehaviour {
 	/// The amount in degrees past the threshold of changing wall mode that the player
 	/// can go.
 	/// </summary>
-	private const float WallModeAngleThreshold = 10.0f;
+	private const float WallModeAngleThreshold = 0.0f;
 
 	/// <summary>
 	/// The speed at which the player must be moving to be able to switch wall modes.
 	/// </summary>
 	private const float WallModeSpeedThreshold = 0.5f;
+
+    /// <summary>
+    /// The maximum height of a ledge above the player's feet that it can climb without hindrance.
+    /// </summary>
+    private const float LedgeHeightMax = 0.25f;
+
+    /// <summary>
+    /// The maximum depth of a surface below the player's feet that it can drop to without hindrance.
+    /// </summary>
+    private const float SurfaceDepthMax = 0.25f;
 
 	/// <summary>
 	/// The maximum change in angle between two surfaces that the player can walk in.
@@ -645,29 +655,52 @@ public class PlayerController : MonoBehaviour {
     /// <param name="footing">The footing to linecast from.</param>
     private RaycastHit2D SurfaceCast(Footing footing)
     {
+        RaycastHit2D cast;
         if (footing == Footing.Left)
         {
-            if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
+            cast = Physics2D.Linecast((Vector2)sensorGroundLeft.position - wallMode.UnitVector() * LedgeHeightMax,
+                                      (Vector2)sensorGroundLeft.position + wallMode.UnitVector() * SurfaceDepthMax,
+                                      terrainMask);
+
+            if(AMath.Equalsf(cast.fraction, 0.0f))
             {
-                return Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.y / 2.0f,
-                                          (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.y / 2.0f,
-                                          terrainMask);
-            } else {
-                return Physics2D.Linecast((Vector2)sensorGroundLeft.position + wallMode.UnitVector() * -size.x / 2.0f,
-                                          (Vector2)sensorGroundLeft.position - wallMode.UnitVector() * -size.x / 2.0f,
-                                          terrainMask);
+                for(WallMode check = wallMode.AdjacentCW(); check != wallMode; check = check.AdjacentCW())
+                {
+                    cast = Physics2D.Linecast((Vector2)sensorGroundLeft.position - check.UnitVector() * LedgeHeightMax,
+                                              (Vector2)sensorGroundLeft.position + check.UnitVector() * SurfaceDepthMax,
+                                              terrainMask);
+
+                    if(cast && !AMath.Equalsf(cast.fraction, 0.0f))
+                    {
+                        return cast;
+                    }
+                }
+
+                return default(RaycastHit2D);
             }
+
+            return cast;
         } else {
-            if(wallMode == WallMode.Floor || wallMode == WallMode.Ceiling)
+            cast = Physics2D.Linecast((Vector2)sensorGroundRight.position - wallMode.UnitVector() * LedgeHeightMax,
+                                      (Vector2)sensorGroundRight.position + wallMode.UnitVector() * SurfaceDepthMax,
+                                      terrainMask);
+
+            if(AMath.Equalsf(cast.fraction, 0.0f))
             {
-                return Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.y / 2.0f,
-                                          (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.y / 2.0f,
-                                          terrainMask);
-            } else {
-                return Physics2D.Linecast((Vector2)sensorGroundRight.position + wallMode.UnitVector() * -size.x / 2.0f,
-                                          (Vector2)sensorGroundRight.position - wallMode.UnitVector() * -size.x / 2.0f,
-                                          terrainMask);
+                for(WallMode check = wallMode.AdjacentCW(); check != wallMode; check = check.AdjacentCW())
+                {
+                    cast = Physics2D.Linecast((Vector2)sensorGroundRight.position - check.UnitVector() * LedgeHeightMax,
+                                              (Vector2)sensorGroundRight.position + check.UnitVector() * SurfaceDepthMax,
+                                              terrainMask);
+                    
+                    if(cast && !AMath.Equalsf(cast.fraction, 0.0f))
+                        return cast;
+                }
+                
+                return default(RaycastHit2D);
             }
+            
+            return cast;
         }
     }
 
