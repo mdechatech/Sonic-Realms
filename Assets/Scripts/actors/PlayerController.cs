@@ -1,16 +1,156 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Controls the player.
+/// </summary>
 public class PlayerController : MonoBehaviour {
-	private bool grounded;
-    private Footing footing;
-	private float vx, vy, vg;
-	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
-    private bool justLanded, justJumped, justDetached;
-    private float lastSurfaceAngle;
 
-	// If grounded, the angle of the incline the player is standing on
-	private float surfaceAngle;
+    /// <summary>
+    /// The acceleration by gravity in units per second per second.
+    /// </summary>
+    [SerializeField]
+    private float gravity;
+
+    /// <summary>
+    /// The player's maximum speed in units per second.
+    /// </summary>
+    [SerializeField]
+    private float maxSpeed;
+
+    /// <summary>
+    /// The player's ground acceleration in units per second per second.
+    /// </summary>
+    [SerializeField]
+    private float groundAcceleration;
+
+    /// <summary>
+    /// The player's friction on the ground in units per second per second.
+    /// </summary>
+    [SerializeField]
+    private float groundDeceleration;
+
+    /// <summary>
+    /// The speed of the player's jump in units per second.
+    /// </summary>
+    [SerializeField]
+    private float jumpSpeed;
+
+    /// <summary>
+    /// The player's horizontal acceleration in the air in units per second per second.
+    /// </summary>
+    [SerializeField]
+    private float airAcceleration;
+
+    // Nine sensors arranged like a tic-tac-toe board.
+    [SerializeField]
+    private Transform sensorGroundLeft;
+    [SerializeField]
+    private Transform sensorGroundMid;
+    [SerializeField]
+    private Transform sensorGroundRight;
+    [SerializeField]
+    private Transform sensorSideLeft;
+    [SerializeField]
+    private Transform sensorSideMid;
+    [SerializeField]
+    private Transform sensorSideRight;
+    [SerializeField]
+    private Transform sensorCeilLeft;
+    [SerializeField]
+    private Transform sensorCeilMid;
+    [SerializeField]
+    private Transform sensorCeilRight;
+    [SerializeField]
+    private Transform sensorTileLeft;
+    [SerializeField]
+    private Transform sensorTileRight;
+
+    /// <summary>
+    /// Whether the left key was held down since the last update. Key is determined by
+    /// Settings.LeftKey.
+    /// </summary>
+    private bool leftKeyDown;
+    
+    /// <summary>
+    /// Whether the right key was held down since the last update. Key is determined by
+    /// Settings.RightKey.
+    /// </summary>
+    private bool rightKeyDown;
+    
+    /// <summary>
+    /// Whether the jump key was pressed since the last update. Key is determined by
+    /// Settings.JumpKey.
+    /// </summary>
+    private bool jumpKeyDown;
+
+    /// <summary>
+    /// The player's horizontal velocity in units per second.
+    /// </summary>
+    private float vx;
+    
+    /// <summary>
+    /// The player's vertical velocity in units per second.
+    /// </summary>
+    private float vy;
+
+    /// <summary>
+    /// Whether the player is on the ground.
+    /// </summary>
+    private bool grounded;
+
+    /// <summary>
+    /// The layer mask which represents the ground the player checks for collision with.
+    /// </summary>
+    private int terrainMask;
+
+    /// <summary>
+    /// Whether the player has just landed on the ground. Is used to ignore surface angle
+    /// once right after.
+    /// </summary>
+    private bool justLanded;
+
+    /// <summary>
+    /// If grounded and hasn't just landed, the angle of incline the player walked on
+    /// one FixedUpdate ago.
+    /// </summary>
+    private float lastSurfaceAngle;
+    
+    /// <summary>
+    /// If grounded, the angle of incline the player is walking on. Goes hand-in-hand
+    /// with rotation.
+    /// </summary>
+    private float surfaceAngle;
+
+    /// <summary>
+    /// If grounded, the player's ground velocity in units per second.
+    /// </summary>
+    private float vg;
+
+    /// <summary>
+    /// If grounded, which sensor on the player defines the primary surface.
+    /// </summary>
+    private Footing footing;
+
+    /// <summary>
+    /// Whether the player has control of horizontal ground movement.
+    /// </summary>
+    private bool horizontalLock;
+
+    /// <summary>
+    /// If horizontally locked, the time in seconds left on it.
+    /// </summary>
+    private float horizontalLockTimer;
+
+    /// <summary>
+    /// Whether the player has just jumped. Is used to avoid collisions right after.
+    /// </summary>
+    private bool justJumped;
+
+    /// <summary>
+    /// Whether the player has just detached. Is used to avoid reattachments right after.
+    /// </summary>
+    private bool justDetached;
 
 	/// <summary>
 	/// Represents the current orientation of the player.
@@ -24,7 +164,7 @@ public class PlayerController : MonoBehaviour {
 	private const float WallModeAngleThreshold = 0.0f;
 
 	/// <summary>
-	/// The speed at which the player must be moving to be able to switch wall modes.
+	/// The speed in units per second at which the player must be moving to be able to switch wall modes.
 	/// </summary>
 	private const float WallModeSpeedThreshold = 0.5f;
 
@@ -56,7 +196,7 @@ public class PlayerController : MonoBehaviour {
     private const float OverlapAngleThreshold = 7.5f;
 
     /// <summary>
-    /// The minimum speed the player must be moving at to stagger each physics update,
+    /// The minimum speed in units per second the player must be moving at to stagger each physics update,
     /// processing the movement in fractions.
     /// </summary>
     private const float StaggerSpeedThreshold = 5.0f;
@@ -78,60 +218,16 @@ public class PlayerController : MonoBehaviour {
     private const float AttachAngleMinimum = 5.0f;
 
     /// <summary>
-    /// The speed below which the player must be traveling on a wall or ceiling to be detached from it.
+    /// The speed in units per second below which the player must be traveling on a wall or ceiling to be
+    /// detached from it.
     /// </summary>
     private const float DetachSpeed = 3.5f;
 
-	// The layer mask which represents all terrain to check for collision with
-	private int terrainMask;
-	
-	[SerializeField]
-	private Vector2 size;
+    /// <summary>
+    /// The duration in seconds of the horizontal lock.
+    /// </summary>
+    private const float HorizontalLockTime = 0.5f;
 
-	[SerializeField]
-	private float gravity;
-
-	[SerializeField]
-	private float maxSpeed;
-
-	[SerializeField]
-	private float groundAcceleration;
-
-	[SerializeField]
-	private float groundDeceleration;
-
-	[SerializeField]
-	private float jumpSpeed;
-
-	[SerializeField]
-	private float airAcceleration;
-
-	// Sensors
-	[SerializeField]
-	private Transform sensorGroundLeft;
-	[SerializeField]
-	private Transform sensorGroundMid;
-	[SerializeField]
-	private Transform sensorGroundRight;
-	[SerializeField]
-	private Transform sensorSideLeft;
-    [SerializeField]
-    private Transform sensorSideMid;
-	[SerializeField]
-	private Transform sensorSideRight;
-	[SerializeField]
-	private Transform sensorCeilLeft;
-	[SerializeField]
-	private Transform sensorCeilMid;
-	[SerializeField]
-	private Transform sensorCeilRight;
-	[SerializeField]
-	private Transform sensorTileLeft;
-	[SerializeField]
-	private Transform sensorTileRight;
-
-
-	// Use this for initialization
 	private void Start () {
 		grounded = false;
 		vx = vy = vg = 0.0f;
@@ -146,7 +242,6 @@ public class PlayerController : MonoBehaviour {
 		collider2D.enabled = false;
 	}
 	
-	// Update is called once per frame
 	private void Update () {
 		GetInput ();
 	}
@@ -289,7 +384,6 @@ public class PlayerController : MonoBehaviour {
 
             if(surfaceAngle > 90.0f && surfaceAngle < 270.0f && Mathf.Abs(vg) < DetachSpeed)
             {
-                Debug.Log("ur 2 slow");
                 Detach();
             }
 
