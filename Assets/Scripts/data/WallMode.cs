@@ -42,20 +42,20 @@ public static class WallModeUtils
 	{
 		switch (wallMode)
 		{
-		case WallMode.Floor : 
-			return new Vector2(0.0f, -1.0f);
-			
-		case WallMode.Ceiling : 
-			return new Vector2(0.0f, 1.0f);
-			
-		case WallMode.Left :
-			return new Vector2(-1.0f, 0.0f);
-			
-		case WallMode.Right : 
-			return new Vector2(1.0f, 0.0f);
-			
-		default:
-			return default(Vector2);
+    		case WallMode.Floor : 
+    			return new Vector2(0.0f, -1.0f);
+    			
+    		case WallMode.Ceiling : 
+    			return new Vector2(0.0f, 1.0f);
+    			
+    		case WallMode.Left :
+    			return new Vector2(-1.0f, 0.0f);
+    			
+    		case WallMode.Right : 
+    			return new Vector2(1.0f, 0.0f);
+    			
+    		default:
+    			return default(Vector2);
 		}
 	}
 
@@ -67,20 +67,20 @@ public static class WallModeUtils
 	{
 		switch(wallMode)
 		{
-		case WallMode.Floor : 
-			return AMath.HALF_PI;
-		
-		case WallMode.Right : 
-			return Mathf.PI;
+    		case WallMode.Floor : 
+    			return AMath.HALF_PI;
+    		
+    		case WallMode.Right : 
+    			return Mathf.PI;
 
-		case WallMode.Ceiling : 
-			return -AMath.HALF_PI;
+    		case WallMode.Ceiling : 
+    			return -AMath.HALF_PI;
 
-		case WallMode.Left : 
-			return 0.0f;
+    		case WallMode.Left : 
+    			return 0.0f;
 
-		default:
-			return default(float);
+    		default:
+    			return default(float);
 		}
 	}
 
@@ -92,20 +92,72 @@ public static class WallModeUtils
 	{
 		switch(wallMode)
 		{
-		case WallMode.Floor : 
-			return WallMode.Ceiling;
-			
-		case WallMode.Right : 
-			return WallMode.Left;
-			
-		case WallMode.Ceiling : 
-			return WallMode.Floor;
-			
-		case WallMode.Left : 
-			return WallMode.Right;
-			
-		default:
-			return WallMode.None;
+    		case WallMode.Floor : 
+    			return WallMode.Ceiling;
+    			
+    		case WallMode.Right : 
+    			return WallMode.Left;
+    			
+    		case WallMode.Ceiling : 
+    			return WallMode.Floor;
+    			
+    		case WallMode.Left : 
+    			return WallMode.Right;
+    			
+    		default:
+    			return WallMode.None;
 		}
 	}
+
+    /// <summary>
+    /// Returns the wall mode adjacent to this traveling clockwise.
+    /// </summary>
+    /// <returns>The adjacent wall mode.</returns>
+    /// <param name="wallMode">The given wall mode.</param>
+    public static WallMode AdjacentCW(this WallMode wallMode)
+    {
+        switch(wallMode)
+        {
+            case WallMode.Floor : 
+                return WallMode.Left;
+                
+            case WallMode.Right : 
+                return WallMode.Floor;
+                
+            case WallMode.Ceiling : 
+                return WallMode.Right;
+                
+            case WallMode.Left : 
+                return WallMode.Ceiling;
+                
+            default:
+                return WallMode.None;
+        }
+    }
+
+    /// <summary>
+    /// Returns the wall mode adjacent to this traveling counter-clockwise.
+    /// </summary>
+    /// <returns>The adjacent wall mode.</returns>
+    /// <param name="wallMode">The given wall mode.</param>
+    public static WallMode AdjacentCCW(this WallMode wallMode)
+    {
+        switch(wallMode)
+        {
+            case WallMode.Floor : 
+                return WallMode.Right;
+                
+            case WallMode.Right : 
+                return WallMode.Ceiling;
+                
+            case WallMode.Ceiling : 
+                return WallMode.Left;
+                
+            case WallMode.Left : 
+                return WallMode.Floor;
+                
+            default:
+                return WallMode.None;
+        }
+    }
 }
