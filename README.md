@@ -5,4 +5,4 @@ This is a 360° platformer inspired by the old Sonic the Hedgehog games. It has 
 
 This does have drawbacks in that the curves can't be represented as well with polygon and circle colliders. To counteract this, the player controller combines the data of two surface sensors to simulate a surface similar to that of a bézier curve.
 
-Right now the engine simply handles physics between the player and anything that has the tag "Terrain" and a 2D collider.
+Right now the engine simply handles physics between the player and anything that has the layer "Terrain" and a 2D collider.
