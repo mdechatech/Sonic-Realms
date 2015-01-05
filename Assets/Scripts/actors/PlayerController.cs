@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour {
     private Footing footing;
 	private float vx, vy, vg;
 	private bool leftKeyDown, rightKeyDown, jumpKeyDown;
-    private bool justLanded, justJumped;
+    private bool justLanded, justJumped, justDetached;
     private float lastSurfaceAngle;
 
 	// If grounded, the angle of the incline the player is standing on
@@ -77,6 +77,11 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private const float AttachAngleMinimum = 5.0f;
 
+    /// <summary>
+    /// The speed below which the player must be traveling on a wall or ceiling to be detached from it.
+    /// </summary>
+    private const float DetachSpeed = 3.5f;
+
 	// The layer mask which represents all terrain to check for collision with
 	private int terrainMask;
 	
@@ -132,7 +137,7 @@ public class PlayerController : MonoBehaviour {
 		vx = vy = vg = 0.0f;
         lastSurfaceAngle = 0.0f;
 		leftKeyDown = rightKeyDown = jumpKeyDown = false;
-        justJumped = justLanded = false;
+        justJumped = justLanded = justDetached = false;
 		wallMode = WallMode.Floor;
 		surfaceAngle = 0.0f;
 		terrainMask = 1 << LayerMask.NameToLayer("Terrain");
@@ -274,10 +279,20 @@ public class PlayerController : MonoBehaviour {
                 }
             }
 
-            vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad) * timeScale;
+            if(Mathf.Abs(AMath.AngleDiffd(surfaceAngle, 0.0f)) > SlopeGravityAngleMinimum)
+            {
+                vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad) * timeScale;
+            }
 
             if(vg > maxSpeed) vg = maxSpeed;
             else if(vg < -maxSpeed) vg = -maxSpeed;
+
+            if(surfaceAngle > 90.0f && surfaceAngle < 270.0f && Mathf.Abs(vg) < DetachSpeed)
+            {
+                Debug.Log("ur 2 slow");
+                Detach();
+            }
+
         } else {
             vy -= gravity * timeScale;
         }
@@ -323,14 +338,19 @@ public class PlayerController : MonoBehaviour {
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
-                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+
+                    if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                    else justDetached = false;
+
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
-                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+
+                    if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                    else justDetached = false;
+
                     if(vy > 0) vy = 0;
                 }
-                
             } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
             {
                 RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
@@ -339,11 +359,17 @@ public class PlayerController : MonoBehaviour {
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
                 {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
-                    HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);   
+
+                    if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);  
+                    else justDetached = false;
+
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
-                    HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+
+                    if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);  
+                    else justDetached = false;
+
                     if(vy > 0) vy = 0;
                 }
             }
@@ -373,7 +399,7 @@ public class PlayerController : MonoBehaviour {
                     } else {
                         HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
                     }
-
+                    
                     justLanded = true;
                     grounded = true;
                 }
@@ -556,6 +582,7 @@ public class PlayerController : MonoBehaviour {
         lastSurfaceAngle = 0.0f;
 		surfaceAngle = 0.0f;
 		grounded = false;
+        justDetached = true;
 		wallMode = WallMode.Floor;
         footing = Footing.None;
 	}
@@ -594,7 +621,7 @@ public class PlayerController : MonoBehaviour {
     private bool HandleImpact(float angleRadians)
     {
         float sAngle = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
-
+        
         // Ground attachment
         if (Mathf.Abs(AMath.AngleDiffd(sAngle, 180.0f)) > AttachAngleMinimum && 
             Mathf.Abs(AMath.AngleDiffd(sAngle, 90.0f)) > AttachAngleMinimum &&
@@ -609,10 +636,10 @@ public class PlayerController : MonoBehaviour {
                        -AMath.Clamp(AMath.AngleDiffd(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, sAngle - 90.0f) / 90.0f, -1.0f, 1.0f),
                        sAngle * Mathf.Deg2Rad);
             }
-
+            
             return true;
         }
-
+        
         return false;
     }
 
