@@ -61,10 +61,6 @@ public class PlayerController : MonoBehaviour {
     private Transform sensorCeilMid;
     [SerializeField]
     private Transform sensorCeilRight;
-    [SerializeField]
-    private Transform sensorTileLeft;
-    [SerializeField]
-    private Transform sensorTileRight;
 
     /// <summary>
     /// Whether the left key was held down since the last update. Key is determined by
@@ -95,6 +91,11 @@ public class PlayerController : MonoBehaviour {
     private float vy;
 
     /// <summary>
+    /// If grounded, the player's ground velocity in units per second.
+    /// </summary>
+    private float vg;
+
+    /// <summary>
     /// Whether the player is on the ground.
     /// </summary>
     private bool grounded;
@@ -121,11 +122,6 @@ public class PlayerController : MonoBehaviour {
     /// with rotation.
     /// </summary>
     private float surfaceAngle;
-
-    /// <summary>
-    /// If grounded, the player's ground velocity in units per second.
-    /// </summary>
-    private float vg;
 
     /// <summary>
     /// If grounded, which sensor on the player defines the primary surface.
