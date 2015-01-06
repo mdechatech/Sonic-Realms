@@ -139,6 +139,11 @@ public class PlayerController : MonoBehaviour {
     private float horizontalLockTimer;
 
     /// <summary>
+    /// If not grounded, whether to activate the horizontal control lock when the player lands.
+    /// </summary>
+    private bool lockUponLanding;
+
+    /// <summary>
     /// Whether the player has just jumped. Is used to avoid collisions right after.
     /// </summary>
     private bool justJumped;
@@ -218,6 +223,12 @@ public class PlayerController : MonoBehaviour {
     /// detached from it.
     /// </summary>
     private const float DetachSpeed = 3.5f;
+
+    /// <summary>
+    /// The maximum surface angle difference from a vertical wall at which a player is able to detach from
+    /// through use of the directional key opposite to the one in which it is traveling.
+    /// </summary>
+    private const float VerticalDetachAngleMax = 5.0f;
 
     /// <summary>
     /// The duration in seconds of the horizontal lock.
@@ -308,6 +319,16 @@ public class PlayerController : MonoBehaviour {
 
         if (grounded)
         {
+            if(horizontalLock)
+            {
+                horizontalLockTimer -= timeStep;
+                if(horizontalLockTimer < 0.0f)
+                {
+                    horizontalLock = false;
+                    horizontalLockTimer = 0.0f;
+                }
+            }
+
             if(jumpKeyDown) 
             {
                 jumpKeyDown = false;
@@ -320,14 +341,26 @@ public class PlayerController : MonoBehaviour {
                 Detach();
             }
             
-            if(leftKeyDown)
+            if(leftKeyDown && !horizontalLock)
             {
-                vg -= groundAcceleration * timeScale;
-                if(vg > 0) vg -= groundDeceleration * timeScale;
-            } else if(rightKeyDown)
+                if(vg > 0 && Mathf.Abs(AMath.AngleDiffd(surfaceAngle, 90.0f)) < VerticalDetachAngleMax)
+                {
+                    vx = 0;
+                    Detach();
+                } else {
+                    vg -= groundAcceleration * timeScale;
+                    if(vg > 0) vg -= groundDeceleration * timeScale;
+                }
+            } else if(rightKeyDown && !horizontalLock)
             {
-                vg += groundAcceleration * timeScale;
-                if(vg < 0) vg += groundDeceleration * timeScale;
+                if(vg < 0 && Mathf.Abs(AMath.AngleDiffd(surfaceAngle, 270.0f)) < VerticalDetachAngleMax)
+                {
+                    vx = 0;
+                    Detach();
+                } else {
+                    vg += groundAcceleration * timeScale;
+                    if(vg < 0) vg += groundDeceleration * timeScale;
+                }
             }
 
             if(Input.GetKey(KeyCode.Space)) vg = maxSpeed * Mathf.Sign(vg);
@@ -357,6 +390,8 @@ public class PlayerController : MonoBehaviour {
 
         if (grounded)
         {
+            float prevVg = vg;
+
             if (!leftKeyDown && !rightKeyDown)
             {
                 if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
@@ -379,11 +414,13 @@ public class PlayerController : MonoBehaviour {
             if(vg > maxSpeed) vg = maxSpeed;
             else if(vg < -maxSpeed) vg = -maxSpeed;
 
+            if(rightKeyDown && prevVg > 0.0f && vg < 0.0f) LockHorizontal();
+            else if(leftKeyDown && prevVg < 0.0f && vg > 0.0f) LockHorizontal();
+
             if(surfaceAngle > 90.0f && surfaceAngle < 270.0f && Mathf.Abs(vg) < DetachSpeed)
             {
-                Detach();
+                Detach(true);
             }
-
         } else {
             vy -= gravity * timeScale;
         }
@@ -669,14 +706,25 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
 	private void Detach()
 	{
-		vg = 0.0f;
-        lastSurfaceAngle = 0.0f;
-		surfaceAngle = 0.0f;
-		grounded = false;
-        justDetached = true;
-		wallMode = WallMode.Floor;
-        footing = Footing.None;
+        Detach(false);
 	}
+
+    /// <summary>
+    /// Detach the player from whatever surface it is on. If the player is not grounded this has no effect
+    /// other than setting lockUponLanding.
+    /// </summary>
+    /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
+    private void Detach(bool lockUponLanding)
+    {
+        vg = 0.0f;
+        lastSurfaceAngle = 0.0f;
+        surfaceAngle = 0.0f;
+        grounded = false;
+        justDetached = true;
+        wallMode = WallMode.Floor;
+        footing = Footing.None;
+        this.lockUponLanding = lockUponLanding;
+    }
 
     /// <summary>
     /// Attaches the player to a surface within the reach of its surface sensors. The angle of attachment
@@ -700,6 +748,12 @@ public class PlayerController : MonoBehaviour {
             wallMode = WallMode.Right;
         else 
             wallMode = WallMode.Left;
+
+        if (lockUponLanding)
+        {
+            lockUponLanding = false;
+            LockHorizontal();
+        }
 
         transform.RotateTo(angleRadians);
     }
@@ -732,6 +786,15 @@ public class PlayerController : MonoBehaviour {
         }
         
         return false;
+    }
+
+    /// <summary>
+    /// Locks the player's horizontal control on the ground for the time specified by HorizontalLockTime.
+    /// </summary>
+    private void LockHorizontal()
+    {
+        horizontalLock = true;
+        horizontalLockTimer = HorizontalLockTime;
     }
 
 	/// <summary>
