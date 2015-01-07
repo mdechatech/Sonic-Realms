@@ -528,9 +528,6 @@ public class PlayerController : MonoBehaviour {
                     } else {
                         HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
                     }
-                    
-                    justLanded = true;
-                    grounded = true;
                 }
             }
         }
@@ -778,26 +775,35 @@ public class PlayerController : MonoBehaviour {
     /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
     private bool HandleImpact(float angleRadians)
     {
-        float sAngle = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+        float sAngled = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+        float sAngler = sAngled * Mathf.Deg2Rad;
+        float groundSpeed;
         
         // Ground attachment
-        if (Mathf.Abs(AMath.AngleDiffd(sAngle, 180.0f)) > AttachAngleMin && 
-            Mathf.Abs(AMath.AngleDiffd(sAngle, 90.0f)) > AttachAngleMin &&
-            Mathf.Abs(AMath.AngleDiffd(sAngle, 270.0f)) > AttachAngleMin)    
+        if (Mathf.Abs(AMath.AngleDiffd(sAngled, 180.0f)) > AttachAngleMin && 
+            Mathf.Abs(AMath.AngleDiffd(sAngled, 90.0f)) > AttachAngleMin &&
+            Mathf.Abs(AMath.AngleDiffd(sAngled, 270.0f)) > AttachAngleMin)    
         {
-            if(vy > 0.0f && (AMath.Equalsf(sAngle, 0.0f) || sAngle > 180.0f))
+            if(vy > 0.0f && (AMath.Equalsf(sAngled, 0.0f) || sAngled > 180.0f))
             {
-                Attach(vx, sAngle * Mathf.Deg2Rad);
+                groundSpeed = vx;
+                Attach(groundSpeed, sAngler);
+                return true;
             } else {
                 // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
-                Attach(Mathf.Sqrt(vx * vx + vy * vy) * 
-                       -AMath.Clamp(AMath.AngleDiffd(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, sAngle - 90.0f) / 90.0f, -1.0f, 1.0f),
-                       sAngle * Mathf.Deg2Rad);
+                groundSpeed = Mathf.Sqrt(vx * vx + vy * vy) * 
+                    -AMath.Clamp(AMath.AngleDiffd(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
+
+                if(sAngled > 90.0f && sAngled < 270.0f && Mathf.Abs(groundSpeed) < DetachSpeed)
+                {
+                    return false;
+                } else {
+                    Attach(groundSpeed, sAngler);
+                    return true;
+                }
             }
-            
-            return true;
         }
-        
+
         return false;
     }
 
