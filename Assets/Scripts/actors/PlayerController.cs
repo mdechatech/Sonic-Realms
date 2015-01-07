@@ -503,16 +503,17 @@ public class PlayerController : MonoBehaviour {
             }
 
             // See if the player landed
-            if(justJumped)
-            {
-                justJumped = Physics2D.OverlapPointNonAlloc(sensorGroundLeft.position, cmem, terrainMask) > 0 || 
-                    Physics2D.OverlapPointNonAlloc(sensorGroundRight.position, cmem, terrainMask) > 0;
-            } else {
-                RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position);
-                RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position);
+            RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position);
+            RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position);
 
-                if(groundLeftCheck || groundRightCheck)
+            if(groundLeftCheck || groundRightCheck)
+            {
+                if(justJumped)
                 {
+                    if(groundLeftCheck) transform.position += (Vector3)groundLeftCheck.point - sensorGroundLeft.position;
+                    if(groundRightCheck) transform.position += (Vector3)groundRightCheck.point - sensorGroundRight.position;
+                    justJumped = false;
+                } else {
                     if(groundLeftCheck && groundRightCheck)
                     {
                         if(groundLeftCheck.point.y > groundRightCheck.point.y)
