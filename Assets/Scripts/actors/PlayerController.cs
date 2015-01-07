@@ -553,11 +553,23 @@ public class PlayerController : MonoBehaviour {
                 vg = 0;
                 transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
                     ((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
+
+                if(wallMode == WallMode.Right)
+                {
+                    transform.RotateTo(0.0f);
+                    wallMode = WallMode.Floor;
+                }
             } else if(sideRightCheck)
             {
                 vg = 0;
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
                     ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
+
+                if(wallMode == WallMode.Left)
+                {
+                    transform.RotateTo(0.0f);
+                    wallMode = WallMode.Floor;
+                }
             }
 
             // Ceiling-side check
