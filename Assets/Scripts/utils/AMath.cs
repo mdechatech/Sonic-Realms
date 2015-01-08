@@ -235,14 +235,25 @@ public static class AMath
     }
 
 	/// <summary>
-	/// Checks for approximate equality between two floats with an epsilon value.
+	/// Checks for approximate equality between two floats with AMath.Epsilon.
 	/// </summary>
 	/// <param name="a">The float a.</param>
 	/// <param name="b">The float b.</param>
 	public static bool Equalsf(float a, float b)
 	{
-		return (a >= b - Epsilon && a <= b + Epsilon);
+        return Equalsf(a, b, Epsilon);
 	}
+
+    /// <summary>
+    /// Checks for approximate equality between two floats with an epsilon.
+    /// </summary>
+    /// <param name="a">The float a.</param>
+    /// <param name="b">The float b.</param>
+    /// <param name="epsilon">The epsilon.</param>
+    public static bool Equalsf(float a, float b, float epsilon)
+    {
+        return (a >= b - Epsilon && a <= b + epsilon);
+    }
 
     /// <summary>
     /// Clamps the number to the specified range.
