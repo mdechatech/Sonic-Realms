@@ -106,6 +106,11 @@ public class PlayerController : MonoBehaviour {
     private int terrainMask;
 
     /// <summary>
+    /// The number of the layer of terrain the player checks for collision with.
+    /// </summary>
+    private int terrainLayer;
+
+    /// <summary>
     /// Whether the player has just landed on the ground. Is used to ignore surface angle
     /// once right after.
     /// </summary>
@@ -235,6 +240,17 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private const float HorizontalLockTime = 0.25f;
 
+    public int Layer {
+        get { return terrainLayer; }
+        set 
+        { 
+            terrainLayer = value;
+            terrainMask =
+                (1 << LayerMask.NameToLayer("Terrain")) |
+                (1 << LayerMask.NameToLayer("Terrain" + terrainLayer));
+        }
+    }
+
 	private void Start () {
 		grounded = false;
 		vx = vy = vg = 0.0f;
@@ -243,7 +259,7 @@ public class PlayerController : MonoBehaviour {
         justJumped = justLanded = justDetached = false;
 		wallMode = WallMode.Floor;
 		surfaceAngle = 0.0f;
-		terrainMask = 1 << LayerMask.NameToLayer("Terrain");
+        Layer = 1;
 
 		// Enable later for ragdoll ?
 		collider2D.enabled = false;
@@ -468,8 +484,8 @@ public class PlayerController : MonoBehaviour {
             // Ceiling check - either pushes out vertically or horizontally based on the closest distance in either direction to the surface
             if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
             {
-                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position);
-                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position);
+                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
+                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position, terrainMask);
                 
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
                 {
@@ -489,8 +505,8 @@ public class PlayerController : MonoBehaviour {
                 }
             } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
             {
-                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position);
-                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position);
+                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
+                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position, terrainMask);
                 
                 if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
                 {
@@ -511,8 +527,8 @@ public class PlayerController : MonoBehaviour {
             }
 
             // See if the player landed
-            RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position);
-            RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position);
+            RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position, terrainMask);
+            RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position, terrainMask);
 
             if(groundLeftCheck || groundRightCheck)
             {
