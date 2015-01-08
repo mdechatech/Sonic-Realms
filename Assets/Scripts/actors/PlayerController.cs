@@ -463,6 +463,7 @@ public class PlayerController : MonoBehaviour {
     {
         // To save memory when doing overlaps
         Collider2D[] cmem = new Collider2D[1];
+        bool anyHit = false;
 
         if(!grounded)
         {   
@@ -478,16 +479,20 @@ public class PlayerController : MonoBehaviour {
                 vx = 0;
                 transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
                     ((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
+                anyHit = true;
             } else if(sideRightCheck)
             {
                 vx = 0;
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
                     ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
+                anyHit = true;
             }
 
             // Ceiling check - either pushes out vertically or horizontally based on the closest distance in either direction to the surface
             if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
             {
+                anyHit = true;
+
                 RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
                 RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position, terrainMask);
                 
@@ -496,19 +501,17 @@ public class PlayerController : MonoBehaviour {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
 
                     if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
-                    else justDetached = false;
-
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
 
                     if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
-                    else justDetached = false;
-
                     if(vy > 0) vy = 0;
                 }
             } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
             {
+                anyHit = true;
+
                 RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
                 RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position, terrainMask);
                 
@@ -517,15 +520,11 @@ public class PlayerController : MonoBehaviour {
                     transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
 
                     if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);  
-                    else justDetached = false;
-
                     if(vy > 0) vy = 0;
                 } else {
                     transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
 
                     if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);  
-                    else justDetached = false;
-
                     if(vy > 0) vy = 0;
                 }
             }
@@ -536,6 +535,8 @@ public class PlayerController : MonoBehaviour {
 
             if(groundLeftCheck || groundRightCheck)
             {
+                anyHit = true;
+
                 if(justJumped)
                 {
                     if(groundLeftCheck) transform.position += (Vector3)groundLeftCheck.point - sensorGroundLeft.position;
@@ -578,6 +579,8 @@ public class PlayerController : MonoBehaviour {
             
             if(sideLeftCheck)
             {
+                anyHit = true;
+
                 vg = 0;
                 transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
                     ((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
@@ -589,6 +592,8 @@ public class PlayerController : MonoBehaviour {
                 }
             } else if(sideRightCheck)
             {
+                anyHit = true;
+
                 vg = 0;
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
                     ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
@@ -606,11 +611,15 @@ public class PlayerController : MonoBehaviour {
             
             if(ceilLeftCheck)
             {
+                anyHit = true;
+
                 vg = 0;
                 transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position + 
                     ((Vector3)ceilLeftCheck.point - sensorCeilLeft.position).normalized * AMath.Epsilon;
             } else if(ceilRightCheck)
             {
+                anyHit = true;
+
                 vg = 0;
                 transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position +
                     ((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
@@ -621,6 +630,8 @@ public class PlayerController : MonoBehaviour {
             
             if(s.leftCast || s.rightCast)
             {
+                anyHit = true;
+
                 // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
                 if(s.leftCast && s.rightCast)
                 {
@@ -739,6 +750,9 @@ public class PlayerController : MonoBehaviour {
                 Detach();
             }
         }
+
+        if (!anyHit && justDetached)
+            justDetached = false;
     }
 
     /// <summary>
@@ -814,7 +828,7 @@ public class PlayerController : MonoBehaviour {
             Mathf.Abs(AMath.AngleDiffd(sAngled, 90.0f)) > AttachAngleMin &&
             Mathf.Abs(AMath.AngleDiffd(sAngled, 270.0f)) > AttachAngleMin)    
         {
-            if(vy > 0.0f && (AMath.Equalsf(sAngled, 0.0f) || sAngled > 180.0f))
+            if(vy > 0.0f && (AMath.Equalsf(sAngled, 0.0f, AttachAngleMin) || (AMath.Equalsf(sAngled, 180.0f, AttachAngleMin))))
             {
                 groundSpeed = vx;
                 Attach(groundSpeed, sAngler);
@@ -828,6 +842,7 @@ public class PlayerController : MonoBehaviour {
                    sAngled < 270.0f + VerticalDetachAngleMax &&
                    Mathf.Abs(groundSpeed) < DetachSpeed)
                 {
+                    Debug.Log(groundSpeed);
                     return false;
                 } else {
                     Attach(groundSpeed, sAngler);
