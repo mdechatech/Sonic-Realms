@@ -240,6 +240,11 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private const float HorizontalLockTime = 0.25f;
 
+    /// <summary>
+    /// The terrain layer that the player is on. The player will collide with the layers "Terrain" and
+    /// "Terrain" plus the terrain layer.
+    /// </summary>
+    /// <value>The terrain layer.</value>
     public int Layer {
         get { return terrainLayer; }
         set 
@@ -261,8 +266,7 @@ public class PlayerController : MonoBehaviour {
 		surfaceAngle = 0.0f;
         Layer = 1;
 
-		// Enable later for ragdoll ?
-		collider2D.enabled = false;
+        collider2D.isTrigger = true;
 	}
 	
 	private void Update () {
