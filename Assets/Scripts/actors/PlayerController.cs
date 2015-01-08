@@ -423,7 +423,9 @@ public class PlayerController : MonoBehaviour {
                 else if(leftKeyDown && prevVg < 0.0f && vg > 0.0f) LockHorizontal();
             }
 
-            if(surfaceAngle > 90.0f && surfaceAngle < 270.0f && Mathf.Abs(vg) < DetachSpeed)
+            if(surfaceAngle > 90.0f - VerticalDetachAngleMax &&
+               surfaceAngle < 270.0f + VerticalDetachAngleMax && 
+               Mathf.Abs(vg) < DetachSpeed)
             {
                 Detach(true);
             }
@@ -802,7 +804,9 @@ public class PlayerController : MonoBehaviour {
                 groundSpeed = Mathf.Sqrt(vx * vx + vy * vy) * 
                     -AMath.Clamp(AMath.AngleDiffd(Mathf.Atan2(vy, vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
 
-                if(sAngled > 90.0f && sAngled < 270.0f && Mathf.Abs(groundSpeed) < DetachSpeed)
+                if(sAngled > 90.0f - VerticalDetachAngleMax &&
+                   sAngled < 270.0f + VerticalDetachAngleMax &&
+                   Mathf.Abs(groundSpeed) < DetachSpeed)
                 {
                     return false;
                 } else {
