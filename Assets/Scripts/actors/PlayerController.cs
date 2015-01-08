@@ -233,7 +233,7 @@ public class PlayerController : MonoBehaviour {
     /// <summary>
     /// The duration in seconds of the horizontal lock.
     /// </summary>
-    private const float HorizontalLockTime = 0.5f;
+    private const float HorizontalLockTime = 0.25f;
 
 	private void Start () {
 		grounded = false;
@@ -406,16 +406,22 @@ public class PlayerController : MonoBehaviour {
                 }
             }
 
+            float slopeForce = 0.0f;
+
             if(Mathf.Abs(AMath.AngleDiffd(surfaceAngle, 0.0f)) > SlopeGravityAngleMin)
             {
-                vg -= SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad) * timeScale;
+                slopeForce = SlopeFactor * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
+                vg -= slopeForce * timeScale;
             }
 
             if(vg > maxSpeed) vg = maxSpeed;
             else if(vg < -maxSpeed) vg = -maxSpeed;
 
-            if(rightKeyDown && prevVg > 0.0f && vg < 0.0f) LockHorizontal();
-            else if(leftKeyDown && prevVg < 0.0f && vg > 0.0f) LockHorizontal();
+            if(Mathf.Abs(slopeForce) > groundAcceleration)
+            {
+                if(rightKeyDown && prevVg > 0.0f && vg < 0.0f) LockHorizontal();
+                else if(leftKeyDown && prevVg < 0.0f && vg > 0.0f) LockHorizontal();
+            }
 
             if(surfaceAngle > 90.0f && surfaceAngle < 270.0f && Mathf.Abs(vg) < DetachSpeed)
             {
@@ -529,6 +535,8 @@ public class PlayerController : MonoBehaviour {
                         HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
                     }
                 }
+            } else {
+                if(justJumped) justJumped = false;
             }
         }
         
