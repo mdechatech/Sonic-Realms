@@ -8,6 +8,12 @@ using System.Collections;
 public class LayerSwitch : MonoBehaviour {
 
     /// <summary>
+    /// Whether the player must be grounded to switch layers.
+    /// </summary>
+    [SerializeField]
+    private bool mustBeGrounded;
+
+    /// <summary>
     /// The layer the player must be on to be able to switch layer.
     /// </summary>
     [SerializeField]
@@ -24,7 +30,13 @@ public class LayerSwitch : MonoBehaviour {
         if (collider.tag == "Player")
         {
             PlayerController player = collider.gameObject.GetComponent<PlayerController>();
-            if(player.Layer == layerFrom) player.Layer = layerTo;
+            if(player.Layer == layerFrom)
+            {
+                if(!mustBeGrounded || (mustBeGrounded && player.Grounded))
+                {
+                    player.Layer = layerTo;
+                }
+            }
         }
     }
 }

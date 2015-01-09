@@ -256,6 +256,15 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Whether the player is touching the ground.
+    /// </summary>
+    /// <value><c>true</c> if grounded; otherwise, <c>false</c>.</value>
+    public bool Grounded {
+        get { return grounded; }
+        set { grounded = value; }
+    }
+
 	private void Start () {
 		grounded = false;
 		vx = vy = vg = 0.0f;
@@ -842,7 +851,6 @@ public class PlayerController : MonoBehaviour {
                    sAngled < 270.0f + VerticalDetachAngleMax &&
                    Mathf.Abs(groundSpeed) < DetachSpeed)
                 {
-                    Debug.Log(groundSpeed);
                     return false;
                 } else {
                     Attach(groundSpeed, sAngler);
