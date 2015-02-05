@@ -6,60 +6,103 @@ using System.Collections;
 /// </summary>
 public class PlayerController : MonoBehaviour {
 
+    [Header("Physics")]
+
     /// <summary>
     /// The acceleration by gravity in units per second per second.
     /// </summary>
     [SerializeField]
+    [Range(0.0f, 1.0f)]
+    [Tooltip("Acceleration in units per second squared, in the downward direction.")]
     private float gravity;
 
     /// <summary>
     /// The player's maximum speed in units per second.
     /// </summary>
     [SerializeField]
+    [Range(0.0f, 100.0f)]
+    [Tooltip("Maximum speed in units.")]
     private float maxSpeed;
+
+    [Header("Control")]
 
     /// <summary>
     /// The player's ground acceleration in units per second per second.
     /// </summary>
     [SerializeField]
+    [Range(0.0f, 0.25f)]
+    [Tooltip("Ground acceleration in units per second squared.")]
     private float groundAcceleration;
 
     /// <summary>
     /// The player's friction on the ground in units per second per second.
     /// </summary>
     [SerializeField]
+    [Range(0.0f, 0.25f)]
+    [Tooltip("Ground deceleration in units per second squared.")]
     private float groundDeceleration;
 
     /// <summary>
     /// The speed of the player's jump in units per second.
     /// </summary>
     [SerializeField]
+    [Range(0.0f, 25.0f)]
+    [Tooltip("Jump speed in units per second.")]
     private float jumpSpeed;
 
     /// <summary>
     /// The player's horizontal acceleration in the air in units per second per second.
     /// </summary>
     [SerializeField]
+    [Range(0.0f, 0.25f)]
+    [Tooltip("Air acceleration in units per second squared.")]
     private float airAcceleration;
+
+    [Header("Contacts")]
+
+    /// <summary>
+    /// If on a moving platform, a transform which is a child of the moving platform used
+    /// to monitor changes in position and rotation.
+    /// </summary>
+    [SerializeField]
+    [Tooltip("Use an empty game object!")]
+    private Transform movingPlatformAnchor;
 
     // Nine sensors arranged like a tic-tac-toe board.
     [SerializeField]
+    [Tooltip("The player's left foot.")]
     private Transform sensorGroundLeft;
+
     [SerializeField]
+    [Tooltip("The midpoint of the player's feet.")]
     private Transform sensorGroundMid;
+
     [SerializeField]
+    [Tooltip("The player's right foot.")]
     private Transform sensorGroundRight;
+
     [SerializeField]
+    [Tooltip("The player's left side, or the midpoint of its left foot and the left side of its head.")]
     private Transform sensorSideLeft;
+
     [SerializeField]
+    [Tooltip("The midpoint of the player's sides.")]
     private Transform sensorSideMid;
+    
     [SerializeField]
+    [Tooltip("The player's right side, or the midpoint of its right foot and the right side of its head.")]
     private Transform sensorSideRight;
+
     [SerializeField]
+    [Tooltip("The player's left side of its head.")]
     private Transform sensorCeilLeft;
+
     [SerializeField]
+    [Tooltip("The midpoint of the player's head.")]
     private Transform sensorCeilMid;
+
     [SerializeField]
+    [Tooltip("The player's right side of its head.")]
     private Transform sensorCeilRight;
 
     /// <summary>
@@ -99,6 +142,11 @@ public class PlayerController : MonoBehaviour {
     /// Whether the player is on the ground.
     /// </summary>
     private bool grounded;
+
+    /// <summary>
+    /// Whether the player is on a moving platform.
+    /// </summary>
+    private bool onMovingPlatform;
 
     /// <summary>
     /// The layer mask which represents the ground the player checks for collision with.
@@ -251,8 +299,8 @@ public class PlayerController : MonoBehaviour {
         { 
             terrainLayer = value;
             terrainMask =
-                (1 << LayerMask.NameToLayer("Terrain")) |
-                (1 << LayerMask.NameToLayer("Terrain" + terrainLayer));
+                (1 << LayerMask.NameToLayer(Settings.LayerTerrain)) |
+                (1 << LayerMask.NameToLayer(Settings.LayerTerrain + " " + terrainLayer));
         }
     }
 
@@ -267,6 +315,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void Start () {
 		grounded = false;
+        onMovingPlatform = false;
 		vx = vy = vg = 0.0f;
         lastSurfaceAngle = 0.0f;
 		leftKeyDown = rightKeyDown = jumpKeyDown = false;
@@ -629,6 +678,8 @@ public class PlayerController : MonoBehaviour {
                 anyHit = true;
 
                 vg = 0;
+
+                // Add epsilon to prevent sticky collisions
                 transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position + 
                     ((Vector3)ceilLeftCheck.point - sensorCeilLeft.position).normalized * AMath.Epsilon;
             } else if(ceilRightCheck)
