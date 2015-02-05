@@ -13,4 +13,16 @@ public class Settings
     /// The normal desired interval between fixed updates.
     /// </summary>
     public static float DefaultFixedDeltaTime = 0.02f;
+
+    /// <summary>
+    /// The name of the layer which contains terrain colliders. Terrain is separated
+    /// into a layer x based on their name, for example "Terrain x" where x is the
+    /// layer number.
+    /// </summary>
+    public static string LayerTerrain = "Terrain";
+
+    /// <summary>
+    /// The name of the tag which contains moving platforms.
+    /// </summary>
+    public static string TagMovingPlatform = "Moving Platform";
 }
