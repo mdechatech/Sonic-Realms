@@ -364,8 +364,8 @@ public class PlayerController : MonoBehaviour {
                 justJumped = true;
                 
                 float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
-                vx += jumpSpeed * Mathf.Cos(surfaceNormal) * timeScale;
-                vy += jumpSpeed * Mathf.Sin(surfaceNormal) * timeScale;
+                vx += jumpSpeed * Mathf.Cos(surfaceNormal);
+                vy += jumpSpeed * Mathf.Sin(surfaceNormal);
 
                 Detach();
             }
@@ -421,6 +421,7 @@ public class PlayerController : MonoBehaviour {
         {
             float prevVg = vg;
 
+            // Friction from deceleration
             if (!leftKeyDown && !rightKeyDown)
             {
                 if(vg != 0.0f && Mathf.Abs(vg) < groundDeceleration)
@@ -435,6 +436,7 @@ public class PlayerController : MonoBehaviour {
                 }
             }
 
+            // Slope gravity
             float slopeForce = 0.0f;
 
             if(Mathf.Abs(AMath.AngleDiffd(surfaceAngle, 0.0f)) > SlopeGravityAngleMin)
@@ -443,6 +445,7 @@ public class PlayerController : MonoBehaviour {
                 vg -= slopeForce * timeScale;
             }
 
+            // Speed limit
             if(vg > maxSpeed) vg = maxSpeed;
             else if(vg < -maxSpeed) vg = -maxSpeed;
 
@@ -452,6 +455,7 @@ public class PlayerController : MonoBehaviour {
                 else if(leftKeyDown && prevVg < 0.0f && vg > 0.0f) LockHorizontal();
             }
 
+            // Detachment from walls if speed is too low
             if(surfaceAngle > 90.0f - VerticalDetachAngleMax &&
                surfaceAngle < 270.0f + VerticalDetachAngleMax && 
                Mathf.Abs(vg) < DetachSpeed)
@@ -479,7 +483,7 @@ public class PlayerController : MonoBehaviour {
             transform.eulerAngles = new Vector3();
             surfaceAngle = 0.0f;
 
-            // Side check
+            // Side check - stop the player horizontally if it hits a wall dead on
             RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
             RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
 
@@ -582,7 +586,7 @@ public class PlayerController : MonoBehaviour {
                 // TODO kill him!
             }
             
-            // Side check
+            // Side check - stop the player's ground speed if it hits a wall
             RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
             RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
             
@@ -594,9 +598,10 @@ public class PlayerController : MonoBehaviour {
                 transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
                     ((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
 
+                // If running down a wall and hits the floor, orient the player onto the floor
                 if(wallMode == WallMode.Right)
                 {
-                    transform.RotateTo(0.0f);
+                    transform.RotateBy(-90.0f);
                     wallMode = WallMode.Floor;
                 }
             } else if(sideRightCheck)
@@ -607,14 +612,15 @@ public class PlayerController : MonoBehaviour {
                 transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
                     ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
 
+                // If running down a wall and hits the floor, orient the player onto the floor
                 if(wallMode == WallMode.Left)
                 {
-                    transform.RotateTo(0.0f);
+                    transform.RotateTo(90.0f);
                     wallMode = WallMode.Floor;
                 }
             }
 
-            // Ceiling-side check
+            // Ceiling check - stop the player dead on if it hits a wall
             RaycastHit2D ceilLeftCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
             RaycastHit2D ceilRightCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
             
@@ -634,7 +640,8 @@ public class PlayerController : MonoBehaviour {
                     ((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
             }
             
-            // Surface check
+            // Surface check - place the player precisely at the surface beneath or a little above his feet
+            // Also rotate him between the surfaces beneath his ground sensors
             SurfaceInfo s = GetSurface(terrainMask);
             
             if(s.leftCast || s.rightCast)
@@ -644,33 +651,39 @@ public class PlayerController : MonoBehaviour {
                 // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
                 if(s.leftCast && s.rightCast)
                 {
+                    // Calculate angle changes for tolerance checks
                     float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
                     float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
                     float overlapDiff = AMath.AngleDiffr(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
 
                     if(s.footing == Footing.Left)
                     {
+                        // If the surface's angle is a small enough difference from that of the previous begin surface checks
                         if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleDiffMax)
                         {
+                            // Check angle differences between feet for player rotation
                             if(Mathf.Abs(overlapDiff) > OverlapAngleMinAbs && overlapDiff > OverlapAngleMin)
                             {
+                                // If tolerable, rotate between the surfaces beneath the two feet
                                 transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                                 footing = Footing.Left;
                             } else {
+                                // Else just rotate for the left foot
                                 transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
                                 transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
                                 footing = Footing.Left;
                             }
-
+                        // Else see if the other surface's angle is tolerable
                         } else if(Mathf.Abs(rightDiff) < SurfaceAngleDiffMax) {
                             transform.RotateTo(s.rightSurfaceAngle, sensorGroundMid.position);
                             transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
                             footing = Footing.Right;
-
+                            // Else the surfaces are untolerable. detach from the surface
                         } else {
                             Detach();
                         }
+                    // Same thing but with the other foot
                     } else if(s.footing == Footing.Right)
                     {
                         if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleDiffMax)
@@ -802,13 +815,16 @@ public class PlayerController : MonoBehaviour {
         surfaceAngle = lastSurfaceAngle = angleDegrees;
         grounded = justLanded = true;
 
-        // Wallmode here is biased toward floor/ceiling; only needs to be right/left at extreme angles
+        // WallModeSwitchAngle may be set to only attach right or left at extreme angles
         if (surfaceAngle < 45.0f + WallModeSwitchAngle || surfaceAngle > 315.0f - WallModeSwitchAngle)
             wallMode = WallMode.Floor;
+
         else if (surfaceAngle > 135.0f - WallModeSwitchAngle && surfaceAngle < 225.0 + WallModeSwitchAngle)
             wallMode = WallMode.Ceiling;
+
         else if (surfaceAngle > 45.0f + WallModeSwitchAngle && surfaceAngle < 135.0f - WallModeSwitchAngle)
             wallMode = WallMode.Right;
+
         else 
             wallMode = WallMode.Left;
 
@@ -913,6 +929,7 @@ public class PlayerController : MonoBehaviour {
         RaycastHit2D cast;
         if (footing == Footing.Left)
         {
+            // Cast from the player's side to below the player's feet based on its wall mode (orientation)
             cast = Physics2D.Linecast((Vector2)sensorGroundLeft.position - wallMode.UnitVector() * LedgeHeightMax,
                                       (Vector2)sensorGroundLeft.position + wallMode.UnitVector() * SurfaceDepthMax,
                                       terrainMask);
