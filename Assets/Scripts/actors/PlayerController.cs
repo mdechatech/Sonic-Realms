@@ -324,7 +324,7 @@ public class PlayerController : MonoBehaviour {
 		surfaceAngle = 0.0f;
         Layer = 1;
 
-        collider2D.isTrigger = true;
+        GetComponent<Collider2D>().isTrigger = true;
 	}
 	
 	private void Update () {
