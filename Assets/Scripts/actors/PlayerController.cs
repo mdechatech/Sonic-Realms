@@ -64,9 +64,6 @@ public class PlayerController : MonoBehaviour {
     /// If on a moving platform, a transform which is a child of the moving platform used
     /// to monitor changes in position and rotation.
     /// </summary>
-    [SerializeField]
-    [Tooltip("Use an empty game object!")]
-    private Transform movingPlatformAnchor;
 
     // Nine sensors arranged like a tic-tac-toe board.
     [SerializeField]
@@ -104,6 +101,12 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     [Tooltip("The player's right side of its head.")]
     private Transform sensorCeilRight;
+
+	/// <summary>
+	/// This point is added to the moving platform the player is standing on while noting
+	/// changes in position, allowing the player to move with a moving platform.
+	/// </summary>
+	private GameObject movingPlatformAnchor;
 
     /// <summary>
     /// Whether the left key was held down since the last update. Key is determined by
@@ -313,18 +316,26 @@ public class PlayerController : MonoBehaviour {
         set { grounded = value; }
     }
 
-	private void Start () {
+	private void Awake()
+	{
+		movingPlatformAnchor = new GameObject ();
+
+		footing = Footing.None;
 		grounded = false;
-        onMovingPlatform = false;
+		onMovingPlatform = false;
 		vx = vy = vg = 0.0f;
-        lastSurfaceAngle = 0.0f;
+		lastSurfaceAngle = 0.0f;
 		leftKeyDown = rightKeyDown = jumpKeyDown = false;
-        justJumped = justLanded = justDetached = false;
+		justJumped = justLanded = justDetached = false;
 		wallMode = WallMode.Floor;
 		surfaceAngle = 0.0f;
-        Layer = 1;
+		Layer = 1;
+		
+		GetComponent<Collider2D>().isTrigger = true;
+	}
 
-        GetComponent<Collider2D>().isTrigger = true;
+	private void Start () {
+
 	}
 	
 	private void Update () {
