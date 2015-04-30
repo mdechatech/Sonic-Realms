@@ -39,4 +39,16 @@ public class LayerSwitch : MonoBehaviour {
             }
         }
     }
+
+	void OnTriggerStay2D(Collider2D collider)
+	{
+		if (mustBeGrounded)
+		{
+			if (collider.tag == "Player") {
+				PlayerController player = collider.gameObject.GetComponent<PlayerController>();
+				if(player.Layer == layerFrom && player.Grounded)
+					player.Layer = layerTo;
+			}
+		}
+	}
 }
