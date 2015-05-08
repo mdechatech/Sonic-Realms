@@ -316,9 +316,59 @@ public class PlayerController : MonoBehaviour {
         set { grounded = value; }
     }
 
+	/// <summary>
+	/// A collection of data about the surface at the player's feet.
+	/// </summary>
+	private struct SurfaceInfo
+	{
+		/// <summary>
+		/// If there is a surface, which foot of the player it is  beneath. Otherwise, Footing.none.
+		/// </summary>
+		public Footing footing;
+		
+		/// <summary>
+		/// The result of the raycast onto the surface at the player's left foot.
+		/// </summary>
+		public RaycastHit2D leftCast;
+		
+		/// <summary>
+		/// The angle, in radians, of the surface on the player's left foot, or 0 if there is none.
+		/// </summary>
+		public float leftSurfaceAngle;
+		
+		/// <summary>
+		/// The result of the raycast onto the surface at the player's right foot.
+		/// </summary>
+		public RaycastHit2D rightCast;
+		
+		/// <summary>
+		/// The angle, in radians, of the surface on the player's right foot, or 0 if there is none.
+		/// </summary>
+		public float rightSurfaceAngle;
+		
+		public SurfaceInfo(RaycastHit2D leftCast, RaycastHit2D rightCast, Footing footing)
+		{   
+			this.leftCast = leftCast;
+			this.leftSurfaceAngle = (leftCast) ? leftCast.normal.Angle() - AMath.HALF_PI : 0.0f;
+			this.rightCast = rightCast;
+			this.rightSurfaceAngle = (rightCast) ? rightCast.normal.Angle() - AMath.HALF_PI : 0.0f;
+			this.footing = footing;
+		}
+	}
+	
+	/// <summary>
+	/// Represents each sensor on the bottom of the player.
+	/// </summary>
+	private enum Footing
+	{
+		None, Left, Right,
+	}
+
 	private void Awake()
 	{
 		movingPlatformAnchor = new GameObject ();
+		movingPlatformAnchor.name = gameObject.name + " Moving Platform Anchor";
+		movingPlatformAnchor.transform.SetParent (gameObject.transform);
 
 		footing = Footing.None;
 		grounded = false;
@@ -524,315 +574,28 @@ public class PlayerController : MonoBehaviour {
             }
         } else {
             vy -= gravity * timeScale;
+			transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.LerpAngle(transform.eulerAngles.z, 0.0f, Time.deltaTime * 5.0f));
         }
     }
 
     /// <summary>
     /// Checks for collision with all sensors, changing position, velocity, and rotation if necessary. This should be called each time
-    /// the player changes position. This method does not require a timestep because it resolves collisions by directly translating
-    /// the player and setting its velocity, often to 0, rather than adding to it.
+    /// the player changes position. This method does not require a timestep because it only resolves overlaps in the player's collision.
     /// </summary>
     private void HandleCollisions()
     {
-        // To save memory when doing overlaps
-        Collider2D[] cmem = new Collider2D[1];
         bool anyHit = false;
 
         if(!grounded)
         {   
-            transform.eulerAngles = new Vector3();
             surfaceAngle = 0.0f;
-
-            // Side check - stop the player horizontally if it hits a wall dead on
-            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
-            RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
-
-            if(sideLeftCheck)
-            {
-                vx = 0;
-                transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
-                    ((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
-                anyHit = true;
-            } else if(sideRightCheck)
-            {
-                vx = 0;
-                transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
-                    ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
-                anyHit = true;
-            }
-
-            // Ceiling check - either pushes out vertically or horizontally based on the closest distance in either direction to the surface
-            if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
-            {
-                anyHit = true;
-
-                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
-                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position, terrainMask);
-                
-                if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
-                {
-                    transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
-
-                    if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
-                    if(vy > 0) vy = 0;
-                } else {
-                    transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
-
-                    if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
-                    if(vy > 0) vy = 0;
-                }
-            } else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
-            {
-                anyHit = true;
-
-                RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
-                RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position, terrainMask);
-                
-                if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) < Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
-                {
-                    transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
-
-                    if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);  
-                    if(vy > 0) vy = 0;
-                } else {
-                    transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
-
-                    if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);  
-                    if(vy > 0) vy = 0;
-                }
-            }
-
-            // See if the player landed
-            RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position, terrainMask);
-            RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position, terrainMask);
-
-            if(groundLeftCheck || groundRightCheck)
-            {
-                anyHit = true;
-
-                if(justJumped)
-                {
-                    if(groundLeftCheck) transform.position += (Vector3)groundLeftCheck.point - sensorGroundLeft.position;
-                    if(groundRightCheck) transform.position += (Vector3)groundRightCheck.point - sensorGroundRight.position;
-                    justJumped = false;
-                } else {
-                    if(groundLeftCheck && groundRightCheck)
-                    {
-                        if(groundLeftCheck.point.y > groundRightCheck.point.y)
-                        {
-                            HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
-                        } else {
-                            HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
-                        }
-                    } else if(groundLeftCheck)
-                    {
-                        HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
-                    } else {
-                        HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
-                    }
-                }
-            } else {
-                if(justJumped) justJumped = false;
-            }
+			anyHit = AirSideCheck() | AirCeilingCheck() | AirGroundCheck();
         }
         
         if(grounded)
         {
-            // Crush check - might not even put this in?
-            if((Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0 &&
-                Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0))
-            {
-                Debug.Log("ded");
-                // TODO kill him!
-            }
-            
-            // Side check - stop the player's ground speed if it hits a wall
-            RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
-            RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
-            
-            if(sideLeftCheck)
-            {
-                anyHit = true;
-
-                vg = 0;
-                transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
-                    ((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
-
-                // If running down a wall and hits the floor, orient the player onto the floor
-                if(wallMode == WallMode.Right)
-                {
-                    transform.RotateBy(-90.0f);
-                    wallMode = WallMode.Floor;
-                }
-            } else if(sideRightCheck)
-            {
-                anyHit = true;
-
-                vg = 0;
-                transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
-                    ((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
-
-                // If running down a wall and hits the floor, orient the player onto the floor
-                if(wallMode == WallMode.Left)
-                {
-                    transform.RotateTo(90.0f);
-                    wallMode = WallMode.Floor;
-                }
-            }
-
-            // Ceiling check - stop the player dead on if it hits a wall
-            RaycastHit2D ceilLeftCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
-            RaycastHit2D ceilRightCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
-            
-            if(ceilLeftCheck)
-            {
-                anyHit = true;
-
-                vg = 0;
-
-                // Add epsilon to prevent sticky collisions
-                transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position + 
-                    ((Vector3)ceilLeftCheck.point - sensorCeilLeft.position).normalized * AMath.Epsilon;
-            } else if(ceilRightCheck)
-            {
-                anyHit = true;
-
-                vg = 0;
-                transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position +
-                    ((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
-            }
-            
-            // Surface check - place the player precisely at the surface beneath or a little above his feet
-            // Also rotate him between the surfaces beneath his ground sensors
-            SurfaceInfo s = GetSurface(terrainMask);
-            
-            if(s.leftCast || s.rightCast)
-            {
-                anyHit = true;
-
-                // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
-                if(s.leftCast && s.rightCast)
-                {
-                    // Calculate angle changes for tolerance checks
-                    float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
-                    float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
-                    float overlapDiff = AMath.AngleDiffr(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
-
-                    if(s.footing == Footing.Left)
-                    {
-                        // If the surface's angle is a small enough difference from that of the previous begin surface checks
-                        if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleDiffMax)
-                        {
-                            // Check angle differences between feet for player rotation
-                            if(Mathf.Abs(overlapDiff) > OverlapAngleMinAbs && overlapDiff > OverlapAngleMin)
-                            {
-                                // If tolerable, rotate between the surfaces beneath the two feet
-                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
-                                transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
-                                footing = Footing.Left;
-                            } else {
-                                // Else just rotate for the left foot
-                                transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
-                                transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
-                                footing = Footing.Left;
-                            }
-                        // Else see if the other surface's angle is tolerable
-                        } else if(Mathf.Abs(rightDiff) < SurfaceAngleDiffMax) {
-                            transform.RotateTo(s.rightSurfaceAngle, sensorGroundMid.position);
-                            transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
-                            footing = Footing.Right;
-                            // Else the surfaces are untolerable. detach from the surface
-                        } else {
-                            Detach();
-                        }
-                    // Same thing but with the other foot
-                    } else if(s.footing == Footing.Right)
-                    {
-                        if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleDiffMax)
-                        {
-                            if(Mathf.Abs(overlapDiff) > OverlapAngleMinAbs && overlapDiff > OverlapAngleMin)
-                            {
-                                transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
-                                transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
-                                footing = Footing.Right;
-                            } else {
-                                transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
-                                transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
-                                footing = Footing.Right;
-                            }
-                            
-                        } else if(Mathf.Abs(leftDiff) < SurfaceAngleDiffMax) {
-                            transform.RotateTo(s.leftSurfaceAngle, sensorGroundMid.position);
-                            transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
-                            footing = Footing.Left;
-                        } else {
-                            Detach();
-                        }
-                    }
-                } else if(s.leftCast)
-                {
-                    float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
-                    if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleDiffMax)
-                    {
-                        transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
-                        transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
-                        footing = Footing.Left;
-                    } else {
-                        Detach();
-                    }
-                } else {
-                    float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
-                    if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleDiffMax)
-                    {
-                        transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
-                        transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
-                        footing = Footing.Right;
-                    } else {
-                        Detach();
-                    }
-                }
-            } else {
-                Detach();
-            }
-
-            if(justLanded)
-            {
-                surfaceAngle = transform.eulerAngles.z;
-                lastSurfaceAngle = surfaceAngle;
-            } else {
-                lastSurfaceAngle = surfaceAngle;
-                surfaceAngle = transform.eulerAngles.z;
-            }
-
-            // Can only stay on the surface if angle difference is low enough
-            if(grounded && (justLanded ||
-                Mathf.Abs(AMath.AngleDiffd(lastSurfaceAngle, surfaceAngle)) < SurfaceAngleDiffMax))
-            {
-                if(wallMode == WallMode.Floor)
-                {
-                    if(surfaceAngle > 45.0f + WallModeSwitchAngle && surfaceAngle < 180.0f) wallMode = WallMode.Right;
-                    else if(surfaceAngle < 315.0f - WallModeSwitchAngle && surfaceAngle > 180.0f) wallMode = WallMode.Left;
-                } else if(wallMode == WallMode.Right)
-                {
-                    if(surfaceAngle > 135.0f + WallModeSwitchAngle) wallMode = WallMode.Ceiling;
-                    else if(surfaceAngle < 45.0f - WallModeSwitchAngle) wallMode = WallMode.Floor;
-                } else if(wallMode == WallMode.Ceiling)
-                {
-                    if(surfaceAngle > 225.0f + WallModeSwitchAngle) wallMode = WallMode.Left;
-                    else if(surfaceAngle < 135.0f - WallModeSwitchAngle) wallMode = WallMode.Right;
-                } else if(wallMode == WallMode.Left)
-                {
-                    if(surfaceAngle > 315.0f + WallModeSwitchAngle || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
-                    else if(surfaceAngle < 225.0f - WallModeSwitchAngle) wallMode = WallMode.Ceiling;
-                }
-
-                vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
-                vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
-
-                justLanded = false;
-            } else {
-                Detach();
-            }
+			anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck();
+			if(!SurfaceAngleCheck()) Detach();
         }
 
         if (!anyHit && justDetached)
@@ -862,6 +625,9 @@ public class PlayerController : MonoBehaviour {
         wallMode = WallMode.Floor;
         footing = Footing.None;
         this.lockUponLanding = lockUponLanding;
+
+		if (movingPlatformAnchor.transform.parent != gameObject.transform)
+			movingPlatformAnchor.transform.SetParent (gameObject.transform);
     }
 
     /// <summary>
@@ -1042,51 +808,354 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-	/// <summary>
-	/// A collection of data about the surface at the player's feet.
-	/// </summary>
-	private struct SurfaceInfo
+	private void AttachMoving(Transform platform)
 	{
-		/// <summary>
-		/// If there is a surface, which foot of the player it is  beneath. Otherwise, Footing.none.
-		/// </summary>
-		public Footing footing;
-
-		/// <summary>
-		/// The result of the raycast onto the surface at the player's left foot.
-		/// </summary>
-		public RaycastHit2D leftCast;
-
-        /// <summary>
-        /// The angle, in radians, of the surface on the player's left foot, or 0 if there is none.
-        /// </summary>
-        public float leftSurfaceAngle;
-
-        /// <summary>
-        /// The result of the raycast onto the surface at the player's right foot.
-        /// </summary>
-        public RaycastHit2D rightCast;
-
-        /// <summary>
-        /// The angle, in radians, of the surface on the player's right foot, or 0 if there is none.
-        /// </summary>
-        public float rightSurfaceAngle;
-
-		public SurfaceInfo(RaycastHit2D leftCast, RaycastHit2D rightCast, Footing footing)
-        {   
-            this.leftCast = leftCast;
-            this.leftSurfaceAngle = (leftCast) ? leftCast.normal.Angle() - AMath.HALF_PI : 0.0f;
-            this.rightCast = rightCast;
-            this.rightSurfaceAngle = (rightCast) ? rightCast.normal.Angle() - AMath.HALF_PI : 0.0f;
-            this.footing = footing;
-        }
+		movingPlatformAnchor.transform.SetParent (platform);
 	}
 
-    /// <summary>
-    /// Represents each sensor on the bottom of the player.
-    /// </summary>
-	private enum Footing
+	/// COLLISION SUBROUTINES
+
+	/// <summary>
+	/// Collision check with side sensors for when player is in the air.
+	/// </summary>
+	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+	private bool AirSideCheck()
 	{
-		None, Left, Right,
+		RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
+		RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
+		
+		if(sideLeftCheck)
+		{
+			vx = 0;
+			transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
+				((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
+			return true;
+		} else if(sideRightCheck)
+		{
+			vx = 0;
+			transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
+				((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
+			return true;
+		}
+		
+		return false;
+	}
+
+	/// <summary>
+	/// Collision check with air sensors for when player is in the air.
+	/// </summary>
+	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+	private bool AirCeilingCheck()
+	{
+		Collider2D[] cmem = new Collider2D[1];
+		
+		if(Physics2D.OverlapPointNonAlloc(sensorCeilLeft.position, cmem, terrainMask) > 0)
+		{
+			RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
+			RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideLeft.position, sensorCeilLeft.position, terrainMask);
+			
+			if(Vector2.Distance(horizontalCheck.point, sensorCeilLeft.position) < Vector2.Distance(verticalCheck.point, sensorCeilLeft.position))
+			{
+				transform.position += (Vector3)horizontalCheck.point - sensorCeilLeft.position;
+				
+				if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+				if(vy > 0) vy = 0;
+			} else {
+				transform.position += (Vector3)verticalCheck.point - sensorCeilLeft.position;
+				
+				if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+				if(vy > 0) vy = 0;
+			}
+			return true;
+			
+		} else if(Physics2D.OverlapPointNonAlloc(sensorCeilRight.position, cmem, terrainMask) > 0)
+		{
+			RaycastHit2D horizontalCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
+			RaycastHit2D verticalCheck = Physics2D.Linecast(sensorSideRight.position, sensorCeilRight.position, terrainMask);
+			
+			if(Vector2.Distance(horizontalCheck.point, sensorCeilRight.position) <
+			   Vector2.Distance(verticalCheck.point, sensorCeilRight.position))
+			{
+				transform.position += (Vector3)horizontalCheck.point - sensorCeilRight.position;
+				
+				if(!justDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);  
+				if(vy > 0) vy = 0;
+			} else {
+				transform.position += (Vector3)verticalCheck.point - sensorCeilRight.position;
+				
+				if(!justDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);  
+				if(vy > 0) vy = 0;
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+
+	/// <summary>
+	/// Collision check with ground sensors for when player is in the air.
+	/// </summary>
+	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+	private bool AirGroundCheck()
+	{
+		RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position, terrainMask);
+		RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position, terrainMask);
+		
+		if(groundLeftCheck || groundRightCheck)
+		{
+			if(justJumped)
+			{
+				if(groundLeftCheck) transform.position += (Vector3)groundLeftCheck.point - sensorGroundLeft.position;
+				if(groundRightCheck) transform.position += (Vector3)groundRightCheck.point - sensorGroundRight.position;
+				justJumped = false;
+			} else {
+				if(groundLeftCheck && groundRightCheck)
+				{
+					if(groundLeftCheck.point.y > groundRightCheck.point.y)
+					{
+						HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+					} else {
+						HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+					}
+				} else if(groundLeftCheck)
+				{
+					HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+				} else {
+					HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+				}
+			}
+			
+			return true;
+		} else {
+			if(justJumped) justJumped = false;
+		}
+		
+		return false;
+	}
+
+	/// <summary>
+	/// Collision check with side sensors for when player is on the ground.
+	/// </summary>
+	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+	private bool GroundSideCheck()
+	{
+		RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
+		RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
+		
+		if(sideLeftCheck)
+		{
+			vg = 0;
+			transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
+				((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
+			
+			// If running down a wall and hits the floor, orient the player onto the floor
+			if(wallMode == WallMode.Right)
+			{
+				transform.RotateBy(-90.0f);
+				wallMode = WallMode.Floor;
+			}
+			
+			return true;
+		} else if(sideRightCheck)
+		{
+			vg = 0;
+			transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
+				((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
+			
+			// If running down a wall and hits the floor, orient the player onto the floor
+			if(wallMode == WallMode.Left)
+			{
+				transform.RotateTo(90.0f);
+				wallMode = WallMode.Floor;
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+
+	/// <summary>
+	/// Collision check with ceiling sensors for when player is on the ground.
+	/// </summary>
+	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+	private bool GroundCeilingCheck()
+	{
+		RaycastHit2D ceilLeftCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilLeft.position, terrainMask);
+		RaycastHit2D ceilRightCheck = Physics2D.Linecast(sensorCeilMid.position, sensorCeilRight.position, terrainMask);
+		
+		if(ceilLeftCheck)
+		{
+			vg = 0;
+			
+			// Add epsilon to prevent sticky collisions
+			transform.position += (Vector3)ceilLeftCheck.point - sensorCeilLeft.position + 
+				((Vector3)ceilLeftCheck.point - sensorCeilLeft.position).normalized * AMath.Epsilon;
+			
+			return true;
+		} else if(ceilRightCheck)
+		{
+			vg = 0;
+			transform.position += (Vector3)ceilRightCheck.point - sensorCeilRight.position +
+				((Vector3)ceilRightCheck.point - sensorCeilRight.position).normalized * AMath.Epsilon;
+			
+			return true;
+		}
+		
+		return false;
+	}
+
+
+	/// <summary>
+	/// Collision check with ground sensors for when player is on the ground.
+	/// </summary>
+	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+	private bool GroundSurfaceCheck()
+	{
+		SurfaceInfo s = GetSurface(terrainMask);
+		
+		if(s.leftCast || s.rightCast)
+		{
+			// If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
+			if(s.leftCast && s.rightCast)
+			{
+				// Calculate angle changes for tolerance checks
+				float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
+				float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
+				float overlapDiff = AMath.AngleDiffr(s.leftSurfaceAngle, s.rightSurfaceAngle) * Mathf.Rad2Deg;
+				
+				if(s.footing == Footing.Left)
+				{
+					// If the surface's angle is a small enough difference from that of the previous begin surface checks
+					if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleDiffMax)
+					{
+						// Check angle differences between feet for player rotation
+						if(Mathf.Abs(overlapDiff) > OverlapAngleMinAbs && overlapDiff > OverlapAngleMin)
+						{
+							// If tolerable, rotate between the surfaces beneath the two feet
+							transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
+							transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+							footing = Footing.Left;
+						} else {
+							// Else just rotate for the left foot
+							transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
+							transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+							footing = Footing.Left;
+						}
+						
+						if(s.leftCast.collider.gameObject.tag == Settings.TagMovingPlatform)
+						{
+							// TODO moving platforms!??!
+						}
+						// Else see if the other surface's angle is tolerable
+					} else if(Mathf.Abs(rightDiff) < SurfaceAngleDiffMax) {
+						transform.RotateTo(s.rightSurfaceAngle, sensorGroundMid.position);
+						transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+						footing = Footing.Right;
+						// Else the surfaces are untolerable. detach from the surface
+					} else {
+						Detach();
+					}
+					// Same thing but with the other foot
+				} else if(s.footing == Footing.Right)
+				{
+					if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleDiffMax)
+					{
+						if(Mathf.Abs(overlapDiff) > OverlapAngleMinAbs && overlapDiff > OverlapAngleMin)
+						{
+							transform.RotateTo((s.rightCast.point - s.leftCast.point).Angle(), sensorGroundMid.position);
+							transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+							footing = Footing.Right;
+						} else {
+							transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
+							transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+							footing = Footing.Right;
+						}
+						
+					} else if(Mathf.Abs(leftDiff) < SurfaceAngleDiffMax) {
+						transform.RotateTo(s.leftSurfaceAngle, sensorGroundMid.position);
+						transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+						footing = Footing.Left;
+					} else {
+						Detach();
+					}
+				}
+			} else if(s.leftCast)
+			{
+				float leftDiff = AMath.AngleDiffd(s.leftSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
+				if(justLanded || Mathf.Abs(leftDiff) < SurfaceAngleDiffMax)
+				{
+					transform.RotateTo(s.leftSurfaceAngle, s.leftCast.point);
+					transform.position += (Vector3)s.leftCast.point - sensorGroundLeft.position;
+					footing = Footing.Left;
+				} else {
+					Detach();
+				}
+			} else {
+				float rightDiff = AMath.AngleDiffd(s.rightSurfaceAngle * Mathf.Rad2Deg, lastSurfaceAngle);
+				if(justLanded || Mathf.Abs(rightDiff) < SurfaceAngleDiffMax)
+				{
+					transform.RotateTo(s.rightSurfaceAngle, s.rightCast.point);
+					transform.position += (Vector3)s.rightCast.point - sensorGroundRight.position;
+					footing = Footing.Right;
+				} else {
+					Detach();
+				}
+			}
+			
+			return true;
+		} else {
+			Detach();
+		}
+		
+		return false;
+	}
+
+	/// <summary>
+	/// Check for changes in angle of incline for when player is on the ground.
+	/// </summary>
+	/// <returns><c>true</c> if the angle of incline is tolerable, <c>false</c> otherwise.</returns>
+	private bool SurfaceAngleCheck()
+	{
+		if(justLanded)
+		{
+			surfaceAngle = transform.eulerAngles.z;
+			lastSurfaceAngle = surfaceAngle;
+		} else {
+			lastSurfaceAngle = surfaceAngle;
+			surfaceAngle = transform.eulerAngles.z;
+		}
+		
+		// Can only stay on the surface if angle difference is low enough
+		if(grounded && (justLanded ||
+		                Mathf.Abs(AMath.AngleDiffd(lastSurfaceAngle, surfaceAngle)) < SurfaceAngleDiffMax))
+		{
+			if(wallMode == WallMode.Floor)
+			{
+				if(surfaceAngle > 45.0f + WallModeSwitchAngle && surfaceAngle < 180.0f) wallMode = WallMode.Right;
+				else if(surfaceAngle < 315.0f - WallModeSwitchAngle && surfaceAngle > 180.0f) wallMode = WallMode.Left;
+			} else if(wallMode == WallMode.Right)
+			{
+				if(surfaceAngle > 135.0f + WallModeSwitchAngle) wallMode = WallMode.Ceiling;
+				else if(surfaceAngle < 45.0f - WallModeSwitchAngle) wallMode = WallMode.Floor;
+			} else if(wallMode == WallMode.Ceiling)
+			{
+				if(surfaceAngle > 225.0f + WallModeSwitchAngle) wallMode = WallMode.Left;
+				else if(surfaceAngle < 135.0f - WallModeSwitchAngle) wallMode = WallMode.Right;
+			} else if(wallMode == WallMode.Left)
+			{
+				if(surfaceAngle > 315.0f + WallModeSwitchAngle || surfaceAngle < 180.0f) wallMode = WallMode.Floor;
+				else if(surfaceAngle < 225.0f - WallModeSwitchAngle) wallMode = WallMode.Ceiling;
+			}
+			
+			vx = vg * Mathf.Cos(surfaceAngle * Mathf.Deg2Rad);
+			vy = vg * Mathf.Sin(surfaceAngle * Mathf.Deg2Rad);
+			
+			justLanded = false;
+			return true;
+		}
+		
+		return false;
 	}
 }
