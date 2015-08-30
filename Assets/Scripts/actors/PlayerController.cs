@@ -4,8 +4,8 @@ using System.Collections;
 /// <summary>
 /// Controls the player.
 /// </summary>
-public class PlayerController : MonoBehaviour {
-
+public class PlayerController : MonoBehaviour
+{
     [Header("Physics")]
 
     /// <summary>
@@ -290,12 +290,21 @@ public class PlayerController : MonoBehaviour {
     /// The duration in seconds of the horizontal lock.
     /// </summary>
     private const float HorizontalLockTime = 0.25f;
+    
+    /// <summary>
+    /// If the player is moving very quickly and jumps, normally it will not make much of a difference
+    /// and the player will usually end up re-attaching to the surface.
+    /// 
+    /// With this constant, the player is forced to leave the ground by at least the specified angle
+    /// difference, in degrees.
+    /// </summary>
+    private const float ForceJumpAngleDifference = 30.0f;
 
     /// <summary>
     /// The terrain layer that the player is on. The player will collide with the layers "Terrain" and
     /// "Terrain" plus the terrain layer.
     /// </summary>
-    /// <value>The terrain layer.</value>
+    /// <value>The terrain layer.</value>f
     public int Layer {
         get { return terrainLayer; }
         set 
@@ -471,13 +480,7 @@ public class PlayerController : MonoBehaviour {
             if(jumpKeyDown) 
             {
                 jumpKeyDown = false;
-                justJumped = true;
-                
-                float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
-                vx += jumpSpeed * Mathf.Cos(surfaceNormal);
-                vy += jumpSpeed * Mathf.Sin(surfaceNormal);
-
-                Detach();
+                Jump();
             }
             
             if(leftKeyDown && !horizontalLock)
@@ -508,6 +511,40 @@ public class PlayerController : MonoBehaviour {
             if(leftKeyDown) vx -= airAcceleration * timeScale;
             else if(rightKeyDown) vx += airAcceleration * timeScale;
         }
+    }
+
+    public void Jump()
+    {
+        justJumped = true;
+
+        // Forces the player to leave the ground using the constant ForceJumpAngleDifference.
+        // Helps prevent sticking to surfaces when the player's gotta go fast.
+        var originalAngle = AMath.Modp((new Vector2(vx, vy)).Angle() * Mathf.Rad2Deg, 360.0f);
+
+        float surfaceNormal = (surfaceAngle + 90.0f) * Mathf.Deg2Rad;
+        vx += jumpSpeed * Mathf.Cos(surfaceNormal);
+        vy += jumpSpeed * Mathf.Sin(surfaceNormal);
+
+        var newAngle = AMath.Modp((new Vector2(vx, vy)).Angle() * Mathf.Rad2Deg, 360.0f);
+        var angleDifference = AMath.AngleDiffd(originalAngle, newAngle);
+
+        if (Mathf.Abs(angleDifference) < ForceJumpAngleDifference)
+        {
+            var targetAngle = originalAngle + ForceJumpAngleDifference*Mathf.Sign(angleDifference);
+            var magnitude = new Vector2(vx, vy).magnitude;
+
+            var targetAngleRadians = targetAngle*Mathf.Deg2Rad;
+            var newVelocity = new Vector2(magnitude*Mathf.Cos(targetAngleRadians),
+                magnitude*Mathf.Sin(targetAngleRadians));
+
+            vx = newVelocity.x;
+            vy = newVelocity.y;
+        }
+
+        // Eject self from ground
+        GroundSurfaceCheck();
+
+        Detach();
     }
 
     /// <summary>
@@ -574,7 +611,8 @@ public class PlayerController : MonoBehaviour {
             }
         } else {
             vy -= gravity * timeScale;
-			transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.LerpAngle(transform.eulerAngles.z, 0.0f, Time.deltaTime * 5.0f));
+			//transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.LerpAngle(transform.eulerAngles.z, 0.0f, Time.deltaTime * 5.0f));
+            transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
         }
     }
 
@@ -585,6 +623,7 @@ public class PlayerController : MonoBehaviour {
     private void HandleCollisions()
     {
         bool anyHit = false;
+        bool jumpedPreviousCheck = justJumped;
 
         if(!grounded)
         {   
@@ -597,6 +636,8 @@ public class PlayerController : MonoBehaviour {
 			anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck();
 			if(!SurfaceAngleCheck()) Detach();
         }
+
+        if (justJumped && jumpedPreviousCheck) justJumped = false;
         
         if (!anyHit && justDetached)
             justDetached = false;
@@ -840,18 +881,27 @@ public class PlayerController : MonoBehaviour {
 	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
 	private bool AirSideCheck()
 	{
+	    var width = (sensorSideLeft.position - sensorSideRight.position).magnitude;
 		RaycastHit2D sideLeftCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideLeft.position, terrainMask);
 		RaycastHit2D sideRightCheck = Physics2D.Linecast(sensorSideMid.position, sensorSideRight.position, terrainMask);
 		
 		if(sideLeftCheck)
 		{
-			vx = 0;
+		    if (!justJumped)
+		    {
+		        vx = 0;
+		    }
+
             transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
 				((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
 			return true;
 		} else if(sideRightCheck)
 		{
-			vx = 0;
+		    if (!justJumped)
+		    {
+		        vx = 0;
+		    }
+
 			transform.position += (Vector3)sideRightCheck.point - sensorSideRight.position +
 				((Vector3)sideRightCheck.point - sensorSideRight.position).normalized * AMath.Epsilon;
 			return true;
@@ -933,7 +983,6 @@ public class PlayerController : MonoBehaviour {
 			    {
 			        transform.position += (Vector3)groundRightCheck.point - sensorGroundRight.position;
 			    }
-				justJumped = false;
 			} else {
 				if(groundLeftCheck && groundRightCheck)
 				{
@@ -952,8 +1001,6 @@ public class PlayerController : MonoBehaviour {
 			}
 			
 			return true;
-		} else {
-			if(justJumped) justJumped = false;
 		}
 		
 		return false;
