@@ -717,6 +717,16 @@ public class PlayerController : MonoBehaviour
         float sAngler = sAngled * Mathf.Deg2Rad;
         float groundSpeed;
         
+        // The player can't possibly land on something if he's traveling 90 degrees
+        // within the normal
+        float surfaceNormal = AMath.Modp(sAngled + 90.0f, 360.0f);
+        float playerAngle = (new Vector2(vx, vy)).Angle() * Mathf.Rad2Deg;
+        float surfaceDifference = AMath.AngleDiffd(playerAngle, surfaceNormal);
+        if(Mathf.Abs(surfaceDifference) < 90.0f)
+        {
+            return false;
+        }
+
         // Ground attachment
         if (Mathf.Abs(AMath.AngleDiffd(sAngled, 180.0f)) > AttachAngleMin && 
             Mathf.Abs(AMath.AngleDiffd(sAngled, 90.0f)) > AttachAngleMin &&
