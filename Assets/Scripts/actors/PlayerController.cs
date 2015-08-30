@@ -589,7 +589,7 @@ public class PlayerController : MonoBehaviour {
         if(!grounded)
         {   
             surfaceAngle = 0.0f;
-			anyHit = AirSideCheck() | AirCeilingCheck() | AirGroundCheck();
+            anyHit = AirSideCheck() | AirCeilingCheck() | AirGroundCheck();
         }
         
         if(grounded)
@@ -597,7 +597,7 @@ public class PlayerController : MonoBehaviour {
 			anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck();
 			if(!SurfaceAngleCheck()) Detach();
         }
-
+        
         if (!anyHit && justDetached)
             justDetached = false;
     }
@@ -747,6 +747,25 @@ public class PlayerController : MonoBehaviour {
 		return default(SurfaceInfo);
 	}
 
+    private RaycastHit2D GroundCast(Footing footing)
+    {
+        RaycastHit2D cast;
+        if (footing == Footing.Left)
+        {
+            cast = Physics2D.Linecast((Vector2) sensorGroundLeft.position - wallMode.UnitVector()*LedgeHeightMax,
+                (Vector2) sensorGroundLeft.position,
+                terrainMask);
+        }
+        else
+        {
+            cast = Physics2D.Linecast((Vector2) sensorGroundRight.position - wallMode.UnitVector()*LedgeHeightMax,
+                (Vector2) sensorGroundRight.position,
+                terrainMask);
+        }
+
+        return cast;
+    }
+
     /// <summary>
     /// Returns the result of a linecast from the specified footing onto the surface based on wallmode.
     /// </summary>
@@ -827,7 +846,7 @@ public class PlayerController : MonoBehaviour {
 		if(sideLeftCheck)
 		{
 			vx = 0;
-			transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
+            transform.position += (Vector3)sideLeftCheck.point - sensorSideLeft.position +
 				((Vector3)sideLeftCheck.point - sensorSideLeft.position).normalized * AMath.Epsilon;
 			return true;
 		} else if(sideRightCheck)
@@ -899,15 +918,21 @@ public class PlayerController : MonoBehaviour {
 	/// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
 	private bool AirGroundCheck()
 	{
-		RaycastHit2D groundLeftCheck = Physics2D.Linecast(sensorSideLeft.position, sensorGroundLeft.position, terrainMask);
-		RaycastHit2D groundRightCheck = Physics2D.Linecast(sensorSideRight.position, sensorGroundRight.position, terrainMask);
+		RaycastHit2D groundLeftCheck = GroundCast(Footing.Left);
+	    RaycastHit2D groundRightCheck = GroundCast(Footing.Right);
 		
 		if(groundLeftCheck || groundRightCheck)
 		{
 			if(justJumped)
 			{
-				if(groundLeftCheck) transform.position += (Vector3)groundLeftCheck.point - sensorGroundLeft.position;
-				if(groundRightCheck) transform.position += (Vector3)groundRightCheck.point - sensorGroundRight.position;
+			    if (groundLeftCheck)
+			    {
+			        transform.position += (Vector3)groundLeftCheck.point - sensorGroundLeft.position;
+			    }
+			    if (groundRightCheck)
+			    {
+			        transform.position += (Vector3)groundRightCheck.point - sensorGroundRight.position;
+			    }
 				justJumped = false;
 			} else {
 				if(groundLeftCheck && groundRightCheck)
