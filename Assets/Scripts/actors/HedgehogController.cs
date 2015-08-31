@@ -5,7 +5,20 @@
 /// </summary>
 public class HedgehogController : MonoBehaviour
 {
+    #region Math Constants
+    public const float Epsilon = 0.0001f;
+    public const float HalfPi = 1.5707963f;
+    public const float DoublePi = 6.283185f;
+    #endregion
+    #region Time Constants
+    private const float DefaultFixedDeltaTime = 0.02f;
+    #endregion
     #region Inspector Fields
+
+    [Header("Collision")]
+    
+    [SerializeField]
+    public string AlwaysCollideLayer = "Terrain";
 
     [Header("Controls")]
 
@@ -213,28 +226,26 @@ public class HedgehogController : MonoBehaviour
     [SerializeField]
     public float MaxVerticalDetachAngle = 5.0f;
     #endregion
-
+    #region Input Variables
     /// <summary>
-    /// Whether the left key was held down since the last update. Key is determined by
-    /// Settings.LeftKey.
+    /// Whether the left key was held down since the last update. Key is determined by LeftKey.
     /// </summary>
     [HideInInspector]
     private bool _leftKeyDown;
 
     /// <summary>
-    /// Whether the right key was held down since the last update. Key is determined by
-    /// Settings.RightKey.
+    /// Whether the right key was held down since the last update. Key is determined by RightKey.
     /// </summary>
     [HideInInspector]
     private bool _rightKeyDown;
 
     /// <summary>
-    /// Whether the jump key was pressed since the last update. Key is determined by
-    /// Settings.JumpKey.
+    /// Whether the jump key was pressed since the last update. Key is determined by JumpKey.
     /// </summary>
     [HideInInspector]
     private bool _jumpKeyDown;
-
+    #endregion
+    #region Physics Variables
     /// <summary>
     /// The player's horizontal velocity in units per second.
     /// </summary>
@@ -336,11 +347,11 @@ public class HedgehogController : MonoBehaviour
     public bool JustDetached;
 
     /// <summary>
-    /// Represents the current orientation of the player.
+    /// Represents the current Wallmode of the player.
     /// </summary>
     [HideInInspector]
-    public WallMode WallMode;
-
+    public Orientation Wallmode;
+    
     /// <summary>
     /// The terrain layer that the player is on. The player will collide with the layers "Terrain" and
     /// "Terrain" plus the terrain layer.
@@ -353,11 +364,23 @@ public class HedgehogController : MonoBehaviour
         {
             TerrainLayer = value;
             TerrainMask =
-                (1 << LayerMask.NameToLayer(Settings.LayerTerrain)) |
-                (1 << LayerMask.NameToLayer(Settings.LayerTerrain + " " + TerrainLayer));
+                (1 << LayerMask.NameToLayer(AlwaysCollideLayer)) |
+                (1 << LayerMask.NameToLayer(AlwaysCollideLayer + " " + TerrainLayer));
         }
     }
+    #endregion
 
+    #region Orientation Definition
+    /// <summary>
+    /// Represents the four sides based on the Wallmode of a character standing on the mask.
+    /// This means that RIGHT is the mask's left side and that LEFT is the mask's right side.
+    /// </summary>
+    public enum Orientation : int
+    {
+        Floor, Right, Ceiling, Left, None,
+    };
+    #endregion
+    #region SurfaceInfo Definition
     /// <summary>
     /// A collection of data about the surface at the player's feet.
     /// </summary>
@@ -391,13 +414,14 @@ public class HedgehogController : MonoBehaviour
         public SurfaceInfo(RaycastHit2D leftCast, RaycastHit2D rightCast, Side Side)
         {
             LeftCast = leftCast;
-            LeftSurfaceAngle = (leftCast) ? leftCast.normal.Angle() - AMath.HALF_PI : 0.0f;
+            LeftSurfaceAngle = (leftCast) ? Angle(leftCast.normal) - HalfPi : 0.0f;
             RightCast = rightCast;
-            RightSurfaceAngle = (rightCast) ? rightCast.normal.Angle() - AMath.HALF_PI : 0.0f;
+            RightSurfaceAngle = (rightCast) ? Angle(rightCast.normal) - HalfPi : 0.0f;
             this.Side = Side;
         }
     }
-
+    #endregion
+    #region Side Definition
     /// <summary>
     /// Represents each sensor on the bottom of the player.
     /// </summary>
@@ -405,6 +429,7 @@ public class HedgehogController : MonoBehaviour
     {
         None, Left, Right
     }
+    #endregion
 
     public void Awake()
     {
@@ -415,16 +440,14 @@ public class HedgehogController : MonoBehaviour
         LastSurfaceAngle = 0.0f;
         _leftKeyDown = _rightKeyDown = _jumpKeyDown = false;
         JustJumped = _justLanded = JustDetached = false;
-        WallMode = WallMode.Floor;
+        Wallmode = Orientation.Floor;
         SurfaceAngle = 0.0f;
         Layer = 1;
-
-        GetComponent<Collider2D>().isTrigger = true;
     }
 
     public void Start()
     {
-
+        GetComponent<Collider2D>().isTrigger = true;
     }
 
     public void Update()
@@ -432,17 +455,15 @@ public class HedgehogController : MonoBehaviour
         GetInput();
     }
 
-
     /// <summary>
     /// Stores keyboard input for the next fixed update (and HandleInput).
     /// </summary>
     private void GetInput()
     {
-        _leftKeyDown = Input.GetKey(Settings.LeftKey);
-        _rightKeyDown = Input.GetKey(Settings.RightKey);
-        if (!_jumpKeyDown && Grounded) _jumpKeyDown = Input.GetKeyDown(Settings.JumpKey);
+        _leftKeyDown = Input.GetKey(LeftKey);
+        _rightKeyDown = Input.GetKey(RightKey);
+        if (!_jumpKeyDown && Grounded) _jumpKeyDown = Input.GetKeyDown(JumpKey);
     }
-
 
     public void FixedUpdate()
     {
@@ -498,7 +519,7 @@ public class HedgehogController : MonoBehaviour
     /// </summary>
     private void HandleInput(float timeStep)
     {
-        var timeScale = timeStep / Settings.DefaultFixedDeltaTime;
+        var timeScale = timeStep / DefaultFixedDeltaTime;
 
         if (Grounded)
         {
@@ -520,7 +541,7 @@ public class HedgehogController : MonoBehaviour
 
             if (_leftKeyDown && !HorizontalLock)
             {
-                if (Vg > 0 && Mathf.Abs(AMath.AngleDiffd(SurfaceAngle, 90.0f)) < MaxVerticalDetachAngle)
+                if (Vg > 0 && Mathf.Abs(AngleDiffd(SurfaceAngle, 90.0f)) < MaxVerticalDetachAngle)
                 {
                     Vx = 0;
                     Detach();
@@ -533,7 +554,7 @@ public class HedgehogController : MonoBehaviour
             }
             else if (_rightKeyDown && !HorizontalLock)
             {
-                if (Vg < 0 && Mathf.Abs(AMath.AngleDiffd(SurfaceAngle, 270.0f)) < MaxVerticalDetachAngle)
+                if (Vg < 0 && Mathf.Abs(AngleDiffd(SurfaceAngle, 270.0f)) < MaxVerticalDetachAngle)
                 {
                     Vx = 0;
                     Detach();
@@ -561,14 +582,14 @@ public class HedgehogController : MonoBehaviour
 
         // Forces the player to leave the ground using the constant ForceJumpAngleDifference.
         // Helps prevent sticking to surfaces when the player's gotta go fast.
-        var originalAngle = AMath.Modp((new Vector2(Vx, Vy)).Angle() * Mathf.Rad2Deg, 360.0f);
+        var originalAngle = Modp(Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
 
         var surfaceNormal = (SurfaceAngle + 90.0f) * Mathf.Deg2Rad;
         Vx += JumpSpeed * Mathf.Cos(surfaceNormal);
         Vy += JumpSpeed * Mathf.Sin(surfaceNormal);
 
-        var newAngle = AMath.Modp((new Vector2(Vx, Vy)).Angle() * Mathf.Rad2Deg, 360.0f);
-        var angleDifference = AMath.AngleDiffd(originalAngle, newAngle);
+        var newAngle = Modp(Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
+        var angleDifference = AngleDiffd(originalAngle, newAngle);
 
         if (Mathf.Abs(angleDifference) < ForceJumpAngleDifference)
         {
@@ -604,7 +625,7 @@ public class HedgehogController : MonoBehaviour
     /// </summary>
     private void HandleForces(float timeStep)
     {
-        var timeScale = timeStep / Settings.DefaultFixedDeltaTime;
+        var timeScale = timeStep / DefaultFixedDeltaTime;
 
         if (Grounded)
         {
@@ -630,7 +651,7 @@ public class HedgehogController : MonoBehaviour
             // Slope gravity
             var slopeForce = 0.0f;
 
-            if (Mathf.Abs(AMath.AngleDiffd(SurfaceAngle, 0.0f)) > SlopeGravityBeginAngle)
+            if (Mathf.Abs(AngleDiffd(SurfaceAngle, 0.0f)) > SlopeGravityBeginAngle)
             {
                 slopeForce = SlopeGravity * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
                 Vg -= slopeForce * timeScale;
@@ -701,7 +722,7 @@ public class HedgehogController : MonoBehaviour
         SurfaceAngle = 0.0f;
         Grounded = false;
         JustDetached = true;
-        WallMode = WallMode.Floor;
+        Wallmode = Orientation.Floor;
         Footing = Side.None;
         LockUponLanding = lockUponLanding;
     }
@@ -714,23 +735,23 @@ public class HedgehogController : MonoBehaviour
     /// <param name="angleRadians">The angle of the surface, in radians.</param>
     private void Attach(float groundSpeed, float angleRadians)
     {
-        var angleDegrees = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+        var angleDegrees = Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
         Vg = groundSpeed;
         SurfaceAngle = LastSurfaceAngle = angleDegrees;
         Grounded = _justLanded = true;
 
         // HorizontalWallmodeAngleWeight may be set to only attach right or left at extreme angles
         if (SurfaceAngle < 45.0f + HorizontalWallmodeAngleWeight || SurfaceAngle > 315.0f - HorizontalWallmodeAngleWeight)
-            WallMode = WallMode.Floor;
+            Wallmode = Orientation.Floor;
 
         else if (SurfaceAngle > 135.0f - HorizontalWallmodeAngleWeight && SurfaceAngle < 225.0 + HorizontalWallmodeAngleWeight)
-            WallMode = WallMode.Ceiling;
+            Wallmode = Orientation.Ceiling;
 
         else if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight)
-            WallMode = WallMode.Right;
+            Wallmode = Orientation.Right;
 
         else
-            WallMode = WallMode.Left;
+            Wallmode = Orientation.Left;
 
         if (LockUponLanding)
         {
@@ -738,7 +759,7 @@ public class HedgehogController : MonoBehaviour
             LockHorizontal();
         }
 
-        transform.RotateTo(angleRadians);
+        RotateTo(transform, angleRadians);
     }
 
     /// <summary>
@@ -748,26 +769,26 @@ public class HedgehogController : MonoBehaviour
     /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
     private bool HandleImpact(float angleRadians)
     {
-        var sAngled = AMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+        var sAngled = Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
         var sAngler = sAngled * Mathf.Deg2Rad;
 
         // The player can't possibly land on something if he's traveling 90 degrees
         // within the normal
-        var surfaceNormal = AMath.Modp(sAngled + 90.0f, 360.0f);
-        var playerAngle = (new Vector2(Vx, Vy)).Angle() * Mathf.Rad2Deg;
-        var surfaceDifference = AMath.AngleDiffd(playerAngle, surfaceNormal);
+        var surfaceNormal = Modp(sAngled + 90.0f, 360.0f);
+        var playerAngle = Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg;
+        var surfaceDifference = AngleDiffd(playerAngle, surfaceNormal);
         if (Mathf.Abs(surfaceDifference) < 90.0f)
         {
             return false;
         }
 
         // Ground attachment
-        if (Mathf.Abs(AMath.AngleDiffd(sAngled, 180.0f)) > MinFlatAttachAngle &&
-            Mathf.Abs(AMath.AngleDiffd(sAngled, 90.0f)) > MinFlatAttachAngle &&
-            Mathf.Abs(AMath.AngleDiffd(sAngled, 270.0f)) > MinFlatAttachAngle)
+        if (Mathf.Abs(AngleDiffd(sAngled, 180.0f)) > MinFlatAttachAngle &&
+            Mathf.Abs(AngleDiffd(sAngled, 90.0f)) > MinFlatAttachAngle &&
+            Mathf.Abs(AngleDiffd(sAngled, 270.0f)) > MinFlatAttachAngle)
         {
             float groundSpeed;
-            if (Vy > 0.0f && (AMath.Equalsf(sAngled, 0.0f, MinFlatAttachAngle) || (AMath.Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
+            if (Vy > 0.0f && (Equalsf(sAngled, 0.0f, MinFlatAttachAngle) || (Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
             {
                 groundSpeed = Vx;
                 Attach(groundSpeed, sAngler);
@@ -775,7 +796,7 @@ public class HedgehogController : MonoBehaviour
             }
             // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
             groundSpeed = Mathf.Sqrt(Vx * Vx + Vy * Vy) *
-                          -AMath.Clamp(AMath.AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
+                          -Mathf.Clamp(AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
 
             if (sAngled > 90.0f - MaxVerticalDetachAngle &&
                 sAngled < 270.0f + MaxVerticalDetachAngle &&
@@ -813,10 +834,10 @@ public class HedgehogController : MonoBehaviour
         if (checkLeft && checkRight)
         {
             // If both sensors have surfaces, return the one with the highest based on wallmode
-            if (WallMode == WallMode.Floor && checkLeft.point.y > checkRight.point.y ||
-               WallMode == WallMode.Ceiling && checkLeft.point.y < checkRight.point.y ||
-               WallMode == WallMode.Right && checkLeft.point.x < checkRight.point.x ||
-               WallMode == WallMode.Left && checkLeft.point.x > checkRight.point.x)
+            if (Wallmode == Orientation.Floor && checkLeft.point.y > checkRight.point.y ||
+               Wallmode == Orientation.Ceiling && checkLeft.point.y < checkRight.point.y ||
+               Wallmode == Orientation.Right && checkLeft.point.x < checkRight.point.x ||
+               Wallmode == Orientation.Left && checkLeft.point.x > checkRight.point.x)
                 return new SurfaceInfo(checkLeft, checkRight, Side.Left);
             return new SurfaceInfo(checkLeft, checkRight, Side.Right);
         }
@@ -837,13 +858,13 @@ public class HedgehogController : MonoBehaviour
         RaycastHit2D cast;
         if (Side == Side.Left)
         {
-            cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - WallMode.UnitVector() * LedgeClimbHeight,
+            cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - Wallmode.UnitVector() * LedgeClimbHeight,
                 SensorBottomLeft.position,
                 TerrainMask);
         }
         else
         {
-            cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - WallMode.UnitVector() * LedgeClimbHeight,
+            cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - Wallmode.UnitVector() * LedgeClimbHeight,
                 SensorBottomRight.position,
                 TerrainMask);
         }
@@ -861,24 +882,24 @@ public class HedgehogController : MonoBehaviour
         RaycastHit2D cast;
         if (footing == Side.Left)
         {
-            // Cast from the player's side to below the player's feet based on its wall mode (orientation)
-            cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - WallMode.UnitVector() * LedgeClimbHeight,
-                                      (Vector2)SensorBottomLeft.position + WallMode.UnitVector() * LedgeDropHeight,
+            // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
+            cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - Wallmode.UnitVector() * LedgeClimbHeight,
+                                      (Vector2)SensorBottomLeft.position + Wallmode.UnitVector() * LedgeDropHeight,
                                       TerrainMask);
 
             if (!cast)
             {
                 return default(RaycastHit2D);
             }
-            if (AMath.Equalsf(cast.fraction, 0.0f))
+            if (Equalsf(cast.fraction, 0.0f))
             {
-                for (var check = WallMode.AdjacentCW(); check != WallMode; check = check.AdjacentCW())
+                for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
                 {
                     cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - check.UnitVector() * LedgeClimbHeight,
                         (Vector2)SensorBottomLeft.position + check.UnitVector() * LedgeDropHeight,
                         TerrainMask);
 
-                    if (cast && !AMath.Equalsf(cast.fraction, 0.0f))
+                    if (cast && !Equalsf(cast.fraction, 0.0f))
                         return cast;
                 }
 
@@ -887,23 +908,23 @@ public class HedgehogController : MonoBehaviour
 
             return cast;
         }
-        cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - WallMode.UnitVector() * LedgeClimbHeight,
-            (Vector2)SensorBottomRight.position + WallMode.UnitVector() * LedgeDropHeight,
+        cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - Wallmode.UnitVector() * LedgeClimbHeight,
+            (Vector2)SensorBottomRight.position + Wallmode.UnitVector() * LedgeDropHeight,
             TerrainMask);
 
         if (!cast)
         {
             return default(RaycastHit2D);
         }
-        if (AMath.Equalsf(cast.fraction, 0.0f))
+        if (Equalsf(cast.fraction, 0.0f))
         {
-            for (var check = WallMode.AdjacentCW(); check != WallMode; check = check.AdjacentCW())
+            for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
             {
                 cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - check.UnitVector() * LedgeClimbHeight,
                     (Vector2)SensorBottomRight.position + check.UnitVector() * LedgeDropHeight,
                     TerrainMask);
 
-                if (cast && !AMath.Equalsf(cast.fraction, 0.0f))
+                if (cast && !Equalsf(cast.fraction, 0.0f))
                     return cast;
             }
 
@@ -913,8 +934,7 @@ public class HedgehogController : MonoBehaviour
         return cast;
     }
 
-    /// COLLISION SUBROUTINES
-
+    #region Collision Subroutines
     /// <summary>
     /// Collision check with side sensors for when player is in the air.
     /// </summary>
@@ -932,7 +952,7 @@ public class HedgehogController : MonoBehaviour
             }
 
             transform.position += (Vector3)sideLeftCheck.point - SensorMiddleLeft.position +
-                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * AMath.Epsilon;
+                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * Epsilon;
             return true;
         }
         if (sideRightCheck)
@@ -943,7 +963,7 @@ public class HedgehogController : MonoBehaviour
             }
 
             transform.position += (Vector3)sideRightCheck.point - SensorMiddleRight.position +
-                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * AMath.Epsilon;
+                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * Epsilon;
             return true;
         }
 
@@ -967,14 +987,14 @@ public class HedgehogController : MonoBehaviour
             {
                 transform.position += (Vector3)horizontalCheck.point - SensorTopLeft.position;
 
-                if (!JustDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                if (!JustDetached) HandleImpact(Angle(horizontalCheck.normal) - HalfPi);
                 if (Vy > 0) Vy = 0;
             }
             else
             {
                 transform.position += (Vector3)verticalCheck.point - SensorTopLeft.position;
 
-                if (!JustDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                if (!JustDetached) HandleImpact(Angle(verticalCheck.normal) - HalfPi);
                 if (Vy > 0) Vy = 0;
             }
             return true;
@@ -990,14 +1010,14 @@ public class HedgehogController : MonoBehaviour
             {
                 transform.position += (Vector3)horizontalCheck.point - SensorTopRight.position;
 
-                if (!JustDetached) HandleImpact(horizontalCheck.normal.Angle() - AMath.HALF_PI);
+                if (!JustDetached) HandleImpact(Angle(horizontalCheck.normal) - HalfPi);
                 if (Vy > 0) Vy = 0;
             }
             else
             {
                 transform.position += (Vector3)verticalCheck.point - SensorTopRight.position;
 
-                if (!JustDetached) HandleImpact(verticalCheck.normal.Angle() - AMath.HALF_PI);
+                if (!JustDetached) HandleImpact(Angle(verticalCheck.normal) - HalfPi);
                 if (Vy > 0) Vy = 0;
             }
 
@@ -1035,20 +1055,20 @@ public class HedgehogController : MonoBehaviour
                 {
                     if (groundLeftCheck.point.y > groundRightCheck.point.y)
                     {
-                        HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+                        HandleImpact(Angle(groundLeftCheck.normal) - HalfPi);
                     }
                     else
                     {
-                        HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+                        HandleImpact(Angle(groundRightCheck.normal) - HalfPi);
                     }
                 }
                 else if (groundLeftCheck)
                 {
-                    HandleImpact(groundLeftCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(Angle(groundLeftCheck.normal) - HalfPi);
                 }
                 else
                 {
-                    HandleImpact(groundRightCheck.normal.Angle() - AMath.HALF_PI);
+                    HandleImpact(Angle(groundRightCheck.normal) - HalfPi);
                 }
             }
 
@@ -1071,13 +1091,13 @@ public class HedgehogController : MonoBehaviour
         {
             Vg = 0;
             transform.position += (Vector3)sideLeftCheck.point - SensorMiddleLeft.position +
-                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * AMath.Epsilon;
+                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * Epsilon;
 
             // If running down a wall and hits the floor, orient the player onto the floor
-            if (WallMode == WallMode.Right)
+            if (Wallmode == Orientation.Right)
             {
-                transform.RotateBy(-90.0f);
-                WallMode = WallMode.Floor;
+                RotateBy(transform, -90.0f);
+                Wallmode = Orientation.Floor;
             }
 
             return true;
@@ -1086,13 +1106,13 @@ public class HedgehogController : MonoBehaviour
         {
             Vg = 0;
             transform.position += (Vector3)sideRightCheck.point - SensorMiddleRight.position +
-                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * AMath.Epsilon;
+                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * Epsilon;
 
             // If running down a wall and hits the floor, orient the player onto the floor
-            if (WallMode == WallMode.Left)
+            if (Wallmode == Orientation.Left)
             {
-                transform.RotateTo(90.0f);
-                WallMode = WallMode.Floor;
+                RotateTo(transform, 90.0f);
+                Wallmode = Orientation.Floor;
             }
 
             return true;
@@ -1116,7 +1136,7 @@ public class HedgehogController : MonoBehaviour
 
             // Add epsilon to prevent sticky collisions
             transform.position += (Vector3)ceilLeftCheck.point - SensorTopLeft.position +
-                ((Vector3)ceilLeftCheck.point - SensorTopLeft.position).normalized * AMath.Epsilon;
+                ((Vector3)ceilLeftCheck.point - SensorTopLeft.position).normalized * Epsilon;
 
             return true;
         }
@@ -1124,14 +1144,13 @@ public class HedgehogController : MonoBehaviour
         {
             Vg = 0;
             transform.position += (Vector3)ceilRightCheck.point - SensorTopRight.position +
-                                  ((Vector3)ceilRightCheck.point - SensorTopRight.position).normalized * AMath.Epsilon;
+                                  ((Vector3)ceilRightCheck.point - SensorTopRight.position).normalized * Epsilon;
 
             return true;
         }
 
         return false;
     }
-
 
     /// <summary>
     /// Collision check with ground sensors for when player is on the ground.
@@ -1147,9 +1166,9 @@ public class HedgehogController : MonoBehaviour
             if (s.LeftCast && s.RightCast)
             {
                 // Calculate angle changes for tolerance checks
-                var rightDiff = AMath.AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                var leftDiff = AMath.AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                var overlapDiff = AMath.AngleDiffr(s.LeftSurfaceAngle, s.RightSurfaceAngle) * Mathf.Rad2Deg;
+                var rightDiff = AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                var leftDiff = AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                var overlapDiff = AngleDiffr(s.LeftSurfaceAngle, s.RightSurfaceAngle) * Mathf.Rad2Deg;
 
                 if (s.Side == Side.Left)
                 {
@@ -1160,27 +1179,23 @@ public class HedgehogController : MonoBehaviour
                         if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
                         {
                             // If tolerable, rotate between the surfaces beneath the two feet
-                            transform.RotateTo((s.RightCast.point - s.LeftCast.point).Angle(), SensorBottomMiddle.position);
+                            RotateTo(transform, Angle(s.RightCast.point - s.LeftCast.point), SensorBottomMiddle.position);
                             transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
                             Footing = Side.Left;
                         }
                         else
                         {
                             // Else just rotate for the left foot
-                            transform.RotateTo(s.LeftSurfaceAngle, s.LeftCast.point);
+                            RotateTo(transform, s.LeftSurfaceAngle, s.LeftCast.point);
                             transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
                             Footing = Side.Left;
                         }
 
-                        if (s.LeftCast.collider.gameObject.tag == Settings.TagMovingPlatform)
-                        {
-                            // TODO moving platforms!??!
-                        }
                         // Else see if the other surface's angle is tolerable
                     }
                     else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                     {
-                        transform.RotateTo(s.RightSurfaceAngle, SensorBottomMiddle.position);
+                        RotateTo(transform, s.RightSurfaceAngle, SensorBottomMiddle.position);
                         transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
                         Footing = Side.Right;
                         // Else the surfaces are untolerable. detach from the surface
@@ -1197,13 +1212,13 @@ public class HedgehogController : MonoBehaviour
                     {
                         if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
                         {
-                            transform.RotateTo((s.RightCast.point - s.LeftCast.point).Angle(), SensorBottomMiddle.position);
+                            RotateTo(transform, Angle(s.RightCast.point - s.LeftCast.point), SensorBottomMiddle.position);
                             transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
                             Footing = Side.Right;
                         }
                         else
                         {
-                            transform.RotateTo(s.RightSurfaceAngle, s.RightCast.point);
+                            RotateTo(transform, s.RightSurfaceAngle, s.RightCast.point);
                             transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
                             Footing = Side.Right;
                         }
@@ -1211,7 +1226,7 @@ public class HedgehogController : MonoBehaviour
                     }
                     else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                     {
-                        transform.RotateTo(s.LeftSurfaceAngle, SensorBottomMiddle.position);
+                        RotateTo(transform, s.LeftSurfaceAngle, SensorBottomMiddle.position);
                         transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
                         Footing = Side.Left;
                     }
@@ -1223,10 +1238,10 @@ public class HedgehogController : MonoBehaviour
             }
             else if (s.LeftCast)
             {
-                var leftDiff = AMath.AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                var leftDiff = AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                 if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                 {
-                    transform.RotateTo(s.LeftSurfaceAngle, s.LeftCast.point);
+                    RotateTo(transform, s.LeftSurfaceAngle, s.LeftCast.point);
                     transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
                     Footing = Side.Left;
                 }
@@ -1237,10 +1252,10 @@ public class HedgehogController : MonoBehaviour
             }
             else
             {
-                var rightDiff = AMath.AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                var rightDiff = AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                 if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                 {
-                    transform.RotateTo(s.RightSurfaceAngle, s.RightCast.point);
+                    RotateTo(transform, s.RightSurfaceAngle, s.RightCast.point);
                     transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
                     Footing = Side.Right;
                 }
@@ -1276,27 +1291,27 @@ public class HedgehogController : MonoBehaviour
 
         // Can only stay on the surface if angle difference is low enough
         if (Grounded && (_justLanded ||
-                        Mathf.Abs(AMath.AngleDiffd(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
+                        Mathf.Abs(AngleDiffd(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
         {
-            if (WallMode == WallMode.Floor)
+            if (Wallmode == Orientation.Floor)
             {
-                if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 180.0f) WallMode = WallMode.Right;
-                else if (SurfaceAngle < 315.0f - HorizontalWallmodeAngleWeight && SurfaceAngle > 180.0f) WallMode = WallMode.Left;
+                if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 180.0f) Wallmode = Orientation.Right;
+                else if (SurfaceAngle < 315.0f - HorizontalWallmodeAngleWeight && SurfaceAngle > 180.0f) Wallmode = Orientation.Left;
             }
-            else if (WallMode == WallMode.Right)
+            else if (Wallmode == Orientation.Right)
             {
-                if (SurfaceAngle > 135.0f + HorizontalWallmodeAngleWeight) WallMode = WallMode.Ceiling;
-                else if (SurfaceAngle < 45.0f - HorizontalWallmodeAngleWeight) WallMode = WallMode.Floor;
+                if (SurfaceAngle > 135.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
+                else if (SurfaceAngle < 45.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Floor;
             }
-            else if (WallMode == WallMode.Ceiling)
+            else if (Wallmode == Orientation.Ceiling)
             {
-                if (SurfaceAngle > 225.0f + HorizontalWallmodeAngleWeight) WallMode = WallMode.Left;
-                else if (SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight) WallMode = WallMode.Right;
+                if (SurfaceAngle > 225.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Left;
+                else if (SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Right;
             }
-            else if (WallMode == WallMode.Left)
+            else if (Wallmode == Orientation.Left)
             {
-                if (SurfaceAngle > 315.0f + HorizontalWallmodeAngleWeight || SurfaceAngle < 180.0f) WallMode = WallMode.Floor;
-                else if (SurfaceAngle < 225.0f - HorizontalWallmodeAngleWeight) WallMode = WallMode.Ceiling;
+                if (SurfaceAngle > 315.0f + HorizontalWallmodeAngleWeight || SurfaceAngle < 180.0f) Wallmode = Orientation.Floor;
+                else if (SurfaceAngle < 225.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
             }
 
             Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
@@ -1308,4 +1323,377 @@ public class HedgehogController : MonoBehaviour
 
         return false;
     }
+    #endregion
+
+    #region Math Utilities
+    public static float AngleDiffd(float a, float b)
+    {
+        return Modp(b - a + 180.0f, 360.0f) - 180.0f;
+    }
+
+    public static float AngleDiffr(float a, float b)
+    {
+        return Modp(b - a + Mathf.PI, Mathf.PI * 2.0f) - Mathf.PI;
+    }
+
+    public static float Modp(float dividend, float divisor)
+    {
+        return ((dividend % divisor) + divisor) % divisor;
+    }
+
+    public static bool Equalsf(float a, float b, float epsilon = Epsilon)
+    {
+        return (a >= b - Epsilon && a <= b + epsilon);
+    }
+
+    /// <summary>
+    /// Returns the angle of the specified vector in radians.
+    /// </summary>
+    /// <param name="a">The vector.</param>
+    public static float Angle(Vector2 a)
+    {
+        return Mathf.Atan2(a.y, a.x);
+    }
+
+    /// <summary>
+    /// Returns the positive vertical distance between a and b if a is higher than b or the negative
+    /// vertical distance if the opposite is true.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    public static float Highest(Vector2 a, Vector2 b)
+    {
+        return Highest(a, b, Mathf.PI / 2);
+    }
+
+    /// <summary>
+    /// Returns the positive distance between a and b projected onto the axis in the speicifed direction
+    /// if a is higher than b on that axis or the negative distance if the opposite is true.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    /// <param name="angle">The positive distance between a and b if a is higher than b in the specified
+    /// direction or the negative distance if the opposite is true.</param>
+    public static float Highest(Vector2 a, Vector2 b, float angle)
+    {
+        Vector2 diff = Projection(a, angle) - Projection(b, angle);
+        return (Mathf.Abs(Angle(diff) - angle) < 1.57f) ? diff.magnitude : -diff.magnitude;
+    }
+
+    /// <summary>
+    /// Determines if a is perpendicular to b.
+    /// </summary>
+    /// <returns><c>true</c> if a is perpendicular to b, otherwise <c>false</c>.</returns>
+    /// <param name="a">The vector a.</param>
+    /// <param name="b">The vector b.</param>
+    public static bool IsPerp(Vector2 a, Vector2 b)
+    {
+        return Equalsf(0.0f, Vector2.Dot(a, b));
+    }
+
+    /// <summary>
+    /// Determines if the line defined by the points a1 and a2 is perpendicular to the line defined by
+    /// the points b1 and b2.
+    /// </summary>
+    /// <returns><c>true</c> if the line defined by the points a1 and a2 is perpendicular to the line defined by
+    /// the points b1 and b2, otherwise <c>false</c>.</returns>
+    /// <param name="a1">The point a1 that defines a line with a2.</param>
+    /// <param name="a2">The point a2 that defines a line with a1.</param>
+    /// <param name="b1">The point b1 that defines a line with b2.</param>
+    /// <param name="b2">The point b2 that defines a line with b1.</param>
+    public static bool IsPerp(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+    {
+        return IsPerp(a2 - a1, b2 - b1);
+    }
+
+    /// <summary>
+    /// Projects the point q onto a line at the origin at the specified angle.
+    /// </summary>
+    /// <param name="q">The point q.</param>
+    /// <param name="angle">The angle of the line.</param>
+    public static Vector2 Projection(Vector2 q, float angle)
+    {
+        return Projection(q, new Vector2(), angle);
+    }
+
+    /// <summary>
+    /// Projects the point q onto a line which intersects the point p and continues in the specified angle.
+    /// </summary>
+    /// <param name="q">The point q.</param>
+    /// <param name="p">The point p.</param>
+    /// <param name="angle">The angle of the line.</param>
+    public static Vector2 Projection(Vector2 q, Vector2 p, float angle)
+    {
+        return Projection(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
+    }
+
+    /// <summary>
+    /// Projects the point q onto a line defined by the points lineA and lineB.
+    /// </summary>
+    /// <param name="q">The point q.</param>
+    /// <param name="lineA">The point lineA which defines a line with lineB.</param>
+    /// <param name="lineB">The point lineB which defines a line with lineA.</param>
+    public static Vector2 Projection(Vector2 q, Vector2 lineA, Vector2 lineB)
+    {
+        Vector2 ab = lineB - lineA;
+        return lineA + ((Vector2.Dot(q - lineA, ab) / Vector2.Dot(ab, ab)) * ab);
+    }
+
+    /// <summary>
+    /// Rotates the point by the angle about (0, 0).
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static Vector2 RotateBy(Vector2 point, float angle)
+    {
+        return RotateBy(point, angle, new Vector2(0.0f, 0.0f));
+    }
+
+    /// <summary>
+    /// Rotates the point by the angle about the specified origin.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static Vector2 RotateBy(Vector2 point, float angle, Vector2 origin)
+    {
+        float s = Mathf.Sin(angle);
+        float c = Mathf.Cos(angle);
+
+        Vector2 npoint = point - origin;
+
+        return new Vector2(npoint.x * c - npoint.y * s + origin.x, npoint.x * s + npoint.y * c + origin.y);
+    }
+
+    /// <summary>
+    /// Rotates the transform by the angle about (0, 0).
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static void RotateBy(Transform transform, float angle)
+    {
+        RotateBy(transform, angle, transform.position);
+    }
+
+    /// <summary>
+    /// Rotates the transform by the angle about the specified origin.
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static void RotateBy(Transform transform, float angle, Vector2 origin)
+    {
+        transform.position = RotateBy(transform.position, angle, origin);
+        transform.eulerAngles = new Vector3(0.0f, 0.0f, transform.eulerAngles.z + (angle * Mathf.Rad2Deg));
+    }
+
+    /// <summary>
+    /// Rotates the point to the angle about (0, 0).
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static Vector2 RotateTo(Vector2 point, float angle)
+    {
+        return RotateBy(point, angle - Angle(point));
+    }
+
+    /// <summary>
+    /// Rotates the point to the angle about the specified origin.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static Vector2 RotateTo(Vector2 point, float angle, Vector2 origin)
+    {
+        return RotateBy(point, angle - Mathf.Atan2(point.x - origin.x, point.y - origin.y), origin);
+    }
+
+    /// <summary>
+    /// Rotates the transform to the angle about (0, 0).
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static void RotateTo(Transform transform, float angle)
+    {
+        RotateTo(transform, angle, transform.position);
+    }
+
+    /// <summary>
+    /// Rotates the transform to the angle about the specified origin.
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static void RotateTo(Transform transform, float angle, Vector2 origin)
+    {
+        transform.position = RotateTo(transform.position, angle, origin);
+        transform.eulerAngles = new Vector3(0.0f, 0.0f, angle * Mathf.Rad2Deg);
+    }
+
+    /// <summary>
+    /// Returns the midpoint between two points.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    public static Vector2 Midpoint(Vector2 a, Vector2 b)
+    {
+        return (a + b) / 2.0f;
+    }
+    #endregion
 }
+
+#region Utility Class Extensions
+/// <summary>
+/// Contains extension methods for HedgehogController utility classes
+/// </summary>
+public static class HedgehogControllerExtensions
+{
+
+    /// <summary>
+    /// Returns the wall mode of a surface with the specified angle.
+    /// </summary>
+    /// <returns>The wall mode.</returns>
+    /// <param name="angleRadians">The surface angle in radians.</param>
+    public static HedgehogController.Orientation FromSurfaceAngle(float angleRadians)
+    {
+        float angle = HedgehogController.Modp(angleRadians, HedgehogController.DoublePi);
+
+        if (angle <= Mathf.PI * 0.25f || angle > Mathf.PI * 1.75f)
+            return HedgehogController.Orientation.Floor;
+        else if (angle > Mathf.PI * 0.25f && angle <= Mathf.PI * 0.75f)
+            return HedgehogController.Orientation.Right;
+        else if (angle > Mathf.PI * 0.75f && angle <= Mathf.PI * 1.25f)
+            return HedgehogController.Orientation.Ceiling;
+        else
+            return HedgehogController.Orientation.Left;
+    }
+
+    /// <summary>
+    /// Returns a unit vector which represents the direction in which a wall mode points.
+    /// </summary>
+    /// <returns>The vector which represents the direction in which a wall mode points.</returns>
+    /// <param name="orientation">The wall mode.</param>
+    public static Vector2 UnitVector(this HedgehogController.Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case HedgehogController.Orientation.Floor:
+                return new Vector2(0.0f, -1.0f);
+
+            case HedgehogController.Orientation.Ceiling:
+                return new Vector2(0.0f, 1.0f);
+
+            case HedgehogController.Orientation.Left:
+                return new Vector2(-1.0f, 0.0f);
+
+            case HedgehogController.Orientation.Right:
+                return new Vector2(1.0f, 0.0f);
+
+            default:
+                return default(Vector2);
+        }
+    }
+
+    /// <summary>
+    /// Returns the normal angle in radians (-pi to pi) of a flat wall in the specified wall mode.
+    /// </summary>
+    /// <param name="orientation">The wall mode.</param>
+    public static float Normal(this HedgehogController.Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case HedgehogController.Orientation.Floor:
+                return HedgehogController.HalfPi;
+
+            case HedgehogController.Orientation.Right:
+                return Mathf.PI;
+
+            case HedgehogController.Orientation.Ceiling:
+                return -HedgehogController.HalfPi;
+
+            case HedgehogController.Orientation.Left:
+                return 0.0f;
+
+            default:
+                return default(float);
+        }
+    }
+
+    /// <summary>
+    /// Returns the wall mode which points in the direction opposite to this one.
+    /// </summary>
+    /// <param name="orientation">The wall mode.</param>
+    public static HedgehogController.Orientation Opposite(this HedgehogController.Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case HedgehogController.Orientation.Floor:
+                return HedgehogController.Orientation.Ceiling;
+
+            case HedgehogController.Orientation.Right:
+                return HedgehogController.Orientation.Left;
+
+            case HedgehogController.Orientation.Ceiling:
+                return HedgehogController.Orientation.Floor;
+
+            case HedgehogController.Orientation.Left:
+                return HedgehogController.Orientation.Right;
+
+            default:
+                return HedgehogController.Orientation.None;
+        }
+    }
+
+    /// <summary>
+    /// Returns the wall mode adjacent to this traveling clockwise.
+    /// </summary>
+    /// <returns>The adjacent wall mode.</returns>
+    /// <param name="orientation">The given wall mode.</param>
+    public static HedgehogController.Orientation AdjacentCW(this HedgehogController.Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case HedgehogController.Orientation.Floor:
+                return HedgehogController.Orientation.Left;
+
+            case HedgehogController.Orientation.Right:
+                return HedgehogController.Orientation.Floor;
+
+            case HedgehogController.Orientation.Ceiling:
+                return HedgehogController.Orientation.Right;
+
+            case HedgehogController.Orientation.Left:
+                return HedgehogController.Orientation.Ceiling;
+
+            default:
+                return HedgehogController.Orientation.None;
+        }
+    }
+
+    /// <summary>
+    /// Returns the wall mode adjacent to this traveling counter-clockwise.
+    /// </summary>
+    /// <returns>The adjacent wall mode.</returns>
+    /// <param name="orientation">The given wall mode.</param>
+    public static HedgehogController.Orientation AdjacentCCW(this HedgehogController.Orientation orientation)
+    {
+        switch (orientation)
+        {
+            case HedgehogController.Orientation.Floor:
+                return HedgehogController.Orientation.Right;
+
+            case HedgehogController.Orientation.Right:
+                return HedgehogController.Orientation.Ceiling;
+
+            case HedgehogController.Orientation.Ceiling:
+                return HedgehogController.Orientation.Left;
+
+            case HedgehogController.Orientation.Left:
+                return HedgehogController.Orientation.Floor;
+
+            default:
+                return HedgehogController.Orientation.None;
+        }
+    }
+}
+#endregion
