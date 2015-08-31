@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
   - 61: {fileID: 6100000}
-  - 114: {fileID: 11400000}
+  - 114: {fileID: 11445232}
   m_Layer: 0
   m_Name: path_1-2
   m_TagString: Untagged
@@ -24,8 +24,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: .103557497, w: .994623482}
-  m_LocalPosition: {x: -9.21520042, y: 10.7690001, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -.0019041053, w: .999998212}
+  m_LocalPosition: {x: -8.40810013, y: 10.8070002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,7 +43,7 @@ BoxCollider2D:
   m_Offset: {x: -2.38418579e-07, y: 0}
   serializedVersion: 2
   m_Size: {x: .639999986, y: .639999986}
---- !u!114 &11400000
+--- !u!114 &11445232
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -51,12 +51,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 206f83b51b5c5ed41a306b2ead8e2ad2, type: 3}
+  m_Script: {fileID: 11500000, guid: 78bd2b07b4f57cc4aa9489ca59e6c62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mustBeGrounded: 1
-  layerFrom: 1
-  layerTo: 2
+  MustBeGrounded: 1
+  LayerFrom: 1
+  LayerTo: 2
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
