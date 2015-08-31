@@ -565,9 +565,6 @@ public class HedgehogController : MonoBehaviour
                     if (Vg < 0) Vg += GroundDeceleration * timeScale;
                 }
             }
-
-            if (Input.GetKey(KeyCode.Space)) Vg = MaxSpeed * Mathf.Sign(Vg);
-
         }
         else
         {
