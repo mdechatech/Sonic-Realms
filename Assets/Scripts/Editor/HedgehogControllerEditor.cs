@@ -23,6 +23,8 @@ public class HedgehogControllerEditor : Editor
     [SerializeField]
     private bool _showSensorsGenerator;
 
+    [SerializeField] private bool _showDebugInfo;
+
     [SerializeField]
     private Renderer _fromRenderer;
     [SerializeField]
@@ -65,6 +67,7 @@ public class HedgehogControllerEditor : Editor
     {
         if (_instance == null) return;
 
+        #region GUIStyles
         var titleStyle = new GUIStyle
         {
             fontSize = 12,
@@ -92,10 +95,14 @@ public class HedgehogControllerEditor : Editor
         {
             padding = new RectOffset(0, 0, 0, 0),
         };
-        
+        #endregion
+
+        #region Title
         GUILayout.Label("<color=\"#0000ff\">Hedgehog Controller</color>", titleStyle);
         GUILayout.Label("<color=\"#5555ff\">mdechatech</color>", subtitleStyle);
+        #endregion
 
+        #region Controls Foldout
         _showControls = EditorGUILayout.Foldout(_showControls, "Controls", foldoutStyle);
         if (_showControls)
         {
@@ -103,70 +110,75 @@ public class HedgehogControllerEditor : Editor
             _instance.LeftKey = (KeyCode)EditorGUILayout.EnumPopup("Left Key", _instance.LeftKey);
             _instance.RightKey = (KeyCode)EditorGUILayout.EnumPopup("Right Key", _instance.RightKey);
         }
-
+        #endregion
+        #region Collision Foldout
         _showCollision = EditorGUILayout.Foldout(_showCollision, "Collision", foldoutStyle);
         if (_showCollision)
         {
-            _showSensorsGenerator = EditorGUILayout.Toggle("Show Sensors Creator", _showSensorsGenerator);
-            if (_showSensorsGenerator)
-            {
-                EditorGUILayout.LabelField("Create Sensors", headerStyle);
+            EditorGUILayout.LabelField("Layers", headerStyle);
 
-                EditorGUILayout.BeginHorizontal();
-                _fromRenderer =
-                    EditorGUILayout.ObjectField("From Renderer", _fromRenderer, typeof(Renderer), true) as Renderer;
-                GUI.enabled = _fromRenderer != null;
-                if (GUILayout.Button("Create"))
-                {
-                    GenerateSensors(_fromRenderer.bounds);
-                }
-                GUI.enabled = true;
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _fromCollider2D =
-                    EditorGUILayout.ObjectField("From Collider2D", _fromCollider2D, typeof(Collider2D), true) as Collider2D;
-                GUI.enabled = _fromCollider2D != null;
-                if (GUILayout.Button("Create"))
-                {
-                    GenerateSensors(_fromCollider2D.bounds);
-                }
-                GUI.enabled = true;
-                EditorGUILayout.EndHorizontal();
-
-                _fromBounds = EditorGUILayout.BoundsField("From Bounds", _fromBounds);
-                GUI.enabled = _fromBounds != default(Bounds);
-                if (GUILayout.Button("Create from Bounds"))
-                {
-                    GenerateSensors(_fromBounds, true);
-                }
-                GUI.enabled = true;
-            }
-
-            _showSensors = EditorGUILayout.Toggle("Show Sensors", _showSensors);
-            if (_showSensors)
-            {
-                _instance.SensorTopLeft = EditorGUILayout.ObjectField("Top Left", _instance.SensorTopLeft,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorTopMiddle = EditorGUILayout.ObjectField("Top Center", _instance.SensorTopMiddle,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorTopRight = EditorGUILayout.ObjectField("Top Right", _instance.SensorTopRight,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorMiddleLeft = EditorGUILayout.ObjectField("Center Left", _instance.SensorMiddleLeft,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorMiddleMiddle = EditorGUILayout.ObjectField("Center", _instance.SensorMiddleMiddle,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorMiddleRight = EditorGUILayout.ObjectField("Center Right", _instance.SensorMiddleRight,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorBottomLeft = EditorGUILayout.ObjectField("Bottom Left", _instance.SensorBottomLeft,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorBottomMiddle = EditorGUILayout.ObjectField("Bottom Center", _instance.SensorBottomMiddle,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorBottomRight = EditorGUILayout.ObjectField("Bottom Right", _instance.SensorBottomRight,
-                    typeof(Transform), true) as Transform;
-            }
+            _instance.InitialTerrainMask = LayerMaskField("Initial Terrain Mask", _instance.InitialTerrainMask);
         }
+        #endregion
+        #region Sensors Foldout
+        _showSensors = EditorGUILayout.Foldout(_showSensors, "Sensors", foldoutStyle);
+        if (_showSensors)
+        {
+            EditorGUILayout.LabelField("Create", headerStyle);
 
+            EditorGUILayout.BeginHorizontal();
+            _fromRenderer =
+                EditorGUILayout.ObjectField("From Renderer", _fromRenderer, typeof(Renderer), true) as Renderer;
+            GUI.enabled = _fromRenderer != null;
+            if (GUILayout.Button("Create"))
+            {
+                GenerateSensors(_fromRenderer.bounds);
+            }
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            _fromCollider2D =
+                EditorGUILayout.ObjectField("From Collider2D", _fromCollider2D, typeof(Collider2D), true) as Collider2D;
+            GUI.enabled = _fromCollider2D != null;
+            if (GUILayout.Button("Create"))
+            {
+                GenerateSensors(_fromCollider2D.bounds);
+            }
+            GUI.enabled = true;
+            EditorGUILayout.EndHorizontal();
+
+            _fromBounds = EditorGUILayout.BoundsField("From Bounds", _fromBounds);
+            GUI.enabled = _fromBounds != default(Bounds);
+            if (GUILayout.Button("Create from Bounds"))
+            {
+                GenerateSensors(_fromBounds, true);
+            }
+            GUI.enabled = true;
+
+            EditorGUILayout.Space();
+            
+            _instance.SensorTopLeft = EditorGUILayout.ObjectField("Top Left", _instance.SensorTopLeft,
+                typeof(Transform), true) as Transform;
+            _instance.SensorTopMiddle = EditorGUILayout.ObjectField("Top Center", _instance.SensorTopMiddle,
+                typeof(Transform), true) as Transform;
+            _instance.SensorTopRight = EditorGUILayout.ObjectField("Top Right", _instance.SensorTopRight,
+                typeof(Transform), true) as Transform;
+            _instance.SensorMiddleLeft = EditorGUILayout.ObjectField("Center Left", _instance.SensorMiddleLeft,
+                typeof(Transform), true) as Transform;
+            _instance.SensorMiddleMiddle = EditorGUILayout.ObjectField("Center", _instance.SensorMiddleMiddle,
+                typeof(Transform), true) as Transform;
+            _instance.SensorMiddleRight = EditorGUILayout.ObjectField("Center Right", _instance.SensorMiddleRight,
+                typeof(Transform), true) as Transform;
+            _instance.SensorBottomLeft = EditorGUILayout.ObjectField("Bottom Left", _instance.SensorBottomLeft,
+                typeof(Transform), true) as Transform;
+            _instance.SensorBottomMiddle = EditorGUILayout.ObjectField("Bottom Center", _instance.SensorBottomMiddle,
+                typeof(Transform), true) as Transform;
+            _instance.SensorBottomRight = EditorGUILayout.ObjectField("Bottom Right", _instance.SensorBottomRight,
+                typeof(Transform), true) as Transform;
+        }
+        #endregion
+        #region Physics Foldout
         _showPhysics = EditorGUILayout.Foldout(_showPhysics, "Physics", foldoutStyle);
         if (_showPhysics)
         {
@@ -217,7 +229,7 @@ public class HedgehogControllerEditor : Editor
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
-
+            #region Advanced Physics
             _showAdvancedPhysics = EditorGUILayout.Toggle("Show Advanced", _showAdvancedPhysics);
             if (_showAdvancedPhysics)
             {
@@ -270,9 +282,8 @@ public class HedgehogControllerEditor : Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.Space();
-
+                #region Forbidden Constants
                 EditorGUILayout.LabelField("Surface Constants", headerStyle);
-
                 EditorGUILayout.HelpBox("The following constants are best left untouched!", MessageType.Warning);
 
                 EditorGUILayout.BeginHorizontal();
@@ -322,8 +333,40 @@ public class HedgehogControllerEditor : Editor
                         _instance.MaxVerticalDetachAngle);
                     EditorGUILayout.PrefixLabel("degrees");
                 EditorGUILayout.EndHorizontal();
+                #endregion
             }
+            #endregion
         }
+        #endregion
+        #region Debug Foldout
+        _showDebugInfo = EditorGUILayout.Foldout(_showDebugInfo, "Debug", foldoutStyle);
+        if (_showDebugInfo)
+        {
+            if (!Application.isPlaying)
+            {
+                EditorGUILayout.HelpBox("This section becomes active in Play Mode.", MessageType.Info);
+            }
+
+            GUI.enabled = Application.isPlaying;
+            EditorGUILayout.LabelField("Surface", headerStyle);
+            _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
+            GUI.enabled = Application.isPlaying && _instance.Grounded;
+            EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
+            GUI.enabled = Application.isPlaying;
+            _instance.TerrainMask = LayerMaskField("Terrain Mask", _instance.TerrainMask);
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField("Velocity", headerStyle);
+            _instance.Vx = EditorGUILayout.FloatField("X", _instance.Vx);
+            _instance.Vy = EditorGUILayout.FloatField("Y", _instance.Vy);
+            GUI.enabled = Application.isPlaying && _instance.Grounded;
+            _instance.Vg = EditorGUILayout.FloatField("Ground", _instance.Vg);
+            GUI.enabled = Application.isPlaying;
+
+            GUI.enabled = true;
+        }
+        #endregion
 
         if (GUI.changed)
         {
@@ -435,5 +478,33 @@ public class HedgehogControllerEditor : Editor
         _instance.SensorBottomLeft = sensorBotLeft.transform;
         _instance.SensorBottomMiddle = sensorBotMid.transform;
         _instance.SensorBottomRight = sensorBotRight.transform;
+    }
+
+    // Source: http://answers.unity3d.com/questions/42996/how-to-create-layermask-field-in-a-custom-editorwi.html
+    private static LayerMask LayerMaskField(string label, LayerMask layerMask)
+    {
+        List<string> layers = new List<string>();
+        List<int> layerNumbers = new List<int>();
+ 
+        for (int i = 0; i < 32; i++) {
+            string layerName = LayerMask.LayerToName(i);
+            if (layerName != "") {
+                layers.Add(layerName);
+                layerNumbers.Add(i);
+            }
+        }
+        int maskWithoutEmpty = 0;
+        for (int i = 0; i < layerNumbers.Count; i++) {
+            if (((1 << layerNumbers[i]) & layerMask.value) > 0)
+                maskWithoutEmpty |= (1 << i);
+        }
+        maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
+        int mask = 0;
+        for (int i = 0; i < layerNumbers.Count; i++) {
+            if ((maskWithoutEmpty & (1 << i)) > 0)
+                mask |= (1 << layerNumbers[i]);
+        }
+        layerMask.value = mask;
+        return layerMask;
     }
 }
