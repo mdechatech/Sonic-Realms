@@ -231,19 +231,19 @@ public class HedgehogController : MonoBehaviour
     /// Whether the left key was held down since the last update. Key is determined by LeftKey.
     /// </summary>
     [HideInInspector]
-    private bool _leftKeyDown;
+    public bool LeftKeyDown;
 
     /// <summary>
     /// Whether the right key was held down since the last update. Key is determined by RightKey.
     /// </summary>
     [HideInInspector]
-    private bool _rightKeyDown;
+    public bool RightKeyDown;
 
     /// <summary>
     /// Whether the jump key was pressed since the last update. Key is determined by JumpKey.
     /// </summary>
     [HideInInspector]
-    private bool _jumpKeyDown;
+    public bool JumpKeyDown;
     #endregion
     #region Physics Variables
     /// <summary>
@@ -1021,7 +1021,7 @@ public class HedgehogController : MonoBehaviour
         OnMovingPlatform = false;
         Vx = Vy = Vg = 0.0f;
         LastSurfaceAngle = 0.0f;
-        _leftKeyDown = _rightKeyDown = _jumpKeyDown = false;
+        LeftKeyDown = RightKeyDown = JumpKeyDown = false;
         JustJumped = _justLanded = JustDetached = false;
         Wallmode = Orientation.Floor;
         TerrainMask = InitialTerrainMask;
@@ -1042,9 +1042,9 @@ public class HedgehogController : MonoBehaviour
     /// </summary>
     private void GetInput()
     {
-        _leftKeyDown = Input.GetKey(LeftKey);
-        _rightKeyDown = Input.GetKey(RightKey);
-        if (!_jumpKeyDown && Grounded) _jumpKeyDown = Input.GetKeyDown(JumpKey);
+        LeftKeyDown = Input.GetKey(LeftKey);
+        RightKeyDown = Input.GetKey(RightKey);
+        if (!JumpKeyDown && Grounded) JumpKeyDown = Input.GetKeyDown(JumpKey);
     }
 
     public void FixedUpdate()
@@ -1115,13 +1115,13 @@ public class HedgehogController : MonoBehaviour
                 }
             }
 
-            if (_jumpKeyDown)
+            if (JumpKeyDown)
             {
-                _jumpKeyDown = false;
+                JumpKeyDown = false;
                 Jump();
             }
 
-            if (_leftKeyDown && !HorizontalLock)
+            if (LeftKeyDown && !HorizontalLock)
             {
                 if (Vg > 0 && Mathf.Abs(AngleDiffd(SurfaceAngle, 90.0f)) < MaxVerticalDetachAngle)
                 {
@@ -1134,7 +1134,7 @@ public class HedgehogController : MonoBehaviour
                     if (Vg > 0) Vg -= GroundDeceleration * timeScale;
                 }
             }
-            else if (_rightKeyDown && !HorizontalLock)
+            else if (RightKeyDown && !HorizontalLock)
             {
                 if (Vg < 0 && Mathf.Abs(AngleDiffd(SurfaceAngle, 270.0f)) < MaxVerticalDetachAngle)
                 {
@@ -1150,8 +1150,8 @@ public class HedgehogController : MonoBehaviour
         }
         else
         {
-            if (_leftKeyDown) Vx -= AirAcceleration * timeScale;
-            else if (_rightKeyDown) Vx += AirAcceleration * timeScale;
+            if (LeftKeyDown) Vx -= AirAcceleration * timeScale;
+            else if (RightKeyDown) Vx += AirAcceleration * timeScale;
         }
     }
 
@@ -1211,7 +1211,7 @@ public class HedgehogController : MonoBehaviour
             var prevVg = Vg;
 
             // Friction from deceleration
-            if (!_leftKeyDown && !_rightKeyDown)
+            if (!LeftKeyDown && !RightKeyDown)
             {
                 if (Vg != 0.0f && Mathf.Abs(Vg) < GroundDeceleration)
                 {
@@ -1242,8 +1242,8 @@ public class HedgehogController : MonoBehaviour
 
             if (Mathf.Abs(slopeForce) > GroundAcceleration)
             {
-                if (_rightKeyDown && prevVg > 0.0f && Vg < 0.0f) LockHorizontal();
-                else if (_leftKeyDown && prevVg < 0.0f && Vg > 0.0f) LockHorizontal();
+                if (RightKeyDown && prevVg > 0.0f && Vg < 0.0f) LockHorizontal();
+                else if (LeftKeyDown && prevVg < 0.0f && Vg > 0.0f) LockHorizontal();
             }
 
             // Detachment from walls if speed is too low
