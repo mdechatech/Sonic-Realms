@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Hedgehog.Actors;
 
 /// <summary>
 /// Must have a collider2D attached. When the player collides (has the tag "Player"),

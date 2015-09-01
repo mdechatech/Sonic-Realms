@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.VR;
+
+using Hedgehog.Actors;
 
 [Serializable]
 [CustomEditor(typeof(HedgehogController))]
