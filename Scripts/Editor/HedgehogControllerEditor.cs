@@ -67,7 +67,7 @@ public class HedgehogControllerEditor : Editor
     {
         if (_instance == null) return;
 
-        #region GUIStyles
+        #region GUI Styles
         var titleStyle = new GUIStyle
         {
             fontSize = 12,

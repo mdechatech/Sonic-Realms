@@ -633,6 +633,9 @@ MonoBehaviour:
   MinFlatOverlapRange: 7.5
   MinFlatAttachAngle: 5
   MaxVerticalDetachAngle: 5
+  LeftKeyDown: 0
+  RightKeyDown: 0
+  JumpKeyDown: 0
   Vx: 0
   Vy: 0
   Vg: 0
