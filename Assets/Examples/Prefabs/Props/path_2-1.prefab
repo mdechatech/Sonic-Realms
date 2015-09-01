@@ -24,8 +24,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: -.00260790647, w: .999996662}
-  m_LocalPosition: {x: -9.08780003, y: 10.7799997, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -.372918755, w: .927864075}
+  m_LocalPosition: {x: 5.62669992, y: .731440008, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -54,9 +54,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78bd2b07b4f57cc4aa9489ca59e6c62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IfTerrainMaskHas:
+    serializedVersion: 2
+    m_Bits: 1024
+  AddLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  RemoveLayers:
+    serializedVersion: 2
+    m_Bits: 1024
   MustBeGrounded: 1
-  LayerFrom: 2
-  LayerTo: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

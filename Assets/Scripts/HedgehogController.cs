@@ -18,7 +18,7 @@ public class HedgehogController : MonoBehaviour
     [Header("Collision")]
     
     [SerializeField]
-    public string AlwaysCollideLayer = "Terrain";
+    public LayerMask InitialTerrainMask;
 
     [Header("Controls")]
 
@@ -281,13 +281,7 @@ public class HedgehogController : MonoBehaviour
     /// The layer mask which represents the ground the player checks for collision with.
     /// </summary>
     [HideInInspector]
-    public int TerrainMask;
-
-    /// <summary>
-    /// The number of the layer of terrain the player checks for collision with.
-    /// </summary>
-    [HideInInspector]
-    public int TerrainLayer;
+    public LayerMask TerrainMask;
 
     /// <summary>
     /// Whether the player has just landed on the ground. Is used to ignore surface angle
@@ -351,23 +345,6 @@ public class HedgehogController : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public Orientation Wallmode;
-    
-    /// <summary>
-    /// The terrain layer that the player is on. The player will collide with the layers "Terrain" and
-    /// "Terrain" plus the terrain layer.
-    /// </summary>
-    /// <value>The terrain layer.</value>
-    public int Layer
-    {
-        get { return TerrainLayer; }
-        set
-        {
-            TerrainLayer = value;
-            TerrainMask =
-                (1 << LayerMask.NameToLayer(AlwaysCollideLayer)) |
-                (1 << LayerMask.NameToLayer(AlwaysCollideLayer + " " + TerrainLayer));
-        }
-    }
     #endregion
 
     #region Orientation Definition
@@ -431,6 +408,612 @@ public class HedgehogController : MonoBehaviour
     }
     #endregion
 
+    #region Collision Subroutines
+    /// <summary>
+    /// Collision check with side sensors for when player is in the air.
+    /// </summary>
+    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+    private bool AirSideCheck()
+    {
+        var sideLeftCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainMask);
+        var sideRightCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainMask);
+
+        if (sideLeftCheck)
+        {
+            if (!JustJumped)
+            {
+                Vx = 0;
+            }
+
+            transform.position += (Vector3)sideLeftCheck.point - SensorMiddleLeft.position +
+                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * Epsilon;
+            return true;
+        }
+        if (sideRightCheck)
+        {
+            if (!JustJumped)
+            {
+                Vx = 0;
+            }
+
+            transform.position += (Vector3)sideRightCheck.point - SensorMiddleRight.position +
+                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * Epsilon;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Collision check with air sensors for when player is in the air.
+    /// </summary>
+    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+    private bool AirCeilingCheck()
+    {
+        var cmem = new Collider2D[1];
+
+        if (Physics2D.OverlapPointNonAlloc(SensorTopLeft.position, cmem, TerrainMask) > 0)
+        {
+            var horizontalCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopLeft.position, TerrainMask);
+            var verticalCheck = Physics2D.Linecast(SensorMiddleLeft.position, SensorTopLeft.position, TerrainMask);
+
+            if (Vector2.Distance(horizontalCheck.point, SensorTopLeft.position) < Vector2.Distance(verticalCheck.point, SensorTopLeft.position))
+            {
+                transform.position += (Vector3)horizontalCheck.point - SensorTopLeft.position;
+
+                if (!JustDetached) HandleImpact(Angle(horizontalCheck.normal) - HalfPi);
+                if (Vy > 0) Vy = 0;
+            }
+            else
+            {
+                transform.position += (Vector3)verticalCheck.point - SensorTopLeft.position;
+
+                if (!JustDetached) HandleImpact(Angle(verticalCheck.normal) - HalfPi);
+                if (Vy > 0) Vy = 0;
+            }
+            return true;
+
+        }
+        if (Physics2D.OverlapPointNonAlloc(SensorTopRight.position, cmem, TerrainMask) > 0)
+        {
+            var horizontalCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopRight.position, TerrainMask);
+            var verticalCheck = Physics2D.Linecast(SensorMiddleRight.position, SensorTopRight.position, TerrainMask);
+
+            if (Vector2.Distance(horizontalCheck.point, SensorTopRight.position) <
+                Vector2.Distance(verticalCheck.point, SensorTopRight.position))
+            {
+                transform.position += (Vector3)horizontalCheck.point - SensorTopRight.position;
+
+                if (!JustDetached) HandleImpact(Angle(horizontalCheck.normal) - HalfPi);
+                if (Vy > 0) Vy = 0;
+            }
+            else
+            {
+                transform.position += (Vector3)verticalCheck.point - SensorTopRight.position;
+
+                if (!JustDetached) HandleImpact(Angle(verticalCheck.normal) - HalfPi);
+                if (Vy > 0) Vy = 0;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Collision check with ground sensors for when player is in the air.
+    /// </summary>
+    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+    private bool AirGroundCheck()
+    {
+        var groundLeftCheck = GroundCast(Side.Left);
+        var groundRightCheck = GroundCast(Side.Right);
+
+        if (groundLeftCheck || groundRightCheck)
+        {
+            if (JustJumped)
+            {
+                if (groundLeftCheck)
+                {
+                    transform.position += (Vector3)groundLeftCheck.point - SensorBottomLeft.position;
+                }
+                if (groundRightCheck)
+                {
+                    transform.position += (Vector3)groundRightCheck.point - SensorBottomRight.position;
+                }
+            }
+            else
+            {
+                if (groundLeftCheck && groundRightCheck)
+                {
+                    if (groundLeftCheck.point.y > groundRightCheck.point.y)
+                    {
+                        HandleImpact(Angle(groundLeftCheck.normal) - HalfPi);
+                    }
+                    else
+                    {
+                        HandleImpact(Angle(groundRightCheck.normal) - HalfPi);
+                    }
+                }
+                else if (groundLeftCheck)
+                {
+                    HandleImpact(Angle(groundLeftCheck.normal) - HalfPi);
+                }
+                else
+                {
+                    HandleImpact(Angle(groundRightCheck.normal) - HalfPi);
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Collision check with side sensors for when player is on the ground.
+    /// </summary>
+    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+    private bool GroundSideCheck()
+    {
+        var sideLeftCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainMask);
+        var sideRightCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainMask);
+
+        if (sideLeftCheck)
+        {
+            Vg = 0;
+            transform.position += (Vector3)sideLeftCheck.point - SensorMiddleLeft.position +
+                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * Epsilon;
+
+            // If running down a wall and hits the floor, orient the player onto the floor
+            if (Wallmode == Orientation.Right)
+            {
+                RotateBy(transform, -90.0f);
+                Wallmode = Orientation.Floor;
+            }
+
+            return true;
+        }
+        if (sideRightCheck)
+        {
+            Vg = 0;
+            transform.position += (Vector3)sideRightCheck.point - SensorMiddleRight.position +
+                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * Epsilon;
+
+            // If running down a wall and hits the floor, orient the player onto the floor
+            if (Wallmode == Orientation.Left)
+            {
+                RotateTo(transform, 90.0f);
+                Wallmode = Orientation.Floor;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Collision check with ceiling sensors for when player is on the ground.
+    /// </summary>
+    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+    private bool GroundCeilingCheck()
+    {
+        var ceilLeftCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopLeft.position, TerrainMask);
+        var ceilRightCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopRight.position, TerrainMask);
+
+        if (ceilLeftCheck)
+        {
+            Vg = 0;
+
+            // Add epsilon to prevent sticky collisions
+            transform.position += (Vector3)ceilLeftCheck.point - SensorTopLeft.position +
+                ((Vector3)ceilLeftCheck.point - SensorTopLeft.position).normalized * Epsilon;
+
+            return true;
+        }
+        if (ceilRightCheck)
+        {
+            Vg = 0;
+            transform.position += (Vector3)ceilRightCheck.point - SensorTopRight.position +
+                                  ((Vector3)ceilRightCheck.point - SensorTopRight.position).normalized * Epsilon;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Collision check with ground sensors for when player is on the ground.
+    /// </summary>
+    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
+    private bool GroundSurfaceCheck()
+    {
+        var s = GetSurface(TerrainMask);
+
+        if (s.LeftCast || s.RightCast)
+        {
+            // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
+            if (s.LeftCast && s.RightCast)
+            {
+                // Calculate angle changes for tolerance checks
+                var rightDiff = AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                var leftDiff = AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                var overlapDiff = AngleDiffr(s.LeftSurfaceAngle, s.RightSurfaceAngle) * Mathf.Rad2Deg;
+
+                if (s.Side == Side.Left)
+                {
+                    // If the surface's angle is a small enough difference from that of the previous begin surface checks
+                    if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
+                    {
+                        // Check angle differences between feet for player rotation
+                        if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
+                        {
+                            // If tolerable, rotate between the surfaces beneath the two feet
+                            RotateTo(transform, Angle(s.RightCast.point - s.LeftCast.point), SensorBottomMiddle.position);
+                            transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
+                            Footing = Side.Left;
+                        }
+                        else
+                        {
+                            // Else just rotate for the left foot
+                            RotateTo(transform, s.LeftSurfaceAngle, s.LeftCast.point);
+                            transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
+                            Footing = Side.Left;
+                        }
+
+                        // Else see if the other surface's angle is tolerable
+                    }
+                    else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
+                    {
+                        RotateTo(transform, s.RightSurfaceAngle, SensorBottomMiddle.position);
+                        transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
+                        Footing = Side.Right;
+                        // Else the surfaces are untolerable. detach from the surface
+                    }
+                    else
+                    {
+                        Detach();
+                    }
+                    // Same thing but with the other foot
+                }
+                else if (s.Side == Side.Right)
+                {
+                    if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
+                    {
+                        if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
+                        {
+                            RotateTo(transform, Angle(s.RightCast.point - s.LeftCast.point), SensorBottomMiddle.position);
+                            transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
+                            Footing = Side.Right;
+                        }
+                        else
+                        {
+                            RotateTo(transform, s.RightSurfaceAngle, s.RightCast.point);
+                            transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
+                            Footing = Side.Right;
+                        }
+
+                    }
+                    else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
+                    {
+                        RotateTo(transform, s.LeftSurfaceAngle, SensorBottomMiddle.position);
+                        transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
+                        Footing = Side.Left;
+                    }
+                    else
+                    {
+                        Detach();
+                    }
+                }
+            }
+            else if (s.LeftCast)
+            {
+                var leftDiff = AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
+                {
+                    RotateTo(transform, s.LeftSurfaceAngle, s.LeftCast.point);
+                    transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
+                    Footing = Side.Left;
+                }
+                else
+                {
+                    Detach();
+                }
+            }
+            else
+            {
+                var rightDiff = AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
+                {
+                    RotateTo(transform, s.RightSurfaceAngle, s.RightCast.point);
+                    transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
+                    Footing = Side.Right;
+                }
+                else
+                {
+                    Detach();
+                }
+            }
+
+            return true;
+        }
+        Detach();
+
+        return false;
+    }
+
+    /// <summary>
+    /// Check for changes in angle of incline for when player is on the ground.
+    /// </summary>
+    /// <returns><c>true</c> if the angle of incline is tolerable, <c>false</c> otherwise.</returns>
+    private bool SurfaceAngleCheck()
+    {
+        if (_justLanded)
+        {
+            SurfaceAngle = transform.eulerAngles.z;
+            LastSurfaceAngle = SurfaceAngle;
+        }
+        else
+        {
+            LastSurfaceAngle = SurfaceAngle;
+            SurfaceAngle = transform.eulerAngles.z;
+        }
+
+        // Can only stay on the surface if angle difference is low enough
+        if (Grounded && (_justLanded ||
+                        Mathf.Abs(AngleDiffd(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
+        {
+            if (Wallmode == Orientation.Floor)
+            {
+                if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 180.0f) Wallmode = Orientation.Right;
+                else if (SurfaceAngle < 315.0f - HorizontalWallmodeAngleWeight && SurfaceAngle > 180.0f) Wallmode = Orientation.Left;
+            }
+            else if (Wallmode == Orientation.Right)
+            {
+                if (SurfaceAngle > 135.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
+                else if (SurfaceAngle < 45.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Floor;
+            }
+            else if (Wallmode == Orientation.Ceiling)
+            {
+                if (SurfaceAngle > 225.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Left;
+                else if (SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Right;
+            }
+            else if (Wallmode == Orientation.Left)
+            {
+                if (SurfaceAngle > 315.0f + HorizontalWallmodeAngleWeight || SurfaceAngle < 180.0f) Wallmode = Orientation.Floor;
+                else if (SurfaceAngle < 225.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
+            }
+
+            Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
+            Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
+
+            _justLanded = false;
+            return true;
+        }
+
+        return false;
+    }
+    #endregion
+    #region Math Utilities
+    public static float AngleDiffd(float a, float b)
+    {
+        return Modp(b - a + 180.0f, 360.0f) - 180.0f;
+    }
+
+    public static float AngleDiffr(float a, float b)
+    {
+        return Modp(b - a + Mathf.PI, Mathf.PI * 2.0f) - Mathf.PI;
+    }
+
+    public static float Modp(float dividend, float divisor)
+    {
+        return ((dividend % divisor) + divisor) % divisor;
+    }
+
+    public static bool Equalsf(float a, float b, float epsilon = Epsilon)
+    {
+        return (a >= b - Epsilon && a <= b + epsilon);
+    }
+
+    /// <summary>
+    /// Returns the angle of the specified vector in radians.
+    /// </summary>
+    /// <param name="a">The vector.</param>
+    public static float Angle(Vector2 a)
+    {
+        return Mathf.Atan2(a.y, a.x);
+    }
+
+    /// <summary>
+    /// Returns the positive vertical distance between a and b if a is higher than b or the negative
+    /// vertical distance if the opposite is true.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    public static float Highest(Vector2 a, Vector2 b)
+    {
+        return Highest(a, b, Mathf.PI / 2);
+    }
+
+    /// <summary>
+    /// Returns the positive distance between a and b projected onto the axis in the speicifed direction
+    /// if a is higher than b on that axis or the negative distance if the opposite is true.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    /// <param name="angle">The positive distance between a and b if a is higher than b in the specified
+    /// direction or the negative distance if the opposite is true.</param>
+    public static float Highest(Vector2 a, Vector2 b, float angle)
+    {
+        Vector2 diff = Projection(a, angle) - Projection(b, angle);
+        return (Mathf.Abs(Angle(diff) - angle) < 1.57f) ? diff.magnitude : -diff.magnitude;
+    }
+
+    /// <summary>
+    /// Determines if a is perpendicular to b.
+    /// </summary>
+    /// <returns><c>true</c> if a is perpendicular to b, otherwise <c>false</c>.</returns>
+    /// <param name="a">The vector a.</param>
+    /// <param name="b">The vector b.</param>
+    public static bool IsPerp(Vector2 a, Vector2 b)
+    {
+        return Equalsf(0.0f, Vector2.Dot(a, b));
+    }
+
+    /// <summary>
+    /// Determines if the line defined by the points a1 and a2 is perpendicular to the line defined by
+    /// the points b1 and b2.
+    /// </summary>
+    /// <returns><c>true</c> if the line defined by the points a1 and a2 is perpendicular to the line defined by
+    /// the points b1 and b2, otherwise <c>false</c>.</returns>
+    /// <param name="a1">The point a1 that defines a line with a2.</param>
+    /// <param name="a2">The point a2 that defines a line with a1.</param>
+    /// <param name="b1">The point b1 that defines a line with b2.</param>
+    /// <param name="b2">The point b2 that defines a line with b1.</param>
+    public static bool IsPerp(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+    {
+        return IsPerp(a2 - a1, b2 - b1);
+    }
+
+    /// <summary>
+    /// Projects the point q onto a line at the origin at the specified angle.
+    /// </summary>
+    /// <param name="q">The point q.</param>
+    /// <param name="angle">The angle of the line.</param>
+    public static Vector2 Projection(Vector2 q, float angle)
+    {
+        return Projection(q, new Vector2(), angle);
+    }
+
+    /// <summary>
+    /// Projects the point q onto a line which intersects the point p and continues in the specified angle.
+    /// </summary>
+    /// <param name="q">The point q.</param>
+    /// <param name="p">The point p.</param>
+    /// <param name="angle">The angle of the line.</param>
+    public static Vector2 Projection(Vector2 q, Vector2 p, float angle)
+    {
+        return Projection(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
+    }
+
+    /// <summary>
+    /// Projects the point q onto a line defined by the points lineA and lineB.
+    /// </summary>
+    /// <param name="q">The point q.</param>
+    /// <param name="lineA">The point lineA which defines a line with lineB.</param>
+    /// <param name="lineB">The point lineB which defines a line with lineA.</param>
+    public static Vector2 Projection(Vector2 q, Vector2 lineA, Vector2 lineB)
+    {
+        Vector2 ab = lineB - lineA;
+        return lineA + ((Vector2.Dot(q - lineA, ab) / Vector2.Dot(ab, ab)) * ab);
+    }
+
+    /// <summary>
+    /// Rotates the point by the angle about (0, 0).
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static Vector2 RotateBy(Vector2 point, float angle)
+    {
+        return RotateBy(point, angle, new Vector2(0.0f, 0.0f));
+    }
+
+    /// <summary>
+    /// Rotates the point by the angle about the specified origin.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static Vector2 RotateBy(Vector2 point, float angle, Vector2 origin)
+    {
+        float s = Mathf.Sin(angle);
+        float c = Mathf.Cos(angle);
+
+        Vector2 npoint = point - origin;
+
+        return new Vector2(npoint.x * c - npoint.y * s + origin.x, npoint.x * s + npoint.y * c + origin.y);
+    }
+
+    /// <summary>
+    /// Rotates the transform by the angle about (0, 0).
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static void RotateBy(Transform transform, float angle)
+    {
+        RotateBy(transform, angle, transform.position);
+    }
+
+    /// <summary>
+    /// Rotates the transform by the angle about the specified origin.
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static void RotateBy(Transform transform, float angle, Vector2 origin)
+    {
+        transform.position = RotateBy(transform.position, angle, origin);
+        transform.eulerAngles = new Vector3(0.0f, 0.0f, transform.eulerAngles.z + (angle * Mathf.Rad2Deg));
+    }
+
+    /// <summary>
+    /// Rotates the point to the angle about (0, 0).
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static Vector2 RotateTo(Vector2 point, float angle)
+    {
+        return RotateBy(point, angle - Angle(point));
+    }
+
+    /// <summary>
+    /// Rotates the point to the angle about the specified origin.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static Vector2 RotateTo(Vector2 point, float angle, Vector2 origin)
+    {
+        return RotateBy(point, angle - Mathf.Atan2(point.x - origin.x, point.y - origin.y), origin);
+    }
+
+    /// <summary>
+    /// Rotates the transform to the angle about (0, 0).
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    public static void RotateTo(Transform transform, float angle)
+    {
+        RotateTo(transform, angle, transform.position);
+    }
+
+    /// <summary>
+    /// Rotates the transform to the angle about the specified origin.
+    /// </summary>
+    /// <param name="transform">The transform.</param>
+    /// <param name="angle">The angle in radians.</param>
+    /// <param name="origin">The origin.</param>
+    public static void RotateTo(Transform transform, float angle, Vector2 origin)
+    {
+        transform.position = RotateTo(transform.position, angle, origin);
+        transform.eulerAngles = new Vector3(0.0f, 0.0f, angle * Mathf.Rad2Deg);
+    }
+
+    /// <summary>
+    /// Returns the midpoint between two points.
+    /// </summary>
+    /// <param name="a">The point a.</param>
+    /// <param name="b">The point b.</param>
+    public static Vector2 Midpoint(Vector2 a, Vector2 b)
+    {
+        return (a + b) / 2.0f;
+    }
+    #endregion
+
     public void Awake()
     {
         Footing = Side.None;
@@ -441,8 +1024,7 @@ public class HedgehogController : MonoBehaviour
         _leftKeyDown = _rightKeyDown = _jumpKeyDown = false;
         JustJumped = _justLanded = JustDetached = false;
         Wallmode = Orientation.Floor;
-        SurfaceAngle = 0.0f;
-        Layer = 1;
+        TerrainMask = InitialTerrainMask;
     }
 
     public void Start()
@@ -930,613 +1512,6 @@ public class HedgehogController : MonoBehaviour
 
         return cast;
     }
-
-    #region Collision Subroutines
-    /// <summary>
-    /// Collision check with side sensors for when player is in the air.
-    /// </summary>
-    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-    private bool AirSideCheck()
-    {
-        var sideLeftCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainMask);
-        var sideRightCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainMask);
-
-        if (sideLeftCheck)
-        {
-            if (!JustJumped)
-            {
-                Vx = 0;
-            }
-
-            transform.position += (Vector3)sideLeftCheck.point - SensorMiddleLeft.position +
-                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * Epsilon;
-            return true;
-        }
-        if (sideRightCheck)
-        {
-            if (!JustJumped)
-            {
-                Vx = 0;
-            }
-
-            transform.position += (Vector3)sideRightCheck.point - SensorMiddleRight.position +
-                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * Epsilon;
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Collision check with air sensors for when player is in the air.
-    /// </summary>
-    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-    private bool AirCeilingCheck()
-    {
-        var cmem = new Collider2D[1];
-
-        if (Physics2D.OverlapPointNonAlloc(SensorTopLeft.position, cmem, TerrainMask) > 0)
-        {
-            var horizontalCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopLeft.position, TerrainMask);
-            var verticalCheck = Physics2D.Linecast(SensorMiddleLeft.position, SensorTopLeft.position, TerrainMask);
-
-            if (Vector2.Distance(horizontalCheck.point, SensorTopLeft.position) < Vector2.Distance(verticalCheck.point, SensorTopLeft.position))
-            {
-                transform.position += (Vector3)horizontalCheck.point - SensorTopLeft.position;
-
-                if (!JustDetached) HandleImpact(Angle(horizontalCheck.normal) - HalfPi);
-                if (Vy > 0) Vy = 0;
-            }
-            else
-            {
-                transform.position += (Vector3)verticalCheck.point - SensorTopLeft.position;
-
-                if (!JustDetached) HandleImpact(Angle(verticalCheck.normal) - HalfPi);
-                if (Vy > 0) Vy = 0;
-            }
-            return true;
-
-        }
-        if (Physics2D.OverlapPointNonAlloc(SensorTopRight.position, cmem, TerrainMask) > 0)
-        {
-            var horizontalCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopRight.position, TerrainMask);
-            var verticalCheck = Physics2D.Linecast(SensorMiddleRight.position, SensorTopRight.position, TerrainMask);
-
-            if (Vector2.Distance(horizontalCheck.point, SensorTopRight.position) <
-                Vector2.Distance(verticalCheck.point, SensorTopRight.position))
-            {
-                transform.position += (Vector3)horizontalCheck.point - SensorTopRight.position;
-
-                if (!JustDetached) HandleImpact(Angle(horizontalCheck.normal) - HalfPi);
-                if (Vy > 0) Vy = 0;
-            }
-            else
-            {
-                transform.position += (Vector3)verticalCheck.point - SensorTopRight.position;
-
-                if (!JustDetached) HandleImpact(Angle(verticalCheck.normal) - HalfPi);
-                if (Vy > 0) Vy = 0;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Collision check with ground sensors for when player is in the air.
-    /// </summary>
-    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-    private bool AirGroundCheck()
-    {
-        var groundLeftCheck = GroundCast(Side.Left);
-        var groundRightCheck = GroundCast(Side.Right);
-
-        if (groundLeftCheck || groundRightCheck)
-        {
-            if (JustJumped)
-            {
-                if (groundLeftCheck)
-                {
-                    transform.position += (Vector3)groundLeftCheck.point - SensorBottomLeft.position;
-                }
-                if (groundRightCheck)
-                {
-                    transform.position += (Vector3)groundRightCheck.point - SensorBottomRight.position;
-                }
-            }
-            else
-            {
-                if (groundLeftCheck && groundRightCheck)
-                {
-                    if (groundLeftCheck.point.y > groundRightCheck.point.y)
-                    {
-                        HandleImpact(Angle(groundLeftCheck.normal) - HalfPi);
-                    }
-                    else
-                    {
-                        HandleImpact(Angle(groundRightCheck.normal) - HalfPi);
-                    }
-                }
-                else if (groundLeftCheck)
-                {
-                    HandleImpact(Angle(groundLeftCheck.normal) - HalfPi);
-                }
-                else
-                {
-                    HandleImpact(Angle(groundRightCheck.normal) - HalfPi);
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Collision check with side sensors for when player is on the ground.
-    /// </summary>
-    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-    private bool GroundSideCheck()
-    {
-        var sideLeftCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainMask);
-        var sideRightCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainMask);
-
-        if (sideLeftCheck)
-        {
-            Vg = 0;
-            transform.position += (Vector3)sideLeftCheck.point - SensorMiddleLeft.position +
-                ((Vector3)sideLeftCheck.point - SensorMiddleLeft.position).normalized * Epsilon;
-
-            // If running down a wall and hits the floor, orient the player onto the floor
-            if (Wallmode == Orientation.Right)
-            {
-                RotateBy(transform, -90.0f);
-                Wallmode = Orientation.Floor;
-            }
-
-            return true;
-        }
-        if (sideRightCheck)
-        {
-            Vg = 0;
-            transform.position += (Vector3)sideRightCheck.point - SensorMiddleRight.position +
-                                  ((Vector3)sideRightCheck.point - SensorMiddleRight.position).normalized * Epsilon;
-
-            // If running down a wall and hits the floor, orient the player onto the floor
-            if (Wallmode == Orientation.Left)
-            {
-                RotateTo(transform, 90.0f);
-                Wallmode = Orientation.Floor;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Collision check with ceiling sensors for when player is on the ground.
-    /// </summary>
-    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-    private bool GroundCeilingCheck()
-    {
-        var ceilLeftCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopLeft.position, TerrainMask);
-        var ceilRightCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopRight.position, TerrainMask);
-
-        if (ceilLeftCheck)
-        {
-            Vg = 0;
-
-            // Add epsilon to prevent sticky collisions
-            transform.position += (Vector3)ceilLeftCheck.point - SensorTopLeft.position +
-                ((Vector3)ceilLeftCheck.point - SensorTopLeft.position).normalized * Epsilon;
-
-            return true;
-        }
-        if (ceilRightCheck)
-        {
-            Vg = 0;
-            transform.position += (Vector3)ceilRightCheck.point - SensorTopRight.position +
-                                  ((Vector3)ceilRightCheck.point - SensorTopRight.position).normalized * Epsilon;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Collision check with ground sensors for when player is on the ground.
-    /// </summary>
-    /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-    private bool GroundSurfaceCheck()
-    {
-        var s = GetSurface(TerrainMask);
-
-        if (s.LeftCast || s.RightCast)
-        {
-            // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
-            if (s.LeftCast && s.RightCast)
-            {
-                // Calculate angle changes for tolerance checks
-                var rightDiff = AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                var leftDiff = AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                var overlapDiff = AngleDiffr(s.LeftSurfaceAngle, s.RightSurfaceAngle) * Mathf.Rad2Deg;
-
-                if (s.Side == Side.Left)
-                {
-                    // If the surface's angle is a small enough difference from that of the previous begin surface checks
-                    if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
-                    {
-                        // Check angle differences between feet for player rotation
-                        if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
-                        {
-                            // If tolerable, rotate between the surfaces beneath the two feet
-                            RotateTo(transform, Angle(s.RightCast.point - s.LeftCast.point), SensorBottomMiddle.position);
-                            transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
-                            Footing = Side.Left;
-                        }
-                        else
-                        {
-                            // Else just rotate for the left foot
-                            RotateTo(transform, s.LeftSurfaceAngle, s.LeftCast.point);
-                            transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
-                            Footing = Side.Left;
-                        }
-
-                        // Else see if the other surface's angle is tolerable
-                    }
-                    else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
-                    {
-                        RotateTo(transform, s.RightSurfaceAngle, SensorBottomMiddle.position);
-                        transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
-                        Footing = Side.Right;
-                        // Else the surfaces are untolerable. detach from the surface
-                    }
-                    else
-                    {
-                        Detach();
-                    }
-                    // Same thing but with the other foot
-                }
-                else if (s.Side == Side.Right)
-                {
-                    if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
-                    {
-                        if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
-                        {
-                            RotateTo(transform, Angle(s.RightCast.point - s.LeftCast.point), SensorBottomMiddle.position);
-                            transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
-                            Footing = Side.Right;
-                        }
-                        else
-                        {
-                            RotateTo(transform, s.RightSurfaceAngle, s.RightCast.point);
-                            transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
-                            Footing = Side.Right;
-                        }
-
-                    }
-                    else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
-                    {
-                        RotateTo(transform, s.LeftSurfaceAngle, SensorBottomMiddle.position);
-                        transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
-                        Footing = Side.Left;
-                    }
-                    else
-                    {
-                        Detach();
-                    }
-                }
-            }
-            else if (s.LeftCast)
-            {
-                var leftDiff = AngleDiffd(s.LeftSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
-                {
-                    RotateTo(transform, s.LeftSurfaceAngle, s.LeftCast.point);
-                    transform.position += (Vector3)s.LeftCast.point - SensorBottomLeft.position;
-                    Footing = Side.Left;
-                }
-                else
-                {
-                    Detach();
-                }
-            }
-            else
-            {
-                var rightDiff = AngleDiffd(s.RightSurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
-                {
-                    RotateTo(transform, s.RightSurfaceAngle, s.RightCast.point);
-                    transform.position += (Vector3)s.RightCast.point - SensorBottomRight.position;
-                    Footing = Side.Right;
-                }
-                else
-                {
-                    Detach();
-                }
-            }
-
-            return true;
-        }
-        Detach();
-
-        return false;
-    }
-
-    /// <summary>
-    /// Check for changes in angle of incline for when player is on the ground.
-    /// </summary>
-    /// <returns><c>true</c> if the angle of incline is tolerable, <c>false</c> otherwise.</returns>
-    private bool SurfaceAngleCheck()
-    {
-        if (_justLanded)
-        {
-            SurfaceAngle = transform.eulerAngles.z;
-            LastSurfaceAngle = SurfaceAngle;
-        }
-        else
-        {
-            LastSurfaceAngle = SurfaceAngle;
-            SurfaceAngle = transform.eulerAngles.z;
-        }
-
-        // Can only stay on the surface if angle difference is low enough
-        if (Grounded && (_justLanded ||
-                        Mathf.Abs(AngleDiffd(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
-        {
-            if (Wallmode == Orientation.Floor)
-            {
-                if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 180.0f) Wallmode = Orientation.Right;
-                else if (SurfaceAngle < 315.0f - HorizontalWallmodeAngleWeight && SurfaceAngle > 180.0f) Wallmode = Orientation.Left;
-            }
-            else if (Wallmode == Orientation.Right)
-            {
-                if (SurfaceAngle > 135.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
-                else if (SurfaceAngle < 45.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Floor;
-            }
-            else if (Wallmode == Orientation.Ceiling)
-            {
-                if (SurfaceAngle > 225.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Left;
-                else if (SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Right;
-            }
-            else if (Wallmode == Orientation.Left)
-            {
-                if (SurfaceAngle > 315.0f + HorizontalWallmodeAngleWeight || SurfaceAngle < 180.0f) Wallmode = Orientation.Floor;
-                else if (SurfaceAngle < 225.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
-            }
-
-            Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
-            Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
-
-            _justLanded = false;
-            return true;
-        }
-
-        return false;
-    }
-    #endregion
-
-    #region Math Utilities
-    public static float AngleDiffd(float a, float b)
-    {
-        return Modp(b - a + 180.0f, 360.0f) - 180.0f;
-    }
-
-    public static float AngleDiffr(float a, float b)
-    {
-        return Modp(b - a + Mathf.PI, Mathf.PI * 2.0f) - Mathf.PI;
-    }
-
-    public static float Modp(float dividend, float divisor)
-    {
-        return ((dividend % divisor) + divisor) % divisor;
-    }
-
-    public static bool Equalsf(float a, float b, float epsilon = Epsilon)
-    {
-        return (a >= b - Epsilon && a <= b + epsilon);
-    }
-
-    /// <summary>
-    /// Returns the angle of the specified vector in radians.
-    /// </summary>
-    /// <param name="a">The vector.</param>
-    public static float Angle(Vector2 a)
-    {
-        return Mathf.Atan2(a.y, a.x);
-    }
-
-    /// <summary>
-    /// Returns the positive vertical distance between a and b if a is higher than b or the negative
-    /// vertical distance if the opposite is true.
-    /// </summary>
-    /// <param name="a">The point a.</param>
-    /// <param name="b">The point b.</param>
-    public static float Highest(Vector2 a, Vector2 b)
-    {
-        return Highest(a, b, Mathf.PI / 2);
-    }
-
-    /// <summary>
-    /// Returns the positive distance between a and b projected onto the axis in the speicifed direction
-    /// if a is higher than b on that axis or the negative distance if the opposite is true.
-    /// </summary>
-    /// <param name="a">The point a.</param>
-    /// <param name="b">The point b.</param>
-    /// <param name="angle">The positive distance between a and b if a is higher than b in the specified
-    /// direction or the negative distance if the opposite is true.</param>
-    public static float Highest(Vector2 a, Vector2 b, float angle)
-    {
-        Vector2 diff = Projection(a, angle) - Projection(b, angle);
-        return (Mathf.Abs(Angle(diff) - angle) < 1.57f) ? diff.magnitude : -diff.magnitude;
-    }
-
-    /// <summary>
-    /// Determines if a is perpendicular to b.
-    /// </summary>
-    /// <returns><c>true</c> if a is perpendicular to b, otherwise <c>false</c>.</returns>
-    /// <param name="a">The vector a.</param>
-    /// <param name="b">The vector b.</param>
-    public static bool IsPerp(Vector2 a, Vector2 b)
-    {
-        return Equalsf(0.0f, Vector2.Dot(a, b));
-    }
-
-    /// <summary>
-    /// Determines if the line defined by the points a1 and a2 is perpendicular to the line defined by
-    /// the points b1 and b2.
-    /// </summary>
-    /// <returns><c>true</c> if the line defined by the points a1 and a2 is perpendicular to the line defined by
-    /// the points b1 and b2, otherwise <c>false</c>.</returns>
-    /// <param name="a1">The point a1 that defines a line with a2.</param>
-    /// <param name="a2">The point a2 that defines a line with a1.</param>
-    /// <param name="b1">The point b1 that defines a line with b2.</param>
-    /// <param name="b2">The point b2 that defines a line with b1.</param>
-    public static bool IsPerp(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
-    {
-        return IsPerp(a2 - a1, b2 - b1);
-    }
-
-    /// <summary>
-    /// Projects the point q onto a line at the origin at the specified angle.
-    /// </summary>
-    /// <param name="q">The point q.</param>
-    /// <param name="angle">The angle of the line.</param>
-    public static Vector2 Projection(Vector2 q, float angle)
-    {
-        return Projection(q, new Vector2(), angle);
-    }
-
-    /// <summary>
-    /// Projects the point q onto a line which intersects the point p and continues in the specified angle.
-    /// </summary>
-    /// <param name="q">The point q.</param>
-    /// <param name="p">The point p.</param>
-    /// <param name="angle">The angle of the line.</param>
-    public static Vector2 Projection(Vector2 q, Vector2 p, float angle)
-    {
-        return Projection(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
-    }
-
-    /// <summary>
-    /// Projects the point q onto a line defined by the points lineA and lineB.
-    /// </summary>
-    /// <param name="q">The point q.</param>
-    /// <param name="lineA">The point lineA which defines a line with lineB.</param>
-    /// <param name="lineB">The point lineB which defines a line with lineA.</param>
-    public static Vector2 Projection(Vector2 q, Vector2 lineA, Vector2 lineB)
-    {
-        Vector2 ab = lineB - lineA;
-        return lineA + ((Vector2.Dot(q - lineA, ab) / Vector2.Dot(ab, ab)) * ab);
-    }
-
-    /// <summary>
-    /// Rotates the point by the angle about (0, 0).
-    /// </summary>
-    /// <param name="point">The point.</param>
-    /// <param name="angle">The angle in radians.</param>
-    public static Vector2 RotateBy(Vector2 point, float angle)
-    {
-        return RotateBy(point, angle, new Vector2(0.0f, 0.0f));
-    }
-
-    /// <summary>
-    /// Rotates the point by the angle about the specified origin.
-    /// </summary>
-    /// <param name="point">The point.</param>
-    /// <param name="angle">The angle in radians.</param>
-    /// <param name="origin">The origin.</param>
-    public static Vector2 RotateBy(Vector2 point, float angle, Vector2 origin)
-    {
-        float s = Mathf.Sin(angle);
-        float c = Mathf.Cos(angle);
-
-        Vector2 npoint = point - origin;
-
-        return new Vector2(npoint.x * c - npoint.y * s + origin.x, npoint.x * s + npoint.y * c + origin.y);
-    }
-
-    /// <summary>
-    /// Rotates the transform by the angle about (0, 0).
-    /// </summary>
-    /// <param name="transform">The transform.</param>
-    /// <param name="angle">The angle in radians.</param>
-    public static void RotateBy(Transform transform, float angle)
-    {
-        RotateBy(transform, angle, transform.position);
-    }
-
-    /// <summary>
-    /// Rotates the transform by the angle about the specified origin.
-    /// </summary>
-    /// <param name="transform">The transform.</param>
-    /// <param name="angle">The angle in radians.</param>
-    /// <param name="origin">The origin.</param>
-    public static void RotateBy(Transform transform, float angle, Vector2 origin)
-    {
-        transform.position = RotateBy(transform.position, angle, origin);
-        transform.eulerAngles = new Vector3(0.0f, 0.0f, transform.eulerAngles.z + (angle * Mathf.Rad2Deg));
-    }
-
-    /// <summary>
-    /// Rotates the point to the angle about (0, 0).
-    /// </summary>
-    /// <param name="point">The point.</param>
-    /// <param name="angle">The angle in radians.</param>
-    public static Vector2 RotateTo(Vector2 point, float angle)
-    {
-        return RotateBy(point, angle - Angle(point));
-    }
-
-    /// <summary>
-    /// Rotates the point to the angle about the specified origin.
-    /// </summary>
-    /// <param name="point">The point.</param>
-    /// <param name="angle">The angle in radians.</param>
-    /// <param name="origin">The origin.</param>
-    public static Vector2 RotateTo(Vector2 point, float angle, Vector2 origin)
-    {
-        return RotateBy(point, angle - Mathf.Atan2(point.x - origin.x, point.y - origin.y), origin);
-    }
-
-    /// <summary>
-    /// Rotates the transform to the angle about (0, 0).
-    /// </summary>
-    /// <param name="transform">The transform.</param>
-    /// <param name="angle">The angle in radians.</param>
-    public static void RotateTo(Transform transform, float angle)
-    {
-        RotateTo(transform, angle, transform.position);
-    }
-
-    /// <summary>
-    /// Rotates the transform to the angle about the specified origin.
-    /// </summary>
-    /// <param name="transform">The transform.</param>
-    /// <param name="angle">The angle in radians.</param>
-    /// <param name="origin">The origin.</param>
-    public static void RotateTo(Transform transform, float angle, Vector2 origin)
-    {
-        transform.position = RotateTo(transform.position, angle, origin);
-        transform.eulerAngles = new Vector3(0.0f, 0.0f, angle * Mathf.Rad2Deg);
-    }
-
-    /// <summary>
-    /// Returns the midpoint between two points.
-    /// </summary>
-    /// <param name="a">The point a.</param>
-    /// <param name="b">The point b.</param>
-    public static Vector2 Midpoint(Vector2 a, Vector2 b)
-    {
-        return (a + b) / 2.0f;
-    }
-    #endregion
 }
 
 #region Utility Class Extensions
