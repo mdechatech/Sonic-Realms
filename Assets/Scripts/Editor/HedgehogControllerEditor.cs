@@ -352,17 +352,33 @@ public class HedgehogControllerEditor : Editor
             _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
             GUI.enabled = Application.isPlaying && _instance.Grounded;
             EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
+            EditorGUILayout.EnumPopup("Wallmode", _instance.Wallmode);
             GUI.enabled = Application.isPlaying;
             _instance.TerrainMask = LayerMaskField("Terrain Mask", _instance.TerrainMask);
 
             EditorGUILayout.Space();
 
             EditorGUILayout.LabelField("Velocity", headerStyle);
+            
             _instance.Vx = EditorGUILayout.FloatField("X", _instance.Vx);
             _instance.Vy = EditorGUILayout.FloatField("Y", _instance.Vy);
             GUI.enabled = Application.isPlaying && _instance.Grounded;
             _instance.Vg = EditorGUILayout.FloatField("Ground", _instance.Vg);
             GUI.enabled = Application.isPlaying;
+
+            EditorGUILayout.LabelField("Control", headerStyle);
+
+            EditorGUILayout.Toggle("Lock Upon Landing", _instance.LockUponLanding);
+            EditorGUILayout.Toggle("Horizontal Lock", _instance.HorizontalLock);
+            GUI.enabled = Application.isPlaying && _instance.HorizontalLock;
+            EditorGUILayout.FloatField("Countdown", _instance.HorizontalLockTimer);
+            GUI.enabled = Application.isPlaying;
+            
+            EditorGUILayout.Space();
+
+            EditorGUILayout.Toggle("Jump Key Pressed", _instance.JumpKeyDown);
+            EditorGUILayout.Toggle("Left Key Pressed", _instance.LeftKeyDown);
+            EditorGUILayout.Toggle("Right Key Pressed", _instance.RightKeyDown);
 
             GUI.enabled = true;
         }
