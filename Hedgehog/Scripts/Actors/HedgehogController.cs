@@ -26,6 +26,9 @@ namespace Hedgehog.Actors
         [SerializeField]
         public KeyCode RightKey = KeyCode.D;
 
+        [SerializeField]
+        public KeyCode DebugSpindashKey = KeyCode.Space;
+
         [Header("Sensors")]
         // Nine sensors arranged like a tic-tac-toe board.
         [SerializeField]
@@ -239,6 +242,9 @@ namespace Hedgehog.Actors
         /// </summary>
         [HideInInspector]
         public bool JumpKeyDown;
+
+
+        public bool DebugSpindashKeyDown;
         #endregion
         #region Physics Variables
         /// <summary>
@@ -784,6 +790,7 @@ namespace Hedgehog.Actors
             LeftKeyDown = Input.GetKey(LeftKey);
             RightKeyDown = Input.GetKey(RightKey);
             if (!JumpKeyDown && Grounded) JumpKeyDown = Input.GetKeyDown(JumpKey);
+            if (Grounded) DebugSpindashKeyDown = Input.GetKey(DebugSpindashKey);
         }
 
         public void FixedUpdate()
@@ -844,6 +851,12 @@ namespace Hedgehog.Actors
 
             if (Grounded)
             {
+                if (DebugSpindashKeyDown)
+                {
+                    GroundVelocity = MaxSpeed*Mathf.Sign(GroundVelocity);
+                    DebugSpindashKeyDown = false;
+                }
+
                 if (HorizontalLock)
                 {
                     HorizontalLockTimer -= timeStep;

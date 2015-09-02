@@ -79,6 +79,8 @@ namespace Hedgehog.Editor
                 _instance.JumpKey = (KeyCode)EditorGUILayout.EnumPopup("Jump Key", _instance.JumpKey);
                 _instance.LeftKey = (KeyCode)EditorGUILayout.EnumPopup("Left Key", _instance.LeftKey);
                 _instance.RightKey = (KeyCode)EditorGUILayout.EnumPopup("Right Key", _instance.RightKey);
+                _instance.DebugSpindashKey =
+                    (KeyCode) EditorGUILayout.EnumPopup("Debug Spindash Key", _instance.DebugSpindashKey);
             }
             #endregion
             #region Collision Foldout
