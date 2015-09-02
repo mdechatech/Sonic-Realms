@@ -102,8 +102,8 @@ namespace Hedgehog.Editor
                         _serializedInstance, _serializedInstance.FindProperty("TerrainTags"));
                 } else if (_instance.CollisionMode == CollisionMode.Names)
                 {
-                    HedgehogEditorGUIUtility.ReorderableListField("Collide with Game Object Names ending in",
-                        _serializedInstance, _serializedInstance.FindProperty("TerrainNameEndings"));
+                    HedgehogEditorGUIUtility.ReorderableListField("Collide with Names",
+                        _serializedInstance, _serializedInstance.FindProperty("TerrainNames"));
                 }
             }
             #endregion

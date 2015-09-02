@@ -24,7 +24,7 @@ namespace Hedgehog.Actors
         public List<string> TerrainTags = new List<string>();
 
         [SerializeField]
-        public List<string> TerrainNameEndings = new List<string>();
+        public List<string> TerrainNames = new List<string>();
 
         [Header("Controls")]
 
