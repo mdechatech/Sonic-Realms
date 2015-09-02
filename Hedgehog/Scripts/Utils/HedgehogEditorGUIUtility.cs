@@ -69,11 +69,11 @@ namespace Hedgehog.Utils
         /// <param name="label"></param>
         /// <param name="serializedObject"></param>
         /// <param name="elements"></param>
-        public static void ReorderableListField<T>(string label, SerializedObject serializedObject, SerializedProperty elements)
+        public static void ReorderableListField(string label, SerializedObject serializedObject, SerializedProperty elements)
         {
-            var list = new ReorderableList(serializedObject, elements, true, true, false, false);
+            var list = new ReorderableList(serializedObject, elements, false, false, false, false);
 
-            list.drawHeaderCallback += rect => GUI.Label(rect, label);
+            //list.drawHeaderCallback += rect => GUI.Label(rect, label);
             list.drawElementCallback += (rect, index, active, focused) =>
             {
                 rect.height = 16;
@@ -92,10 +92,13 @@ namespace Hedgehog.Utils
 
             serializedObject.Update();
 
-            list.DoLayoutList();
-            
+            var headerStyle = EditorStyles.miniLabel;
+            headerStyle.alignment = TextAnchor.MiddleCenter;
+
             var buttonStyle = EditorStyles.miniButton;
             var disabledButtonStyle = new GUIStyle(buttonStyle) {normal = buttonStyle.active};
+
+            EditorGUILayout.LabelField(label, headerStyle);
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add", buttonStyle))
@@ -108,6 +111,8 @@ namespace Hedgehog.Utils
                 if(list.onCanRemoveCallback(list)) list.onRemoveCallback(list);
             }
             EditorGUILayout.EndHorizontal();
+
+            list.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();
         }

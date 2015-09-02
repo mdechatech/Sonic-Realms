@@ -98,11 +98,11 @@ namespace Hedgehog.Editor
                         HedgehogEditorGUIUtility.LayerMaskField("Terrain Layer Mask", _instance.InitialTerrainMask);
                 } else if (_instance.CollisionMode == CollisionMode.Tags)
                 {
-                    HedgehogEditorGUIUtility.ReorderableListField<string>("Terrain Tags",
+                    HedgehogEditorGUIUtility.ReorderableListField("Collide with Tags",
                         _serializedInstance, _serializedInstance.FindProperty("TerrainTags"));
                 } else if (_instance.CollisionMode == CollisionMode.Names)
                 {
-                    HedgehogEditorGUIUtility.ReorderableListField<string>("Terrain Name Endings",
+                    HedgehogEditorGUIUtility.ReorderableListField("Collide with Game Object Names ending in",
                         _serializedInstance, _serializedInstance.FindProperty("TerrainNameEndings"));
                 }
             }
