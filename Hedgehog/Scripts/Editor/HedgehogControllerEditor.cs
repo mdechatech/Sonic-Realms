@@ -14,10 +14,6 @@ namespace Hedgehog.Editor
         [SerializeField] private HedgehogController _instance;
 
         [SerializeField]
-        private Transform _generatedSensors;
-        
-
-        [SerializeField]
         private bool _showCollision;
         [SerializeField]
         private bool _showSensors;
@@ -45,7 +41,6 @@ namespace Hedgehog.Editor
         public void OnEnable()
         {
             _instance = target as HedgehogController;
-            _generatedSensors = HedgehogUtils.SearchGeneratedSensors(_instance.transform);
 
             _fromRenderer = _instance.GetComponent<Renderer>();
             _fromCollider2D = _instance.GetComponent<Collider2D>();
@@ -64,13 +59,6 @@ namespace Hedgehog.Editor
                 richText = true
             };
 
-            var subtitleStyle = new GUIStyle
-            {
-                fontSize = 8,
-                alignment = TextAnchor.MiddleCenter,
-                richText = true
-            };
-
             var headerStyle = new GUIStyle
             {
                 fontSize = 11,
@@ -78,11 +66,6 @@ namespace Hedgehog.Editor
             };
 
             var foldoutStyle = new GUIStyle(EditorStyles.foldout);
-
-            var verticalStyle1 = new GUIStyle()
-            {
-                padding = new RectOffset(0, 0, 0, 0),
-            };
             #endregion
 
             #region Title
