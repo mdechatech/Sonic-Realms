@@ -280,8 +280,8 @@ namespace Hedgehog.Editor
 
                     EditorGUILayout.Space();
                     #region Forbidden Constants
-                    EditorGUILayout.LabelField("Surface Constants", headerStyle);
-                    EditorGUILayout.HelpBox("The following constants are best left untouched!", MessageType.Warning);
+                    EditorGUILayout.LabelField("Surface Values", headerStyle);
+                    EditorGUILayout.HelpBox("The following values are best left untouched!", MessageType.Warning);
 
                     EditorGUILayout.BeginHorizontal();
                     _instance.MinWallmodeSwitchSpeed = EditorGUILayout.FloatField("Min Wallmode Switch Speed",
@@ -345,13 +345,50 @@ namespace Hedgehog.Editor
                 }
 
                 GUI.enabled = Application.isPlaying;
+
+                EditorGUILayout.LabelField("Control", headerStyle);
+
+                EditorGUILayout.Toggle("Jump Key Pressed", _instance.JumpKeyDown);
+                EditorGUILayout.Toggle("Left Key Pressed", _instance.LeftKeyDown);
+                EditorGUILayout.Toggle("Right Key Pressed", _instance.RightKeyDown);
+
+                EditorGUILayout.Space();
+
+                EditorGUILayout.Toggle("Lock Upon Landing", _instance.LockUponLanding);
+                EditorGUILayout.Toggle("Horizontal Lock", _instance.HorizontalLock);
+                GUI.enabled = Application.isPlaying && _instance.HorizontalLock;
+                EditorGUILayout.FloatField("Countdown", _instance.HorizontalLockTimer);
+                GUI.enabled = Application.isPlaying;
+
+                EditorGUILayout.Space();
+
+                EditorGUILayout.LabelField("Collision", headerStyle);
+
+                _instance.CollisionMode =
+                    (CollisionMode) EditorGUILayout.EnumPopup("Collision Mode", _instance.CollisionMode);
+
+                if (_instance.CollisionMode == CollisionMode.Layers)
+                {
+                    _instance.TerrainMask = HedgehogEditorGUIUtility.LayerMaskField("Terrain Mask",
+                        _instance.TerrainMask);
+                } else if (_instance.CollisionMode == CollisionMode.Tags)
+                {
+                    HedgehogEditorGUIUtility.ReorderableListField("Terrain Tags", _serializedInstance,
+                        _serializedInstance.FindProperty("TerrainTags"));
+                } else if (_instance.CollisionMode == CollisionMode.Names)
+                {
+                    HedgehogEditorGUIUtility.ReorderableListField("Terrain Names", _serializedInstance,
+                        _serializedInstance.FindProperty("TerrainNames"));
+                }
+
+                EditorGUILayout.Space();
+
                 EditorGUILayout.LabelField("Surface", headerStyle);
-                _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
                 EditorGUILayout.EnumPopup("Wallmode", _instance.Wallmode);
                 GUI.enabled = Application.isPlaying;
-                _instance.TerrainMask = HedgehogEditorGUIUtility.LayerMaskField("Terrain Mask", _instance.TerrainMask);
+                _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
 
                 EditorGUILayout.Space();
 
@@ -362,20 +399,6 @@ namespace Hedgehog.Editor
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 _instance.Vg = EditorGUILayout.FloatField("Ground", _instance.Vg);
                 GUI.enabled = Application.isPlaying;
-
-                EditorGUILayout.LabelField("Control", headerStyle);
-
-                EditorGUILayout.Toggle("Lock Upon Landing", _instance.LockUponLanding);
-                EditorGUILayout.Toggle("Horizontal Lock", _instance.HorizontalLock);
-                GUI.enabled = Application.isPlaying && _instance.HorizontalLock;
-                EditorGUILayout.FloatField("Countdown", _instance.HorizontalLockTimer);
-                GUI.enabled = Application.isPlaying;
-            
-                EditorGUILayout.Space();
-
-                EditorGUILayout.Toggle("Jump Key Pressed", _instance.JumpKeyDown);
-                EditorGUILayout.Toggle("Left Key Pressed", _instance.LeftKeyDown);
-                EditorGUILayout.Toggle("Right Key Pressed", _instance.RightKeyDown);
 
                 GUI.enabled = true;
             }
