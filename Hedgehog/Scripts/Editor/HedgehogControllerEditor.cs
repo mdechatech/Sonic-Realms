@@ -87,7 +87,6 @@ namespace Hedgehog.Editor
 
             #region Title
             GUILayout.Label("<color=\"#0000ff\">Hedgehog Controller</color>", titleStyle);
-            GUILayout.Label("<color=\"#5555ff\">mdechatech</color>", subtitleStyle);
             #endregion
 
             #region Controls Foldout
