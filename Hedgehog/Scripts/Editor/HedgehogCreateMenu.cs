@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Hedgehog.Editor
 {
-    static class CreateMenuEditor
+    static class HedgehogCreateMenu
     {
         private static void HandleCreateContext(MenuCommand menuCommand, GameObject createdObject)
         {
