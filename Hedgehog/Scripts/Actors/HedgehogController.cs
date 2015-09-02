@@ -242,6 +242,26 @@ namespace Hedgehog.Actors
         #endregion
         #region Physics Variables
         /// <summary>
+        /// The player's velocity as a Vector2. Setting velocity this way will detach
+        /// the player from whatever surface it is on.
+        /// </summary>
+        public Vector2 Velocity
+        {
+            get { return new Vector2(Vx, Vy); }
+            set { Detach(); Vx = value.x; Vy = value.y; }
+        }
+
+        /// <summary>
+        /// The player's velocity on the ground; the faster it's running, the higher in magnitude
+        /// this number is. If it's moving forward, this is positive. If backwards, negative.
+        /// </summary>
+        public float GroundVelocity
+        {
+            get { return Vg; }
+            set { Vg = value; }
+        }
+
+        /// <summary>
         /// The player's horizontal velocity in units per second.
         /// </summary>
         [HideInInspector]
