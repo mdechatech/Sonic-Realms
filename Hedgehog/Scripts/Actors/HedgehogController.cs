@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Hedgehog.Utils;
 
 namespace Hedgehog.Actors
@@ -11,9 +13,18 @@ namespace Hedgehog.Actors
         #region Inspector Fields
 
         [Header("Collision")]
+
+        [SerializeField]
+        public CollisionMode CollisionMode = CollisionMode.Layers;
     
         [SerializeField]
         public LayerMask InitialTerrainMask;
+
+        [SerializeField]
+        public List<string> TerrainTags = new List<string>();
+
+        [SerializeField]
+        public List<string> TerrainNameEndings = new List<string>();
 
         [Header("Controls")]
 
@@ -766,15 +777,10 @@ namespace Hedgehog.Actors
             OnMovingPlatform = false;
             Vx = Vy = Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
-            LeftKeyDown = RightKeyDown = JumpKeyDown = false;
+            LeftKeyDown = RightKeyDown = JumpKeyDown = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
             TerrainMask = InitialTerrainMask;
-        }
-
-        public void Start()
-        {
-            GetComponent<Collider2D>().isTrigger = true;
         }
 
         public void Update()

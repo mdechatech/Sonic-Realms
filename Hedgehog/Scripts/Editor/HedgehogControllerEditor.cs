@@ -12,6 +12,7 @@ namespace Hedgehog.Editor
     public class HedgehogControllerEditor : UnityEditor.Editor
     {
         [SerializeField] private HedgehogController _instance;
+        [SerializeField] private SerializedObject _serializedInstance;
 
         [SerializeField]
         private bool _showCollision;
@@ -41,6 +42,7 @@ namespace Hedgehog.Editor
         public void OnEnable()
         {
             _instance = target as HedgehogController;
+            _serializedInstance = new SerializedObject(_instance);
 
             _fromRenderer = _instance.GetComponent<Renderer>();
             _fromCollider2D = _instance.GetComponent<Collider2D>();
@@ -87,9 +89,22 @@ namespace Hedgehog.Editor
             _showCollision = EditorGUILayout.Foldout(_showCollision, "Collision", foldoutStyle);
             if (_showCollision)
             {
-                EditorGUILayout.LabelField("Layers", headerStyle);
+                EditorGUILayout.LabelField("Collision Mode", headerStyle);
+                _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
 
-                _instance.InitialTerrainMask = LayerMaskField("Initial Terrain Mask", _instance.InitialTerrainMask);
+                if (_instance.CollisionMode == CollisionMode.Layers)
+                {
+                    _instance.InitialTerrainMask = 
+                        HedgehogEditorGUIUtility.LayerMaskField("Terrain Layer Mask", _instance.InitialTerrainMask);
+                } else if (_instance.CollisionMode == CollisionMode.Tags)
+                {
+                    HedgehogEditorGUIUtility.ReorderableListField<string>("Terrain Tags",
+                        _serializedInstance, _serializedInstance.FindProperty("TerrainTags"));
+                } else if (_instance.CollisionMode == CollisionMode.Names)
+                {
+                    HedgehogEditorGUIUtility.ReorderableListField<string>("Terrain Name Endings",
+                        _serializedInstance, _serializedInstance.FindProperty("TerrainNameEndings"));
+                }
             }
             #endregion
             #region Sensors Foldout
@@ -104,7 +119,7 @@ namespace Hedgehog.Editor
                 GUI.enabled = _fromRenderer != null && _fromRenderer.bounds != default(Bounds);
                 if (GUILayout.Button("Create"))
                 {
-                    HedgehogUtils.GenerateSensors(_instance, _fromRenderer.bounds);
+                    HedgehogUtility.GenerateSensors(_instance, _fromRenderer.bounds);
                 }
                 GUI.enabled = true;
                 EditorGUILayout.EndHorizontal();
@@ -115,7 +130,7 @@ namespace Hedgehog.Editor
                 GUI.enabled = _fromCollider2D != null;
                 if (GUILayout.Button("Create"))
                 {
-                    HedgehogUtils.GenerateSensors(_instance, _fromCollider2D.bounds);
+                    HedgehogUtility.GenerateSensors(_instance, _fromCollider2D.bounds);
                 }
                 GUI.enabled = true;
                 EditorGUILayout.EndHorizontal();
@@ -124,7 +139,7 @@ namespace Hedgehog.Editor
                 GUI.enabled = _fromBounds != default(Bounds);
                 if (GUILayout.Button("Create from Bounds"))
                 {
-                    HedgehogUtils.GenerateSensors(_instance, _fromBounds, true);
+                    HedgehogUtility.GenerateSensors(_instance, _fromBounds, true);
                 }
                 GUI.enabled = true;
 
@@ -326,7 +341,7 @@ namespace Hedgehog.Editor
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
                 EditorGUILayout.EnumPopup("Wallmode", _instance.Wallmode);
                 GUI.enabled = Application.isPlaying;
-                _instance.TerrainMask = LayerMaskField("Terrain Mask", _instance.TerrainMask);
+                _instance.TerrainMask = HedgehogEditorGUIUtility.LayerMaskField("Terrain Mask", _instance.TerrainMask);
 
                 EditorGUILayout.Space();
 
@@ -361,34 +376,6 @@ namespace Hedgehog.Editor
                 EditorUtility.SetDirty(_instance);
                 EditorUtility.SetDirty(this);
             }
-        }
-
-        // Source: http://answers.unity3d.com/questions/42996/how-to-create-layermask-field-in-a-custom-editorwi.html
-        private static LayerMask LayerMaskField(string label, LayerMask layerMask)
-        {
-            List<string> layers = new List<string>();
-            List<int> layerNumbers = new List<int>();
- 
-            for (int i = 0; i < 32; i++) {
-                string layerName = LayerMask.LayerToName(i);
-                if (layerName != "") {
-                    layers.Add(layerName);
-                    layerNumbers.Add(i);
-                }
-            }
-            int maskWithoutEmpty = 0;
-            for (int i = 0; i < layerNumbers.Count; i++) {
-                if (((1 << layerNumbers[i]) & layerMask.value) > 0)
-                    maskWithoutEmpty |= (1 << i);
-            }
-            maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
-            int mask = 0;
-            for (int i = 0; i < layerNumbers.Count; i++) {
-                if ((maskWithoutEmpty & (1 << i)) > 0)
-                    mask |= (1 << layerNumbers[i]);
-            }
-            layerMask.value = mask;
-            return layerMask;
         }
     }
 }

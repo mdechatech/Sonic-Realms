@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hedgehog.Utils
 {
-    public static class HedgehogUtils
+    public static class HedgehogUtility
     {
         public const string GeneratedSensorsName = "__Generated Sensors__";
 
@@ -24,7 +24,7 @@ namespace Hedgehog.Utils
         public static void GenerateSensors(HedgehogController hedgehog, Bounds bounds,
             bool isLocal = false)
         {
-            var generatedSensors = HedgehogUtils.SearchGeneratedSensors(hedgehog.transform);
+            var generatedSensors = HedgehogUtility.SearchGeneratedSensors(hedgehog.transform);
             if (generatedSensors != null)
             {
                 Object.DestroyImmediate(generatedSensors.gameObject);
@@ -32,7 +32,7 @@ namespace Hedgehog.Utils
             }
 
             var sensorsObject = new GameObject();
-            sensorsObject.name = HedgehogUtils.GeneratedSensorsName;
+            sensorsObject.name = HedgehogUtility.GeneratedSensorsName;
             sensorsObject.transform.SetParent(hedgehog.transform);
             if (isLocal) sensorsObject.transform.localPosition = bounds.center;
             else sensorsObject.transform.position = bounds.center;
