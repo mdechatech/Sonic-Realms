@@ -10,6 +10,8 @@ namespace Hedgehog.Actors
     /// </summary>
     public class HedgehogController : MonoBehaviour
     {
+        private const int CollisionLinecastLimit = 64;
+
         #region Inspector Fields
 
         [Header("Collision")]
@@ -278,6 +280,8 @@ namespace Hedgehog.Actors
             set { Vg = value; }
         }
 
+        private RaycastHit2D[] _raycastHit2DAllocated;
+
         /// <summary>
         /// The player's horizontal velocity in units per second.
         /// </summary>
@@ -386,8 +390,10 @@ namespace Hedgehog.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirSideCheck()
         {
-            var sideLeftCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainMask);
-            var sideRightCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainMask);
+            var sideLeftCheck = CollisionMode.LinecastTerrain(this, SensorMiddleMiddle.position,
+                SensorMiddleLeft.position);
+            var sideRightCheck = CollisionMode.LinecastTerrain(this, SensorMiddleMiddle.position,
+                SensorMiddleRight.position);
 
             if (sideLeftCheck)
             {
@@ -421,12 +427,14 @@ namespace Hedgehog.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirCeilingCheck()
         {
-            var cmem = new Collider2D[1];
+            var leftCheck = CollisionMode.LinecastTerrain(this, SensorMiddleMiddle.position, SensorTopLeft.position);
 
-            if (Physics2D.OverlapPointNonAlloc(SensorTopLeft.position, cmem, TerrainMask) > 0)
+            if (leftCheck)
             {
-                var horizontalCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopLeft.position, TerrainMask);
-                var verticalCheck = Physics2D.Linecast(SensorMiddleLeft.position, SensorTopLeft.position, TerrainMask);
+                var horizontalCheck = CollisionMode.LinecastTerrain(this, SensorTopMiddle.position,
+                    SensorTopLeft.position);
+                var verticalCheck = CollisionMode.LinecastTerrain(this, SensorMiddleLeft.position,
+                    SensorTopLeft.position);
 
                 if (Vector2.Distance(horizontalCheck.point, SensorTopLeft.position) < Vector2.Distance(verticalCheck.point, SensorTopLeft.position))
                 {
@@ -445,10 +453,15 @@ namespace Hedgehog.Actors
                 return true;
 
             }
-            if (Physics2D.OverlapPointNonAlloc(SensorTopRight.position, cmem, TerrainMask) > 0)
+
+            var rightCheck = CollisionMode.LinecastTerrain(this, SensorMiddleMiddle.position, SensorTopRight.position);
+
+            if (rightCheck)
             {
-                var horizontalCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopRight.position, TerrainMask);
-                var verticalCheck = Physics2D.Linecast(SensorMiddleRight.position, SensorTopRight.position, TerrainMask);
+                var horizontalCheck = CollisionMode.LinecastTerrain(this, SensorTopMiddle.position,
+                    SensorTopRight.position);
+                var verticalCheck = CollisionMode.LinecastTerrain(this, SensorMiddleRight.position,
+                    SensorTopRight.position);
 
                 if (Vector2.Distance(horizontalCheck.point, SensorTopRight.position) <
                     Vector2.Distance(verticalCheck.point, SensorTopRight.position))
@@ -529,8 +542,10 @@ namespace Hedgehog.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSideCheck()
         {
-            var sideLeftCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainMask);
-            var sideRightCheck = Physics2D.Linecast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainMask);
+            var sideLeftCheck = CollisionMode.LinecastTerrain(this, SensorMiddleMiddle.position,
+                SensorMiddleLeft.position);
+            var sideRightCheck = CollisionMode.LinecastTerrain(this, SensorMiddleMiddle.position,
+                SensorMiddleRight.position);
 
             if (sideLeftCheck)
             {
@@ -572,8 +587,8 @@ namespace Hedgehog.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundCeilingCheck()
         {
-            var ceilLeftCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopLeft.position, TerrainMask);
-            var ceilRightCheck = Physics2D.Linecast(SensorTopMiddle.position, SensorTopRight.position, TerrainMask);
+            var ceilLeftCheck = CollisionMode.LinecastTerrain(this, SensorTopMiddle.position, SensorTopLeft.position);
+            var ceilRightCheck = CollisionMode.LinecastTerrain(this, SensorTopMiddle.position, SensorTopRight.position);
 
             if (ceilLeftCheck)
             {
@@ -781,6 +796,8 @@ namespace Hedgehog.Actors
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
             TerrainMask = InitialTerrainMask;
+
+            _raycastHit2DAllocated = new RaycastHit2D[CollisionLinecastLimit];
         }
 
         public void Update()
@@ -1195,15 +1212,15 @@ namespace Hedgehog.Actors
             RaycastHit2D cast;
             if (Side == Side.Left)
             {
-                cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - Wallmode.UnitVector() * LedgeClimbHeight,
-                    SensorBottomLeft.position,
-                    TerrainMask);
+                cast = CollisionMode.LinecastTerrain(this,
+                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    SensorBottomLeft.position);
             }
             else
             {
-                cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - Wallmode.UnitVector() * LedgeClimbHeight,
-                    SensorBottomRight.position,
-                    TerrainMask);
+                cast = CollisionMode.LinecastTerrain(this,
+                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    SensorBottomRight.position);
             }
 
             return cast;
@@ -1220,9 +1237,9 @@ namespace Hedgehog.Actors
             if (footing == Side.Left)
             {
                 // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
-                cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - Wallmode.UnitVector() * LedgeClimbHeight,
-                    (Vector2)SensorBottomLeft.position + Wallmode.UnitVector() * LedgeDropHeight,
-                    TerrainMask);
+                cast = CollisionMode.LinecastTerrain(this,
+                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    (Vector2) SensorBottomLeft.position + Wallmode.UnitVector()*LedgeDropHeight);
 
                 if (!cast)
                 {
@@ -1232,9 +1249,9 @@ namespace Hedgehog.Actors
                 {
                     for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
                     {
-                        cast = Physics2D.Linecast((Vector2)SensorBottomLeft.position - check.UnitVector() * LedgeClimbHeight,
-                            (Vector2)SensorBottomLeft.position + check.UnitVector() * LedgeDropHeight,
-                            TerrainMask);
+                        cast = CollisionMode.LinecastTerrain(this,
+                            (Vector2) SensorBottomLeft.position - check.UnitVector()*LedgeClimbHeight,
+                            (Vector2) SensorBottomLeft.position + check.UnitVector()*LedgeDropHeight);
 
                         if (cast && !DMath.Equalsf(cast.fraction, 0.0f))
                             return cast;
@@ -1245,9 +1262,10 @@ namespace Hedgehog.Actors
 
                 return cast;
             }
-            cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - Wallmode.UnitVector() * LedgeClimbHeight,
-                (Vector2)SensorBottomRight.position + Wallmode.UnitVector() * LedgeDropHeight,
-                TerrainMask);
+            cast =
+                CollisionMode.LinecastTerrain(this,
+                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    (Vector2) SensorBottomRight.position + Wallmode.UnitVector()*LedgeDropHeight);
 
             if (!cast)
             {
@@ -1257,9 +1275,9 @@ namespace Hedgehog.Actors
             {
                 for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
                 {
-                    cast = Physics2D.Linecast((Vector2)SensorBottomRight.position - check.UnitVector() * LedgeClimbHeight,
-                        (Vector2)SensorBottomRight.position + check.UnitVector() * LedgeDropHeight,
-                        TerrainMask);
+                    cast = CollisionMode.LinecastTerrain(this,
+                        (Vector2) SensorBottomRight.position - check.UnitVector()*LedgeClimbHeight,
+                        (Vector2) SensorBottomRight.position + check.UnitVector()*LedgeDropHeight);
 
                     if (cast && !DMath.Equalsf(cast.fraction, 0.0f))
                         return cast;

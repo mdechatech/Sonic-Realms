@@ -1,4 +1,9 @@
-﻿namespace Hedgehog.Utils
+﻿using System.Collections;
+using System.Collections.Generic;
+using Hedgehog.Actors;
+using UnityEngine;
+
+namespace Hedgehog.Utils
 {
     public enum CollisionMode
     {
@@ -27,5 +32,31 @@
         /// You can imagine the performance overhead this incurs!
         /// </summary>
         Names,
+    }
+
+    public static class CollisionModeExtensions
+    {
+        private const int CollisionLinecastLimit = 64;
+        private static readonly RaycastHit2D[] CollisionLinecastAlloc = new RaycastHit2D[CollisionLinecastLimit];
+
+        public static RaycastHit2D LinecastTerrain(this CollisionMode collisionMode, HedgehogController hedgehog, 
+            Vector2 start, Vector2 end)
+        {
+            switch (collisionMode)
+            {
+                case CollisionMode.Layers:
+                    return Physics2D.Linecast(start, end, hedgehog.TerrainMask);
+
+                case CollisionMode.Tags:
+                    return Physics2DUtility.ClosestWithTag(Physics2D.LinecastAll(start, end), hedgehog.TerrainTags);
+
+                case CollisionMode.Names:
+                    return Physics2DUtility.ClosestWithNameRecursive(Physics2D.LinecastAll(start, end),
+                        hedgehog.TerrainNames);
+
+                default:
+                    return default(RaycastHit2D);
+            }
+        }
     }
 }
