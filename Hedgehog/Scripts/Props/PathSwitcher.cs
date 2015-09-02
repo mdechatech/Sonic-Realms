@@ -93,13 +93,7 @@ public class PathSwitcher : MonoBehaviour
         HedgehogController player = collider.gameObject.GetComponent<HedgehogController>();
         if (player == null) return;
 
-        if ((player.TerrainMask | IfTerrainMaskHas) > 0)
-        {
-            if (!MustBeGrounded || (MustBeGrounded && player.Grounded))
-            {
-                Apply(player);
-            }
-        }
+        if(AppliesTo(player)) Apply(player);
     }
 
     public void OnTriggerStay2D(Collider2D collider)
@@ -109,10 +103,7 @@ public class PathSwitcher : MonoBehaviour
         HedgehogController player = collider.gameObject.GetComponent<HedgehogController>();
         if (player == null) return;
 
-        if ((player.TerrainMask | IfTerrainMaskHas) > 0 && player.Grounded)
-        {
-            Apply(player);
-        }
+        if (AppliesTo(player)) Apply(player);
     }
 
     public bool AppliesTo(HedgehogController player)
