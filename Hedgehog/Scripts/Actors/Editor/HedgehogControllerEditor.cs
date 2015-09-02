@@ -11,33 +11,45 @@ namespace Hedgehog.Editor
     [CustomEditor(typeof(HedgehogController))]
     public class HedgehogControllerEditor : UnityEditor.Editor
     {
+        #region Instance Variables
         [SerializeField] private HedgehogController _instance;
         [SerializeField] private SerializedObject _serializedInstance;
-
+        #endregion
+        #region Foldout Variables
         [SerializeField]
         private bool _showCollision;
+
         [SerializeField]
         private bool _showSensors;
+
         [SerializeField]
         private bool _showSensorsGenerator;
 
-        [SerializeField] private bool _showDebugInfo;
-
-        [SerializeField]
-        private Renderer _fromRenderer;
-        [SerializeField]
-        private Collider2D _fromCollider2D;
-        [SerializeField]
-        private Bounds _fromBounds;
-
         [SerializeField]
         private bool _showAdvancedSensors;
+
         [SerializeField]
         private bool _showControls;
+
         [SerializeField]
         private bool _showPhysics;
+
         [SerializeField]
         private bool _showAdvancedPhysics;
+
+        [SerializeField]
+        private bool _showDebugInfo;
+        #endregion
+        #region Sensor Creator Variables
+        [SerializeField]
+        private Renderer _fromRenderer;
+
+        [SerializeField]
+        private Collider2D _fromCollider2D;
+
+        [SerializeField]
+        private Bounds _fromBounds;
+        #endregion
 
         public void OnEnable()
         {
@@ -89,9 +101,7 @@ namespace Hedgehog.Editor
             _showCollision = EditorGUILayout.Foldout(_showCollision, "Collision", foldoutStyle);
             if (_showCollision)
             {
-                EditorGUILayout.LabelField("Collision Mode", headerStyle);
                 _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
-
                 if (_instance.CollisionMode == CollisionMode.Layers)
                 {
                     _instance.InitialTerrainMask = 

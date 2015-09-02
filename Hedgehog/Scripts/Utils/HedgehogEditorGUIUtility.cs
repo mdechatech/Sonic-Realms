@@ -43,7 +43,15 @@ namespace Hedgehog.Utils
             var selectedButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
             selectedButtonStyle.normal = selectedButtonStyle.active;
 
+            var headerStyle = new GUIStyle
+            {
+                fontSize = 11,
+                alignment = TextAnchor.MiddleCenter,
+            };
+
             CollisionMode selected = value;
+
+            EditorGUILayout.LabelField("Collision Mode", headerStyle);
             
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Layers", value == CollisionMode.Layers ? selectedButtonStyle : buttonStyle))
