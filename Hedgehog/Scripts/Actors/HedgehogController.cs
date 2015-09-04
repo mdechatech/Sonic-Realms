@@ -10,10 +10,7 @@ namespace Hedgehog.Actors
     /// </summary>
     public class HedgehogController : MonoBehaviour
     {
-        private const int CollisionLinecastLimit = 64;
-
         #region Inspector Fields
-
         [Header("Collision")]
 
         [SerializeField]
@@ -279,8 +276,6 @@ namespace Hedgehog.Actors
             get { return Vg; }
             set { Vg = value; }
         }
-
-        private RaycastHit2D[] _raycastHit2DAllocated;
 
         /// <summary>
         /// The player's horizontal velocity in units per second.
@@ -796,8 +791,6 @@ namespace Hedgehog.Actors
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
             TerrainMask = InitialTerrainMask;
-
-            _raycastHit2DAllocated = new RaycastHit2D[CollisionLinecastLimit];
         }
 
         public void Update()

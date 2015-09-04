@@ -119,7 +119,7 @@ public class PathSwitcher : MonoBehaviour
                 return IfTerrainTagsHas.Any(tag => player.TerrainTags.Contains(tag));
 
             case CollisionMode.Names:
-                return IfTerrainNamesHas.Any(name => player.TerrainNames.Contains(tag));
+                return IfTerrainNamesHas.Any(name => player.TerrainNames.Contains(name));
 
             default:
                 return true;
@@ -141,8 +141,8 @@ public class PathSwitcher : MonoBehaviour
                 break;
 
             case CollisionMode.Names:
-                foreach(var name in AddNames) player.TerrainNames.Add(tag);
-                foreach (var name in RemoveNames) player.TerrainNames.Remove(tag);
+                foreach(var name in AddNames) player.TerrainNames.Add(name);
+                foreach (var name in RemoveNames) player.TerrainNames.Remove(name);
                 break;
         }
     }
