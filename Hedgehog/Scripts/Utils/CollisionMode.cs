@@ -36,9 +36,6 @@ namespace Hedgehog.Utils
 
     public static class CollisionModeExtensions
     {
-        private const int CollisionLinecastLimit = 64;
-        private static readonly RaycastHit2D[] CollisionLinecastAlloc = new RaycastHit2D[CollisionLinecastLimit];
-
         public static RaycastHit2D LinecastTerrain(this CollisionMode collisionMode, HedgehogController hedgehog, 
             Vector2 start, Vector2 end)
         {

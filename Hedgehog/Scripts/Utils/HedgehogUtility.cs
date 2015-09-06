@@ -24,15 +24,16 @@ namespace Hedgehog.Utils
         public static void GenerateSensors(HedgehogController hedgehog, Bounds bounds,
             bool isLocal = false)
         {
-            var generatedSensors = HedgehogUtility.SearchGeneratedSensors(hedgehog.transform);
+            var generatedSensors = SearchGeneratedSensors(hedgehog.transform);
             if (generatedSensors != null)
             {
                 Object.DestroyImmediate(generatedSensors.gameObject);
-                generatedSensors = null;
             }
 
-            var sensorsObject = new GameObject();
-            sensorsObject.name = HedgehogUtility.GeneratedSensorsName;
+            var sensorsObject = new GameObject
+            {
+                name = GeneratedSensorsName
+            };
             sensorsObject.transform.SetParent(hedgehog.transform);
             if (isLocal) sensorsObject.transform.localPosition = bounds.center;
             else sensorsObject.transform.position = bounds.center;
