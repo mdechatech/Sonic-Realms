@@ -1,4 +1,5 @@
-﻿using Hedgehog.Utils;
+﻿using Hedgehog.Terrain;
+using Hedgehog.Utils;
 using UnityEditor;
 
 namespace Hedgehog.Props.Editor
