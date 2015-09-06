@@ -1,6 +1,7 @@
 ﻿using Hedgehog.Terrain;
 using Hedgehog.Utils;
 using UnityEditor;
+using UnityEngine;
 
 namespace Hedgehog.Props.Editor
 {
@@ -44,6 +45,11 @@ namespace Hedgehog.Props.Editor
                     _serializedInstance.FindProperty("AddNames"));
                 HedgehogEditorGUIUtility.ReorderableListField("And Remove Names", _serializedInstance,
                     _serializedInstance.FindProperty("RemoveNames"));
+            }
+
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(_instance);
             }
         }
     }
