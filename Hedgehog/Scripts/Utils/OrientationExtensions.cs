@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedgehog.Terrain;
+using UnityEngine;
 
 namespace Hedgehog.Utils
 {
@@ -151,6 +152,27 @@ namespace Hedgehog.Utils
 
                 default:
                     return Orientation.None;
+            }
+        }
+
+        public static TerrainSide ToTerrainSide(this Orientation orientation)
+        {
+            switch (orientation)
+            {
+                case Orientation.Floor:
+                    return TerrainSide.Bottom;
+                
+                case Orientation.Right:
+                    return TerrainSide.Right;
+
+                case Orientation.Ceiling:
+                    return TerrainSide.Top;
+
+                case Orientation.Left:
+                    return TerrainSide.Left;
+
+                default:
+                    return TerrainSide.None;
             }
         }
     }
