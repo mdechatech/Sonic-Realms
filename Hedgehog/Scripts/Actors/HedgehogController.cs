@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Hedgehog.Terrain;
 using UnityEngine;
 using Hedgehog.Utils;
@@ -303,12 +304,6 @@ namespace Hedgehog.Actors
         public bool Grounded;
 
         /// <summary>
-        /// Whether the player is on a moving platform.
-        /// </summary>
-        [HideInInspector]
-        public bool OnMovingPlatform;
-
-        /// <summary>
         /// The layer mask which represents the ground the player checks for collision with.
         /// </summary>
         [HideInInspector]
@@ -376,18 +371,25 @@ namespace Hedgehog.Actors
         /// </summary>
         [HideInInspector]
         public Orientation Wallmode;
+
+        [HideInInspector]
+        public MovingPlatformAnchor MovingPlatformAnchor;
         #endregion
         public void Awake()
         {
             Footing = FootSide.None;
             Grounded = false;
-            OnMovingPlatform = false;
             Vx = Vy = Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
             LeftKeyDown = RightKeyDown = JumpKeyDown = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
             TerrainMask = InitialTerrainMask;
+
+            MovingPlatformAnchor = (new GameObject()).AddComponent<MovingPlatformAnchor>();
+            MovingPlatformAnchor.name = name + "'s Moving Platform Anchor";
+            MovingPlatformAnchor.LinkController(this);
+            MovingPlatformAnchor.Moved += OnMovingPlatformMove;
         }
 
         public void Update()
@@ -670,6 +672,7 @@ namespace Hedgehog.Actors
             Wallmode = Orientation.Floor;
             Footing = FootSide.None;
             LockUponLanding = lockUponLanding;
+            MovingPlatformAnchor.UnlinkPlatform();
         }
 
         /// <summary>
@@ -1134,6 +1137,7 @@ namespace Hedgehog.Actors
         private bool GroundSurfaceCheck()
         {
             var s = GetSurface(TerrainMask);
+            var previousFooting = Footing;
 
             if (s.LeftCast || s.RightCast)
             {
@@ -1180,6 +1184,7 @@ namespace Hedgehog.Actors
                         {
                             Detach();
                         }
+
                         // Same thing but with the other foot
                     }
                     else if (s.Side == FootSide.Right)
@@ -1242,11 +1247,44 @@ namespace Hedgehog.Actors
                     }
                 }
 
+                if (Grounded)
+                {
+                    if (Footing == FootSide.Left)
+                    {
+                        if (s.LeftCast.Properties != null && s.LeftCast.Properties.MovingPlatform)
+                        {
+                            if (MovingPlatformAnchor.Platform != s.LeftCast.Hit.transform)
+                                MovingPlatformAnchor.LinkPlatform(s.LeftCast.Hit.point, s.LeftCast.Hit.transform);
+                        }
+                        else
+                        {
+                            MovingPlatformAnchor.UnlinkPlatform();
+                        }
+                    } else if (Footing == FootSide.Right)
+                    {
+                        if (s.RightCast.Properties != null && s.RightCast.Properties.MovingPlatform)
+                        {
+                            if (MovingPlatformAnchor.Platform != s.RightCast.Hit.transform)
+                                MovingPlatformAnchor.LinkPlatform(s.RightCast.Hit.point, s.RightCast.Hit.transform);
+                        }
+                        else
+                        {
+                            MovingPlatformAnchor.UnlinkPlatform();
+                        }
+                    }
+                    
+                }
+
                 return true;
             }
             Detach();
 
             return false;
+        }
+
+        public void OnMovingPlatformMove(object sender, EventArgs e)
+        {
+            transform.position += MovingPlatformAnchor.DeltaPosition;
         }
 
         /// <summary>
