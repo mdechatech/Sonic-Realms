@@ -7,36 +7,36 @@ public class CameraController : MonoBehaviour
 	/// The target for the camera to follow.
 	/// </summary>
 	[SerializeField]
-	private GameObject followTarget;
+	public GameObject FollowTarget;
 
 	/// <summary>
 	/// Must be 1 or higher. The higher this is, the smoother the camera movement.
 	/// </summary>
 	[SerializeField]
-	private float easeFactor;
+    public float EaseFactor = 1;
 
 	/// <summary>
 	/// Whether or not the camera stays put in terms of depth.
 	/// </summary>
 	[SerializeField]
-	private bool zLock;
+    public bool ZLock;
 
 	/// <summary>
 	/// If the z lock is off, the amount in distance to maintain from the target in terms of depth.
 	/// </summary>
 	[SerializeField]
-	private float zOffset;
+    public float ZOffset;
 
-	private void FixedUpdate()
+	public void LateUpdate()
 	{
-		if(followTarget != null)
+		if(FollowTarget != null)
 		{
 			Camera.main.transform.position = new Vector3 (
-				Camera.main.transform.position.x + (followTarget.transform.position.x - Camera.main.transform.position.x) / easeFactor, 
-				Camera.main.transform.position.y + (followTarget.transform.position.y - Camera.main.transform.position.y) / easeFactor,
-				(zLock) ? 
+				Camera.main.transform.position.x + (FollowTarget.transform.position.x - Camera.main.transform.position.x) / EaseFactor, 
+				Camera.main.transform.position.y + (FollowTarget.transform.position.y - Camera.main.transform.position.y) / EaseFactor,
+				(ZLock) ? 
 					Camera.main.transform.position.z : 
-					Camera.main.transform.position.z + (followTarget.transform.position.z - zOffset) / easeFactor);
+					Camera.main.transform.position.z + (FollowTarget.transform.position.z - ZOffset) / EaseFactor);
 		}
 	}
 }
