@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d5567b7e8f0f4892de869d9b03b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionMode: 2
+  CollisionMode: 1
   InitialTerrainMask:
     serializedVersion: 2
     m_Bits: 0
@@ -373,10 +373,10 @@ MonoBehaviour:
   GroundAcceleration: .0799999982
   GroundDeceleration: .119999997
   AirAcceleration: .159999996
-  JumpSpeed: 8
+  JumpSpeed: 6.5
   ReleaseJumpSpeed: 4
   AirGravity: .300000012
-  SlopeGravity: .300000012
+  SlopeGravity: .200000003
   MaxSpeed: 20
   LedgeClimbHeight: .25
   LedgeDropHeight: .25
@@ -408,6 +408,7 @@ MonoBehaviour:
   LastSurfaceAngle: 0
   SurfaceAngle: 0
   Footing: 0
+  TerrainProperties: {fileID: 0}
   HorizontalLock: 0
   HorizontalLockTimer: 0
   LockUponLanding: 0
@@ -456,6 +457,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.x
+      value: .720000029
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
