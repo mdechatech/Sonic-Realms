@@ -762,14 +762,14 @@ namespace Hedgehog.Actors
                     {
                         transform.position += (Vector3)horizontalCheck.Hit.point - SensorTopLeft.position;
 
-                        if (!JustDetached) HandleImpact(horizontalCheck.NormalAngle - DMath.HalfPi);
+                        if (!JustDetached) HandleImpact(horizontalCheck);
                         if (Vy > 0) Vy = 0;
                     }
                     else
                     {
                         transform.position += (Vector3)verticalCheck.Hit.point - SensorTopLeft.position;
 
-                        if (!JustDetached) HandleImpact(verticalCheck.NormalAngle - DMath.HalfPi);
+                        if (!JustDetached) HandleImpact(verticalCheck);
                         if (Vy > 0) Vy = 0;
                     }
 
@@ -795,14 +795,14 @@ namespace Hedgehog.Actors
                     {
                         transform.position += (Vector3)horizontalCheck.Hit.point - SensorTopRight.position;
 
-                        if (!JustDetached) HandleImpact(DMath.Angle(horizontalCheck.Hit.normal) - DMath.HalfPi);
+                        if (!JustDetached) HandleImpact(horizontalCheck);
                         if (Vy > 0) Vy = 0;
                     }
                     else
                     {
                         transform.position += (Vector3)verticalCheck.Hit.point - SensorTopRight.position;
 
-                        if (!JustDetached) HandleImpact(DMath.Angle(verticalCheck.Hit.normal) - DMath.HalfPi);
+                        if (!JustDetached) HandleImpact(verticalCheck);
                         if (Vy > 0) Vy = 0;
                     }
 
@@ -841,20 +841,20 @@ namespace Hedgehog.Actors
                     {
                         if (groundLeftCheck.Hit.point.y > groundRightCheck.Hit.point.y)
                         {
-                            HandleImpact(groundLeftCheck.SurfaceAngle);
+                            HandleImpact(groundLeftCheck);
                         }
                         else
                         {
-                            HandleImpact(groundRightCheck.SurfaceAngle);
+                            HandleImpact(groundRightCheck);
                         }
                     }
                     else if (groundLeftCheck)
                     {
-                        HandleImpact(groundLeftCheck.SurfaceAngle);
+                        HandleImpact(groundLeftCheck);
                     }
                     else
                     {
-                        HandleImpact(groundRightCheck.SurfaceAngle);
+                        HandleImpact(groundRightCheck);
                     }
                 }
 
@@ -1273,10 +1273,10 @@ namespace Hedgehog.Actors
         /// Calculates the ground velocity as the result of an impact on the specified surface angle.
         /// </summary>
         /// <returns>Whether the player should attach to the specified incline.</returns>
-        /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
-        private bool HandleImpact(float angleRadians)
+        /// <param name="impact">The impact data as th result of a terrain cast.</param>
+        private bool HandleImpact(TerrainCastHit impact)
         {
-            var sAngled = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+            var sAngled = DMath.Modp(impact.SurfaceAngle * Mathf.Rad2Deg, 360.0f);
             var sAngler = sAngled * Mathf.Deg2Rad;
 
             // The player can't possibly land on something if he's traveling 90 degrees
@@ -1295,15 +1295,19 @@ namespace Hedgehog.Actors
                 Mathf.Abs(DMath.AngleDiffd(sAngled, 270.0f)) > MinFlatAttachAngle)
             {
                 float groundSpeed;
-                if (Vy > 0.0f && (DMath.Equalsf(sAngled, 0.0f, MinFlatAttachAngle) || (DMath.Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
+                if (Vy > 0.0f && (DMath.Equalsf(sAngled, 0.0f, MinFlatAttachAngle) ||
+                    (DMath.Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
                 {
-                    groundSpeed = Vx;
+                    groundSpeed = DMath.Equalsf(impact.Hit.fraction, 0.0f) ? 0.0f : Vx;
                     Attach(groundSpeed, sAngler);
                     return true;
                 }
                 // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
-                groundSpeed = Mathf.Sqrt(Vx * Vx + Vy * Vy) *
-                              -Mathf.Clamp(DMath.AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
+                groundSpeed = DMath.Equalsf(impact.Hit.fraction, 0.0f) ? 
+                    0.0f : 
+                    Mathf.Sqrt(Vx * Vx + Vy * Vy) *
+                              -Mathf.Clamp(DMath.AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) /
+                              90.0f, -1.0f, 1.0f);
 
                 if (sAngled > 90.0f - MaxVerticalDetachAngle &&
                     sAngled < 270.0f + MaxVerticalDetachAngle &&
