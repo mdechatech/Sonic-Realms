@@ -254,7 +254,11 @@ namespace Hedgehog.Actors
         [HideInInspector]
         public bool JumpKeyDown;
 
-
+        /// <summary>
+        /// Temporary. Whether the debug spindash key was pressed since the last update. Key is
+        /// determined by DebugSpindashKey.
+        /// </summary>
+        [HideInInspector]
         public bool DebugSpindashKeyDown;
         #endregion
         #region Physics Variables
@@ -372,11 +376,19 @@ namespace Hedgehog.Actors
         [HideInInspector]
         public Orientation Wallmode;
 
+        /// <summary>
+        /// The moving platform anchor used to move the player when on moving platforms.
+        /// </summary>
         [HideInInspector]
         public MovingPlatformAnchor MovingPlatformAnchor;
 
+        /// <summary>
+        /// Stores movement of a moving platform from the last update, if any.
+        /// </summary>
         private Vector3 _movingPlatformDelta;
         #endregion
+
+        #region Main Event Functions
         public void Awake()
         {
             Footing = FootSide.None;
@@ -388,28 +400,12 @@ namespace Hedgehog.Actors
             Wallmode = Orientation.Floor;
             TerrainMask = InitialTerrainMask;
 
-            MovingPlatformAnchor = (new GameObject()).AddComponent<MovingPlatformAnchor>();
-            MovingPlatformAnchor.name = name + "'s Moving Platform Anchor";
-            MovingPlatformAnchor.LinkController(this);
-            MovingPlatformAnchor.Moved += OnMovingPlatformMove;
-
-            _movingPlatformDelta = new Vector3();
+            CreateMovingPlatformAnchor();
         }
 
         public void Update()
         {
             GetInput();
-        }
-
-        /// <summary>
-        /// Stores keyboard input for the next fixed update (and HandleInput).
-        /// </summary>
-        private void GetInput()
-        {
-            LeftKeyDown = Input.GetKey(LeftKey);
-            RightKeyDown = Input.GetKey(RightKey);
-            if (!JumpKeyDown && Grounded) JumpKeyDown = Input.GetKeyDown(JumpKey);
-            if (Grounded) DebugSpindashKeyDown = Input.GetKey(DebugSpindashKey);
         }
 
         public void FixedUpdate()
@@ -452,6 +448,19 @@ namespace Hedgehog.Actors
                     vt *= vn / vt;
                 }
             }
+        }
+        #endregion
+
+        #region Main Loop Subroutines
+        /// <summary>
+        /// Stores keyboard input for the next fixed update (and HandleInput).
+        /// </summary>
+        private void GetInput()
+        {
+            LeftKeyDown = Input.GetKey(LeftKey);
+            RightKeyDown = Input.GetKey(RightKey);
+            if (!JumpKeyDown && Grounded) JumpKeyDown = Input.GetKeyDown(JumpKey);
+            if (Grounded) DebugSpindashKeyDown = Input.GetKey(DebugSpindashKey);
         }
 
         /// <summary>
@@ -525,40 +534,6 @@ namespace Hedgehog.Actors
                 if (LeftKeyDown) Vx -= AirAcceleration * timeScale;
                 else if (RightKeyDown) Vx += AirAcceleration * timeScale;
             }
-        }
-
-        public void Jump()
-        {
-            JustJumped = true;
-
-            // Forces the player to leave the ground using the constant ForceJumpAngleDifference.
-            // Helps prevent sticking to surfaces when the player's gotta go fast.
-            var originalAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
-
-            var surfaceNormal = (SurfaceAngle + 90.0f) * Mathf.Deg2Rad;
-            Vx += JumpSpeed * Mathf.Cos(surfaceNormal);
-            Vy += JumpSpeed * Mathf.Sin(surfaceNormal);
-
-            var newAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
-            var angleDifference = DMath.AngleDiffd(originalAngle, newAngle);
-
-            if (Mathf.Abs(angleDifference) < ForceJumpAngleDifference)
-            {
-                var targetAngle = originalAngle + ForceJumpAngleDifference * Mathf.Sign(angleDifference);
-                var magnitude = new Vector2(Vx, Vy).magnitude;
-
-                var targetAngleRadians = targetAngle * Mathf.Deg2Rad;
-                var newVelocity = new Vector2(magnitude * Mathf.Cos(targetAngleRadians),
-                    magnitude * Mathf.Sin(targetAngleRadians));
-
-                Vx = newVelocity.x;
-                Vy = newVelocity.y;
-            }
-
-            // Eject self from ground
-            GroundSurfaceCheck();
-
-            Detach();
         }
 
         /// <summary>
@@ -660,255 +635,13 @@ namespace Hedgehog.Actors
             if (!anyHit && JustDetached)
                 JustDetached = false;
         }
-
-        /// <summary>
-        /// Detach the player from whatever surface it is on. If the player is not grounded this has no effect
-        /// other than setting lockUponLanding.
-        /// </summary>
-        /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
-        private void Detach(bool lockUponLanding = false)
+#if UNITY_EDITOR
+        public void OnApplicationQuit()
         {
-            Vg = 0.0f;
-            LastSurfaceAngle = 0.0f;
-            SurfaceAngle = 0.0f;
-            Grounded = false;
-            JustDetached = true;
-            Wallmode = Orientation.Floor;
-            Footing = FootSide.None;
-            LockUponLanding = lockUponLanding;
-            MovingPlatformAnchor.UnlinkPlatform();
+            DestroyMovingPlatformAnchor();
         }
-
-        /// <summary>
-        /// Attaches the player to a surface within the reach of its surface sensors. The angle of attachment
-        /// need not be perfect; the method works reliably for angles within 45 degrees of the one specified.
-        /// </summary>
-        /// <param name="groundSpeed">The ground speed of the player after attaching.</param>
-        /// <param name="angleRadians">The angle of the surface, in radians.</param>
-        private void Attach(float groundSpeed, float angleRadians)
-        {
-            var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
-            Vg = groundSpeed;
-            SurfaceAngle = LastSurfaceAngle = angleDegrees;
-            Grounded = _justLanded = true;
-
-            // HorizontalWallmodeAngleWeight may be set to only attach right or left at extreme angles
-            if (SurfaceAngle < 45.0f + HorizontalWallmodeAngleWeight || SurfaceAngle > 315.0f - HorizontalWallmodeAngleWeight)
-                Wallmode = Orientation.Floor;
-
-            else if (SurfaceAngle > 135.0f - HorizontalWallmodeAngleWeight && SurfaceAngle < 225.0 + HorizontalWallmodeAngleWeight)
-                Wallmode = Orientation.Ceiling;
-
-            else if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight)
-                Wallmode = Orientation.Right;
-
-            else
-                Wallmode = Orientation.Left;
-
-            if (LockUponLanding)
-            {
-                LockUponLanding = false;
-                LockHorizontal();
-            }
-
-            DMath.RotateTo(transform, angleRadians);
-        }
-
-        /// <summary>
-        /// Calculates the ground velocity as the result of an impact on the specified surface angle.
-        /// </summary>
-        /// <returns>Whether the player should attach to the specified incline.</returns>
-        /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
-        private bool HandleImpact(float angleRadians)
-        {
-            var sAngled = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
-            var sAngler = sAngled * Mathf.Deg2Rad;
-
-            // The player can't possibly land on something if he's traveling 90 degrees
-            // within the normal
-            var surfaceNormal = DMath.Modp(sAngled + 90.0f, 360.0f);
-            var playerAngle = DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg;
-            var surfaceDifference = DMath.AngleDiffd(playerAngle, surfaceNormal);
-            if (Mathf.Abs(surfaceDifference) < 90.0f)
-            {
-                return false;
-            }
-
-            // Ground attachment
-            if (Mathf.Abs(DMath.AngleDiffd(sAngled, 180.0f)) > MinFlatAttachAngle &&
-                Mathf.Abs(DMath.AngleDiffd(sAngled, 90.0f)) > MinFlatAttachAngle &&
-                Mathf.Abs(DMath.AngleDiffd(sAngled, 270.0f)) > MinFlatAttachAngle)
-            {
-                float groundSpeed;
-                if (Vy > 0.0f && (DMath.Equalsf(sAngled, 0.0f, MinFlatAttachAngle) || (DMath.Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
-                {
-                    groundSpeed = Vx;
-                    Attach(groundSpeed, sAngler);
-                    return true;
-                }
-                // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
-                groundSpeed = Mathf.Sqrt(Vx * Vx + Vy * Vy) *
-                              -Mathf.Clamp(DMath.AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
-
-                if (sAngled > 90.0f - MaxVerticalDetachAngle &&
-                    sAngled < 270.0f + MaxVerticalDetachAngle &&
-                    Mathf.Abs(groundSpeed) < DetachSpeed)
-                {
-                    return false;
-                }
-                Attach(groundSpeed, sAngler);
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Locks the player's horizontal control on the ground for the time specified by HorizontalLockTime.
-        /// </summary>
-        private void LockHorizontal()
-        {
-            HorizontalLock = true;
-            HorizontalLockTimer = HorizontalLockTime;
-        }
-
-        /// <summary>
-        /// Gets data about the surface closest to the player's feet, including its FootSide and raycast info.
-        /// </summary>
-        /// <returns>The surface.</returns>
-        /// <param name="layerMask">A mask indicating what layers are surfaces.</param>
-        public SurfaceInfo GetSurface(int layerMask)
-        {
-            // Linecasts are straight vertical or horizontal from the ground sensors
-            var checkLeft = Surfacecast(FootSide.Left);
-            var checkRight = Surfacecast(FootSide.Right);
-
-            FootSide newFooting = FootSide.None;
-
-            if (checkLeft && checkRight)
-            {
-                // Find the highest point using wall mode orientation
-                var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point, Wallmode.Normal());
-                
-                // If they are equally high prioritize the one with no terrain properties, then the one
-                // with no moving platform properties
-                if (DMath.Equalsf(distance, 0.0f))
-                {
-                    if (checkLeft.Properties == null) newFooting = FootSide.Left;
-                    else if(checkRight.Properties == null) newFooting = FootSide.Right;
-                    else if(!checkLeft.Properties.MovingPlatform) newFooting = FootSide.Left;
-                    else if(!checkRight.Properties.MovingPlatform) newFooting = FootSide.Right;
-                    else newFooting = FootSide.Left;
-                } else if (distance > 0)
-                {
-                    newFooting = FootSide.Left;
-                }
-                else
-                {
-                    newFooting = FootSide.Right;
-                }
-            } else if (checkLeft)
-            {
-                newFooting = FootSide.Left;;
-            } else if (checkRight)
-            {
-                newFooting = FootSide.Right;
-            }
-
-            if (newFooting == FootSide.None) return default(SurfaceInfo);
-            return new SurfaceInfo(checkLeft, checkRight, newFooting);
-        }
-
-        /// <summary>
-        /// Casts from LedgeClimbHeight to the player's geet.
-        /// </summary>
-        /// <param name="side"></param>
-        /// <returns></returns>
-        private TerrainCastHit Groundcast(FootSide side)
-        {
-            TerrainCastHit cast;
-            if (side == FootSide.Left)
-            {
-                cast = this.TerrainCast(
-                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    SensorBottomLeft.position, TerrainSide.Bottom);
-            }
-            else
-            {
-                cast = this.TerrainCast(
-                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    SensorBottomRight.position, TerrainSide.Bottom);
-            }
-
-            return cast;
-        }
-
-        /// <summary>
-        /// Returns the result of a linecast from the ClimbLedgeHeight to Su
-        /// </summary>
-        /// <returns>The result of the linecast.</returns>
-        /// <param name="footing">The side to linecast from.</param>
-        private TerrainCastHit Surfacecast(FootSide footing)
-        {
-            TerrainCastHit cast;
-            if (footing == FootSide.Left)
-            {
-                // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
-                cast = this.TerrainCast(
-                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    (Vector2) SensorBottomLeft.position + Wallmode.UnitVector()*LedgeDropHeight,
-                    TerrainSide.Bottom);
-
-                if (!cast)
-                {
-                    return default(TerrainCastHit);
-                }
-                if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
-                {
-                    for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
-                    {
-                        cast = this.TerrainCast(
-                            (Vector2) SensorBottomLeft.position - check.UnitVector()*LedgeClimbHeight,
-                            (Vector2) SensorBottomLeft.position + check.UnitVector()*LedgeDropHeight,
-                            TerrainSide.Bottom);
-
-                        if (cast && !DMath.Equalsf(cast.Hit.fraction, 0.0f))
-                            return cast;
-                    }
-
-                    return default(TerrainCastHit);
-                }
-
-                return cast;
-            }
-            cast = this.TerrainCast(
-                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    (Vector2) SensorBottomRight.position + Wallmode.UnitVector()*LedgeDropHeight,
-                    TerrainSide.Bottom);
-
-            if (!cast)
-            {
-                return default(TerrainCastHit);
-            }
-            if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
-            {
-                for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
-                {
-                    cast = this.TerrainCast(
-                        (Vector2) SensorBottomRight.position - check.UnitVector()*LedgeClimbHeight,
-                        (Vector2) SensorBottomRight.position + check.UnitVector()*LedgeDropHeight,
-                        TerrainSide.Bottom);
-
-                    if (cast && !DMath.Equalsf(cast.Hit.fraction, 0.0f))
-                        return cast;
-                }
-
-                return default(TerrainCastHit);
-            }
-
-            return cast;
-        }
-
+#endif
+        #endregion
         #region Collision Subroutines
         /// <summary>
         /// Collision check with side sensors for when player is in the air.
@@ -983,7 +716,7 @@ namespace Hedgehog.Actors
 
                     return true;
                 }
-                
+
 
             }
 
@@ -1276,7 +1009,8 @@ namespace Hedgehog.Actors
                         {
                             MovingPlatformAnchor.UnlinkPlatform();
                         }
-                    } else if (Footing == FootSide.Right)
+                    }
+                    else if (Footing == FootSide.Right)
                     {
                         if (s.RightCast.Properties != null && s.RightCast.Properties.MovingPlatform)
                         {
@@ -1288,7 +1022,7 @@ namespace Hedgehog.Actors
                             MovingPlatformAnchor.UnlinkPlatform();
                         }
                     }
-                    
+
                 }
 
                 return true;
@@ -1296,15 +1030,6 @@ namespace Hedgehog.Actors
             Detach();
 
             return false;
-        }
-
-        public void OnMovingPlatformMove(object sender, EventArgs e)
-        {
-            _movingPlatformDelta += MovingPlatformAnchor.DeltaPosition;
-            transform.position += _movingPlatformDelta;
-            _movingPlatformDelta = default(Vector3);
-
-            HandleCollisions();
         }
 
         /// <summary>
@@ -1357,6 +1082,338 @@ namespace Hedgehog.Actors
             }
 
             return false;
+        }
+        #endregion
+
+        #region Control Functions
+        /// <summary>
+        /// Locks the player's horizontal control on the ground for the time specified by HorizontalLockTime.
+        /// </summary>
+        private void LockHorizontal()
+        {
+            HorizontalLock = true;
+            HorizontalLockTimer = HorizontalLockTime;
+        }
+
+        public void Jump()
+        {
+            JustJumped = true;
+
+            // Forces the player to leave the ground using the constant ForceJumpAngleDifference.
+            // Helps prevent sticking to surfaces when the player's gotta go fast.
+            var originalAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
+
+            var surfaceNormal = (SurfaceAngle + 90.0f) * Mathf.Deg2Rad;
+            Vx += JumpSpeed * Mathf.Cos(surfaceNormal);
+            Vy += JumpSpeed * Mathf.Sin(surfaceNormal);
+
+            var newAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
+            var angleDifference = DMath.AngleDiffd(originalAngle, newAngle);
+
+            if (Mathf.Abs(angleDifference) < ForceJumpAngleDifference)
+            {
+                var targetAngle = originalAngle + ForceJumpAngleDifference * Mathf.Sign(angleDifference);
+                var magnitude = new Vector2(Vx, Vy).magnitude;
+
+                var targetAngleRadians = targetAngle * Mathf.Deg2Rad;
+                var newVelocity = new Vector2(magnitude * Mathf.Cos(targetAngleRadians),
+                    magnitude * Mathf.Sin(targetAngleRadians));
+
+                Vx = newVelocity.x;
+                Vy = newVelocity.y;
+            }
+
+            // Eject self from ground
+            GroundSurfaceCheck();
+
+            Detach();
+        }
+        #endregion
+        #region Surface Acquisition Functions
+        /// <summary>
+        /// Detach the player from whatever surface it is on. If the player is not grounded this has no effect
+        /// other than setting lockUponLanding.
+        /// </summary>
+        /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
+        private void Detach(bool lockUponLanding = false)
+        {
+            Vg = 0.0f;
+            LastSurfaceAngle = 0.0f;
+            SurfaceAngle = 0.0f;
+            Grounded = false;
+            JustDetached = true;
+            Wallmode = Orientation.Floor;
+            Footing = FootSide.None;
+            LockUponLanding = lockUponLanding;
+            MovingPlatformAnchor.UnlinkPlatform();
+        }
+
+        /// <summary>
+        /// Attaches the player to a surface within the reach of its surface sensors. The angle of attachment
+        /// need not be perfect; the method works reliably for angles within 45 degrees of the one specified.
+        /// </summary>
+        /// <param name="groundSpeed">The ground speed of the player after attaching.</param>
+        /// <param name="angleRadians">The angle of the surface, in radians.</param>
+        private void Attach(float groundSpeed, float angleRadians)
+        {
+            var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+            Vg = groundSpeed;
+            SurfaceAngle = LastSurfaceAngle = angleDegrees;
+            Grounded = _justLanded = true;
+
+            // HorizontalWallmodeAngleWeight may be set to only attach right or left at extreme angles
+            if (SurfaceAngle < 45.0f + HorizontalWallmodeAngleWeight || SurfaceAngle > 315.0f - HorizontalWallmodeAngleWeight)
+                Wallmode = Orientation.Floor;
+
+            else if (SurfaceAngle > 135.0f - HorizontalWallmodeAngleWeight && SurfaceAngle < 225.0 + HorizontalWallmodeAngleWeight)
+                Wallmode = Orientation.Ceiling;
+
+            else if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight)
+                Wallmode = Orientation.Right;
+
+            else
+                Wallmode = Orientation.Left;
+
+            if (LockUponLanding)
+            {
+                LockUponLanding = false;
+                LockHorizontal();
+            }
+
+            DMath.RotateTo(transform, angleRadians);
+        }
+
+        /// <summary>
+        /// Calculates the ground velocity as the result of an impact on the specified surface angle.
+        /// </summary>
+        /// <returns>Whether the player should attach to the specified incline.</returns>
+        /// <param name="angleRadians">The angle of the surface impacted, in radians.</param>
+        private bool HandleImpact(float angleRadians)
+        {
+            var sAngled = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+            var sAngler = sAngled * Mathf.Deg2Rad;
+
+            // The player can't possibly land on something if he's traveling 90 degrees
+            // within the normal
+            var surfaceNormal = DMath.Modp(sAngled + 90.0f, 360.0f);
+            var playerAngle = DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg;
+            var surfaceDifference = DMath.AngleDiffd(playerAngle, surfaceNormal);
+            if (Mathf.Abs(surfaceDifference) < 90.0f)
+            {
+                return false;
+            }
+
+            // Ground attachment
+            if (Mathf.Abs(DMath.AngleDiffd(sAngled, 180.0f)) > MinFlatAttachAngle &&
+                Mathf.Abs(DMath.AngleDiffd(sAngled, 90.0f)) > MinFlatAttachAngle &&
+                Mathf.Abs(DMath.AngleDiffd(sAngled, 270.0f)) > MinFlatAttachAngle)
+            {
+                float groundSpeed;
+                if (Vy > 0.0f && (DMath.Equalsf(sAngled, 0.0f, MinFlatAttachAngle) || (DMath.Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
+                {
+                    groundSpeed = Vx;
+                    Attach(groundSpeed, sAngler);
+                    return true;
+                }
+                // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
+                groundSpeed = Mathf.Sqrt(Vx * Vx + Vy * Vy) *
+                              -Mathf.Clamp(DMath.AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) / 90.0f, -1.0f, 1.0f);
+
+                if (sAngled > 90.0f - MaxVerticalDetachAngle &&
+                    sAngled < 270.0f + MaxVerticalDetachAngle &&
+                    Mathf.Abs(groundSpeed) < DetachSpeed)
+                {
+                    return false;
+                }
+                Attach(groundSpeed, sAngler);
+                return true;
+            }
+
+            return false;
+        }
+        #endregion
+        #region Surface Calculation Functions
+        /// <summary>
+        /// Gets data about the surface closest to the player's feet, including its FootSide and raycast info.
+        /// </summary>
+        /// <returns>The surface.</returns>
+        /// <param name="layerMask">A mask indicating what layers are surfaces.</param>
+        public SurfaceInfo GetSurface(int layerMask)
+        {
+            // Linecasts are straight vertical or horizontal from the ground sensors
+            var checkLeft = Surfacecast(FootSide.Left);
+            var checkRight = Surfacecast(FootSide.Right);
+
+            FootSide newFooting = FootSide.None;
+
+            if (checkLeft && checkRight)
+            {
+                // Find the highest point using wall mode orientation
+                var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point, Wallmode.Normal());
+                
+                // If they are equally high prioritize the one with no terrain properties, then the one
+                // with no moving platform properties
+                if (DMath.Equalsf(distance, 0.0f))
+                {
+                    if (checkLeft.Properties == null) newFooting = FootSide.Left;
+                    else if(checkRight.Properties == null) newFooting = FootSide.Right;
+                    else if(!checkLeft.Properties.MovingPlatform) newFooting = FootSide.Left;
+                    else if(!checkRight.Properties.MovingPlatform) newFooting = FootSide.Right;
+                    else newFooting = FootSide.Left;
+                } else if (distance > 0)
+                {
+                    newFooting = FootSide.Left;
+                }
+                else
+                {
+                    newFooting = FootSide.Right;
+                }
+            } else if (checkLeft)
+            {
+                newFooting = FootSide.Left;;
+            } else if (checkRight)
+            {
+                newFooting = FootSide.Right;
+            }
+
+            if (newFooting == FootSide.None) return default(SurfaceInfo);
+            return new SurfaceInfo(checkLeft, checkRight, newFooting);
+        }
+
+        /// <summary>
+        /// Casts from LedgeClimbHeight to the player's geet.
+        /// </summary>
+        /// <param name="side"></param>
+        /// <returns></returns>
+        private TerrainCastHit Groundcast(FootSide side)
+        {
+            TerrainCastHit cast;
+            if (side == FootSide.Left)
+            {
+                cast = this.TerrainCast(
+                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    SensorBottomLeft.position, TerrainSide.Bottom);
+            }
+            else
+            {
+                cast = this.TerrainCast(
+                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    SensorBottomRight.position, TerrainSide.Bottom);
+            }
+
+            return cast;
+        }
+
+        /// <summary>
+        /// Returns the result of a linecast from the ClimbLedgeHeight to Su
+        /// </summary>
+        /// <returns>The result of the linecast.</returns>
+        /// <param name="footing">The side to linecast from.</param>
+        private TerrainCastHit Surfacecast(FootSide footing)
+        {
+            TerrainCastHit cast;
+            if (footing == FootSide.Left)
+            {
+                // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
+                cast = this.TerrainCast(
+                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    (Vector2) SensorBottomLeft.position + Wallmode.UnitVector()*LedgeDropHeight,
+                    TerrainSide.Bottom);
+
+                if (!cast)
+                {
+                    return default(TerrainCastHit);
+                }
+                if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
+                {
+                    for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
+                    {
+                        cast = this.TerrainCast(
+                            (Vector2) SensorBottomLeft.position - check.UnitVector()*LedgeClimbHeight,
+                            (Vector2) SensorBottomLeft.position + check.UnitVector()*LedgeDropHeight,
+                            TerrainSide.Bottom);
+
+                        if (cast && !DMath.Equalsf(cast.Hit.fraction, 0.0f))
+                            return cast;
+                    }
+
+                    return default(TerrainCastHit);
+                }
+
+                return cast;
+            }
+            cast = this.TerrainCast(
+                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
+                    (Vector2) SensorBottomRight.position + Wallmode.UnitVector()*LedgeDropHeight,
+                    TerrainSide.Bottom);
+
+            if (!cast)
+            {
+                return default(TerrainCastHit);
+            }
+            if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
+            {
+                for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
+                {
+                    cast = this.TerrainCast(
+                        (Vector2) SensorBottomRight.position - check.UnitVector()*LedgeClimbHeight,
+                        (Vector2) SensorBottomRight.position + check.UnitVector()*LedgeDropHeight,
+                        TerrainSide.Bottom);
+
+                    if (cast && !DMath.Equalsf(cast.Hit.fraction, 0.0f))
+                        return cast;
+                }
+
+                return default(TerrainCastHit);
+            }
+
+            return cast;
+        }
+        #endregion
+        #region Moving Platform Functions
+        /// <summary>
+        /// Destroys the current moving platform anchor and creates a new one.
+        /// </summary>
+        public void CreateMovingPlatformAnchor()
+        {
+            DestroyMovingPlatformAnchor();
+
+            MovingPlatformAnchor = (new GameObject()).AddComponent<MovingPlatformAnchor>();
+            MovingPlatformAnchor.name = name + "'s Moving Platform Anchor";
+            MovingPlatformAnchor.LinkController(this);
+            MovingPlatformAnchor.Moved += OnMovingPlatformMove;
+            MovingPlatformAnchor.Destroyed += OnMovingPlatformAnchorDestroyed;
+
+            _movingPlatformDelta = new Vector3();
+        }
+
+        /// <summary>
+        /// Destroys the current moving platform anchor.
+        /// </summary>
+        public void DestroyMovingPlatformAnchor()
+        {
+            if (MovingPlatformAnchor != null && MovingPlatformAnchor.gameObject)
+            {
+                MovingPlatformAnchor.Moved -= OnMovingPlatformMove;
+                MovingPlatformAnchor.Destroyed -= OnMovingPlatformAnchorDestroyed;
+                Destroy(MovingPlatformAnchor.gameObject);
+            }
+
+            MovingPlatformAnchor = null;
+        }
+
+        private void OnMovingPlatformMove(object sender, EventArgs e)
+        {
+            _movingPlatformDelta += MovingPlatformAnchor.DeltaPosition;
+            transform.position += _movingPlatformDelta;
+            _movingPlatformDelta = default(Vector3);
+
+            HandleCollisions();
+        }
+
+        private void OnMovingPlatformAnchorDestroyed(object sender, EventArgs e)
+        {
+            CreateMovingPlatformAnchor();
         }
         #endregion
     }
