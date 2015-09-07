@@ -173,7 +173,7 @@ namespace Hedgehog.Actors
         /// detached from it.
         /// </summary>
         [SerializeField]
-        public float DetachSpeed = 3.5f;
+        public float DetachSpeed = 3.0f;
 
         /// <summary>
         /// The duration in seconds of the horizontal lock.
@@ -1421,6 +1421,7 @@ namespace Hedgehog.Actors
             DestroyMovingPlatformAnchor();
 
             MovingPlatformAnchor = (new GameObject()).AddComponent<MovingPlatformAnchor>();
+            MovingPlatformAnchor.transform.SetParent(transform);
             MovingPlatformAnchor.name = name + "'s Moving Platform Anchor";
             MovingPlatformAnchor.LinkController(this);
             MovingPlatformAnchor.Moved += OnMovingPlatformMove;

@@ -351,12 +351,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d5567b7e8f0f4892de869d9b03b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CollisionMode: 2
   InitialTerrainMask:
     serializedVersion: 2
     m_Bits: 0
+  TerrainTags: []
+  TerrainNames: []
   JumpKey: 119
   LeftKey: 97
   RightKey: 100
+  DebugSpindashKey: 32
   SensorBottomLeft: {fileID: 411022}
   SensorBottomMiddle: {fileID: 486886}
   SensorBottomRight: {fileID: 467340}
@@ -369,7 +373,8 @@ MonoBehaviour:
   GroundAcceleration: .0799999982
   GroundDeceleration: .119999997
   AirAcceleration: .159999996
-  JumpSpeed: 7.5
+  JumpSpeed: 8
+  ReleaseJumpSpeed: 4
   AirGravity: .300000012
   SlopeGravity: .300000012
   MaxSpeed: 20
@@ -389,12 +394,14 @@ MonoBehaviour:
   MaxVerticalDetachAngle: 5
   LeftKeyDown: 0
   RightKeyDown: 0
+  JumpKeyPressed: 0
   JumpKeyDown: 0
+  JumpKeyReleased: 0
+  DebugSpindashKeyDown: 0
   Vx: 0
   Vy: 0
   Vg: 0
   Grounded: 0
-  OnMovingPlatform: 0
   TerrainMask:
     serializedVersion: 2
     m_Bits: 0
@@ -405,8 +412,10 @@ MonoBehaviour:
   HorizontalLockTimer: 0
   LockUponLanding: 0
   JustJumped: 0
+  CanReleaseJump: 0
   JustDetached: 0
   Wallmode: 0
+  MovingPlatformAnchor: {fileID: 0}
 --- !u!212 &21274774
 SpriteRenderer:
   m_ObjectHideFlags: 1

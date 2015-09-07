@@ -377,7 +377,7 @@ namespace Hedgehog.Editor
 
                 EditorGUILayout.LabelField("Control", headerStyle);
 
-                EditorGUILayout.Toggle("Jump Key Pressed", _instance.JumpKeyDown);
+                EditorGUILayout.Toggle("Jump Key Pressed", _instance.JumpKeyPressed);
                 EditorGUILayout.Toggle("Left Key Pressed", _instance.LeftKeyDown);
                 EditorGUILayout.Toggle("Right Key Pressed", _instance.RightKeyDown);
 
