@@ -33,27 +33,4 @@ namespace Hedgehog.Utils
         /// </summary>
         Names,
     }
-
-    public static class CollisionModeExtensions
-    {
-        public static RaycastHit2D LinecastTerrain(this CollisionMode collisionMode, HedgehogController hedgehog, 
-            Vector2 start, Vector2 end)
-        {
-            switch (collisionMode)
-            {
-                case CollisionMode.Layers:
-                    return Physics2D.Linecast(start, end, hedgehog.TerrainMask);
-
-                case CollisionMode.Tags:
-                    return Physics2DUtility.ClosestWithTag(Physics2D.LinecastAll(start, end), hedgehog.TerrainTags);
-
-                case CollisionMode.Names:
-                    return Physics2DUtility.ClosestWithNameRecursive(Physics2D.LinecastAll(start, end),
-                        hedgehog.TerrainNames);
-
-                default:
-                    return default(RaycastHit2D);
-            }
-        }
-    }
 }

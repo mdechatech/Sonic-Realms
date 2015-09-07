@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Actors;
 using Hedgehog.Utils;
@@ -15,7 +16,7 @@ namespace Hedgehog.Terrain
         /// <param name="terrain">The terrain transform.</param>
         /// <param name="maxLevel">The maximum amount of parents to go through.</param>
         /// <returns></returns>
-        public static TerrainProperties SearchProperties(Transform terrain, int maxLevel = int.MaxValue)
+        public static TerrainProperties SearchProperties(Transform terrain, int maxLevel = Int32.MaxValue)
         {
             var check = terrain;
             var levelsDown = 0;
@@ -62,7 +63,7 @@ namespace Hedgehog.Terrain
             return raycasts.Where(raycastHit2D => raycastHit2D && 
                 TransformSelector(raycastHit2D.transform, source, raycastSide)).FirstOrDefault();
         }
-        #region Terrain Cast Selectors
+        #region Platform Cast Selectors
         /// <summary>
         /// Returns whether the specified transform can be collided with based on the source's collision info and
         /// the transform's terrain properties.
@@ -97,7 +98,7 @@ namespace Hedgehog.Terrain
 
                 case CollisionMode.Names:
                 default:
-                    return source.TerrainNames.Contains(transform.name);
+                    return HasNameRecursive(transform, source.TerrainNames);
             }
         }
 
@@ -114,6 +115,37 @@ namespace Hedgehog.Terrain
             if (properties == null) return true;
 
             return properties.CollidesWithSide(raycastSide);
+        }
+        #endregion
+        #region Name Utilities
+        /// <summary>
+        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
+        /// the specified name.
+        /// </summary>
+        /// <param name="transform">The specified transform.</param>
+        /// <param name="name">The specified name.</param>
+        /// <returns></returns>
+        public static bool HasNameRecursive(Transform transform, string name)
+        {
+            var check = transform;
+            while (check != null)
+            {
+                if (check.name == name) return true;
+                check = check.parent;
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
+        /// a name contained in the specified name list.
+        /// </summary>
+        /// <param name="transform">The specified transform.</param>
+        /// <param name="names">The specified name list.</param>
+        /// <returns></returns>
+        public static bool HasNameRecursive(Transform transform, ICollection<string> names)
+        {
+            return names.Any(name => HasNameRecursive(transform, name));
         }
         #endregion
     }
