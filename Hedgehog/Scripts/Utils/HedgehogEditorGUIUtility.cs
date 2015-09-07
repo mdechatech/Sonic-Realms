@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Utils
 {
@@ -13,22 +14,26 @@ namespace Hedgehog.Utils
         {
             List<string> layers = new List<string>();
             List<int> layerNumbers = new List<int>();
- 
-            for (int i = 0; i < 32; i++) {
+
+            for (int i = 0; i < 32; i++)
+            {
                 string layerName = LayerMask.LayerToName(i);
-                if (layerName != "") {
+                if (layerName != "")
+                {
                     layers.Add(layerName);
                     layerNumbers.Add(i);
                 }
             }
             int maskWithoutEmpty = 0;
-            for (int i = 0; i < layerNumbers.Count; i++) {
+            for (int i = 0; i < layerNumbers.Count; i++)
+            {
                 if (((1 << layerNumbers[i]) & layerMask.value) > 0)
                     maskWithoutEmpty |= (1 << i);
             }
             maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
             int mask = 0;
-            for (int i = 0; i < layerNumbers.Count; i++) {
+            for (int i = 0; i < layerNumbers.Count; i++)
+            {
                 if ((maskWithoutEmpty & (1 << i)) > 0)
                     mask |= (1 << layerNumbers[i]);
             }
@@ -52,15 +57,17 @@ namespace Hedgehog.Utils
             CollisionMode selected = value;
 
             EditorGUILayout.LabelField("Collision Mode", headerStyle);
-            
+
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Layers", value == CollisionMode.Layers ? selectedButtonStyle : buttonStyle))
             {
                 selected = CollisionMode.Layers;
-            } else if (GUILayout.Button("Tags", value == CollisionMode.Tags ? selectedButtonStyle : buttonStyle))
+            }
+            else if (GUILayout.Button("Tags", value == CollisionMode.Tags ? selectedButtonStyle : buttonStyle))
             {
                 selected = CollisionMode.Tags;
-            } else if (GUILayout.Button("Names", value == CollisionMode.Names ? selectedButtonStyle : buttonStyle))
+            }
+            else if (GUILayout.Button("Names", value == CollisionMode.Names ? selectedButtonStyle : buttonStyle))
             {
                 selected = CollisionMode.Names;
             }
@@ -77,7 +84,8 @@ namespace Hedgehog.Utils
         /// <param name="label"></param>
         /// <param name="serializedObject"></param>
         /// <param name="elements"></param>
-        public static void ReorderableListField(string label, SerializedObject serializedObject, SerializedProperty elements)
+        public static void ReorderableListField(string label, SerializedObject serializedObject,
+            SerializedProperty elements)
         {
             var list = new ReorderableList(serializedObject, elements, false, false, false, false);
 
@@ -116,13 +124,25 @@ namespace Hedgehog.Utils
 
             if (GUILayout.Button("Remove Last", list.onCanRemoveCallback(list) ? buttonStyle : disabledButtonStyle))
             {
-                if(list.onCanRemoveCallback(list)) list.onRemoveCallback(list);
+                if (list.onCanRemoveCallback(list)) list.onRemoveCallback(list);
             }
             EditorGUILayout.EndHorizontal();
 
             list.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        public static void UnityEventField(UnityEvent unityEvent, SerializedProperty serializedEvent)
+        {
+            var lastRect = GUILayoutUtility.GetLastRect();
+            lastRect.y += 20;
+            
+            EditorGUI.PropertyField(lastRect, serializedEvent, true);
+
+            GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none,
+                GUILayout.Height(90 +
+                                 Mathf.Max(0, unityEvent.GetPersistentEventCount() - 1) * 42.5f));
         }
     }
 }
