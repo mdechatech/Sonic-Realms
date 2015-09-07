@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Hedgehog.Editor
 {
-    [Serializable]
     [CustomEditor(typeof(HedgehogController))]
     public class HedgehogControllerEditor : UnityEditor.Editor
     {
@@ -16,29 +15,53 @@ namespace Hedgehog.Editor
         [SerializeField] private SerializedObject _serializedInstance;
         #endregion
         #region Foldout Variables
-        [SerializeField]
-        private bool _showCollision;
+        private static bool ShowCollision
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowCollision", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowCollision", value); }
+        }
 
-        [SerializeField]
-        private bool _showSensors;
+        private static bool ShowSensors
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowSensors", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowSensors", value);}
+        }
 
-        [SerializeField]
-        private bool _showSensorsGenerator;
+        private bool ShowSensorsGenerator
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowSensorsGenerator", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowSensorsGenerator", value); }
+        }
 
-        [SerializeField]
-        private bool _showAdvancedSensors;
+        private bool ShowAdvancedSensors
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedSensors", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedSensors", value); }
+        }
 
-        [SerializeField]
-        private bool _showControls;
+        private static bool ShowControls
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowControls", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowControls", value); }
+        }
 
-        [SerializeField]
-        private bool _showPhysics;
+        private static bool ShowPhysics
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPhysics", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysics", value); }
+        }
 
-        [SerializeField]
-        private bool _showAdvancedPhysics;
+        private static bool ShowAdvancedPhysics
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysics", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysics", value); }
+        }
 
-        [SerializeField]
-        private bool _showDebugInfo;
+        private bool ShowDebugInfo
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowDebugInfo", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowDebugInfo", value); }
+        }
         #endregion
         #region Sensor Creator Variables
         [SerializeField]
@@ -87,8 +110,8 @@ namespace Hedgehog.Editor
             #endregion
 
             #region Controls Foldout
-            _showControls = EditorGUILayout.Foldout(_showControls, "Controls", foldoutStyle);
-            if (_showControls)
+            ShowControls = EditorGUILayout.Foldout(ShowControls, "Controls", foldoutStyle);
+            if (ShowControls)
             {
                 _instance.JumpKey = (KeyCode)EditorGUILayout.EnumPopup("Jump Key", _instance.JumpKey);
                 _instance.LeftKey = (KeyCode)EditorGUILayout.EnumPopup("Left Key", _instance.LeftKey);
@@ -98,8 +121,8 @@ namespace Hedgehog.Editor
             }
             #endregion
             #region Collision Foldout
-            _showCollision = EditorGUILayout.Foldout(_showCollision, "Collision", foldoutStyle);
-            if (_showCollision)
+            ShowCollision = EditorGUILayout.Foldout(ShowCollision, "Collision", foldoutStyle);
+            if (ShowCollision)
             {
                 _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
                 if (_instance.CollisionMode == CollisionMode.Layers)
@@ -118,8 +141,8 @@ namespace Hedgehog.Editor
             }
             #endregion
             #region Sensors Foldout
-            _showSensors = EditorGUILayout.Foldout(_showSensors, "Sensors", foldoutStyle);
-            if (_showSensors)
+            ShowSensors = EditorGUILayout.Foldout(ShowSensors, "Sensors", foldoutStyle);
+            if (ShowSensors)
             {
                 EditorGUILayout.LabelField("Create", headerStyle);
 
@@ -176,8 +199,8 @@ namespace Hedgehog.Editor
             }
             #endregion
             #region Physics Foldout
-            _showPhysics = EditorGUILayout.Foldout(_showPhysics, "Physics", foldoutStyle);
-            if (_showPhysics)
+            ShowPhysics = EditorGUILayout.Foldout(ShowPhysics, "Physics", foldoutStyle);
+            if (ShowPhysics)
             {
                 EditorGUILayout.BeginHorizontal();
                 _instance.MaxSpeed = EditorGUILayout.FloatField("Max Speed",
@@ -188,6 +211,12 @@ namespace Hedgehog.Editor
                 EditorGUILayout.BeginHorizontal();
                 _instance.JumpSpeed = EditorGUILayout.FloatField("Jump Speed",
                     _instance.JumpSpeed);
+                EditorGUILayout.PrefixLabel("units/s");
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                _instance.ReleaseJumpSpeed = EditorGUILayout.FloatField("Jump Release Speed",
+                    _instance.ReleaseJumpSpeed);
                 EditorGUILayout.PrefixLabel("units/s");
                 EditorGUILayout.EndHorizontal();
 
@@ -227,8 +256,8 @@ namespace Hedgehog.Editor
 
                 EditorGUILayout.Space();
                 #region Advanced Physics
-                _showAdvancedPhysics = EditorGUILayout.Toggle("Show Advanced", _showAdvancedPhysics);
-                if (_showAdvancedPhysics)
+                ShowAdvancedPhysics = EditorGUILayout.Toggle("Show Advanced", ShowAdvancedPhysics);
+                if (ShowAdvancedPhysics)
                 {
                     EditorGUILayout.BeginHorizontal();
                     _instance.HorizontalLockTime = EditorGUILayout.FloatField("Horizontal Lock",
@@ -336,8 +365,8 @@ namespace Hedgehog.Editor
             }
             #endregion
             #region Debug Foldout
-            _showDebugInfo = EditorGUILayout.Foldout(_showDebugInfo, "Debug", foldoutStyle);
-            if (_showDebugInfo)
+            ShowDebugInfo = EditorGUILayout.Foldout(ShowDebugInfo, "Debug", foldoutStyle);
+            if (ShowDebugInfo)
             {
                 if (!Application.isPlaying)
                 {
