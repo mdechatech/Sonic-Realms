@@ -49,7 +49,6 @@ namespace Hedgehog.Terrain
             get
             {
                 if (Platform == null) return default(Vector3);
-                Debug.Log(transform.position - _previousPosition);
                 return transform.position - _previousPosition;
             }
         }
