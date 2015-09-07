@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedgehog.Terrain;
 using UnityEngine;
 using Hedgehog.Utils;
+using UnityEngine.Events;
 
 namespace Hedgehog.Actors
 {
@@ -12,6 +13,7 @@ namespace Hedgehog.Actors
     public class HedgehogController : MonoBehaviour
     {
         #region Inspector Fields
+        #region Collision
         [Header("Collision")]
 
         [SerializeField]
@@ -25,7 +27,8 @@ namespace Hedgehog.Actors
 
         [SerializeField]
         public List<string> TerrainNames = new List<string>();
-
+        #endregion
+        #region Controls
         [Header("Controls")]
 
         [SerializeField]
@@ -39,7 +42,8 @@ namespace Hedgehog.Actors
 
         [SerializeField]
         public KeyCode DebugSpindashKey = KeyCode.Space;
-
+        #endregion
+        #region Sensors
         [Header("Sensors")]
         // Nine sensors arranged like a tic-tac-toe board.
         [SerializeField]
@@ -77,7 +81,8 @@ namespace Hedgehog.Actors
         [SerializeField]
         [Tooltip("The top right corner.")]
         public Transform SensorTopRight;
-
+        #endregion
+        #region Physics
         [Header("Physics")]
 
         /// <summary>
@@ -240,6 +245,11 @@ namespace Hedgehog.Actors
         [SerializeField]
         public float MaxVerticalDetachAngle = 5.0f;
         #endregion
+        #region Events
+        [SerializeField]
+        public UnityEvent OnCrush;
+        #endregion
+        #endregion
         #region Input Variables
         /// <summary>
         /// Whether the left key was held down since the last update. Key is determined by LeftKey.
@@ -357,6 +367,12 @@ namespace Hedgehog.Actors
         /// </summary>
         [HideInInspector]
         public FootSide Footing;
+
+        /// <summary>
+        /// If grounded, the properties of the ground beneath the player, if any.
+        /// </summary>
+        [HideInInspector]
+        public TerrainProperties TerrainProperties;
 
         /// <summary>
         /// Whether the player has control of horizontal ground movement.
@@ -594,6 +610,9 @@ namespace Hedgehog.Actors
             if (Grounded)
             {
                 var prevVg = Vg;
+                var friction = TerrainProperties == null
+                    ? 1.0f
+                    : TerrainProperties.Friction;
 
                 // Friction from deceleration
                 if (!LeftKeyDown && !RightKeyDown)
@@ -604,11 +623,11 @@ namespace Hedgehog.Actors
                     }
                     else if (Vg > 0.0f)
                     {
-                        Vg -= GroundDeceleration * timeScale;
+                        Vg -= GroundDeceleration*timeScale*friction;
                     }
                     else if (Vg < 0.0f)
                     {
-                        Vg += GroundDeceleration * timeScale;
+                        Vg += GroundDeceleration*timeScale*friction;
                     }
                 }
 
@@ -655,6 +674,8 @@ namespace Hedgehog.Actors
         {
             var anyHit = false;
             var jumpedPreviousCheck = JustJumped;
+
+            if(CrushCheck()) OnCrush.Invoke();
 
             if (!Grounded)
             {
@@ -1060,7 +1081,13 @@ namespace Hedgehog.Actors
                             MovingPlatformAnchor.UnlinkPlatform();
                         }
                     }
+                }
 
+                if (Grounded)
+                {
+                    TerrainProperties = Footing == FootSide.Left
+                        ? s.LeftCast.Properties
+                        : s.RightCast.Properties;
                 }
 
                 return true;
@@ -1120,6 +1147,23 @@ namespace Hedgehog.Actors
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Checks for terrain hitting both horizontal or both vertical sides of a player, aka crushing.
+        /// </summary>
+        /// <returns></returns>
+        private bool CrushCheck()
+        {
+            return (this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleLeft.position,
+                        TerrainSide.Left) &&
+                    this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleRight.position,
+                        TerrainSide.Right)) ||
+
+                   (this.TerrainCast(SensorMiddleMiddle.position, SensorTopMiddle.position,
+                       TerrainSide.Top) &&
+                    this.TerrainCast(SensorMiddleMiddle.position, SensorBottomMiddle.position,
+                        TerrainSide.Bottom));
         }
         #endregion
 

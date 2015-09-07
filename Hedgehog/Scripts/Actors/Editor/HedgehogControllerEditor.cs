@@ -57,6 +57,12 @@ namespace Hedgehog.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysics", value); }
         }
 
+        private static bool ShowEvents
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowEvents", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowEvents", value); }
+        }
+
         private bool ShowDebugInfo
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowDebugInfo", false); }
@@ -364,6 +370,14 @@ namespace Hedgehog.Editor
                 #endregion
             }
             #endregion
+            #region Events Foldout
+            ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events", foldoutStyle);
+            if (ShowEvents)
+            {
+                HedgehogEditorGUIUtility.UnityEventField(_instance.OnCrush,
+                    _serializedInstance.FindProperty("OnCrush"));
+            }
+            #endregion
             #region Debug Foldout
             ShowDebugInfo = EditorGUILayout.Foldout(ShowDebugInfo, "Debug", foldoutStyle);
             if (ShowDebugInfo)
@@ -436,6 +450,7 @@ namespace Hedgehog.Editor
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(_instance);
+                _serializedInstance.ApplyModifiedProperties();
                 EditorUtility.SetDirty(this);
             }
         }
