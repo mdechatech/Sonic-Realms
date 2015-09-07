@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Making math-related helper functions as we go!
@@ -14,6 +15,11 @@ public static class DMath
     /// Half of pi.
     /// </summary>
     public const float HalfPi = 1.5707963f;
+
+    /// <summary>
+    /// One and three quarters pi.
+    /// </summary>
+    public const float OneThreeFourthsPi = 5.4977871f;
 
     /// <summary>
     /// Double pi.
@@ -57,7 +63,7 @@ public static class DMath
     /// <param name="b">The point b.</param>
     public static float Highest(Vector2 a, Vector2 b)
     {
-        return Highest(a, b, Mathf.PI / 2);
+        return Highest(a, b, HalfPi);
     }
 
     /// <summary>
@@ -66,12 +72,21 @@ public static class DMath
     /// </summary>
     /// <param name="a">The point a.</param>
     /// <param name="b">The point b.</param>
-    /// <param name="direction">The positive distance between a and b if a is higher than b in the specified
-    /// direction or the negative distance if the opposite is true.</param>
+    /// <param name="direction">The direction, in radians, by which the farthest point in that
+    /// direction is chosen. For example, if zero is specified, and point a is farther right
+    /// than point b, a positive distance will be returned.</param>
+    /// <returns>The positive distance between a and b if a is higher than b in the specified
+    /// direction or the negative distance if the opposite is true.</returns>
     public static float Highest(Vector2 a, Vector2 b, float direction)
     {
+        // Get easy angles out of the way
+        if (Equalsf(direction, 0)) return a.x - b.x;
+        if (Equalsf(direction, HalfPi)) return a.y - b.y;
+        if (Equalsf(direction, Mathf.PI)) return b.x - a.x;
+        if (Equalsf(direction, OneThreeFourthsPi)) return b.y - a.y;
+
         Vector2 diff = Projection(a, direction) - Projection(b, direction);
-        return (Mathf.Abs(Angle(diff) - direction) < 1.57f) ? diff.magnitude : -diff.magnitude;
+        return (Mathf.Abs(Angle(diff) - direction) < HalfPi) ? diff.magnitude : -diff.magnitude;
     }
 
     /// <summary>
@@ -252,7 +267,7 @@ public static class DMath
     /// <param name="epsilon">The epsilon.</param>
     public static bool Equalsf(float a, float b, float epsilon)
     {
-        return (a >= b - Epsilon && a <= b + epsilon);
+        return Math.Abs(a - b) < epsilon;
     }
 
     /// <summary>
