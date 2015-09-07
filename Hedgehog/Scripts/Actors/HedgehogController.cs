@@ -110,7 +110,12 @@ namespace Hedgehog.Actors
         [SerializeField]
         [Range(0.0f, 25.0f)]
         [Tooltip("Jump speed in units per second.")]
-        public float JumpSpeed = 7.5f;
+        public float JumpSpeed = 8.0f;
+
+        [SerializeField]
+        [Range(0.0f, 25.0f)]
+        [Tooltip("The maximum vertical speed the player can have after releasing the jump button.")]
+        public float ReleaseJumpSpeed = 5.0f;
 
         /// <summary>
         /// The acceleration by gravity in units per second per second.
@@ -252,7 +257,19 @@ namespace Hedgehog.Actors
         /// Whether the jump key was pressed since the last update. Key is determined by JumpKey.
         /// </summary>
         [HideInInspector]
+        public bool JumpKeyPressed;
+
+        /// <summary>
+        /// Whether the jump key was held down since the last update. Key is determined by JumpKey.
+        /// </summary>
+        [HideInInspector]
         public bool JumpKeyDown;
+
+        /// <summary>
+        /// Whether the jump key was released since the last update.
+        /// </summary>
+        [HideInInspector]
+        public bool JumpKeyReleased;
 
         /// <summary>
         /// Temporary. Whether the debug spindash key was pressed since the last update. Key is
@@ -274,7 +291,8 @@ namespace Hedgehog.Actors
 
         /// <summary>
         /// The player's velocity on the ground; the faster it's running, the higher in magnitude
-        /// this number is. If it's moving forward, this is positive. If backwards, negative.
+        /// this number is. If it's moving forward (counter-clockwise inside a loop), this is positive.
+        /// If backwards (clockwise inside a loop), negative.
         /// </summary>
         public float GroundVelocity
         {
@@ -365,6 +383,12 @@ namespace Hedgehog.Actors
         public bool JustJumped;
 
         /// <summary>
+        /// Whether the player can release the jump key to reduce vertical speed.
+        /// </summary>
+        [HideInInspector]
+        public bool CanReleaseJump;
+
+        /// <summary>
         /// Whether the player has just detached. Is used to avoid reattachments right after.
         /// </summary>
         [HideInInspector]
@@ -395,7 +419,7 @@ namespace Hedgehog.Actors
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
-            LeftKeyDown = RightKeyDown = JumpKeyDown = DebugSpindashKeyDown = false;
+            LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
             TerrainMask = InitialTerrainMask;
@@ -459,7 +483,14 @@ namespace Hedgehog.Actors
         {
             LeftKeyDown = Input.GetKey(LeftKey);
             RightKeyDown = Input.GetKey(RightKey);
-            if (!JumpKeyDown && Grounded) JumpKeyDown = Input.GetKeyDown(JumpKey);
+            
+            if(!JumpKeyPressed) JumpKeyPressed = Input.GetKeyDown(JumpKey);
+
+            if (!JumpKeyReleased && JumpKeyDown && !Input.GetKey(JumpKey))
+                JumpKeyReleased = true;
+
+            JumpKeyDown = Input.GetKey(JumpKey);
+
             if (Grounded) DebugSpindashKeyDown = Input.GetKey(DebugSpindashKey);
         }
 
@@ -496,10 +527,10 @@ namespace Hedgehog.Actors
                     }
                 }
 
-                if (JumpKeyDown)
+                if (JumpKeyPressed)
                 {
-                    JumpKeyDown = false;
                     Jump();
+                    JumpKeyPressed = false;
                 }
 
                 if (LeftKeyDown && !HorizontalLock)
@@ -533,6 +564,13 @@ namespace Hedgehog.Actors
             {
                 if (LeftKeyDown) Vx -= AirAcceleration * timeScale;
                 else if (RightKeyDown) Vx += AirAcceleration * timeScale;
+
+                if (JumpKeyPressed) JumpKeyPressed = false;
+                if (JumpKeyReleased)
+                {
+                    ReleaseJump();
+                    JumpKeyReleased = false;
+                }
             }
         }
 
@@ -1124,10 +1162,14 @@ namespace Hedgehog.Actors
             }
 
             // Eject self from ground
-            GroundSurfaceCheck();
-
             Detach();
         }
+
+        public void ReleaseJump()
+        {
+            if (Vy > ReleaseJumpSpeed) Vy = ReleaseJumpSpeed;
+        }
+
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
