@@ -374,6 +374,8 @@ namespace Hedgehog.Actors
 
         [HideInInspector]
         public MovingPlatformAnchor MovingPlatformAnchor;
+
+        private Vector3 _movingPlatformDelta;
         #endregion
         public void Awake()
         {
@@ -390,6 +392,8 @@ namespace Hedgehog.Actors
             MovingPlatformAnchor.name = name + "'s Moving Platform Anchor";
             MovingPlatformAnchor.LinkController(this);
             MovingPlatformAnchor.Moved += OnMovingPlatformMove;
+
+            _movingPlatformDelta = new Vector3();
         }
 
         public void Update()
@@ -779,26 +783,40 @@ namespace Hedgehog.Actors
             var checkLeft = Surfacecast(FootSide.Left);
             var checkRight = Surfacecast(FootSide.Right);
 
+            FootSide newFooting = FootSide.None;
+
             if (checkLeft && checkRight)
             {
-                // If both sensors have surfaces, return the one with the highest based on wallmode
-                if (Wallmode == Orientation.Floor && checkLeft.Hit.point.y > checkRight.Hit.point.y ||
-                    Wallmode == Orientation.Ceiling && checkLeft.Hit.point.y < checkRight.Hit.point.y ||
-                    Wallmode == Orientation.Right && checkLeft.Hit.point.x < checkRight.Hit.point.x ||
-                    Wallmode == Orientation.Left && checkLeft.Hit.point.x > checkRight.Hit.point.x)
-                    return new SurfaceInfo(checkLeft, checkRight, FootSide.Left);
-                return new SurfaceInfo(checkLeft, checkRight, FootSide.Right);
-            }
-            if (checkLeft)
+                // Find the highest point using wall mode orientation
+                var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point, Wallmode.Normal());
+                
+                // If they are equally high prioritize the one with no terrain properties, then the one
+                // with no moving platform properties
+                if (DMath.Equalsf(distance, 0.0f))
+                {
+                    if (checkLeft.Properties == null) newFooting = FootSide.Left;
+                    else if(checkRight.Properties == null) newFooting = FootSide.Right;
+                    else if(!checkLeft.Properties.MovingPlatform) newFooting = FootSide.Left;
+                    else if(!checkRight.Properties.MovingPlatform) newFooting = FootSide.Right;
+                    else newFooting = FootSide.Left;
+                } else if (distance > 0)
+                {
+                    newFooting = FootSide.Left;
+                }
+                else
+                {
+                    newFooting = FootSide.Right;
+                }
+            } else if (checkLeft)
             {
-                return new SurfaceInfo(checkLeft, checkRight, FootSide.Left);
-            }
-            if (checkRight)
+                newFooting = FootSide.Left;;
+            } else if (checkRight)
             {
-                return new SurfaceInfo(checkLeft, checkRight, FootSide.Right);
+                newFooting = FootSide.Right;
             }
 
-            return default(SurfaceInfo);
+            if (newFooting == FootSide.None) return default(SurfaceInfo);
+            return new SurfaceInfo(checkLeft, checkRight, newFooting);
         }
 
         /// <summary>
@@ -1137,8 +1155,6 @@ namespace Hedgehog.Actors
         private bool GroundSurfaceCheck()
         {
             var s = GetSurface(TerrainMask);
-            var previousFooting = Footing;
-
             if (s.LeftCast || s.RightCast)
             {
                 // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
@@ -1284,7 +1300,11 @@ namespace Hedgehog.Actors
 
         public void OnMovingPlatformMove(object sender, EventArgs e)
         {
-            transform.position += MovingPlatformAnchor.DeltaPosition;
+            _movingPlatformDelta += MovingPlatformAnchor.DeltaPosition;
+            transform.position += _movingPlatformDelta;
+            _movingPlatformDelta = default(Vector3);
+
+            HandleCollisions();
         }
 
         /// <summary>
