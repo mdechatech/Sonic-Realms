@@ -9,6 +9,53 @@ namespace Hedgehog.Terrain
 {
     public static class TerrainUtility
     {
+        #region Name Utilities
+        /// <summary>
+        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
+        /// the specified name.
+        /// </summary>
+        /// <param name="transform">The specified transform.</param>
+        /// <param name="name">The specified name.</param>
+        /// <returns></returns>
+        public static bool HasNameRecursive(Transform transform, string name)
+        {
+            var check = transform;
+            while (check != null)
+            {
+                if (check.name == name) return true;
+                check = check.parent;
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
+        /// a name contained in the specified name list.
+        /// </summary>
+        /// <param name="transform">The specified transform.</param>
+        /// <param name="names">The specified name list.</param>
+        /// <returns></returns>
+        public static bool HasNameRecursive(Transform transform, ICollection<string> names)
+        {
+            return names.Any(name => HasNameRecursive(transform, name));
+        }
+        #endregion
+        #region Terrain Utilities
+        /// <summary>
+        /// Performs a linecast against the terrain.
+        /// </summary>
+        /// <param name="source">The controller that queried the linecast.</param>
+        /// <param name="start">The beginning of the linecast.</param>
+        /// <param name="end">The end of the linecast.</param>
+        /// <param name="fromSide">The side from which the linecast originated, if any.</param>
+        /// <returns></returns>
+        public static TerrainCastHit TerrainCast(this HedgehogController source, Vector2 start,
+            Vector2 end, TerrainSide fromSide = TerrainSide.All)
+        {
+            var hit = BestRaycast(source, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
+            return new TerrainCastHit(hit, hit ? SearchProperties(hit.transform) : null, fromSide);
+        }
+
         /// <summary>
         /// Searches for terrain properties on the transform and all its parents, taking into
         /// account any terrain properties' maximum level.
@@ -33,21 +80,6 @@ namespace Hedgehog.Terrain
 
             return null;
         }
-        
-        /// <summary>
-        /// Performs a linecast against the terrain.
-        /// </summary>
-        /// <param name="source">The controller that queried the linecast.</param>
-        /// <param name="start">The beginning of the linecast.</param>
-        /// <param name="end">The end of the linecast.</param>
-        /// <param name="fromSide">The side from which the linecast originated, if any.</param>
-        /// <returns></returns>
-        public static TerrainCastHit TerrainCast(this HedgehogController source, Vector2 start,
-            Vector2 end, TerrainSide fromSide = TerrainSide.All)
-        {
-            var hit = BestRaycast(source, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
-            return new TerrainCastHit(hit, hit ? SearchProperties(hit.transform) : null, fromSide);
-        }
 
         /// <summary>
         /// Returns the closest from a list of raycasts filtered based on the controller's collision mode
@@ -60,10 +92,11 @@ namespace Hedgehog.Terrain
         public static RaycastHit2D BestRaycast(HedgehogController source, RaycastHit2D[] raycasts,
             TerrainSide raycastSide = TerrainSide.All)
         {
-            return raycasts.Where(raycastHit2D => raycastHit2D && 
+            return raycasts.Where(raycastHit2D => raycastHit2D &&
                 TransformSelector(raycastHit2D.transform, source, raycastSide)).FirstOrDefault();
         }
-        #region Platform Cast Selectors
+        #endregion
+        #region Terrain Cast Selectors
         /// <summary>
         /// Returns whether the specified transform can be collided with based on the source's collision info and
         /// the transform's terrain properties.
@@ -115,37 +148,6 @@ namespace Hedgehog.Terrain
             if (properties == null) return true;
 
             return properties.CollidesWithSide(raycastSide);
-        }
-        #endregion
-        #region Name Utilities
-        /// <summary>
-        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
-        /// the specified name.
-        /// </summary>
-        /// <param name="transform">The specified transform.</param>
-        /// <param name="name">The specified name.</param>
-        /// <returns></returns>
-        public static bool HasNameRecursive(Transform transform, string name)
-        {
-            var check = transform;
-            while (check != null)
-            {
-                if (check.name == name) return true;
-                check = check.parent;
-            }
-
-            return false;
-        }
-        /// <summary>
-        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
-        /// a name contained in the specified name list.
-        /// </summary>
-        /// <param name="transform">The specified transform.</param>
-        /// <param name="names">The specified name list.</param>
-        /// <returns></returns>
-        public static bool HasNameRecursive(Transform transform, ICollection<string> names)
-        {
-            return names.Any(name => HasNameRecursive(transform, name));
         }
         #endregion
     }

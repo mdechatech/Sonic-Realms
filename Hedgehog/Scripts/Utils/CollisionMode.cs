@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Hedgehog.Actors;
-using UnityEngine;
-
-namespace Hedgehog.Utils
+﻿namespace Hedgehog.Utils
 {
     public enum CollisionMode
     {

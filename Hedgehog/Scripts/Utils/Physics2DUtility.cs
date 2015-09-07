@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Hedgehog.Utils
 {
@@ -15,7 +11,7 @@ namespace Hedgehog.Utils
         private static int _previousRaycastResultAmount;
         private static int _raycastResultAmount = 0;
         #endregion
-
+        
         public static RaycastHit2D[] LinecastNonAlloc(Vector2 start, Vector2 end,
             int layerMask = Physics2D.DefaultRaycastLayers)
         {
