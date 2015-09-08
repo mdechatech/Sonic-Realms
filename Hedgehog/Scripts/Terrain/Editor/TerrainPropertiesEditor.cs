@@ -15,7 +15,6 @@ namespace Hedgehog.Terrain.Editor
             set { EditorPrefs.SetBool("TerrainPropertiesEditor.ShowAdvanced", value);}
         }
 
-        private const TerrainSide LedgeSolidMask = TerrainSide.Bottom;
         private const int AppliesToChildrenLevel = int.MaxValue;
 
         public void OnEnable()
@@ -45,12 +44,7 @@ namespace Hedgehog.Terrain.Editor
             EditorGUILayout.Space();
 
             _instance.MovingPlatform = EditorGUILayout.Toggle("Moving Platform", _instance.MovingPlatform);
-
-            var ledgeSolid = _instance.SolidSides == LedgeSolidMask;
-            ledgeSolid = EditorGUILayout.Toggle("Ledge", ledgeSolid);
-            if (ledgeSolid) _instance.SolidSides = LedgeSolidMask;
-            else _instance.SolidSides = TerrainSide.All;
-
+            _instance.Ledge = EditorGUILayout.Toggle("Ledge", _instance.Ledge);
             _instance.Friction = EditorGUILayout.FloatField("Friction", _instance.Friction);
 
             EditorGUILayout.Space();

@@ -8,6 +8,7 @@ namespace Hedgehog.Terrain
     /// </summary>
     public class TerrainProperties : MonoBehaviour
     {
+        public const TerrainSide LedgeSolidMask = TerrainSide.Bottom;
         #region Inspector Fields
         /// <summary>
         /// How far down these properties apply to the object's children. For example
@@ -105,6 +106,16 @@ namespace Hedgehog.Terrain
         }
         #endregion
         #region Side Mask Utilities
+        /// <summary>
+        /// Whether the terrain is a ledge. A ledge only checks for collision with
+        /// the player's bottom side and therefore has only a floor.
+        /// </summary>
+        public bool Ledge
+        {
+            get { return SolidSides == LedgeSolidMask; }
+            set { SolidSides = value ? LedgeSolidMask : TerrainSide.All; }
+        }
+
         /// <summary>
         /// Returns whether the terrain collides with the specified side.
         /// </summary>
