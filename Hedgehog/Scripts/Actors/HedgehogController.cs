@@ -1274,9 +1274,6 @@ namespace Hedgehog.Actors
         /// <param name="impact">The impact data as th result of a terrain cast.</param>
         private bool HandleImpact(TerrainCastHit impact)
         {
-            if (impact.Properties != null && impact.Properties.Ledge && DMath.Equalsf(impact.Hit.fraction, 0.0f))
-                return false;
-
             var sAngled = DMath.Modp(impact.SurfaceAngle * Mathf.Rad2Deg, 360.0f);
             var sAngler = sAngled * Mathf.Deg2Rad;
 
