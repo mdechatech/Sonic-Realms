@@ -966,15 +966,14 @@ namespace Hedgehog.Actors
                             if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
                             {
                                 // If tolerable, rotate between the surfaces beneath the two feet
-                                DMath.RotateTo(transform, DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point),
-                                    SensorBottomMiddle.position);
+                                DMath.RotateTo(transform, DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point));
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = FootSide.Left;
                             }
                             else
                             {
                                 // Else just rotate for the left foot
-                                DMath.RotateTo(transform, s.LeftCast.SurfaceAngle, s.LeftCast.Hit.point);
+                                DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = FootSide.Left;
                             }
@@ -983,7 +982,7 @@ namespace Hedgehog.Actors
                         }
                         else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                         {
-                            DMath.RotateTo(transform, s.RightCast.SurfaceAngle, SensorBottomMiddle.position);
+                            DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                             transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                             Footing = FootSide.Right;
                             // Else the surfaces are untolerable. detach from the surface
@@ -1001,14 +1000,13 @@ namespace Hedgehog.Actors
                         {
                             if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
                             {
-                                DMath.RotateTo(transform, DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point),
-                                    SensorBottomMiddle.position);
+                                DMath.RotateTo(transform, DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point));
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = FootSide.Right;
                             }
                             else
                             {
-                                DMath.RotateTo(transform, s.RightCast.SurfaceAngle, s.RightCast.Hit.point);
+                                DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = FootSide.Right;
                             }
@@ -1016,7 +1014,7 @@ namespace Hedgehog.Actors
                         }
                         else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                         {
-                            DMath.RotateTo(transform, s.LeftCast.SurfaceAngle, SensorBottomMiddle.position);
+                            DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                             transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                             Footing = FootSide.Left;
                         }
@@ -1031,7 +1029,7 @@ namespace Hedgehog.Actors
                     var leftDiff = DMath.AngleDiffd(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                     if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                     {
-                        DMath.RotateTo(transform, s.LeftCast.SurfaceAngle, s.LeftCast.Hit.point);
+                        DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                         transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                         Footing = FootSide.Left;
                     }
@@ -1045,7 +1043,7 @@ namespace Hedgehog.Actors
                     var rightDiff = DMath.AngleDiffd(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                     if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                     {
-                        DMath.RotateTo(transform, s.RightCast.SurfaceAngle, s.RightCast.Hit.point);
+                        DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                         transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                         Footing = FootSide.Right;
                     }
