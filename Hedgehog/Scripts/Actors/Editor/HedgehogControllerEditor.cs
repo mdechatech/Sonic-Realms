@@ -133,7 +133,7 @@ namespace Hedgehog.Editor
                 _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
                 if (_instance.CollisionMode == CollisionMode.Layers)
                 {
-                    _instance.InitialTerrainMask = 
+                    _instance.TerrainMask = 
                         HedgehogEditorGUIUtility.LayerMaskField("Terrain Layer Mask", _instance.InitialTerrainMask);
                 } else if (_instance.CollisionMode == CollisionMode.Tags)
                 {
