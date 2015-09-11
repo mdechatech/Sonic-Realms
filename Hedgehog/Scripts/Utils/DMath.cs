@@ -306,7 +306,7 @@ public static class DMath
     /// <param name="b">The angle of the second ray, in radians.</param>
     public static float AngleDiffr(float a, float b)
     {
-        return Modp(b - a + Mathf.PI, Mathf.PI * 2.0f) - Mathf.PI;
+        return Modp(b - a + Mathf.PI, DoublePi) - Mathf.PI;
     }
 
     /// <summary>
