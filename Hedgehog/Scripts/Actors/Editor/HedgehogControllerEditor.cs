@@ -430,6 +430,7 @@ namespace Hedgehog.Editor
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
                 EditorGUILayout.EnumPopup("Wallmode", _instance.Wallmode);
+                EditorGUILayout.EnumPopup("Footing", _instance.Footing);
                 GUI.enabled = Application.isPlaying;
                 _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
 
