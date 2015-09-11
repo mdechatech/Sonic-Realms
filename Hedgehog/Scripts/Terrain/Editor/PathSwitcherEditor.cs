@@ -21,6 +21,10 @@ namespace Hedgehog.Props.Editor
         {
             if (_instance == null) return;
 
+            _instance.MustBeGrounded = EditorGUILayout.Toggle("Must Be Grounded", _instance.MustBeGrounded);
+
+            EditorGUILayout.Space();
+
             _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
             if (_instance.CollisionMode == CollisionMode.Layers)
             {
