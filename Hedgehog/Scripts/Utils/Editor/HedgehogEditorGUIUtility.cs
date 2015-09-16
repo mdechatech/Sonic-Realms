@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Hedgehog.Utils
+namespace Hedgehog.Utils.Editor
 {
     public class HedgehogEditorGUIUtility
     {

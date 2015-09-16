@@ -102,6 +102,14 @@ namespace Hedgehog.Actors
         public float GroundDeceleration = 0.12f;
 
         /// <summary>
+        /// The player's braking speed in units per second per second.
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1.00f)]
+        [Tooltip("Ground braking speed in units per second squared.")]
+        public float GroundBrake = 0.5f;
+
+        /// <summary>
         /// The player's horizontal acceleration in the air in units per second per second.
         /// </summary>
         [SerializeField]
@@ -428,7 +436,7 @@ namespace Hedgehog.Actors
         private Vector3 _movingPlatformDelta;
         #endregion
 
-        #region Main Event Functions
+        #region Lifecycle Functions
         public void Awake()
         {
             Footing = FootSide.None;
@@ -438,7 +446,8 @@ namespace Hedgehog.Actors
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
-            TerrainMask = InitialTerrainMask;
+            if(InitialTerrainMask != LayerMask.NameToLayer("Nothing"))
+                TerrainMask = InitialTerrainMask;
 
             CreateMovingPlatformAnchor();
         }
@@ -491,7 +500,7 @@ namespace Hedgehog.Actors
         }
         #endregion
 
-        #region Main Loop Subroutines
+        #region Lifecycle Subroutines
         /// <summary>
         /// Stores keyboard input for the next fixed update (and HandleInput).
         /// </summary>
@@ -957,16 +966,22 @@ namespace Hedgehog.Actors
                     var leftDiff = DMath.AngleDiffd(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                     var overlapDiff = DMath.AngleDiffr(s.LeftCast.SurfaceAngle, s.RightCast.SurfaceAngle) * Mathf.Rad2Deg;
 
+                    var overlapSurfaceAngle = DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point);
+                    // = difference between the angle of a line drawn between the surfaces minus the average of 
+                    //   their surface angles
+                    var overlapSurfaceDiff = DMath.AngleDiffr(overlapSurfaceAngle,
+                        (s.LeftCast.SurfaceAngle + s.RightCast.SurfaceAngle)/2.0f)*Mathf.Rad2Deg;
                     if (s.Side == FootSide.Left)
                     {
                         // If the surface's angle is a small enough difference from that of the previous begin surface checks
                         if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                         {
                             // Check angle differences between feet for player rotation
-                            if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
+                            if (overlapDiff > MinOverlapAngle && Mathf.Abs(overlapSurfaceDiff) < MinFlatOverlapRange || 
+                                Mathf.Abs(overlapSurfaceDiff) > 135.0f)
                             {
                                 // If tolerable, rotate between the surfaces beneath the two feet
-                                DMath.RotateTo(transform, DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point));
+                                DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = FootSide.Left;
                             }
@@ -998,9 +1013,10 @@ namespace Hedgehog.Actors
                     {
                         if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                         {
-                            if (Mathf.Abs(overlapDiff) > MinFlatOverlapRange && overlapDiff > MinOverlapAngle)
+                            if (overlapDiff > MinOverlapAngle && Mathf.Abs(overlapSurfaceDiff) < MinFlatOverlapRange || 
+                                Mathf.Abs(overlapSurfaceDiff) > 135.0f)
                             {
-                                DMath.RotateTo(transform, DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point));
+                                DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = FootSide.Right;
                             }
@@ -1079,10 +1095,7 @@ namespace Hedgehog.Actors
                             MovingPlatformAnchor.UnlinkPlatform();
                         }
                     }
-                }
 
-                if (Grounded)
-                {
                     TerrainProperties = Footing == FootSide.Left
                         ? s.LeftCast.Properties
                         : s.RightCast.Properties;
@@ -1090,8 +1103,8 @@ namespace Hedgehog.Actors
 
                 return true;
             }
-            Detach();
 
+            Detach();
             return false;
         }
 
