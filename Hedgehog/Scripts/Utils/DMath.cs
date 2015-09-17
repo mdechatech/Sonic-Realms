@@ -250,6 +250,15 @@ public static class DMath
     }
 
     /// <summary>
+    /// Checks for approximate equality to zero.
+    /// </summary>
+    /// <param name="a">The float a.</param>
+    public static bool Equalsf(float a)
+    {
+        return Equalsf(a, 0.0f);
+    }
+
+    /// <summary>
     /// Checks for approximate equality between two floats with AMath.Epsilon.
     /// </summary>
     /// <param name="a">The float a.</param>
