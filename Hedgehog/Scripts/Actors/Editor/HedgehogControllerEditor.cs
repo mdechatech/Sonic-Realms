@@ -93,9 +93,8 @@ namespace Hedgehog.Editor
         private static readonly IDictionary<string, HedgehogPhysicsValues> PhysicsPresets =
             new Dictionary<string, HedgehogPhysicsValues>
             {
-                {"Genesis Era Sonic", HedgehogUtility.SonicPhysicsValues},
-                {"Genesis Era Tails", HedgehogUtility.TailsPhysicsValues},
-                {"Genesis Era Knuckles", HedgehogUtility.KnucklesPhysicsValues}
+                {"Genesis Era/Sonic and Tails", HedgehogUtility.SonicPhysicsValues},
+                {"Genesis Era/Knuckles", HedgehogUtility.KnucklesPhysicsValues}
             };
 
         private static readonly string[] PhysicsPresetResolutionSources = new string[]
