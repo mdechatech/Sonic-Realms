@@ -58,6 +58,18 @@ namespace Hedgehog.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysics", value); }
         }
 
+        private static bool ShowAdvancedPhysicsSpeeds
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSpeeds", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSpeeds", value); }
+        }
+
+        private static bool ShowAdvancedPhysicsSurfaces
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSurfaces", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSurfaces", value); }
+        }
+
         private static bool ShowEvents
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowEvents", false); }
@@ -151,8 +163,6 @@ namespace Hedgehog.Editor
             ShowSensors = EditorGUILayout.Foldout(ShowSensors, "Sensors", foldoutStyle);
             if (ShowSensors)
             {
-                EditorGUILayout.LabelField("Create", headerStyle);
-
                 EditorGUILayout.BeginHorizontal();
                 _fromRenderer =
                     EditorGUILayout.ObjectField("From Renderer", _fromRenderer, typeof(Renderer), true) as Renderer;
@@ -210,6 +220,12 @@ namespace Hedgehog.Editor
             if (ShowPhysics)
             {
                 EditorGUILayout.BeginHorizontal();
+                _instance.TopSpeed = EditorGUILayout.FloatField("Top Speed",
+                    _instance.TopSpeed);
+                EditorGUILayout.PrefixLabel("units/s");
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
                 _instance.MaxSpeed = EditorGUILayout.FloatField("Max Speed",
                     _instance.MaxSpeed);
                 EditorGUILayout.PrefixLabel("units/s");
@@ -242,9 +258,22 @@ namespace Hedgehog.Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
+                _instance.GroundBrake = EditorGUILayout.FloatField("Ground Brake",
+                    _instance.GroundBrake);
+                EditorGUILayout.PrefixLabel("units/s²");
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.Space();
+
+                EditorGUILayout.BeginHorizontal();
                 _instance.AirAcceleration = EditorGUILayout.FloatField("Air Acceleration",
                     _instance.AirAcceleration);
                 EditorGUILayout.PrefixLabel("units/s²");
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                _instance.AirDragCoefficient = EditorGUILayout.FloatField("Air Drag",
+                    _instance.AirDragCoefficient);
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.Space();
@@ -263,111 +292,127 @@ namespace Hedgehog.Editor
 
                 EditorGUILayout.Space();
                 #region Advanced Physics
-                ShowAdvancedPhysics = EditorGUILayout.Toggle("Show Advanced", ShowAdvancedPhysics);
+                ++EditorGUI.indentLevel;
+
+                ShowAdvancedPhysics = EditorGUILayout.Foldout(ShowAdvancedPhysics, "Advanced");
                 if (ShowAdvancedPhysics)
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.HorizontalLockTime = EditorGUILayout.FloatField("Horizontal Lock",
-                        _instance.HorizontalLockTime);
-                    EditorGUILayout.PrefixLabel("seconds");
-                    EditorGUILayout.EndHorizontal();
+                    ++EditorGUI.indentLevel;
+                    #region Speed & Control
+                    ShowAdvancedPhysicsSpeeds = EditorGUILayout.Foldout(ShowAdvancedPhysicsSpeeds, "Speed & Control");
+                    if (ShowAdvancedPhysicsSpeeds)
+                    {
+                        Vector2 airDragVelocity =
+                        EditorGUILayout.Vector2Field("Min Air Drag Velocity",
+                            new Vector2(_instance.AirDragHorizontalSpeed, _instance.AirDragVerticalSpeed));
+                        _instance.AirDragHorizontalSpeed = airDragVelocity.x;
+                        _instance.AirDragVerticalSpeed = airDragVelocity.y;
 
-                    EditorGUILayout.Space();
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.AntiTunnelingSpeed = EditorGUILayout.FloatField("Anti-Tunneling Speed",
+                            _instance.AntiTunnelingSpeed);
+                        EditorGUILayout.PrefixLabel("units/s");
+                        EditorGUILayout.EndHorizontal();
 
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.LedgeClimbHeight = EditorGUILayout.FloatField("Ledge Climb Height",
-                        _instance.LedgeClimbHeight);
-                    EditorGUILayout.PrefixLabel("units");
-                    EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.DetachSpeed = EditorGUILayout.FloatField("Detach Speed",
+                            _instance.DetachSpeed);
+                        EditorGUILayout.PrefixLabel("units/s");
+                        EditorGUILayout.EndHorizontal();
 
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.LedgeDropHeight = EditorGUILayout.FloatField("Ledge Drop Height",
-                        _instance.LedgeDropHeight);
-                    EditorGUILayout.PrefixLabel("units");
-                    EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.HorizontalLockTime = EditorGUILayout.FloatField("Horizontal Lock",
+                            _instance.HorizontalLockTime);
+                        EditorGUILayout.PrefixLabel("seconds");
+                        EditorGUILayout.EndHorizontal();
 
-                    EditorGUILayout.Space();
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.SlopeGravityBeginAngle = EditorGUILayout.FloatField("Slope Gravity Begin Angle",
+                            _instance.SlopeGravityBeginAngle);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
 
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.SlopeGravityBeginAngle = EditorGUILayout.FloatField("Slope Gravity Begin Angle",
-                        _instance.SlopeGravityBeginAngle);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.ForceJumpAngleDifference = EditorGUILayout.FloatField("Force Jump Angle",
-                        _instance.ForceJumpAngleDifference);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Space();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.AntiTunnelingSpeed = EditorGUILayout.FloatField("Anti-Tunneling Speed",
-                        _instance.AntiTunnelingSpeed);
-                    EditorGUILayout.PrefixLabel("units/s");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.DetachSpeed = EditorGUILayout.FloatField("Detach Speed",
-                        _instance.DetachSpeed);
-                    EditorGUILayout.PrefixLabel("units/s");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Space();
-                    #region Forbidden Constants
-                    EditorGUILayout.LabelField("Surface Values", headerStyle);
-                    EditorGUILayout.HelpBox("The following values are best left untouched!", MessageType.Warning);
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.MinWallmodeSwitchSpeed = EditorGUILayout.FloatField("Min Wallmode Switch Speed",
-                        _instance.MinWallmodeSwitchSpeed);
-                    EditorGUILayout.PrefixLabel("units/s");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.HorizontalWallmodeAngleWeight = EditorGUILayout.FloatField("Horizontal Wallmode Angle Weight",
-                        _instance.HorizontalWallmodeAngleWeight);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Space();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.MaxSurfaceAngleDifference = EditorGUILayout.FloatField("Max Surface Angle Difference",
-                        _instance.MaxSurfaceAngleDifference);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Space();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.MinOverlapAngle = EditorGUILayout.FloatField("Min Overlap Angle",
-                        _instance.MinOverlapAngle);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.MinFlatOverlapRange = EditorGUILayout.FloatField("Min Flat Overlap Range",
-                        _instance.MinFlatOverlapRange);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Space();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.MinFlatAttachAngle = EditorGUILayout.FloatField("Min Flat Attach Angle",
-                        _instance.MinFlatAttachAngle);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.BeginHorizontal();
-                    _instance.MaxVerticalDetachAngle = EditorGUILayout.FloatField("Max Vertical Detach Angle",
-                        _instance.MaxVerticalDetachAngle);
-                    EditorGUILayout.PrefixLabel("degrees");
-                    EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.ForceJumpAngleDifference = EditorGUILayout.FloatField("Force Jump Angle",
+                            _instance.ForceJumpAngleDifference);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+                    }
                     #endregion
+                    #region Surfaces
+                    ShowAdvancedPhysicsSurfaces = EditorGUILayout.Foldout(ShowAdvancedPhysicsSurfaces, "Surfaces");
+                    if (ShowAdvancedPhysicsSurfaces)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.LedgeClimbHeight = EditorGUILayout.FloatField("Ledge Climb Height",
+                            _instance.LedgeClimbHeight);
+                        EditorGUILayout.PrefixLabel("units");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.LedgeDropHeight = EditorGUILayout.FloatField("Ledge Drop Height",
+                            _instance.LedgeDropHeight);
+                        EditorGUILayout.PrefixLabel("units");
+                        EditorGUILayout.EndHorizontal();
+
+                        #region Forbidden Constants
+                        EditorGUILayout.LabelField("Surface Values", headerStyle);
+                        EditorGUILayout.HelpBox("The following values are best left untouched!", MessageType.Warning);
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.MinWallmodeSwitchSpeed = EditorGUILayout.FloatField("Min Wallmode Switch Speed",
+                            _instance.MinWallmodeSwitchSpeed);
+                        EditorGUILayout.PrefixLabel("units/s");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.HorizontalWallmodeAngleWeight = EditorGUILayout.FloatField("Horizontal Wallmode Angle Weight",
+                            _instance.HorizontalWallmodeAngleWeight);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.Space();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.MaxSurfaceAngleDifference = EditorGUILayout.FloatField("Max Surface Angle Difference",
+                            _instance.MaxSurfaceAngleDifference);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.Space();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.MinOverlapAngle = EditorGUILayout.FloatField("Min Overlap Angle",
+                            _instance.MinOverlapAngle);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.MinFlatOverlapRange = EditorGUILayout.FloatField("Min Flat Overlap Range",
+                            _instance.MinFlatOverlapRange);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.Space();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.MinFlatAttachAngle = EditorGUILayout.FloatField("Min Flat Attach Angle",
+                            _instance.MinFlatAttachAngle);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+
+                        EditorGUILayout.BeginHorizontal();
+                        _instance.MaxVerticalDetachAngle = EditorGUILayout.FloatField("Max Vertical Detach Angle",
+                            _instance.MaxVerticalDetachAngle);
+                        EditorGUILayout.PrefixLabel("degrees");
+                        EditorGUILayout.EndHorizontal();
+                        #endregion
+                    }
+                    #endregion
+                    --EditorGUI.indentLevel;
                 }
+
+                --EditorGUI.indentLevel;
                 #endregion
             }
             #endregion

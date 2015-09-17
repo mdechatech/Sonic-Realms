@@ -118,6 +118,31 @@ namespace Hedgehog.Actors
         public float AirAcceleration = 0.16f;
 
         /// <summary>
+        /// Minimum horizontal speed requirement for air drag.
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 20.0f)]
+        [Tooltip("Horizontal speed requirement for air drag.")]
+        public float AirDragHorizontalSpeed = 0.25f;
+
+        /// <summary>
+        /// Minimum vertical speed requirement for air drag.
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 20.0f)]
+        [Tooltip("Vertical speed requirement for air drag.")]
+        public float AirDragVerticalSpeed = 4.8f;
+
+        /// <summary>
+        /// This coefficient is applied to horizontal speed when horizontal and vertical speed
+        /// requirements are met.
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 1.0f)]
+        [Tooltip("Air drag coefficient applied if horizontal speed is greater than air drag speed.")]
+        public float AirDragCoefficient = 0.9738896f;
+
+        /// <summary>
         /// The speed of the player's jump in units per second.
         /// </summary>
         [SerializeField]
@@ -145,6 +170,14 @@ namespace Hedgehog.Actors
         [Range(0.0f, 1.0f)]
         [Tooltip("Acceleration on downward slopes, the maximum being this value, in units per second squared")]
         public float SlopeGravity = 0.3f;
+
+        /// <summary>
+        /// The player's top speed, the maximum it can attain by running, it units per second.
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 100.0f)]
+        [Tooltip("Maximum speed achieved through running in units per second.")]
+        public float TopSpeed = 20.0f;
 
         /// <summary>
         /// The player's maximum speed in units per second.
@@ -530,9 +563,12 @@ namespace Hedgehog.Actors
         /// <summary>
         /// Handles the input from the previous update.
         /// </summary>
-        private void HandleInput(float timeStep)
+        private void HandleInput(float timestep)
         {
-            var timeScale = timeStep / Constants.DefaultFixedDeltaTime;
+            Debug.Log(timestep);
+            var friction = TerrainProperties == null
+                    ? 1.0f
+                    : TerrainProperties.Friction;
 
             if (Grounded)
             {
@@ -544,7 +580,7 @@ namespace Hedgehog.Actors
 
                 if (HorizontalLock)
                 {
-                    HorizontalLockTimer -= timeStep;
+                    HorizontalLockTimer -= timestep;
                     if (HorizontalLockTimer < 0.0f)
                     {
                         HorizontalLock = false;
@@ -567,8 +603,15 @@ namespace Hedgehog.Actors
                     }
                     else
                     {
-                        Vg -= GroundAcceleration * timeScale;
-                        if (Vg > 0) Vg -= GroundDeceleration * timeScale;
+                        if (Vg > 0.0f)
+                        {
+                            Vg -= GroundBrake*friction*timestep;
+                            if (Vg < 0.0f) Vg -= GroundAcceleration * friction * timestep;
+                        }
+                        else if (Vg > -TopSpeed)
+                        {
+                            Vg -= GroundAcceleration*friction*timestep;
+                        }
                     }
                 }
                 else if (RightKeyDown && !HorizontalLock)
@@ -580,15 +623,22 @@ namespace Hedgehog.Actors
                     }
                     else
                     {
-                        Vg += GroundAcceleration * timeScale;
-                        if (Vg < 0) Vg += GroundDeceleration * timeScale;
+                        if (Vg < 0.0f)
+                        {
+                            Vg += GroundBrake*friction*timestep;
+                            if (Vg > 0.0f) Vg += GroundAcceleration * friction * timestep;
+                        }
+                        else if (Vg < TopSpeed)
+                        {
+                            Vg += GroundAcceleration*friction*timestep;
+                        }
                     }
                 }
             }
             else
             {
-                if (LeftKeyDown) Vx -= AirAcceleration * timeScale;
-                else if (RightKeyDown) Vx += AirAcceleration * timeScale;
+                if (LeftKeyDown) Vx -= AirAcceleration*timestep;
+                else if (RightKeyDown) Vx += AirAcceleration*timestep;
 
                 if (JumpKeyPressed) JumpKeyPressed = false;
                 if (JumpKeyReleased)
@@ -612,10 +662,8 @@ namespace Hedgehog.Actors
         /// Applies forces on the player and also handles speed-based conditions, such as detaching the player if it is too slow on
         /// an incline.
         /// </summary>
-        private void HandleForces(float timeStep)
+        private void HandleForces(float timestep)
         {
-            var timeScale = timeStep /Constants.DefaultFixedDeltaTime;
-
             if (Grounded)
             {
                 var prevVg = Vg;
@@ -624,52 +672,58 @@ namespace Hedgehog.Actors
                     : TerrainProperties.Friction;
 
                 // Friction from deceleration
-                if (!LeftKeyDown && !RightKeyDown)
+                if (HorizontalLock || (!LeftKeyDown && !RightKeyDown))
                 {
-                    if (Vg != 0.0f && Mathf.Abs(Vg) < GroundDeceleration)
+                    if (DMath.Equalsf(Vg) && Mathf.Abs(Vg) < GroundDeceleration)
                     {
                         Vg = 0.0f;
                     }
                     else if (Vg > 0.0f)
                     {
-                        Vg -= GroundDeceleration*timeScale*friction;
+                        Vg -= GroundDeceleration*timestep*friction;
+                        if (Vg < 0.0f) Vg = 0.0f;
                     }
                     else if (Vg < 0.0f)
                     {
-                        Vg += GroundDeceleration*timeScale*friction;
+                        Vg += GroundDeceleration*timestep*friction;
+                        if (Vg > 0.0f) Vg = 0.0f;
                     }
                 }
 
                 // Slope gravity
-                var slopeForce = 0.0f;
-
                 if (Mathf.Abs(DMath.AngleDiffd(SurfaceAngle, 0.0f)) > SlopeGravityBeginAngle)
                 {
-                    slopeForce = SlopeGravity * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
-                    Vg -= slopeForce * timeScale;
+                    Vg -= SlopeGravity*Mathf.Sin(SurfaceAngle*Mathf.Deg2Rad)*timestep;
                 }
 
                 // Speed limit
                 if (Vg > MaxSpeed) Vg = MaxSpeed;
                 else if (Vg < -MaxSpeed) Vg = -MaxSpeed;
 
-                if (Mathf.Abs(slopeForce) > GroundAcceleration)
+                // Detachment from walls if speed is too low
+                if (Wallmode != Orientation.Floor && Mathf.Abs(Vg) < DetachSpeed)
                 {
-                    if (RightKeyDown && prevVg > 0.0f && Vg < 0.0f) LockHorizontal();
-                    else if (LeftKeyDown && prevVg < 0.0f && Vg > 0.0f) LockHorizontal();
+                    if (SurfaceAngle > 90.0f - MaxVerticalDetachAngle &&
+                        SurfaceAngle < 270.0f + MaxVerticalDetachAngle)
+                    {
+                        Detach(true);
+                    }
+                    else
+                    {
+                        LockHorizontal();
+                    }
                 }
 
-                // Detachment from walls if speed is too low
-                if (SurfaceAngle > 90.0f - MaxVerticalDetachAngle &&
-                    SurfaceAngle < 270.0f + MaxVerticalDetachAngle &&
-                    Mathf.Abs(Vg) < DetachSpeed)
-                {
-                    Detach(true);
-                }
+               
             }
             else
             {
-                Vy -= AirGravity * timeScale;
+                Vy -= AirGravity * timestep;
+                if (Vy > AirDragVerticalSpeed && Mathf.Abs(Vx) > AirDragHorizontalSpeed)
+                {
+                    Vx *= Mathf.Pow(AirDragCoefficient, timestep);
+                }
+
                 //transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.LerpAngle(transform.eulerAngles.z, 0.0f, Time.deltaTime * 5.0f));
                 transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
             }
