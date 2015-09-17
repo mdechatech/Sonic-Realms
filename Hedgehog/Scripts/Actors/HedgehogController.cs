@@ -544,7 +544,9 @@ namespace Hedgehog.Actors
             
             if(!JumpKeyPressed) JumpKeyPressed = Input.GetKeyDown(JumpKey);
 
-            if (!JumpKeyReleased && JumpKeyDown && !Input.GetKey(JumpKey))
+            if (Grounded)
+                JumpKeyReleased = false;
+            else if (!JumpKeyReleased && JumpKeyDown && !Input.GetKey(JumpKey))
                 JumpKeyReleased = true;
 
             JumpKeyDown = Input.GetKey(JumpKey);
