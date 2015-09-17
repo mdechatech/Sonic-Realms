@@ -565,7 +565,6 @@ namespace Hedgehog.Actors
         /// </summary>
         private void HandleInput(float timestep)
         {
-            Debug.Log(timestep);
             var friction = TerrainProperties == null
                     ? 1.0f
                     : TerrainProperties.Friction;

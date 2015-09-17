@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedgehog.Actors;
 using Hedgehog.Utils;
 using Hedgehog.Utils.Editor;
@@ -52,6 +53,12 @@ namespace Hedgehog.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysics", value); }
         }
 
+        private static bool ShowPhysicsPresets
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPhysicsPresets", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysicsPresets", value); }
+        }
+
         private static bool ShowAdvancedPhysics
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysics", false); }
@@ -81,6 +88,28 @@ namespace Hedgehog.Editor
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowDebugInfo", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowDebugInfo", value); }
         }
+        #endregion
+        #region Physics Preset Variables
+        private static readonly IDictionary<string, HedgehogPhysicsValues> PhysicsPresets =
+            new Dictionary<string, HedgehogPhysicsValues>
+            {
+                {"Genesis Era Sonic", HedgehogUtility.SonicPhysicsValues},
+                {"Genesis Era Tails", HedgehogUtility.TailsPhysicsValues},
+                {"Genesis Era Knuckles", HedgehogUtility.KnucklesPhysicsValues}
+            };
+
+        private static readonly string[] PhysicsPresetResolutionSources = new string[]
+        {
+            "Camera",
+            "Screen Size",
+            "Orthographic Size",
+        };
+
+        private int _physicsPresetIndex = 0;
+        private float _physicsPresetOrthographicSize = 5.0f;
+        private Vector2 _physicsPresetScreenSize;
+        private int _physicsPresetResolutionSourceIndex = 0;
+        private Camera _physicsPresetCamera;
         #endregion
         #region Sensor Creator Variables
         [SerializeField]
@@ -219,6 +248,77 @@ namespace Hedgehog.Editor
             ShowPhysics = EditorGUILayout.Foldout(ShowPhysics, "Physics", foldoutStyle);
             if (ShowPhysics)
             {
+                #region Generator
+                ++EditorGUI.indentLevel;
+                ShowPhysicsPresets = EditorGUILayout.Foldout(ShowPhysicsPresets, "Presets", foldoutStyle);
+                if (ShowPhysicsPresets)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PrefixLabel("Preset");
+                    --EditorGUI.indentLevel;
+                    _physicsPresetIndex = EditorGUILayout.Popup(_physicsPresetIndex, PhysicsPresets.Keys.ToArray());
+                    ++EditorGUI.indentLevel;
+                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.PrefixLabel("Use Resolution From");
+                    --EditorGUI.indentLevel;
+                    _physicsPresetResolutionSourceIndex =
+                        EditorGUILayout.Popup(_physicsPresetResolutionSourceIndex, PhysicsPresetResolutionSources);
+                    ++EditorGUI.indentLevel;
+                    EditorGUILayout.EndHorizontal();
+
+                    switch (PhysicsPresetResolutionSources[_physicsPresetResolutionSourceIndex])
+                    {
+                        case "Camera":
+                            if (_physicsPresetCamera == null && Camera.main != null)
+                            {
+                                _physicsPresetCamera = Camera.main;
+                            }
+
+                            _physicsPresetCamera = EditorGUILayout.ObjectField("Camera", _physicsPresetCamera,
+                            typeof(Camera), true) as Camera;
+
+                            if (_physicsPresetCamera.orthographic)
+                            {
+                                _physicsPresetOrthographicSize = _physicsPresetCamera.orthographicSize;
+                            }
+                            else
+                            {
+                                EditorGUILayout.HelpBox("Using perspective projection is inaccurate. Try finding a similar orthographic size. You can switch back when you're done.",
+                                    MessageType.Warning);
+                                _physicsPresetOrthographicSize =
+                                    HedgehogUtility.FOV2OrthographicSize(_physicsPresetOrthographicSize);
+                            }
+                            break;
+
+                        case "Screen Size":
+                            _physicsPresetScreenSize = EditorGUILayout.Vector2Field("Screen Size",
+                                _physicsPresetScreenSize);
+
+                            _physicsPresetOrthographicSize = _physicsPresetScreenSize.y/200.0f;
+                            break;
+
+                        case "Orthographic Size":
+                            _physicsPresetOrthographicSize = EditorGUILayout.FloatField("Orthographic Size",
+                                _physicsPresetOrthographicSize);
+                            break;
+                    }
+
+                    if (GUILayout.Button("Apply Preset"))
+                    {
+                        if (EditorUtility.DisplayDialog("Apply Preset", "Are you sure? Please back up your " +
+                                                                        "current values first!", "Yes", "No"))
+                        {
+                            (PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]]
+                             *(_physicsPresetOrthographicSize/HedgehogUtility.MegadriveOrthographicSize))
+                                .Apply(_instance);
+                        }
+                    }
+                }
+                --EditorGUI.indentLevel;
+                #endregion
+
                 EditorGUILayout.BeginHorizontal();
                 _instance.TopSpeed = EditorGUILayout.FloatField("Top Speed",
                     _instance.TopSpeed);
@@ -228,18 +328,6 @@ namespace Hedgehog.Editor
                 EditorGUILayout.BeginHorizontal();
                 _instance.MaxSpeed = EditorGUILayout.FloatField("Max Speed",
                     _instance.MaxSpeed);
-                EditorGUILayout.PrefixLabel("units/s");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.JumpSpeed = EditorGUILayout.FloatField("Jump Speed",
-                    _instance.JumpSpeed);
-                EditorGUILayout.PrefixLabel("units/s");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.ReleaseJumpSpeed = EditorGUILayout.FloatField("Jump Release Speed",
-                    _instance.ReleaseJumpSpeed);
                 EditorGUILayout.PrefixLabel("units/s");
                 EditorGUILayout.EndHorizontal();
 
@@ -263,6 +351,12 @@ namespace Hedgehog.Editor
                 EditorGUILayout.PrefixLabel("units/s²");
                 EditorGUILayout.EndHorizontal();
 
+                EditorGUILayout.BeginHorizontal();
+                _instance.SlopeGravity = EditorGUILayout.FloatField("Slope Gravity",
+                    _instance.SlopeGravity);
+                EditorGUILayout.PrefixLabel("units/s²");
+                EditorGUILayout.EndHorizontal();
+
                 EditorGUILayout.Space();
 
                 EditorGUILayout.BeginHorizontal();
@@ -276,8 +370,6 @@ namespace Hedgehog.Editor
                     _instance.AirDragCoefficient);
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.Space();
-
                 EditorGUILayout.BeginHorizontal();
                 _instance.AirGravity = EditorGUILayout.FloatField("Air Gravity",
                     _instance.AirGravity);
@@ -285,9 +377,15 @@ namespace Hedgehog.Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                _instance.SlopeGravity = EditorGUILayout.FloatField("Slope Gravity",
-                    _instance.SlopeGravity);
-                EditorGUILayout.PrefixLabel("units/s²");
+                _instance.JumpSpeed = EditorGUILayout.FloatField("Jump Speed",
+                    _instance.JumpSpeed);
+                EditorGUILayout.PrefixLabel("units/s");
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                _instance.ReleaseJumpSpeed = EditorGUILayout.FloatField("Jump Release Speed",
+                    _instance.ReleaseJumpSpeed);
+                EditorGUILayout.PrefixLabel("units/s");
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.Space();
@@ -356,7 +454,6 @@ namespace Hedgehog.Editor
                         EditorGUILayout.EndHorizontal();
 
                         #region Forbidden Constants
-                        EditorGUILayout.LabelField("Surface Values", headerStyle);
                         EditorGUILayout.HelpBox("The following values are best left untouched!", MessageType.Warning);
 
                         EditorGUILayout.BeginHorizontal();
