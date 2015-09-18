@@ -147,7 +147,6 @@ namespace Hedgehog.Utils
                 TargetOrthographicSize = MegadriveOrthographicSize,
 
                 TopSpeed = 3.6f,
-                MaxSpeed = 20.0f,
                 JumpSpeed = 3.9f,
                 ReleaseJumpSpeed = 2.4f,
                 GroundAcceleration = 1.6875f,
