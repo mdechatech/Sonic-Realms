@@ -6,6 +6,8 @@ namespace Hedgehog.Utils
 {
     public class HedgehogPhysicsValues
     {
+        public float? TargetOrthographicSize;
+
         public float TopSpeed;
         public float MaxSpeed;
         public float JumpSpeed;
@@ -51,6 +53,9 @@ namespace Hedgehog.Utils
             var sqrtMultiplier = Mathf.Sqrt(multiplier);
 
             // Multiply all speeds by multiplier and accelerations by sqrtMultiplier
+            if(product.TargetOrthographicSize != null)
+                product.TargetOrthographicSize *= multiplier;
+
             product.TopSpeed *= multiplier;
             product.MaxSpeed *= multiplier;
             product.JumpSpeed *= multiplier;
@@ -85,10 +90,12 @@ namespace Hedgehog.Utils
     {
         public const float MegadriveOrthographicSize = 1.12f;
         public const float SegaCDOrthographicSize = 1.12f;
-        #region Physics Templates
+        #region Physics Presets
         public static readonly HedgehogPhysicsValues BasePhysicsValues = 
             new HedgehogPhysicsValues
             {
+                TargetOrthographicSize = MegadriveOrthographicSize,
+
                 TopSpeed = 3.6f,
                 MaxSpeed = 12.0f,
                 JumpSpeed = 3.9f,
@@ -121,6 +128,8 @@ namespace Hedgehog.Utils
         public static readonly HedgehogPhysicsValues SonicPhysicsValues = 
             new HedgehogPhysicsValues(BasePhysicsValues)
             {
+                TargetOrthographicSize = MegadriveOrthographicSize,
+
                 TopSpeed = 3.6f,
                 MaxSpeed = 20.0f,
                 JumpSpeed = 3.9f,
