@@ -95,8 +95,8 @@ namespace Hedgehog.Terrain
                 Mathf.Lerp(
                     // Triangle wave
                     (CurrentTime/Duration) < 0.5f
-                        ? (CurrentTime/Duration*2)
-                        : 1.0f - (CurrentTime/Duration*2),
+                        ? (CurrentTime/Duration*2)%1.0f
+                        : 1.0f - (CurrentTime/Duration*2)%1.0f,
                     // Sine wave
                     Mathf.Sin((CurrentTime - Mathf.PI)/Duration*DMath.DoublePi)*0.5f + 0.5f,
                     // Interpolation
