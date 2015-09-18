@@ -21,6 +21,14 @@ namespace Hedgehog.Terrain
         public float Duration = 10.0f;
 
         /// <summary>
+        /// The current timer for the object's position, which counts up to Duration then resets.
+        /// Change this to have it start somewhere else on the path.
+        /// </summary>
+        [SerializeField,
+        Tooltip("Controls position on the path. Counts up to duration.")]
+        public float CurrentTime = 0.0f;
+
+        /// <summary>
         /// If true, the object will move opposite to the way it usually does. Usually true means
         /// clockwise and false means counter-clockwise.
         /// </summary>
@@ -45,13 +53,11 @@ namespace Hedgehog.Terrain
                                  " whether there have been any changes.")]
         public bool AlwaysUpdate = false;
 
-        private float _timer;
         private Collider2D _previousPath;
         private Vector2[] _cachedPath;
 
         public void Start()
         {
-            _timer = 0.0f;
             ReconstructPath();
         }
 
@@ -72,11 +78,18 @@ namespace Hedgehog.Terrain
 
         public void FixedUpdate()
         {
-            _timer += Time.fixedDeltaTime;
-            if (_timer > Duration) _timer -= Duration;
+            if (ReverseDirection)
+            {
+                CurrentTime -= Time.fixedDeltaTime;
+                if (CurrentTime < 0.0f) CurrentTime += Duration;
+            }
+            else
+            {
+                CurrentTime += Time.fixedDeltaTime;
+                if (CurrentTime > Duration) CurrentTime -= Duration;
+            }
 
-            var t = ReverseDirection ? 1.0f - _timer/Duration : _timer/Duration;
-
+            var t = CurrentTime/Duration;
             transform.position = _cachedPath == null ? Walk(Path, t) : Walk(_cachedPath, t);
         }
 
