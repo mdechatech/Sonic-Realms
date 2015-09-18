@@ -99,10 +99,10 @@ namespace Hedgehog.Editor
 
         private static readonly string[] PhysicsPresetResolutionSources = new string[]
         {
-            "Camera",
             "Player vs. Camera Size",
-            "Screen Size",
+            "Camera Size",
             "Orthographic Size",
+            "Screen Size",
         };
 
         private int _physicsPresetIndex = 0;
@@ -273,7 +273,7 @@ namespace Hedgehog.Editor
 
                     switch (resolutionSource)
                     {
-                        case "Camera":
+                        case "Camera Size":
                             if (_physicsPresetCamera == null && Camera.main != null)
                             {
                                 _physicsPresetCamera = Camera.main;
@@ -322,13 +322,24 @@ namespace Hedgehog.Editor
                             break;
 
                         case "Screen Size":
-                            _physicsPresetScreenSize = EditorGUILayout.Vector2Field("Screen Size",
+                            _physicsPresetScreenSize = EditorGUILayout.Vector2Field("Screen Size (pixels)",
                                 _physicsPresetScreenSize);
 
                             _physicsPresetOrthographicSize = _physicsPresetScreenSize.y/200.0f;
                             break;
 
                         case "Orthographic Size":
+                            if (_physicsPresetOrthographicSize == default(float))
+                            {
+                                var camera = Camera.main;
+                                if (camera != null)
+                                    if (camera.orthographic)
+                                        _physicsPresetOrthographicSize = Camera.main.orthographicSize;
+                                    else
+                                        _physicsPresetOrthographicSize =
+                                            HedgehogUtility.FOV2OrthographicSize(_physicsPresetOrthographicSize);
+                            }
+
                             _physicsPresetOrthographicSize = EditorGUILayout.FloatField("Orthographic Size",
                                 _physicsPresetOrthographicSize);
                             break;
