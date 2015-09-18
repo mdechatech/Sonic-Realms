@@ -18,9 +18,12 @@ namespace Hedgehog.Actors
 
         [SerializeField]
         public CollisionMode CollisionMode = CollisionMode.Layers;
-    
-        [SerializeField]
-        public LayerMask InitialTerrainMask;
+
+        /// <summary>
+        /// The layer mask which represents the ground the player checks for collision with.
+        /// </summary>
+        [HideInInspector]
+        public LayerMask TerrainMask;
 
         [SerializeField]
         public List<string> TerrainTags = new List<string>();
@@ -377,12 +380,6 @@ namespace Hedgehog.Actors
         public bool Grounded;
 
         /// <summary>
-        /// The layer mask which represents the ground the player checks for collision with.
-        /// </summary>
-        [HideInInspector]
-        public LayerMask TerrainMask;
-
-        /// <summary>
         /// Whether the player has just landed on the ground. Is used to ignore surface angle
         /// once right after.
         /// </summary>
@@ -479,8 +476,6 @@ namespace Hedgehog.Actors
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
-            if(InitialTerrainMask != LayerMask.NameToLayer("Nothing"))
-                TerrainMask = InitialTerrainMask;
 
             CreateMovingPlatformAnchor();
         }

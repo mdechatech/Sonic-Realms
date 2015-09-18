@@ -175,7 +175,7 @@ namespace Hedgehog.Editor
                 if (_instance.CollisionMode == CollisionMode.Layers)
                 {
                     _instance.TerrainMask = 
-                        HedgehogEditorGUIUtility.LayerMaskField("Terrain Layer Mask", _instance.InitialTerrainMask);
+                        HedgehogEditorGUIUtility.LayerMaskField("Terrain Layer Mask", _instance.TerrainMask);
                 } else if (_instance.CollisionMode == CollisionMode.Tags)
                 {
                     HedgehogEditorGUIUtility.ReorderableListField("Collide with Tags",
@@ -310,7 +310,9 @@ namespace Hedgehog.Editor
                                                                         "current values first!", "Yes", "No"))
                         {
                             (PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]]
-                             *(_physicsPresetOrthographicSize/HedgehogUtility.MegadriveOrthographicSize))
+                             *(_physicsPresetOrthographicSize/
+                               PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]].TargetOrthographicSize
+                                   .Value))
                                 .Apply(_instance);
                         }
                     }
