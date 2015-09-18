@@ -50,9 +50,8 @@ namespace Hedgehog.Utils
             (HedgehogPhysicsValues multiplicand, float multiplier)
         {
             var product = new HedgehogPhysicsValues(multiplicand);
-            var sqrtMultiplier = Mathf.Sqrt(multiplier);
 
-            // Multiply all speeds by multiplier and accelerations by sqrtMultiplier
+            // Multiply all speeds by multiplier
             if(product.TargetOrthographicSize != null)
                 product.TargetOrthographicSize *= multiplier;
 

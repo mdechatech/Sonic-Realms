@@ -667,7 +667,6 @@ namespace Hedgehog.Actors
         {
             if (Grounded)
             {
-                var prevVg = Vg;
                 var friction = TerrainProperties == null
                     ? 1.0f
                     : TerrainProperties.Friction;
