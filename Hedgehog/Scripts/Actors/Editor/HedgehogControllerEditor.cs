@@ -100,6 +100,7 @@ namespace Hedgehog.Editor
         private static readonly string[] PhysicsPresetResolutionSources = new string[]
         {
             "Camera",
+            "Player vs. Camera Size",
             "Screen Size",
             "Orthographic Size",
         };
@@ -109,6 +110,7 @@ namespace Hedgehog.Editor
         private Vector2 _physicsPresetScreenSize;
         private int _physicsPresetResolutionSourceIndex = 0;
         private Camera _physicsPresetCamera;
+        private Vector2 _physicsPresetPlayerSize;
         #endregion
         #region Sensor Creator Variables
         [SerializeField]
@@ -267,7 +269,9 @@ namespace Hedgehog.Editor
                     ++EditorGUI.indentLevel;
                     EditorGUILayout.EndHorizontal();
 
-                    switch (PhysicsPresetResolutionSources[_physicsPresetResolutionSourceIndex])
+                    var resolutionSource = PhysicsPresetResolutionSources[_physicsPresetResolutionSourceIndex];
+
+                    switch (resolutionSource)
                     {
                         case "Camera":
                             if (_physicsPresetCamera == null && Camera.main != null)
@@ -291,6 +295,32 @@ namespace Hedgehog.Editor
                             }
                             break;
 
+                        case "Player vs. Camera Size":
+                            if (_physicsPresetOrthographicSize == default(float))
+                            {
+                                var camera = Camera.main;
+                                if (camera != null)
+                                    if (camera.orthographic)
+                                        _physicsPresetOrthographicSize = Camera.main.orthographicSize;
+                                    else
+                                        _physicsPresetOrthographicSize =
+                                            HedgehogUtility.FOV2OrthographicSize(_physicsPresetOrthographicSize);
+                            }
+
+                            _physicsPresetOrthographicSize = EditorGUILayout.FloatField("Camera Orthographic Size",
+                                _physicsPresetOrthographicSize);
+
+                            if (_physicsPresetPlayerSize == default(Vector2))
+                            {
+                                var sprite = _instance.GetComponent<SpriteRenderer>();
+                                if (sprite != null)
+                                    _physicsPresetPlayerSize = sprite.bounds.size;
+                            }
+
+                            _physicsPresetPlayerSize = EditorGUILayout.Vector2Field("Player Size (units)",
+                                _physicsPresetPlayerSize);
+                            break;
+
                         case "Screen Size":
                             _physicsPresetScreenSize = EditorGUILayout.Vector2Field("Screen Size",
                                 _physicsPresetScreenSize);
@@ -304,16 +334,19 @@ namespace Hedgehog.Editor
                             break;
                     }
 
+                    var physicsPreset = PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]];
+
                     if (GUILayout.Button("Apply Preset"))
                     {
                         if (EditorUtility.DisplayDialog("Apply Preset", "Are you sure? Please back up your " +
                                                                         "current values first!", "Yes", "No"))
                         {
-                            (PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]]
-                             *(_physicsPresetOrthographicSize/
-                               PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]].TargetOrthographicSize
-                                   .Value))
-                                .Apply(_instance);
+                            if (resolutionSource == "Player vs. Camera Size")
+                                (physicsPreset*(_physicsPresetOrthographicSize/_physicsPresetPlayerSize.y/
+                                                HedgehogUtility.MegadriveCameraPlayerRatio)).Apply(_instance);
+                            else
+                                (physicsPreset*(_physicsPresetOrthographicSize/physicsPreset.TargetOrthographicSize
+                                    .Value)).Apply(_instance);
                         }
                     }
                 }
