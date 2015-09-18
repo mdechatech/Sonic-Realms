@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Terrain
 {
@@ -37,16 +38,67 @@ namespace Hedgehog.Terrain
         Tooltip("1 for smoothest movement, 0 for jagged movement")] 
         public float Smoothness = 1.0f;
 
+        /// <summary>
+        /// If true, the object will move opposite to the way it usually does.
+        /// </summary>
+        [SerializeField, Tooltip("Whether to move in the reverse direction.")]
+        public bool ReverseDirection = false;
+
+        /// <summary>
+        /// The current timer for the object's position, which counts up to Duration then resets.
+        /// Change this to have it start somewhere else on the path.
+        /// </summary>
+        [SerializeField]
+        public float CurrentTime = 0.0f;
+
+        /// <summary>
+        /// Called when the object completes its cycle.
+        /// </summary>
+        [SerializeField]
+        public UnityEvent OnComplete;
+
+        /// <summary>
+        /// The number of cycles (round trips) the object has completed.
+        /// </summary>
+        [HideInInspector]
+        public int CyclesCompleted;
+
+        public void Awake()
+        {
+            CyclesCompleted = 0;
+        }
+
         public void FixedUpdate()
         {
+            if (ReverseDirection)
+            {
+                CurrentTime -= Time.fixedDeltaTime;
+                if (CurrentTime < 0.0f)
+                {
+                    OnComplete.Invoke();
+                    ++CyclesCompleted;
+                    CurrentTime += Duration;
+                }
+            }
+            else
+            {
+                CurrentTime += Time.fixedDeltaTime;
+                if (CurrentTime > Duration)
+                {
+                    OnComplete.Invoke();
+                    ++CyclesCompleted;
+                    CurrentTime -= Duration;
+                }
+            }
+
             transform.position = Vector2.Lerp(StartPoint, EndPoint,
                 Mathf.Lerp(
                     // Triangle wave
-                    (Time.fixedTime/Duration)%1.0f < 0.5f ?
-                    (Time.fixedTime/Duration*2)%1.0f : 
-                    1.0f - (Time.fixedTime/Duration*2)%1.0f,
+                    (CurrentTime/Duration) < 0.5f
+                        ? (CurrentTime/Duration*2)
+                        : 1.0f - (CurrentTime/Duration*2),
                     // Sine wave
-                    Mathf.Sin((Time.fixedTime - Mathf.PI)/Duration*DMath.DoublePi)*0.5f + 0.5f,
+                    Mathf.Sin((CurrentTime - Mathf.PI)/Duration*DMath.DoublePi)*0.5f + 0.5f,
                     // Interpolation
                     Smoothness));
         }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Terrain
 {
@@ -53,8 +54,25 @@ namespace Hedgehog.Terrain
                                  " whether there have been any changes.")]
         public bool AlwaysUpdate = false;
 
+        /// <summary>
+        /// Called when the object completes its cycle.
+        /// </summary>
+        [SerializeField]
+        public UnityEvent OnComplete;
+
+        /// <summary>
+        /// The number of cycles (round trips) the object has completed.
+        /// </summary>
+        [HideInInspector]
+        public int CyclesCompleted;
+
         private Collider2D _previousPath;
         private Vector2[] _cachedPath;
+
+        public void Awake()
+        {
+            CyclesCompleted = 0;
+        }
 
         public void Start()
         {
@@ -81,12 +99,22 @@ namespace Hedgehog.Terrain
             if (ReverseDirection)
             {
                 CurrentTime -= Time.fixedDeltaTime;
-                if (CurrentTime < 0.0f) CurrentTime += Duration;
+                if (CurrentTime < 0.0f)
+                {
+                    OnComplete.Invoke();
+                    ++CyclesCompleted;
+                    CurrentTime += Duration;
+                }
             }
             else
             {
                 CurrentTime += Time.fixedDeltaTime;
-                if (CurrentTime > Duration) CurrentTime -= Duration;
+                if (CurrentTime > Duration)
+                {
+                    OnComplete.Invoke();
+                    ++CyclesCompleted;
+                    CurrentTime -= Duration;
+                }
             }
 
             var t = CurrentTime/Duration;
