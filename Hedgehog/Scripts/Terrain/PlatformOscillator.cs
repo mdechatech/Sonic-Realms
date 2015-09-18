@@ -5,7 +5,7 @@ namespace Hedgehog.Terrain
     /// <summary>
     /// Moves an object between two points, with options for smoothness.
     /// </summary>
-    public class ExamplePlatformOscillator : MonoBehaviour
+    public class PlatformOscillator : MonoBehaviour
     {
         /// <summary>
         /// Where the platform begins.
@@ -34,7 +34,7 @@ namespace Hedgehog.Terrain
         /// of these two waves.
         /// </summary>
         [SerializeField, Range(0.0f, 1.0f),
-        Tooltip("1 for smoothest, 0 for jagged movement")] 
+        Tooltip("1 for smoothest movement, 0 for jagged movement")] 
         public float Smoothness = 1.0f;
 
         public void FixedUpdate()
