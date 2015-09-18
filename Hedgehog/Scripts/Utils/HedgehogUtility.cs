@@ -1,11 +1,20 @@
-﻿using Hedgehog.Actors;
+﻿using System;
+using System.Linq;
+using Hedgehog.Actors;
 using JetBrains.Annotations;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Hedgehog.Utils
 {
     public class HedgehogPhysicsValues
     {
+        public static readonly string[] ExcludedFields = new[]
+        {
+            "ExcludedFields",
+            "TargetOrthographicSize",
+        };
+
         public float? TargetOrthographicSize;
 
         public float TopSpeed;
@@ -80,7 +89,14 @@ namespace Hedgehog.Utils
             var fields = physicsType.GetFields();
             foreach (var field in fields)
             {
-                hedgehogType.GetField(field.Name).SetValue(hedgehog, field.GetValue(this));
+                if (!ExcludedFields.Contains(field.Name))
+                {
+                    var controllerField = hedgehogType.GetField(field.Name);
+                    if(controllerField != null)
+                        controllerField.SetValue(hedgehog, field.GetValue(this));
+                    else
+                        Debug.LogError("Controller has no property " + field.Name + ".");
+                }
             }
         }
     }
