@@ -103,7 +103,7 @@ namespace Hedgehog.Utils
 
     public static class HedgehogUtility
     {
-        public const float MegadriveCameraPlayerRatio = 2.8f;
+        public const float MegadrivePlayerCameraRatio = 0.0892857f;
         public const float MegadriveOrthographicSize = 1.12f;
         public const float SegaCDOrthographicSize = 1.12f;
         #region Physics Presets

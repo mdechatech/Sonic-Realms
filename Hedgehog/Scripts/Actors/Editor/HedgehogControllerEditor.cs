@@ -353,8 +353,8 @@ namespace Hedgehog.Editor
                                                                         "current values first!", "Yes", "No"))
                         {
                             if (resolutionSource == "Player vs. Camera Size")
-                                (physicsPreset*(_physicsPresetOrthographicSize/_physicsPresetPlayerSize.y/
-                                                HedgehogUtility.MegadriveCameraPlayerRatio)).Apply(_instance);
+                                (physicsPreset*(_physicsPresetPlayerSize.y/_physicsPresetOrthographicSize/
+                                                HedgehogUtility.MegadrivePlayerCameraRatio)).Apply(_instance);
                             else
                                 (physicsPreset*(_physicsPresetOrthographicSize/physicsPreset.TargetOrthographicSize
                                     .Value)).Apply(_instance);
