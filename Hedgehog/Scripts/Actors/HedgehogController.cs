@@ -404,7 +404,7 @@ namespace Hedgehog.Actors
         /// If grounded, which sensor on the player defines the primary surface.
         /// </summary>
         [HideInInspector]
-        public FootSide Footing;
+        public Footing Footing;
 
         /// <summary>
         /// If grounded, the properties of the ground beneath the player, if any.
@@ -461,6 +461,19 @@ namespace Hedgehog.Actors
         public MovingPlatformAnchor MovingPlatformAnchor;
 
         /// <summary>
+        /// If grounded, the surface which is currently defining the controller's position
+        /// and rotation.
+        /// </summary>
+        [HideInInspector]
+        public Transform PrimarySurface;
+
+        /// <summary>
+        /// The surface which is currently partially defining the controller's rotation, if any.
+        /// </summary>
+        [HideInInspector]
+        public Transform SecondarySurface;
+
+        /// <summary>
         /// Stores movement of a moving platform from the last update, if any.
         /// </summary>
         private Vector3 _movingPlatformDelta;
@@ -469,7 +482,7 @@ namespace Hedgehog.Actors
         #region Lifecycle Functions
         public void Awake()
         {
-            Footing = FootSide.None;
+            Footing = Footing.None;
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
@@ -877,8 +890,8 @@ namespace Hedgehog.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirGroundCheck()
         {
-            var groundLeftCheck = Groundcast(FootSide.Left);
-            var groundRightCheck = Groundcast(FootSide.Right);
+            var groundLeftCheck = Groundcast(Footing.Left);
+            var groundRightCheck = Groundcast(Footing.Right);
 
             if (groundLeftCheck || groundRightCheck)
             {
@@ -1020,7 +1033,7 @@ namespace Hedgehog.Actors
                     //   their surface angles
                     var overlapSurfaceDiff = DMath.AngleDiffr(overlapSurfaceAngle,
                         (s.LeftCast.SurfaceAngle + s.RightCast.SurfaceAngle)/2.0f)*Mathf.Rad2Deg;
-                    if (s.Side == FootSide.Left)
+                    if (s.Side == Footing.Left)
                     {
                         // If the surface's angle is a small enough difference from that of the previous begin surface checks
                         if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
@@ -1032,33 +1045,35 @@ namespace Hedgehog.Actors
                                 // If tolerable, rotate between the surfaces beneath the two feet
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
-                                Footing = FootSide.Left;
+                                Footing = Footing.Left;
+                                SetSurface(s.LeftCast.Hit.transform, s.RightCast.Hit.transform);
                             }
                             else
                             {
                                 // Else just rotate for the left foot
                                 DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
-                                Footing = FootSide.Left;
+                                Footing = Footing.Left;
+                                SetSurface(s.LeftCast.Hit.transform);
                             }
-
-                            // Else see if the other surface's angle is tolerable
                         }
                         else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                         {
+                            // Else see if the other surface's angle is tolerable
                             DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                             transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
-                            Footing = FootSide.Right;
-                            // Else the surfaces are untolerable. detach from the surface
+                            Footing = Footing.Right;
+                            SetSurface(s.RightCast.Hit.transform);
                         }
                         else
                         {
+                            // Else the surfaces are untolerable. detach from the surface
                             Detach();
                         }
 
                         // Same thing but with the other foot
                     }
-                    else if (s.Side == FootSide.Right)
+                    else if (s.Side == Footing.Right)
                     {
                         if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                         {
@@ -1067,13 +1082,15 @@ namespace Hedgehog.Actors
                             {
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
-                                Footing = FootSide.Right;
+                                Footing = Footing.Right;
+                                SetSurface(s.RightCast.Hit.transform, s.LeftCast.Hit.transform);
                             }
                             else
                             {
                                 DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
-                                Footing = FootSide.Right;
+                                Footing = Footing.Right;
+                                SetSurface(s.RightCast.Hit.transform);
                             }
 
                         }
@@ -1081,7 +1098,8 @@ namespace Hedgehog.Actors
                         {
                             DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                             transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
-                            Footing = FootSide.Left;
+                            Footing = Footing.Left;
+                            SetSurface(s.LeftCast.Hit.transform);
                         }
                         else
                         {
@@ -1096,7 +1114,8 @@ namespace Hedgehog.Actors
                     {
                         DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                         transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
-                        Footing = FootSide.Left;
+                        Footing = Footing.Left;
+                        SetSurface(s.LeftCast.Hit.transform);
                     }
                     else
                     {
@@ -1110,7 +1129,8 @@ namespace Hedgehog.Actors
                     {
                         DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                         transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
-                        Footing = FootSide.Right;
+                        Footing = Footing.Right;
+                        SetSurface(s.RightCast.Hit.transform);
                     }
                     else
                     {
@@ -1120,7 +1140,7 @@ namespace Hedgehog.Actors
 
                 if (Grounded)
                 {
-                    if (Footing == FootSide.Left)
+                    if (Footing == Footing.Left)
                     {
                         if (s.LeftCast.Properties != null && s.LeftCast.Properties.MovingPlatform)
                         {
@@ -1132,7 +1152,7 @@ namespace Hedgehog.Actors
                             MovingPlatformAnchor.UnlinkPlatform();
                         }
                     }
-                    else if (Footing == FootSide.Right)
+                    else if (Footing == Footing.Right)
                     {
                         if (s.RightCast.Properties != null && s.RightCast.Properties.MovingPlatform)
                         {
@@ -1145,7 +1165,7 @@ namespace Hedgehog.Actors
                         }
                     }
 
-                    TerrainProperties = Footing == FootSide.Left
+                    TerrainProperties = Footing == Footing.Left
                         ? s.LeftCast.Properties
                         : s.RightCast.Properties;
                 }
@@ -1289,9 +1309,10 @@ namespace Hedgehog.Actors
             Grounded = false;
             JustDetached = true;
             Wallmode = Orientation.Floor;
-            Footing = FootSide.None;
+            Footing = Footing.None;
             LockUponLanding = lockUponLanding;
             MovingPlatformAnchor.UnlinkPlatform();
+            SetSurface(null);
         }
 
         /// <summary>
@@ -1381,20 +1402,122 @@ namespace Hedgehog.Actors
 
             return false;
         }
+
+        /// <summary>
+        /// Sets the controller's primary and secondary surfaces and triggers their respective platform events.
+        /// </summary>
+        /// <param name="primarySurface">The new primary surface.</param>
+        /// <param name="secondarySurface">The new secondary surface.</param>
+        /// <param name="triggerEvents">Whether to trigger the surfaces' respective platform events.</param>
+        public void SetSurface(Transform primarySurface, Transform secondarySurface = null, bool triggerEvents = true)
+        {
+            if (!triggerEvents)
+            {
+                PrimarySurface = primarySurface;
+                SecondarySurface = secondarySurface;
+            }
+            else
+            {
+                var oldPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(PrimarySurface, BaseTrigger.Selector);
+                var newPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(primarySurface, BaseTrigger.Selector);
+                var oldSecondaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(SecondarySurface,
+                    BaseTrigger.Selector);
+                var newSecondaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(secondarySurface,
+                    BaseTrigger.Selector);
+
+                var oldPrimarySurface = PrimarySurface;
+                var oldSecondarySurface = SecondarySurface;
+
+                PrimarySurface = primarySurface;
+                SecondarySurface = secondarySurface;
+
+                if (oldPrimaryTriggers != null)
+                {
+                    if (oldPrimarySurface != primarySurface)
+                    {
+                        foreach (var primaryTrigger in oldPrimaryTriggers)
+                        {
+                            primaryTrigger.OnExit.Invoke(this);
+                            primaryTrigger.OnSurfaceExit.Invoke(this, oldPrimarySurface, SurfacePriority.Primary);
+                        }
+
+                        if (newPrimaryTriggers != null)
+                        {
+                            foreach (var newPrimaryTrigger in newPrimaryTriggers)
+                            {
+                                newPrimaryTrigger.OnEnter.Invoke(this);
+                                newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurface, SurfacePriority.Primary);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var primaryTrigger in oldPrimaryTriggers)
+                        {
+                            primaryTrigger.OnStay.Invoke(this);
+                            primaryTrigger.OnSurfaceStay.Invoke(this, primarySurface, SurfacePriority.Primary);
+                        }
+                    }
+                } else if (newPrimaryTriggers != null && oldPrimarySurface != primarySurface)
+                {
+                    foreach (var newPrimaryTrigger in newPrimaryTriggers)
+                    {
+                        newPrimaryTrigger.OnEnter.Invoke(this);
+                        newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurface, SurfacePriority.Primary);
+                    }
+                }
+
+                if (oldSecondaryTriggers != null)
+                {
+                    if (oldSecondarySurface != secondarySurface)
+                    {
+                        foreach (var secondaryTrigger in oldSecondaryTriggers)
+                        {
+                            secondaryTrigger.OnExit.Invoke(this);
+                            secondaryTrigger.OnSurfaceExit.Invoke(this, oldSecondarySurface, SurfacePriority.Secondary);
+                        }
+
+                        if (newSecondaryTriggers != null)
+                        {
+                            foreach (var newSecondaryTrigger in newSecondaryTriggers)
+                            {
+                                newSecondaryTrigger.OnEnter.Invoke(this);
+                                newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurface, SurfacePriority.Secondary);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var secondaryTrigger in oldSecondaryTriggers)
+                        {
+                            secondaryTrigger.OnStay.Invoke(this);
+                            secondaryTrigger.OnSurfaceStay.Invoke(this, secondarySurface, SurfacePriority.Secondary);
+                        }
+                    }
+                } else if (newSecondaryTriggers != null && oldSecondarySurface != secondarySurface)
+                {
+                    foreach (var newSecondaryTrigger in newSecondaryTriggers)
+                    {
+                        newSecondaryTrigger.OnEnter.Invoke(this);
+                        newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurface, SurfacePriority.Secondary);
+                    }
+                }
+            }
+        }
         #endregion
         #region Surface Calculation Functions
         /// <summary>
-        /// Gets data about the surface closest to the player's feet, including its FootSide and raycast info.
+        /// Gets data about the surface closest to the player's feet, including its Footing and raycast info.
         /// </summary>
         /// <returns>The surface.</returns>
         /// <param name="layerMask">A mask indicating what layers are surfaces.</param>
         public SurfaceInfo GetSurface(int layerMask)
         {
             // Linecasts are straight vertical or horizontal from the ground sensors
-            var checkLeft = Surfacecast(FootSide.Left);
-            var checkRight = Surfacecast(FootSide.Right);
+            var checkLeft = Surfacecast(Footing.Left);
+            var checkRight = Surfacecast(Footing.Right);
 
-            FootSide newFooting = FootSide.None;
+            Footing newFooting = Footing.None;
 
             if (checkLeft && checkRight)
             {
@@ -1405,28 +1528,28 @@ namespace Hedgehog.Actors
                 // with no moving platform properties
                 if (DMath.Equalsf(distance, 0.0f))
                 {
-                    if (checkLeft.Properties == null) newFooting = FootSide.Left;
-                    else if(checkRight.Properties == null) newFooting = FootSide.Right;
-                    else if(!checkLeft.Properties.MovingPlatform) newFooting = FootSide.Left;
-                    else if(!checkRight.Properties.MovingPlatform) newFooting = FootSide.Right;
-                    else newFooting = FootSide.Left;
+                    if (checkLeft.Properties == null) newFooting = Footing.Left;
+                    else if(checkRight.Properties == null) newFooting = Footing.Right;
+                    else if(!checkLeft.Properties.MovingPlatform) newFooting = Footing.Left;
+                    else if(!checkRight.Properties.MovingPlatform) newFooting = Footing.Right;
+                    else newFooting = Footing.Left;
                 } else if (distance > 0)
                 {
-                    newFooting = FootSide.Left;
+                    newFooting = Footing.Left;
                 }
                 else
                 {
-                    newFooting = FootSide.Right;
+                    newFooting = Footing.Right;
                 }
             } else if (checkLeft)
             {
-                newFooting = FootSide.Left;;
+                newFooting = Footing.Left;;
             } else if (checkRight)
             {
-                newFooting = FootSide.Right;
+                newFooting = Footing.Right;
             }
 
-            if (newFooting == FootSide.None) return default(SurfaceInfo);
+            if (newFooting == Footing.None) return default(SurfaceInfo);
             return new SurfaceInfo(checkLeft, checkRight, newFooting);
         }
 
@@ -1435,10 +1558,10 @@ namespace Hedgehog.Actors
         /// </summary>
         /// <param name="side"></param>
         /// <returns></returns>
-        private TerrainCastHit Groundcast(FootSide side)
+        private TerrainCastHit Groundcast(Footing side)
         {
             TerrainCastHit cast;
-            if (side == FootSide.Left)
+            if (side == Footing.Left)
             {
                 cast = this.TerrainCast(
                     (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
@@ -1459,10 +1582,10 @@ namespace Hedgehog.Actors
         /// </summary>
         /// <returns>The result of the linecast.</returns>
         /// <param name="footing">The side to linecast from.</param>
-        private TerrainCastHit Surfacecast(FootSide footing)
+        private TerrainCastHit Surfacecast(Footing footing)
         {
             TerrainCastHit cast;
-            if (footing == FootSide.Left)
+            if (footing == Footing.Left)
             {
                 // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
                 cast = this.TerrainCast(

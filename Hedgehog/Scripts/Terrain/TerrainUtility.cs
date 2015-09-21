@@ -56,6 +56,86 @@ namespace Hedgehog.Terrain
             return new TerrainCastHit(hit, hit ? SearchProperties(hit.transform) : null, fromSide);
         }
 
+        public static TComponent Find<TComponent>(Transform transform)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var transformCheck = transform;
+            var componentCheck = transform.GetComponent<TComponent>();
+
+            while (transformCheck != null)
+            {
+                if (componentCheck != null) return componentCheck;
+
+                transformCheck = transformCheck.parent;
+                componentCheck = transformCheck.GetComponent<TComponent>();
+            }
+
+            return null;
+        }
+
+        public static TComponent Find<TComponent>(Transform transform, Func<TComponent, Transform, bool> selector)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var transformCheck = transform;
+            var componentCheck = transform.GetComponent<TComponent>();
+
+            while (transformCheck != null)
+            {
+                if (componentCheck != null && selector(componentCheck, transformCheck)) return componentCheck;
+
+                transformCheck = transformCheck.parent;
+                componentCheck = transformCheck.GetComponent<TComponent>();
+            }
+
+            return null;
+        }
+
+        public static IEnumerable<TComponent> FindAll<TComponent>(Transform transform) 
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var result = new List<TComponent>();
+
+            var transformCheck = transform;
+            var componentCheck = transform.GetComponent<TComponent>();
+
+            while (transformCheck != null)
+            {
+                if (componentCheck != null) result.Add(componentCheck);
+
+                transformCheck = transformCheck.parent;
+                componentCheck = transformCheck.GetComponent<TComponent>();
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<TComponent> FindAll<TComponent>(Transform transform,
+            Func<TComponent, Transform, bool> selector)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var result = new List<TComponent>();
+
+            var transformCheck = transform;
+
+            while (transformCheck != null)
+            {
+                var componentCheck = transformCheck.GetComponent<TComponent>();
+                if (componentCheck != null && selector(componentCheck, transformCheck)) result.Add(componentCheck);
+
+                transformCheck = transformCheck.parent;
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Searches for terrain properties on the transform and all its parents, taking into
         /// account any terrain properties' maximum level.

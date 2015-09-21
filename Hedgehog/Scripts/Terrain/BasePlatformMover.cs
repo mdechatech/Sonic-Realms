@@ -43,6 +43,12 @@ namespace Hedgehog.Terrain
         [HideInInspector]
         public int CyclesCompleted = 0;
 
+        public virtual void Reset()
+        {
+            if (gameObject.GetComponent<PlatformTrigger>() == null) 
+                gameObject.AddComponent<PlatformTrigger>();
+        }
+
         public virtual void FixedUpdate()
         {
             UpdateTimer();

@@ -8,9 +8,9 @@ namespace Hedgehog.Utils
     public struct SurfaceInfo
     {
         /// <summary>
-        /// If there is a surface, which foot of the player it is  beneath. Otherwise, FootSide.none.
+        /// If there is a surface, which foot of the player it is  beneath. Otherwise, Footing.none.
         /// </summary>
-        public FootSide Side;
+        public Footing Side;
 
         /// <summary>
         /// The result of the raycast onto the surface at the player's left foot.
@@ -22,7 +22,7 @@ namespace Hedgehog.Utils
         /// </summary>
         public TerrainCastHit RightCast;
 
-        public SurfaceInfo(TerrainCastHit leftCast, TerrainCastHit rightCast, FootSide Side)
+        public SurfaceInfo(TerrainCastHit leftCast, TerrainCastHit rightCast, Footing Side)
         {
             LeftCast = leftCast;
             RightCast = rightCast;

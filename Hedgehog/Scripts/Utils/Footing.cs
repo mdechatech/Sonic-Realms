@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents each sensor on the bottom of the player.
     /// </summary>
-    public enum FootSide
+    public enum Footing
     {
         None, Left, Right
     }

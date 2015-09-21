@@ -135,6 +135,7 @@ namespace Hedgehog.Editor
         public override void OnInspectorGUI()
         {
             if (_instance == null) return;
+            serializedObject.Update();
 
             #region GUI Styles
             var titleStyle = new GUIStyle
@@ -619,6 +620,8 @@ namespace Hedgehog.Editor
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
                 EditorGUILayout.EnumPopup("Wallmode", _instance.Wallmode);
                 EditorGUILayout.EnumPopup("Footing", _instance.Footing);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("PrimarySurface"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("SecondarySurface"));
                 GUI.enabled = Application.isPlaying;
                 _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
 
@@ -638,6 +641,7 @@ namespace Hedgehog.Editor
 
             if (GUI.changed)
             {
+                serializedObject.ApplyModifiedProperties();
                 EditorUtility.SetDirty(_instance);
                 _serializedInstance.ApplyModifiedProperties();
                 EditorUtility.SetDirty(this);
