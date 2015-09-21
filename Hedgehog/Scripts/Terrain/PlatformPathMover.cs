@@ -7,6 +7,7 @@ namespace Hedgehog.Terrain
     /// <summary>
     /// Moves an object along the path defined by a collider2D.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Path Mover")]
     public class PlatformPathMover : BasePlatformMover
     {
         /// <summary>
@@ -61,7 +62,10 @@ namespace Hedgehog.Terrain
             if (AlwaysUpdate || Path != _previousPath || hasChanged) ReconstructPath();
         }
 
-
+        /// <summary>
+        /// Moves the platform to a point on the path.
+        /// </summary>
+        /// <param name="t">A point on the path, 0 being its start point and 1 being its end point.</param>
         public override void To(float t)
         {
             transform.position = _cachedPath == null ? Walk(Path, t) : Walk(_cachedPath, t);

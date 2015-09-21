@@ -6,6 +6,7 @@ namespace Hedgehog.Terrain
     /// <summary>
     /// Moves an object between two points, with options for smoothness.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Oscillator")]
     public class PlatformOscillator : BasePlatformMover
     {
         /// <summary>

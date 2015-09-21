@@ -2,6 +2,7 @@
 
 namespace Hedgehog.Terrain
 {
+    [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Mover")]
     public class PlatformMover : MonoBehaviour
     {
         /// <summary>
