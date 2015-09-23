@@ -101,12 +101,12 @@ namespace Hedgehog.Terrain
         public void Unlink(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (!_linkedControllers.Contains(controller) || 
-                (controller.PrimarySurface == transform || controller.SecondarySurface == transform)) return;
+                priority == SurfacePriority.Secondary || controller.SecondarySurface == transform) return;
 
             var perSecondVelocity = (Vector2) Velocity/Time.fixedDeltaTime;
             controller.Velocity += new Vector2(TransferMomentumX ? perSecondVelocity.x : 0.0f,
                 TransferMomentumY ? perSecondVelocity.y : 0.0f);
-
+            
             _controllerRemoveQueue.Add(controller);
         }
     }

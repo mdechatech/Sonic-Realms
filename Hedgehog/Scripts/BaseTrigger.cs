@@ -63,10 +63,10 @@ namespace Hedgehog
             return false;
         }
 
-        public static bool Selector(BaseTrigger baseTrigger, Transform originalTransform)
+        public static bool Selector<TTrigger>(TTrigger trigger, Transform originalTransform)
+            where TTrigger : BaseTrigger
         {
-            return originalTransform == baseTrigger.transform ||
-                   baseTrigger.TriggersFromChildren;
+            return originalTransform == trigger.transform || trigger.TriggersFromChildren;
         }
     }
 

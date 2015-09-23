@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedgehog.Actors;
+using UnityEngine;
 
 namespace Hedgehog.Terrain
 {
@@ -13,14 +14,14 @@ namespace Hedgehog.Terrain
         public RaycastHit2D Hit;
 
         /// <summary>
-        /// The properties of the terrain hit, if any.
-        /// </summary>
-        public TerrainProperties Properties;
-
-        /// <summary>
         /// The side from which the linecast originated.
         /// </summary>
         public TerrainSide Side;
+
+        /// <summary>
+        /// The controller that initiated the cast, if any.
+        /// </summary>
+        public HedgehogController Source;
 
         /// <summary>
         /// The angle of incline of the terrain hit, if any.
@@ -32,11 +33,12 @@ namespace Hedgehog.Terrain
         /// </summary>
         public float NormalAngle;
 
-        public TerrainCastHit(RaycastHit2D hit, TerrainProperties properties, TerrainSide fromSide = TerrainSide.All)
+        public TerrainCastHit(RaycastHit2D hit, TerrainSide fromSide = TerrainSide.All,
+            HedgehogController source = null)
         {
             Hit = hit;
-            Properties = properties;
             Side = fromSide;
+            Source = source;
             NormalAngle = hit ? DMath.Angle(hit.normal) : 0.0f;
             SurfaceAngle = hit ? NormalAngle - DMath.HalfPi : 0.0f;
         }

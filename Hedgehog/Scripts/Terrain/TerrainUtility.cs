@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Hedgehog.Terrain
 {
+    /// <summary>
+    /// Helpers for the terrain.
+    /// </summary>
     public static class TerrainUtility
     {
         #region Name Utilities
@@ -42,7 +45,7 @@ namespace Hedgehog.Terrain
         #endregion
         #region Terrain Utilities
         /// <summary>
-        /// Performs a linecast against the terrain.
+        /// Performs a linecast against the terrain taking into account a controller's attributes.
         /// </summary>
         /// <param name="source">The controller that queried the linecast.</param>
         /// <param name="start">The beginning of the linecast.</param>
@@ -53,87 +56,20 @@ namespace Hedgehog.Terrain
             Vector2 end, TerrainSide fromSide = TerrainSide.All)
         {
             var hit = BestRaycast(source, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
-            return new TerrainCastHit(hit, hit ? SearchProperties(hit.transform) : null, fromSide);
+            return new TerrainCastHit(hit, fromSide, source);
         }
 
-        public static TComponent Find<TComponent>(Transform transform)
-            where TComponent : Component
+        /// <summary>
+        /// Performs a linecast against the terrain.
+        /// </summary>
+        /// <param name="start">The beginning of the linecast.</param>
+        /// <param name="end">The end of the linecast.</param>
+        /// <param name="fromSide">The side from which the linecast originated, if any.</param>
+        /// <returns></returns>
+        public static TerrainCastHit TerrainCast(Vector2 start, Vector2 end, TerrainSide fromSide = TerrainSide.All)
         {
-            if (transform == null) return null;
-
-            var transformCheck = transform;
-            var componentCheck = transform.GetComponent<TComponent>();
-
-            while (transformCheck != null)
-            {
-                if (componentCheck != null) return componentCheck;
-
-                transformCheck = transformCheck.parent;
-                componentCheck = transformCheck.GetComponent<TComponent>();
-            }
-
-            return null;
-        }
-
-        public static TComponent Find<TComponent>(Transform transform, Func<TComponent, Transform, bool> selector)
-            where TComponent : Component
-        {
-            if (transform == null) return null;
-
-            var transformCheck = transform;
-            var componentCheck = transform.GetComponent<TComponent>();
-
-            while (transformCheck != null)
-            {
-                if (componentCheck != null && selector(componentCheck, transformCheck)) return componentCheck;
-
-                transformCheck = transformCheck.parent;
-                componentCheck = transformCheck.GetComponent<TComponent>();
-            }
-
-            return null;
-        }
-
-        public static IEnumerable<TComponent> FindAll<TComponent>(Transform transform) 
-            where TComponent : Component
-        {
-            if (transform == null) return null;
-
-            var result = new List<TComponent>();
-
-            var transformCheck = transform;
-            var componentCheck = transform.GetComponent<TComponent>();
-
-            while (transformCheck != null)
-            {
-                if (componentCheck != null) result.Add(componentCheck);
-
-                transformCheck = transformCheck.parent;
-                componentCheck = transformCheck.GetComponent<TComponent>();
-            }
-
-            return result;
-        }
-
-        public static IEnumerable<TComponent> FindAll<TComponent>(Transform transform,
-            Func<TComponent, Transform, bool> selector)
-            where TComponent : Component
-        {
-            if (transform == null) return null;
-
-            var result = new List<TComponent>();
-
-            var transformCheck = transform;
-
-            while (transformCheck != null)
-            {
-                var componentCheck = transformCheck.GetComponent<TComponent>();
-                if (componentCheck != null && selector(componentCheck, transformCheck)) result.Add(componentCheck);
-
-                transformCheck = transformCheck.parent;
-            }
-
-            return result;
+            var hit = BestRaycast(null, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
+            return new TerrainCastHit(hit, fromSide);
         }
 
         /// <summary>
@@ -188,19 +124,19 @@ namespace Hedgehog.Terrain
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
             TerrainSide raycastSide = TerrainSide.All)
         {
-            if (!CollisionModeSelector(hit, source)) return false;
-            return PropertiesSelector(hit, raycastSide);
+            return CollisionModeSelector(hit, source) && PlatformTriggerSelector(hit, source, raycastSide);
         }
 
         /// <summary>
         /// Returns whether the raycast hit can be collided with based on the specified controller's
         /// collision mode and collision data.
         /// </summary>
-        /// <param name="source">The specified controller.</param>
+        /// <param name="source">The specified controller, if any.</param>
         /// <param name="hit">The specified raycast hit.</param>
         /// <returns></returns>
-        public static bool CollisionModeSelector(RaycastHit2D hit, HedgehogController source)
+        public static bool CollisionModeSelector(RaycastHit2D hit, HedgehogController source = null)
         {
+            if (source == null) return false;
             switch (source.CollisionMode)
             {
                 case CollisionMode.Layers:
@@ -216,21 +152,133 @@ namespace Hedgehog.Terrain
         }
 
         /// <summary>
-        /// Returns whether the specified raycast hit can be collided with on the
-        /// specified transform's terrain properties, if any.
+        /// Returns whether the raycast hit can be collided with based its platform trigger, if any.
         /// </summary>
         /// <param name="hit">The specified raycast hit.</param>
-        /// <param name="raycastSide">The side from which the raycast originates, if any.</param>
+        /// <param name="source">The controller which initiated the raycast, if any.</param>
+        /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
-        public static bool PropertiesSelector(RaycastHit2D hit, TerrainSide raycastSide = TerrainSide.All)
+        public static bool PlatformTriggerSelector(RaycastHit2D hit, HedgehogController source = null,
+            TerrainSide raycastSide = TerrainSide.All)
         {
-            var properties = SearchProperties(hit.transform);
-            if (properties == null) return true;
+            var enumerable = FindAll<PlatformTrigger>(hit.transform, BaseTrigger.Selector);
+            var platformTriggers = enumerable as PlatformTrigger[] ?? enumerable.ToArray();
 
-            if (properties.Ledge && DMath.Equalsf(hit.fraction, 0.0f))
-                return false;
+            return !platformTriggers.Any() ||
+                platformTriggers.All(trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
+        }
+        #endregion
+        #region Finders
+        /// <summary>
+        /// Finds the first component starting from the specified transform and working its way up
+        /// the hierarchy.
+        /// </summary>
+        /// <typeparam name="TComponent">The type of component to find.</typeparam>
+        /// <param name="transform">The specified transform.</param>
+        /// <returns></returns>
+        public static TComponent Find<TComponent>(Transform transform)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
 
-            return properties.CollidesWithSide(raycastSide);
+            var transformCheck = transform;
+            var componentCheck = transform.GetComponent<TComponent>();
+
+            while (transformCheck != null)
+            {
+                if (componentCheck != null) return componentCheck;
+
+                transformCheck = transformCheck.parent;
+                componentCheck = transformCheck.GetComponent<TComponent>();
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Finds the first component starting from the specified transform and working its way up
+        /// the hierarchy.
+        /// </summary>
+        /// <typeparam name="TComponent">The type of component to find.</typeparam>
+        /// <param name="transform">The specified transform.</param>
+        /// <param name="selector">A predicate that takes the component type and transform currently being
+        /// checked.</param>
+        /// <returns></returns>
+        public static TComponent Find<TComponent>(Transform transform, Func<TComponent, Transform, bool> selector)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var transformCheck = transform;
+            var componentCheck = transform.GetComponent<TComponent>();
+
+            while (transformCheck != null)
+            {
+                if (componentCheck != null && selector(componentCheck, transformCheck)) return componentCheck;
+
+                transformCheck = transformCheck.parent;
+                componentCheck = transformCheck.GetComponent<TComponent>();
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Finds all components starting from the specified transform and working its way up
+        /// the hierarchy (limit one component per transform).
+        /// </summary>
+        /// <typeparam name="TComponent">The type of component to find.</typeparam>
+        /// <param name="transform">The specified transform.</param>
+        /// <returns></returns>
+        public static IEnumerable<TComponent> FindAll<TComponent>(Transform transform)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var result = new List<TComponent>();
+
+            var transformCheck = transform;
+            var componentCheck = transform.GetComponent<TComponent>();
+
+            while (transformCheck != null)
+            {
+                if (componentCheck != null) result.Add(componentCheck);
+
+                transformCheck = transformCheck.parent;
+                componentCheck = transformCheck.GetComponent<TComponent>();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Finds all components starting from the specified transform and working its way up
+        /// the hierarchy (limit one component per transform).
+        /// </summary>
+        /// <typeparam name="TComponent">The type of component to find.</typeparam>
+        /// <param name="transform">The specified transform.</param>
+        /// <param name="selector">A predicate that takes the component type and transform currently being
+        /// checked.</param>
+        /// <returns></returns>
+        public static IEnumerable<TComponent> FindAll<TComponent>(Transform transform,
+            Func<TComponent, Transform, bool> selector)
+            where TComponent : Component
+        {
+            if (transform == null) return null;
+
+            var result = new List<TComponent>();
+
+            var transformCheck = transform;
+
+            while (transformCheck != null)
+            {
+                var componentCheck = transformCheck.GetComponent<TComponent>();
+                if (componentCheck != null && selector(componentCheck, transformCheck)) result.Add(componentCheck);
+
+                transformCheck = transformCheck.parent;
+            }
+
+            return result;
         }
         #endregion
     }

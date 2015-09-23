@@ -543,7 +543,7 @@ namespace Hedgehog.Actors
             {
                 transform.Translate(_queuedTranslate);
                 _queuedTranslate = default(Vector3);
-                HandleCollisions(false);
+                HandleCollisions();
             }
         }
         #endregion
@@ -1139,13 +1139,6 @@ namespace Hedgehog.Actors
                     }
                 }
 
-                if (Grounded)
-                {
-                    TerrainProperties = Footing == Footing.Left
-                        ? s.LeftCast.Properties
-                        : s.RightCast.Properties;
-                }
-
                 return true;
             }
 
@@ -1515,25 +1508,9 @@ namespace Hedgehog.Actors
             {
                 // Find the highest point using wall mode orientation
                 var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point, Wallmode.Normal());
-                
-                // If they are equally high prioritize the one with no terrain properties, then the one
-                // with no moving platform properties
-                if (DMath.Equalsf(distance, 0.0f))
-                {
-                    if (checkLeft.Properties == null) newFooting = Footing.Left;
-                    else if(checkRight.Properties == null) newFooting = Footing.Right;
-                    else if(!checkLeft.Properties.MovingPlatform) newFooting = Footing.Left;
-                    else if(!checkRight.Properties.MovingPlatform) newFooting = Footing.Right;
-                    else newFooting = Footing.Left;
-                } else if (distance > 0)
-                {
-                    newFooting = Footing.Left;
-                }
-                else
-                {
-                    newFooting = Footing.Right;
-                }
-            } else if (checkLeft)
+                newFooting = distance > 0.0f ? Footing.Left : Footing.Right;
+            }
+            else if (checkLeft)
             {
                 newFooting = Footing.Left;
             } else if (checkRight)
