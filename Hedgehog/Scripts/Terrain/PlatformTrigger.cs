@@ -29,6 +29,13 @@ namespace Hedgehog.Terrain
         /// </summary>
         [SerializeField]
         public PlatformSurfaceEvent OnSurfaceExit;
+
+        public override void Reset()
+        {
+            OnSurfaceEnter = new PlatformSurfaceEvent();
+            OnSurfaceStay = new PlatformSurfaceEvent();
+            OnSurfaceExit = new PlatformSurfaceEvent();
+        }
     }
 
     /// <summary>
@@ -59,7 +66,7 @@ namespace Hedgehog.Terrain
     /// the offending platform, and the priority the surface holds.
     /// </summary>
     [Serializable]
-    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, Transform, SurfacePriority>
+    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, TerrainCastHit, SurfacePriority>
     {
         
     }

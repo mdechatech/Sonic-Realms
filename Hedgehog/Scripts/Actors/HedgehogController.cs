@@ -455,17 +455,16 @@ namespace Hedgehog.Actors
         public Orientation Wallmode;
 
         /// <summary>
-        /// The moving platform anchor used to move the player when on moving platforms.
-        /// </summary>
-        [HideInInspector]
-        public MovingPlatformAnchor MovingPlatformAnchor;
-
-        /// <summary>
         /// If grounded, the surface which is currently defining the controller's position
         /// and rotation.
         /// </summary>
         [HideInInspector]
         public Transform PrimarySurface;
+
+        /// <summary>
+        /// The results from the terrain cast which found the primary surface, if any.
+        /// </summary>
+        public TerrainCastHit PrimarySurfaceHit;
 
         /// <summary>
         /// The surface which is currently partially defining the controller's rotation, if any.
@@ -474,9 +473,11 @@ namespace Hedgehog.Actors
         public Transform SecondarySurface;
 
         /// <summary>
-        /// Stores movement of a moving platform from the last update, if any.
+        /// The results from the terrain cast which found the secondary surface, if any.
         /// </summary>
-        private Vector3 _movingPlatformDelta;
+        public TerrainCastHit SecondarySurfaceHit;
+
+        private Vector3 _queuedTranslate;
         #endregion
 
         #region Lifecycle Functions
@@ -489,8 +490,7 @@ namespace Hedgehog.Actors
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
-
-            CreateMovingPlatformAnchor();
+            _queuedTranslate = default(Vector3);
         }
 
         public void Update()
@@ -537,6 +537,13 @@ namespace Hedgehog.Actors
                     vc *= vn / vt;
                     vt *= vn / vt;
                 }
+            }
+
+            if (_queuedTranslate != default(Vector3))
+            {
+                transform.Translate(_queuedTranslate);
+                _queuedTranslate = default(Vector3);
+                HandleCollisions(false);
             }
         }
         #endregion
@@ -741,7 +748,7 @@ namespace Hedgehog.Actors
         /// Checks for collision with all sensors, changing position, velocity, and rotation if necessary. This should be called each time
         /// the player changes position. This method does not require a timestep because it only resolves overlaps in the player's collision.
         /// </summary>
-        private void HandleCollisions()
+        public void HandleCollisions(bool triggerEvents = true)
         {
             var anyHit = false;
             var jumpedPreviousCheck = JustJumped;
@@ -756,7 +763,7 @@ namespace Hedgehog.Actors
 
             if (Grounded)
             {
-                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck();
+                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck(triggerEvents);
                 if (!SurfaceAngleCheck()) Detach();
             }
 
@@ -765,12 +772,6 @@ namespace Hedgehog.Actors
             if (!anyHit && JustDetached)
                 JustDetached = false;
         }
-#if UNITY_EDITOR
-        public void OnApplicationQuit()
-        {
-            DestroyMovingPlatformAnchor();
-        }
-#endif
         #endregion
         #region Collision Subroutines
         /// <summary>
@@ -1015,7 +1016,7 @@ namespace Hedgehog.Actors
         /// Collision check with ground sensors for when player is on the ground.
         /// </summary>
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-        private bool GroundSurfaceCheck()
+        private bool GroundSurfaceCheck(bool triggerEvents = true)
         {
             var s = GetSurface(TerrainMask);
             if (s.LeftCast || s.RightCast)
@@ -1046,7 +1047,7 @@ namespace Hedgehog.Actors
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = Footing.Left;
-                                SetSurface(s.LeftCast.Hit.transform, s.RightCast.Hit.transform);
+                                SetSurface(s.LeftCast, s.RightCast, triggerEvents);
                             }
                             else
                             {
@@ -1054,7 +1055,7 @@ namespace Hedgehog.Actors
                                 DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = Footing.Left;
-                                SetSurface(s.LeftCast.Hit.transform);
+                                SetSurface(s.LeftCast, null, triggerEvents);
                             }
                         }
                         else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
@@ -1063,12 +1064,12 @@ namespace Hedgehog.Actors
                             DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                             transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                             Footing = Footing.Right;
-                            SetSurface(s.RightCast.Hit.transform);
+                            SetSurface(s.RightCast, null, triggerEvents);
                         }
                         else
                         {
                             // Else the surfaces are untolerable. detach from the surface
-                            Detach();
+                            Detach(false, triggerEvents);
                         }
 
                         // Same thing but with the other foot
@@ -1083,14 +1084,14 @@ namespace Hedgehog.Actors
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = Footing.Right;
-                                SetSurface(s.RightCast.Hit.transform, s.LeftCast.Hit.transform);
+                                SetSurface(s.RightCast, s.LeftCast, triggerEvents);
                             }
                             else
                             {
                                 DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = Footing.Right;
-                                SetSurface(s.RightCast.Hit.transform);
+                                SetSurface(s.RightCast, null, triggerEvents);
                             }
 
                         }
@@ -1099,11 +1100,11 @@ namespace Hedgehog.Actors
                             DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                             transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                             Footing = Footing.Left;
-                            SetSurface(s.LeftCast.Hit.transform);
+                            SetSurface(s.LeftCast, null, triggerEvents);
                         }
                         else
                         {
-                            Detach();
+                            Detach(false, triggerEvents);
                         }
                     }
                 }
@@ -1115,11 +1116,11 @@ namespace Hedgehog.Actors
                         DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                         transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                         Footing = Footing.Left;
-                        SetSurface(s.LeftCast.Hit.transform);
+                        SetSurface(s.LeftCast, null, triggerEvents);
                     }
                     else
                     {
-                        Detach();
+                        Detach(false, triggerEvents);
                     }
                 }
                 else
@@ -1130,41 +1131,16 @@ namespace Hedgehog.Actors
                         DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                         transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                         Footing = Footing.Right;
-                        SetSurface(s.RightCast.Hit.transform);
+                        SetSurface(s.RightCast, null, triggerEvents);
                     }
                     else
                     {
-                        Detach();
+                        Detach(false, triggerEvents);
                     }
                 }
 
                 if (Grounded)
                 {
-                    if (Footing == Footing.Left)
-                    {
-                        if (s.LeftCast.Properties != null && s.LeftCast.Properties.MovingPlatform)
-                        {
-                            if (MovingPlatformAnchor.Platform != s.LeftCast.Hit.transform)
-                                MovingPlatformAnchor.LinkPlatform(s.LeftCast.Hit.point, s.LeftCast.Hit.transform);
-                        }
-                        else
-                        {
-                            MovingPlatformAnchor.UnlinkPlatform();
-                        }
-                    }
-                    else if (Footing == Footing.Right)
-                    {
-                        if (s.RightCast.Properties != null && s.RightCast.Properties.MovingPlatform)
-                        {
-                            if (MovingPlatformAnchor.Platform != s.RightCast.Hit.transform)
-                                MovingPlatformAnchor.LinkPlatform(s.RightCast.Hit.point, s.RightCast.Hit.transform);
-                        }
-                        else
-                        {
-                            MovingPlatformAnchor.UnlinkPlatform();
-                        }
-                    }
-
                     TerrainProperties = Footing == Footing.Left
                         ? s.LeftCast.Properties
                         : s.RightCast.Properties;
@@ -1173,7 +1149,7 @@ namespace Hedgehog.Actors
                 return true;
             }
 
-            Detach();
+            Detach(false, triggerEvents);
             return false;
         }
 
@@ -1294,6 +1270,15 @@ namespace Hedgehog.Actors
             if (Vy > ReleaseJumpSpeed) Vy = ReleaseJumpSpeed;
         }
 
+        /// <summary>
+        /// Translates the controller at the start of its physics checks.
+        /// </summary>
+        /// <param name="deltaPosition"></param>
+        public void Translate(Vector3 deltaPosition)
+        {
+            _queuedTranslate = deltaPosition;
+        }
+
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
@@ -1301,7 +1286,7 @@ namespace Hedgehog.Actors
         /// other than setting lockUponLanding.
         /// </summary>
         /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
-        private void Detach(bool lockUponLanding = false)
+        private void Detach(bool lockUponLanding = false, bool triggerEvents = true)
         {
             Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
@@ -1311,8 +1296,7 @@ namespace Hedgehog.Actors
             Wallmode = Orientation.Floor;
             Footing = Footing.None;
             LockUponLanding = lockUponLanding;
-            MovingPlatformAnchor.UnlinkPlatform();
-            SetSurface(null);
+            SetSurface(null, null, triggerEvents);
         }
 
         /// <summary>
@@ -1406,18 +1390,24 @@ namespace Hedgehog.Actors
         /// <summary>
         /// Sets the controller's primary and secondary surfaces and triggers their respective platform events.
         /// </summary>
-        /// <param name="primarySurface">The new primary surface.</param>
-        /// <param name="secondarySurface">The new secondary surface.</param>
+        /// <param name="primarySurfaceHit">The new primary surface.</param>
+        /// <param name="secondarySurfaceHit">The new secondary surface.</param>
         /// <param name="triggerEvents">Whether to trigger the surfaces' respective platform events.</param>
-        public void SetSurface(Transform primarySurface, Transform secondarySurface = null, bool triggerEvents = true)
+        public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null,
+            bool triggerEvents = true)
         {
             if (!triggerEvents)
             {
-                PrimarySurface = primarySurface;
-                SecondarySurface = secondarySurface;
+                PrimarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
+                PrimarySurfaceHit = primarySurfaceHit;
+                SecondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
+                SecondarySurfaceHit = secondarySurfaceHit;
             }
             else
             {
+                var primarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
+                var secondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
+
                 var oldPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(PrimarySurface, BaseTrigger.Selector);
                 var newPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(primarySurface, BaseTrigger.Selector);
                 var oldSecondaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(SecondarySurface,
@@ -1426,7 +1416,9 @@ namespace Hedgehog.Actors
                     BaseTrigger.Selector);
 
                 var oldPrimarySurface = PrimarySurface;
+                var oldPrimarySurfaceHit = PrimarySurfaceHit;
                 var oldSecondarySurface = SecondarySurface;
+                var oldSecondarySurfaceHit = SecondarySurfaceHit;
 
                 PrimarySurface = primarySurface;
                 SecondarySurface = secondarySurface;
@@ -1438,7 +1430,7 @@ namespace Hedgehog.Actors
                         foreach (var primaryTrigger in oldPrimaryTriggers)
                         {
                             primaryTrigger.OnExit.Invoke(this);
-                            primaryTrigger.OnSurfaceExit.Invoke(this, oldPrimarySurface, SurfacePriority.Primary);
+                            primaryTrigger.OnSurfaceExit.Invoke(this, oldPrimarySurfaceHit, SurfacePriority.Primary);
                         }
 
                         if (newPrimaryTriggers != null)
@@ -1446,7 +1438,7 @@ namespace Hedgehog.Actors
                             foreach (var newPrimaryTrigger in newPrimaryTriggers)
                             {
                                 newPrimaryTrigger.OnEnter.Invoke(this);
-                                newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurface, SurfacePriority.Primary);
+                                newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurfaceHit, SurfacePriority.Primary);
                             }
                         }
                     }
@@ -1455,7 +1447,7 @@ namespace Hedgehog.Actors
                         foreach (var primaryTrigger in oldPrimaryTriggers)
                         {
                             primaryTrigger.OnStay.Invoke(this);
-                            primaryTrigger.OnSurfaceStay.Invoke(this, primarySurface, SurfacePriority.Primary);
+                            primaryTrigger.OnSurfaceStay.Invoke(this, primarySurfaceHit, SurfacePriority.Primary);
                         }
                     }
                 } else if (newPrimaryTriggers != null && oldPrimarySurface != primarySurface)
@@ -1463,7 +1455,7 @@ namespace Hedgehog.Actors
                     foreach (var newPrimaryTrigger in newPrimaryTriggers)
                     {
                         newPrimaryTrigger.OnEnter.Invoke(this);
-                        newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurface, SurfacePriority.Primary);
+                        newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurfaceHit, SurfacePriority.Primary);
                     }
                 }
 
@@ -1474,7 +1466,7 @@ namespace Hedgehog.Actors
                         foreach (var secondaryTrigger in oldSecondaryTriggers)
                         {
                             secondaryTrigger.OnExit.Invoke(this);
-                            secondaryTrigger.OnSurfaceExit.Invoke(this, oldSecondarySurface, SurfacePriority.Secondary);
+                            secondaryTrigger.OnSurfaceExit.Invoke(this, oldSecondarySurfaceHit, SurfacePriority.Secondary);
                         }
 
                         if (newSecondaryTriggers != null)
@@ -1482,7 +1474,7 @@ namespace Hedgehog.Actors
                             foreach (var newSecondaryTrigger in newSecondaryTriggers)
                             {
                                 newSecondaryTrigger.OnEnter.Invoke(this);
-                                newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurface, SurfacePriority.Secondary);
+                                newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurfaceHit, SurfacePriority.Secondary);
                             }
                         }
                     }
@@ -1491,7 +1483,7 @@ namespace Hedgehog.Actors
                         foreach (var secondaryTrigger in oldSecondaryTriggers)
                         {
                             secondaryTrigger.OnStay.Invoke(this);
-                            secondaryTrigger.OnSurfaceStay.Invoke(this, secondarySurface, SurfacePriority.Secondary);
+                            secondaryTrigger.OnSurfaceStay.Invoke(this, secondarySurfaceHit, SurfacePriority.Secondary);
                         }
                     }
                 } else if (newSecondaryTriggers != null && oldSecondarySurface != secondarySurface)
@@ -1499,7 +1491,7 @@ namespace Hedgehog.Actors
                     foreach (var newSecondaryTrigger in newSecondaryTriggers)
                     {
                         newSecondaryTrigger.OnEnter.Invoke(this);
-                        newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurface, SurfacePriority.Secondary);
+                        newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurfaceHit, SurfacePriority.Secondary);
                     }
                 }
             }
@@ -1543,7 +1535,7 @@ namespace Hedgehog.Actors
                 }
             } else if (checkLeft)
             {
-                newFooting = Footing.Left;;
+                newFooting = Footing.Left;
             } else if (checkRight)
             {
                 newFooting = Footing.Right;
@@ -1641,53 +1633,6 @@ namespace Hedgehog.Actors
             }
 
             return cast;
-        }
-        #endregion
-        #region Moving Platform Functions
-        /// <summary>
-        /// Destroys the current moving platform anchor and creates a new one.
-        /// </summary>
-        public void CreateMovingPlatformAnchor()
-        {
-            DestroyMovingPlatformAnchor();
-
-            MovingPlatformAnchor = (new GameObject()).AddComponent<MovingPlatformAnchor>();
-            MovingPlatformAnchor.transform.SetParent(transform);
-            MovingPlatformAnchor.name = name + "'s Moving Platform Anchor";
-            MovingPlatformAnchor.LinkController(this);
-            MovingPlatformAnchor.Moved += OnMovingPlatformMove;
-            MovingPlatformAnchor.Destroyed += OnMovingPlatformAnchorDestroyed;
-
-            _movingPlatformDelta = new Vector3();
-        }
-
-        /// <summary>
-        /// Destroys the current moving platform anchor.
-        /// </summary>
-        public void DestroyMovingPlatformAnchor()
-        {
-            if (MovingPlatformAnchor != null && MovingPlatformAnchor.gameObject)
-            {
-                MovingPlatformAnchor.Moved -= OnMovingPlatformMove;
-                MovingPlatformAnchor.Destroyed -= OnMovingPlatformAnchorDestroyed;
-                Destroy(MovingPlatformAnchor.gameObject);
-            }
-
-            MovingPlatformAnchor = null;
-        }
-
-        private void OnMovingPlatformMove(object sender, EventArgs e)
-        {
-            _movingPlatformDelta += MovingPlatformAnchor.DeltaPosition;
-            transform.position += _movingPlatformDelta;
-            _movingPlatformDelta = default(Vector3);
-
-            HandleCollisions();
-        }
-
-        private void OnMovingPlatformAnchorDestroyed(object sender, EventArgs e)
-        {
-            CreateMovingPlatformAnchor();
         }
         #endregion
     }

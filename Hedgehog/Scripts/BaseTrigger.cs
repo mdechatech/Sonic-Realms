@@ -35,6 +35,14 @@ namespace Hedgehog
         [SerializeField]
         public TriggerEvent OnExit;
 
+        public virtual void Reset()
+        {
+            TriggersFromChildren = false;
+            OnEnter = new TriggerEvent();
+            OnStay = new TriggerEvent();
+            OnExit = new TriggerEvent();
+        }
+
         /// <summary>
         /// Returns whether these properties apply to the specified transform.
         /// </summary>

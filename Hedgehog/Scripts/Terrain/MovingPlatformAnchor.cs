@@ -6,15 +6,11 @@ namespace Hedgehog.Terrain
 {
     public class MovingPlatformAnchor : MonoBehaviour
     {
-        public event EventHandler<EventArgs> Destroyed;
-        public event EventHandler<EventArgs> Moved; 
-
-        [HideInInspector]
+        [SerializeField]
         public HedgehogController Controller;
 
-        public Transform Platform;
-
         private Vector3 _previousPosition;
+        private Vector3 _previousControllerPosition;
 
         /// <summary>
         /// Use this to change the anchor's positon without applying the change to
@@ -44,72 +40,56 @@ namespace Hedgehog.Terrain
             }
         }
 
-        public Vector3 DeltaPosition
-        {
-            get
-            {
-                if (Platform == null) return default(Vector3);
-                return transform.position - _previousPosition;
-            }
-        }
+        public Vector3 PreviousDeltaPosition;
+        public Vector3 DeltaPosition;
+        public Vector3 DeltaControllerPosition;
 
         public void FixedUpdate()
         {
-            if (Platform != null)
+            
+        }
+
+        public void TranslateController()
+        {
+            DeltaPosition = default(Vector3);
+            DeltaControllerPosition = default(Vector3);
+
+            if (transform.position != _previousPosition)
             {
-                if (transform.position != _previousPosition)
-                {
-                    if (Moved != null) Moved(this, EventArgs.Empty);
-                    _previousPosition = transform.position;
-                }
+                DeltaPosition = transform.position - _previousPosition;
+                // TODO: Fix bug where controller rocks side-to-side on sloped platforms
+                Controller.Translate(DeltaPosition);
+                _previousPosition = transform.position;
             }
+
+            if(Controller.Velocity != default(Vector2))
+                PositionOverride += (Vector3)Controller.Velocity * Time.fixedDeltaTime;
+        }
+
+        public void LinkController(HedgehogController controller, Vector2 contactPoint)
+        {
+            Controller = controller;
+            transform.position = contactPoint;
+            ResetDeltaPosition();
         }
 
         public void LinkController(HedgehogController controller)
         {
             Controller = controller;
+            transform.position = controller.transform.position;
             ResetDeltaPosition();
         }
 
-        public void UnlinkController(HedgehogController controller)
+        public void UnlinkController(Transform controller)
         {
             Controller = null;
             transform.SetParent(transform.root);
         }
 
-        public void LinkPlatform(Vector2 position, Transform terrain)
-        {
-            transform.SetParent(terrain);
-            transform.position = position;
-
-            Platform = terrain;
-            ResetDeltaPosition();
-        }
-
-        public void UnlinkPlatform()
-        {
-            Platform = null;
-            if (Controller != null)
-            {
-                transform.SetParent(Controller.transform);
-            }
-            else
-            {
-                transform.SetParent(transform.root);
-            }
-
-            ResetDeltaPosition();
-        }
-
         public void ResetDeltaPosition()
         {
-            if (Platform != null) _previousPosition = transform.position;
-            else _previousPosition = default(Vector3);
-        }
-
-        public void OnDestroy()
-        {
-            if (Destroyed != null) Destroyed(this, EventArgs.Empty);
+            _previousPosition = transform.position;
+            if(Controller != null) _previousControllerPosition = Controller.transform.position;
         }
     }
 }

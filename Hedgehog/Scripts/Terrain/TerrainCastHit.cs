@@ -5,7 +5,7 @@ namespace Hedgehog.Terrain
     /// <summary>
     /// Contains data from the result of a terrain cast.
     /// </summary>
-    public struct TerrainCastHit
+    public class TerrainCastHit
     {
         /// <summary>
         /// The resulting raycast hit data.
@@ -43,7 +43,7 @@ namespace Hedgehog.Terrain
 
         public static implicit operator bool(TerrainCastHit terrainInfo)
         {
-            return terrainInfo.Hit;
+            return terrainInfo == null ? false : terrainInfo.Hit;
         }
     }
 }
