@@ -8,6 +8,7 @@ namespace Hedgehog.Terrain
     /// Moves an object along the path defined by a collider2D.
     /// </summary>
     [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Path Mover")]
+    [RequireComponent(typeof(MovingPlatform))]
     public class PlatformPathMover : BasePlatformMover
     {
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Hedgehog.Actors;
-using UnityEditor.Events;
 using UnityEngine;
 
 namespace Hedgehog.Terrain
@@ -35,11 +34,6 @@ namespace Hedgehog.Terrain
         public void Reset()
         {
             TransferMomentumX = TransferMomentumY = false;
-
-            _trigger = GetComponent<PlatformTrigger>();
-            UnityEventTools.AddPersistentListener(_trigger.OnSurfaceEnter, Link);
-            UnityEventTools.AddPersistentListener(_trigger.OnSurfaceStay, Translate);
-            UnityEventTools.AddPersistentListener(_trigger.OnSurfaceExit, Unlink);
         }
 
         public void Awake()
@@ -52,6 +46,9 @@ namespace Hedgehog.Terrain
         public void Start()
         {
             _trigger = GetComponent<PlatformTrigger>();
+            _trigger.OnSurfaceEnter.AddListener(Link);
+            _trigger.OnSurfaceStay.AddListener(Translate);
+            _trigger.OnSurfaceExit.AddListener(Unlink);
         }
 
         public void FixedUpdate()
@@ -67,6 +64,13 @@ namespace Hedgehog.Terrain
             }
 
             _controllerRemoveQueue.Clear();
+        }
+
+        public void OnDestroy()
+        {
+            _trigger.OnSurfaceEnter.RemoveListener(Link);
+            _trigger.OnSurfaceStay.RemoveListener(Translate);
+            _trigger.OnSurfaceExit.RemoveListener(Unlink);
         }
 
         private MovingPlatformAnchor CreateAnchor(HedgehogController controller, TerrainCastHit hit)
@@ -101,11 +105,14 @@ namespace Hedgehog.Terrain
         public void Unlink(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (!_linkedControllers.Contains(controller) || 
-                priority == SurfacePriority.Secondary || controller.SecondarySurface == transform) return;
+                (controller.PrimarySurface == transform || controller.SecondarySurface == transform)) return;
 
-            var perSecondVelocity = (Vector2) Velocity/Time.fixedDeltaTime;
-            controller.Velocity += new Vector2(TransferMomentumX ? perSecondVelocity.x : 0.0f,
-                TransferMomentumY ? perSecondVelocity.y : 0.0f);
+            var anchor = _linkedAnchors[_linkedControllers.IndexOf(controller)];
+            var velocity = (Vector2) anchor.DeltaPosition/Time.fixedDeltaTime;
+            
+            controller.Velocity += new Vector2(
+                TransferMomentumX ? velocity.x : 0.0f,
+                TransferMomentumY ? velocity.y : 0.0f);
             
             _controllerRemoveQueue.Add(controller);
         }

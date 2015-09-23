@@ -99,6 +99,29 @@ namespace Hedgehog.Utils
                 }
             }
         }
+
+        public static HedgehogPhysicsValues Capture(HedgehogController hedgehog)
+        {
+            var result = new HedgehogPhysicsValues();
+
+            var hedgehogType = typeof (HedgehogController);
+            var physicsType = typeof (HedgehogPhysicsValues);
+
+            var fields = physicsType.GetFields();
+            foreach (var field in fields)
+            {
+                if (!ExcludedFields.Contains(field.Name))
+                {
+                    var controllerField = hedgehogType.GetField(field.Name);
+                    if(controllerField != null)
+                        field.SetValue(result, controllerField.GetValue(hedgehog));
+                    else
+                        Debug.LogError("Controller has no property " + field.Name + ".");
+                }
+            }
+
+            return result;
+        }
     }
 
     public static class HedgehogUtility
@@ -176,6 +199,11 @@ namespace Hedgehog.Utils
             // It becomes inaccurate for FOVs over 100.
             // I have no idea how to correctly find FOV projection sizes.
             return 33.6778f*Mathf.Log(1.26728f);
+        }
+
+        public static HedgehogPhysicsValues CapturePhysicsValues(HedgehogController controller)
+        {
+            return HedgehogPhysicsValues.Capture(controller);
         }
 
         public static Transform SearchGeneratedSensors(Transform hedgehog)

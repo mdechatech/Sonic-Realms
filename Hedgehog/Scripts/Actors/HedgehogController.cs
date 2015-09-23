@@ -694,7 +694,7 @@ namespace Hedgehog.Actors
                 // Slope gravity
                 if (Mathf.Abs(DMath.AngleDiffd(SurfaceAngle, 0.0f)) > SlopeGravityBeginAngle)
                 {
-                    Vg -= SlopeGravity*Mathf.Sin(SurfaceAngle*Mathf.Deg2Rad)*timestep;
+                    Vg -= SlopeGravity*Mathf.Sin(PrimarySurfaceHit.SurfaceAngle)*timestep;
                 }
 
                 // Speed limit
@@ -1400,7 +1400,9 @@ namespace Hedgehog.Actors
                 var oldSecondarySurfaceHit = SecondarySurfaceHit;
 
                 PrimarySurface = primarySurface;
+                PrimarySurfaceHit = primarySurfaceHit;
                 SecondarySurface = secondarySurface;
+                SecondarySurfaceHit = secondarySurfaceHit;
 
                 if (oldPrimaryTriggers != null)
                 {

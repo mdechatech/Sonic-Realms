@@ -38,20 +38,15 @@ namespace Hedgehog.Terrain
             }
         }
 
-        public Vector3 PreviousDeltaPosition;
         public Vector3 DeltaPosition;
-        public Vector3 DeltaControllerPosition;
 
         public void FixedUpdate()
         {
-            
+            if(Controller != null) TranslateController();
         }
 
         public void TranslateController()
         {
-            DeltaPosition = default(Vector3);
-            DeltaControllerPosition = default(Vector3);
-
             if (transform.position != _previousPosition)
             {
                 DeltaPosition = transform.position - _previousPosition;
