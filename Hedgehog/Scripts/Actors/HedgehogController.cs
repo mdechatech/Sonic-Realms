@@ -407,12 +407,6 @@ namespace Hedgehog.Actors
         public Footing Footing;
 
         /// <summary>
-        /// If grounded, the properties of the ground beneath the player, if any.
-        /// </summary>
-        [HideInInspector]
-        public TerrainProperties TerrainProperties;
-
-        /// <summary>
         /// Whether the player has control of horizontal ground movement.
         /// </summary>
         [HideInInspector]
@@ -582,10 +576,6 @@ namespace Hedgehog.Actors
         /// </summary>
         private void HandleInput(float timestep)
         {
-            var friction = TerrainProperties == null
-                    ? 1.0f
-                    : TerrainProperties.Friction;
-
             if (Grounded)
             {
                 if (DebugSpindashKeyDown)
@@ -621,12 +611,12 @@ namespace Hedgehog.Actors
                     {
                         if (Vg > 0.0f)
                         {
-                            Vg -= GroundBrake*friction*timestep;
-                            if (Vg < 0.0f) Vg -= GroundAcceleration * friction * timestep;
+                            Vg -= GroundBrake*timestep;
+                            if (Vg < 0.0f) Vg -= GroundAcceleration *timestep;
                         }
                         else if (Vg > -TopSpeed)
                         {
-                            Vg -= GroundAcceleration*friction*timestep;
+                            Vg -= GroundAcceleration*timestep;
                         }
                     }
                 }
@@ -641,12 +631,12 @@ namespace Hedgehog.Actors
                     {
                         if (Vg < 0.0f)
                         {
-                            Vg += GroundBrake*friction*timestep;
-                            if (Vg > 0.0f) Vg += GroundAcceleration * friction * timestep;
+                            Vg += GroundBrake*timestep;
+                            if (Vg > 0.0f) Vg += GroundAcceleration*timestep;
                         }
                         else if (Vg < TopSpeed)
                         {
-                            Vg += GroundAcceleration*friction*timestep;
+                            Vg += GroundAcceleration*timestep;
                         }
                     }
                 }
@@ -682,10 +672,6 @@ namespace Hedgehog.Actors
         {
             if (Grounded)
             {
-                var friction = TerrainProperties == null
-                    ? 1.0f
-                    : TerrainProperties.Friction;
-
                 // Friction from deceleration
                 if (HorizontalLock || (!LeftKeyDown && !RightKeyDown))
                 {
@@ -695,12 +681,12 @@ namespace Hedgehog.Actors
                     }
                     else if (Vg > 0.0f)
                     {
-                        Vg -= GroundDeceleration*timestep*friction;
+                        Vg -= GroundDeceleration*timestep;
                         if (Vg < 0.0f) Vg = 0.0f;
                     }
                     else if (Vg < 0.0f)
                     {
-                        Vg += GroundDeceleration*timestep*friction;
+                        Vg += GroundDeceleration*timestep;
                         if (Vg > 0.0f) Vg = 0.0f;
                     }
                 }

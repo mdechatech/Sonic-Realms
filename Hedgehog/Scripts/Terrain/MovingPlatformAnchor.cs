@@ -1,5 +1,4 @@
-﻿using System;
-using Hedgehog.Actors;
+﻿using Hedgehog.Actors;
 using UnityEngine;
 
 namespace Hedgehog.Terrain
@@ -10,7 +9,6 @@ namespace Hedgehog.Terrain
         public HedgehogController Controller;
 
         private Vector3 _previousPosition;
-        private Vector3 _previousControllerPosition;
 
         /// <summary>
         /// Use this to change the anchor's positon without applying the change to
@@ -89,7 +87,6 @@ namespace Hedgehog.Terrain
         public void ResetDeltaPosition()
         {
             _previousPosition = transform.position;
-            if(Controller != null) _previousControllerPosition = Controller.transform.position;
         }
     }
 }

@@ -73,31 +73,6 @@ namespace Hedgehog.Terrain
         }
 
         /// <summary>
-        /// Searches for terrain properties on the transform and all its parents, taking into
-        /// account any terrain properties' maximum level.
-        /// </summary>
-        /// <param name="hit">The terrain transform.</param>
-        /// <param name="maxLevel">The maximum amount of parents to go through.</param>
-        /// <returns></returns>
-        public static TerrainProperties SearchProperties(Transform hit, int maxLevel = Int32.MaxValue)
-        {
-            var check = hit;
-            var levelsDown = 0;
-            while (maxLevel >= 0 && check != null)
-            {
-                var properties = check.GetComponent<TerrainProperties>();
-                if (properties != null && levelsDown <= properties.AppliesToChildrenLevel)
-                    return properties;
-
-                ++levelsDown;
-                check = check.parent;
-                --maxLevel;
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Returns the closest from a list of raycasts filtered based on the controller's collision mode
         /// and the raycast hit's terrain properties.
         /// </summary>
