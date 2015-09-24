@@ -11,14 +11,20 @@ namespace Hedgehog.Level.Platforms
     [RequireComponent(typeof(PlatformTrigger))]
     public class Ledge : MonoBehaviour
     {
+        private PlatformTrigger _trigger;
+
+        public void Awake()
+        {
+            _trigger = GetComponent<PlatformTrigger>();
+        }
         public void OnEnable()
         {
-            GetComponent<PlatformTrigger>().CollisionPredicates.Add(CollisionPredicate);
+            _trigger.CollisionPredicates.Add(CollisionPredicate);
         }
 
         public void OnDisable()
         {
-            GetComponent<PlatformTrigger>().CollisionPredicates.Remove(CollisionPredicate);
+            _trigger.CollisionPredicates.Remove(CollisionPredicate);
         }
 
         // The platform can be collided with if the player is checking its bottom side and

@@ -43,26 +43,30 @@ namespace Hedgehog.Level.Areas
             MinFloatSpeed = 100.0f;
         }
 
-        public void Start()
+        public void Awake()
         {
+            _areaTrigger = GetComponent<AreaTrigger>();
             _platformTrigger = GetComponent<PlatformTrigger>();
+            _collider2D = GetComponent<Collider2D>();
+        }
+
+        public void OnEnable()
+        {
             _platformTrigger.CollisionPredicates.Add(FloatSelector);
 
-            _areaTrigger = GetComponent<AreaTrigger>();
             _areaTrigger.CollisionPredicates.Add(SubmersionPredicate);
             _areaTrigger.OnAreaEnter.AddListener(Apply);
             _areaTrigger.OnAreaStay.AddListener(Stay);
             _areaTrigger.OnAreaExit.AddListener(Revert);
-
-            _collider2D = GetComponent<Collider2D>();
         }
 
-        public void OnDestroy()
+        public void OnDisable()
         {
             _platformTrigger.CollisionPredicates.Remove(FloatSelector);
 
             _areaTrigger.CollisionPredicates.Remove(SubmersionPredicate);
             _areaTrigger.OnAreaEnter.RemoveListener(Apply);
+            _areaTrigger.OnAreaStay.RemoveListener(Stay);
             _areaTrigger.OnAreaExit.RemoveListener(Revert);
         }
 

@@ -43,14 +43,21 @@ namespace Hedgehog.Level.Platforms
             _linkedControllers = new List<HedgehogController>();
             _linkedAnchors = new List<MovingPlatformAnchor>();
             _controllerRemoveQueue = new List<HedgehogController>();
+            _trigger = GetComponent<PlatformTrigger>();
         }
 
-        public void Start()
+        public void OnEnable()
         {
-            _trigger = GetComponent<PlatformTrigger>();
             _trigger.OnSurfaceEnter.AddListener(Link);
             _trigger.OnSurfaceStay.AddListener(Translate);
             _trigger.OnSurfaceExit.AddListener(Unlink);
+        }
+
+        public void OnDisable()
+        {
+            _trigger.OnSurfaceEnter.RemoveListener(Link);
+            _trigger.OnSurfaceStay.RemoveListener(Translate);
+            _trigger.OnSurfaceExit.RemoveListener(Unlink);
         }
 
         public void FixedUpdate()

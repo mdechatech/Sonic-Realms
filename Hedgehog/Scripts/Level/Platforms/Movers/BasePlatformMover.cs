@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 namespace Hedgehog.Level.Platforms.Movers
 {
+    [RequireComponent(typeof(MovingPlatform))]
     public abstract class BasePlatformMover : MonoBehaviour
     {
         /// <summary>
@@ -52,22 +53,23 @@ namespace Hedgehog.Level.Platforms.Movers
 
         public virtual void FixedUpdate()
         {
-            UpdateTimer();
+            UpdateTimer(Time.fixedDeltaTime);
             To(PositionCurve.Evaluate(CurrentTime/Duration));
         }
 
         /// <summary>
-        /// Updates the current time with Time.fixedDeltaTime.
+        /// Updates the current time by the specified timestep.
         /// </summary>
-        public virtual void UpdateTimer()
+        /// <param name="timestep">The specified timestep.</param>
+        public virtual void UpdateTimer(float timestep)
         {
             if (ReverseDirection)
             {
-                CurrentTime -= Time.fixedDeltaTime;
+                CurrentTime -= timestep;
             }
             else
             {
-                CurrentTime += Time.fixedDeltaTime;
+                CurrentTime += timestep;
             }
 
             if (CurrentTime > Duration)

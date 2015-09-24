@@ -29,16 +29,16 @@ namespace Hedgehog.Level.Platforms
         public void Awake()
         {
             _capturedPhysicsValues = new Dictionary<int, HedgehogPhysicsValues>();
+            _trigger = GetComponent<PlatformTrigger>();
         }
 
-        public void Start()
+        public void OnEnable()
         {
-            _trigger = GetComponent<PlatformTrigger>();
             _trigger.OnSurfaceEnter.AddListener(ApplyFriction);
             _trigger.OnSurfaceExit.AddListener(RemoveFriction);
         }
 
-        public void Destroy()
+        public void OnDisable()
         {
             _trigger.OnSurfaceEnter.RemoveListener(ApplyFriction);
             _trigger.OnSurfaceExit.RemoveListener(RemoveFriction);
