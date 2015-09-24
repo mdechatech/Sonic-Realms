@@ -85,6 +85,7 @@ namespace Hedgehog.Terrain
             return anchor;
         }
 
+        // Attaches the controller to the platform through a MovingPlatformAnchor
         public void Link(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (priority == SurfacePriority.Secondary || _linkedControllers.Contains(controller)) return;
@@ -93,6 +94,7 @@ namespace Hedgehog.Terrain
             _linkedAnchors.Add(CreateAnchor(controller, hit));
         }
 
+        // Updates the anchor associated with the controller
         public void Translate(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (priority == SurfacePriority.Secondary) return;
@@ -102,6 +104,7 @@ namespace Hedgehog.Terrain
             _linkedAnchors[index].TranslateController();
         }
 
+        // Removes the anchor associated with the controller
         public void Unlink(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (!_linkedControllers.Contains(controller) || 

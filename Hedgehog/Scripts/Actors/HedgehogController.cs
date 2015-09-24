@@ -47,43 +47,24 @@ namespace Hedgehog.Actors
         public KeyCode DebugSpindashKey = KeyCode.Space;
         #endregion
         #region Sensors
+
         [Header("Sensors")]
-        // Nine sensors arranged like a tic-tac-toe board.
-        [SerializeField]
-        [Tooltip("The bottom left corner.")]
-        public Transform SensorBottomLeft;
+        [SerializeField] public Transform SensorSurfaceLeft;
+        [SerializeField] public Transform SensorSurfaceRight;
+        [SerializeField] public Transform SensorLedgeLeft;
+        [SerializeField] public Transform SensorLedgeRight;
 
-        [SerializeField]
-        [Tooltip("The bottom middle point.")]
-        public Transform SensorBottomMiddle;
+        [SerializeField] public Transform SensorBottomLeft;
+        [SerializeField] public Transform SensorBottomMiddle;
+        [SerializeField] public Transform SensorBottomRight;
 
-        [SerializeField]
-        [Tooltip("The bottom right corner.")]
-        public Transform SensorBottomRight;
+        [SerializeField] public Transform SensorMiddleLeft;
+        [SerializeField] public Transform SensorMiddleMiddle;
+        [SerializeField] public Transform SensorMiddleRight;
 
-        [SerializeField]
-        [Tooltip("The left middle point.")]
-        public Transform SensorMiddleLeft;
-
-        [SerializeField]
-        [Tooltip("The center point.")]
-        public Transform SensorMiddleMiddle;
-
-        [SerializeField]
-        [Tooltip("The right middle point.")]
-        public Transform SensorMiddleRight;
-
-        [SerializeField]
-        [Tooltip("The top left corner.")]
-        public Transform SensorTopLeft;
-
-        [SerializeField]
-        [Tooltip("The top middle point.")]
-        public Transform SensorTopMiddle;
-
-        [SerializeField]
-        [Tooltip("The top right corner.")]
-        public Transform SensorTopRight;
+        [SerializeField] public Transform SensorTopLeft;
+        [SerializeField] public Transform SensorTopMiddle;
+        [SerializeField] public Transform SensorTopRight;
         #endregion
         #region Physics
         [Header("Physics")]
@@ -694,7 +675,7 @@ namespace Hedgehog.Actors
                 // Slope gravity
                 if (Mathf.Abs(DMath.AngleDiffd(SurfaceAngle, 0.0f)) > SlopeGravityBeginAngle)
                 {
-                    Vg -= SlopeGravity*Mathf.Sin(PrimarySurfaceHit.SurfaceAngle)*timestep;
+                    Vg -= SlopeGravity*Mathf.Sin(SurfaceAngle*Mathf.Deg2Rad)*timestep;
                 }
 
                 // Speed limit
@@ -1495,7 +1476,8 @@ namespace Hedgehog.Actors
             if (checkLeft && checkRight)
             {
                 // Find the highest point using wall mode orientation
-                var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point, Wallmode.Normal());
+                var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point,
+                    (SurfaceAngle + 90.0f)*Mathf.Deg2Rad);
                 newFooting = distance > 0.0f ? Footing.Left : Footing.Right;
             }
             else if (checkLeft)
@@ -1521,14 +1503,11 @@ namespace Hedgehog.Actors
             if (side == Footing.Left)
             {
                 cast = this.TerrainCast(
-                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    SensorBottomLeft.position, TerrainSide.Bottom);
+                    SensorLedgeLeft.position, SensorBottomLeft.position, TerrainSide.Bottom);
             }
             else
             {
-                cast = this.TerrainCast(
-                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    SensorBottomRight.position, TerrainSide.Bottom);
+                cast = this.TerrainCast(SensorLedgeRight.position, SensorBottomRight.position, TerrainSide.Bottom);
             }
 
             return cast;
@@ -1545,37 +1524,16 @@ namespace Hedgehog.Actors
             if (footing == Footing.Left)
             {
                 // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
-                cast = this.TerrainCast(
-                    (Vector2) SensorBottomLeft.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    (Vector2) SensorBottomLeft.position + Wallmode.UnitVector()*LedgeDropHeight,
-                    TerrainSide.Bottom);
+                cast = this.TerrainCast(SensorLedgeLeft.position, SensorSurfaceLeft.position, TerrainSide.Bottom);
 
                 if (!cast)
                 {
                     return default(TerrainCastHit);
                 }
-                if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
-                {
-                    for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
-                    {
-                        cast = this.TerrainCast(
-                            (Vector2) SensorBottomLeft.position - check.UnitVector()*LedgeClimbHeight,
-                            (Vector2) SensorBottomLeft.position + check.UnitVector()*LedgeDropHeight,
-                            TerrainSide.Bottom);
-
-                        if (cast && !DMath.Equalsf(cast.Hit.fraction, 0.0f))
-                            return cast;
-                    }
-
-                    return default(TerrainCastHit);
-                }
-
-                return cast;
+                return DMath.Equalsf(cast.Hit.fraction, 0.0f) ? default(TerrainCastHit) : cast;
             }
-            cast = this.TerrainCast(
-                    (Vector2) SensorBottomRight.position - Wallmode.UnitVector()*LedgeClimbHeight,
-                    (Vector2) SensorBottomRight.position + Wallmode.UnitVector()*LedgeDropHeight,
-                    TerrainSide.Bottom);
+            cast = this.TerrainCast(SensorLedgeRight.position, SensorSurfaceRight.position,
+                TerrainSide.Bottom);
 
             if (!cast)
             {
@@ -1583,17 +1541,6 @@ namespace Hedgehog.Actors
             }
             if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
             {
-                for (var check = Wallmode.AdjacentCW(); check != Wallmode; check = check.AdjacentCW())
-                {
-                    cast = this.TerrainCast(
-                        (Vector2) SensorBottomRight.position - check.UnitVector()*LedgeClimbHeight,
-                        (Vector2) SensorBottomRight.position + check.UnitVector()*LedgeDropHeight,
-                        TerrainSide.Bottom);
-
-                    if (cast && !DMath.Equalsf(cast.Hit.fraction, 0.0f))
-                        return cast;
-                }
-
                 return default(TerrainCastHit);
             }
 

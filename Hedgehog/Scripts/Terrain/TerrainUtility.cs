@@ -99,7 +99,7 @@ namespace Hedgehog.Terrain
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
             TerrainSide raycastSide = TerrainSide.All)
         {
-            return CollisionModeSelector(hit, source) && PlatformTriggerSelector(hit, source, raycastSide);
+            return CollisionModeSelector(hit.transform, source) && PlatformTriggerSelector(hit, source, raycastSide);
         }
 
         /// <summary>
@@ -109,20 +109,20 @@ namespace Hedgehog.Terrain
         /// <param name="source">The specified controller, if any.</param>
         /// <param name="hit">The specified raycast hit.</param>
         /// <returns></returns>
-        public static bool CollisionModeSelector(RaycastHit2D hit, HedgehogController source = null)
+        public static bool CollisionModeSelector(Transform transform, HedgehogController source = null)
         {
             if (source == null) return false;
             switch (source.CollisionMode)
             {
                 case CollisionMode.Layers:
-                    return (source.TerrainMask & (1 << hit.transform.gameObject.layer)) > 0;
+                    return (source.TerrainMask & (1 << transform.gameObject.layer)) > 0;
 
                 case CollisionMode.Tags:
-                    return source.TerrainTags.Contains(hit.transform.tag);
+                    return source.TerrainTags.Contains(transform.tag);
 
                 case CollisionMode.Names:
                 default:
-                    return HasNameRecursive(hit.transform, source.TerrainNames);
+                    return HasNameRecursive(transform, source.TerrainNames);
             }
         }
 

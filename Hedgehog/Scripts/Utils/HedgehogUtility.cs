@@ -264,6 +264,18 @@ namespace Hedgehog.Utils
             var sensorBotRight = new GameObject();
             sensorBotRight.name = "Bot Right";
 
+            var sensorSurfLeft = new GameObject();
+            sensorSurfLeft.name = "Surface Left";
+
+            var sensorSurfRight = new GameObject();
+            sensorSurfRight.name = "Surface Right";
+
+            var sensorLedgeLeft = new GameObject();
+            sensorLedgeLeft.name = "Ledge Left";
+
+            var sensorLedgeRight = new GameObject();
+            sensorLedgeRight.name = "Ledge Right";
+
             sensorTopLeft.transform.SetParent(sensorsObject.transform);
             hedgehog.SensorTopLeft = sensorTopLeft.transform;
 
@@ -291,6 +303,18 @@ namespace Hedgehog.Utils
             sensorBotRight.transform.SetParent(sensorsObject.transform);
             hedgehog.SensorBottomRight = sensorBotRight.transform;
 
+            sensorSurfLeft.transform.SetParent(sensorsObject.transform);
+            hedgehog.SensorSurfaceLeft = sensorSurfLeft.transform;
+
+            sensorSurfRight.transform.SetParent(sensorsObject.transform);
+            hedgehog.SensorSurfaceRight = sensorSurfRight.transform;
+
+            sensorLedgeLeft.transform.SetParent(sensorsObject.transform);
+            hedgehog.SensorLedgeLeft = sensorLedgeLeft.transform;
+
+            sensorLedgeRight.transform.SetParent(sensorsObject.transform);
+            hedgehog.SensorLedgeRight = sensorLedgeRight.transform;
+
             if (isLocal)
             {
                 sensorTopLeft.transform.localPosition = new Vector3(bounds.min.x, bounds.max.y);
@@ -302,6 +326,14 @@ namespace Hedgehog.Utils
                 sensorBotLeft.transform.localPosition = bounds.min;
                 sensorBotMid.transform.localPosition = new Vector3(bounds.center.x, bounds.min.y);
                 sensorBotRight.transform.localPosition = new Vector3(bounds.max.x, bounds.min.y);
+                sensorLedgeLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
+                                                         Vector3.up*hedgehog.LedgeDropHeight;
+                sensorLedgeRight.transform.localPosition = sensorBotRight.transform.localPosition +
+                                                           Vector3.up*hedgehog.LedgeDropHeight;
+                sensorSurfLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
+                                                         Vector3.down * hedgehog.LedgeDropHeight;
+                sensorSurfRight.transform.localPosition = sensorBotRight.transform.localPosition +
+                                                         Vector3.down * hedgehog.LedgeDropHeight;
             }
             else
             {
@@ -314,17 +346,15 @@ namespace Hedgehog.Utils
                 sensorBotLeft.transform.position = bounds.min;
                 sensorBotMid.transform.position = new Vector3(bounds.center.x, bounds.min.y);
                 sensorBotRight.transform.position = new Vector3(bounds.max.x, bounds.min.y);
+                sensorLedgeLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
+                                                         Vector3.up * hedgehog.LedgeDropHeight;
+                sensorLedgeRight.transform.localPosition = sensorBotRight.transform.localPosition +
+                                                         Vector3.up * hedgehog.LedgeDropHeight;
+                sensorSurfLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
+                                                         Vector3.down * hedgehog.LedgeDropHeight;
+                sensorSurfRight.transform.localPosition = sensorBotRight.transform.localPosition +
+                                                         Vector3.down * hedgehog.LedgeDropHeight;
             }
-
-            hedgehog.SensorTopLeft = sensorTopLeft.transform;
-            hedgehog.SensorTopMiddle = sensorTopMid.transform;
-            hedgehog.SensorTopRight = sensorTopRight.transform;
-            hedgehog.SensorMiddleLeft = sensorMidLeft.transform;
-            hedgehog.SensorMiddleMiddle = sensorMidMid.transform;
-            hedgehog.SensorMiddleRight = sensorMidRight.transform;
-            hedgehog.SensorBottomLeft = sensorBotLeft.transform;
-            hedgehog.SensorBottomMiddle = sensorBotMid.transform;
-            hedgehog.SensorBottomRight = sensorBotRight.transform;
         }
     }
 }
