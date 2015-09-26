@@ -360,10 +360,10 @@ namespace Hedgehog.Core.Utils
                 sensorBotLeft.transform.localPosition = bounds.min;
                 sensorBotMid.transform.localPosition = new Vector3(bounds.center.x, bounds.min.y);
                 sensorBotRight.transform.localPosition = new Vector3(bounds.max.x, bounds.min.y);
-                sensorLedgeLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
-                                                         Vector3.up*controller.LedgeDropHeight;
-                sensorLedgeRight.transform.localPosition = sensorBotRight.transform.localPosition +
-                                                           Vector3.up*controller.LedgeDropHeight;
+                sensorLedgeLeft.transform.localPosition = Vector3.Lerp(sensorTopLeft.transform.localPosition,
+                    sensorBotLeft.transform.localPosition, 0.5f);
+                sensorLedgeRight.transform.localPosition = Vector3.Lerp(sensorTopRight.transform.localPosition,
+                    sensorBotRight.transform.localPosition, 0.5f);
                 sensorSurfLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
                                                          Vector3.down * controller.LedgeDropHeight;
                 sensorSurfRight.transform.localPosition = sensorBotRight.transform.localPosition +
@@ -380,10 +380,10 @@ namespace Hedgehog.Core.Utils
                 sensorBotLeft.transform.position = bounds.min;
                 sensorBotMid.transform.position = new Vector3(bounds.center.x, bounds.min.y);
                 sensorBotRight.transform.position = new Vector3(bounds.max.x, bounds.min.y);
-                sensorLedgeLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
-                                                         Vector3.up * controller.LedgeDropHeight;
-                sensorLedgeRight.transform.localPosition = sensorBotRight.transform.localPosition +
-                                                         Vector3.up * controller.LedgeDropHeight;
+                sensorLedgeLeft.transform.position = Vector3.Lerp(sensorTopLeft.transform.position,
+                     sensorBotLeft.transform.position, 0.5f);
+                sensorLedgeRight.transform.position = Vector3.Lerp(sensorTopRight.transform.position,
+                    sensorBotRight.transform.position, 0.5f);
                 sensorSurfLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
                                                          Vector3.down * controller.LedgeDropHeight;
                 sensorSurfRight.transform.localPosition = sensorBotRight.transform.localPosition +
