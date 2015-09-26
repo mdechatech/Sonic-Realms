@@ -7,7 +7,7 @@ namespace Hedgehog.Core.Triggers.Editor
     public class BaseTriggerEditor : UnityEditor.Editor
     {
         protected SerializedProperty
-            TriggersFromChildrenProperty,
+            TriggerFromChildrenProperty,
             OnEnterProperty,
             OnStayProperty,
             OnExitProperty;
@@ -20,7 +20,7 @@ namespace Hedgehog.Core.Triggers.Editor
 
         public virtual void OnEnable()
         {
-            TriggersFromChildrenProperty = serializedObject.FindProperty("TriggersFromChildren");
+            TriggerFromChildrenProperty = serializedObject.FindProperty("TriggersFromChildren");
             OnEnterProperty = serializedObject.FindProperty("OnEnter");
             OnStayProperty = serializedObject.FindProperty("OnStay");
             OnExitProperty = serializedObject.FindProperty("OnExit");
@@ -30,8 +30,8 @@ namespace Hedgehog.Core.Triggers.Editor
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(TriggersFromChildrenProperty, 
-                new GUIContent("Trigger From Children", TriggersFromChildrenProperty.tooltip));
+            EditorGUILayout.PropertyField(TriggerFromChildrenProperty, 
+                new GUIContent("Trigger From Children", TriggerFromChildrenProperty.tooltip));
 
             ShowBaseEvents = EditorGUILayout.Foldout(ShowBaseEvents, "Base Events");
             if (ShowBaseEvents)

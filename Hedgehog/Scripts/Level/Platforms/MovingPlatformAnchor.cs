@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Hedgehog.Level.Platforms
 {
+    /// <summary>
+    /// Used by MovingPlatform to track and apply changes in position to a controller.
+    /// </summary>
     public class MovingPlatformAnchor : MonoBehaviour
     {
         [SerializeField]
@@ -47,6 +50,8 @@ namespace Hedgehog.Level.Platforms
 
         public void TranslateController()
         {
+            PositionOverride += (Vector3)Controller.Velocity * Time.fixedDeltaTime + Controller.QueuedTranslation;
+
             if (transform.position != _previousPosition)
             {
                 DeltaPosition = transform.position - _previousPosition;
@@ -54,9 +59,6 @@ namespace Hedgehog.Level.Platforms
                 Controller.Translate(DeltaPosition);
                 _previousPosition = transform.position;
             }
-
-            if(Controller.Velocity != default(Vector2))
-                PositionOverride += (Vector3)Controller.Velocity * Time.fixedDeltaTime;
         }
 
         public void LinkController(HedgehogController controller, Vector2 contactPoint)
@@ -68,9 +70,7 @@ namespace Hedgehog.Level.Platforms
 
         public void LinkController(HedgehogController controller)
         {
-            Controller = controller;
-            transform.position = controller.transform.position;
-            ResetDeltaPosition();
+            LinkController(controller, controller.transform.position);
         }
 
         public void UnlinkController(Transform controller)

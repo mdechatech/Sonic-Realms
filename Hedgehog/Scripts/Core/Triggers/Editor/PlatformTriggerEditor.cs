@@ -33,9 +33,9 @@ namespace Hedgehog.Core.Triggers.Editor
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
-
             serializedObject.Update();
+
+            EditorGUILayout.PropertyField(TriggerFromChildrenProperty);
 
             ShowPlatformEvents = EditorGUILayout.Foldout(ShowPlatformEvents, "Platform Events");
             if (ShowPlatformEvents)

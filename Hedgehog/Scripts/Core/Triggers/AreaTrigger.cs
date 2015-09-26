@@ -14,19 +14,25 @@ namespace Hedgehog.Core.Triggers
     public class AreaTrigger : BaseTrigger
     {
         /// <summary>
+        /// Whether to ignore the controller's collision mask/tags/names and always
+        /// collide with the controller.
+        /// </summary>
+        [SerializeField] public bool IgnoreLayers;
+
+        /// <summary>
         /// Invoked when a controller enters the area.
         /// </summary>
-        public AreaEvent OnAreaEnter;
+        [SerializeField] public AreaEvent OnAreaEnter;
 
         /// <summary>
         /// Invoked when a controller stays in the area.
         /// </summary>
-        public AreaEvent OnAreaStay;
+        [SerializeField] public AreaEvent OnAreaStay;
 
         /// <summary>
         /// Invoked when a controller exits the area.
         /// </summary>
-        public AreaEvent OnAreaExit;
+        [SerializeField] public AreaEvent OnAreaExit;
 
         /// <summary>
         /// Defines whether the controller should collide with the area. The trigger ONLY checks
@@ -40,14 +46,15 @@ namespace Hedgehog.Core.Triggers
         /// A list of predicates which, if empty or all return true, allow the controller to collide
         /// with the area. The trigger ONLY checks if the controller is touching it!
         /// </summary>
-        public List<CollisionPredicate> CollisionPredicates;
+        public List<CollisionPredicate> CollisionRules;
 
-        private Dictionary<int, HedgehogController> _collisions;
+        private List<HedgehogController> _collisions;
 
         public override void Reset()
         {
             base.Reset();
 
+            IgnoreLayers = true;
             OnAreaEnter = new AreaEvent();
             OnAreaStay = new AreaEvent();
             OnAreaExit = new AreaEvent();
@@ -55,24 +62,24 @@ namespace Hedgehog.Core.Triggers
 
         public void Awake()
         {
-            _collisions = new Dictionary<int, HedgehogController>();
-            CollisionPredicates = new List<CollisionPredicate>();
+            _collisions = new List<HedgehogController>();
+            CollisionRules = new List<CollisionPredicate>();
         }
 
         /// <summary>
-        /// Returns whether the controller collides with the specified controller.
+        /// Returns whether the specified controller collides with the collider.
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <returns></returns>
         public bool CollidesWith(HedgehogController controller)
         {
-            return !CollisionPredicates.Any() || CollisionPredicates.All(predicate => predicate(controller));
+            return (!CollisionRules.Any() && DefaultCollisionRule(controller)) 
+                || CollisionRules.All(predicate => predicate(controller));
         }
 
-        // If there are any collision predicates we must track collisions and invoke events manually
-        private void CheckCustomCollision(HedgehogController controller)
+        private void CheckCollision(HedgehogController controller)
         {
-            if (_collisions.ContainsKey(controller.GetInstanceID()))
+            if (_collisions.Contains(controller))
             {
                 if (CollidesWith(controller))
                 {
@@ -81,7 +88,7 @@ namespace Hedgehog.Core.Triggers
                 }
                 else
                 {
-                    _collisions.Remove(controller.GetInstanceID());
+                    _collisions.Remove(controller);
                     OnAreaExit.Invoke(controller);
                     OnEnter.Invoke(controller);
                 }
@@ -90,7 +97,7 @@ namespace Hedgehog.Core.Triggers
             {
                 if (CollidesWith(controller))
                 {
-                    _collisions.Add(controller.GetInstanceID(), controller);
+                    _collisions.Add(controller);
                     OnAreaEnter.Invoke(controller);
                     OnEnter.Invoke(controller);
                 }
@@ -101,48 +108,32 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponent<HedgehogController>();
             if (controller == null) return;
-            if (!TerrainUtility.CollisionModeSelector(transform, controller)) return;
+            if (!IgnoreLayers && !TerrainUtility.CollisionModeSelector(transform, controller)) return;
 
-            if (CollisionPredicates.Any())
-            {
-                CheckCustomCollision(controller);
-                return;
-            }
-
-            OnAreaEnter.Invoke(controller);
-            OnEnter.Invoke(controller);
+            CheckCollision(controller);
         }
 
         public void OnTriggerStay2D(Collider2D collider2D)
         {
             var controller = collider2D.GetComponent<HedgehogController>();
             if (controller == null) return;
-            if (!TerrainUtility.CollisionModeSelector(transform, controller)) return;
+            if (!IgnoreLayers && !TerrainUtility.CollisionModeSelector(transform, controller)) return;
 
-            if (CollisionPredicates.Any())
-            {
-                CheckCustomCollision(controller);
-                return;
-            }
-
-            OnAreaStay.Invoke(controller);
-            OnStay.Invoke(controller);
+            CheckCollision(controller);
         }
 
         public void OnTriggerExit2D(Collider2D collider2D)
         {
             var controller = collider2D.GetComponent<HedgehogController>();
             if (controller == null) return;
-            if (!TerrainUtility.CollisionModeSelector(transform, controller)) return;
+            if (!IgnoreLayers && !TerrainUtility.CollisionModeSelector(transform, controller)) return;
 
-            if (CollisionPredicates.Any())
-            {
-                CheckCustomCollision(controller);
-                return;
-            }
+            CheckCollision(controller);
+        }
 
-            OnAreaExit.Invoke(controller);
-            OnExit.Invoke(controller);
+        public bool DefaultCollisionRule(HedgehogController controller)
+        {
+            return true;
         }
     }
 

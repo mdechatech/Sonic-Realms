@@ -9,8 +9,7 @@ namespace Hedgehog.Level.Areas
     /// Liquid that makes the controller slower or faster and has options for buoyancy and even running
     /// on top of it, if it's fast enough!
     /// </summary>
-    [RequireComponent(typeof(PlatformTrigger), typeof(AreaTrigger))]
-    public class Water : MonoBehaviour
+    public class Water : ReactivePlatformArea
     {
         /// <summary>
         /// The viscosity of the liquid. The player's physics values are essentially divided by
@@ -31,9 +30,6 @@ namespace Hedgehog.Level.Areas
         [SerializeField]
         public float MinFloatSpeed;
 
-        private PlatformTrigger _platformTrigger;
-        private AreaTrigger _areaTrigger;
-
         private Collider2D _collider2D;
 
         public void Reset()
@@ -43,41 +39,20 @@ namespace Hedgehog.Level.Areas
             MinFloatSpeed = 100.0f;
         }
 
-        public void Awake()
+        public override void Awake()
         {
-            _areaTrigger = GetComponent<AreaTrigger>();
-            _platformTrigger = GetComponent<PlatformTrigger>();
+            base.Awake();
             _collider2D = GetComponent<Collider2D>();
         }
 
-        public void OnEnable()
-        {
-            _platformTrigger.CollisionPredicates.Add(FloatSelector);
-
-            _areaTrigger.CollisionPredicates.Add(SubmersionPredicate);
-            _areaTrigger.OnAreaEnter.AddListener(Apply);
-            _areaTrigger.OnAreaStay.AddListener(Stay);
-            _areaTrigger.OnAreaExit.AddListener(Revert);
-        }
-
-        public void OnDisable()
-        {
-            _platformTrigger.CollisionPredicates.Remove(FloatSelector);
-
-            _areaTrigger.CollisionPredicates.Remove(SubmersionPredicate);
-            _areaTrigger.OnAreaEnter.RemoveListener(Apply);
-            _areaTrigger.OnAreaStay.RemoveListener(Stay);
-            _areaTrigger.OnAreaExit.RemoveListener(Revert);
-        }
-
         // The controller must be at least half submerged underwater to apply new physics values.
-        public bool SubmersionPredicate(HedgehogController controller)
+        public override bool IsInsideArea(HedgehogController controller)
         {
             return _collider2D.OverlapPoint(controller.SensorMiddleMiddle.position);
         }
 
         // The water is a surface if the player is upright, on top of it, grounded, and running quickly enough.
-        public bool FloatSelector(TerrainCastHit hit)
+        public override bool CollidesWith(TerrainCastHit hit)
         {
             if (hit.Source == null || MinFloatSpeed <= 0.0f) return false;
             return
@@ -88,7 +63,7 @@ namespace Hedgehog.Level.Areas
         }
         
         // Apply new physics values based on viscosity.
-        public void Apply(HedgehogController controller)
+        public override void OnAreaEnter(HedgehogController controller)
         {
             controller.GroundAcceleration /= Viscosity;
             controller.GroundBrake /= Viscosity;
@@ -105,13 +80,13 @@ namespace Hedgehog.Level.Areas
         }
         
         // Constantly apply buoyancy.
-        public void Stay(HedgehogController controller)
+        public override void OnAreaStay(HedgehogController controller)
         {
             if(!controller.Grounded) controller.Vy += Buoyancy*Time.fixedDeltaTime;
         }
 
         // Restore old physics values.
-        public void Revert(HedgehogController controller)
+        public override void OnAreaExit(HedgehogController controller)
         {
             controller.GroundAcceleration *= Viscosity;
             controller.GroundBrake *= Viscosity;

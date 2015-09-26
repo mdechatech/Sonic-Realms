@@ -10,7 +10,7 @@ namespace Hedgehog.Level.Platforms
     /// Gives friction to a platform, allowing slippery surfaces.
     /// </summary>
     [RequireComponent(typeof(PlatformTrigger))]
-    public class Ice : MonoBehaviour
+    public class Ice : ReactivePlatform
     {
         /// <summary>
         /// The friction coefficient; smaller than one and the surface becomes slippery.
@@ -18,7 +18,6 @@ namespace Hedgehog.Level.Platforms
         [SerializeField, Range(0.0f, 2.0f)]
         public float Friction;
 
-        private PlatformTrigger _trigger;
         private Dictionary<int, HedgehogPhysicsValues> _capturedPhysicsValues;
 
         public void Reset()
@@ -26,26 +25,14 @@ namespace Hedgehog.Level.Platforms
             Friction = 0.2f;
         }
 
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             _capturedPhysicsValues = new Dictionary<int, HedgehogPhysicsValues>();
-            _trigger = GetComponent<PlatformTrigger>();
-        }
-
-        public void OnEnable()
-        {
-            _trigger.OnSurfaceEnter.AddListener(ApplyFriction);
-            _trigger.OnSurfaceExit.AddListener(RemoveFriction);
-        }
-
-        public void OnDisable()
-        {
-            _trigger.OnSurfaceEnter.RemoveListener(ApplyFriction);
-            _trigger.OnSurfaceExit.RemoveListener(RemoveFriction);
         }
 
         // Applies new physics values based on friction.
-        public void ApplyFriction(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (priority == SurfacePriority.Secondary) return;
 
@@ -65,7 +52,7 @@ namespace Hedgehog.Level.Platforms
         }
 
         // Restores old physics values.
-        public void RemoveFriction(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (priority == SurfacePriority.Secondary) return;
             var physicsValues = _capturedPhysicsValues[controller.GetInstanceID()];

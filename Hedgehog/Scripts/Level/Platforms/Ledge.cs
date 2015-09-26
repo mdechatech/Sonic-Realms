@@ -9,27 +9,11 @@ namespace Hedgehog.Level.Platforms
     /// Turns a platform into a ledge where a controller can only collide with its top side.
     /// </summary>
     [RequireComponent(typeof(PlatformTrigger))]
-    public class Ledge : MonoBehaviour
+    public class Ledge : ReactivePlatform
     {
-        private PlatformTrigger _trigger;
-
-        public void Awake()
-        {
-            _trigger = GetComponent<PlatformTrigger>();
-        }
-        public void OnEnable()
-        {
-            _trigger.CollisionPredicates.Add(CollisionPredicate);
-        }
-
-        public void OnDisable()
-        {
-            _trigger.CollisionPredicates.Remove(CollisionPredicate);
-        }
-
         // The platform can be collided with if the player is checking its bottom side and
         // the result of the check did not stop where it started.
-        public static bool CollisionPredicate(TerrainCastHit hit)
+        public override bool CollidesWith(TerrainCastHit hit)
         {
             if(hit.Source == null) 
                 return (hit.Side & TerrainSide.Bottom) > 0;

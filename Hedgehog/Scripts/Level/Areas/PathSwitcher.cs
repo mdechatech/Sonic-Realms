@@ -10,7 +10,7 @@ namespace Hedgehog.Level.Areas
     /// When the player collides, this switches the player's collision mask/tag/name.
     /// </summary>
     [RequireComponent(typeof(AreaTrigger))]
-    public class PathSwitcher : MonoBehaviour
+    public class PathSwitcher : ReactiveArea
     {
         /// <summary>
         /// Whether the player must be grounded to switch layers.
@@ -90,39 +90,31 @@ namespace Hedgehog.Level.Areas
 
         private AreaTrigger _trigger;
 
-        public void OnEnable()
-        {
-            if(_trigger == null) _trigger = GetComponent<AreaTrigger>();
-            _trigger.OnAreaEnter.AddListener(Apply);
-        }
-
-        public void OnDisable()
-        {
-            if (_trigger == null) _trigger = GetComponent<AreaTrigger>();
-        }
-
         // The controller must be grounded if MustBeGrounded is true.
-        public bool CollisionPredicate(HedgehogController controller)
+        public override bool IsInsideArea(HedgehogController controller)
         {
-            return !MustBeGrounded || controller.Grounded;
+            return AppliesTo(controller) && (!MustBeGrounded || controller.Grounded);
         }
 
-        public void OnTriggerEnter2D(Collider2D collider)
+        public override void OnAreaEnter(HedgehogController controller)
         {
-            HedgehogController player = collider.gameObject.GetComponent<HedgehogController>();
-            if (player == null) return;
+            switch (CollisionMode)
+            {
+                case CollisionMode.Layers:
+                    controller.TerrainMask |= AddLayers;
+                    controller.TerrainMask &= ~RemoveLayers;
+                    break;
 
-            if(AppliesTo(player)) Apply(player);
-        }
+                case CollisionMode.Tags:
+                    foreach (var tag in AddTags) controller.TerrainTags.Add(tag);
+                    foreach (var tag in RemoveTags) controller.TerrainTags.Remove(tag);
+                    break;
 
-        public void OnTriggerStay2D(Collider2D collider)
-        {
-            if (!MustBeGrounded) return;
-
-            HedgehogController player = collider.gameObject.GetComponent<HedgehogController>();
-            if (player == null) return;
-
-            if (AppliesTo(player)) Apply(player);
+                case CollisionMode.Names:
+                    foreach (var name in AddNames) controller.TerrainNames.Add(name);
+                    foreach (var name in RemoveNames) controller.TerrainNames.Remove(name);
+                    break;
+            }
         }
 
         public bool AppliesTo(HedgehogController player)
@@ -142,27 +134,6 @@ namespace Hedgehog.Level.Areas
 
                 default:
                     return true;
-            }
-        }
-
-        public void Apply(HedgehogController player)
-        {
-            switch (CollisionMode)
-            {
-                case CollisionMode.Layers:
-                    player.TerrainMask |= AddLayers;
-                    player.TerrainMask &= ~RemoveLayers;
-                    break;
-
-                case CollisionMode.Tags:
-                    foreach (var tag in AddTags) player.TerrainTags.Add(tag);
-                    foreach (var tag in RemoveTags) player.TerrainTags.Remove(tag);
-                    break;
-
-                case CollisionMode.Names:
-                    foreach(var name in AddNames) player.TerrainNames.Add(name);
-                    foreach (var name in RemoveNames) player.TerrainNames.Remove(name);
-                    break;
             }
         }
     }
