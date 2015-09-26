@@ -58,6 +58,16 @@ namespace Hedgehog.Core.Utils
         }
 
         /// <summary>
+        /// Returns the a unit vector2 pointing in the specified direction.
+        /// </summary>
+        /// <param name="angle">The specified angle, in radians.</param>
+        /// <returns></returns>
+        public static Vector2 AngleToVector2(float angle)
+        {
+            return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        }
+
+        /// <summary>
         /// Returns the positive vertical distance between a and b if a is higher than b or the negative
         /// vertical distance if the opposite is true.
         /// </summary>
