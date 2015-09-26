@@ -451,7 +451,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public TerrainCastHit SecondarySurfaceHit;
 
-        private Vector3 _queuedTranslate;
+        public Vector3 QueuedTranslation;
         #endregion
 
         #region Lifecycle Functions
@@ -464,7 +464,7 @@ namespace Hedgehog.Core.Actors
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             Wallmode = Orientation.Floor;
-            _queuedTranslate = default(Vector3);
+            QueuedTranslation = default(Vector3);
         }
 
         public void Update()
@@ -479,6 +479,9 @@ namespace Hedgehog.Core.Actors
             // Stagger routine - if the player's gotta go fast, move it in increments of AntiTunnelingSpeed
             // to prevent tunneling.
             var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
+
+            var oldPrimarySurfaceHit = PrimarySurfaceHit;
+            var oldSecondarySurfaceHit = SecondarySurfaceHit;
 
             if (vt < AntiTunnelingSpeed)
             {
@@ -513,11 +516,20 @@ namespace Hedgehog.Core.Actors
                 }
             }
 
-            if (_queuedTranslate != default(Vector3))
+            TriggerSurfaceEvents(oldPrimarySurfaceHit, oldSecondarySurfaceHit, PrimarySurfaceHit,
+                    SecondarySurfaceHit);
+
+            if (QueuedTranslation != default(Vector3))
             {
-                transform.Translate(_queuedTranslate);
-                _queuedTranslate = default(Vector3);
-                HandleCollisions();
+                oldPrimarySurfaceHit = PrimarySurfaceHit;
+                oldSecondarySurfaceHit = SecondarySurfaceHit;
+
+                transform.Translate(QueuedTranslation);
+                QueuedTranslation = default(Vector3);
+                HandleCollisions(false);
+
+                TriggerSurfaceEvents(oldPrimarySurfaceHit, oldSecondarySurfaceHit, PrimarySurfaceHit,
+                    SecondarySurfaceHit, false);
             }
         }
         #endregion
@@ -714,7 +726,7 @@ namespace Hedgehog.Core.Actors
         /// Checks for collision with all sensors, changing position, velocity, and rotation if necessary. This should be called each time
         /// the player changes position. This method does not require a timestep because it only resolves overlaps in the player's collision.
         /// </summary>
-        public void HandleCollisions(bool triggerEvents = true)
+        public void HandleCollisions(bool triggerStayEvents = true)
         {
             var anyHit = false;
             var jumpedPreviousCheck = JustJumped;
@@ -729,7 +741,7 @@ namespace Hedgehog.Core.Actors
 
             if (Grounded)
             {
-                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck(triggerEvents);
+                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck(triggerStayEvents);
                 if (!SurfaceAngleCheck()) Detach();
             }
 
@@ -913,7 +925,7 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                Vg = 0;
+                if(Vg < 0.0f) Vg = 0.0f;
                 transform.position += (Vector3)sideLeftCheck.Hit.point - SensorMiddleLeft.position +
                                       ((Vector3)sideLeftCheck.Hit.point - SensorMiddleLeft.position).normalized * DMath.Epsilon;
 
@@ -928,7 +940,7 @@ namespace Hedgehog.Core.Actors
             }
             if (sideRightCheck)
             {
-                Vg = 0;
+                if(Vg > 0.0f) Vg = 0.0f;
                 transform.position += (Vector3)sideRightCheck.Hit.point - SensorMiddleRight.position +
                                       ((Vector3)sideRightCheck.Hit.point - SensorMiddleRight.position)
                                       .normalized * DMath.Epsilon;
@@ -957,7 +969,7 @@ namespace Hedgehog.Core.Actors
 
             if (ceilLeftCheck)
             {
-                Vg = 0;
+                if(Vg < 0.0f) Vg = 0.0f;
 
                 // Add epsilon to prevent sticky collisions
                 transform.position += (Vector3)ceilLeftCheck.Hit.point - SensorTopLeft.position +
@@ -967,7 +979,7 @@ namespace Hedgehog.Core.Actors
             }
             if (ceilRightCheck)
             {
-                Vg = 0;
+                if (Vg > 0.0f) Vg = 0.0f;
                 transform.position += (Vector3)ceilRightCheck.Hit.point - SensorTopRight.position +
                                       ((Vector3)ceilRightCheck.Hit.point - SensorTopRight.position)
                                       .normalized * DMath.Epsilon;
@@ -982,7 +994,7 @@ namespace Hedgehog.Core.Actors
         /// Collision check with ground sensors for when player is on the ground.
         /// </summary>
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-        private bool GroundSurfaceCheck(bool triggerEvents = true)
+        private bool GroundSurfaceCheck(bool triggerStayEvents = true)
         {
             var s = GetSurface(TerrainMask);
             if (s.LeftCast || s.RightCast)
@@ -1013,7 +1025,7 @@ namespace Hedgehog.Core.Actors
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = Footing.Left;
-                                SetSurface(s.LeftCast, s.RightCast, triggerEvents);
+                                SetSurface(s.LeftCast, s.RightCast);
                             }
                             else
                             {
@@ -1021,7 +1033,7 @@ namespace Hedgehog.Core.Actors
                                 DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                                 transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                                 Footing = Footing.Left;
-                                SetSurface(s.LeftCast, null, triggerEvents);
+                                SetSurface(s.LeftCast, null);
                             }
                         }
                         else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
@@ -1030,12 +1042,12 @@ namespace Hedgehog.Core.Actors
                             DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                             transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                             Footing = Footing.Right;
-                            SetSurface(s.RightCast, null, triggerEvents);
+                            SetSurface(s.RightCast, null);
                         }
                         else
                         {
                             // Else the surfaces are untolerable. detach from the surface
-                            Detach(false, triggerEvents);
+                            Detach(false);
                         }
 
                         // Same thing but with the other foot
@@ -1050,14 +1062,14 @@ namespace Hedgehog.Core.Actors
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = Footing.Right;
-                                SetSurface(s.RightCast, s.LeftCast, triggerEvents);
+                                SetSurface(s.RightCast, s.LeftCast);
                             }
                             else
                             {
                                 DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                                 transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                                 Footing = Footing.Right;
-                                SetSurface(s.RightCast, null, triggerEvents);
+                                SetSurface(s.RightCast, null);
                             }
 
                         }
@@ -1066,11 +1078,11 @@ namespace Hedgehog.Core.Actors
                             DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                             transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                             Footing = Footing.Left;
-                            SetSurface(s.LeftCast, null, triggerEvents);
+                            SetSurface(s.LeftCast, null);
                         }
                         else
                         {
-                            Detach(false, triggerEvents);
+                            Detach(false);
                         }
                     }
                 }
@@ -1082,11 +1094,11 @@ namespace Hedgehog.Core.Actors
                         DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
                         transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
                         Footing = Footing.Left;
-                        SetSurface(s.LeftCast, null, triggerEvents);
+                        SetSurface(s.LeftCast, null);
                     }
                     else
                     {
-                        Detach(false, triggerEvents);
+                        Detach(false);
                     }
                 }
                 else
@@ -1097,18 +1109,18 @@ namespace Hedgehog.Core.Actors
                         DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
                         transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
                         Footing = Footing.Right;
-                        SetSurface(s.RightCast, null, triggerEvents);
+                        SetSurface(s.RightCast, null);
                     }
                     else
                     {
-                        Detach(false, triggerEvents);
+                        Detach(false);
                     }
                 }
 
                 return true;
             }
 
-            Detach(false, triggerEvents);
+            Detach(false);
             return false;
         }
 
@@ -1235,7 +1247,7 @@ namespace Hedgehog.Core.Actors
         /// <param name="deltaPosition"></param>
         public void Translate(Vector3 deltaPosition)
         {
-            _queuedTranslate = deltaPosition;
+            QueuedTranslation += deltaPosition;
         }
 
         #endregion
@@ -1245,7 +1257,7 @@ namespace Hedgehog.Core.Actors
         /// other than setting lockUponLanding.
         /// </summary>
         /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
-        private void Detach(bool lockUponLanding = false, bool triggerEvents = true)
+        private void Detach(bool lockUponLanding = false)
         {
             Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
@@ -1255,7 +1267,8 @@ namespace Hedgehog.Core.Actors
             Wallmode = Orientation.Floor;
             Footing = Footing.None;
             LockUponLanding = lockUponLanding;
-            SetSurface(null, null, triggerEvents);
+            TriggerSurfaceEvents(PrimarySurfaceHit, SecondarySurfaceHit, null, null);
+            SetSurface(null);
         }
 
         /// <summary>
@@ -1347,115 +1360,56 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// Sets the controller's primary and secondary surfaces and triggers their respective platform events.
+        /// Sets the controller's primary and secondary surfaces and triggers their platform events.
+        /// </summary>
+        /// <param name="oldPrimarySurfaceHit">The old primary surface.</param>
+        /// <param name="oldSecondarySurfaceHit">The old primary surface.</param>
+        /// <param name="primarySurfaceHit">The new primary surface.</param>
+        /// <param name="secondarySurfaceHit">The new secondary surface.</param>
+        /// <param name="triggerStayEvents"></param>
+        public void TriggerSurfaceEvents(TerrainCastHit oldPrimarySurfaceHit, TerrainCastHit oldSecondarySurfaceHit,
+            TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit, bool triggerStayEvents = true)
+        {
+            var primarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
+            var secondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
+
+            var oldPrimarySurface = oldPrimarySurfaceHit == null ? null : oldPrimarySurfaceHit.Hit.transform;
+
+            var oldPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(oldPrimarySurface, BaseTrigger.Selector);
+            var newPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(primarySurface, BaseTrigger.Selector);
+
+            PrimarySurface = primarySurface;
+            PrimarySurfaceHit = primarySurfaceHit;
+            SecondarySurface = secondarySurface;
+            SecondarySurfaceHit = secondarySurfaceHit;
+
+            if (oldPrimaryTriggers != null && oldPrimarySurface != primarySurface)
+            {
+                foreach (var primaryTrigger in oldPrimaryTriggers)
+                    primaryTrigger.InvokeSurfaceEvents(this, oldPrimarySurfaceHit, SurfacePriority.Primary,
+                        triggerStayEvents);
+            }
+
+
+            if (newPrimaryTriggers != null)
+            {
+                foreach (var newPrimaryTrigger in newPrimaryTriggers)
+                    newPrimaryTrigger.InvokeSurfaceEvents(this, primarySurfaceHit, SurfacePriority.Primary,
+                        triggerStayEvents);
+            }
+        }
+
+        /// <summary>
+        /// Sets the controller's primary and secondary surfaces.
         /// </summary>
         /// <param name="primarySurfaceHit">The new primary surface.</param>
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
-        /// <param name="triggerEvents">Whether to trigger the surfaces' respective platform events.</param>
-        public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null,
-            bool triggerEvents = true)
+        public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
         {
-            if (!triggerEvents)
-            {
-                PrimarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
-                PrimarySurfaceHit = primarySurfaceHit;
-                SecondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
-                SecondarySurfaceHit = secondarySurfaceHit;
-            }
-            else
-            {
-                var primarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
-                var secondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
-
-                var oldPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(PrimarySurface, BaseTrigger.Selector);
-                var newPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(primarySurface, BaseTrigger.Selector);
-                var oldSecondaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(SecondarySurface,
-                    BaseTrigger.Selector);
-                var newSecondaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(secondarySurface,
-                    BaseTrigger.Selector);
-
-                var oldPrimarySurface = PrimarySurface;
-                var oldPrimarySurfaceHit = PrimarySurfaceHit;
-                var oldSecondarySurface = SecondarySurface;
-                var oldSecondarySurfaceHit = SecondarySurfaceHit;
-
-                PrimarySurface = primarySurface;
-                PrimarySurfaceHit = primarySurfaceHit;
-                SecondarySurface = secondarySurface;
-                SecondarySurfaceHit = secondarySurfaceHit;
-
-                if (oldPrimaryTriggers != null)
-                {
-                    if (oldPrimarySurface != primarySurface)
-                    {
-                        foreach (var primaryTrigger in oldPrimaryTriggers)
-                        {
-                            primaryTrigger.OnExit.Invoke(this);
-                            primaryTrigger.OnSurfaceExit.Invoke(this, oldPrimarySurfaceHit, SurfacePriority.Primary);
-                        }
-
-                        if (newPrimaryTriggers != null)
-                        {
-                            foreach (var newPrimaryTrigger in newPrimaryTriggers)
-                            {
-                                newPrimaryTrigger.OnEnter.Invoke(this);
-                                newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurfaceHit, SurfacePriority.Primary);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var primaryTrigger in oldPrimaryTriggers)
-                        {
-                            primaryTrigger.OnStay.Invoke(this);
-                            primaryTrigger.OnSurfaceStay.Invoke(this, primarySurfaceHit, SurfacePriority.Primary);
-                        }
-                    }
-                } else if (newPrimaryTriggers != null && oldPrimarySurface != primarySurface)
-                {
-                    foreach (var newPrimaryTrigger in newPrimaryTriggers)
-                    {
-                        newPrimaryTrigger.OnEnter.Invoke(this);
-                        newPrimaryTrigger.OnSurfaceEnter.Invoke(this, primarySurfaceHit, SurfacePriority.Primary);
-                    }
-                }
-
-                if (oldSecondaryTriggers != null)
-                {
-                    if (oldSecondarySurface != secondarySurface)
-                    {
-                        foreach (var secondaryTrigger in oldSecondaryTriggers)
-                        {
-                            secondaryTrigger.OnExit.Invoke(this);
-                            secondaryTrigger.OnSurfaceExit.Invoke(this, oldSecondarySurfaceHit, SurfacePriority.Secondary);
-                        }
-
-                        if (newSecondaryTriggers != null)
-                        {
-                            foreach (var newSecondaryTrigger in newSecondaryTriggers)
-                            {
-                                newSecondaryTrigger.OnEnter.Invoke(this);
-                                newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurfaceHit, SurfacePriority.Secondary);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var secondaryTrigger in oldSecondaryTriggers)
-                        {
-                            secondaryTrigger.OnStay.Invoke(this);
-                            secondaryTrigger.OnSurfaceStay.Invoke(this, secondarySurfaceHit, SurfacePriority.Secondary);
-                        }
-                    }
-                } else if (newSecondaryTriggers != null && oldSecondarySurface != secondarySurface)
-                {
-                    foreach (var newSecondaryTrigger in newSecondaryTriggers)
-                    {
-                        newSecondaryTrigger.OnEnter.Invoke(this);
-                        newSecondaryTrigger.OnSurfaceEnter.Invoke(this, secondarySurfaceHit, SurfacePriority.Secondary);
-                    }
-                }
-            }
+            PrimarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
+            PrimarySurfaceHit = primarySurfaceHit;
+            SecondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
+            SecondarySurfaceHit = secondarySurfaceHit;
         }
         #endregion
         #region Surface Calculation Functions
