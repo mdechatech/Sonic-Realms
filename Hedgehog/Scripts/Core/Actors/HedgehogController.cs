@@ -1257,7 +1257,7 @@ namespace Hedgehog.Core.Actors
         /// other than setting lockUponLanding.
         /// </summary>
         /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
-        private void Detach(bool lockUponLanding = false)
+        public void Detach(bool lockUponLanding = false)
         {
             Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
@@ -1277,7 +1277,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <param name="groundSpeed">The ground speed of the player after attaching.</param>
         /// <param name="angleRadians">The angle of the surface, in radians.</param>
-        private void Attach(float groundSpeed, float angleRadians)
+        public void Attach(float groundSpeed, float angleRadians)
         {
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             Vg = groundSpeed;
@@ -1311,7 +1311,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <returns>Whether the player should attach to the specified incline.</returns>
         /// <param name="impact">The impact data as th result of a terrain cast.</param>
-        private bool HandleImpact(TerrainCastHit impact)
+        public bool HandleImpact(TerrainCastHit impact)
         {
             var sAngled = DMath.Modp(impact.SurfaceAngle * Mathf.Rad2Deg, 360.0f);
             var sAngler = sAngled * Mathf.Deg2Rad;
