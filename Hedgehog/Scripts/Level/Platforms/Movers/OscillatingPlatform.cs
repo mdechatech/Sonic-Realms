@@ -6,7 +6,7 @@ namespace Hedgehog.Level.Platforms.Movers
     /// Moves an object between two points, with options for smoothness.
     /// </summary>
     [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Oscillator")]
-    public class PlatformOscillator : BasePlatformMover
+    public class OscillatingPlatform : BasePlatformMover
     {
         /// <summary>
         /// Where the platform begins.

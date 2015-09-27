@@ -8,7 +8,7 @@ namespace Hedgehog.Level.Platforms.Movers
     /// Moves an object along the path defined by a collider2D.
     /// </summary>
     [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Path Mover")]
-    public class PlatformPathMover : BasePlatformMover
+    public class PathPlatform : BasePlatformMover
     {
         /// <summary>
         /// The path for the object to follow, defined by the collider's shape.
@@ -36,11 +36,6 @@ namespace Hedgehog.Level.Platforms.Movers
 
         private Collider2D _previousPath;
         private Vector2[] _cachedPath;
-
-        public void Awake()
-        {
-            CyclesCompleted = 0;
-        }
 
         public void Start()
         {
