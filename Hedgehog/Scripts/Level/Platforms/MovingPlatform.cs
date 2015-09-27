@@ -27,8 +27,6 @@ namespace Hedgehog.Level.Platforms
         [HideInInspector]
         public Vector3 Velocity;
 
-        private PlatformTrigger _trigger;
-
         private List<HedgehogController> _linkedControllers;
         private List<MovingPlatformAnchor> _linkedAnchors; 
         private List<HedgehogController> _controllerRemoveQueue;

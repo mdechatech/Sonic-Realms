@@ -22,8 +22,8 @@ namespace Hedgehog.Level.Platforms
             get { return transform.position; }
             set
             {
+                _previousPosition += value - transform.position;
                 transform.position = value;
-                ResetDeltaPosition();
             }
         }
 
@@ -51,7 +51,7 @@ namespace Hedgehog.Level.Platforms
         public void TranslateController()
         {
             PositionOverride += (Vector3)Controller.Velocity * Time.fixedDeltaTime + Controller.QueuedTranslation;
-
+            
             if (transform.position != _previousPosition)
             {
                 DeltaPosition = transform.position - _previousPosition;

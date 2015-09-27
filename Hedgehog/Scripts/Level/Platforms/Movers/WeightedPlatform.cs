@@ -11,6 +11,11 @@ namespace Hedgehog.Level.Platforms.Movers
     public class WeightedPlatform : BasePlatformMover
     {
         /// <summary>
+        /// The time to wait before a platform depresses after a controller stands on it.
+        /// </summary>
+        [SerializeField] public float DepressDelay;
+
+        /// <summary>
         /// The amount by which to depress the platform when a controller stands on it.
         /// </summary>
         [SerializeField] public Vector2 DepressionAmount;
@@ -30,26 +35,21 @@ namespace Hedgehog.Level.Platforms.Movers
 
         private Vector2 _originalPosition;
         private bool _colliding;
-        private PlatformTrigger _trigger;
 
         public override void Reset()
         {
             base.Reset();
 
             Duration = 0.5f;
+            DepressDelay = 0.0f;
             DepressionAmount = Vector2.up;
             Return = true;
             ReturnDelay = 0.5f;
         }
-        public void OnEnable()
-        {
-            _trigger = GetComponent<PlatformTrigger>();
-            _trigger.OnSurfaceEnter.AddListener(OnSurfaceEnter);
-            _trigger.OnSurfaceExit.AddListener(OnSurfaceExit);
-        }
 
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             _returnTimer = 0.0f;
             _returning = false;
         }
@@ -57,12 +57,6 @@ namespace Hedgehog.Level.Platforms.Movers
         public void Start()
         {
             _originalPosition = transform.localPosition;
-        }
-
-        public void OnDisable()
-        {
-            _trigger.OnSurfaceEnter.RemoveListener(OnSurfaceEnter);
-            _trigger.OnSurfaceExit.RemoveListener(OnSurfaceExit);
         }
 
         /// <summary>
@@ -106,27 +100,21 @@ namespace Hedgehog.Level.Platforms.Movers
         }
 
         // Check if a controller is on the platform
-        public void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
-            if(controller.PrimarySurface == transform && 
-                (controller.SecondarySurface == null || controller.SecondarySurface == transform))
-                _colliding = true;
+            _colliding = true;
         }
 
         // Check if a controller is on the platform
-        public void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
-            if (controller.PrimarySurface == transform &&
-                (controller.SecondarySurface == null || controller.SecondarySurface == transform))
-                _colliding = true;
+            _colliding = true;
         }
 
         // Check if a controller leaves the platform
-        public void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
             if (!_colliding) return;
-            if (controller.PrimarySurface == transform || controller.SecondarySurface == transform) return;
-
             _colliding = false;
             if (Return) DelayReturn();
         }

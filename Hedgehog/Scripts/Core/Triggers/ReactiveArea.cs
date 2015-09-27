@@ -6,6 +6,7 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Helper class for creating areas that react to player events.
     /// </summary>
+    [RequireComponent(typeof(AreaTrigger))]
     public class ReactiveArea : MonoBehaviour
     {
         protected AreaTrigger AreaTrigger;

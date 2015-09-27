@@ -77,8 +77,16 @@ namespace Hedgehog.Core.Triggers
                 || CollisionRules.All(predicate => predicate(controller));
         }
 
-        private void CheckCollision(HedgehogController controller)
+        private void CheckCollision(HedgehogController controller, bool isExit = false)
         {
+            if (isExit && _collisions.Contains(controller))
+            {
+                _collisions.Remove(controller);
+                OnAreaExit.Invoke(controller);
+                OnEnter.Invoke(controller);
+                return;
+            }
+
             if (_collisions.Contains(controller))
             {
                 if (CollidesWith(controller))
@@ -106,34 +114,22 @@ namespace Hedgehog.Core.Triggers
 
         public void OnTriggerEnter2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponent<HedgehogController>();
-            if (controller == null) return;
-            if (!IgnoreLayers && !TerrainUtility.CollisionModeSelector(transform, controller)) return;
-
-            CheckCollision(controller);
+            CheckCollision(collider2D.GetComponent<HedgehogController>());
         }
 
         public void OnTriggerStay2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponent<HedgehogController>();
-            if (controller == null) return;
-            if (!IgnoreLayers && !TerrainUtility.CollisionModeSelector(transform, controller)) return;
-
-            CheckCollision(controller);
+            CheckCollision(collider2D.GetComponent<HedgehogController>());
         }
 
         public void OnTriggerExit2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponent<HedgehogController>();
-            if (controller == null) return;
-            if (!IgnoreLayers && !TerrainUtility.CollisionModeSelector(transform, controller)) return;
-
-            CheckCollision(controller);
+            CheckCollision(collider2D.GetComponent<HedgehogController>(), true);
         }
 
         public bool DefaultCollisionRule(HedgehogController controller)
         {
-            return true;
+            return controller != null && (IgnoreLayers || TerrainUtility.CollisionModeSelector(transform, controller));
         }
     }
 
