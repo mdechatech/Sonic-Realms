@@ -99,7 +99,7 @@ namespace Hedgehog.Core.Utils
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
             TerrainSide raycastSide = TerrainSide.All)
         {
-            return CollisionModeSelector(hit.transform, source) && PlatformTriggerSelector(hit, source, raycastSide);
+            return CollisionModeSelector(hit.transform, source) && TriggerSelector(hit, source, raycastSide);
         }
 
         /// <summary>
@@ -127,20 +127,29 @@ namespace Hedgehog.Core.Utils
         }
 
         /// <summary>
-        /// Returns whether the raycast hit can be collided with based its platform trigger, if any.
+        /// Returns whether the raycast hit can be collided with based on its area and platform triggers,
+        /// if any.
         /// </summary>
         /// <param name="hit">The specified raycast hit.</param>
         /// <param name="source">The controller which initiated the raycast, if any.</param>
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
-        public static bool PlatformTriggerSelector(RaycastHit2D hit, HedgehogController source = null,
+        public static bool TriggerSelector(RaycastHit2D hit, HedgehogController source = null,
             TerrainSide raycastSide = TerrainSide.All)
         {
-            var enumerable = FindAll<PlatformTrigger>(hit.transform, BaseTrigger.Selector);
-            var platformTriggers = enumerable as PlatformTrigger[] ?? enumerable.ToArray();
+            var platformEnumerable = FindAll<PlatformTrigger>(hit.transform, BaseTrigger.Selector);
+            var platformTriggers = platformEnumerable as PlatformTrigger[] ?? platformEnumerable.ToArray();
 
-            return !platformTriggers.Any() ||
-                platformTriggers.All(trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
+            if (platformTriggers.Any())
+            {
+                return platformTriggers.All(
+                           trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
+            }
+
+            var areaEnumerable = FindAll<AreaTrigger>(hit.transform, BaseTrigger.Selector);
+            var areaTriggers = areaEnumerable as AreaTrigger[] ?? areaEnumerable.ToArray();
+
+            return !areaTriggers.Any();
         }
         #endregion
         #region Finders

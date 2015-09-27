@@ -79,6 +79,8 @@ namespace Hedgehog.Core.Triggers
 
         private void CheckCollision(HedgehogController controller, bool isExit = false)
         {
+            if (controller == null) return;
+
             if (isExit && _collisions.Contains(controller))
             {
                 _collisions.Remove(controller);
