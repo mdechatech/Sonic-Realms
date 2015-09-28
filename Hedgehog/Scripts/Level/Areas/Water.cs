@@ -55,7 +55,7 @@ namespace Hedgehog.Level.Areas
         public override bool CollidesWith(TerrainCastHit hit)
         {
             if (hit.Source == null || MinFloatSpeed <= 0.0f) return false;
-            return
+            return base.CollidesWith(hit) && 
                 (hit.Side & TerrainSide.Bottom) > 0 &&
                 hit.Hit.fraction > 0.0f && 
                 hit.Source.Grounded &&
