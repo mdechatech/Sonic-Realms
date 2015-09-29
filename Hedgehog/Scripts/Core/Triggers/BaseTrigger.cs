@@ -8,7 +8,6 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Base class for level objects that receive events.
     /// </summary>
-    [RequireComponent(typeof(Collider2D))]
     public abstract class BaseTrigger : MonoBehaviour
     {
         /// <summary>

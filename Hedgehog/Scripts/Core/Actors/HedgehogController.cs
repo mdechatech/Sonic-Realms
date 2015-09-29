@@ -155,6 +155,14 @@ namespace Hedgehog.Core.Actors
         public float SlopeGravity = 0.3f;
 
         /// <summary>
+        /// Direction of gravity. 0/360 is right, 90 is up, 180 is left, 270 is down.
+        /// </summary>
+        [SerializeField]
+        [Range(0.0f, 360.0f)]
+        [Tooltip("Direction of gravity in degrees. 0/360 is right, 90 is up, 180 is left, 270 is down.")]
+        public float GravityDirection = 270.0f;
+
+        /// <summary>
         /// The player's top speed, the maximum it can attain by running, it units per second.
         /// </summary>
         [SerializeField]
@@ -699,6 +707,7 @@ namespace Hedgehog.Core.Actors
                     if (SurfaceAngle > 90.0f - MaxVerticalDetachAngle &&
                         SurfaceAngle < 270.0f + MaxVerticalDetachAngle)
                     {
+                        Debug.Log(1);
                         Detach(true);
                     }
                     else
@@ -711,7 +720,7 @@ namespace Hedgehog.Core.Actors
             }
             else
             {
-                Vy -= AirGravity * timestep;
+                Velocity += DMath.AngleToVector2(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
                 if (Vy > AirDragVerticalSpeed && Mathf.Abs(Vx) > AirDragHorizontalSpeed)
                 {
                     Vx *= Mathf.Pow(AirDragCoefficient, timestep);
@@ -796,10 +805,14 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirCeilingCheck()
         {
-            var leftCheck = this.TerrainCast(SensorMiddleMiddle.position, SensorTopLeft.position);
+            var leftCheck = this.TerrainCast(SensorMiddleLeft.position, SensorTopLeft.position, TerrainSide.Top);
 
             if (leftCheck)
             {
+                transform.position += (Vector3) leftCheck.Hit.point - SensorTopLeft.position;
+                HandleImpact(leftCheck);
+                return true;
+                /*
                 var horizontalCheck = this.TerrainCast(SensorTopMiddle.position, SensorTopLeft.position,
                     TerrainSide.Left);
                 var verticalCheck = this.TerrainCast(SensorMiddleLeft.position, SensorTopLeft.position,
@@ -825,14 +838,19 @@ namespace Hedgehog.Core.Actors
 
                     return true;
                 }
+                 */
 
 
             }
 
-            var rightCheck = this.TerrainCast(SensorMiddleMiddle.position, SensorTopRight.position);
+            var rightCheck = this.TerrainCast(SensorMiddleRight.position, SensorTopRight.position, TerrainSide.Top);
 
             if (rightCheck)
             {
+                transform.position += (Vector3) rightCheck.Hit.point - SensorTopRight.position;
+                HandleImpact(rightCheck);
+                return true;
+                /*
                 var horizontalCheck = this.TerrainCast(SensorTopMiddle.position, SensorTopRight.position,
                     TerrainSide.Right);
                 var verticalCheck = this.TerrainCast(SensorMiddleRight.position, SensorTopRight.position,
@@ -858,6 +876,7 @@ namespace Hedgehog.Core.Actors
 
                     return true;
                 }
+                 */
             }
 
             return false;
@@ -1250,6 +1269,33 @@ namespace Hedgehog.Core.Actors
             QueuedTranslation += deltaPosition;
         }
 
+        /// <summary>
+        /// If grounded, sets the controller's ground velocity based on how much the specified velocity
+        /// "fits" with its current surface angle (scalar projection). For example, if the controller
+        /// is on a flat horizontal surface and the specified velocity points straight up, the resulting
+        /// ground velocity will be zero.
+        /// </summary>
+        /// <param name="velocity">The specified velocity as a vector with x and y components.</param>
+        /// <returns>The resulting ground velocity.</returns>
+        public float SetGroundVelocity(Vector2 velocity)
+        {
+            if (!Grounded) return 0.0f;
+            return Vg = DMath.ScalarProjection(velocity, SurfaceAngle*Mathf.Deg2Rad);
+        }
+
+        /// <summary>
+        /// If grounded, adds to the controller's ground velocity based on how much the specified velocity
+        /// "fits" with its current surface angle (scalar projection). For example, if the controller
+        /// is on a flat horizontal surface and the specified velocity points straight up, there will be
+        /// no change in ground velocity.
+        /// </summary>
+        /// <param name="velocity">The specified velocity as a vector with x and y components.</param>
+        /// <returns>The resulting change in ground velocity.</returns>
+        public float AddGroundVelocity(Vector2 velocity)
+        {
+            if (!Grounded) return 0.0f;
+            return Vg += DMath.ScalarProjection(velocity, SurfaceAngle * Mathf.Deg2Rad);
+        }
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
@@ -1326,37 +1372,64 @@ namespace Hedgehog.Core.Actors
                 return false;
             }
 
-            // Ground attachment
-            if (Mathf.Abs(DMath.AngleDiffd(sAngled, 180.0f)) > MinFlatAttachAngle &&
-                Mathf.Abs(DMath.AngleDiffd(sAngled, 90.0f)) > MinFlatAttachAngle &&
-                Mathf.Abs(DMath.AngleDiffd(sAngled, 270.0f)) > MinFlatAttachAngle)
-            {
-                float groundSpeed;
-                if (Vy > 0.0f && (DMath.Equalsf(sAngled, 0.0f, MinFlatAttachAngle) ||
-                    (DMath.Equalsf(sAngled, 180.0f, MinFlatAttachAngle))))
-                {
-                    groundSpeed = DMath.Equalsf(impact.Hit.fraction, 0.0f) ? 0.0f : Vx;
-                    Attach(groundSpeed, sAngler);
-                    return true;
-                }
-                // groundspeed = (airspeed) * (angular difference between air direction and surface normal direction) / (90 degrees)
-                groundSpeed = DMath.Equalsf(impact.Hit.fraction, 0.0f) ? 
-                    0.0f : 
-                    Mathf.Sqrt(Vx * Vx + Vy * Vy) *
-                              -Mathf.Clamp(DMath.AngleDiffd(Mathf.Atan2(Vy, Vx) * Mathf.Rad2Deg, sAngled - 90.0f) /
-                              90.0f, -1.0f, 1.0f);
+            float? result = null;
 
-                if (sAngled > 90.0f - MaxVerticalDetachAngle &&
-                    sAngled < 270.0f + MaxVerticalDetachAngle &&
-                    Mathf.Abs(groundSpeed) < DetachSpeed)
+            if (Velocity.y <= 0.0f)
+            {
+                if (sAngled < 22.5f || sAngled > 337.5f)
                 {
-                    return false;
+                    result = Velocity.x;
                 }
-                Attach(groundSpeed, sAngler);
-                return true;
+                else if (sAngled < 45.0f)
+                {
+                    result = Mathf.Abs(Velocity.x) > -Velocity.y
+                        ? Velocity.x
+                        : 0.5f*Velocity.y;
+                }
+                else if (sAngled > 315.0f)
+                {
+                    result = Mathf.Abs(Velocity.x) > -Velocity.y
+                        ? Velocity.x
+                        : -0.5f * Velocity.y;
+                }
+                else if (sAngled < 90.0f)
+                {
+                    result = Mathf.Abs(Velocity.x) > -Velocity.y
+                        ? Velocity.x
+                        : Velocity.y;
+                }
+                else if (sAngled > 270.0f)
+                {
+                    result = Mathf.Abs(Velocity.x) > -Velocity.y
+                        ? Velocity.x
+                        : -Velocity.y;
+                }
+            }
+            else
+            {
+                if (sAngled > 90.0f && sAngled < 135.0f)
+                {
+                    result = Velocity.y;
+                }
+                else if (sAngled > 225.0f && sAngled < 270.0f)
+                {
+                    result = -Velocity.y;
+                }
+                else if (sAngled > 135.0f && sAngled < 225.0f)
+                {
+                    Vy = 0.0f;
+                }
             }
 
-            return false;
+            if (result != null)
+            {
+                Attach(result.Value, sAngler);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

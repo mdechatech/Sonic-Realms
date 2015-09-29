@@ -421,6 +421,11 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("GravityDirection"));
+                EditorGUILayout.PrefixLabel("degrees");
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
                 _instance.JumpSpeed = EditorGUILayout.FloatField("Jump Speed",
                     _instance.JumpSpeed);
                 EditorGUILayout.PrefixLabel("units/s");

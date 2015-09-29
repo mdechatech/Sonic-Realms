@@ -24,12 +24,12 @@ namespace Hedgehog.Core.Utils
         public HedgehogController Source;
 
         /// <summary>
-        /// The angle of incline of the terrain hit, if any.
+        /// The angle of incline of the terrain hit in radians, if any.
         /// </summary>
         public float SurfaceAngle;
 
         /// <summary>
-        /// The normal angle of the terrain hit, if any.
+        /// The normal angle of the terrain hit in radians, if any.
         /// </summary>
         public float NormalAngle;
 

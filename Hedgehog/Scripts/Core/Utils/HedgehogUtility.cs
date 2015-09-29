@@ -33,6 +33,7 @@ namespace Hedgehog.Core.Utils
         public float AirDragVerticalSpeed;
         public float AirDragCoefficient;
         public float AirGravity;
+        public float GravityDirection;
         public float SlopeGravity;
         public float LedgeClimbHeight;
         public float LedgeDropHeight;
@@ -164,6 +165,7 @@ namespace Hedgehog.Core.Utils
                 AirDragVerticalSpeed = 2.4f,
                 AirDragCoefficient = 0.1488343f,
                 AirGravity = 7.875f,
+                GravityDirection = 270.0f,
                 SlopeGravity = 4.5f,
                 AntiTunnelingSpeed = 5.0f,
                 DetachSpeed = 1.5f,

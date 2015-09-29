@@ -13,16 +13,25 @@ namespace Hedgehog.Level.Platforms
     public class MovingPlatform : ReactivePlatform
     {
         /// <summary>
-        /// Whether the player gets the horizontal speed it had on the platform after leaving it.
+        /// Whether the controller gets the horizontal speed it had on the platform after leaving it.
         /// </summary>
-        [SerializeField, Tooltip("Whether the player gets the horizontal speed it had on the platform after leaving it.")]
+        [SerializeField]
+        [Tooltip("Whether the controller gets the horizontal speed it had on the platform after leaving it.")]
         public bool TransferMomentumX;
 
         /// <summary>
-        /// Whether the player gets the vertical speed it had on the platform after leaving it.
+        /// Whether the controller gets the vertical speed it had on the platform after leaving it.
         /// </summary>
-        [SerializeField, Tooltip("Whether the player gets the horizontal speed it had on the platform after leaving it.")]
+        [SerializeField]
+        [Tooltip("Whether the controller gets the vertical speed it had on the platform after leaving it.")]
         public bool TransferMomentumY;
+
+        /// <summary>
+        /// Whether the controller gets the ground speed it had on the platform after leaving it.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Whether the controller gets the speed it had on the platform after leaving it for another surface.")]
+        public bool TransferMomentumGround;
 
         [HideInInspector]
         public Vector3 Velocity;
@@ -33,7 +42,7 @@ namespace Hedgehog.Level.Platforms
 
         public void Reset()
         {
-            TransferMomentumX = TransferMomentumY = false;
+            TransferMomentumX = TransferMomentumY = TransferMomentumGround = false;
         }
 
         public override void Awake()
@@ -88,14 +97,21 @@ namespace Hedgehog.Level.Platforms
         // Removes the anchor associated with the controller
         public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
+            _controllerRemoveQueue.Add(controller);
+
             var velocity = (Vector2) _linkedAnchors[_linkedControllers.IndexOf(controller)].DeltaPosition
                            /Time.fixedDeltaTime;
-            
-            controller.Velocity += new Vector2(
-                TransferMomentumX ? velocity.x : 0.0f,
-                TransferMomentumY ? velocity.y : 0.0f);
-            
-            _controllerRemoveQueue.Add(controller);
+
+            if (controller.Grounded)
+            {
+                if(TransferMomentumGround) controller.SetGroundVelocity(velocity);
+            }
+            else
+            {
+                controller.Velocity += new Vector2(
+                    TransferMomentumX ? velocity.x : 0.0f,
+                    TransferMomentumY ? velocity.y : 0.0f);
+            }
         }
     }
 }
