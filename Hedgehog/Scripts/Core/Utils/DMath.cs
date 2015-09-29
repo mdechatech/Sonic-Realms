@@ -175,8 +175,7 @@ namespace Hedgehog.Core.Utils
         /// Returns the scalar projection (aka scalar component) onto a vector theta radians above vector a.
         /// </summary>
         /// <param name="a">The vector a.</param>
-        /// <param name="theta">The angle in radians which the vector a is higher (farther counter-clockwise)
-        /// than the vector to project onto.</param>
+        /// <param name="theta">The angle in radians of vector a relative to the vector to project onto.</param>
         /// <returns></returns>
         public static float ScalarProjection(Vector2 a, float theta)
         {

@@ -48,7 +48,7 @@ namespace Hedgehog.Level.Areas
         // The controller must be at least half submerged underwater to apply new physics values.
         public override bool IsInsideArea(HedgehogController controller)
         {
-            return _collider2D.OverlapPoint(controller.SensorMiddleMiddle.position);
+            return _collider2D.OverlapPoint(controller.Sensors.Center.position);
         }
 
         // The water is a surface if the player is upright, on top of it, grounded, and running quickly enough.

@@ -223,25 +223,8 @@ namespace Hedgehog.Core.Actors.Editor
                 GUI.enabled = true;
 
                 EditorGUILayout.Space();
-            
-                _instance.SensorTopLeft = EditorGUILayout.ObjectField("Top Left", _instance.SensorTopLeft,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorTopMiddle = EditorGUILayout.ObjectField("Top Center", _instance.SensorTopMiddle,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorTopRight = EditorGUILayout.ObjectField("Top Right", _instance.SensorTopRight,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorMiddleLeft = EditorGUILayout.ObjectField("Center Left", _instance.SensorMiddleLeft,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorMiddleMiddle = EditorGUILayout.ObjectField("Center", _instance.SensorMiddleMiddle,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorMiddleRight = EditorGUILayout.ObjectField("Center Right", _instance.SensorMiddleRight,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorBottomLeft = EditorGUILayout.ObjectField("Bottom Left", _instance.SensorBottomLeft,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorBottomMiddle = EditorGUILayout.ObjectField("Bottom Center", _instance.SensorBottomMiddle,
-                    typeof(Transform), true) as Transform;
-                _instance.SensorBottomRight = EditorGUILayout.ObjectField("Bottom Right", _instance.SensorBottomRight,
-                    typeof(Transform), true) as Transform;
+
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Sensors"));
             }
             #endregion
             #region Physics Foldout

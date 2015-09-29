@@ -48,10 +48,10 @@ namespace Hedgehog.Level.Areas
 
             if (!controller.Grounded)
             {
-                if ((!_collider2D.OverlapPoint(controller.SensorMiddleLeft.position) &&
-                    _collider2D.OverlapPoint(controller.SensorBottomLeft.position)) ||
-                    (!_collider2D.OverlapPoint(controller.SensorMiddleRight.position)) &&
-                    _collider2D.OverlapPoint(controller.SensorBottomRight.position))
+                if ((!_collider2D.OverlapPoint(controller.Sensors.CenterLeft.position) &&
+                    _collider2D.OverlapPoint(controller.Sensors.BottomLeft.position)) ||
+                    (!_collider2D.OverlapPoint(controller.Sensors.CenterRight.position)) &&
+                    _collider2D.OverlapPoint(controller.Sensors.BottomRight.position))
                 {
                     controller.Velocity = new Vector2(controller.Velocity.x,
                         (AccountForGravity ? controller.AirGravity * Time.fixedDeltaTime : 0.0f));

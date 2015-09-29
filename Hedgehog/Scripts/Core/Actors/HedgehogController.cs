@@ -48,22 +48,12 @@ namespace Hedgehog.Core.Actors
         #region Sensors
 
         [Header("Sensors")]
-        [SerializeField] public Transform SensorSurfaceLeft;
-        [SerializeField] public Transform SensorSurfaceRight;
-        [SerializeField] public Transform SensorLedgeLeft;
-        [SerializeField] public Transform SensorLedgeRight;
+        /// <summary>
+        /// Contains sensor data for hit detection.
+        /// </summary>
+        [SerializeField]
+        public HedgehogSensors Sensors;
 
-        [SerializeField] public Transform SensorBottomLeft;
-        [SerializeField] public Transform SensorBottomMiddle;
-        [SerializeField] public Transform SensorBottomRight;
-
-        [SerializeField] public Transform SensorMiddleLeft;
-        [SerializeField] public Transform SensorMiddleMiddle;
-        [SerializeField] public Transform SensorMiddleRight;
-
-        [SerializeField] public Transform SensorTopLeft;
-        [SerializeField] public Transform SensorTopMiddle;
-        [SerializeField] public Transform SensorTopRight;
         #endregion
         #region Physics
         [Header("Physics")]
@@ -332,7 +322,7 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// The player's velocity on the ground; the faster it's running, the higher in magnitude
+        /// The controller's velocity on the ground; the faster it's running, the higher in magnitude
         /// this number is. If it's moving forward (counter-clockwise inside a loop), this is positive.
         /// If backwards (clockwise inside a loop), negative.
         /// </summary>
@@ -340,6 +330,15 @@ namespace Hedgehog.Core.Actors
         {
             get { return Vg; }
             set { Vg = value; }
+        }
+
+        /// <summary>
+        /// A unit vector pointing in the "downward" direction based on the controller's GravityDirection.
+        /// </summary>
+        public Vector2 GravityDown
+        {
+            get { return DMath.AngleToVector2(GravityDirection*Mathf.Deg2Rad); }
+            set { GravityDirection = DMath.Modp(DMath.Angle(value)*Mathf.Rad2Deg, 360.0f); }
         }
 
         /// <summary>
@@ -707,7 +706,6 @@ namespace Hedgehog.Core.Actors
                     if (SurfaceAngle > 90.0f - MaxVerticalDetachAngle &&
                         SurfaceAngle < 270.0f + MaxVerticalDetachAngle)
                     {
-                        Debug.Log(1);
                         Detach(true);
                     }
                     else
@@ -767,9 +765,9 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirSideCheck()
         {
-            var sideLeftCheck = this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleLeft.position,
+            var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
                 TerrainSide.Left);
-            var sideRightCheck = this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleRight.position,
+            var sideRightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                 TerrainSide.Right);
 
             if (sideLeftCheck)
@@ -779,8 +777,9 @@ namespace Hedgehog.Core.Actors
                     Vx = 0;
                 }
 
-                transform.position += (Vector3)sideLeftCheck.Hit.point - SensorMiddleLeft.position +
-                                      ((Vector3)sideLeftCheck.Hit.point - SensorMiddleLeft.position).normalized * DMath.Epsilon;
+                transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
+                                      ((Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position).normalized*
+                                      DMath.Epsilon;
                 return true;
             }
             if (sideRightCheck)
@@ -790,8 +789,8 @@ namespace Hedgehog.Core.Actors
                     Vx = 0;
                 }
 
-                transform.position += (Vector3)sideRightCheck.Hit.point - SensorMiddleRight.position +
-                                      ((Vector3)sideRightCheck.Hit.point - SensorMiddleRight.position)
+                transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
+                                      ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
                                       .normalized * DMath.Epsilon;
                 return true;
             }
@@ -805,11 +804,11 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirCeilingCheck()
         {
-            var leftCheck = this.TerrainCast(SensorMiddleLeft.position, SensorTopLeft.position, TerrainSide.Top);
+            var leftCheck = this.TerrainCast(Sensors.CenterLeft.position, Sensors.TopLeft.position, TerrainSide.Top);
 
             if (leftCheck)
             {
-                transform.position += (Vector3) leftCheck.Hit.point - SensorTopLeft.position;
+                transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
                 HandleImpact(leftCheck);
                 return true;
                 /*
@@ -843,11 +842,11 @@ namespace Hedgehog.Core.Actors
 
             }
 
-            var rightCheck = this.TerrainCast(SensorMiddleRight.position, SensorTopRight.position, TerrainSide.Top);
+            var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position, TerrainSide.Top);
 
             if (rightCheck)
             {
-                transform.position += (Vector3) rightCheck.Hit.point - SensorTopRight.position;
+                transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
                 HandleImpact(rightCheck);
                 return true;
                 /*
@@ -897,11 +896,11 @@ namespace Hedgehog.Core.Actors
                 {
                     if (groundLeftCheck)
                     {
-                        transform.position += (Vector3)groundLeftCheck.Hit.point - SensorBottomLeft.position;
+                        transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
                     }
                     if (groundRightCheck)
                     {
-                        transform.position += (Vector3)groundRightCheck.Hit.point - SensorBottomRight.position;
+                        transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
                     }
                 }
                 else
@@ -939,14 +938,16 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSideCheck()
         {
-            var sideLeftCheck = this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleLeft.position, TerrainSide.Left);
-            var sideRightCheck = this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleRight.position, TerrainSide.Right);
+            var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position, TerrainSide.Left);
+            var sideRightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
+                TerrainSide.Right);
 
             if (sideLeftCheck)
             {
                 if(Vg < 0.0f) Vg = 0.0f;
-                transform.position += (Vector3)sideLeftCheck.Hit.point - SensorMiddleLeft.position +
-                                      ((Vector3)sideLeftCheck.Hit.point - SensorMiddleLeft.position).normalized * DMath.Epsilon;
+                transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
+                                      ((Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position).normalized*
+                                      DMath.Epsilon;
 
                 // If running down a wall and hits the floor, orient the player onto the floor
                 if (Wallmode == Orientation.Right)
@@ -960,8 +961,8 @@ namespace Hedgehog.Core.Actors
             if (sideRightCheck)
             {
                 if(Vg > 0.0f) Vg = 0.0f;
-                transform.position += (Vector3)sideRightCheck.Hit.point - SensorMiddleRight.position +
-                                      ((Vector3)sideRightCheck.Hit.point - SensorMiddleRight.position)
+                transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
+                                      ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
                                       .normalized * DMath.Epsilon;
 
                 // If running down a wall and hits the floor, orient the player onto the floor
@@ -983,25 +984,27 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundCeilingCheck()
         {
-            var ceilLeftCheck = this.TerrainCast(SensorTopMiddle.position, SensorTopLeft.position, TerrainSide.Left);
-            var ceilRightCheck = this.TerrainCast(SensorTopMiddle.position, SensorTopRight.position, TerrainSide.Right);
+            var ceilLeftCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopLeft.position, TerrainSide.Left);
+            var ceilRightCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopRight.position,
+                TerrainSide.Right);
 
             if (ceilLeftCheck)
             {
                 if(Vg < 0.0f) Vg = 0.0f;
 
                 // Add epsilon to prevent sticky collisions
-                transform.position += (Vector3)ceilLeftCheck.Hit.point - SensorTopLeft.position +
-                                      ((Vector3)ceilLeftCheck.Hit.point - SensorTopLeft.position).normalized * DMath.Epsilon;
+                transform.position += (Vector3) ceilLeftCheck.Hit.point - Sensors.TopLeft.position +
+                                      ((Vector3) ceilLeftCheck.Hit.point - Sensors.TopLeft.position).normalized*
+                                      DMath.Epsilon;
 
                 return true;
             }
             if (ceilRightCheck)
             {
                 if (Vg > 0.0f) Vg = 0.0f;
-                transform.position += (Vector3)ceilRightCheck.Hit.point - SensorTopRight.position +
-                                      ((Vector3)ceilRightCheck.Hit.point - SensorTopRight.position)
-                                      .normalized * DMath.Epsilon;
+                transform.position += (Vector3) ceilRightCheck.Hit.point - Sensors.TopRight.position +
+                                      ((Vector3) ceilRightCheck.Hit.point - Sensors.TopRight.position)
+                                          .normalized*DMath.Epsilon;
 
                 return true;
             }
@@ -1042,7 +1045,7 @@ namespace Hedgehog.Core.Actors
                             {
                                 // If tolerable, rotate between the surfaces beneath the two feet
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
-                                transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
+                                transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                                 Footing = Footing.Left;
                                 SetSurface(s.LeftCast, s.RightCast);
                             }
@@ -1050,7 +1053,7 @@ namespace Hedgehog.Core.Actors
                             {
                                 // Else just rotate for the left foot
                                 DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
-                                transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
+                                transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                                 Footing = Footing.Left;
                                 SetSurface(s.LeftCast, null);
                             }
@@ -1059,7 +1062,7 @@ namespace Hedgehog.Core.Actors
                         {
                             // Else see if the other surface's angle is tolerable
                             DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
-                            transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
+                            transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                             Footing = Footing.Right;
                             SetSurface(s.RightCast, null);
                         }
@@ -1079,14 +1082,14 @@ namespace Hedgehog.Core.Actors
                                 Mathf.Abs(overlapSurfaceDiff) > 135.0f)
                             {
                                 DMath.RotateTo(transform, overlapSurfaceAngle);
-                                transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
+                                transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                                 Footing = Footing.Right;
                                 SetSurface(s.RightCast, s.LeftCast);
                             }
                             else
                             {
                                 DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
-                                transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
+                                transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                                 Footing = Footing.Right;
                                 SetSurface(s.RightCast, null);
                             }
@@ -1095,7 +1098,7 @@ namespace Hedgehog.Core.Actors
                         else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                         {
                             DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
-                            transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
+                            transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                             Footing = Footing.Left;
                             SetSurface(s.LeftCast, null);
                         }
@@ -1111,7 +1114,7 @@ namespace Hedgehog.Core.Actors
                     if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                     {
                         DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
-                        transform.position += (Vector3)s.LeftCast.Hit.point - SensorBottomLeft.position;
+                        transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                         Footing = Footing.Left;
                         SetSurface(s.LeftCast, null);
                     }
@@ -1126,7 +1129,7 @@ namespace Hedgehog.Core.Actors
                     if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                     {
                         DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
-                        transform.position += (Vector3)s.RightCast.Hit.point - SensorBottomRight.position;
+                        transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                         Footing = Footing.Right;
                         SetSurface(s.RightCast, null);
                     }
@@ -1201,14 +1204,14 @@ namespace Hedgehog.Core.Actors
         /// <returns></returns>
         private bool CrushCheck()
         {
-            return (this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleLeft.position,
+            return (this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
                         TerrainSide.Left) &&
-                    this.TerrainCast(SensorMiddleMiddle.position, SensorMiddleRight.position,
+                    this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                         TerrainSide.Right)) ||
 
-                   (this.TerrainCast(SensorMiddleMiddle.position, SensorTopMiddle.position,
+                   (this.TerrainCast(Sensors.Center.position, Sensors.TopCenter.position,
                        TerrainSide.Top) &&
-                    this.TerrainCast(SensorMiddleMiddle.position, SensorBottomMiddle.position,
+                    this.TerrainCast(Sensors.Center.position, Sensors.BottomCenter.position,
                         TerrainSide.Bottom));
         }
         #endregion
@@ -1529,11 +1532,12 @@ namespace Hedgehog.Core.Actors
             if (side == Footing.Left)
             {
                 cast = this.TerrainCast(
-                    SensorLedgeLeft.position, SensorBottomLeft.position, TerrainSide.Bottom);
+                    Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position, TerrainSide.Bottom);
             }
             else
             {
-                cast = this.TerrainCast(SensorLedgeRight.position, SensorBottomRight.position, TerrainSide.Bottom);
+                cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
+                    TerrainSide.Bottom);
             }
 
             return cast;
@@ -1550,7 +1554,8 @@ namespace Hedgehog.Core.Actors
             if (footing == Footing.Left)
             {
                 // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
-                cast = this.TerrainCast(SensorLedgeLeft.position, SensorSurfaceLeft.position, TerrainSide.Bottom);
+                cast = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
+                    TerrainSide.Bottom);
 
                 if (!cast)
                 {
@@ -1558,7 +1563,7 @@ namespace Hedgehog.Core.Actors
                 }
                 return DMath.Equalsf(cast.Hit.fraction, 0.0f) ? default(TerrainCastHit) : cast;
             }
-            cast = this.TerrainCast(SensorLedgeRight.position, SensorSurfaceRight.position,
+            cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
                 TerrainSide.Bottom);
 
             if (!cast)

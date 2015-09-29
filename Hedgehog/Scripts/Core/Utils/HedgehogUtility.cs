@@ -236,14 +236,14 @@ namespace Hedgehog.Core.Utils
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <returns></returns>
-        public static Transform SearchGeneratedSensors(Transform controller)
+        public static HedgehogSensors FindGeneratedSensors(Transform controller)
         {
             foreach (var child in controller.transform)
             {
                 var transform = child as Transform;
                 if (transform.name == GeneratedSensorsName)
                 {
-                    return transform;
+                    return transform.GetComponent<HedgehogSensors>();
                 }
             }
 
@@ -259,136 +259,111 @@ namespace Hedgehog.Core.Utils
         public static void GenerateSensors(HedgehogController controller, Bounds bounds,
             bool isLocal = false)
         {
-            var generatedSensors = SearchGeneratedSensors(controller.transform);
-            if (generatedSensors != null)
-            {
-                Object.DestroyImmediate(generatedSensors.gameObject);
-            }
+            if(controller.Sensors != null)
+                Object.DestroyImmediate(controller.Sensors.gameObject);
 
-            var sensorsObject = new GameObject
-            {
-                name = GeneratedSensorsName
-            };
+            var sensorsObject = new GameObject { name = GeneratedSensorsName };
+            var sensors = sensorsObject.AddComponent<HedgehogSensors>();
+            controller.Sensors = sensors;
+            
             sensorsObject.transform.SetParent(controller.transform);
             if (isLocal) sensorsObject.transform.localPosition = bounds.center;
             else sensorsObject.transform.position = bounds.center;
 
-            var sensorTopLeft = new GameObject();
-            sensorTopLeft.name = "Top Left";
+            var topLeft = new GameObject {name = "Top Left"};
+            var topCenter = new GameObject {name = "Top Mid"};
+            var topRight = new GameObject {name = "Top Right"};
 
-            var sensorTopMid = new GameObject();
-            sensorTopMid.name = "Top Mid";
+            var centerLeft = new GameObject {name = "Center Left"};
+            var center = new GameObject {name = "Center"};
+            var centerRight = new GameObject {name = "Center Right"};
 
-            var sensorTopRight = new GameObject();
-            sensorTopRight.name = "Top Right";
+            var bottomLeft = new GameObject {name = "Bottom Left"};
+            var botttomCenter = new GameObject {name = "Bottom Center"};
+            var bottomRight = new GameObject {name = "Bottom Right"};
+            
+            var ledgeDropLeft = new GameObject {name = "Ledge Drop Left"};
+            var ledgeDropRight = new GameObject {name = "Ledge Drop Right"};
+            var ledgeClimbLeft = new GameObject {name = "Ledge Climb Left"};
+            var ledgeClimbRight = new GameObject {name = "Ledge Climb Right"};
 
-            var sensorMidLeft = new GameObject();
-            sensorMidLeft.name = "Mid Left";
+            topLeft.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.TopLeft = topLeft.transform;
 
-            var sensorMidMid = new GameObject();
-            sensorMidMid.name = "Mid Mid";
+            topCenter.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.TopCenter = topCenter.transform;
 
-            var sensorMidRight = new GameObject();
-            sensorMidRight.name = "Mid Right";
+            topRight.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.TopRight = topRight.transform;
 
-            var sensorBotLeft = new GameObject();
-            sensorBotLeft.name = "Bot Left";
+            centerLeft.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.CenterLeft = centerLeft.transform;
 
-            var sensorBotMid = new GameObject();
-            sensorBotMid.name = "Bot Mid";
+            center.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.Center = center.transform;
 
-            var sensorBotRight = new GameObject();
-            sensorBotRight.name = "Bot Right";
+            centerRight.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.CenterRight = centerRight.transform;
 
-            var sensorSurfLeft = new GameObject();
-            sensorSurfLeft.name = "Surface Left";
+            bottomLeft.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.BottomLeft = bottomLeft.transform;
 
-            var sensorSurfRight = new GameObject();
-            sensorSurfRight.name = "Surface Right";
+            botttomCenter.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.BottomCenter = botttomCenter.transform;
 
-            var sensorLedgeLeft = new GameObject();
-            sensorLedgeLeft.name = "Ledge Left";
+            bottomRight.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.BottomRight = bottomRight.transform;
 
-            var sensorLedgeRight = new GameObject();
-            sensorLedgeRight.name = "Ledge Right";
+            ledgeDropLeft.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.LedgeDropLeft = ledgeDropLeft.transform;
 
-            sensorTopLeft.transform.SetParent(sensorsObject.transform);
-            controller.SensorTopLeft = sensorTopLeft.transform;
+            ledgeDropRight.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.LedgeDropRight = ledgeDropRight.transform;
 
-            sensorTopMid.transform.SetParent(sensorsObject.transform);
-            controller.SensorTopMiddle = sensorTopMid.transform;
+            ledgeClimbLeft.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.LedgeClimbLeft = ledgeClimbLeft.transform;
 
-            sensorTopRight.transform.SetParent(sensorsObject.transform);
-            controller.SensorTopRight = sensorTopRight.transform;
-
-            sensorMidLeft.transform.SetParent(sensorsObject.transform);
-            controller.SensorMiddleLeft = sensorMidLeft.transform;
-
-            sensorMidMid.transform.SetParent(sensorsObject.transform);
-            controller.SensorMiddleMiddle = sensorMidMid.transform;
-
-            sensorMidRight.transform.SetParent(sensorsObject.transform);
-            controller.SensorMiddleRight = sensorMidRight.transform;
-
-            sensorBotLeft.transform.SetParent(sensorsObject.transform);
-            controller.SensorBottomLeft = sensorBotLeft.transform;
-
-            sensorBotMid.transform.SetParent(sensorsObject.transform);
-            controller.SensorBottomMiddle = sensorBotMid.transform;
-
-            sensorBotRight.transform.SetParent(sensorsObject.transform);
-            controller.SensorBottomRight = sensorBotRight.transform;
-
-            sensorSurfLeft.transform.SetParent(sensorsObject.transform);
-            controller.SensorSurfaceLeft = sensorSurfLeft.transform;
-
-            sensorSurfRight.transform.SetParent(sensorsObject.transform);
-            controller.SensorSurfaceRight = sensorSurfRight.transform;
-
-            sensorLedgeLeft.transform.SetParent(sensorsObject.transform);
-            controller.SensorLedgeLeft = sensorLedgeLeft.transform;
-
-            sensorLedgeRight.transform.SetParent(sensorsObject.transform);
-            controller.SensorLedgeRight = sensorLedgeRight.transform;
+            ledgeClimbRight.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.LedgeClimbRight = ledgeClimbRight.transform;
 
             if (isLocal)
             {
-                sensorTopLeft.transform.localPosition = new Vector3(bounds.min.x, bounds.max.y);
-                sensorTopMid.transform.localPosition = new Vector3(bounds.center.x, bounds.max.y);
-                sensorTopRight.transform.localPosition = bounds.max;
-                sensorMidLeft.transform.localPosition = new Vector3(bounds.min.x - 0.01f, bounds.center.y);
-                sensorMidMid.transform.localPosition = bounds.center;
-                sensorMidRight.transform.localPosition = new Vector3(bounds.max.x + 0.01f, bounds.center.y);
-                sensorBotLeft.transform.localPosition = bounds.min;
-                sensorBotMid.transform.localPosition = new Vector3(bounds.center.x, bounds.min.y);
-                sensorBotRight.transform.localPosition = new Vector3(bounds.max.x, bounds.min.y);
-                sensorLedgeLeft.transform.localPosition = Vector3.Lerp(sensorTopLeft.transform.localPosition,
-                    sensorBotLeft.transform.localPosition, 0.5f);
-                sensorLedgeRight.transform.localPosition = Vector3.Lerp(sensorTopRight.transform.localPosition,
-                    sensorBotRight.transform.localPosition, 0.5f);
-                sensorSurfLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
+                topLeft.transform.localPosition = new Vector3(bounds.min.x, bounds.max.y);
+                topCenter.transform.localPosition = new Vector3(bounds.center.x, bounds.max.y);
+                topRight.transform.localPosition = bounds.max;
+                centerLeft.transform.localPosition = new Vector3(bounds.min.x - 0.01f, bounds.center.y);
+                center.transform.localPosition = bounds.center;
+                centerRight.transform.localPosition = new Vector3(bounds.max.x + 0.01f, bounds.center.y);
+                bottomLeft.transform.localPosition = bounds.min;
+                botttomCenter.transform.localPosition = new Vector3(bounds.center.x, bounds.min.y);
+                bottomRight.transform.localPosition = new Vector3(bounds.max.x, bounds.min.y);
+                ledgeClimbLeft.transform.localPosition = Vector3.Lerp(topLeft.transform.localPosition,
+                    bottomLeft.transform.localPosition, 0.5f);
+                ledgeClimbRight.transform.localPosition = Vector3.Lerp(topRight.transform.localPosition,
+                    bottomRight.transform.localPosition, 0.5f);
+                ledgeDropLeft.transform.localPosition = bottomLeft.transform.localPosition +
                                                          Vector3.down * controller.LedgeDropHeight;
-                sensorSurfRight.transform.localPosition = sensorBotRight.transform.localPosition +
+                ledgeDropRight.transform.localPosition = bottomRight.transform.localPosition +
                                                          Vector3.down * controller.LedgeDropHeight;
             }
             else
             {
-                sensorTopLeft.transform.position = new Vector3(bounds.min.x, bounds.max.y);
-                sensorTopMid.transform.position = new Vector3(bounds.center.x, bounds.max.y);
-                sensorTopRight.transform.position = bounds.max;
-                sensorMidLeft.transform.position = new Vector3(bounds.min.x - 0.01f, bounds.center.y);
-                sensorMidMid.transform.position = bounds.center;
-                sensorMidRight.transform.position = new Vector3(bounds.max.x + 0.01f, bounds.center.y);
-                sensorBotLeft.transform.position = bounds.min;
-                sensorBotMid.transform.position = new Vector3(bounds.center.x, bounds.min.y);
-                sensorBotRight.transform.position = new Vector3(bounds.max.x, bounds.min.y);
-                sensorLedgeLeft.transform.position = Vector3.Lerp(sensorTopLeft.transform.position,
-                     sensorBotLeft.transform.position, 0.5f);
-                sensorLedgeRight.transform.position = Vector3.Lerp(sensorTopRight.transform.position,
-                    sensorBotRight.transform.position, 0.5f);
-                sensorSurfLeft.transform.localPosition = sensorBotLeft.transform.localPosition +
+                topLeft.transform.position = new Vector3(bounds.min.x, bounds.max.y);
+                topCenter.transform.position = new Vector3(bounds.center.x, bounds.max.y);
+                topRight.transform.position = bounds.max;
+                centerLeft.transform.position = new Vector3(bounds.min.x - 0.01f, bounds.center.y);
+                center.transform.position = bounds.center;
+                centerRight.transform.position = new Vector3(bounds.max.x + 0.01f, bounds.center.y);
+                bottomLeft.transform.position = bounds.min;
+                botttomCenter.transform.position = new Vector3(bounds.center.x, bounds.min.y);
+                bottomRight.transform.position = new Vector3(bounds.max.x, bounds.min.y);
+                ledgeClimbLeft.transform.position = Vector3.Lerp(topLeft.transform.position,
+                     bottomLeft.transform.position, 0.5f);
+                ledgeClimbRight.transform.position = Vector3.Lerp(topRight.transform.position,
+                    bottomRight.transform.position, 0.5f);
+                ledgeDropLeft.transform.localPosition = bottomLeft.transform.localPosition +
                                                          Vector3.down * controller.LedgeDropHeight;
-                sensorSurfRight.transform.localPosition = sensorBotRight.transform.localPosition +
+                ledgeDropRight.transform.localPosition = bottomRight.transform.localPosition +
                                                          Vector3.down * controller.LedgeDropHeight;
             }
         }
