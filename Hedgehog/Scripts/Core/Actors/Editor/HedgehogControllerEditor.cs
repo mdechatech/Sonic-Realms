@@ -488,18 +488,6 @@ namespace Hedgehog.Core.Actors.Editor
                         #region Forbidden Constants
                         EditorGUILayout.HelpBox("The following values are best left untouched!", MessageType.Warning);
 
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.MinWallmodeSwitchSpeed = EditorGUILayout.FloatField("Min Wallmode Switch Speed",
-                            _instance.MinWallmodeSwitchSpeed);
-                        EditorGUILayout.PrefixLabel("units/s");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.HorizontalWallmodeAngleWeight = EditorGUILayout.FloatField("Horizontal Wallmode Angle Weight",
-                            _instance.HorizontalWallmodeAngleWeight);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-
                         EditorGUILayout.Space();
 
                         EditorGUILayout.BeginHorizontal();
@@ -604,7 +592,6 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
-                EditorGUILayout.EnumPopup("Wallmode", _instance.Wallmode);
                 EditorGUILayout.EnumPopup("Footing", _instance.Footing);
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("PrimarySurface"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("SecondarySurface"));

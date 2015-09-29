@@ -172,7 +172,8 @@ namespace Hedgehog.Core.Utils
         }
 
         /// <summary>
-        /// Returns the scalar projection (aka scalar component) onto a vector theta radians above vector a.
+        /// Returns the scalar projection of vector a (aka scalar component) onto a vector pointing theta radians
+        /// clockwise from vector a.
         /// </summary>
         /// <param name="a">The vector a.</param>
         /// <param name="theta">The angle in radians of vector a relative to the vector to project onto.</param>
@@ -180,6 +181,17 @@ namespace Hedgehog.Core.Utils
         public static float ScalarProjection(Vector2 a, float theta)
         {
             return a.magnitude*Mathf.Cos(theta);
+        }
+
+        /// <summary>
+        /// Returns the scalar projection of vector a (aka scalar component) onto a vector pointing theta radians.
+        /// </summary>
+        /// <param name="a">The vector a.</param>
+        /// <param name="theta">The angle theta, in radians.</param>
+        /// <returns></returns>
+        public static float AbsoluteScalarProjection(Vector2 a, float theta)
+        {
+            return a.magnitude*Mathf.Cos(Angle(a) - theta);
         }
 
         /// <summary>
@@ -333,9 +345,9 @@ namespace Hedgehog.Core.Utils
         /// <returns>The angle.</returns>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
-        public static float AngleDiffr(Vector2 a, Vector2 b)
+        public static float ShortestArc(Vector2 a, Vector2 b)
         {
-            return AngleDiffr(Angle(a), Angle(b));
+            return ShortestArc(Angle(a), Angle(b));
         }
 
         /// <summary>
@@ -347,7 +359,7 @@ namespace Hedgehog.Core.Utils
         /// <returns>The angle in radians between two rays pointing in the specified direction.</returns>
         /// <param name="a">The angle of the first ray, in radians.</param>
         /// <param name="b">The angle of the second ray, in radians.</param>
-        public static float AngleDiffr(float a, float b)
+        public static float ShortestArc(float a, float b)
         {
             return Modp(b - a + Mathf.PI, DoublePi) - Mathf.PI;
         }
@@ -361,9 +373,9 @@ namespace Hedgehog.Core.Utils
         /// <returns>The angle.</returns>
         /// <param name="a">The first vector.</param>
         /// <param name="b">The second vector.</param>
-        public static float AngleDiffd(Vector2 a, Vector2 b)
+        public static float ShortestArc_d(Vector2 a, Vector2 b)
         {
-            return AngleDiffd(Angle(a) * Mathf.Rad2Deg, Angle(b) * Mathf.Rad2Deg);
+            return ShortestArc_d(Angle(a) * Mathf.Rad2Deg, Angle(b) * Mathf.Rad2Deg);
         }
 
         /// <summary>
@@ -375,9 +387,81 @@ namespace Hedgehog.Core.Utils
         /// <returns>The angle in degrees between two rays pointing in the specified direction.</returns>
         /// <param name="a">The angle of the first ray, in degrees.</param>
         /// <param name="b">The angle of the second ray, in degrees.</param>
-        public static float AngleDiffd(float a, float b)
+        public static float ShortestArc_d(float a, float b)
         {
             return Modp(b - a + 180.0f, 360.0f) - 180.0f;
+        }
+
+        /// <summary>
+        /// Returns the positive length of the arc from a traveling counter-clockwise to b, in radians.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float PositiveArc(float a, float b)
+        {
+            var diff = PositiveAngle(b) - PositiveAngle(a);
+            if (diff < 0.0f) return diff + DoublePi;
+            return diff;
+        }
+
+        /// <summary>
+        /// Returns the length of the arc from a traveling counter-clockwise to b, in degrees.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float PositiveArc_d(float a, float b)
+        {
+            var diff = PositiveAngle_d(b) - PositiveAngle_d(a);
+            if (diff < 0.0f) return diff + 360.0f;
+            return diff;
+        }
+
+        /// <summary>
+        /// Returns the specified angle in the range 0 to 2pi.
+        /// </summary>
+        /// <param name="angle">The specified angle in radians.</param>
+        /// <returns></returns>
+        public static float PositiveAngle(float angle)
+        {
+            return Modp(angle, DoublePi);
+        }
+
+        /// <summary>
+        /// Returns the specified angle in the range 0 to 360.
+        /// </summary>
+        /// <param name="angle">The specified angle in degrees.</param>
+        /// <returns></returns>
+        public static float PositiveAngle_d(float angle)
+        {
+            return Modp(angle, 360.0f);
+        }
+
+        /// <summary>
+        /// Returns whether the specified angle is inside the arc formed between the angle a
+        /// traveling counter-clockwise (upwards) to b.
+        /// </summary>
+        /// <param name="angle">The specified angle in radians.</param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool AngleInRange(float angle, float a, float b)
+        {
+            return PositiveArc(a, angle) <= PositiveArc(a, b);
+        }
+
+        /// <summary>
+        /// Returns whether the specified angle is inside the arc formed between the angle a
+        /// traveling counter-clockwise (upwards) to b.
+        /// </summary>
+        /// <param name="angle">The specified angle in degrees.</param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool AngleInRange_d(float angle, float a, float b)
+        {
+            return PositiveArc_d(a, angle) <= PositiveArc_d(a, b);
         }
 
         /// <summary>

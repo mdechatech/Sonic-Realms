@@ -39,8 +39,8 @@ namespace Hedgehog.Core.Utils
             Hit = hit;
             Side = fromSide;
             Source = source;
-            NormalAngle = hit ? DMath.Angle(hit.normal) : 0.0f;
-            SurfaceAngle = hit ? NormalAngle - DMath.HalfPi : 0.0f;
+            NormalAngle = hit ? DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi) : 0.0f;
+            SurfaceAngle = hit ? DMath.Modp(NormalAngle - DMath.HalfPi, DMath.DoublePi) : 0.0f;
         }
 
         public static implicit operator bool(TerrainCastHit terrainInfo)

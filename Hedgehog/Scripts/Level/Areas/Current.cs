@@ -99,7 +99,7 @@ namespace Hedgehog.Level.Areas
                 var result = normalized*Power*Time.fixedDeltaTime;
                 if (AccountForGravity) result += Vector2.up*controller.AirGravity*Time.fixedDeltaTime;
 
-                if (Mathf.Abs(DMath.AngleDiffr(DMath.Angle(result), targetAngle)) > DMath.HalfPi)
+                if (Mathf.Abs(DMath.ShortestArc(DMath.Angle(result), targetAngle)) > DMath.HalfPi)
                 {
                     controller.Velocity = TargetVelocity;
                     return;

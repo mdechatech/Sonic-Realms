@@ -48,11 +48,24 @@ namespace Hedgehog.Core.Actors
         #region Sensors
 
         [Header("Sensors")]
+
         /// <summary>
         /// Contains sensor data for hit detection.
         /// </summary>
         [SerializeField]
         public HedgehogSensors Sensors;
+
+        /// <summary>
+        /// The rotation angle of the sensors in degrees.
+        /// </summary>
+        public float SensorsRotation
+        {
+            get { return Sensors.transform.eulerAngles.z; }
+            set { Sensors.transform.eulerAngles = new Vector3(
+                Sensors.transform.eulerAngles.x,
+                Sensors.transform.eulerAngles.y,
+                value); }
+        }
 
         #endregion
         #region Physics
@@ -227,19 +240,6 @@ namespace Hedgehog.Core.Actors
         public float MaxSurfaceAngleDifference = 70.0f;
 
         /// <summary>
-        /// The amount in degrees past the threshold of changing wall mode that the player
-        /// can go.
-        /// </summary>
-        [SerializeField]
-        public float HorizontalWallmodeAngleWeight = 0.0f;
-
-        /// <summary>
-        /// The speed in units per second at which the player must be moving to be able to switch wall modes.
-        /// </summary>
-        [SerializeField]
-        public float MinWallmodeSwitchSpeed = 0.5f;
-
-        /// <summary>
         /// The minimum difference in angle between the surface sensor and the overlap sensor
         /// to have the player's rotation account for it.
         /// </summary>
@@ -374,18 +374,27 @@ namespace Hedgehog.Core.Actors
         private bool _justLanded;
 
         /// <summary>
-        /// If grounded and hasn't just landed, the angle of incline the player walked on
+        /// If grounded and hasn't just landed, the controller of incline in degrees the player walked on
         /// one FixedUpdate ago.
         /// </summary>
         [HideInInspector]
         public float LastSurfaceAngle;
 
         /// <summary>
-        /// If grounded, the angle of incline the player is walking on. Goes hand-in-hand
+        /// If grounded, the angle of incline the controller is walking on in degrees. Goes hand-in-hand
         /// with rotation.
         /// </summary>
         [HideInInspector]
         public float SurfaceAngle;
+
+        /// <summary>
+        /// If grounded, the angle of incline the controller is walking on
+        /// </summary>
+        public float RelativeSurfaceAngle
+        {
+            get { return RelativeAngle(SurfaceAngle); }
+            set { SurfaceAngle = AbsoluteAngle(value); }
+        }
 
         /// <summary>
         /// If grounded, which sensor on the player defines the primary surface.
@@ -430,12 +439,6 @@ namespace Hedgehog.Core.Actors
         public bool JustDetached;
 
         /// <summary>
-        /// Represents the current Wallmode of the player.
-        /// </summary>
-        [HideInInspector]
-        public Orientation Wallmode;
-
-        /// <summary>
         /// If grounded, the surface which is currently defining the controller's position
         /// and rotation.
         /// </summary>
@@ -464,13 +467,15 @@ namespace Hedgehog.Core.Actors
         #region Lifecycle Functions
         public void Awake()
         {
+            Debug.Log(DMath.PositiveArc_d(-90.0f, 0.0f));
+            Debug.Log(DMath.AngleInRange_d(45.0f, -90.0f, 0.0f));
+            Debug.Log(DMath.AngleInRange_d(300.0f, -90.0f, 0.0f));
             Footing = Footing.None;
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
             LastSurfaceAngle = 0.0f;
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
-            Wallmode = Orientation.Floor;
             QueuedTranslation = default(Vector3);
         }
 
@@ -538,6 +543,8 @@ namespace Hedgehog.Core.Actors
                 TriggerSurfaceEvents(oldPrimarySurfaceHit, oldSecondarySurfaceHit, PrimarySurfaceHit,
                     SecondarySurfaceHit, false);
             }
+
+            HandleDisplay(Time.fixedDeltaTime);
         }
         #endregion
 
@@ -577,12 +584,14 @@ namespace Hedgehog.Core.Actors
         {
             if (Grounded)
             {
+                // Debug spindash
                 if (DebugSpindashKeyDown)
                 {
                     GroundVelocity = MaxSpeed*Mathf.Sign(GroundVelocity);
                     DebugSpindashKeyDown = false;
                 }
-
+                
+                // Horizontal lock timer update
                 if (HorizontalLock)
                 {
                     HorizontalLockTimer -= timestep;
@@ -593,50 +602,36 @@ namespace Hedgehog.Core.Actors
                     }
                 }
 
+                // Jump
                 if (JumpKeyPressed)
                 {
                     Jump();
                     JumpKeyPressed = false;
                 }
 
+                // Ground movement
                 if (LeftKeyDown && !HorizontalLock)
                 {
-                    if (Vg > 0 && Mathf.Abs(DMath.AngleDiffd(SurfaceAngle, 90.0f)) < MaxVerticalDetachAngle)
+                    if (Vg > 0.0f)
                     {
-                        Vx = 0;
-                        Detach();
+                        Vg -= GroundBrake*timestep;
+                        if (Vg < 0.0f) Vg -= GroundAcceleration *timestep;
                     }
-                    else
+                    else if (Vg > -TopSpeed)
                     {
-                        if (Vg > 0.0f)
-                        {
-                            Vg -= GroundBrake*timestep;
-                            if (Vg < 0.0f) Vg -= GroundAcceleration *timestep;
-                        }
-                        else if (Vg > -TopSpeed)
-                        {
-                            Vg -= GroundAcceleration*timestep;
-                        }
+                        Vg -= GroundAcceleration*timestep;
                     }
                 }
                 else if (RightKeyDown && !HorizontalLock)
                 {
-                    if (Vg < 0 && Mathf.Abs(DMath.AngleDiffd(SurfaceAngle, 270.0f)) < MaxVerticalDetachAngle)
+                    if (Vg < 0.0f)
                     {
-                        Vx = 0;
-                        Detach();
+                        Vg += GroundBrake*timestep;
+                        if (Vg > 0.0f) Vg += GroundAcceleration*timestep;
                     }
-                    else
+                    else if (Vg < TopSpeed)
                     {
-                        if (Vg < 0.0f)
-                        {
-                            Vg += GroundBrake*timestep;
-                            if (Vg > 0.0f) Vg += GroundAcceleration*timestep;
-                        }
-                        else if (Vg < TopSpeed)
-                        {
-                            Vg += GroundAcceleration*timestep;
-                        }
+                        Vg += GroundAcceleration*timestep;
                     }
                 }
             }
@@ -652,6 +647,19 @@ namespace Hedgehog.Core.Actors
                     JumpKeyReleased = false;
                 }
             }
+        }
+
+        public void HandleDisplay()
+        {
+            HandleDisplay(Time.fixedDeltaTime);
+        }
+
+        public void HandleDisplay(float timestep)
+        {
+            // Do a little smoothness later
+            var globalRotation = SensorsRotation;
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
+            SensorsRotation = globalRotation;
         }
 
         /// <summary>
@@ -691,9 +699,10 @@ namespace Hedgehog.Core.Actors
                 }
 
                 // Slope gravity
-                if (Mathf.Abs(DMath.AngleDiffd(SurfaceAngle, 0.0f)) > SlopeGravityBeginAngle)
+                if (!DMath.AngleInRange_d(RelativeSurfaceAngle,
+                    -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
                 {
-                    Vg -= SlopeGravity*Mathf.Sin(SurfaceAngle*Mathf.Deg2Rad)*timestep;
+                    Vg -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
                 }
 
                 // Speed limit
@@ -701,10 +710,11 @@ namespace Hedgehog.Core.Actors
                 else if (Vg < -MaxSpeed) Vg = -MaxSpeed;
 
                 // Detachment from walls if speed is too low
-                if (Wallmode != Orientation.Floor && Mathf.Abs(Vg) < DetachSpeed)
+                if (Mathf.Abs(Vg) < DetachSpeed && DMath.AngleInRange_d(RelativeSurfaceAngle, 45.0f, 315.0f))
                 {
-                    if (SurfaceAngle > 90.0f - MaxVerticalDetachAngle &&
-                        SurfaceAngle < 270.0f + MaxVerticalDetachAngle)
+                    if (DMath.AngleInRange_d(RelativeSurfaceAngle, 
+                        90.0f - MaxVerticalDetachAngle,
+                        270.0f + MaxVerticalDetachAngle))
                     {
                         Detach(true);
                     }
@@ -713,8 +723,6 @@ namespace Hedgehog.Core.Actors
                         LockHorizontal();
                     }
                 }
-
-               
             }
             else
             {
@@ -723,9 +731,6 @@ namespace Hedgehog.Core.Actors
                 {
                     Vx *= Mathf.Pow(AirDragCoefficient, timestep);
                 }
-
-                //transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.LerpAngle(transform.eulerAngles.z, 0.0f, Time.deltaTime * 5.0f));
-                transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
             }
         }
 
@@ -742,7 +747,6 @@ namespace Hedgehog.Core.Actors
 
             if (!Grounded)
             {
-                SurfaceAngle = 0.0f;
                 anyHit = AirSideCheck() | AirCeilingCheck() | AirGroundCheck();
             }
 
@@ -774,7 +778,8 @@ namespace Hedgehog.Core.Actors
             {
                 if (!JustJumped)
                 {
-                    Vx = 0;
+                    Vx *= Mathf.Abs(Mathf.Cos(GravityDirection*Mathf.Deg2Rad));
+                    Vy *= Mathf.Abs(Mathf.Sin(GravityDirection*Mathf.Deg2Rad));
                 }
 
                 transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
@@ -786,7 +791,8 @@ namespace Hedgehog.Core.Actors
             {
                 if (!JustJumped)
                 {
-                    Vx = 0;
+                    Vx *= Mathf.Abs(Mathf.Cos(GravityDirection*Mathf.Deg2Rad));
+                    Vy *= Mathf.Abs(Mathf.Sin(GravityDirection*Mathf.Deg2Rad));
                 }
 
                 transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
@@ -809,37 +815,8 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
-                HandleImpact(leftCheck);
+                if(!JustDetached) HandleImpact(leftCheck);
                 return true;
-                /*
-                var horizontalCheck = this.TerrainCast(SensorTopMiddle.position, SensorTopLeft.position,
-                    TerrainSide.Left);
-                var verticalCheck = this.TerrainCast(SensorMiddleLeft.position, SensorTopLeft.position,
-                    TerrainSide.Top);
-
-                if (horizontalCheck || verticalCheck)
-                {
-                    if (Vector2.Distance(horizontalCheck.Hit.point, SensorTopLeft.position) <
-                    Vector2.Distance(verticalCheck.Hit.point, SensorTopLeft.position))
-                    {
-                        transform.position += (Vector3)horizontalCheck.Hit.point - SensorTopLeft.position;
-
-                        if (!JustDetached) HandleImpact(horizontalCheck);
-                        if (Vy > 0) Vy = 0;
-                    }
-                    else
-                    {
-                        transform.position += (Vector3)verticalCheck.Hit.point - SensorTopLeft.position;
-
-                        if (!JustDetached) HandleImpact(verticalCheck);
-                        if (Vy > 0) Vy = 0;
-                    }
-
-                    return true;
-                }
-                 */
-
-
             }
 
             var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position, TerrainSide.Top);
@@ -847,35 +824,8 @@ namespace Hedgehog.Core.Actors
             if (rightCheck)
             {
                 transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
-                HandleImpact(rightCheck);
+                if(!JustDetached) HandleImpact(rightCheck);
                 return true;
-                /*
-                var horizontalCheck = this.TerrainCast(SensorTopMiddle.position, SensorTopRight.position,
-                    TerrainSide.Right);
-                var verticalCheck = this.TerrainCast(SensorMiddleRight.position, SensorTopRight.position,
-                    TerrainSide.Top);
-
-                if (horizontalCheck || verticalCheck)
-                {
-                    if (Vector2.Distance(horizontalCheck.Hit.point, SensorTopRight.position) <
-                    Vector2.Distance(verticalCheck.Hit.point, SensorTopRight.position))
-                    {
-                        transform.position += (Vector3)horizontalCheck.Hit.point - SensorTopRight.position;
-
-                        if (!JustDetached) HandleImpact(horizontalCheck);
-                        if (Vy > 0) Vy = 0;
-                    }
-                    else
-                    {
-                        transform.position += (Vector3)verticalCheck.Hit.point - SensorTopRight.position;
-
-                        if (!JustDetached) HandleImpact(verticalCheck);
-                        if (Vy > 0) Vy = 0;
-                    }
-
-                    return true;
-                }
-                 */
             }
 
             return false;
@@ -907,7 +857,8 @@ namespace Hedgehog.Core.Actors
                 {
                     if (groundLeftCheck && groundRightCheck)
                     {
-                        if (groundLeftCheck.Hit.point.y > groundRightCheck.Hit.point.y)
+                        if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
+                                (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
                         {
                             HandleImpact(groundLeftCheck);
                         }
@@ -950,12 +901,12 @@ namespace Hedgehog.Core.Actors
                                       DMath.Epsilon;
 
                 // If running down a wall and hits the floor, orient the player onto the floor
-                if (Wallmode == Orientation.Right)
+                if (DMath.AngleInRange_d(RelativeAngle(SurfaceAngle), 45.0f, 135.0f))
                 {
-                    DMath.RotateBy(transform, -90.0f);
-                    Wallmode = Orientation.Floor;
+                    SurfaceAngle -= 90.0f;
                 }
 
+                SensorsRotation = SurfaceAngle;
                 return true;
             }
             if (sideRightCheck)
@@ -964,17 +915,18 @@ namespace Hedgehog.Core.Actors
                 transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
                                       ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
                                       .normalized * DMath.Epsilon;
-
+                
                 // If running down a wall and hits the floor, orient the player onto the floor
-                if (Wallmode == Orientation.Left)
+                if (DMath.AngleInRange_d(RelativeAngle(SurfaceAngle), 225.0f, 315.0f))
                 {
-                    DMath.RotateTo(transform, 90.0f);
-                    Wallmode = Orientation.Floor;
+                    SurfaceAngle += 90.0f;
                 }
 
+                SensorsRotation = SurfaceAngle;
                 return true;
             }
 
+            SensorsRotation = SurfaceAngle;
             return false;
         }
 
@@ -1025,14 +977,14 @@ namespace Hedgehog.Core.Actors
                 if (s.LeftCast && s.RightCast)
                 {
                     // Calculate angle changes for tolerance checks
-                    var rightDiff = DMath.AngleDiffd(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                    var leftDiff = DMath.AngleDiffd(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                    var overlapDiff = DMath.AngleDiffr(s.LeftCast.SurfaceAngle, s.RightCast.SurfaceAngle) * Mathf.Rad2Deg;
+                    var rightDiff = DMath.ShortestArc_d(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                    var leftDiff = DMath.ShortestArc_d(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                    var overlapDiff = DMath.ShortestArc(s.LeftCast.SurfaceAngle, s.RightCast.SurfaceAngle) * Mathf.Rad2Deg;
 
                     var overlapSurfaceAngle = DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point);
                     // = difference between the angle of a line drawn between the surfaces minus the average of 
                     //   their surface angles
-                    var overlapSurfaceDiff = DMath.AngleDiffr(overlapSurfaceAngle,
+                    var overlapSurfaceDiff = DMath.ShortestArc(overlapSurfaceAngle,
                         (s.LeftCast.SurfaceAngle + s.RightCast.SurfaceAngle)/2.0f)*Mathf.Rad2Deg;
                     if (s.Side == Footing.Left)
                     {
@@ -1044,7 +996,7 @@ namespace Hedgehog.Core.Actors
                                 Mathf.Abs(overlapSurfaceDiff) > 135.0f)
                             {
                                 // If tolerable, rotate between the surfaces beneath the two feet
-                                DMath.RotateTo(transform, overlapSurfaceAngle);
+                                SurfaceAngle = overlapSurfaceAngle*Mathf.Rad2Deg;
                                 transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                                 Footing = Footing.Left;
                                 SetSurface(s.LeftCast, s.RightCast);
@@ -1052,7 +1004,7 @@ namespace Hedgehog.Core.Actors
                             else
                             {
                                 // Else just rotate for the left foot
-                                DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
+                                SurfaceAngle = s.LeftCast.SurfaceAngle*Mathf.Rad2Deg;
                                 transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                                 Footing = Footing.Left;
                                 SetSurface(s.LeftCast, null);
@@ -1061,7 +1013,7 @@ namespace Hedgehog.Core.Actors
                         else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                         {
                             // Else see if the other surface's angle is tolerable
-                            DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
+                            SurfaceAngle = s.RightCast.SurfaceAngle*Mathf.Rad2Deg;
                             transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                             Footing = Footing.Right;
                             SetSurface(s.RightCast, null);
@@ -1081,14 +1033,14 @@ namespace Hedgehog.Core.Actors
                             if (overlapDiff > MinOverlapAngle && Mathf.Abs(overlapSurfaceDiff) < MinFlatOverlapRange || 
                                 Mathf.Abs(overlapSurfaceDiff) > 135.0f)
                             {
-                                DMath.RotateTo(transform, overlapSurfaceAngle);
+                                SurfaceAngle = overlapSurfaceAngle*Mathf.Rad2Deg;
                                 transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                                 Footing = Footing.Right;
                                 SetSurface(s.RightCast, s.LeftCast);
                             }
                             else
                             {
-                                DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
+                                SurfaceAngle = s.RightCast.SurfaceAngle*Mathf.Rad2Deg;
                                 transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                                 Footing = Footing.Right;
                                 SetSurface(s.RightCast, null);
@@ -1097,7 +1049,7 @@ namespace Hedgehog.Core.Actors
                         }
                         else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                         {
-                            DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
+                            SurfaceAngle = s.LeftCast.SurfaceAngle*Mathf.Rad2Deg;
                             transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                             Footing = Footing.Left;
                             SetSurface(s.LeftCast, null);
@@ -1110,10 +1062,10 @@ namespace Hedgehog.Core.Actors
                 }
                 else if (s.LeftCast)
                 {
-                    var leftDiff = DMath.AngleDiffd(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                    var leftDiff = DMath.ShortestArc_d(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                     if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
                     {
-                        DMath.RotateTo(transform, s.LeftCast.SurfaceAngle);
+                        SurfaceAngle = s.LeftCast.SurfaceAngle*Mathf.Rad2Deg;
                         transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
                         Footing = Footing.Left;
                         SetSurface(s.LeftCast, null);
@@ -1125,10 +1077,10 @@ namespace Hedgehog.Core.Actors
                 }
                 else
                 {
-                    var rightDiff = DMath.AngleDiffd(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
+                    var rightDiff = DMath.ShortestArc_d(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
                     if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
                     {
-                        DMath.RotateTo(transform, s.RightCast.SurfaceAngle);
+                        SurfaceAngle = s.RightCast.SurfaceAngle*Mathf.Rad2Deg;
                         transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
                         Footing = Footing.Right;
                         SetSurface(s.RightCast, null);
@@ -1139,6 +1091,7 @@ namespace Hedgehog.Core.Actors
                     }
                 }
 
+                SensorsRotation = SurfaceAngle;
                 return true;
             }
 
@@ -1152,42 +1105,12 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c> if the angle of incline is tolerable, <c>false</c> otherwise.</returns>
         private bool SurfaceAngleCheck()
         {
-            if (_justLanded)
-            {
-                SurfaceAngle = transform.eulerAngles.z;
-                LastSurfaceAngle = SurfaceAngle;
-            }
-            else
-            {
-                LastSurfaceAngle = SurfaceAngle;
-                SurfaceAngle = transform.eulerAngles.z;
-            }
+            LastSurfaceAngle = SurfaceAngle;
 
             // Can only stay on the surface if angle difference is low enough
             if (Grounded && (_justLanded ||
-                             Mathf.Abs(DMath.AngleDiffd(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
+                             Mathf.Abs(DMath.ShortestArc_d(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
             {
-                if (Wallmode == Orientation.Floor)
-                {
-                    if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 180.0f) Wallmode = Orientation.Right;
-                    else if (SurfaceAngle < 315.0f - HorizontalWallmodeAngleWeight && SurfaceAngle > 180.0f) Wallmode = Orientation.Left;
-                }
-                else if (Wallmode == Orientation.Right)
-                {
-                    if (SurfaceAngle > 135.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
-                    else if (SurfaceAngle < 45.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Floor;
-                }
-                else if (Wallmode == Orientation.Ceiling)
-                {
-                    if (SurfaceAngle > 225.0f + HorizontalWallmodeAngleWeight) Wallmode = Orientation.Left;
-                    else if (SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Right;
-                }
-                else if (Wallmode == Orientation.Left)
-                {
-                    if (SurfaceAngle > 315.0f + HorizontalWallmodeAngleWeight || SurfaceAngle < 180.0f) Wallmode = Orientation.Floor;
-                    else if (SurfaceAngle < 225.0f - HorizontalWallmodeAngleWeight) Wallmode = Orientation.Ceiling;
-                }
-
                 Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
                 Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
 
@@ -1239,7 +1162,7 @@ namespace Hedgehog.Core.Actors
             Vy += JumpSpeed * Mathf.Sin(surfaceNormal);
 
             var newAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
-            var angleDifference = DMath.AngleDiffd(originalAngle, newAngle);
+            var angleDifference = DMath.ShortestArc_d(originalAngle, newAngle);
 
             if (Mathf.Abs(angleDifference) < ForceJumpAngleDifference)
             {
@@ -1309,15 +1232,14 @@ namespace Hedgehog.Core.Actors
         public void Detach(bool lockUponLanding = false)
         {
             Vg = 0.0f;
-            LastSurfaceAngle = 0.0f;
-            SurfaceAngle = 0.0f;
+            LastSurfaceAngle = SurfaceAngle = RelativeAngle(0.0f);
             Grounded = false;
             JustDetached = true;
-            Wallmode = Orientation.Floor;
             Footing = Footing.None;
             LockUponLanding = lockUponLanding;
             TriggerSurfaceEvents(PrimarySurfaceHit, SecondarySurfaceHit, null, null);
             SetSurface(null);
+            SensorsRotation = GravityDirection + 90.0f;
         }
 
         /// <summary>
@@ -1331,28 +1253,14 @@ namespace Hedgehog.Core.Actors
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             Vg = groundSpeed;
             SurfaceAngle = LastSurfaceAngle = angleDegrees;
+            SensorsRotation = SurfaceAngle;
             Grounded = _justLanded = true;
-
-            // HorizontalWallmodeAngleWeight may be set to only attach right or left at extreme angles
-            if (SurfaceAngle < 45.0f + HorizontalWallmodeAngleWeight || SurfaceAngle > 315.0f - HorizontalWallmodeAngleWeight)
-                Wallmode = Orientation.Floor;
-
-            else if (SurfaceAngle > 135.0f - HorizontalWallmodeAngleWeight && SurfaceAngle < 225.0 + HorizontalWallmodeAngleWeight)
-                Wallmode = Orientation.Ceiling;
-
-            else if (SurfaceAngle > 45.0f + HorizontalWallmodeAngleWeight && SurfaceAngle < 135.0f - HorizontalWallmodeAngleWeight)
-                Wallmode = Orientation.Right;
-
-            else
-                Wallmode = Orientation.Left;
 
             if (LockUponLanding)
             {
                 LockUponLanding = false;
                 LockHorizontal();
             }
-
-            DMath.RotateTo(transform, angleRadians);
         }
 
         /// <summary>
@@ -1362,65 +1270,69 @@ namespace Hedgehog.Core.Actors
         /// <param name="impact">The impact data as th result of a terrain cast.</param>
         public bool HandleImpact(TerrainCastHit impact)
         {
-            var sAngled = DMath.Modp(impact.SurfaceAngle * Mathf.Rad2Deg, 360.0f);
+            var sAngled = DMath.PositiveAngle_d(impact.SurfaceAngle * Mathf.Rad2Deg);
             var sAngler = sAngled * Mathf.Deg2Rad;
 
             // The player can't possibly land on something if he's traveling 90 degrees
             // within the normal
             var surfaceNormal = DMath.Modp(sAngled + 90.0f, 360.0f);
             var playerAngle = DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg;
-            var surfaceDifference = DMath.AngleDiffd(playerAngle, surfaceNormal);
+            var surfaceDifference = DMath.ShortestArc_d(playerAngle, surfaceNormal);
             if (Mathf.Abs(surfaceDifference) < 90.0f)
             {
                 return false;
             }
 
             float? result = null;
-
-            if (Velocity.y <= 0.0f)
+            var fixedAngled = RelativeAngle(sAngled);
+            var projectedVelocity = new Vector2(
+                DMath.AbsoluteScalarProjection(Velocity, (GravityDirection - 270.0f)*Mathf.Deg2Rad),
+                -DMath.AbsoluteScalarProjection(Velocity, GravityDirection*Mathf.Deg2Rad));
+            if (-DMath.AbsoluteScalarProjection(Velocity, GravityDirection*Mathf.Deg2Rad) <= 0.0f)
             {
-                if (sAngled < 22.5f || sAngled > 337.5f)
-                {
-                    result = Velocity.x;
+                if (fixedAngled < 22.5f || fixedAngled > 337.5f)
+                {   
+                    result = projectedVelocity.x;
                 }
-                else if (sAngled < 45.0f)
+                else if (fixedAngled < 45.0f)
                 {
-                    result = Mathf.Abs(Velocity.x) > -Velocity.y
-                        ? Velocity.x
-                        : 0.5f*Velocity.y;
+                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
+                        ? projectedVelocity.x
+                        : 0.5f*projectedVelocity.y;
                 }
-                else if (sAngled > 315.0f)
+                else if (fixedAngled > 315.0f)
                 {
-                    result = Mathf.Abs(Velocity.x) > -Velocity.y
-                        ? Velocity.x
-                        : -0.5f * Velocity.y;
+                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
+                        ? projectedVelocity.x
+                        : -0.5f * projectedVelocity.y;
                 }
-                else if (sAngled < 90.0f)
+                else if (fixedAngled < 90.0f)
                 {
-                    result = Mathf.Abs(Velocity.x) > -Velocity.y
-                        ? Velocity.x
-                        : Velocity.y;
+                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
+                        ? projectedVelocity.x
+                        : projectedVelocity.y;
                 }
-                else if (sAngled > 270.0f)
+                else if (fixedAngled > 270.0f)
                 {
-                    result = Mathf.Abs(Velocity.x) > -Velocity.y
-                        ? Velocity.x
-                        : -Velocity.y;
+                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
+                        ? projectedVelocity.x
+                        : -projectedVelocity.y;
                 }
             }
             else
             {
-                if (sAngled > 90.0f && sAngled < 135.0f)
+                if (fixedAngled > 90.0f && fixedAngled < 135.0f)
                 {
-                    result = Velocity.y;
+                    result = projectedVelocity.y;
                 }
-                else if (sAngled > 225.0f && sAngled < 270.0f)
+                else if (fixedAngled > 225.0f && fixedAngled < 270.0f)
                 {
-                    result = -Velocity.y;
+                    result = -projectedVelocity.y;
                 }
-                else if (sAngled > 135.0f && sAngled < 225.0f)
+                else if (fixedAngled > 135.0f && fixedAngled < 225.0f)
                 {
-                    Vy = 0.0f;
+                    Vx *= Mathf.Abs(Mathf.Sin(GravityDirection*Mathf.Deg2Rad));
+                    Vy *= Mathf.Abs(Mathf.Cos(GravityDirection*Mathf.Deg2Rad));
                 }
             }
 
@@ -1433,6 +1345,23 @@ namespace Hedgehog.Core.Actors
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Returns the specified absolute angle in degrees relative to the direction of gravity.
+        /// For example, 0 (flat surface angle) returns 180 (upside-down surface) when gravity
+        /// points upward and 0 when gravity points downward.
+        /// </summary>
+        /// <param name="absoluteAngle"></param>
+        /// <returns></returns>
+        public float RelativeAngle(float absoluteAngle)
+        {
+            return DMath.PositiveAngle_d(absoluteAngle - GravityDirection + 270.0f);
+        }
+
+        public float AbsoluteAngle(float relativeAngle)
+        {
+            return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
 
         /// <summary>
@@ -1539,7 +1468,7 @@ namespace Hedgehog.Core.Actors
                 cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
                     TerrainSide.Bottom);
             }
-
+            
             return cast;
         }
 
