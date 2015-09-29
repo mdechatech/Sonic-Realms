@@ -318,7 +318,18 @@ namespace Hedgehog.Core.Actors
         public Vector2 Velocity
         {
             get { return new Vector2(Vx, Vy); }
-            set { Detach(); Vx = value.x; Vy = value.y; }
+            set
+            {
+                if (Grounded)
+                {
+                    SetGroundVelocity(Velocity);
+                }
+                else
+                {
+                    Vx = value.x;
+                    Vy = value.y;
+                }
+            }
         }
 
         /// <summary>
@@ -467,9 +478,6 @@ namespace Hedgehog.Core.Actors
         #region Lifecycle Functions
         public void Awake()
         {
-            Debug.Log(DMath.PositiveArc_d(-90.0f, 0.0f));
-            Debug.Log(DMath.AngleInRange_d(45.0f, -90.0f, 0.0f));
-            Debug.Log(DMath.AngleInRange_d(300.0f, -90.0f, 0.0f));
             Footing = Footing.None;
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
@@ -748,6 +756,7 @@ namespace Hedgehog.Core.Actors
             if (!Grounded)
             {
                 anyHit = AirSideCheck() | AirCeilingCheck() | AirGroundCheck();
+                SensorsRotation = GravityDirection + 90.0f;
             }
 
             if (Grounded)
@@ -757,7 +766,7 @@ namespace Hedgehog.Core.Actors
             }
 
             if (JustJumped && jumpedPreviousCheck) JustJumped = false;
-
+            
             if (!anyHit && JustDetached)
                 JustDetached = false;
         }
