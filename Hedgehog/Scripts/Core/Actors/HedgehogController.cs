@@ -666,7 +666,16 @@ namespace Hedgehog.Core.Actors
         {
             // Do a little smoothness later
             var globalRotation = SensorsRotation;
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
+            if (!Grounded)
+            {
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 
+                    Mathf.LerpAngle(transform.eulerAngles.z, SensorsRotation, Time.fixedDeltaTime*20.0f));
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
+            }
+            
             SensorsRotation = globalRotation;
         }
 
