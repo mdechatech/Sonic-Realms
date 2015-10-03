@@ -62,7 +62,7 @@ namespace Hedgehog.Core.Utils
         /// </summary>
         /// <param name="angle">The specified angle, in radians.</param>
         /// <returns></returns>
-        public static Vector2 AngleToVector2(float angle)
+        public static Vector2 AngleToVector(float angle)
         {
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
@@ -189,7 +189,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="a">The vector a.</param>
         /// <param name="theta">The angle theta, in radians.</param>
         /// <returns></returns>
-        public static float AbsoluteScalarProjection(Vector2 a, float theta)
+        public static float ScalarProjectionAbs(Vector2 a, float theta)
         {
             return a.magnitude*Mathf.Cos(Angle(a) - theta);
         }

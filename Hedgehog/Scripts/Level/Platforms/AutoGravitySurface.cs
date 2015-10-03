@@ -24,7 +24,7 @@ namespace Hedgehog.Level.Platforms
 
         public void Reset()
         {
-            RestoreOnExit = true;
+            RestoreOnExit = false;
         }
 
         public override void Awake()

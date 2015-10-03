@@ -13,8 +13,6 @@ namespace Hedgehog.Core.Actors
     {
         #region Inspector Fields
         #region Collision
-        [Header("Collision")]
-
         [SerializeField]
         public CollisionMode CollisionMode = CollisionMode.Layers;
 
@@ -31,8 +29,6 @@ namespace Hedgehog.Core.Actors
         public List<string> TerrainNames = new List<string>();
         #endregion
         #region Controls
-        [Header("Controls")]
-
         [SerializeField]
         public KeyCode JumpKey = KeyCode.W;
 
@@ -46,9 +42,6 @@ namespace Hedgehog.Core.Actors
         public KeyCode DebugSpindashKey = KeyCode.Space;
         #endregion
         #region Sensors
-
-        [Header("Sensors")]
-
         /// <summary>
         /// Contains sensor data for hit detection.
         /// </summary>
@@ -69,8 +62,6 @@ namespace Hedgehog.Core.Actors
 
         #endregion
         #region Physics
-        [Header("Physics")]
-
         /// <summary>
         /// The player's ground acceleration in units per second per second.
         /// </summary>
@@ -181,11 +172,6 @@ namespace Hedgehog.Core.Actors
         [Tooltip("Maximum speed in units per second.")]
         public float MaxSpeed = 20.0f;
 
-        [Header("Physics - Uncommon")]
-
-        /// <summary>
-        /// The maximum height of a ledge above the player's feet that it can climb without hindrance.
-        /// </summary>
         [SerializeField]
         public float LedgeClimbHeight = 0.25f;
 
@@ -230,8 +216,6 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [SerializeField]
         public float ForceJumpAngleDifference = 30.0f;
-
-        [Header("Physics - Advanced")]
 
         /// <summary>
         /// The maximum change in angle between two surfaces that the player can walk in.
@@ -312,7 +296,7 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Physics Variables
         /// <summary>
-        /// The player's velocity as a Vector2. Setting velocity this way will detach
+        /// The controller's velocity as a Vector2. Setting velocity this way will detach
         /// the player from whatever surface it is on.
         /// </summary>
         public Vector2 Velocity
@@ -333,6 +317,16 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
+        /// The controller's velocity relative to the direction of gravity. If gravity is down (270),
+        /// relative velocity is the same as velocity.
+        /// </summary>
+        public Vector2 RelativeVelocity
+        {
+            get { return DMath.RotateBy(Velocity, (270.0f - GravityDirection)*Mathf.Deg2Rad); }
+            set { Velocity = DMath.RotateBy(value, (GravityDirection - 270.0f)*Mathf.Deg2Rad); }
+        }
+
+        /// <summary>
         /// The controller's velocity on the ground; the faster it's running, the higher in magnitude
         /// this number is. If it's moving forward (counter-clockwise inside a loop), this is positive.
         /// If backwards (clockwise inside a loop), negative.
@@ -348,7 +342,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public Vector2 GravityDown
         {
-            get { return DMath.AngleToVector2(GravityDirection*Mathf.Deg2Rad); }
+            get { return DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad); }
             set { GravityDirection = DMath.Modp(DMath.Angle(value)*Mathf.Rad2Deg, 360.0f); }
         }
 
@@ -645,8 +639,12 @@ namespace Hedgehog.Core.Actors
             }
             else
             {
-                if (LeftKeyDown) Vx -= AirAcceleration*timestep;
-                else if (RightKeyDown) Vx += AirAcceleration*timestep;
+                if (LeftKeyDown)
+                    Velocity += DMath.AngleToVector((GravityDirection - 90.0f)
+                                                     *Mathf.Deg2Rad)*AirAcceleration*timestep;
+                else if (RightKeyDown)
+                    Velocity += DMath.AngleToVector((GravityDirection + 90.0f)
+                                                     *Mathf.Deg2Rad)*AirAcceleration*timestep;
 
                 if (JumpKeyPressed) JumpKeyPressed = false;
                 if (JumpKeyReleased)
@@ -743,7 +741,7 @@ namespace Hedgehog.Core.Actors
             }
             else
             {
-                Velocity += DMath.AngleToVector2(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
+                Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
                 if (Vy > AirDragVerticalSpeed && Mathf.Abs(Vx) > AirDragHorizontalSpeed)
                 {
                     Vx *= Mathf.Pow(AirDragCoefficient, timestep);
@@ -1179,6 +1177,12 @@ namespace Hedgehog.Core.Actors
             Vx += JumpSpeed * Mathf.Cos(surfaceNormal);
             Vy += JumpSpeed * Mathf.Sin(surfaceNormal);
 
+            if (DMath.Equalsf(Vg))
+            {
+                Detach();
+                return;
+            }
+
             var newAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
             var angleDifference = DMath.ShortestArc_d(originalAngle, newAngle);
 
@@ -1195,13 +1199,18 @@ namespace Hedgehog.Core.Actors
                 Vy = newVelocity.y;
             }
 
-            // Eject self from ground
             Detach();
         }
 
         public void ReleaseJump()
         {
-            if (Vy > ReleaseJumpSpeed) Vy = ReleaseJumpSpeed;
+            var relativeVy = DMath.ScalarProjectionAbs(Velocity, (GravityDirection + 180.0f)*Mathf.Deg2Rad);
+            if (relativeVy > JumpSpeed)
+                Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)
+                            *(JumpSpeed - ReleaseJumpSpeed);
+            else if (relativeVy > ReleaseJumpSpeed)
+                Velocity += DMath.AngleToVector(GravityDirection * Mathf.Deg2Rad)
+                            * (relativeVy - ReleaseJumpSpeed);
         }
 
         /// <summary>
@@ -1283,6 +1292,9 @@ namespace Hedgehog.Core.Actors
 
         /// <summary>
         /// Calculates the ground velocity as the result of an impact on the specified surface angle.
+        /// 
+        /// Uses the algorithm here: https://info.sonicretro.org/SPG:Solid_Tiles#Reacquisition_Of_The_Ground
+        /// adapted for 360° gravity.
         /// </summary>
         /// <returns>Whether the player should attach to the specified incline.</returns>
         /// <param name="impact">The impact data as th result of a terrain cast.</param>
@@ -1304,9 +1316,9 @@ namespace Hedgehog.Core.Actors
             float? result = null;
             var fixedAngled = RelativeAngle(sAngled);
             var projectedVelocity = new Vector2(
-                DMath.AbsoluteScalarProjection(Velocity, (GravityDirection - 270.0f)*Mathf.Deg2Rad),
-                -DMath.AbsoluteScalarProjection(Velocity, GravityDirection*Mathf.Deg2Rad));
-            if (-DMath.AbsoluteScalarProjection(Velocity, GravityDirection*Mathf.Deg2Rad) <= 0.0f)
+                DMath.ScalarProjectionAbs(Velocity, (GravityDirection - 270.0f)*Mathf.Deg2Rad),
+                -DMath.ScalarProjectionAbs(Velocity, GravityDirection*Mathf.Deg2Rad));
+            if (-DMath.ScalarProjectionAbs(Velocity, GravityDirection*Mathf.Deg2Rad) <= 0.0f)
             {
                 if (fixedAngled < 22.5f || fixedAngled > 337.5f)
                 {   

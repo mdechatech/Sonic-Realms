@@ -65,7 +65,7 @@ namespace Hedgehog.Level.Platforms
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;
 
             var result = _originalSlopeGravities[instanceID];
-            if (-DMath.AbsoluteScalarProjection(controller.Velocity, controller.GravityDirection*Mathf.Deg2Rad) < 0.0f)
+            if (-DMath.ScalarProjectionAbs(controller.Velocity, controller.GravityDirection*Mathf.Deg2Rad) < 0.0f)
                 result += DownhillSlopeGravity;
             else
                 result += UphillSlopeGravity;

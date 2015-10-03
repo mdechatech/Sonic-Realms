@@ -27,7 +27,7 @@ namespace Hedgehog.Level.Platforms
         // surface angle.
         public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
         {
-            controller.Translate(DMath.AngleToVector2(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
+            controller.Translate(DMath.AngleToVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
                                  Time.fixedDeltaTime);
 
             _lastSurfaceAngle = controller.SurfaceAngle;
@@ -39,7 +39,7 @@ namespace Hedgehog.Level.Platforms
             if (controller.Grounded)
                 controller.GroundVelocity += Velocity;
             else
-                controller.Velocity += DMath.AngleToVector2(_lastSurfaceAngle*Mathf.Deg2Rad)*Velocity;
+                controller.Velocity += DMath.AngleToVector(_lastSurfaceAngle*Mathf.Deg2Rad)*Velocity;
         }
     }
 }
