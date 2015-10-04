@@ -488,7 +488,8 @@ namespace Hedgehog.Core.Actors
 
         public void FixedUpdate()
         {
-            HandleInput(Time.fixedDeltaTime);
+            HandleForces();
+            HandleInput();
 
             // Stagger routine - if the player's gotta go fast, move it in increments of AntiTunnelingSpeed
             // to prevent tunneling.
@@ -499,7 +500,6 @@ namespace Hedgehog.Core.Actors
 
             if (vt < AntiTunnelingSpeed)
             {
-                HandleForces();
                 transform.position = new Vector2(transform.position.x + (Vx * Time.fixedDeltaTime), transform.position.y + (Vy * Time.fixedDeltaTime));
                 HandleCollisions();
             }
@@ -510,13 +510,11 @@ namespace Hedgehog.Core.Actors
                 {
                     if (vc > AntiTunnelingSpeed)
                     {
-                        HandleForces(Time.fixedDeltaTime * (AntiTunnelingSpeed / vt));
                         transform.position += (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (AntiTunnelingSpeed / vt);
                         vc -= AntiTunnelingSpeed;
                     }
                     else
                     {
-                        HandleForces(Time.fixedDeltaTime * (vc / vt));
                         transform.position += (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (vc / vt);
                         vc = 0.0f;
                     }
@@ -617,7 +615,6 @@ namespace Hedgehog.Core.Actors
                     if (Vg > 0.0f)
                     {
                         Vg -= GroundBrake*timestep;
-                        if (Vg < 0.0f) Vg -= GroundAcceleration *timestep;
                     }
                     else if (Vg > -TopSpeed)
                     {
@@ -629,22 +626,24 @@ namespace Hedgehog.Core.Actors
                     if (Vg < 0.0f)
                     {
                         Vg += GroundBrake*timestep;
-                        if (Vg > 0.0f) Vg += GroundAcceleration*timestep;
                     }
                     else if (Vg < TopSpeed)
                     {
                         Vg += GroundAcceleration*timestep;
                     }
                 }
+                else
+                {
+                    // Ground friction
+                    Vg -= Mathf.Min(Mathf.Abs(Vg), GroundDeceleration*timestep)*Mathf.Sign(Vg);
+                }
             }
             else
             {
                 if (LeftKeyDown)
-                    Velocity += DMath.AngleToVector((GravityDirection - 90.0f)
-                                                     *Mathf.Deg2Rad)*AirAcceleration*timestep;
+                   RelativeVelocity += Vector2.left*AirAcceleration*timestep;
                 else if (RightKeyDown)
-                    Velocity += DMath.AngleToVector((GravityDirection + 90.0f)
-                                                     *Mathf.Deg2Rad)*AirAcceleration*timestep;
+                   RelativeVelocity += Vector2.right*AirAcceleration*timestep;
 
                 if (JumpKeyPressed) JumpKeyPressed = false;
                 if (JumpKeyReleased)
@@ -694,28 +693,8 @@ namespace Hedgehog.Core.Actors
         {
             if (Grounded)
             {
-                // Friction from deceleration
-                if (HorizontalLock || (!LeftKeyDown && !RightKeyDown))
-                {
-                    if (DMath.Equalsf(Vg) && Mathf.Abs(Vg) < GroundDeceleration)
-                    {
-                        Vg = 0.0f;
-                    }
-                    else if (Vg > 0.0f)
-                    {
-                        Vg -= GroundDeceleration*timestep;
-                        if (Vg < 0.0f) Vg = 0.0f;
-                    }
-                    else if (Vg < 0.0f)
-                    {
-                        Vg += GroundDeceleration*timestep;
-                        if (Vg > 0.0f) Vg = 0.0f;
-                    }
-                }
-
                 // Slope gravity
-                if (!DMath.AngleInRange_d(RelativeSurfaceAngle,
-                    -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
+                if (!DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
                 {
                     Vg -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
                 }
@@ -794,8 +773,7 @@ namespace Hedgehog.Core.Actors
             {
                 if (!JustJumped)
                 {
-                    Vx *= Mathf.Abs(Mathf.Cos(GravityDirection*Mathf.Deg2Rad));
-                    Vy *= Mathf.Abs(Mathf.Sin(GravityDirection*Mathf.Deg2Rad));
+                    if (RelativeVelocity.x < 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
                 }
 
                 transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
@@ -807,8 +785,7 @@ namespace Hedgehog.Core.Actors
             {
                 if (!JustJumped)
                 {
-                    Vx *= Mathf.Abs(Mathf.Cos(GravityDirection*Mathf.Deg2Rad));
-                    Vy *= Mathf.Abs(Mathf.Sin(GravityDirection*Mathf.Deg2Rad));
+                    if (RelativeVelocity.x > 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
                 }
 
                 transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
@@ -831,7 +808,7 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
-                if(!JustDetached) HandleImpact(leftCheck);
+                HandleImpact(leftCheck);
                 return true;
             }
 
@@ -840,7 +817,7 @@ namespace Hedgehog.Core.Actors
             if (rightCheck)
             {
                 transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
-                if(!JustDetached) HandleImpact(rightCheck);
+                HandleImpact(rightCheck);
                 return true;
             }
 
@@ -917,7 +894,7 @@ namespace Hedgehog.Core.Actors
                                       DMath.Epsilon;
 
                 // If running down a wall and hits the floor, orient the player onto the floor
-                if (DMath.AngleInRange_d(RelativeAngle(SurfaceAngle), 45.0f, 135.0f))
+                if (DMath.AngleInRange_d(RelativeSurfaceAngle, 85.0f, 95.0f))
                 {
                     SurfaceAngle -= 90.0f;
                 }
@@ -933,7 +910,7 @@ namespace Hedgehog.Core.Actors
                                       .normalized * DMath.Epsilon;
                 
                 // If running down a wall and hits the floor, orient the player onto the floor
-                if (DMath.AngleInRange_d(RelativeAngle(SurfaceAngle), 225.0f, 315.0f))
+                if (DMath.AngleInRange_d(RelativeSurfaceAngle, 265.0f, 275.0f))
                 {
                     SurfaceAngle += 90.0f;
                 }
@@ -1204,13 +1181,10 @@ namespace Hedgehog.Core.Actors
 
         public void ReleaseJump()
         {
-            var relativeVy = DMath.ScalarProjectionAbs(Velocity, (GravityDirection + 180.0f)*Mathf.Deg2Rad);
-            if (relativeVy > JumpSpeed)
-                Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)
-                            *(JumpSpeed - ReleaseJumpSpeed);
-            else if (relativeVy > ReleaseJumpSpeed)
-                Velocity += DMath.AngleToVector(GravityDirection * Mathf.Deg2Rad)
-                            * (relativeVy - ReleaseJumpSpeed);
+            if (RelativeVelocity.y > JumpSpeed)
+                RelativeVelocity += Vector2.down*(JumpSpeed - ReleaseJumpSpeed);
+            else if (RelativeVelocity.y > ReleaseJumpSpeed)
+                RelativeVelocity += Vector2.down*(RelativeVelocity.y - ReleaseJumpSpeed);
         }
 
         /// <summary>
@@ -1315,54 +1289,50 @@ namespace Hedgehog.Core.Actors
 
             float? result = null;
             var fixedAngled = RelativeAngle(sAngled);
-            var projectedVelocity = new Vector2(
-                DMath.ScalarProjectionAbs(Velocity, (GravityDirection - 270.0f)*Mathf.Deg2Rad),
-                -DMath.ScalarProjectionAbs(Velocity, GravityDirection*Mathf.Deg2Rad));
-            if (-DMath.ScalarProjectionAbs(Velocity, GravityDirection*Mathf.Deg2Rad) <= 0.0f)
+            if (RelativeVelocity.y <= 0.0f)
             {
                 if (fixedAngled < 22.5f || fixedAngled > 337.5f)
                 {   
-                    result = projectedVelocity.x;
+                    result = RelativeVelocity.x;
                 }
                 else if (fixedAngled < 45.0f)
                 {
-                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
-                        ? projectedVelocity.x
-                        : 0.5f*projectedVelocity.y;
+                    result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
+                        ? RelativeVelocity.x
+                        : 0.5f*RelativeVelocity.y;
                 }
                 else if (fixedAngled > 315.0f)
                 {
-                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
-                        ? projectedVelocity.x
-                        : -0.5f * projectedVelocity.y;
+                    result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
+                        ? RelativeVelocity.x
+                        : -0.5f * RelativeVelocity.y;
                 }
                 else if (fixedAngled < 90.0f)
                 {
-                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
-                        ? projectedVelocity.x
-                        : projectedVelocity.y;
+                    result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
+                        ? RelativeVelocity.x
+                        : RelativeVelocity.y;
                 }
                 else if (fixedAngled > 270.0f)
                 {
-                    result = Mathf.Abs(projectedVelocity.x) > -projectedVelocity.y
-                        ? projectedVelocity.x
-                        : -projectedVelocity.y;
+                    result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
+                        ? RelativeVelocity.x
+                        : -RelativeVelocity.y;
                 }
             }
             else
             {
                 if (fixedAngled > 90.0f && fixedAngled < 135.0f)
                 {
-                    result = projectedVelocity.y;
+                    result = RelativeVelocity.y;
                 }
                 else if (fixedAngled > 225.0f && fixedAngled < 270.0f)
                 {
-                    result = -projectedVelocity.y;
+                    result = -RelativeVelocity.y;
                 }
                 else if (fixedAngled > 135.0f && fixedAngled < 225.0f)
                 {
-                    Vx *= Mathf.Abs(Mathf.Sin(GravityDirection*Mathf.Deg2Rad));
-                    Vy *= Mathf.Abs(Mathf.Cos(GravityDirection*Mathf.Deg2Rad));
+                    RelativeVelocity = new Vector2(RelativeVelocity.x, 0.0f);
                 }
             }
 
