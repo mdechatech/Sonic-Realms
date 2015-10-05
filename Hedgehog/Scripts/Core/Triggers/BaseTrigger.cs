@@ -11,10 +11,13 @@ namespace Hedgehog.Core.Triggers
     public abstract class BaseTrigger : MonoBehaviour
     {
         /// <summary>
-        /// Whether children also send events from this trigger.
+        /// Whether children of the trigger can set off events. Turning this on makes
+        /// it easy to work with groups of colliders/objects.
         /// </summary>
         [SerializeField]
-        public bool TriggersFromChildren;
+        [Tooltip("Whether children of the trigger can set off events. Turning this on makes it easy to work" +
+                 " with groups of colliders/objects.")]
+        public bool TriggerFromChildren;
 
         /// <summary>
         /// Called when a controller enters the trigger.
@@ -36,7 +39,7 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void Reset()
         {
-            TriggersFromChildren = false;
+            TriggerFromChildren = false;
             OnEnter = new TriggerEvent();
             OnStay = new TriggerEvent();
             OnExit = new TriggerEvent();
@@ -49,7 +52,7 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool AppliesTo(Transform platform)
         {
-            if (!TriggersFromChildren && platform != transform) return false;
+            if (!TriggerFromChildren && platform != transform) return false;
 
             var check = platform;
 
@@ -65,7 +68,7 @@ namespace Hedgehog.Core.Triggers
         public static bool Selector<TTrigger>(TTrigger trigger, Transform originalTransform)
             where TTrigger : BaseTrigger
         {
-            return originalTransform == trigger.transform || trigger.TriggersFromChildren;
+            return originalTransform == trigger.transform || trigger.TriggerFromChildren;
         }
     }
 

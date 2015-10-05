@@ -20,7 +20,7 @@ namespace Hedgehog.Core.Triggers.Editor
 
         public virtual void OnEnable()
         {
-            TriggerFromChildrenProperty = serializedObject.FindProperty("TriggersFromChildren");
+            TriggerFromChildrenProperty = serializedObject.FindProperty("TriggerFromChildren");
             OnEnterProperty = serializedObject.FindProperty("OnEnter");
             OnStayProperty = serializedObject.FindProperty("OnStay");
             OnExitProperty = serializedObject.FindProperty("OnExit");

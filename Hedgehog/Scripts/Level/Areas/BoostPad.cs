@@ -12,7 +12,8 @@ namespace Hedgehog.Level.Areas
         /// <summary>
         /// The velocity to add.
         /// </summary>
-        [SerializeField, Tooltip("Bosst velocity.")] public float Velocity;
+        [SerializeField, Tooltip("Boost velocity.")]
+        public float Velocity;
 
         /// <summary>
         /// Whether to make the controller faster regardless of the direction it is facing.
