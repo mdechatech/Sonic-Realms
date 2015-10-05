@@ -45,6 +45,13 @@ namespace Hedgehog.Core.Triggers
             OnExit = new TriggerEvent();
         }
 
+        public virtual void Awake()
+        {
+            OnEnter = OnEnter ?? new TriggerEvent();
+            OnStay = OnStay ?? new TriggerEvent();
+            OnExit = OnExit ?? new TriggerEvent();
+        }
+
         /// <summary>
         /// Returns whether these properties apply to the specified transform.
         /// </summary>

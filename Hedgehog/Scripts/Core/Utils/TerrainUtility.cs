@@ -137,6 +137,8 @@ namespace Hedgehog.Core.Utils
         public static bool TriggerSelector(RaycastHit2D hit, HedgehogController source = null,
             TerrainSide raycastSide = TerrainSide.All)
         {
+            if (hit.collider.isTrigger) return false;
+
             var platformEnumerable = FindAll<PlatformTrigger>(hit.transform, BaseTrigger.Selector);
             var platformTriggers = platformEnumerable as PlatformTrigger[] ?? platformEnumerable.ToArray();
 

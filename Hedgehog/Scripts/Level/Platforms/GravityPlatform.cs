@@ -84,7 +84,7 @@ namespace Hedgehog.Level.Platforms
             _oldGravities = new Dictionary<int, GravityData>();
         }
 
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
             _oldGravities[controller.GetInstanceID()] = new GravityData(controller.GravityDirection,
                 controller.AirGravity, controller.SlopeGravity);
@@ -95,7 +95,7 @@ namespace Hedgehog.Level.Platforms
             controller.SlopeGravity = GroundStrength;
         }
 
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
             var instanceID = controller.GetInstanceID();
             if (!RestoreOnExit || !_oldGravities.ContainsKey(instanceID)) return;

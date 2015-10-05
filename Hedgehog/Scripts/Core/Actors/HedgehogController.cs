@@ -747,7 +747,7 @@ namespace Hedgehog.Core.Actors
 
             if (Grounded)
             {
-                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck(triggerStayEvents);
+                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck();
                 if (!SurfaceAngleCheck()) Detach();
             }
 
@@ -961,7 +961,7 @@ namespace Hedgehog.Core.Actors
         /// Collision check with ground sensors for when player is on the ground.
         /// </summary>
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
-        private bool GroundSurfaceCheck(bool triggerStayEvents = true)
+        private bool GroundSurfaceCheck()
         {
             var s = GetSurface(TerrainMask);
             if (s.LeftCast || s.RightCast)
@@ -1367,40 +1367,81 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Sets the controller's primary and secondary surfaces and triggers their platform events.
         /// </summary>
-        /// <param name="oldPrimarySurfaceHit">The old primary surface.</param>
-        /// <param name="oldSecondarySurfaceHit">The old primary surface.</param>
+        /// <param name="oldPrimaryHit">The old primary surface.</param>
+        /// <param name="oldSecondaryHit">The old primary surface.</param>
         /// <param name="primarySurfaceHit">The new primary surface.</param>
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
-        /// <param name="triggerStayEvents"></param>
-        public void TriggerSurfaceEvents(TerrainCastHit oldPrimarySurfaceHit, TerrainCastHit oldSecondarySurfaceHit,
-            TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit, bool triggerStayEvents = true)
+        /// <param name="triggerStay"></param>
+        public void TriggerSurfaceEvents(TerrainCastHit oldPrimaryHit, TerrainCastHit oldSecondaryHit,
+            TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit, bool triggerStay = true)
         {
+            var oldPrimarySurface = oldPrimaryHit == null ? null : oldPrimaryHit.Hit.transform;
+            var oldPrimaryTrigger = oldPrimarySurface == null ? null : oldPrimarySurface.GetComponent<PlatformTrigger>();
+            var oldSecondarySurface = oldSecondaryHit == null ? null : oldSecondaryHit.Hit.transform;
+            var oldSecondaryTrigger = oldSecondarySurface == null
+                ? null
+                : oldSecondarySurface.GetComponent<PlatformTrigger>();
+
             var primarySurface = primarySurfaceHit == null ? null : primarySurfaceHit.Hit.transform;
+            var primaryTrigger = primarySurface == null ? null : primarySurface.GetComponent<PlatformTrigger>();
             var secondarySurface = secondarySurfaceHit == null ? null : secondarySurfaceHit.Hit.transform;
+            var secondaryTrigger = secondarySurface == null ? null : secondarySurface.GetComponent<PlatformTrigger>();
 
-            var oldPrimarySurface = oldPrimarySurfaceHit == null ? null : oldPrimarySurfaceHit.Hit.transform;
-
-            var oldPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(oldPrimarySurface, BaseTrigger.Selector);
-            var newPrimaryTriggers = TerrainUtility.FindAll<PlatformTrigger>(primarySurface, BaseTrigger.Selector);
-
-            PrimarySurface = primarySurface;
-            PrimarySurfaceHit = primarySurfaceHit;
-            SecondarySurface = secondarySurface;
-            SecondarySurfaceHit = secondarySurfaceHit;
-
-            if (oldPrimaryTriggers != null && oldPrimarySurface != primarySurface)
+            if (oldPrimarySurface != null)
             {
-                foreach (var primaryTrigger in oldPrimaryTriggers)
-                    primaryTrigger.InvokeSurfaceEvents(this, oldPrimarySurfaceHit, SurfacePriority.Primary,
-                        triggerStayEvents);
+                if (oldPrimaryTrigger != null)
+                {
+                    if (oldPrimarySurface != primarySurface &&
+                    oldPrimarySurface != secondarySurface)
+                    {
+                        // old primary exit
+                        oldPrimaryTrigger.UpdateController(this, oldPrimaryHit, triggerStay, true);
+
+                    }
+                    else if (triggerStay)
+                    {
+                        // old primary stay
+                        oldPrimaryTrigger.UpdateController(this, oldPrimaryHit, triggerStay);
+                    }
+                }
+                
+
+                if (oldSecondaryTrigger != null && oldSecondarySurface != oldPrimarySurface)
+                {
+                    if (oldSecondarySurface != primarySurface &&
+                        oldSecondarySurface != secondarySurface)
+                    {
+                        // old secondary exit (if diff from primary)
+                        oldSecondaryTrigger.UpdateController(this, oldSecondaryHit, triggerStay, true);
+                    } else if (triggerStay)
+                    {
+                        // old secondary stay
+                        oldSecondaryTrigger.UpdateController(this, oldSecondaryHit, triggerStay);
+                    }
+                }
             }
 
-
-            if (newPrimaryTriggers != null)
+            if (primarySurface != null)
             {
-                foreach (var newPrimaryTrigger in newPrimaryTriggers)
-                    newPrimaryTrigger.InvokeSurfaceEvents(this, primarySurfaceHit, SurfacePriority.Primary,
-                        triggerStayEvents);
+                if (primaryTrigger != null)
+                {
+                    if (primarySurface != oldPrimarySurface &&
+                        primarySurface != oldSecondarySurface)
+                    {
+                        // primary enter
+                        primaryTrigger.UpdateController(this, primarySurfaceHit, triggerStay);
+                    }
+                }
+
+                if (secondaryTrigger != null && secondarySurface != primarySurface)
+                {
+                    if (secondarySurface != oldPrimarySurface &&
+                        secondarySurface != oldSecondarySurface)
+                    {
+                        // secondary enter
+                        secondaryTrigger.UpdateController(this, secondarySurfaceHit, triggerStay);
+                    }
+                }
             }
         }
 

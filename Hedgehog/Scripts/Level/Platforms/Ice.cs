@@ -32,10 +32,8 @@ namespace Hedgehog.Level.Platforms
         }
 
         // Applies new physics values based on friction.
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
-            if (priority == SurfacePriority.Secondary) return;
-
             _capturedPhysicsValues.Add(controller.GetInstanceID(), HedgehogPhysicsValues.Capture(controller));
             if (DMath.Equalsf(Friction))
             {
@@ -52,9 +50,8 @@ namespace Hedgehog.Level.Platforms
         }
 
         // Restores old physics values.
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
-            if (priority == SurfacePriority.Secondary) return;
             var physicsValues = _capturedPhysicsValues[controller.GetInstanceID()];
 
             controller.GroundAcceleration = physicsValues.GroundAcceleration;

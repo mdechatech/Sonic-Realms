@@ -9,6 +9,16 @@ using UnityEngine.Events;
 namespace Hedgehog.Core.Triggers
 {
     /// <summary>
+    /// An event for when a controller lands on a platform, invoked with the offending controller,
+    /// the offending platform, and the priority the surface holds.
+    /// </summary>
+    [Serializable]
+    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, TerrainCastHit>
+    {
+
+    }
+
+    /// <summary>
     /// Can be added to a collider to receive events when a controller stands on it.
     /// </summary>
     [AddComponentMenu("Hedgehog/Platforms/Platform Trigger")]
@@ -50,8 +60,7 @@ namespace Hedgehog.Core.Triggers
         /// Returns whether the controller is considered to be on the surface.
         /// </summary>
         /// <returns></returns>
-        public delegate bool SurfacePredicate(
-            HedgehogController controller, TerrainCastHit hit, SurfacePriority priority);
+        public delegate bool SurfacePredicate(HedgehogController controller, TerrainCastHit hit);
 
         /// <summary>
         /// A list of predicates which invokes surface events based on whether it is empty or all
@@ -59,7 +68,7 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         public ICollection<SurfacePredicate> SurfaceRules;
 
-        private List<HedgehogController> _surfaceCollisions;  
+        private List<HedgehogController> _collisions;
 
         public override void Reset()
         {
@@ -70,48 +79,75 @@ namespace Hedgehog.Core.Triggers
             OnSurfaceExit = new PlatformSurfaceEvent();
         }
 
-        public void Awake()
+        public virtual void Awake()
         {
+            base.Awake();
+
+            OnSurfaceEnter = OnSurfaceEnter ?? new PlatformSurfaceEvent();
+            OnSurfaceStay = OnSurfaceStay ?? new PlatformSurfaceEvent();
+            OnSurfaceExit = OnSurfaceExit ?? new PlatformSurfaceEvent();
             CollisionRules = new List<CollisionPredicate>();
             SurfaceRules = new List<SurfacePredicate>();
-            _surfaceCollisions = new List<HedgehogController>();
+            _collisions = new List<HedgehogController>();
         }
 
-        /// <summary>
-        /// Invokes the platform's surface events based on SurfaceRules.
-        /// </summary>
-        public void InvokeSurfaceEvents(HedgehogController controller, TerrainCastHit hit,
-            SurfacePriority priority = SurfacePriority.Primary, bool invokeStay = true)
+        public virtual void OnEnable()
         {
-            if (_surfaceCollisions.Contains(controller))
+            if (!TriggerFromChildren) return;
+            foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
             {
-                if (IsOnSurface(controller, hit, priority))
+                if (childCollider.transform == transform) continue;
+                var childTrigger = childCollider.gameObject.GetComponent<PlatformTrigger>() ??
+                                   childCollider.gameObject.AddComponent<PlatformTrigger>();
+            }
+        }
+
+        private void CheckSurface(HedgehogController controller, TerrainCastHit hit, bool triggerStay = true,
+            bool triggerExit = false)
+        {
+            if (!enabled || controller == null) return;
+            if (_collisions.Contains(controller))
+            {
+                if (triggerExit || !CollidesWith(hit))
                 {
-                    if (invokeStay)
-                    {
-                        OnSurfaceStay.Invoke(controller, hit, priority);
-                        OnStay.Invoke(controller);
-                    }
-                }
-                else
-                {
-                    _surfaceCollisions.Remove(controller);
-                    OnSurfaceExit.Invoke(controller, hit, priority);
+                    _collisions.Remove(controller);
+                    OnSurfaceExit.Invoke(controller, hit);
                     OnExit.Invoke(controller);
+                } else if (triggerStay)
+                {
+                    OnSurfaceStay.Invoke(controller, hit);
+                    OnStay.Invoke(controller);
                 }
             }
-            else if (IsOnSurface(controller, hit, priority))
+            else if (CollidesWith(hit))
             {
-                _surfaceCollisions.Add(controller);
-                OnSurfaceEnter.Invoke(controller, hit, priority);
+                _collisions.Add(controller);
+                OnSurfaceEnter.Invoke(controller, hit);
                 OnEnter.Invoke(controller);
             }
         }
 
-        public bool IsOnSurface(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        private void BubbleEvent(HedgehogController controller, TerrainCastHit hit, bool triggerStay = true,
+            bool triggerExit = false)
         {
-            return (!SurfaceRules.Any() && DefaultSurfaceRule(controller, hit, priority))
-                || SurfaceRules.All(predicate => predicate(controller, hit, priority));
+            foreach (var trigger in GetComponentsInParent<PlatformTrigger>().Where(
+                trigger => trigger != this && trigger.TriggerFromChildren))
+            {
+                trigger.CheckSurface(controller, hit, triggerStay, triggerExit);
+            }
+        }
+
+        public void UpdateController(HedgehogController controller, TerrainCastHit hit, bool triggerStay = true,
+            bool triggerExit = false)
+        {
+            CheckSurface(controller, hit, triggerStay, triggerExit);
+            BubbleEvent(controller, hit, triggerStay, triggerExit);
+        }
+
+        public bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
+        {
+            return (!SurfaceRules.Any() && DefaultSurfaceRule(controller, hit))
+                || SurfaceRules.All(predicate => predicate(controller, hit));
         }
 
         /// <summary>
@@ -126,48 +162,15 @@ namespace Hedgehog.Core.Triggers
                 || CollisionRules.All(predicate => predicate(hit));
         }
 
-        public bool DefaultSurfaceRule(HedgehogController controller, TerrainCastHit hit,
-            SurfacePriority priority)
+        public bool DefaultSurfaceRule(HedgehogController controller, TerrainCastHit hit)
         {
-            return priority != SurfacePriority.Secondary && controller.PrimarySurface == transform;
+            return controller.PrimarySurface == hit.Hit.transform ||
+                   controller.SecondarySurface == hit.Hit.transform;
         }
 
         public bool DefaultCollisionRule(TerrainCastHit hit)
         {
             return true;
         }
-    }
-
-    /// <summary>
-    /// Represents the priority the platform's surface holds to the controller.
-    /// </summary>
-    public enum SurfacePriority
-    {
-        /// <summary>
-        /// Represents a null value.
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// The platform's surface defines the controller's position and rotation. Usually given
-        /// to the higher surface beneath the controller's left and right sensors.
-        /// </summary>
-        Primary,
-
-        /// <summary>
-        /// The platform's surface partially defines the controller's rotation. Usually given to
-        /// the lower surface beneath the controller's left and right sensors.
-        /// </summary>
-        Secondary
-    }
-
-    /// <summary>
-    /// An event for when a controller lands on a platform, invoked with the offending controller,
-    /// the offending platform, and the priority the surface holds.
-    /// </summary>
-    [Serializable]
-    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, TerrainCastHit, SurfacePriority>
-    {
-        
     }
 }

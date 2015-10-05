@@ -54,12 +54,12 @@ namespace Hedgehog.Level.Platforms
                                                !DMath.Equalsf(hit.Hit.fraction)));
         }
 
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
             _originalSlopeGravities[controller.GetInstanceID()] = controller.SlopeGravity;
         }
 
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
             var instanceID = controller.GetInstanceID();
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;
@@ -73,7 +73,7 @@ namespace Hedgehog.Level.Platforms
             controller.SlopeGravity = result;
         }
 
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
             var instanceID = controller.GetInstanceID();
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;

@@ -40,9 +40,9 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Default surface rule. Uses the trigger's default surface rule.
         /// </summary>
-        public virtual bool IsOnSurface(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public virtual bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
         {
-            return PlatformTrigger.DefaultSurfaceRule(controller, hit, priority);
+            return PlatformTrigger.DefaultSurfaceRule(controller, hit);
         }
 
         /// <summary>
@@ -54,17 +54,17 @@ namespace Hedgehog.Core.Triggers
         }
 
         // Override these methods to react when a controller enters, stays on, and exits a platform!
-        public virtual void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public virtual void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
             
         }
 
-        public virtual void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public virtual void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
 
         }
 
-        public virtual void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public virtual void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
 
         }

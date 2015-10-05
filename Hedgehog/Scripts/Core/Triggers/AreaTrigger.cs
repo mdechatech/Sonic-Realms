@@ -69,32 +69,16 @@ namespace Hedgehog.Core.Triggers
             OnAreaExit = new AreaEvent();
         }
 
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
+            OnAreaEnter = OnAreaEnter ?? new AreaEvent();
+            OnAreaStay = OnAreaStay ?? new AreaEvent();
+            OnAreaExit = OnAreaExit ?? new AreaEvent();
             _collisions = new Dictionary<HedgehogController, List<Transform>>();
             CollisionRules = new List<CollisionPredicate>();
         }
 
-#if UNITY_EDITOR
-        public void Start()
-        {
-            foreach (var rigidbody2D in GetComponentsInChildren<Rigidbody2D>())
-            {
-                if (rigidbody2D.GetComponent<ChildAreaTrigger>() != null && TriggerFromChildren)
-                {
-                    Debug.LogWarning(rigidbody2D.name + " is the child of area trigger " + name +" and has a" +
-                                     " rigidbody2D. This can cause problems with the trigger.");
-                }
-
-                if (rigidbody2D.GetComponent<AreaTrigger>() != null && 
-                    rigidbody2D.GetComponentsInChildren<Collider2D>().Any(d => d.transform != rigidbody2D.transform))
-                {
-                    Debug.LogWarning(rigidbody2D.name + " is an area trigger with a rigidbody2D." +
-                                     " This can cause problems with the trigger if it has children.");
-                }
-            }
-        }
-#endif
         public void FixedUpdate()
         {
             foreach (var controller in _collisions.Keys)
@@ -110,17 +94,9 @@ namespace Hedgehog.Core.Triggers
             foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
             {
                 if (childCollider.transform == transform) continue;
-                var childTrigger = childCollider.gameObject.AddComponent<ChildAreaTrigger>();
-                childTrigger.Target = this;
-            }
-        }
-
-        public void OnDisable()
-        {
-            foreach (var childTrigger in transform.GetComponentsInChildren<ChildAreaTrigger>())
-            {
-                if(childTrigger.transform != transform && childTrigger.Target == this) 
-                    Destroy(childTrigger);
+                var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
+                                   childCollider.gameObject.AddComponent<AreaTrigger>();
+                childTrigger.IgnoreLayers |= IgnoreLayers;
             }
         }
 
@@ -148,7 +124,7 @@ namespace Hedgehog.Core.Triggers
             List<Transform> hits;
             if (_collisions.TryGetValue(controller, out hits))
             {
-                if (isExit)
+                if (isExit || !CollidesWith(controller))
                 {
                     hits.Remove(hit);
                     if (hits.Any()) return;
@@ -164,42 +140,50 @@ namespace Hedgehog.Core.Triggers
             else
             {
                 if (isExit) return;
+                if (!CollidesWith(controller)) return;
                 _collisions[controller] = new List<Transform> {hit};
                 OnAreaEnter.Invoke(controller);
                 OnEnter.Invoke(controller);
             }
         }
-        #region Trigger Functions
+
+        /// <summary>
+        /// Used by children triggers to bubble their events up to parent triggers.
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="area"></param>
+        /// <param name="isExit"></param>
+        public void BubbleEvent(HedgehogController controller, Transform area, bool isExit = false)
+        {
+            foreach (var trigger in GetComponentsInParent<AreaTrigger>().Where(
+                trigger => trigger != this && trigger.TriggerFromChildren))
+            {
+                trigger.CheckCollision(controller, area, isExit);
+            }
+        }
+
         public void OnTriggerEnter2D(Collider2D collider2D)
         {
-            CheckCollision(collider2D.GetComponent<HedgehogController>(), transform);
+            var controller = collider2D.GetComponent<HedgehogController>();
+            if (controller == null) return;
+            CheckCollision(controller, transform);
+            BubbleEvent(controller, transform);
         }
 
         public void OnTriggerStay2D(Collider2D collider2D)
         {
-            CheckCollision(collider2D.GetComponent<HedgehogController>(), transform);
+            var controller = collider2D.GetComponent<HedgehogController>();
+            if (controller == null) return;
+            CheckCollision(controller, transform);
+            BubbleEvent(controller, transform);
         }
 
         public void OnTriggerExit2D(Collider2D collider2D)
         {
-            CheckCollision(collider2D.GetComponent<HedgehogController>(), transform, true);
+            var controller = collider2D.GetComponent<HedgehogController>();
+            if (controller == null) return;
+            CheckCollision(controller, transform, true);
+            BubbleEvent(controller, transform, true);
         }
-
-        // These functions are for when TriggerFromChildren is on
-        public void OnChildTriggerEnter2D(Collider2D collider2D, Transform child)
-        {
-            CheckCollision(collider2D.GetComponent<HedgehogController>(), child);
-        }
-
-        public void OnChildTriggerStay2D(Collider2D collider2D, Transform child)
-        {
-            CheckCollision(collider2D.GetComponent<HedgehogController>(), child);
-        }
-
-        public void OnChildTriggerExit2D(Collider2D collider2D, Transform child)
-        {
-            CheckCollision(collider2D.GetComponent<HedgehogController>(), child, true);
-        }
-        #endregion
     }
 }

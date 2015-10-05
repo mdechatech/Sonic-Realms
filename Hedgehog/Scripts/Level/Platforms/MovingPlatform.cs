@@ -82,20 +82,20 @@ namespace Hedgehog.Level.Platforms
         }
 
         // Attaches the controller to the platform through a MovingPlatformAnchor
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
             _linkedControllers.Add(controller);
             _linkedAnchors.Add(CreateAnchor(controller, hit));
         }
 
         // Updates the anchor associated with the controller
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
             _linkedAnchors[_linkedControllers.IndexOf(controller)].TranslateController();
         }
 
         // Removes the anchor associated with the controller
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
             _controllerRemoveQueue.Add(controller);
 

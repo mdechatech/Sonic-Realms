@@ -33,18 +33,19 @@ namespace Hedgehog.Level.Platforms
             _oldGravities = new Dictionary<int, float>();
         }
 
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
             if (!RestoreOnExit) return;
             _oldGravities[controller.GetInstanceID()] = controller.GravityDirection;
         }
 
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
+            if (!controller.Grounded) Debug.Log(1);
             controller.GravityDirection = DMath.PositiveAngle_d(controller.SurfaceAngle - 90.0f);
         }
 
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit, SurfacePriority priority)
+        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
             if (!RestoreOnExit) return;
             var instanceID = controller.GetInstanceID();
