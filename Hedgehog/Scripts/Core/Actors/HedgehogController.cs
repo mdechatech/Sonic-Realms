@@ -789,7 +789,7 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
-                HandleImpact(leftCheck);
+                if(!JustDetached) HandleImpact(leftCheck);
                 return true;
             }
 
@@ -798,7 +798,7 @@ namespace Hedgehog.Core.Actors
             if (rightCheck)
             {
                 transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
-                HandleImpact(rightCheck);
+                if(!JustDetached) HandleImpact(rightCheck);
                 return true;
             }
 

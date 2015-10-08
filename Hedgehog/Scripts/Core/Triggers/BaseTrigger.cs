@@ -39,7 +39,7 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void Reset()
         {
-            TriggerFromChildren = false;
+            TriggerFromChildren = true;
             OnEnter = new TriggerEvent();
             OnStay = new TriggerEvent();
             OnExit = new TriggerEvent();
@@ -51,6 +51,8 @@ namespace Hedgehog.Core.Triggers
             OnStay = OnStay ?? new TriggerEvent();
             OnExit = OnExit ?? new TriggerEvent();
         }
+
+        public abstract bool HasController(HedgehogController controller);
 
         /// <summary>
         /// Returns whether these properties apply to the specified transform.

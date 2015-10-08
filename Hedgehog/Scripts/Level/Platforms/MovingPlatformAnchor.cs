@@ -6,6 +6,7 @@ namespace Hedgehog.Level.Platforms
     /// <summary>
     /// Used by MovingPlatform to track and apply changes in position to a controller.
     /// </summary>
+    [AddComponentMenu("")]
     public class MovingPlatformAnchor : MonoBehaviour
     {
         [SerializeField]

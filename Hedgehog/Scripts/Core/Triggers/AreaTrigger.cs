@@ -12,10 +12,7 @@ namespace Hedgehog.Core.Triggers
     /// UnityEvents that pass in a controller. Used by OnAreaEnter, OnAreaStay, and OnAreaExit.
     /// </summary>
     [Serializable]
-    public class AreaEvent : UnityEvent<HedgehogController>
-    {
-
-    }
+    public class AreaEvent : UnityEvent<HedgehogController> { }
 
     /// <summary>
     /// Can be added to a collider to receive events when a collider enters it.
@@ -60,7 +57,7 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Maps a controller to the areas it is colliding with (can collide with multiple child areas).
         /// </summary>
-        private Dictionary<HedgehogController, List<Transform>> Collisions; 
+        protected Dictionary<HedgehogController, List<Transform>> Collisions; 
 
         public override void Reset()
         {
@@ -75,6 +72,7 @@ namespace Hedgehog.Core.Triggers
         public override void Awake()
         {
             base.Awake();
+
             OnAreaEnter = OnAreaEnter ?? new AreaEvent();
             OnAreaStay = OnAreaStay ?? new AreaEvent();
             OnAreaExit = OnAreaExit ?? new AreaEvent();
@@ -101,6 +99,11 @@ namespace Hedgehog.Core.Triggers
                                    childCollider.gameObject.AddComponent<AreaTrigger>();
                 childTrigger.IgnoreLayers |= IgnoreLayers;
             }
+        }
+
+        public override bool HasController(HedgehogController controller)
+        {
+            return Collisions.ContainsKey(controller);
         }
 
         /// <summary>

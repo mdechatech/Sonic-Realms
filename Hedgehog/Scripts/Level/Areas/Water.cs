@@ -51,15 +51,17 @@ namespace Hedgehog.Level.Areas
             return _collider2D.OverlapPoint(controller.Sensors.Center.position);
         }
 
-        // The water is a surface if the player is upright, on top of it, grounded, and running quickly enough.
+        // The water is a surface if the player is upright, on top of it, grounded, not already submerged,
+        // and running quickly enough.
         public override bool CollidesWith(TerrainCastHit hit)
         {
             if (hit.Source == null || MinFloatSpeed <= 0.0f) return false;
-            return base.CollidesWith(hit) && 
-                (hit.Side & TerrainSide.Bottom) > 0 &&
-                hit.Hit.fraction > 0.0f && 
-                hit.Source.Grounded &&
-                Mathf.Abs(hit.Source.GroundVelocity) >= MinFloatSpeed;
+            return base.CollidesWith(hit) &&
+                   (hit.Side & TerrainSide.Bottom) > 0 &&
+                   hit.Hit.fraction > 0.0f &&
+                   hit.Source.Grounded &&
+                   Mathf.Abs(hit.Source.GroundVelocity) >= MinFloatSpeed &&
+                   !AreaTrigger.HasController(hit.Source);
         }
         
         // Apply new physics values based on viscosity.

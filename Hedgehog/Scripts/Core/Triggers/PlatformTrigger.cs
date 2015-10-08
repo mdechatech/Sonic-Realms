@@ -13,10 +13,7 @@ namespace Hedgehog.Core.Triggers
     /// the offending platform, and the priority the surface holds.
     /// </summary>
     [Serializable]
-    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, TerrainCastHit>
-    {
-
-    }
+    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, TerrainCastHit> { }
 
     /// <summary>
     /// Can be added to a collider to receive events when a controller stands on it.
@@ -114,6 +111,11 @@ namespace Hedgehog.Core.Triggers
             }
         }
 
+        public override bool HasController(HedgehogController controller)
+        {
+            return Collisions.Any(hit => hit.Source == controller);
+        }
+
         private void CheckSurface(HedgehogController controller, TerrainCastHit hit, bool isExit = false)
         {
             if (!enabled || controller == null) return;
@@ -136,7 +138,7 @@ namespace Hedgehog.Core.Triggers
                 Collisions[Collisions.FindIndex(castHit => castHit.Source == controller)] = hit;
             }
         }
-
+        
         private void BubbleEvent(HedgehogController controller, TerrainCastHit hit, bool isExit = false)
         {
             foreach (var trigger in GetComponentsInParent<PlatformTrigger>().Where(
