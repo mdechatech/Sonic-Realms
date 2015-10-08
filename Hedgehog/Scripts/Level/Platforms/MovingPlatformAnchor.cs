@@ -55,8 +55,7 @@ namespace Hedgehog.Level.Platforms
             if (transform.position != _previousPosition)
             {
                 DeltaPosition = transform.position - _previousPosition;
-                // TODO: Fix bug where controller rocks side-to-side on sloped platforms
-                Controller.transform.Translate(DeltaPosition);
+                Controller.transform.position += DeltaPosition;
                 _previousPosition = transform.position;
             }
         }

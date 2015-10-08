@@ -1169,15 +1169,6 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// Translates the controller at the start of its physics checks.
-        /// </summary>
-        /// <param name="deltaPosition"></param>
-        public void Translate(Vector3 deltaPosition)
-        {
-            QueuedTranslation += deltaPosition;
-        }
-
-        /// <summary>
         /// If grounded, sets the controller's ground velocity based on how much the specified velocity
         /// "fits" with its current surface angle (scalar projection). For example, if the controller
         /// is on a flat horizontal surface and the specified velocity points straight up, the resulting
