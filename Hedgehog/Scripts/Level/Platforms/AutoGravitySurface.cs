@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Hedgehog.Core.Actors;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
@@ -41,7 +42,6 @@ namespace Hedgehog.Level.Platforms
 
         public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
-            if (!controller.Grounded) Debug.Log(1);
             controller.GravityDirection = DMath.PositiveAngle_d(controller.SurfaceAngle - 90.0f);
         }
 

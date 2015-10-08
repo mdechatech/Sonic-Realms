@@ -37,8 +37,10 @@ namespace Hedgehog.Level.Platforms.Movers
         private Collider2D _previousPath;
         private Vector2[] _cachedPath;
 
-        public void Start()
+        public override void Start()
         {
+            base.Start();
+
             ReconstructPath();
         }
 

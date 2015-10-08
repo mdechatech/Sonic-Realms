@@ -45,7 +45,7 @@ namespace Hedgehog.Level.Platforms
         public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
             var oldVelocity = controller.GroundVelocity;
-
+            
             if (AccelerateBothWays)
             {
                 if (AccountForFriction)
@@ -57,7 +57,7 @@ namespace Hedgehog.Level.Platforms
                 var absTargetVg = Mathf.Abs(TargetVelocity);
                 if (Mathf.Abs(oldVelocity) < absTargetVg && Mathf.Abs(controller.GroundVelocity) > absTargetVg)
                 {
-                        controller.GroundVelocity = TargetVelocity*Mathf.Sign(controller.GroundVelocity);
+                    controller.GroundVelocity = TargetVelocity*Mathf.Sign(controller.GroundVelocity);
                 }
             }
             else

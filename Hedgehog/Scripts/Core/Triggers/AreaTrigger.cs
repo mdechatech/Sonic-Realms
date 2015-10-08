@@ -57,7 +57,10 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         public List<CollisionPredicate> CollisionRules;
 
-        private Dictionary<HedgehogController, List<Transform>> _collisions; 
+        /// <summary>
+        /// Maps a controller to the areas it is colliding with (can collide with multiple child areas).
+        /// </summary>
+        private Dictionary<HedgehogController, List<Transform>> Collisions; 
 
         public override void Reset()
         {
@@ -75,13 +78,13 @@ namespace Hedgehog.Core.Triggers
             OnAreaEnter = OnAreaEnter ?? new AreaEvent();
             OnAreaStay = OnAreaStay ?? new AreaEvent();
             OnAreaExit = OnAreaExit ?? new AreaEvent();
-            _collisions = new Dictionary<HedgehogController, List<Transform>>();
+            Collisions = new Dictionary<HedgehogController, List<Transform>>();
             CollisionRules = new List<CollisionPredicate>();
         }
 
         public void FixedUpdate()
         {
-            foreach (var controller in _collisions.Keys)
+            foreach (var controller in Collisions.Keys)
             {
                 OnAreaStay.Invoke(controller);
                 OnStay.Invoke(controller);
@@ -122,14 +125,14 @@ namespace Hedgehog.Core.Triggers
             if (!enabled || controller == null) return;
 
             List<Transform> hits;
-            if (_collisions.TryGetValue(controller, out hits))
+            if (Collisions.TryGetValue(controller, out hits))
             {
                 if (isExit || !CollidesWith(controller))
                 {
                     hits.Remove(hit);
                     if (hits.Any()) return;
                     
-                    _collisions.Remove(controller);
+                    Collisions.Remove(controller);
                     OnAreaExit.Invoke(controller);
                     OnExit.Invoke(controller);
                 } else if (!hits.Contains(hit))
@@ -141,7 +144,7 @@ namespace Hedgehog.Core.Triggers
             {
                 if (isExit) return;
                 if (!CollidesWith(controller)) return;
-                _collisions[controller] = new List<Transform> {hit};
+                Collisions[controller] = new List<Transform> {hit};
                 OnAreaEnter.Invoke(controller);
                 OnEnter.Invoke(controller);
             }

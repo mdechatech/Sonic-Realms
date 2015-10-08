@@ -54,8 +54,9 @@ namespace Hedgehog.Level.Platforms.Movers
             _returning = false;
         }
 
-        public void Start()
+        public override void Start()
         {
+            base.Start();
             _originalPosition = transform.localPosition;
         }
 

@@ -12,29 +12,44 @@ namespace Hedgehog.Core.Triggers
     public class ReactivePlatform : MonoBehaviour
     {
         protected PlatformTrigger PlatformTrigger;
+        protected bool RegisteredEvents;
 
         public virtual void Awake()
         {
             PlatformTrigger = GetComponent<PlatformTrigger>();
+            RegisteredEvents = false;
         }
 
         public virtual void OnEnable()
         {
-            if(!PlatformTrigger.SurfaceRules.Contains(IsOnSurface))
+            if (PlatformTrigger.SurfaceRules != null) Start();
+        }
+
+        public virtual void Start()
+        {
+            if (RegisteredEvents) return;
+
+            if (!PlatformTrigger.SurfaceRules.Contains(IsOnSurface))
                 PlatformTrigger.SurfaceRules.Add(IsOnSurface);
             PlatformTrigger.CollisionRules.Add(CollidesWith);
             PlatformTrigger.OnSurfaceEnter.AddListener(OnSurfaceEnter);
             PlatformTrigger.OnSurfaceStay.AddListener(OnSurfaceStay);
             PlatformTrigger.OnSurfaceExit.AddListener(OnSurfaceExit);
+
+            RegisteredEvents = true;
         }
 
         public virtual void OnDisable()
         {
+            if (!RegisteredEvents) return;
+
             PlatformTrigger.SurfaceRules.Remove(IsOnSurface);
             PlatformTrigger.CollisionRules.Remove(CollidesWith);
             PlatformTrigger.OnSurfaceEnter.RemoveListener(OnSurfaceEnter);
             PlatformTrigger.OnSurfaceStay.RemoveListener(OnSurfaceStay);
             PlatformTrigger.OnSurfaceExit.RemoveListener(OnSurfaceExit);
+
+            RegisteredEvents = false;
         }
 
         /// <summary>

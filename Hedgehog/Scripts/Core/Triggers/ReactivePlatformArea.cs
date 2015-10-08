@@ -15,26 +15,38 @@ namespace Hedgehog.Core.Triggers
         public override void Awake()
         {
             base.Awake();
+
             AreaTrigger = GetComponent<AreaTrigger>();
         }
 
         public override void OnEnable()
         {
-            base.OnEnable();
+            if (AreaTrigger.CollisionRules != null) Start();
+        }
+
+        public override void Start()
+        {
+            if (RegisteredEvents) return;
+
             if (!AreaTrigger.CollisionRules.Contains(IsInsideArea))
                 AreaTrigger.CollisionRules.Add(IsInsideArea);
             AreaTrigger.OnAreaEnter.AddListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.AddListener(OnAreaStay);
             AreaTrigger.OnAreaExit.AddListener(OnAreaExit);
+
+            base.Start();
         }
 
         public override void OnDisable()
         {
-            base.OnDisable();
+            if (!RegisteredEvents) return;
+
             AreaTrigger.CollisionRules.Remove(IsInsideArea);
             AreaTrigger.OnAreaEnter.RemoveListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.RemoveListener(OnAreaStay);
             AreaTrigger.OnAreaExit.RemoveListener(OnAreaExit);
+
+            base.OnDisable();
         }
 
         public virtual bool IsInsideArea(HedgehogController controller)

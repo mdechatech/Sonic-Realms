@@ -37,8 +37,7 @@ namespace Hedgehog.Level.Platforms
         public Vector3 Velocity;
 
         private List<HedgehogController> _linkedControllers;
-        private List<MovingPlatformAnchor> _linkedAnchors; 
-        private List<HedgehogController> _controllerRemoveQueue;
+        private List<MovingPlatformAnchor> _linkedAnchors;
 
         public void Reset()
         {
@@ -51,22 +50,6 @@ namespace Hedgehog.Level.Platforms
 
             _linkedControllers = new List<HedgehogController>();
             _linkedAnchors = new List<MovingPlatformAnchor>();
-            _controllerRemoveQueue = new List<HedgehogController>();
-        }
-
-        public void FixedUpdate()
-        {
-            foreach (var controller in _controllerRemoveQueue)
-            {
-                var index = _linkedControllers.IndexOf(controller);
-                if (index < 0) continue;
-
-                _linkedControllers.RemoveAt(index);
-                Destroy(_linkedAnchors[index].gameObject);
-                _linkedAnchors.RemoveAt(index);
-            }
-
-            _controllerRemoveQueue.Clear();
         }
 
         private MovingPlatformAnchor CreateAnchor(HedgehogController controller, TerrainCastHit hit)
@@ -97,14 +80,12 @@ namespace Hedgehog.Level.Platforms
         // Removes the anchor associated with the controller
         public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
-            _controllerRemoveQueue.Add(controller);
-
             var velocity = (Vector2) _linkedAnchors[_linkedControllers.IndexOf(controller)].DeltaPosition
                            /Time.fixedDeltaTime;
 
             if (controller.Grounded)
             {
-                if(TransferMomentumGround) controller.SetGroundVelocity(velocity);
+                if(TransferMomentumGround) controller.AddGroundVelocity(velocity);
             }
             else
             {
@@ -112,6 +93,11 @@ namespace Hedgehog.Level.Platforms
                     TransferMomentumX ? velocity.x : 0.0f,
                     TransferMomentumY ? velocity.y : 0.0f);
             }
+
+            var index = _linkedControllers.IndexOf(controller);
+            _linkedControllers.RemoveAt(index);
+            Destroy(_linkedAnchors[index].gameObject);
+            _linkedAnchors.RemoveAt(index);
         }
     }
 }

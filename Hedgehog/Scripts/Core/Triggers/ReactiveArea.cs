@@ -10,6 +10,7 @@ namespace Hedgehog.Core.Triggers
     public class ReactiveArea : MonoBehaviour
     {
         protected AreaTrigger AreaTrigger;
+        protected bool RegisteredEvents;
 
         public virtual void Awake()
         {
@@ -18,19 +19,32 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void OnEnable()
         {
-            if(!AreaTrigger.CollisionRules.Contains(IsInsideArea))
+            if (AreaTrigger.CollisionRules != null) Start();
+        }
+
+        public virtual void Start()
+        {
+            if (RegisteredEvents) return;
+
+            if (!AreaTrigger.CollisionRules.Contains(IsInsideArea))
                 AreaTrigger.CollisionRules.Add(IsInsideArea);
             AreaTrigger.OnAreaEnter.AddListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.AddListener(OnAreaStay);
             AreaTrigger.OnAreaExit.AddListener(OnAreaExit);
+
+            RegisteredEvents = true;
         }
 
         public virtual void OnDisable()
         {
+            if (!RegisteredEvents) return;
+
             AreaTrigger.CollisionRules.Remove(IsInsideArea);
             AreaTrigger.OnAreaEnter.RemoveListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.RemoveListener(OnAreaStay);
             AreaTrigger.OnAreaExit.RemoveListener(OnAreaExit);
+
+            RegisteredEvents = false;
         }
 
         public virtual bool IsInsideArea(HedgehogController controller)

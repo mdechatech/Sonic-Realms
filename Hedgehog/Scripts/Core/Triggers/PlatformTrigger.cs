@@ -68,7 +68,10 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         public ICollection<SurfacePredicate> SurfaceRules;
 
-        private List<HedgehogController> _collisions;
+        /// <summary>
+        /// A list of current surface collisions.
+        /// </summary>
+        public List<TerrainCastHit> Collisions;
 
         public override void Reset()
         {
@@ -79,7 +82,7 @@ namespace Hedgehog.Core.Triggers
             OnSurfaceExit = new PlatformSurfaceEvent();
         }
 
-        public virtual void Awake()
+        public override void Awake()
         {
             base.Awake();
 
@@ -88,7 +91,7 @@ namespace Hedgehog.Core.Triggers
             OnSurfaceExit = OnSurfaceExit ?? new PlatformSurfaceEvent();
             CollisionRules = new List<CollisionPredicate>();
             SurfaceRules = new List<SurfacePredicate>();
-            _collisions = new List<HedgehogController>();
+            Collisions = new List<TerrainCastHit>();
         }
 
         public virtual void OnEnable()
@@ -97,51 +100,56 @@ namespace Hedgehog.Core.Triggers
             foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
             {
                 if (childCollider.transform == transform) continue;
-                var childTrigger = childCollider.gameObject.GetComponent<PlatformTrigger>() ??
-                                   childCollider.gameObject.AddComponent<PlatformTrigger>();
+                if(childCollider.gameObject.GetComponent<PlatformTrigger>() == null)
+                    childCollider.gameObject.AddComponent<PlatformTrigger>();
             }
         }
 
-        private void CheckSurface(HedgehogController controller, TerrainCastHit hit, bool triggerStay = true,
-            bool triggerExit = false)
+        public virtual void FixedUpdate()
+        {
+            foreach (var hit in Collisions)
+            {
+                OnSurfaceStay.Invoke(hit.Source, hit);
+                OnStay.Invoke(hit.Source);
+            }
+        }
+
+        private void CheckSurface(HedgehogController controller, TerrainCastHit hit, bool isExit = false)
         {
             if (!enabled || controller == null) return;
-            if (_collisions.Contains(controller))
+
+            var found = Collisions.FirstOrDefault(castHit => castHit.Source == controller);
+            if (isExit)
             {
-                if (triggerExit || !CollidesWith(hit))
-                {
-                    _collisions.Remove(controller);
-                    OnSurfaceExit.Invoke(controller, hit);
-                    OnExit.Invoke(controller);
-                } else if (triggerStay)
-                {
-                    OnSurfaceStay.Invoke(controller, hit);
-                    OnStay.Invoke(controller);
-                }
-            }
-            else if (CollidesWith(hit))
+                if (found == null || found.Hit.transform != hit.Hit.transform) return;
+                Collisions.Remove(found);
+                OnSurfaceExit.Invoke(controller, hit);
+                OnExit.Invoke(controller);
+            } else if (found == null)
             {
-                _collisions.Add(controller);
+                Collisions.Add(hit);
                 OnSurfaceEnter.Invoke(controller, hit);
                 OnEnter.Invoke(controller);
             }
+            else
+            {
+                Collisions[Collisions.FindIndex(castHit => castHit.Source == controller)] = hit;
+            }
         }
 
-        private void BubbleEvent(HedgehogController controller, TerrainCastHit hit, bool triggerStay = true,
-            bool triggerExit = false)
+        private void BubbleEvent(HedgehogController controller, TerrainCastHit hit, bool isExit = false)
         {
             foreach (var trigger in GetComponentsInParent<PlatformTrigger>().Where(
                 trigger => trigger != this && trigger.TriggerFromChildren))
             {
-                trigger.CheckSurface(controller, hit, triggerStay, triggerExit);
+                trigger.CheckSurface(controller, hit, isExit);
             }
         }
 
-        public void UpdateController(HedgehogController controller, TerrainCastHit hit, bool triggerStay = true,
-            bool triggerExit = false)
+        public void UpdateController(HedgehogController controller, TerrainCastHit hit, bool isExit = false)
         {
-            CheckSurface(controller, hit, triggerStay, triggerExit);
-            BubbleEvent(controller, hit, triggerStay, triggerExit);
+            CheckSurface(controller, hit, isExit);
+            BubbleEvent(controller, hit, isExit);
         }
 
         public bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
