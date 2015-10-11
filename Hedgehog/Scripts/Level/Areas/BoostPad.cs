@@ -34,14 +34,9 @@ namespace Hedgehog.Level.Areas
         
         public override void OnAreaEnter(HedgehogController controller)
         {
-            if (BoostBothWays)
-            {
-                controller.GroundVelocity = Velocity*Mathf.Sign(controller.GroundVelocity);
-            }
-            else
-            {
-                controller.GroundVelocity = Velocity;
-            }
+            controller.GroundVelocity = Velocity*(BoostBothWays
+                ? Mathf.Sign(controller.GroundVelocity)
+                : 1.0f);
         }
     }
 }

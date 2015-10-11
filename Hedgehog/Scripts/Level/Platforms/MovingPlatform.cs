@@ -55,7 +55,7 @@ namespace Hedgehog.Level.Platforms
         private MovingPlatformAnchor CreateAnchor(HedgehogController controller, TerrainCastHit hit)
         {
             var anchor = new GameObject().AddComponent<MovingPlatformAnchor>();
-            anchor.LinkController(controller, hit.Hit.point);
+            anchor.LinkController(controller);
             anchor.name = controller.name + "'s Moving Platform Anchor";
             anchor.transform.SetParent(transform);
             // We will update the anchor manually and lazily

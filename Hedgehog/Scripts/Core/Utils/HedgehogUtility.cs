@@ -43,11 +43,6 @@ namespace Hedgehog.Core.Utils
         public float HorizontalLockTime;
         public float ForceJumpAngleDifference;
         public float MaxSurfaceAngleDifference;
-        public float HorizontalWallmodeAngleWeight;
-        public float MinWallmodeSwitchSpeed;
-        public float MinOverlapAngle;
-        public float MinFlatOverlapRange;
-        public float MinFlatAttachAngle;
         public float MaxVerticalDetachAngle;
 
         public HedgehogPhysicsValues() {}
@@ -174,12 +169,7 @@ namespace Hedgehog.Core.Utils
                 ForceJumpAngleDifference = 30.0f,
                 LedgeClimbHeight = 0.25f,
                 LedgeDropHeight = 0.25f,
-                MinWallmodeSwitchSpeed = 0.5f,
-                HorizontalWallmodeAngleWeight = 0.0f,
                 MaxSurfaceAngleDifference = 70.0f,
-                MinOverlapAngle = -40.0f,
-                MinFlatOverlapRange = 30.0f,
-                MinFlatAttachAngle = 5.0f,
                 MaxVerticalDetachAngle = 2.5f
             };
 

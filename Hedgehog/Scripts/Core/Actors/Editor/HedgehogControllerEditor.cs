@@ -485,36 +485,9 @@ namespace Hedgehog.Core.Actors.Editor
                         EditorGUILayout.PrefixLabel("units");
                         EditorGUILayout.EndHorizontal();
 
-                        #region Forbidden Constants
-                        EditorGUILayout.HelpBox("The following values are best left untouched!", MessageType.Warning);
-
-                        EditorGUILayout.Space();
-
                         EditorGUILayout.BeginHorizontal();
                         _instance.MaxSurfaceAngleDifference = EditorGUILayout.FloatField("Max Surface Angle Difference",
                             _instance.MaxSurfaceAngleDifference);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.Space();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.MinOverlapAngle = EditorGUILayout.FloatField("Min Overlap Angle",
-                            _instance.MinOverlapAngle);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.MinFlatOverlapRange = EditorGUILayout.FloatField("Min Flat Overlap Range",
-                            _instance.MinFlatOverlapRange);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.Space();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.MinFlatAttachAngle = EditorGUILayout.FloatField("Min Flat Attach Angle",
-                            _instance.MinFlatAttachAngle);
                         EditorGUILayout.PrefixLabel("degrees");
                         EditorGUILayout.EndHorizontal();
 
@@ -523,7 +496,6 @@ namespace Hedgehog.Core.Actors.Editor
                             _instance.MaxVerticalDetachAngle);
                         EditorGUILayout.PrefixLabel("degrees");
                         EditorGUILayout.EndHorizontal();
-                        #endregion
                     }
                     #endregion
                     --EditorGUI.indentLevel;

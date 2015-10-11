@@ -5,6 +5,6 @@
     /// </summary>
     public enum Footing
     {
-        None, Left, Right
+        None, Left, Right, Both
     }
 }

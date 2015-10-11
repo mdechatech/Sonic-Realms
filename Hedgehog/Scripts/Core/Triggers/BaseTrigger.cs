@@ -6,6 +6,12 @@ using UnityEngine.Events;
 namespace Hedgehog.Core.Triggers
 {
     /// <summary>
+    /// An event for when a controller is on a trigger, invoked with the offending controller.
+    /// </summary>
+    [Serializable]
+    public class TriggerEvent : UnityEvent<HedgehogController> { }
+
+    /// <summary>
     /// Base class for level objects that receive events.
     /// </summary>
     public abstract class BaseTrigger : MonoBehaviour
@@ -79,14 +85,5 @@ namespace Hedgehog.Core.Triggers
         {
             return originalTransform == trigger.transform || trigger.TriggerFromChildren;
         }
-    }
-
-    /// <summary>
-    /// An event for when a controller is on a trigger, invoked with the offending controller.
-    /// </summary>
-    [Serializable]
-    public class TriggerEvent : UnityEvent<HedgehogController>
-    {
-        
     }
 }

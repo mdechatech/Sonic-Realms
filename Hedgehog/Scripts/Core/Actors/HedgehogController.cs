@@ -224,27 +224,6 @@ namespace Hedgehog.Core.Actors
         public float MaxSurfaceAngleDifference = 70.0f;
 
         /// <summary>
-        /// The minimum difference in angle between the surface sensor and the overlap sensor
-        /// to have the player's rotation account for it.
-        /// </summary>
-        [SerializeField]
-        public float MinOverlapAngle = -40.0f;
-
-        /// <summary>
-        /// The minimum absolute difference in angle between the surface sensor and the overlap
-        /// sensor to have the player's rotation account for it.
-        /// </summary>
-        [SerializeField]
-        public float MinFlatOverlapRange = 7.5f;
-
-        /// <summary>hor
-        /// The minimum angle of an incline from a ceiling or left or right wall for a player to be able to
-        /// attach to it from the air.
-        /// </summary>
-        [SerializeField]
-        public float MinFlatAttachAngle = 5.0f;
-
-        /// <summary>
         /// The maximum surface angle difference from a vertical wall at which a player is able to detach from
         /// through use of the directional key opposite to the one in which it is traveling.
         /// </summary>
@@ -591,33 +570,37 @@ namespace Hedgehog.Core.Actors
                 }
 
                 // Ground movement
-                if (LeftKeyDown && !HorizontalLock)
+                if (!HorizontalLock)
                 {
-                    if (Vg > 0.0f)
+                    if (LeftKeyDown)
                     {
-                        Vg -= GroundBrake*timestep;
+                        if (Vg > 0.0f)
+                        {
+                            Vg -= GroundBrake * timestep;
+                        }
+                        else if (Vg > -TopSpeed)
+                        {
+                            Vg -= GroundAcceleration * timestep;
+                        }
                     }
-                    else if (Vg > -TopSpeed)
+                    else if (RightKeyDown)
                     {
-                        Vg -= GroundAcceleration*timestep;
+                        if (Vg < 0.0f)
+                        {
+                            Vg += GroundBrake * timestep;
+                        }
+                        else if (Vg < TopSpeed)
+                        {
+                            Vg += GroundAcceleration * timestep;
+                        }
+                    }
+                    else
+                    {
+                        // Ground friction
+                        Vg -= Mathf.Min(Mathf.Abs(Vg), GroundDeceleration * timestep) * Mathf.Sign(Vg);
                     }
                 }
-                else if (RightKeyDown && !HorizontalLock)
-                {
-                    if (Vg < 0.0f)
-                    {
-                        Vg += GroundBrake*timestep;
-                    }
-                    else if (Vg < TopSpeed)
-                    {
-                        Vg += GroundAcceleration*timestep;
-                    }
-                }
-                else
-                {
-                    // Ground friction
-                    Vg -= Mathf.Min(Mathf.Abs(Vg), GroundDeceleration*timestep)*Mathf.Sign(Vg);
-                }
+                
             }
             else
             {
@@ -789,7 +772,7 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
-                if(!JustDetached) HandleImpact(leftCheck);
+                if((!JustDetached || JustJumped) && HandleImpact(leftCheck)) Footing = Footing.Left;
                 return true;
             }
 
@@ -798,7 +781,7 @@ namespace Hedgehog.Core.Actors
             if (rightCheck)
             {
                 transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
-                if(!JustDetached) HandleImpact(rightCheck);
+                if((!JustDetached || JustJumped) && HandleImpact(rightCheck)) Footing = Footing.Right;
                 return true;
             }
 
@@ -834,20 +817,20 @@ namespace Hedgehog.Core.Actors
                         if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
                                 (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
                         {
-                            HandleImpact(groundLeftCheck);
+                            if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
                         }
                         else
                         {
-                            HandleImpact(groundRightCheck);
+                            if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
                         }
                     }
                     else if (groundLeftCheck)
                     {
-                        HandleImpact(groundLeftCheck);
+                        if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
                     }
                     else
                     {
-                        HandleImpact(groundRightCheck);
+                        if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
                     }
                 }
 
@@ -875,7 +858,8 @@ namespace Hedgehog.Core.Actors
                                       DMath.Epsilon;
 
                 // If running down a wall and hits the floor, orient the player onto the floor
-                if (DMath.AngleInRange_d(RelativeSurfaceAngle, 85.0f, 95.0f))
+                if (DMath.AngleInRange_d(RelativeSurfaceAngle,
+                    MaxSurfaceAngleDifference, 180.0f - MaxSurfaceAngleDifference))
                 {
                     SurfaceAngle -= 90.0f;
                 }
@@ -891,8 +875,10 @@ namespace Hedgehog.Core.Actors
                                       .normalized * DMath.Epsilon;
                 
                 // If running down a wall and hits the floor, orient the player onto the floor
-                if (DMath.AngleInRange_d(RelativeSurfaceAngle, 265.0f, 275.0f))
+                if (DMath.AngleInRange_d(RelativeSurfaceAngle,
+                    180.0f + MaxSurfaceAngleDifference, 360.0f - MaxSurfaceAngleDifference))
                 {
+                    Debug.Log(RelativeSurfaceAngle);
                     SurfaceAngle += 90.0f;
                 }
 
@@ -944,133 +930,126 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSurfaceCheck()
         {
-            var s = GetSurface(TerrainMask);
-            if (s.LeftCast || s.RightCast)
+            var left = Surfacecast(Footing.Left);
+            var right = Surfacecast(Footing.Right);
+
+            Vector3 originalPosition, originalRotation;
+            TerrainCastHit recheck;
+
+            // Get easy checks out of the way
+            if (!left && !right)
+                goto detach;
+
+            if (!left && right)
+                goto orientRight;
+
+            if (left && !right)
+                goto orientLeft;
+
+            // Both feet have surfaces beneath them, things get complicated
+            var leftAngle = left.SurfaceAngle * Mathf.Rad2Deg;
+            var rightAngle = right.SurfaceAngle * Mathf.Rad2Deg;
+            var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
+            
+            // If a surface is too steep, use only one surface 
+            // (as long as that surface isn't too different from the current)
+            if (diff > MaxSurfaceAngleDifference &&
+                Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle)) < MaxSurfaceAngleDifference/2.0f)
+                goto orientLeft;
+            
+            if (diff < -MaxSurfaceAngleDifference &&
+                Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle)) < MaxSurfaceAngleDifference/2.0f)
+                goto orientRight;
+
+            // If the proposed angle is between the angles of the two surfaces, we can go ahead and use both sensors
+            var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
+            if ((diff >= 0.0f && DMath.AngleInRange(overlap, left.SurfaceAngle, right.SurfaceAngle)) || 
+                (diff <  0.0f && DMath.AngleInRange(overlap, right.SurfaceAngle, left.SurfaceAngle)))
             {
-                // If both sensors found surfaces, need additional checks to see if rotation needs to account for both their positions
-                if (s.LeftCast && s.RightCast)
-                {
-                    // Calculate angle changes for tolerance checks
-                    var rightDiff = DMath.ShortestArc_d(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                    var leftDiff = DMath.ShortestArc_d(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                    var overlapDiff = DMath.ShortestArc(s.LeftCast.SurfaceAngle, s.RightCast.SurfaceAngle) * Mathf.Rad2Deg;
+                // Angle closest to the current gets priority
+                if (Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle)) <
+                    Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle)))
+                    goto orientLeftBoth;
 
-                    var overlapSurfaceAngle = DMath.Angle(s.RightCast.Hit.point - s.LeftCast.Hit.point);
-                    // = difference between the angle of a line drawn between the surfaces minus the average of 
-                    //   their surface angles
-                    var overlapSurfaceDiff = DMath.ShortestArc(overlapSurfaceAngle,
-                        (s.LeftCast.SurfaceAngle + s.RightCast.SurfaceAngle)/2.0f)*Mathf.Rad2Deg;
-                    if (s.Side == Footing.Left)
-                    {
-                        // If the surface's angle is a small enough difference from that of the previous begin surface checks
-                        if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
-                        {
-                            // Check angle differences between feet for player rotation
-                            if (overlapDiff > MinOverlapAngle && Mathf.Abs(overlapSurfaceDiff) < MinFlatOverlapRange || 
-                                Mathf.Abs(overlapSurfaceDiff) > 135.0f)
-                            {
-                                // If tolerable, rotate between the surfaces beneath the two feet
-                                SurfaceAngle = overlapSurfaceAngle*Mathf.Rad2Deg;
-                                transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
-                                Footing = Footing.Left;
-                                SetSurface(s.LeftCast, s.RightCast);
-                            }
-                            else
-                            {
-                                // Else just rotate for the left foot
-                                SurfaceAngle = s.LeftCast.SurfaceAngle*Mathf.Rad2Deg;
-                                transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
-                                Footing = Footing.Left;
-                                SetSurface(s.LeftCast, null);
-                            }
-                        }
-                        else if (Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
-                        {
-                            // Else see if the other surface's angle is tolerable
-                            SurfaceAngle = s.RightCast.SurfaceAngle*Mathf.Rad2Deg;
-                            transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
-                            Footing = Footing.Right;
-                            SetSurface(s.RightCast, null);
-                        }
-                        else
-                        {
-                            // Else the surfaces are untolerable. detach from the surface
-                            Detach(false);
-                        }
-
-                        // Same thing but with the other foot
-                    }
-                    else if (s.Side == Footing.Right)
-                    {
-                        if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
-                        {
-                            if (overlapDiff > MinOverlapAngle && Mathf.Abs(overlapSurfaceDiff) < MinFlatOverlapRange || 
-                                Mathf.Abs(overlapSurfaceDiff) > 135.0f)
-                            {
-                                SurfaceAngle = overlapSurfaceAngle*Mathf.Rad2Deg;
-                                transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
-                                Footing = Footing.Right;
-                                SetSurface(s.RightCast, s.LeftCast);
-                            }
-                            else
-                            {
-                                SurfaceAngle = s.RightCast.SurfaceAngle*Mathf.Rad2Deg;
-                                transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
-                                Footing = Footing.Right;
-                                SetSurface(s.RightCast, null);
-                            }
-
-                        }
-                        else if (Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
-                        {
-                            SurfaceAngle = s.LeftCast.SurfaceAngle*Mathf.Rad2Deg;
-                            transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
-                            Footing = Footing.Left;
-                            SetSurface(s.LeftCast, null);
-                        }
-                        else
-                        {
-                            Detach(false);
-                        }
-                    }
-                }
-                else if (s.LeftCast)
-                {
-                    var leftDiff = DMath.ShortestArc_d(s.LeftCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                    if (_justLanded || Mathf.Abs(leftDiff) < MaxSurfaceAngleDifference)
-                    {
-                        SurfaceAngle = s.LeftCast.SurfaceAngle*Mathf.Rad2Deg;
-                        transform.position += (Vector3)s.LeftCast.Hit.point - Sensors.BottomLeft.position;
-                        Footing = Footing.Left;
-                        SetSurface(s.LeftCast, null);
-                    }
-                    else
-                    {
-                        Detach(false);
-                    }
-                }
-                else
-                {
-                    var rightDiff = DMath.ShortestArc_d(s.RightCast.SurfaceAngle * Mathf.Rad2Deg, LastSurfaceAngle);
-                    if (_justLanded || Mathf.Abs(rightDiff) < MaxSurfaceAngleDifference)
-                    {
-                        SurfaceAngle = s.RightCast.SurfaceAngle*Mathf.Rad2Deg;
-                        transform.position += (Vector3)s.RightCast.Hit.point - Sensors.BottomRight.position;
-                        Footing = Footing.Right;
-                        SetSurface(s.RightCast, null);
-                    }
-                    else
-                    {
-                        Detach(false);
-                    }
-                }
-
-                SensorsRotation = SurfaceAngle;
-                return true;
+                goto orientRightBoth;
             }
 
+            // Otherwise use only one surface, angle closest to the current gets priority
+            if (Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle)) <
+                Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle)))
+                goto orientLeft;
+
+            goto orientRight;
+
+            // gotos don't seem that bad here please don't sue me
+            orientLeft:
+            Footing = Footing.Left;
+            SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
+            SensorsRotation = SurfaceAngle;
+            transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
+            SetSurface(left);
+            goto finish;
+
+            orientRight:
+            Footing = Footing.Right;
+            SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
+            SensorsRotation = SurfaceAngle;
+            transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
+            SetSurface(right);
+            goto finish;
+
+            // It's possible to come up short when using both surfaces since the sensors shift
+            // during rotation. If we check after rotation and the sensor can't find the ground
+            // directly beneath it as we expect, we have to undo everything.
+            orientLeftBoth:
+            originalPosition = transform.position;
+            originalRotation = transform.eulerAngles;
+
+            Footing = Footing.Left;
+            SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
+            SensorsRotation = SurfaceAngle;
+            transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
+
+            recheck = this.TerrainCast(Sensors.BottomRight.position, Sensors.LedgeDropRight.position, TerrainSide.Bottom);
+            if (recheck.Hit.fraction > 0.01f)
+            {
+                transform.position = originalPosition;
+                transform.eulerAngles = originalRotation;
+            }
+            else
+            {
+                SetSurface(left, right);
+            }
+            
+            goto finish;
+
+            orientRightBoth:
+            originalPosition = transform.position;
+            originalRotation = transform.eulerAngles;
+
+            Footing = Footing.Right;
+            SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
+            SensorsRotation = SurfaceAngle;
+            transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
+
+            recheck = this.TerrainCast(Sensors.BottomLeft.position, Sensors.LedgeDropLeft.position, TerrainSide.Bottom);
+            if (recheck.Hit.fraction > 0.01f)
+            {
+                transform.position = originalPosition;
+                transform.eulerAngles = originalRotation;
+            }
+            else
+            {
+                SetSurface(left, right);
+            }
+            goto finish;
+
+            detach:
             Detach(false);
             return false;
+
+            finish:
+            return true;
         }
 
         /// <summary>
@@ -1389,38 +1368,6 @@ namespace Hedgehog.Core.Actors
         }
         #endregion
         #region Surface Calculation Functions
-        /// <summary>
-        /// Gets data about the surface closest to the player's feet, including its Footing and raycast info.
-        /// </summary>
-        /// <returns>The surface.</returns>
-        /// <param name="layerMask">A mask indicating what layers are surfaces.</param>
-        public SurfaceInfo GetSurface(int layerMask)
-        {
-            // Linecasts are straight vertical or horizontal from the ground sensors
-            var checkLeft = Surfacecast(Footing.Left);
-            var checkRight = Surfacecast(Footing.Right);
-
-            Footing newFooting = Footing.None;
-
-            if (checkLeft && checkRight)
-            {
-                // Find the highest point using wall mode orientation
-                var distance = DMath.Highest(checkLeft.Hit.point, checkRight.Hit.point,
-                    (SurfaceAngle + 90.0f)*Mathf.Deg2Rad);
-                newFooting = distance > 0.0f ? Footing.Left : Footing.Right;
-            }
-            else if (checkLeft)
-            {
-                newFooting = Footing.Left;
-            } else if (checkRight)
-            {
-                newFooting = Footing.Right;
-            }
-
-            if (newFooting == Footing.None) return default(SurfaceInfo);
-            return new SurfaceInfo(checkLeft, checkRight, newFooting);
-        }
-
         /// <summary>
         /// Casts from LedgeClimbHeight to the player's geet.
         /// </summary>
