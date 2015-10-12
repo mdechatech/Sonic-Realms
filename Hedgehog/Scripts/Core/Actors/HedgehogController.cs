@@ -933,7 +933,10 @@ namespace Hedgehog.Core.Actors
             var left = Surfacecast(Footing.Left);
             var right = Surfacecast(Footing.Right);
 
-            Vector3 originalPosition, originalRotation;
+            var originalPosition = transform.position;
+            var originalRotation = transform.eulerAngles;
+            var originalPrimary = PrimarySurfaceHit;
+            var originalSecondary = SecondarySurfaceHit;
             TerrainCastHit recheck;
 
             // Get easy checks out of the way
@@ -950,16 +953,20 @@ namespace Hedgehog.Core.Actors
             var leftAngle = left.SurfaceAngle * Mathf.Rad2Deg;
             var rightAngle = right.SurfaceAngle * Mathf.Rad2Deg;
             var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
+
+            var leftDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle));
+            var rightDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle));
             
             // If a surface is too steep, use only one surface 
             // (as long as that surface isn't too different from the current)
-            if (diff > MaxSurfaceAngleDifference &&
-                Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle)) < MaxSurfaceAngleDifference/2.0f)
-                goto orientLeft;
-            
-            if (diff < -MaxSurfaceAngleDifference &&
-                Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle)) < MaxSurfaceAngleDifference/2.0f)
-                goto orientRight;
+            if (diff > MaxSurfaceAngleDifference || diff < -MaxSurfaceAngleDifference)
+            {
+                if (leftDiff < rightDiff && leftDiff < MaxSurfaceAngleDifference/4.0f)
+                    goto orientLeft;
+
+                if(rightDiff < MaxSurfaceAngleDifference/4.0f)
+                    goto orientRight;
+            }
 
             // If the proposed angle is between the angles of the two surfaces, we can go ahead and use both sensors
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
@@ -967,16 +974,14 @@ namespace Hedgehog.Core.Actors
                 (diff <  0.0f && DMath.AngleInRange(overlap, right.SurfaceAngle, left.SurfaceAngle)))
             {
                 // Angle closest to the current gets priority
-                if (Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle)) <
-                    Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle)))
+                if (leftDiff < rightDiff)
                     goto orientLeftBoth;
 
                 goto orientRightBoth;
             }
 
             // Otherwise use only one surface, angle closest to the current gets priority
-            if (Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle)) <
-                Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle)))
+            if (leftDiff < rightDiff)
                 goto orientLeft;
 
             goto orientRight;
@@ -1002,46 +1007,19 @@ namespace Hedgehog.Core.Actors
             // during rotation. If we check after rotation and the sensor can't find the ground
             // directly beneath it as we expect, we have to undo everything.
             orientLeftBoth:
-            originalPosition = transform.position;
-            originalRotation = transform.eulerAngles;
-
             Footing = Footing.Left;
             SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
             SensorsRotation = SurfaceAngle;
             transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
-
-            recheck = this.TerrainCast(Sensors.BottomRight.position, Sensors.LedgeDropRight.position, TerrainSide.Bottom);
-            if (recheck.Hit.fraction > 0.01f)
-            {
-                transform.position = originalPosition;
-                transform.eulerAngles = originalRotation;
-            }
-            else
-            {
-                SetSurface(left, right);
-            }
-            
+            SetSurface(left, right);
             goto finish;
 
             orientRightBoth:
-            originalPosition = transform.position;
-            originalRotation = transform.eulerAngles;
-
             Footing = Footing.Right;
             SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
             SensorsRotation = SurfaceAngle;
             transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
-
-            recheck = this.TerrainCast(Sensors.BottomLeft.position, Sensors.LedgeDropLeft.position, TerrainSide.Bottom);
-            if (recheck.Hit.fraction > 0.01f)
-            {
-                transform.position = originalPosition;
-                transform.eulerAngles = originalRotation;
-            }
-            else
-            {
-                SetSurface(left, right);
-            }
+            SetSurface(right, left);
             goto finish;
 
             detach:
@@ -1049,6 +1027,21 @@ namespace Hedgehog.Core.Actors
             return false;
 
             finish:
+            recheck = Footing == Footing.Left
+                ? this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
+                    TerrainSide.Bottom)
+                : this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
+                    TerrainSide.Bottom);
+
+            if (recheck && Vector2.Distance(recheck.Hit.point, Footing == Footing.Left
+                ? Sensors.BottomRight.position
+                : Sensors.BottomLeft.position) > 0.05f)
+            {
+                SetSurface(originalPrimary, originalSecondary);
+                transform.position = originalPosition;
+                transform.eulerAngles = originalRotation;
+            }
+
             return true;
         }
 
