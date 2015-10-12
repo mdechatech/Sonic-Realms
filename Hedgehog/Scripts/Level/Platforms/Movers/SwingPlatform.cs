@@ -8,10 +8,35 @@ namespace Hedgehog.Level.Platforms.Movers
     /// </summary>
     public class SwingPlatform : BasePlatformMover
     {
-        [SerializeField] public Vector2 Pivot;
-        [SerializeField] public float Radius;
-        [SerializeField] public float MidAngle;
-        [SerializeField] public float Range;
+        /// <summary>
+        /// The platform's pivot position.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The platform's pivot position.")]
+        public Vector2 Pivot;
+
+        /// <summary>
+        /// The distance between the pivot position and the platform.
+        /// </summary>
+        [SerializeField] 
+        [Tooltip("The distance between the pivot position and the platform.")]
+        public float Radius;
+
+        /// <summary>
+        /// The platform swings around this direction, in degrees.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The platform swings around this direction, in degrees.")]
+        public float MidAngle;
+
+        /// <summary>
+        /// The platform's swing range, in degrees.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The platform's swing range, in degrees.")]
+        public float Range;
+
+        private float _tprev;
 
         public override void Reset()
         {
@@ -23,6 +48,13 @@ namespace Hedgehog.Level.Platforms.Movers
             MidAngle = -90.0f;
             Range = 180.0f;
             PingPong = true;
+        }
+
+        public override void Awake()
+        {
+            base.Awake();
+
+            _tprev = CurrentTime/Duration;
         }
 
         public override void To(float t)

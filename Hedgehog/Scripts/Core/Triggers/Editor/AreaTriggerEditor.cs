@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Hedgehog.Core.Utils.Editor;
+using UnityEditor;
 
 namespace Hedgehog.Core.Triggers.Editor
 {
@@ -17,29 +18,21 @@ namespace Hedgehog.Core.Triggers.Editor
             set { EditorPrefs.SetBool("AreaTriggerEditor.ShowAreaEvents", value); }
         }
 
-        public override void OnEnable()
-        {
-            base.OnEnable();
-
-            IgnoreLayersProperty = serializedObject.FindProperty("IgnoreLayers");
-            OnAreaEnterProperty = serializedObject.FindProperty("OnAreaEnter");
-            OnAreaStayProperty = serializedObject.FindProperty("OnAreaStay");
-            OnAreaExitProperty = serializedObject.FindProperty("OnAreaExit");
-        }
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(IgnoreLayersProperty);
-            EditorGUILayout.PropertyField(TriggerFromChildrenProperty);
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                "IgnoreLayers",
+                "TriggerFromChildren");
 
             ShowAreaEvents = EditorGUILayout.Foldout(ShowAreaEvents, "Area Events");
             if (ShowAreaEvents)
             {
-                EditorGUILayout.PropertyField(OnAreaEnterProperty);
-                EditorGUILayout.PropertyField(OnAreaStayProperty);
-                EditorGUILayout.PropertyField(OnAreaExitProperty);
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "OnAreaEnter",
+                    "OnAreaStay",
+                    "OnAreaExit");
             }
 
             serializedObject.ApplyModifiedProperties();

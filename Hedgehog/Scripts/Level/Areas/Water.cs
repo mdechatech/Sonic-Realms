@@ -43,6 +43,7 @@ namespace Hedgehog.Level.Areas
         {
             base.Awake();
             _collider2D = GetComponent<Collider2D>();
+            _collider2D.isTrigger = false;
         }
 
         // The controller must be at least half submerged underwater to apply new physics values.

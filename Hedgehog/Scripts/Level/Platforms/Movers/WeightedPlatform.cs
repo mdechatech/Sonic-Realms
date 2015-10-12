@@ -36,6 +36,8 @@ namespace Hedgehog.Level.Platforms.Movers
         private Vector2 _originalPosition;
         private bool _colliding;
 
+        private float _tprev;
+
         public override void Reset()
         {
             base.Reset();
@@ -52,6 +54,7 @@ namespace Hedgehog.Level.Platforms.Movers
             base.Awake();
             _returnTimer = 0.0f;
             _returning = false;
+            _tprev = CurrentTime/Duration;
         }
 
         public override void Start()
@@ -97,7 +100,8 @@ namespace Hedgehog.Level.Platforms.Movers
 
         public override void To(float t)
         {
-            transform.localPosition = Vector2.Lerp(_originalPosition, _originalPosition - DepressionAmount, t);
+            transform.localPosition -= (Vector3)DepressionAmount*(t - _tprev);
+            _tprev = t;
         }
 
         // Check if a controller is on the platform

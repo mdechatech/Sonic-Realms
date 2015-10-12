@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Hedgehog.Core.Actors;
 using UnityEditor;
 using UnityEditorInternal;
@@ -9,6 +10,46 @@ namespace Hedgehog.Core.Utils.Editor
 {
     public class HedgehogEditorGUIUtility
     {
+        /// <summary>
+        /// Just a quick way to draw property fields.
+        /// </summary>
+        /// <param name="serializedObject"></param>
+        /// <param name="properties"></param>
+        public static void DrawProperties(SerializedObject serializedObject)
+        {
+            DrawExcluding(serializedObject);
+        }
+
+        /// <summary>
+        /// Just a quick way to draw property fields.
+        /// </summary>
+        /// <param name="serializedObject"></param>
+        /// <param name="properties"></param>
+        public static void DrawProperties(SerializedObject serializedObject, params string[] properties)
+        {
+            foreach (var property in properties)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(property));
+            }
+        }
+
+        /// <summary>
+        /// Just a quick way to draw property fields.
+        /// </summary>
+        /// <param name="serializedObject"></param>
+        /// <param name="excludingProperties"></param>
+        public static void DrawExcluding(SerializedObject serializedObject, params string[] excludingProperties)
+        {
+            var it = serializedObject.GetIterator(); it.Next(true);
+            while(it.NextVisible(false))
+            {
+                if (!excludingProperties.Contains(it.name))
+                {
+                    EditorGUILayout.PropertyField(it);
+                }
+            }
+        }
+
         // Source: http://answers.unity3d.com/questions/42996/how-to-create-layermask-field-in-a-custom-editorwi.html
         public static LayerMask LayerMaskField(string label, LayerMask layerMask)
         {
