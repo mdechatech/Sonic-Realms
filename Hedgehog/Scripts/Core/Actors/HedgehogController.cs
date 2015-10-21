@@ -275,8 +275,7 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Physics Variables
         /// <summary>
-        /// The controller's velocity as a Vector2. Setting velocity this way will detach
-        /// the player from whatever surface it is on.
+        /// The controller's velocity as a Vector2.
         /// </summary>
         public Vector2 Velocity
         {
@@ -743,6 +742,9 @@ namespace Hedgehog.Core.Actors
                 transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
                                       ((Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position).normalized*
                                       DMath.Epsilon;
+
+                NotifyCollision(sideLeftCheck);
+
                 return true;
             }
             if (sideRightCheck)
@@ -755,6 +757,9 @@ namespace Hedgehog.Core.Actors
                 transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
                                       ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
                                       .normalized * DMath.Epsilon;
+
+                NotifyCollision(sideRightCheck);
+
                 return true;
             }
 
@@ -773,6 +778,9 @@ namespace Hedgehog.Core.Actors
             {
                 transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
                 if((!JustDetached || JustJumped) && HandleImpact(leftCheck)) Footing = Footing.Left;
+
+                NotifyCollision(leftCheck);
+
                 return true;
             }
 
@@ -782,6 +790,9 @@ namespace Hedgehog.Core.Actors
             {
                 transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
                 if((!JustDetached || JustJumped) && HandleImpact(rightCheck)) Footing = Footing.Right;
+
+                NotifyCollision(rightCheck);
+
                 return true;
             }
 
@@ -804,10 +815,12 @@ namespace Hedgehog.Core.Actors
                     if (groundLeftCheck)
                     {
                         transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
+                        NotifyCollision(groundLeftCheck);
                     }
                     if (groundRightCheck)
                     {
                         transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
+                        NotifyCollision(groundRightCheck);
                     }
                 }
                 else
@@ -818,19 +831,23 @@ namespace Hedgehog.Core.Actors
                                 (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
                         {
                             if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
+                            NotifyCollision(groundLeftCheck);
                         }
                         else
                         {
                             if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
+                            NotifyCollision(groundRightCheck);
                         }
                     }
                     else if (groundLeftCheck)
                     {
                         if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
+                        NotifyCollision(groundLeftCheck);
                     }
                     else
                     {
                         if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
+                        NotifyCollision(groundRightCheck);
                     }
                 }
 
@@ -865,6 +882,8 @@ namespace Hedgehog.Core.Actors
                 }
 
                 SensorsRotation = SurfaceAngle;
+                NotifyCollision(sideLeftCheck);
+
                 return true;
             }
             if (sideRightCheck)
@@ -883,6 +902,8 @@ namespace Hedgehog.Core.Actors
                 }
 
                 SensorsRotation = SurfaceAngle;
+                NotifyCollision(sideRightCheck);
+
                 return true;
             }
 
@@ -909,6 +930,8 @@ namespace Hedgehog.Core.Actors
                                       ((Vector3) ceilLeftCheck.Hit.point - Sensors.TopLeft.position).normalized*
                                       DMath.Epsilon;
 
+                NotifyCollision(ceilLeftCheck);
+
                 return true;
             }
             if (ceilRightCheck)
@@ -917,6 +940,8 @@ namespace Hedgehog.Core.Actors
                 transform.position += (Vector3) ceilRightCheck.Hit.point - Sensors.TopRight.position +
                                       ((Vector3) ceilRightCheck.Hit.point - Sensors.TopRight.position)
                                           .normalized*DMath.Epsilon;
+
+                NotifyCollision(ceilRightCheck);
 
                 return true;
             }
@@ -993,6 +1018,7 @@ namespace Hedgehog.Core.Actors
             SensorsRotation = SurfaceAngle;
             transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
             SetSurface(left);
+            NotifyCollision(left);
             goto finish;
 
             orientRight:
@@ -1001,6 +1027,7 @@ namespace Hedgehog.Core.Actors
             SensorsRotation = SurfaceAngle;
             transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
             SetSurface(right);
+            NotifyCollision(right);
             goto finish;
 
             // It's possible to come up short when using both surfaces since the sensors shift
@@ -1012,6 +1039,8 @@ namespace Hedgehog.Core.Actors
             SensorsRotation = SurfaceAngle;
             transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
             SetSurface(left, right);
+            NotifyCollision(left);
+            NotifyCollision(right);
             goto finish;
 
             orientRightBoth:
@@ -1020,6 +1049,8 @@ namespace Hedgehog.Core.Actors
             SensorsRotation = SurfaceAngle;
             transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
             SetSurface(right, left);
+            NotifyCollision(right);
+            NotifyCollision(left);
             goto finish;
 
             detach:
@@ -1307,6 +1338,17 @@ namespace Hedgehog.Core.Actors
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
 
+        private void NotifyCollision(TerrainCastHit collision)
+        {
+            if (!collision) return;
+
+            var trigger = collision.Hit.transform.GetComponent<PlatformTrigger>();
+            if (trigger == null)
+                return;
+
+            trigger.NotifyCollision(this, collision);
+        }
+
         /// <summary>
         /// Sets the controller's primary and secondary surfaces and triggers their platform events, if any.
         /// </summary>
@@ -1314,49 +1356,24 @@ namespace Hedgehog.Core.Actors
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
         public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
         {
-            var oldPrimarySurface = PrimarySurface;
-            var oldPrimaryHit = PrimarySurfaceHit;
-            var oldPrimaryTrigger = PrimarySurface == null ? null : PrimarySurface.GetComponent<PlatformTrigger>();
-
-            var oldSecondarySurface = SecondarySurface;
-            var oldSecondaryHit = SecondarySurfaceHit;
-            var oldSecondaryTrigger = SecondarySurface == null ? null : SecondarySurface.GetComponent<PlatformTrigger>();
-
             PrimarySurfaceHit = primarySurfaceHit;
-            PrimarySurface = PrimarySurfaceHit == null ? null : PrimarySurfaceHit.Hit.transform;
-            var primaryTrigger = PrimarySurface == null ? null : PrimarySurface.GetComponent<PlatformTrigger>();
+            PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Hit.transform : null;
+
             SecondarySurfaceHit = secondarySurfaceHit;
-            SecondarySurface = SecondarySurfaceHit == null ? null : SecondarySurfaceHit.Hit.transform;
-            var secondaryTrigger = SecondarySurface == null ? null : SecondarySurface.GetComponent<PlatformTrigger>();
+            SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Hit.transform : null;
 
-            // Call enter/stay events for current triggers
-            if (PrimarySurface != null)
+            if (PrimarySurfaceHit)
             {
-                if (primaryTrigger != null)
-                {
-                    primaryTrigger.UpdateController(this, primarySurfaceHit);
-                }
-
-                if (secondaryTrigger != null && SecondarySurface != PrimarySurface)
-                {
-                    secondaryTrigger.UpdateController(this, secondarySurfaceHit);
-                }
+                PlatformTrigger primaryTrigger;
+                if (primarySurfaceHit && (primaryTrigger = primarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
+                    primaryTrigger.NotifySurfaceCollision(this, primarySurfaceHit);
             }
 
-            // Check if we should call exit events for previous triggers
-            if (oldPrimarySurface != null)
+            if(SecondarySurfaceHit)
             {
-                if (oldPrimaryTrigger != null && 
-                    oldPrimaryTrigger != primaryTrigger && oldPrimaryTrigger != secondaryTrigger)
-                {
-                    oldPrimaryTrigger.UpdateController(this, oldPrimaryHit, true);
-                }
-
-                if (oldSecondaryTrigger != null && oldSecondarySurface != oldPrimarySurface && 
-                    oldSecondaryTrigger != primaryTrigger && oldSecondaryTrigger != secondaryTrigger)
-                {
-                    oldSecondaryTrigger.UpdateController(this, oldSecondaryHit, true);
-                }
+                PlatformTrigger secondaryTrigger;
+                if (secondarySurfaceHit && (secondaryTrigger = secondarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
+                    secondaryTrigger.NotifySurfaceCollision(this, secondarySurfaceHit);
             }
         }
         #endregion

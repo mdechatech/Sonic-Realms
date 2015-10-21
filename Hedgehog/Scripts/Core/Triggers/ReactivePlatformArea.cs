@@ -21,15 +21,15 @@ namespace Hedgehog.Core.Triggers
 
         public override void OnEnable()
         {
-            if (AreaTrigger.CollisionRules != null) Start();
+            if (AreaTrigger.InsideRules != null) Start();
         }
 
         public override void Start()
         {
             if (RegisteredEvents) return;
 
-            if (!AreaTrigger.CollisionRules.Contains(IsInsideArea))
-                AreaTrigger.CollisionRules.Add(IsInsideArea);
+            if (!AreaTrigger.InsideRules.Contains(IsInsideArea))
+                AreaTrigger.InsideRules.Add(IsInsideArea);
             AreaTrigger.OnAreaEnter.AddListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.AddListener(OnAreaStay);
             AreaTrigger.OnAreaExit.AddListener(OnAreaExit);
@@ -41,7 +41,7 @@ namespace Hedgehog.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
-            AreaTrigger.CollisionRules.Remove(IsInsideArea);
+            AreaTrigger.InsideRules.Remove(IsInsideArea);
             AreaTrigger.OnAreaEnter.RemoveListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.RemoveListener(OnAreaStay);
             AreaTrigger.OnAreaExit.RemoveListener(OnAreaExit);

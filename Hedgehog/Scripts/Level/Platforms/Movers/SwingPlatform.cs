@@ -36,8 +36,6 @@ namespace Hedgehog.Level.Platforms.Movers
         [Tooltip("The platform's swing range, in degrees.")]
         public float Range;
 
-        private float _tprev;
-
         public override void Reset()
         {
             base.Reset();
@@ -48,13 +46,6 @@ namespace Hedgehog.Level.Platforms.Movers
             MidAngle = -90.0f;
             Range = 180.0f;
             PingPong = true;
-        }
-
-        public override void Awake()
-        {
-            base.Awake();
-
-            _tprev = CurrentTime/Duration;
         }
 
         public override void To(float t)

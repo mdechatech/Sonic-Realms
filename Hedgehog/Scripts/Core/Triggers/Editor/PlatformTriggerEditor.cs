@@ -1,15 +1,11 @@
-﻿using UnityEditor;
+﻿using Hedgehog.Core.Utils.Editor;
+using UnityEditor;
 
 namespace Hedgehog.Core.Triggers.Editor
 {
     [CustomEditor(typeof(PlatformTrigger)), CanEditMultipleObjects]
     public class PlatformTriggerEditor : BaseTriggerEditor
     {
-        protected SerializedProperty
-            OnSurfaceEnterProperty,
-            OnSurfaceStayProperty,
-            OnSurfaceExitProperty;
-
         protected static bool ShowPlatformEvents
         {
             get { return EditorPrefs.GetBool("PlatformTriggerEditor.ShowPlatformEvents", false); }
@@ -22,33 +18,24 @@ namespace Hedgehog.Core.Triggers.Editor
             set { EditorPrefs.SetBool("PlatformTriggerEditor.ShowSurfaceEvents", value); }
         }
 
-        public override void OnEnable()
-        {
-            base.OnEnable();
-
-            OnSurfaceEnterProperty = serializedObject.FindProperty("OnSurfaceEnter");
-            OnSurfaceStayProperty = serializedObject.FindProperty("OnSurfaceStay");
-            OnSurfaceExitProperty = serializedObject.FindProperty("OnSurfaceExit");
-        }
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(TriggerFromChildrenProperty);
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TriggerFromChildren");
 
             ShowPlatformEvents = EditorGUILayout.Foldout(ShowPlatformEvents, "Platform Events");
             if (ShowPlatformEvents)
             {
-                ++EditorGUI.indentLevel;
-                ShowSurfaceEvents = EditorGUILayout.Foldout(ShowSurfaceEvents, "Surface Events");
-                if (ShowSurfaceEvents)
-                {
-                    EditorGUILayout.PropertyField(OnSurfaceEnterProperty);
-                    EditorGUILayout.PropertyField(OnSurfaceStayProperty);
-                    EditorGUILayout.PropertyField(OnSurfaceExitProperty);
-                }
-                --EditorGUI.indentLevel;
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "OnPlatformEnter", "OnPlatformStay", "OnPlatformExit");
+            }
+
+            ShowSurfaceEvents = EditorGUILayout.Foldout(ShowSurfaceEvents, "Surface Events");
+            if (ShowSurfaceEvents)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "OnSurfaceEnter", "OnSurfaceStay", "OnSurfaceExit");
             }
 
             serializedObject.ApplyModifiedProperties();

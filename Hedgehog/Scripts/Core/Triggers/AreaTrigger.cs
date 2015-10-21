@@ -15,7 +15,7 @@ namespace Hedgehog.Core.Triggers
     public class AreaEvent : UnityEvent<HedgehogController> { }
 
     /// <summary>
-    /// Can be added to a collider to receive events when a collider enters it.
+    /// Hook up to these events to react when a controller enters the area.
     /// </summary>
     public class AreaTrigger : BaseTrigger
     {
@@ -46,13 +46,13 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="controller"></param>
         /// <returns></returns>
-        public delegate bool CollisionPredicate(HedgehogController controller);
+        public delegate bool InsidePredicate(HedgehogController controller);
 
         /// <summary>
         /// A list of predicates which, if empty or all return true, allow the controller to collide
         /// with the area. The trigger ONLY checks if the controller is touching it!
         /// </summary>
-        public List<CollisionPredicate> CollisionRules;
+        public List<InsidePredicate> InsideRules;
 
         /// <summary>
         /// Maps a controller to the areas it is colliding with (can collide with multiple child areas).
@@ -77,7 +77,14 @@ namespace Hedgehog.Core.Triggers
             OnAreaStay = OnAreaStay ?? new AreaEvent();
             OnAreaExit = OnAreaExit ?? new AreaEvent();
             Collisions = new Dictionary<HedgehogController, List<Transform>>();
-            CollisionRules = new List<CollisionPredicate>();
+            InsideRules = new List<InsidePredicate>();
+        }
+
+        public virtual void Start()
+        {
+            var collider2D = GetComponent<Collider2D>();
+            if (collider2D != null && GetComponent<PlatformTrigger>() != null)
+                collider2D.isTrigger = true;
         }
 
         public void FixedUpdate()
@@ -94,7 +101,11 @@ namespace Hedgehog.Core.Triggers
             if (!TriggerFromChildren) return;
             foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
             {
-                if (childCollider.transform == transform) continue;
+                if (childCollider.transform == transform || 
+                    childCollider.GetComponent<PlatformTrigger>() != null || 
+                    childCollider.GetComponent<ObjectTrigger>() != null)
+                    continue;
+
                 var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
                                    childCollider.gameObject.AddComponent<AreaTrigger>();
                 childTrigger.IgnoreLayers |= IgnoreLayers;
@@ -113,9 +124,9 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool CollidesWith(HedgehogController controller)
         {
-            return !CollisionRules.Any()
+            return !InsideRules.Any()
                 ? DefaultCollisionRule(controller)
-                : CollisionRules.All(predicate => predicate(controller));
+                : InsideRules.All(predicate => predicate(controller));
         }
 
         public bool DefaultCollisionRule(HedgehogController controller)

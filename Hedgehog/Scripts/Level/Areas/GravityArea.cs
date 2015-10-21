@@ -106,7 +106,6 @@ namespace Hedgehog.Level.Areas
             if (!ModifyStrength) return;
             controller.AirGravity = old.AirStrength;
             controller.SlopeGravity = old.GroundStrength;
-            
         }
     }
 }

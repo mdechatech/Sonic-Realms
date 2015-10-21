@@ -39,11 +39,10 @@ namespace Hedgehog.Level.Areas
             MinFloatSpeed = 100.0f;
         }
 
-        public override void Awake()
+        public override void Start()
         {
-            base.Awake();
+            base.Start();
             _collider2D = GetComponent<Collider2D>();
-            _collider2D.isTrigger = false;
         }
 
         // The controller must be at least half submerged underwater to apply new physics values.

@@ -5,11 +5,11 @@ using UnityEngine;
 namespace Hedgehog.Core.Triggers
 {
     /// <summary>
-    /// Helper class for creating platforms that react to player events.
+    /// Helper class for creating platforms that react to controller events.
     /// </summary>
     [AddComponentMenu("")]
     [RequireComponent(typeof(PlatformTrigger))]
-    public class ReactivePlatform : MonoBehaviour
+    public class ReactivePlatform : BaseReactive
     {
         protected PlatformTrigger PlatformTrigger;
         protected bool RegisteredEvents;
@@ -25,13 +25,18 @@ namespace Hedgehog.Core.Triggers
             if (PlatformTrigger.SurfaceRules != null) Start();
         }
 
-        public virtual void Start()
+        public override void Start()
         {
+            base.Start();
+
             if (RegisteredEvents) return;
 
-            if (!PlatformTrigger.SurfaceRules.Contains(IsOnSurface))
-                PlatformTrigger.SurfaceRules.Add(IsOnSurface);
             PlatformTrigger.CollisionRules.Add(CollidesWith);
+            PlatformTrigger.OnPlatformEnter.AddListener(OnPlatformEnter);
+            PlatformTrigger.OnPlatformStay.AddListener(OnPlatformStay);
+            PlatformTrigger.OnPlatformExit.AddListener(OnPlatformExit);
+
+            PlatformTrigger.SurfaceRules.Add(IsOnSurface);
             PlatformTrigger.OnSurfaceEnter.AddListener(OnSurfaceEnter);
             PlatformTrigger.OnSurfaceStay.AddListener(OnSurfaceStay);
             PlatformTrigger.OnSurfaceExit.AddListener(OnSurfaceExit);
@@ -43,8 +48,12 @@ namespace Hedgehog.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
-            PlatformTrigger.SurfaceRules.Remove(IsOnSurface);
             PlatformTrigger.CollisionRules.Remove(CollidesWith);
+            PlatformTrigger.OnPlatformEnter.RemoveListener(OnPlatformEnter);
+            PlatformTrigger.OnPlatformStay.RemoveListener(OnPlatformStay);
+            PlatformTrigger.OnPlatformExit.RemoveListener(OnPlatformExit);
+
+            PlatformTrigger.SurfaceRules.Remove(IsOnSurface);
             PlatformTrigger.OnSurfaceEnter.RemoveListener(OnSurfaceEnter);
             PlatformTrigger.OnSurfaceStay.RemoveListener(OnSurfaceStay);
             PlatformTrigger.OnSurfaceExit.RemoveListener(OnSurfaceExit);
@@ -68,7 +77,22 @@ namespace Hedgehog.Core.Triggers
             return PlatformTrigger.DefaultCollisionRule(hit);
         }
 
-        // Override these methods to react when a controller enters, stays on, and exits a platform!
+        // Override these methods to react when a controller collides with the platform.
+        public virtual void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
+        {
+
+        }
+
+        public virtual void OnPlatformStay(HedgehogController controller, TerrainCastHit hit)
+        {
+
+        }
+
+        public virtual void OnPlatformExit(HedgehogController controller, TerrainCastHit hit)
+        {
+
+        }
+        // Override these methods to react when a controller stands on the platform.
         public virtual void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
             
@@ -76,12 +100,12 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
-
+            
         }
 
         public virtual void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
-
+            
         }
     }
 }

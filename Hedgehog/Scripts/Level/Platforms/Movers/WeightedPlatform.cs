@@ -32,8 +32,6 @@ namespace Hedgehog.Level.Platforms.Movers
 
         private float _returnTimer;
         private bool _returning;
-
-        private Vector2 _originalPosition;
         private bool _colliding;
 
         private float _tprev;
@@ -55,12 +53,6 @@ namespace Hedgehog.Level.Platforms.Movers
             _returnTimer = 0.0f;
             _returning = false;
             _tprev = CurrentTime/Duration;
-        }
-
-        public override void Start()
-        {
-            base.Start();
-            _originalPosition = transform.localPosition;
         }
 
         /// <summary>

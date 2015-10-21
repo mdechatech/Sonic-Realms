@@ -88,15 +88,18 @@ namespace Hedgehog.Level.Areas
 
         #endregion
 
-        private AreaTrigger _trigger;
-
         // The controller must be grounded if MustBeGrounded is true.
         public override bool IsInsideArea(HedgehogController controller)
         {
-            return AppliesTo(controller) && (!MustBeGrounded || controller.Grounded);
+            return base.IsInsideArea(controller) && AppliesTo(controller) && (!MustBeGrounded || controller.Grounded);
         }
 
         public override void OnAreaEnter(HedgehogController controller)
+        {
+            Apply(controller);
+        }
+
+        public void Apply(HedgehogController controller)
         {
             switch (CollisionMode)
             {

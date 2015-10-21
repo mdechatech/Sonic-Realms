@@ -7,7 +7,7 @@ namespace Hedgehog.Core.Triggers
     /// Helper class for creating areas that react to player events.
     /// </summary>
     [RequireComponent(typeof(AreaTrigger))]
-    public class ReactiveArea : MonoBehaviour
+    public class ReactiveArea : BaseReactive
     {
         protected AreaTrigger AreaTrigger;
         protected bool RegisteredEvents;
@@ -19,15 +19,17 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void OnEnable()
         {
-            if (AreaTrigger.CollisionRules != null) Start();
+            if (AreaTrigger.InsideRules != null) Start();
         }
 
-        public virtual void Start()
+        public override void Start()
         {
+            base.Start();
+
             if (RegisteredEvents) return;
 
-            if (!AreaTrigger.CollisionRules.Contains(IsInsideArea))
-                AreaTrigger.CollisionRules.Add(IsInsideArea);
+            if (!AreaTrigger.InsideRules.Contains(IsInsideArea))
+                AreaTrigger.InsideRules.Add(IsInsideArea);
             AreaTrigger.OnAreaEnter.AddListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.AddListener(OnAreaStay);
             AreaTrigger.OnAreaExit.AddListener(OnAreaExit);
@@ -39,7 +41,7 @@ namespace Hedgehog.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
-            AreaTrigger.CollisionRules.Remove(IsInsideArea);
+            AreaTrigger.InsideRules.Remove(IsInsideArea);
             AreaTrigger.OnAreaEnter.RemoveListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.RemoveListener(OnAreaStay);
             AreaTrigger.OnAreaExit.RemoveListener(OnAreaExit);
