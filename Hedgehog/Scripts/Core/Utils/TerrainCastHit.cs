@@ -16,7 +16,7 @@ namespace Hedgehog.Core.Utils
         /// <summary>
         /// The side from which the linecast originated.
         /// </summary>
-        public TerrainSide Side;
+        public ControllerSide Side;
 
         /// <summary>
         /// The controller that initiated the cast, if any.
@@ -33,7 +33,7 @@ namespace Hedgehog.Core.Utils
         /// </summary>
         public float NormalAngle;
 
-        public TerrainCastHit(RaycastHit2D hit, TerrainSide fromSide = TerrainSide.All,
+        public TerrainCastHit(RaycastHit2D hit, ControllerSide fromSide = ControllerSide.All,
             HedgehogController source = null)
         {
             Hit = hit;

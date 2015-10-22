@@ -3,11 +3,11 @@
 namespace Hedgehog.Core.Actors
 {
     /// <summary>
-    /// Represents the four sides of terrain. Each value is a flag, similar to
+    /// Represents the four sides of a controller. Each value is a flag, similar to
     /// Unity's layer masks, so you MUST check for equality with bitwise AND.
     /// </summary>
     [Flags]
-    public enum TerrainSide
+    public enum ControllerSide
     {
         None    = 0,
 
@@ -16,6 +16,6 @@ namespace Hedgehog.Core.Actors
         Left    = 1 << 2,
         Bottom  = 1 << 3,
 
-        All     = int.MaxValue
+        All     = Right | Top | Left | Bottom,
     }
 }

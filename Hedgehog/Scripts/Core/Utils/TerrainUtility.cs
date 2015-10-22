@@ -53,7 +53,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="fromSide">The side from which the linecast originated, if any.</param>
         /// <returns></returns>
         public static TerrainCastHit TerrainCast(this HedgehogController source, Vector2 start,
-            Vector2 end, TerrainSide fromSide = TerrainSide.All)
+            Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
             var hit = BestRaycast(source, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
             return new TerrainCastHit(hit, fromSide, source);
@@ -66,7 +66,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="end">The end of the linecast.</param>
         /// <param name="fromSide">The side from which the linecast originated, if any.</param>
         /// <returns></returns>
-        public static TerrainCastHit TerrainCast(Vector2 start, Vector2 end, TerrainSide fromSide = TerrainSide.All)
+        public static TerrainCastHit TerrainCast(Vector2 start, Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
             var hit = BestRaycast(null, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
             return new TerrainCastHit(hit, fromSide);
@@ -81,7 +81,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
         public static RaycastHit2D BestRaycast(HedgehogController source, RaycastHit2D[] raycasts,
-            TerrainSide raycastSide = TerrainSide.All)
+            ControllerSide raycastSide = ControllerSide.All)
         {
             return raycasts.Where(raycastHit2D => raycastHit2D &&
                 TransformSelector(raycastHit2D, source, raycastSide)).FirstOrDefault();
@@ -97,9 +97,10 @@ namespace Hedgehog.Core.Utils
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
-            TerrainSide raycastSide = TerrainSide.All)
+            ControllerSide raycastSide = ControllerSide.All)
         {
-            return CollisionModeSelector(hit.transform, source) && TriggerSelector(hit, source, raycastSide);
+            return !hit.collider.isTrigger &&
+                   (TriggerSelector(hit, source, raycastSide) || CollisionModeSelector(hit.transform, source));
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
         public static bool TriggerSelector(RaycastHit2D hit, HedgehogController source = null,
-            TerrainSide raycastSide = TerrainSide.All)
+            ControllerSide raycastSide = ControllerSide.All)
         {
             if (hit.collider.isTrigger) return false;
 
@@ -148,10 +149,46 @@ namespace Hedgehog.Core.Utils
                            trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
             }
 
-            var areaEnumerable = FindAll<AreaTrigger>(hit.transform, BaseTrigger.Selector);
-            var areaTriggers = areaEnumerable as AreaTrigger[] ?? areaEnumerable.ToArray();
+            return false;
+        }
+        #endregion
+        #region ControllerSide Utilities
+        public static float ControllerSideToNormal(ControllerSide side)
+        {
+            switch (side)
+            {
+                case ControllerSide.Right:
+                default:
+                    return 0.0f;
 
-            return !areaTriggers.Any();
+                case ControllerSide.Top:
+                    return 90.0f;
+
+                case ControllerSide.Left:
+                    return 180.0f;
+
+                case ControllerSide.Bottom:
+                    return 270.0f;
+            }
+        }
+
+        public static ControllerSide NormalToControllerSide(float normal)
+        {
+            normal = DMath.PositiveAngle_d(normal);
+            if (normal >= 315.0f || normal < 45.0f)
+            {
+                return ControllerSide.Right;
+            }
+            else if (normal < 135.0f)
+            {
+                return ControllerSide.Top;
+            }
+            else if (normal < 225.0f)
+            {
+                return ControllerSide.Left;
+            }
+
+            return ControllerSide.Bottom;
         }
         #endregion
         #region Finders

@@ -728,9 +728,9 @@ namespace Hedgehog.Core.Actors
         private bool AirSideCheck()
         {
             var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
-                TerrainSide.Left);
+                ControllerSide.Left);
             var sideRightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
-                TerrainSide.Right);
+                ControllerSide.Right);
 
             if (sideLeftCheck)
             {
@@ -772,7 +772,7 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirCeilingCheck()
         {
-            var leftCheck = this.TerrainCast(Sensors.CenterLeft.position, Sensors.TopLeft.position, TerrainSide.Top);
+            var leftCheck = this.TerrainCast(Sensors.CenterLeft.position, Sensors.TopLeft.position, ControllerSide.Top);
 
             if (leftCheck)
             {
@@ -784,7 +784,7 @@ namespace Hedgehog.Core.Actors
                 return true;
             }
 
-            var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position, TerrainSide.Top);
+            var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position, ControllerSide.Top);
 
             if (rightCheck)
             {
@@ -863,9 +863,9 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSideCheck()
         {
-            var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position, TerrainSide.Left);
+            var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position, ControllerSide.Left);
             var sideRightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
-                TerrainSide.Right);
+                ControllerSide.Right);
 
             if (sideLeftCheck)
             {
@@ -917,9 +917,9 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundCeilingCheck()
         {
-            var ceilLeftCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopLeft.position, TerrainSide.Left);
+            var ceilLeftCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopLeft.position, ControllerSide.Left);
             var ceilRightCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopRight.position,
-                TerrainSide.Right);
+                ControllerSide.Right);
 
             if (ceilLeftCheck)
             {
@@ -1060,9 +1060,9 @@ namespace Hedgehog.Core.Actors
             finish:
             recheck = Footing == Footing.Left
                 ? this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
-                    TerrainSide.Bottom)
+                    ControllerSide.Bottom)
                 : this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
-                    TerrainSide.Bottom);
+                    ControllerSide.Bottom);
 
             if (recheck && Vector2.Distance(recheck.Hit.point, Footing == Footing.Left
                 ? Sensors.BottomRight.position
@@ -1105,14 +1105,14 @@ namespace Hedgehog.Core.Actors
         private bool CrushCheck()
         {
             return (this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
-                        TerrainSide.Left) &&
+                        ControllerSide.Left) &&
                     this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
-                        TerrainSide.Right)) ||
+                        ControllerSide.Right)) ||
 
                    (this.TerrainCast(Sensors.Center.position, Sensors.TopCenter.position,
-                       TerrainSide.Top) &&
+                       ControllerSide.Top) &&
                     this.TerrainCast(Sensors.Center.position, Sensors.BottomCenter.position,
-                        TerrainSide.Bottom));
+                        ControllerSide.Bottom));
         }
         #endregion
 
@@ -1120,7 +1120,16 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Locks the player's horizontal control on the ground for the time specified by HorizontalLockTime.
         /// </summary>
-        private void LockHorizontal()
+        public void LockHorizontal()
+        {
+            LockHorizontal(HorizontalLockTime);
+        }
+
+        /// <summary>
+        /// Locks the player's horizontal control on the ground for the specified time.
+        /// </summary>
+        /// <param name="time">The specified time, in seconds</param>
+        public void LockHorizontal(float time)
         {
             HorizontalLock = true;
             HorizontalLockTimer = HorizontalLockTime;
@@ -1389,12 +1398,12 @@ namespace Hedgehog.Core.Actors
             if (side == Footing.Left)
             {
                 cast = this.TerrainCast(
-                    Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position, TerrainSide.Bottom);
+                    Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position, ControllerSide.Bottom);
             }
             else
             {
                 cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
-                    TerrainSide.Bottom);
+                    ControllerSide.Bottom);
             }
             
             return cast;
@@ -1412,7 +1421,7 @@ namespace Hedgehog.Core.Actors
             {
                 // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
                 cast = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
-                    TerrainSide.Bottom);
+                    ControllerSide.Bottom);
 
                 if (!cast)
                 {
@@ -1421,7 +1430,7 @@ namespace Hedgehog.Core.Actors
                 return DMath.Equalsf(cast.Hit.fraction, 0.0f) ? default(TerrainCastHit) : cast;
             }
             cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
-                TerrainSide.Bottom);
+                ControllerSide.Bottom);
 
             if (!cast)
             {

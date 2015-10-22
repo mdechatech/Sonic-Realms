@@ -57,7 +57,7 @@ namespace Hedgehog.Level.Areas
         {
             if (hit.Source == null || MinFloatSpeed <= 0.0f) return false;
             return base.CollidesWith(hit) &&
-                   (hit.Side & TerrainSide.Bottom) > 0 &&
+                   (hit.Side & ControllerSide.Bottom) > 0 &&
                    hit.Hit.fraction > 0.0f &&
                    hit.Source.Grounded &&
                    Mathf.Abs(hit.Source.GroundVelocity) >= MinFloatSpeed &&
