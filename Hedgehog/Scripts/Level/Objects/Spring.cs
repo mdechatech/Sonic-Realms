@@ -39,8 +39,6 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether to lock the controller's horizontal control after being hit.")]
         public bool LockControl;
 
-        private BoxCollider2D _boxCollider2D;
-
         public void Reset()
         {
             Power = 10.0f;
@@ -52,7 +50,7 @@ namespace Hedgehog.Level.Objects
         public override void Start()
         {
             base.Start();
-            _boxCollider2D = GetComponent<BoxCollider2D>();
+            AutoActivate = false;
         }
 
         public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
@@ -74,7 +72,7 @@ namespace Hedgehog.Level.Objects
                 controller.Velocity += DMath.AngleToVector(hit.NormalAngle) * Power;
             }
 
-            TriggerObject();
+            TriggerObject(controller);
         }
     }
 }

@@ -12,8 +12,9 @@ namespace Hedgehog.Core.Triggers
         protected AreaTrigger AreaTrigger;
         protected bool RegisteredEvents;
 
-        public virtual void Awake()
+        public override void Awake()
         {
+            base.Awake();
             AreaTrigger = GetComponent<AreaTrigger>();
         }
 

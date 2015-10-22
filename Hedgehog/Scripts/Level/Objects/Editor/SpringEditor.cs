@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
 using Hedgehog.Core.Utils.Editor;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Hedgehog.Level.Objects.Editor
 {

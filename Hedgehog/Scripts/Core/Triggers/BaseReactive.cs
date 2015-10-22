@@ -10,6 +10,17 @@ namespace Hedgehog.Core.Triggers
     {
         private ObjectTrigger _objectTrigger;
 
+        protected bool AutoActivate
+        {
+            get { return _objectTrigger == null ? false : _objectTrigger.AutoActivate; }
+            set { if (_objectTrigger != null) _objectTrigger.AutoActivate = value; }
+        }
+
+        public virtual void Awake()
+        {
+            
+        }
+
         public virtual void Start()
         {
             _objectTrigger = GetComponent<ObjectTrigger>();

@@ -26,6 +26,8 @@ namespace Hedgehog.Core.Triggers
 
         public override void Start()
         {
+            base.Start();
+
             if (RegisteredEvents) return;
 
             if (!AreaTrigger.InsideRules.Contains(IsInsideArea))

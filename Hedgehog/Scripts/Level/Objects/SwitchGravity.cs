@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using Hedgehog.Core.Actors;
 using Hedgehog.Core.Triggers;
+using Hedgehog.Level.Areas;
 using UnityEngine;
 
-namespace Hedgehog.Level.Areas
+namespace Hedgehog.Level.Objects
 {
     /// <summary>
-    /// Changes the direction and magnitude of a controller's gravity when entered.
+    /// Changes the direction and magnitude of a controller's gravity when activated.
     /// </summary>
-    public class GravityArea : ReactiveArea
+    public class SwitchGravity : ReactiveObject
     {
         /// <summary>
         /// Whether to restore the controller's old gravity after leaving.
@@ -54,9 +55,9 @@ namespace Hedgehog.Level.Areas
 
         private class GravityData
         {
-            public float Direction;
-            public float AirStrength;
-            public float GroundStrength;
+            public readonly float Direction;
+            public readonly float AirStrength;
+            public readonly float GroundStrength;
 
             public GravityData(float direction, float airStrength, float groundStrength)
             {
@@ -83,26 +84,30 @@ namespace Hedgehog.Level.Areas
             _oldGravities = new Dictionary<int, GravityData>();
         }
 
-        public override void OnAreaEnter(HedgehogController controller)
+        public override void OnActivateEnter(HedgehogController controller)
         {
+            if (controller == null) return;
+
             _oldGravities[controller.GetInstanceID()] = new GravityData(controller.GravityDirection,
                 controller.AirGravity, controller.SlopeGravity);
 
-            if(ModifyDirection) controller.GravityDirection = Direction;
+            if (ModifyDirection) controller.GravityDirection = Direction;
             if (!ModifyStrength) return;
             controller.AirGravity = AirStrength;
             controller.SlopeGravity = GroundStrength;
         }
 
-        public override void OnAreaExit(HedgehogController controller)
+        public override void OnActivateExit(HedgehogController controller)
         {
+            if (controller == null) return;
+
             var instanceID = controller.GetInstanceID();
             if (!RestoreOnExit || !_oldGravities.ContainsKey(instanceID)) return;
 
             var old = _oldGravities[instanceID];
             _oldGravities.Remove(instanceID);
 
-            if(ModifyDirection) controller.GravityDirection = old.Direction;
+            if (ModifyDirection) controller.GravityDirection = old.Direction;
             if (!ModifyStrength) return;
             controller.AirGravity = old.AirStrength;
             controller.SlopeGravity = old.GroundStrength;

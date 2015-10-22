@@ -14,8 +14,10 @@ namespace Hedgehog.Core.Triggers
         protected PlatformTrigger PlatformTrigger;
         protected bool RegisteredEvents;
 
-        public virtual void Awake()
+        public override void Awake()
         {
+            base.Awake();
+
             PlatformTrigger = GetComponent<PlatformTrigger>();
             RegisteredEvents = false;
         }

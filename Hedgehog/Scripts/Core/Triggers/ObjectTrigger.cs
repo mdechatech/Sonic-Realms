@@ -74,7 +74,7 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            AutoActivate = true;
+            AutoActivate = false;
             AllowReactivation = true;
             OnActivateEnter = new ObjectEvent();
             OnActivateStay = new ObjectEvent();
@@ -95,7 +95,6 @@ namespace Hedgehog.Core.Triggers
         public void Start()
         {
             if (!AutoActivate) return;
-
             if ((_platformTrigger = GetComponent<PlatformTrigger>()) != null)
             {
                 _platformTrigger.OnSurfaceEnter.AddListener((controller, hit) => Activate(controller));

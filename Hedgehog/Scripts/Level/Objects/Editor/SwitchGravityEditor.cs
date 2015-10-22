@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace Hedgehog.Level.Objects.Editor
 {
-    [CustomEditor(typeof(GravityChanger))]
+    [CustomEditor(typeof(SwitchGravity))]
     [CanEditMultipleObjects]
     public class GravityChangerEditor : UnityEditor.Editor
     {

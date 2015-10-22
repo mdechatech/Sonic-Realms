@@ -13,8 +13,9 @@ namespace Hedgehog.Core.Triggers
         protected ObjectTrigger ObjectTrigger;
         protected bool RegisteredEvents;
 
-        public virtual void Awake()
+        public override void Awake()
         {
+            base.Awake();
             ObjectTrigger = GetComponent<ObjectTrigger>();
         }
 

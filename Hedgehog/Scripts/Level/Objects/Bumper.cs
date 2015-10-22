@@ -47,6 +47,7 @@ namespace Hedgehog.Level.Objects
         {
             base.Start();
             _circleCollider2D = GetComponent<CircleCollider2D>();
+            AutoActivate = false;
         }
 
         public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
