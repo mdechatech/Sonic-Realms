@@ -2,7 +2,7 @@
 using Hedgehog.Core.Triggers;
 using UnityEngine;
 
-namespace Hedgehog.Level.Areas
+namespace Hedgehog.Level.Objects
 {
     /// <summary>
     /// Adds to a controller's velocity when it enters the area.
@@ -26,17 +26,19 @@ namespace Hedgehog.Level.Areas
             Velocity = 10.0f;
             BoostBothWays = false;
         }
-        
+
         public override bool IsInsideArea(HedgehogController controller)
         {
             return base.IsInsideArea(controller) && controller.Grounded;
         }
-        
+
         public override void OnAreaEnter(HedgehogController controller)
         {
-            controller.GroundVelocity = Velocity*(BoostBothWays
+            controller.GroundVelocity = Velocity * (BoostBothWays
                 ? Mathf.Sign(controller.GroundVelocity)
                 : 1.0f);
+
+            TriggerObject();
         }
     }
 }

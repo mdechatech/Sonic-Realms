@@ -8,7 +8,6 @@ namespace Hedgehog.Level.Objects
     /// <summary>
     /// Bumpers like the ones in Spring Yard and Carnival Night.
     /// </summary>
-    [RequireComponent(typeof(Collider2D))]
     public class Bumper : ReactivePlatform
     {
         /// <summary>
@@ -38,7 +37,7 @@ namespace Hedgehog.Level.Objects
         {
             Velocity = 10.0f;
             AccurateBounce = false;
-            LockControl = true;
+            LockControl = false;
         }
 
         public override void Start()

@@ -315,7 +315,8 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultSurfaceRule(HedgehogController controller, TerrainCastHit hit)
         {
-            return controller.Grounded && (controller.PrimarySurface == hit.Hit.transform ||
+            return (IgnoreLayers || TerrainUtility.CollisionModeSelector(hit.Hit.transform, controller)) && 
+                controller.Grounded && (controller.PrimarySurface == hit.Hit.transform ||
                                            controller.SecondarySurface == hit.Hit.transform);
         }
 

@@ -8,11 +8,10 @@ using UnityEngine;
 namespace Hedgehog.Level.Platforms
 {
     /// <summary>
-    /// Functions the same as the trippy gravity surfaces in Death Egg mk ii.
-    /// Automatically sets a controller's direction of gravity opposite to the surface's normal.
-    /// The surface basically becomes "flat" (no gravity applied) no matter how steep it is.
+    /// Functions the same as the trippy gravity surfaces in Death Egg mk ii. Sticks the controller
+    /// onto the platform using gravity.
     /// </summary>
-    public class AutoGravitySurface : ReactivePlatform
+    public class GravityMagnet : ReactivePlatform
     {
         /// <summary>
         /// Whether to restore the controller's old gravity direction when it leaves the platform.

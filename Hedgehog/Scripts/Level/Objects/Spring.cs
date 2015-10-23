@@ -44,7 +44,7 @@ namespace Hedgehog.Level.Objects
             Power = 10.0f;
             BouncySides = ControllerSide.Right;
             AccurateBounce = false;
-            LockControl = true;
+            LockControl = false;
         }
 
         public override void Start()
@@ -61,7 +61,7 @@ namespace Hedgehog.Level.Objects
             controller.Detach();
             if (LockControl) controller.LockHorizontal();
 
-            if (AccurateBounce)
+            if (!AccurateBounce)
             {
                 controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
             }

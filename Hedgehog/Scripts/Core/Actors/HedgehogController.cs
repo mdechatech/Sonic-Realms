@@ -360,13 +360,6 @@ namespace Hedgehog.Core.Actors
         public bool Grounded;
 
         /// <summary>
-        /// Whether the player has just landed on the ground. Is used to ignore surface angle
-        /// once right after.
-        /// </summary>
-        [HideInInspector]
-        private bool _justLanded;
-
-        /// <summary>
         /// If grounded, the angle of incline the controller is walking on in degrees. Goes hand-in-hand
         /// with rotation.
         /// </summary>
@@ -461,7 +454,7 @@ namespace Hedgehog.Core.Actors
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
-            JustJumped = _justLanded = JustDetached = false;
+            JustJumped = JustDetached = false;
             QueuedTranslation = default(Vector3);
         }
 
@@ -1116,9 +1109,6 @@ namespace Hedgehog.Core.Actors
             {
                 Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
                 Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
-
-                _justLanded = false;
-                
                 return true;
             }
 
@@ -1276,7 +1266,7 @@ namespace Hedgehog.Core.Actors
             Vg = groundSpeed;
             SurfaceAngle = angleDegrees;
             SensorsRotation = SurfaceAngle;
-            Grounded = _justLanded = true;
+            Grounded = true;
 
             if (LockUponLanding)
             {

@@ -1,15 +1,60 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &103350
+--- !u!1 &105066
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 425822}
+  - 4: {fileID: 439850}
   m_Layer: 0
-  m_Name: Mid Left
+  m_Name: Ledge Climb Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &112942
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 457040}
+  m_Layer: 0
+  m_Name: Center Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &118686
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 404022}
+  m_Layer: 0
+  m_Name: Bottom Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &122786
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 472614}
+  m_Layer: 0
+  m_Name: Bottom Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,6 +68,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 422810}
+  - 114: {fileID: 11488018}
   m_Layer: 0
   m_Name: __Generated Sensors__
   m_TagString: Untagged
@@ -30,16 +76,31 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &139096
+--- !u!1 &134560
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 483940}
+  - 4: {fileID: 410730}
   m_Layer: 0
-  m_Name: Mid Right
+  m_Name: Center Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &140386
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 477648}
+  m_Layer: 0
+  m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,16 +121,46 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &143926
+--- !u!1 &143750
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 467340}
+  - 4: {fileID: 435126}
   m_Layer: 0
-  m_Name: Bot Right
+  m_Name: Ledge Climb Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &147758
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 463168}
+  m_Layer: 0
+  m_Name: Ledge Drop Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &156702
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 486648}
+  m_Layer: 0
+  m_Name: Bottom Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,21 +180,6 @@ GameObject:
   - 50: {fileID: 5096726}
   m_Layer: 0
   m_Name: Default
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &161470
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 486886}
-  m_Layer: 0
-  m_Name: Bot Mid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,48 +215,45 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &182430
+--- !u!1 &195248
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 443120}
+  - 4: {fileID: 418538}
   m_Layer: 0
-  m_Name: Mid Mid
+  m_Name: Ledge Drop Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &199280
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 411022}
-  m_Layer: 0
-  m_Name: Bot Left
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &411022
+--- !u!4 &404022
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 199280}
+  m_GameObject: {fileID: 118686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -.150000006, y: -.1875, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 422810}
   m_RootOrder: 6
+--- !u!4 &410730
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134560}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .160000011, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 422810}
+  m_RootOrder: 5
 --- !u!4 &412840
 Transform:
   m_ObjectHideFlags: 1
@@ -194,6 +267,18 @@ Transform:
   - {fileID: 422810}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &418538
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 195248}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -.150000006, y: -.4375, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 422810}
+  m_RootOrder: 9
 --- !u!4 &422810
 Transform:
   m_ObjectHideFlags: 1
@@ -207,26 +292,30 @@ Transform:
   - {fileID: 440076}
   - {fileID: 436524}
   - {fileID: 464918}
-  - {fileID: 425822}
-  - {fileID: 443120}
-  - {fileID: 483940}
-  - {fileID: 411022}
-  - {fileID: 486886}
-  - {fileID: 467340}
+  - {fileID: 457040}
+  - {fileID: 477648}
+  - {fileID: 410730}
+  - {fileID: 404022}
+  - {fileID: 486648}
+  - {fileID: 472614}
+  - {fileID: 418538}
+  - {fileID: 463168}
+  - {fileID: 435126}
+  - {fileID: 439850}
   m_Father: {fileID: 412840}
   m_RootOrder: 0
---- !u!4 &425822
+--- !u!4 &435126
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 103350}
+  m_GameObject: {fileID: 143750}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.160000011, y: 0, z: 0}
+  m_LocalPosition: {x: -.150000006, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 422810}
-  m_RootOrder: 3
+  m_RootOrder: 11
 --- !u!4 &436524
 Transform:
   m_ObjectHideFlags: 1
@@ -239,6 +328,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 422810}
   m_RootOrder: 1
+--- !u!4 &439850
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .150000006, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 422810}
+  m_RootOrder: 12
 --- !u!4 &440076
 Transform:
   m_ObjectHideFlags: 1
@@ -251,18 +352,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 422810}
   m_RootOrder: 0
---- !u!4 &443120
+--- !u!4 &457040
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182430}
+  m_GameObject: {fileID: 112942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -.160000011, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 422810}
-  m_RootOrder: 4
+  m_RootOrder: 3
+--- !u!4 &463168
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147758}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .150000006, y: -.4375, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 422810}
+  m_RootOrder: 10
 --- !u!4 &464918
 Transform:
   m_ObjectHideFlags: 1
@@ -275,36 +388,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 422810}
   m_RootOrder: 2
---- !u!4 &467340
+--- !u!4 &472614
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 143926}
+  m_GameObject: {fileID: 122786}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: .150000006, y: -.1875, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 422810}
   m_RootOrder: 8
---- !u!4 &483940
+--- !u!4 &477648
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 139096}
+  m_GameObject: {fileID: 140386}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .160000011, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 422810}
-  m_RootOrder: 5
---- !u!4 &486886
+  m_RootOrder: 4
+--- !u!4 &486648
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 161470}
+  m_GameObject: {fileID: 156702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -.1875, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -351,47 +464,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d5567b7e8f0f4892de869d9b03b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionMode: 1
-  InitialTerrainMask:
+  CollisionMode: 2
+  TerrainMask:
     serializedVersion: 2
     m_Bits: 0
   TerrainTags: []
-  TerrainNames: []
+  TerrainNames:
+  - Always Collide
   JumpKey: 119
   LeftKey: 97
   RightKey: 100
   DebugSpindashKey: 32
-  SensorBottomLeft: {fileID: 411022}
-  SensorBottomMiddle: {fileID: 486886}
-  SensorBottomRight: {fileID: 467340}
-  SensorMiddleLeft: {fileID: 425822}
-  SensorMiddleMiddle: {fileID: 443120}
-  SensorMiddleRight: {fileID: 483940}
-  SensorTopLeft: {fileID: 440076}
-  SensorTopMiddle: {fileID: 436524}
-  SensorTopRight: {fileID: 464918}
-  GroundAcceleration: .0799999982
-  GroundDeceleration: .119999997
-  AirAcceleration: .159999996
-  JumpSpeed: 6.5
-  ReleaseJumpSpeed: 4
-  AirGravity: .300000012
-  SlopeGravity: .200000003
-  MaxSpeed: 20
+  Sensors: {fileID: 11488018}
+  GroundAcceleration: 3.15000033
+  GroundDeceleration: 3.15000033
+  GroundBrake: 33.6000061
+  AirAcceleration: 14.7000017
+  AirDragHorizontalSpeed: .14000003
+  AirDragVerticalSpeed: 4.48000097
+  AirDragCoefficient: .148834303
+  JumpSpeed: 7.28000116
+  ReleaseJumpSpeed: 4.48000097
+  AirGravity: 14.7000017
+  SlopeGravity: 8.40000153
+  GravityDirection: 270
+  TopSpeed: 6.72000074
+  MaxSpeed: 22.4000034
   LedgeClimbHeight: .25
   LedgeDropHeight: .25
   AntiTunnelingSpeed: 5
   SlopeGravityBeginAngle: 10
-  DetachSpeed: 3.5
-  HorizontalLockTime: .25
+  DetachSpeed: 2.80000043
+  HorizontalLockTime: .5
   ForceJumpAngleDifference: 30
   MaxSurfaceAngleDifference: 70
-  HorizontalWallmodeAngleWeight: 0
-  MinWallmodeSwitchSpeed: .5
-  MinOverlapAngle: -40
-  MinFlatOverlapRange: 7.5
-  MinFlatAttachAngle: 5
-  MaxVerticalDetachAngle: 5
+  MaxVerticalDetachAngle: 2.5
+  OnCrush:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   LeftKeyDown: 0
   RightKeyDown: 0
   JumpKeyPressed: 0
@@ -402,21 +514,41 @@ MonoBehaviour:
   Vy: 0
   Vg: 0
   Grounded: 0
-  TerrainMask:
-    serializedVersion: 2
-    m_Bits: 0
-  LastSurfaceAngle: 0
   SurfaceAngle: 0
   Footing: 0
-  TerrainProperties: {fileID: 0}
   HorizontalLock: 0
   HorizontalLockTimer: 0
   LockUponLanding: 0
   JustJumped: 0
   CanReleaseJump: 0
   JustDetached: 0
-  Wallmode: 0
-  MovingPlatformAnchor: {fileID: 0}
+  PrimarySurface: {fileID: 0}
+  SecondarySurface: {fileID: 0}
+  QueuedTranslation: {x: 0, y: 0, z: 0}
+--- !u!114 &11488018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7406431d84d33e44b62e26a55c3d66c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopLeft: {fileID: 440076}
+  TopCenter: {fileID: 436524}
+  TopRight: {fileID: 464918}
+  CenterLeft: {fileID: 457040}
+  Center: {fileID: 477648}
+  CenterRight: {fileID: 410730}
+  BottomLeft: {fileID: 404022}
+  BottomCenter: {fileID: 486648}
+  BottomRight: {fileID: 472614}
+  LedgeClimbLeft: {fileID: 435126}
+  LedgeClimbRight: {fileID: 439850}
+  LedgeDropLeft: {fileID: 418538}
+  LedgeDropRight: {fileID: 463168}
 --- !u!212 &21274774
 SpriteRenderer:
   m_ObjectHideFlags: 1
