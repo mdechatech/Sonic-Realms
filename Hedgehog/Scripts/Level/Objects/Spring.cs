@@ -24,13 +24,13 @@ namespace Hedgehog.Level.Objects
         public float Power;
 
         /// <summary>
-        /// Whether to make the controller launch straight in the direction of the spring. For example, a spring
-        /// facing up with this set to true will launch you straight up, no horizontal movement.
+        /// Whether to make the controller bounce accurately (like a ball off a surface) or have its speed set
+        /// directly.
         /// </summary>
         [SerializeField]
-        [Tooltip("Whether to make the controller launch straight in the direction of the spring. For example, " +
-                 "a spring facing up with this checked will launch you straight up, no horizontal movement.")]
-        public bool ForceDirection;
+        [Tooltip("Whether to make the controller bounce accurately (like a ball off a surface) or have its speed set " +
+                 "directly.")]
+        public bool AccurateBounce;
 
         /// <summary>
         /// Whether to lock the controller's horizontal controller after being hit.
@@ -43,7 +43,7 @@ namespace Hedgehog.Level.Objects
         {
             Power = 10.0f;
             BouncySides = ControllerSide.Right;
-            ForceDirection = false;
+            AccurateBounce = false;
             LockControl = true;
         }
 
@@ -55,13 +55,13 @@ namespace Hedgehog.Level.Objects
 
         public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
         {
-            var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.localEulerAngles.z);
+            var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);
             if ((BouncySides & hitSide) == 0) return;
 
             controller.Detach();
             if (LockControl) controller.LockHorizontal();
 
-            if (ForceDirection)
+            if (AccurateBounce)
             {
                 controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
             }

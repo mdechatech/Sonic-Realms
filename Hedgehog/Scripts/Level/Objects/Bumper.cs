@@ -8,7 +8,7 @@ namespace Hedgehog.Level.Objects
     /// <summary>
     /// Bumpers like the ones in Spring Yard and Carnival Night.
     /// </summary>
-    [RequireComponent(typeof(CircleCollider2D))]
+    [RequireComponent(typeof(Collider2D))]
     public class Bumper : ReactivePlatform
     {
         /// <summary>
@@ -19,13 +19,13 @@ namespace Hedgehog.Level.Objects
         public float Velocity;
 
         /// <summary>
-        /// Whether to make the controller launch straight in the direction of the spring. For example, a spring
-        /// facing up with this set to true will launch you straight up, no horizontal movement.
+        /// Whether to make the controller bounce accurately (like a ball off a surface) or have its speed set
+        /// directly.
         /// </summary>
         [SerializeField]
-        [Tooltip("Whether to make the controller launch straight in the direction of the spring. For example, " +
-                 "a spring facing up with this checked will launch you straight up, no horizontal movement.")]
-        public bool ForceDirection;
+        [Tooltip("Whether to make the controller bounce accurately (like a ball off a surface) or have its speed set " +
+                 "directly.")]
+        public bool AccurateBounce;
 
         /// <summary>
         /// Whether to lock the controller's horizontal controller after being hit.
@@ -39,7 +39,7 @@ namespace Hedgehog.Level.Objects
         public void Reset()
         {
             Velocity = 10.0f;
-            ForceDirection = false;
+            AccurateBounce = false;
             LockControl = true;
         }
 
@@ -55,17 +55,17 @@ namespace Hedgehog.Level.Objects
             controller.Detach();
             if(LockControl) controller.LockHorizontal();
            
-            var normal = DMath.Angle(hit.Hit.point - (Vector2)_circleCollider2D.bounds.center);
+            var normal = hit.NormalAngle;
 
-            if (ForceDirection)
+            if (AccurateBounce)
             {
-                controller.Velocity = DMath.AngleToVector(normal) * Velocity;
+                controller.Velocity = new Vector2(controller.Velocity.x * Mathf.Abs(Mathf.Sin(normal)),
+                    controller.Velocity.y * Mathf.Abs(Mathf.Cos(normal)));
+                controller.Velocity += DMath.AngleToVector(normal) * Velocity;
             }
             else
             {
-                controller.Velocity = new Vector2(controller.Velocity.x*Mathf.Abs(Mathf.Sin(normal)), 
-                    controller.Velocity.y*Mathf.Abs(Mathf.Cos(normal)));
-                controller.Velocity += DMath.AngleToVector(normal)*Velocity;
+                controller.Velocity = DMath.AngleToVector(normal) * Velocity;
             }
 
             TriggerObject();

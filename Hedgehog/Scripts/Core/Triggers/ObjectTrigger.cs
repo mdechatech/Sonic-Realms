@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Core.Actors;
-using Hedgehog.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -106,7 +105,7 @@ namespace Hedgehog.Core.Triggers
                 _areaTrigger = GetComponent<AreaTrigger>() ?? gameObject.AddComponent<AreaTrigger>();
                 _areaTrigger.OnAreaEnter.AddListener(Activate);
                 _areaTrigger.OnAreaExit.AddListener(Deactivate);
-                _areaTrigger.IgnoreLayers = true;
+                _areaTrigger.AlwaysCollide = true;
                 _areaTrigger.TriggerFromChildren = TriggerFromChildren;
             }
         }

@@ -1092,9 +1092,11 @@ namespace Hedgehog.Core.Actors
                 Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
 
                 _justLanded = false;
+                
                 return true;
             }
 
+            Detach();
             return false;
         }
 

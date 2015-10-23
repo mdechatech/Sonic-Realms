@@ -23,7 +23,7 @@ namespace Hedgehog.Core.Triggers
         /// Whether to ignore the controller's collision mask/tags/names and always
         /// collide with the controller.
         /// </summary>
-        [SerializeField] public bool IgnoreLayers;
+        [SerializeField] public bool AlwaysCollide;
 
         /// <summary>
         /// Invoked when a controller enters the area.
@@ -63,7 +63,7 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            IgnoreLayers = true;
+            AlwaysCollide = true;
             OnAreaEnter = new AreaEvent();
             OnAreaStay = new AreaEvent();
             OnAreaExit = new AreaEvent();
@@ -108,7 +108,7 @@ namespace Hedgehog.Core.Triggers
 
                 var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
                                    childCollider.gameObject.AddComponent<AreaTrigger>();
-                childTrigger.IgnoreLayers |= IgnoreLayers;
+                childTrigger.AlwaysCollide |= AlwaysCollide;
             }
         }
 
@@ -131,7 +131,7 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultCollisionRule(HedgehogController controller)
         {
-            return controller != null && (IgnoreLayers || TerrainUtility.CollisionModeSelector(transform, controller));
+            return controller != null && (AlwaysCollide || TerrainUtility.CollisionModeSelector(transform, controller));
         }
 
         private void CheckCollision(HedgehogController controller, Transform hit, bool isExit = false)

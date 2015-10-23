@@ -21,13 +21,13 @@ namespace Hedgehog.Core.Triggers
 
         public override void OnEnable()
         {
+            base.OnEnable();
+
             if (AreaTrigger.InsideRules != null) Start();
         }
 
         public override void Start()
         {
-            base.Start();
-
             if (RegisteredEvents) return;
 
             if (!AreaTrigger.InsideRules.Contains(IsInsideArea))

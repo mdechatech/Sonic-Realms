@@ -99,8 +99,18 @@ namespace Hedgehog.Core.Utils
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
             ControllerSide raycastSide = ControllerSide.All)
         {
-            return !hit.collider.isTrigger &&
-                   (TriggerSelector(hit, source, raycastSide) || CollisionModeSelector(hit.transform, source));
+            if (hit.collider.isTrigger) return false;
+
+            var platformEnumerable = GetTriggers<PlatformTrigger>(hit.transform);
+            var platformTriggers = platformEnumerable as PlatformTrigger[] ?? platformEnumerable.ToArray();
+
+            if (platformTriggers.Any())
+                return
+                    platformTriggers.All(trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
+
+            if (GetTriggers<AreaTrigger>(hit.transform).Any()) return false;
+
+            return CollisionModeSelector(hit.transform, source);
         }
 
         /// <summary>
@@ -150,6 +160,13 @@ namespace Hedgehog.Core.Utils
             }
 
             return false;
+        }
+
+        public static IEnumerable<TTrigger> GetTriggers<TTrigger>(Transform transform) where TTrigger : BaseTrigger
+        {
+            return
+                transform.GetComponentsInParent<TTrigger>()
+                    .Where(trigger => trigger.transform == transform || trigger.TriggerFromChildren);
         }
         #endregion
         #region ControllerSide Utilities

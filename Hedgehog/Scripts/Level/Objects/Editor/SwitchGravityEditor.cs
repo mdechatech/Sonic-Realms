@@ -5,7 +5,7 @@ namespace Hedgehog.Level.Objects.Editor
 {
     [CustomEditor(typeof(SwitchGravity))]
     [CanEditMultipleObjects]
-    public class GravityChangerEditor : UnityEditor.Editor
+    public class SwitchGravityEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

@@ -24,7 +24,7 @@ namespace Hedgehog.Level.Objects.Editor
 
             if(targets.Count() <= 1)
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, "BouncySides");
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Power", "ForceDirection", "LockControl");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Power", "AccurateBounce", "LockControl");
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -40,6 +40,7 @@ namespace Hedgehog.Level.Objects.Editor
             var box = spring.GetComponent<BoxCollider2D>();
 
             float originalRotation = box.transform.eulerAngles.z;
+
             box.transform.eulerAngles = new Vector3(
                 box.transform.eulerAngles.x, box.transform.eulerAngles.y, 0.0f);
 
