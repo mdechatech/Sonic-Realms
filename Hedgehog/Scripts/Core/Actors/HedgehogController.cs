@@ -902,7 +902,6 @@ namespace Hedgehog.Core.Actors
                 if (DMath.AngleInRange_d(RelativeSurfaceAngle,
                     180.0f + MaxSurfaceAngleDifference, 360.0f - MaxSurfaceAngleDifference))
                 {
-                    Debug.Log(RelativeSurfaceAngle);
                     SurfaceAngle += 90.0f;
                 }
 

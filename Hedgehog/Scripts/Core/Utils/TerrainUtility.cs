@@ -103,10 +103,11 @@ namespace Hedgehog.Core.Utils
 
             var platformEnumerable = GetTriggers<PlatformTrigger>(hit.transform);
             var platformTriggers = platformEnumerable as PlatformTrigger[] ?? platformEnumerable.ToArray();
+            var terrainCastHit = new TerrainCastHit(hit, raycastSide, source);
 
             if (platformTriggers.Any())
                 return
-                    platformTriggers.All(trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
+                    platformTriggers.All(trigger => trigger.CollidesWith(terrainCastHit));
 
             if (GetTriggers<AreaTrigger>(hit.transform).Any()) return false;
 

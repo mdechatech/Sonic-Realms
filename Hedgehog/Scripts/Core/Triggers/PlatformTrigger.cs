@@ -297,8 +297,9 @@ namespace Hedgehog.Core.Triggers
         #region Collision Rules
         public bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
         {
-            return (!SurfaceRules.Any() && DefaultSurfaceRule(controller, hit))
-                || SurfaceRules.All(predicate => predicate(controller, hit));
+            if (!SurfaceRules.Any()) return DefaultSurfaceRule(controller, hit);
+
+            return SurfaceRules.All(predicate => predicate(controller, hit));
         }
 
         /// <summary>
@@ -309,14 +310,13 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool CollidesWith(TerrainCastHit hit)
         {
-            return (!CollisionRules.Any() && DefaultCollisionRule(hit))
-                || CollisionRules.All(predicate => predicate(hit));
+            if (!CollisionRules.Any()) return DefaultCollisionRule(hit);
+            return CollisionRules.All(predicate => predicate(hit));
         }
 
         public bool DefaultSurfaceRule(HedgehogController controller, TerrainCastHit hit)
         {
-            return (IgnoreLayers || TerrainUtility.CollisionModeSelector(hit.Hit.transform, controller)) && 
-                controller.Grounded && (controller.PrimarySurface == hit.Hit.transform ||
+            return controller.Grounded && (controller.PrimarySurface == hit.Hit.transform ||
                                            controller.SecondarySurface == hit.Hit.transform);
         }
 

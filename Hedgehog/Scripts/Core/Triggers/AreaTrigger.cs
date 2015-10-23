@@ -124,9 +124,8 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool CollidesWith(HedgehogController controller)
         {
-            return !InsideRules.Any()
-                ? DefaultCollisionRule(controller)
-                : InsideRules.All(predicate => predicate(controller));
+            if (!InsideRules.Any()) DefaultCollisionRule(controller);
+            return InsideRules.All(predicate => predicate(controller));
         }
 
         public bool DefaultCollisionRule(HedgehogController controller)
