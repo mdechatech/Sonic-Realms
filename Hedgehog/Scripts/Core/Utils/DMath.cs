@@ -440,7 +440,7 @@ namespace Hedgehog.Core.Utils
 
         /// <summary>
         /// Returns whether the specified angle is inside the arc formed between the angle a
-        /// traveling counter-clockwise (upwards) to b.
+        /// traveling counter-clockwise to the angle b.
         /// </summary>
         /// <param name="angle">The specified angle in radians.</param>
         /// <param name="a"></param>

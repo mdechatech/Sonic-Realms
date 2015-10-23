@@ -275,6 +275,16 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Physics Variables
         /// <summary>
+        /// Used for sanity check during surface rotation.
+        /// </summary>
+        private const float SurfaceReversionThreshold = 0.05f;
+
+        /// <summary>
+        /// The default direction of gravity, in degrees.
+        /// </summary>
+        private const float DefaultGravityDirection = 270.0f;
+
+        /// <summary>
         /// The controller's velocity as a Vector2.
         /// </summary>
         public Vector2 Velocity
@@ -300,8 +310,8 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public Vector2 RelativeVelocity
         {
-            get { return DMath.RotateBy(Velocity, (270.0f - GravityDirection)*Mathf.Deg2Rad); }
-            set { Velocity = DMath.RotateBy(value, (GravityDirection - 270.0f)*Mathf.Deg2Rad); }
+            get { return DMath.RotateBy(Velocity, (DefaultGravityDirection - GravityDirection)*Mathf.Deg2Rad); }
+            set { Velocity = DMath.RotateBy(value, (GravityDirection - DefaultGravityDirection) *Mathf.Deg2Rad); }
         }
 
         /// <summary>
@@ -355,13 +365,6 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [HideInInspector]
         private bool _justLanded;
-
-        /// <summary>
-        /// If grounded and hasn't just landed, the controller of incline in degrees the player walked on
-        /// one FixedUpdate ago.
-        /// </summary>
-        [HideInInspector]
-        public float LastSurfaceAngle;
 
         /// <summary>
         /// If grounded, the angle of incline the controller is walking on in degrees. Goes hand-in-hand
@@ -444,6 +447,10 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public TerrainCastHit SecondarySurfaceHit;
 
+        /// <summary>
+        /// The controller will move this much in its next FixedUpdate. It is set using the Translate function,
+        /// which guarantees that movement from outside sources is applied before collision checks.
+        /// </summary>
         public Vector3 QueuedTranslation;
         #endregion
 
@@ -453,7 +460,6 @@ namespace Hedgehog.Core.Actors
             Footing = Footing.None;
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
-            LastSurfaceAngle = 0.0f;
             LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
             JustJumped = _justLanded = JustDetached = false;
             QueuedTranslation = default(Vector3);
@@ -468,6 +474,12 @@ namespace Hedgehog.Core.Actors
         {
             HandleForces();
             HandleInput();
+
+            if (QueuedTranslation != default(Vector3))
+            {
+                transform.position += QueuedTranslation;
+                QueuedTranslation = default(Vector3);
+            }
             
             // Stagger routine - if the player's gotta go fast, move it in increments of AntiTunnelingSpeed
             // to prevent tunneling.
@@ -964,10 +976,20 @@ namespace Hedgehog.Core.Actors
             var originalSecondary = SecondarySurfaceHit;
             TerrainCastHit recheck;
 
+            var leftAngle = left ? left.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
+            var rightAngle = right ? right.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
+            var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
+
+            var leftDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle));
+            var rightDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle));
+
             // Get easy checks out of the way
-            if (!left && !right)
+
+            // If we've found no surface, or they're all too steep, detach from the ground
+            if ((!left || leftDiff > MaxSurfaceAngleDifference) && (!right || rightDiff > MaxSurfaceAngleDifference))
                 goto detach;
 
+            // If only one sensor found a surface we don't need any further checks
             if (!left && right)
                 goto orientRight;
 
@@ -975,15 +997,8 @@ namespace Hedgehog.Core.Actors
                 goto orientLeft;
 
             // Both feet have surfaces beneath them, things get complicated
-            var leftAngle = left.SurfaceAngle * Mathf.Rad2Deg;
-            var rightAngle = right.SurfaceAngle * Mathf.Rad2Deg;
-            var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
 
-            var leftDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle));
-            var rightDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle));
-            
-            // If a surface is too steep, use only one surface 
-            // (as long as that surface isn't too different from the current)
+            // If a surface is too steep, use only one surface (as long as that surface isn't too different from the current)
             if (diff > MaxSurfaceAngleDifference || diff < -MaxSurfaceAngleDifference)
             {
                 if (leftDiff < rightDiff && leftDiff < MaxSurfaceAngleDifference/4.0f)
@@ -993,8 +1008,10 @@ namespace Hedgehog.Core.Actors
                     goto orientRight;
             }
 
-            // If the proposed angle is between the angles of the two surfaces, we can go ahead and use both sensors
+            // Propose an angle that would rotate the controller between both surfaces
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
+
+            // If the proposed angle is between the angles of the two surfaces, it's works
             if ((diff >= 0.0f && DMath.AngleInRange(overlap, left.SurfaceAngle, right.SurfaceAngle)) || 
                 (diff <  0.0f && DMath.AngleInRange(overlap, right.SurfaceAngle, left.SurfaceAngle)))
             {
@@ -1005,58 +1022,70 @@ namespace Hedgehog.Core.Actors
                 goto orientRightBoth;
             }
 
-            // Otherwise use only one surface, angle closest to the current gets priority
-            if (leftDiff < rightDiff)
-                goto orientLeft;
+            // Otherwise use only one surface, check for steepness again
+            if (leftDiff < MaxSurfaceAngleDifference || rightDiff < MaxSurfaceAngleDifference)
+            {
+                // Angle closest to the current gets priority
+                if (leftDiff < rightDiff)
+                    goto orientLeft;
 
-            goto orientRight;
+                goto orientRight;
+            }
 
-            // gotos don't seem that bad here please don't sue me
+            // Usually shouldn't reach this point, but detaching from the ground is a good catch-all solution
+            goto detach;
+
+            // Goto's actually seem to improve the code's readability here, so please don't sue me
+            #region Orientation Goto's
             orientLeft:
             Footing = Footing.Left;
-            SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
-            SensorsRotation = SurfaceAngle;
+            SensorsRotation = SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
             transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
+
             SetSurface(left);
             NotifyCollision(left);
+
             goto finish;
 
             orientRight:
             Footing = Footing.Right;
-            SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
-            SensorsRotation = SurfaceAngle;
+            SensorsRotation = SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
             transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
+
             SetSurface(right);
             NotifyCollision(right);
+
             goto finish;
 
-            // It's possible to come up short when using both surfaces since the sensors shift
-            // during rotation. If we check after rotation and the sensor can't find the ground
-            // directly beneath it as we expect, we have to undo everything.
             orientLeftBoth:
             Footing = Footing.Left;
-            SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
-            SensorsRotation = SurfaceAngle;
+            SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
             transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
+
             SetSurface(left, right);
             NotifyCollision(left);
             NotifyCollision(right);
+
             goto finish;
 
             orientRightBoth:
             Footing = Footing.Right;
-            SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
-            SensorsRotation = SurfaceAngle;
+            SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
             transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
+
             SetSurface(right, left);
             NotifyCollision(right);
             NotifyCollision(left);
+
             goto finish;
 
             detach:
-            Detach(false);
+            Detach();
             return false;
-
+            #endregion
+            // It's possible to come up short after surface checks because the sensors shift
+            // during rotation. If we check after rotation and the sensor can't find the ground
+            // directly beneath it as we expect, we have to undo everything.
             finish:
             recheck = Footing == Footing.Left
                 ? this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
@@ -1066,7 +1095,7 @@ namespace Hedgehog.Core.Actors
 
             if (recheck && Vector2.Distance(recheck.Hit.point, Footing == Footing.Left
                 ? Sensors.BottomRight.position
-                : Sensors.BottomLeft.position) > 0.05f)
+                : Sensors.BottomLeft.position) > SurfaceReversionThreshold)
             {
                 SetSurface(originalPrimary, originalSecondary);
                 transform.position = originalPosition;
@@ -1082,11 +1111,8 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c> if the angle of incline is tolerable, <c>false</c> otherwise.</returns>
         private bool SurfaceAngleCheck()
         {
-            LastSurfaceAngle = SurfaceAngle;
-
             // Can only stay on the surface if angle difference is low enough
-            if (Grounded && (_justLanded ||
-                             Mathf.Abs(DMath.ShortestArc_d(LastSurfaceAngle, SurfaceAngle)) < MaxSurfaceAngleDifference))
+            if (Grounded)
             {
                 Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
                 Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
@@ -1209,6 +1235,16 @@ namespace Hedgehog.Core.Actors
             if (!Grounded) return 0.0f;
             return Vg += DMath.ScalarProjection(velocity, SurfaceAngle * Mathf.Deg2Rad);
         }
+
+        /// <summary>
+        /// Translates the controller by the specified amount. This function doesn't immediately move the controller
+        /// and instead sets it to move in its next FixedUpdate, right before collision checks.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Translate(Vector3 amount)
+        {
+            QueuedTranslation += amount;
+        }
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
@@ -1219,7 +1255,7 @@ namespace Hedgehog.Core.Actors
         public void Detach(bool lockUponLanding = false)
         {
             Vg = 0.0f;
-            LastSurfaceAngle = SurfaceAngle = RelativeAngle(0.0f);
+            SurfaceAngle = RelativeAngle(0.0f);
             Grounded = false;
             JustDetached = true;
             Footing = Footing.None;
@@ -1238,7 +1274,7 @@ namespace Hedgehog.Core.Actors
         {
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             Vg = groundSpeed;
-            SurfaceAngle = LastSurfaceAngle = angleDegrees;
+            SurfaceAngle = angleDegrees;
             SensorsRotation = SurfaceAngle;
             Grounded = _justLanded = true;
 
@@ -1321,15 +1357,10 @@ namespace Hedgehog.Core.Actors
                 }
             }
 
-            if (result != null)
-            {
-                Attach(result.Value, sAngler);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (result == null) return false;
+
+            Attach(result.Value, sAngler);
+            return true;
         }
 
         /// <summary>
@@ -1349,15 +1380,21 @@ namespace Hedgehog.Core.Actors
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
 
-        private void NotifyCollision(TerrainCastHit collision)
+        /// <summary>
+        /// Lets a platform's trigger know about a collision, if it has one.
+        /// </summary>
+        /// <param name="collision"></param>
+        /// <returns>Whether a platform trigger was notified.</returns>
+        private bool NotifyCollision(TerrainCastHit collision)
         {
-            if (!collision) return;
+            if (!collision) return false;
 
             var trigger = collision.Hit.transform.GetComponent<PlatformTrigger>();
             if (trigger == null)
-                return;
+                return false;
 
             trigger.NotifyCollision(this, collision);
+            return true;
         }
 
         /// <summary>
@@ -1376,14 +1413,16 @@ namespace Hedgehog.Core.Actors
             if (PrimarySurfaceHit)
             {
                 PlatformTrigger primaryTrigger;
-                if (primarySurfaceHit && (primaryTrigger = primarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
+                if (primarySurfaceHit && 
+                    (primaryTrigger = primarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
                     primaryTrigger.NotifySurfaceCollision(this, primarySurfaceHit);
             }
 
             if(SecondarySurfaceHit)
             {
                 PlatformTrigger secondaryTrigger;
-                if (secondarySurfaceHit && (secondaryTrigger = secondarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
+                if (secondarySurfaceHit &&
+                    (secondaryTrigger = secondarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
                     secondaryTrigger.NotifySurfaceCollision(this, secondarySurfaceHit);
             }
         }
