@@ -33,7 +33,7 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         [SerializeField]
         [Tooltip("Whether to always collide regardless of a controller's collision flags.")]
-        public bool AlwaysCollide;
+        public bool IgnoreLayers;
 
         /// <summary>
         /// Called when a controller lands on the surface of the platform.
@@ -109,7 +109,7 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            AlwaysCollide = false;
+            IgnoreLayers = false;
 
             OnPlatformEnter = new PlatformCollisionEvent();
             OnPlatformStay = new PlatformCollisionEvent();
@@ -321,7 +321,7 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultCollisionRule(TerrainCastHit hit)
         {
-            return AlwaysCollide || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Source);
+            return IgnoreLayers || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Source);
         }
         #endregion
     }
