@@ -36,7 +36,7 @@ namespace Hedgehog.Level.Areas
         {
             Viscosity = 2.0f;
             Buoyancy = 0.0f;
-            MinFloatSpeed = 100.0f;
+            MinFloatSpeed = 5.0f;
         }
 
         public override void Start()
