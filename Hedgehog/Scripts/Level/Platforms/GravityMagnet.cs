@@ -11,6 +11,7 @@ namespace Hedgehog.Level.Platforms
     /// Functions the same as the trippy gravity surfaces in Death Egg mk ii. Sticks the controller
     /// onto the platform using gravity.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Gravity Magnet")]
     public class GravityMagnet : ReactivePlatform
     {
         /// <summary>

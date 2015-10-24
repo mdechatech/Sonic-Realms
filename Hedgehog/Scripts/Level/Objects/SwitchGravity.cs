@@ -9,6 +9,7 @@ namespace Hedgehog.Level.Objects
     /// <summary>
     /// Changes the direction and magnitude of a controller's gravity when activated.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Object Effects/Switch Gravity")]
     public class SwitchGravity : ReactiveObject
     {
         /// <summary>

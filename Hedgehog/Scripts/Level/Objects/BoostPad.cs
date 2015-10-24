@@ -7,6 +7,7 @@ namespace Hedgehog.Level.Objects
     /// <summary>
     /// Adds to a controller's velocity when it enters the area.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Objects/Boost Pad")]
     public class BoostPad : ReactiveArea
     {
         /// <summary>

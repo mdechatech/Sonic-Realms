@@ -10,6 +10,7 @@ namespace Hedgehog.Level.Objects
     /// When activated by a controller, switches its path. Great for springs or buttons that put you on
     /// new paths.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Object Effects/Switch Path")]
     public class SwitchPath : ReactiveObject
     {
         /// <summary>

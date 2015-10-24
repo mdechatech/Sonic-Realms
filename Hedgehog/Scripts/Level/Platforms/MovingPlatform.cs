@@ -10,6 +10,7 @@ namespace Hedgehog.Level.Platforms
     /// Moves the player with the transform while the player is on it.
     /// </summary>
     [RequireComponent(typeof(PlatformTrigger))]
+    [AddComponentMenu("Hedgehog/Platforms/Moving Platform Tracker")]
     public class MovingPlatform : ReactivePlatform
     {
         /// <summary>

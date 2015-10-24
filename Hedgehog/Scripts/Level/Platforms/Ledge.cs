@@ -8,7 +8,7 @@ namespace Hedgehog.Level.Platforms
     /// <summary>
     /// Turns a platform into a ledge where a controller can only collide with its top side.
     /// </summary>
-    [RequireComponent(typeof(PlatformTrigger))]
+    [AddComponentMenu("Hedgehog/Platforms/Ledge")]
     public class Ledge : ReactivePlatform
     {
         /// <summary>

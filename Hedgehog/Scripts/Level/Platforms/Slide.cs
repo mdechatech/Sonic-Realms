@@ -10,6 +10,7 @@ namespace Hedgehog.Level.Platforms
     /// <summary>
     /// Slide (or tunnel? rail?) that increases the controller's slope gravity.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Slide")]
     public class Slide : ReactivePlatform
     {
         /// <summary>

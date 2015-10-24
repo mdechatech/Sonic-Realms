@@ -8,6 +8,7 @@ namespace Hedgehog.Level.Platforms
     /// <summary>
     /// Moves the player forward or backward on the platform.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Conveyor Belt")]
     public class ConveyorBelt : ReactivePlatform
     {
         /// <summary>

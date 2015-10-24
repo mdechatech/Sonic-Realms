@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Hedgehog.Level.Objects
 {
     [RequireComponent(typeof(BoxCollider2D))]
+    [AddComponentMenu("Hedgehog/Objects/Spring")]
     public class Spring : ReactivePlatform
     {
         /// <summary>

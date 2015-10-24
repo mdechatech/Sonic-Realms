@@ -8,6 +8,7 @@ namespace Hedgehog.Level.Platforms
     /// <summary>
     /// Accelerates or decelerates a controller when on its surface.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Accelerator")]
     public class Accelerator : ReactivePlatform
     {
         /// <summary>

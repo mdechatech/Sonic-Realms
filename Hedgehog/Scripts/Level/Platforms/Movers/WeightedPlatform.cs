@@ -8,6 +8,7 @@ namespace Hedgehog.Level.Platforms.Movers
     /// <summary>
     /// Moves down when a controller stands on it and back up when it leaves.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Movers/Weighted Platform")]
     public class WeightedPlatform : BasePlatformMover
     {
         /// <summary>

@@ -8,6 +8,7 @@ namespace Hedgehog.Level.Objects
     /// <summary>
     /// Bumpers like the ones in Spring Yard and Carnival Night.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Objects/Bumper")]
     public class Bumper : ReactivePlatform
     {
         /// <summary>

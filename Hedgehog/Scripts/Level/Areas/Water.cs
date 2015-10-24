@@ -9,6 +9,7 @@ namespace Hedgehog.Level.Areas
     /// Liquid that makes the controller slower or faster and has options for buoyancy and even running
     /// on top of it, if it's fast enough!
     /// </summary>
+    [AddComponentMenu("Hedgehog/Areas/Water")]
     public class Water : ReactivePlatformArea
     {
         /// <summary>

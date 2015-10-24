@@ -9,6 +9,7 @@ namespace Hedgehog.Core.Actors
     /// <summary>
     /// Controls the player.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Actors/Hedgehog")]
     public class HedgehogController : MonoBehaviour
     {
         #region Inspector Fields

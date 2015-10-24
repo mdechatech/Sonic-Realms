@@ -131,5 +131,13 @@ namespace Hedgehog.Core.Editor
         {
             HandleClonePrefab(menuCommand, SwingPlatformPath, SwingPlatformName);
         }
+
+        private const string WeightedPlatformPath = "Assets/Hedgehog/Prefabs/Level/Platforms/Weighted Platform.prefab";
+        private const string WeightedPlatformName = "Weighted Platform";
+        [MenuItem("GameObject/Hedgehog/Platforms/Weighted Platform", false, 10)]
+        private static void CreateWeightedPlatform(MenuCommand menuCommand)
+        {
+            HandleClonePrefab(menuCommand, WeightedPlatformPath, WeightedPlatformName);
+        }
     }
 }

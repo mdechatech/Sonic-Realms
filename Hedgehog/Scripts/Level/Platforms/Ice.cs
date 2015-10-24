@@ -9,7 +9,7 @@ namespace Hedgehog.Level.Platforms
     /// <summary>
     /// Gives friction to a platform, allowing slippery surfaces.
     /// </summary>
-    [RequireComponent(typeof(PlatformTrigger))]
+    [AddComponentMenu("Hedgehog/Platforms/Ice")]
     public class Ice : ReactivePlatform
     {
         /// <summary>

@@ -17,6 +17,7 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Hook up to these events to react when a controller enters the area.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Triggers/Area Trigger")]
     public class AreaTrigger : BaseTrigger
     {
         /// <summary>

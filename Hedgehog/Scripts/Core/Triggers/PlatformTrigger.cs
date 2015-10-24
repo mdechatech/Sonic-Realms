@@ -25,7 +25,7 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Hook up to these events to react when a controller lands on the object.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Platform Trigger")]
+    [AddComponentMenu("Hedgehog/Triggers/Platform Trigger")]
     public class PlatformTrigger : BaseTrigger
     {
         /// <summary>

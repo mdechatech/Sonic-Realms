@@ -10,6 +10,7 @@ namespace Hedgehog.Level.Areas
     /// When the player collides, this switches the player's collision mask/tag/name.
     /// </summary>
     [RequireComponent(typeof(AreaTrigger))]
+    [AddComponentMenu("Hedgehog/Areas/Path Switcher")]
     public class PathSwitcher : ReactiveArea
     {
         /// <summary>

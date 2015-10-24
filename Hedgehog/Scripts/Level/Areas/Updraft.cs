@@ -8,6 +8,7 @@ namespace Hedgehog.Level.Areas
     /// <summary>
     /// Pushes the controller upward in the air. Emulates the fans in Hydrocity Act 2.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Areas/Updraft")]
     public class Updraft : ReactiveArea
     {
         /// <summary>

@@ -18,6 +18,7 @@ namespace Hedgehog.Core.Triggers
     /// Hook up to these events to react when the object is activated. Activation must be
     /// performed by other triggers.
     /// </summary>
+    [AddComponentMenu("Hedgehog/Triggers/Object Trigger")]
     public class ObjectTrigger : BaseTrigger
     {
         /// <summary>

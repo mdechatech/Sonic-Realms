@@ -7,6 +7,7 @@ using UnityEngine.Events;
 namespace Hedgehog.Level.Platforms.Movers
 {
     [RequireComponent(typeof(MovingPlatform))]
+    [AddComponentMenu("")]
     public abstract class BasePlatformMover : ReactivePlatform
     {
         /// <summary>

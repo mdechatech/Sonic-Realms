@@ -6,6 +6,7 @@ namespace Hedgehog.Level.Platforms.Movers
     /// <summary>
     /// Swings back and forth (or all around).
     /// </summary>
+    [AddComponentMenu("Hedgehog/Platforms/Movers/Swing Platform")]
     public class SwingPlatform : BasePlatformMover
     {
         /// <summary>
