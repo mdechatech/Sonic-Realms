@@ -75,12 +75,6 @@ namespace Hedgehog.Level.Platforms.Movers
             To(PositionCurve.Evaluate(CurrentTime/Duration));
         }
 
-        public override bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
-        {
-            return base.IsOnSurface(controller, hit) &&
-                   (controller.SecondarySurface == null || controller.SecondarySurface == transform);
-        }
-
         /// <summary>
         /// Updates the current time by the specified timestep.
         /// </summary>

@@ -134,7 +134,7 @@ namespace Hedgehog.Core.Triggers
             return controller != null && (IgnoreLayers || TerrainUtility.CollisionModeSelector(transform, controller));
         }
 
-        private void CheckCollision(HedgehogController controller, Transform hit, bool isExit = false)
+        public void NotifyCollision(HedgehogController controller, Transform hit, bool isExit = false)
         {
             if (!enabled || controller == null) return;
 
@@ -175,7 +175,7 @@ namespace Hedgehog.Core.Triggers
             foreach (var trigger in GetComponentsInParent<AreaTrigger>().Where(
                 trigger => trigger != this && trigger.TriggerFromChildren))
             {
-                trigger.CheckCollision(controller, area, isExit);
+                trigger.NotifyCollision(controller, area, isExit);
             }
         }
 
@@ -183,7 +183,7 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponent<HedgehogController>();
             if (controller == null) return;
-            CheckCollision(controller, transform);
+            NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
         }
 
@@ -191,7 +191,7 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponent<HedgehogController>();
             if (controller == null) return;
-            CheckCollision(controller, transform);
+            NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
         }
 
@@ -199,7 +199,7 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponent<HedgehogController>();
             if (controller == null) return;
-            CheckCollision(controller, transform, true);
+            NotifyCollision(controller, transform, true);
             BubbleEvent(controller, transform, true);
         }
     }

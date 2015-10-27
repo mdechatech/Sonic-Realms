@@ -141,21 +141,6 @@ namespace Hedgehog.Core.Triggers
             _notifiedSurfaceCollisions = new List<TerrainCastHit>();
         }
 
-        public virtual void OnEnable()
-        {
-            if (!TriggerFromChildren) return;
-            foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
-            {
-                if (childCollider.transform == transform ||
-                    childCollider.GetComponent<AreaTrigger>() != null ||
-                    childCollider.GetComponent<ObjectTrigger>() != null)
-                    continue;
-
-                if (childCollider.gameObject.GetComponent<PlatformTrigger>() == null)
-                    childCollider.gameObject.AddComponent<PlatformTrigger>();
-            }
-        }
-
         public virtual void Start()
         {
             var collider2D = GetComponent<Collider2D>();
@@ -224,12 +209,11 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <param name="hit">The collision data.</param>
-        /// <param name="bubble">Whether to bubble the event up to other platform triggers.</param>
-        public void NotifyCollision(HedgehogController controller, TerrainCastHit hit, bool bubble = true)
+        public void NotifyCollision(HedgehogController controller, TerrainCastHit hit)
         {
             if (!CollidesWith(hit))
                 return;
-
+            
             if (Collisions.All(castHit => castHit.Source != controller))
             {
                 Collisions.Add(hit);
@@ -241,18 +225,6 @@ namespace Hedgehog.Core.Triggers
             {
                 _notifiedCollisions.Add(hit);
             }
-
-            if (bubble)
-                BubbleCollision(controller, hit);
-        }
-
-        private void BubbleCollision(HedgehogController controller, TerrainCastHit hit)
-        {
-            foreach (var trigger in GetComponentsInParent<PlatformTrigger>().Where(
-                trigger => trigger != this && trigger.TriggerFromChildren))
-            {
-                trigger.NotifyCollision(controller, hit, false);
-            }
         }
 
         /// <summary>
@@ -260,8 +232,7 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <param name="hit">The collision data.</param>
-        /// <param name="bubble">Whether to bubble the event up to other platform triggers.</param>
-        public void NotifySurfaceCollision(HedgehogController controller, TerrainCastHit hit, bool bubble = true)
+        public void NotifySurfaceCollision(HedgehogController controller, TerrainCastHit hit)
         {
             if (!IsOnSurface(controller, hit))
                 return;
@@ -280,25 +251,13 @@ namespace Hedgehog.Core.Triggers
 
                 OnSurfaceEnter.Invoke(controller, hit);
             }
-
-            if (bubble)
-                BubbleSurfaceCollision(controller, hit);
         }
 
-        private void BubbleSurfaceCollision(HedgehogController controller, TerrainCastHit hit)
-        {
-            foreach (var trigger in GetComponentsInParent<PlatformTrigger>().Where(
-                trigger => trigger != this && trigger.TriggerFromChildren))
-            {
-                trigger.NotifySurfaceCollision(controller, hit);
-            }
-        }
         #endregion
         #region Collision Rules
         public bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
         {
             if (!SurfaceRules.Any()) return DefaultSurfaceRule(controller, hit);
-
             return SurfaceRules.All(predicate => predicate(controller, hit));
         }
 
@@ -316,8 +275,8 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultSurfaceRule(HedgehogController controller, TerrainCastHit hit)
         {
-            return controller.Grounded && (controller.PrimarySurface == hit.Hit.transform ||
-                                           controller.SecondarySurface == hit.Hit.transform);
+            if (!controller.Grounded) return false;
+            return hit.Hit.transform == controller.PrimarySurface || hit.Hit.transform == controller.SecondarySurface;
         }
 
         public bool DefaultCollisionRule(TerrainCastHit hit)

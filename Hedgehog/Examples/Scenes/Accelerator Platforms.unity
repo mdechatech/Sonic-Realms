@@ -1882,11 +1882,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 412840, guid: a55aa361649c0b64189c76ba5f3e09b8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -.0299999993
       objectReference: {fileID: 0}
     - target: {fileID: 412840, guid: a55aa361649c0b64189c76ba5f3e09b8, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -.569999993
       objectReference: {fileID: 0}
     - target: {fileID: 412840, guid: a55aa361649c0b64189c76ba5f3e09b8, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2172,7 +2172,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6123948, guid: 92f37abe6ce4e874caf5059692ce1b12, type: 2}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 21282514, guid: 92f37abe6ce4e874caf5059692ce1b12, type: 2}
       propertyPath: m_Color.r
@@ -2310,7 +2310,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 6123948, guid: 92f37abe6ce4e874caf5059692ce1b12, type: 2}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 164768, guid: 92f37abe6ce4e874caf5059692ce1b12, type: 2}
       propertyPath: m_Name

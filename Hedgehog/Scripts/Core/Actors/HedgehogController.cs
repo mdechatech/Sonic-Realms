@@ -1005,8 +1005,10 @@ namespace Hedgehog.Core.Actors
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
 
             // If the proposed angle is between the angles of the two surfaces, it's works
-            if ((diff >= 0.0f && DMath.AngleInRange(overlap, left.SurfaceAngle, right.SurfaceAngle)) || 
-                (diff <  0.0f && DMath.AngleInRange(overlap, right.SurfaceAngle, left.SurfaceAngle)))
+            if ((DMath.Equalsf(diff) && 
+                    DMath.Equalsf(overlap, left.SurfaceAngle) && DMath.Equalsf(overlap, right.SurfaceAngle)) ||
+                (diff > 0.0f && DMath.AngleInRange(overlap, left.SurfaceAngle, right.SurfaceAngle)) || 
+                (diff < 0.0f && DMath.AngleInRange(overlap, right.SurfaceAngle, left.SurfaceAngle)))
             {
                 // Angle closest to the current gets priority
                 if (leftDiff < rightDiff)
@@ -1377,14 +1379,8 @@ namespace Hedgehog.Core.Actors
         /// <returns>Whether a platform trigger was notified.</returns>
         private bool NotifyCollision(TerrainCastHit collision)
         {
-            if (!collision) return false;
-
-            var trigger = collision.Hit.transform.GetComponent<PlatformTrigger>();
-            if (trigger == null)
-                return false;
-
-            trigger.NotifyCollision(this, collision);
-            return true;
+            if (!collision || collision.Hit.transform == null) return false;
+            return TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
         }
 
         /// <summary>
@@ -1392,7 +1388,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <param name="primarySurfaceHit">The new primary surface.</param>
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
-        public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
+        public bool SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
         {
             PrimarySurfaceHit = primarySurfaceHit;
             PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Hit.transform : null;
@@ -1400,21 +1396,11 @@ namespace Hedgehog.Core.Actors
             SecondarySurfaceHit = secondarySurfaceHit;
             SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Hit.transform : null;
 
-            if (PrimarySurfaceHit)
-            {
-                PlatformTrigger primaryTrigger;
-                if (primarySurfaceHit && 
-                    (primaryTrigger = primarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
-                    primaryTrigger.NotifySurfaceCollision(this, primarySurfaceHit);
-            }
+            var result = false;
+            result = TriggerUtility.NotifySurfaceCollision(PrimarySurface, primarySurfaceHit);
+                     TriggerUtility.NotifySurfaceCollision(SecondarySurface, secondarySurfaceHit);
 
-            if(SecondarySurfaceHit)
-            {
-                PlatformTrigger secondaryTrigger;
-                if (secondarySurfaceHit &&
-                    (secondaryTrigger = secondarySurfaceHit.Hit.transform.GetComponent<PlatformTrigger>()) != null)
-                    secondaryTrigger.NotifySurfaceCollision(this, secondarySurfaceHit);
-            }
+            return result;
         }
         #endregion
         #region Surface Calculation Functions

@@ -101,7 +101,7 @@ namespace Hedgehog.Core.Utils
         {
             if (hit.collider.isTrigger) return false;
 
-            var platformEnumerable = GetTriggers<PlatformTrigger>(hit.transform);
+            var platformEnumerable = TriggerUtility.GetTriggers<PlatformTrigger>(hit.transform);
             var platformTriggers = platformEnumerable as PlatformTrigger[] ?? platformEnumerable.ToArray();
             var terrainCastHit = new TerrainCastHit(hit, raycastSide, source);
 
@@ -134,7 +134,9 @@ namespace Hedgehog.Core.Utils
 
                 case CollisionMode.Names:
                 default:
-                    return HasNameRecursive(transform, source.TerrainNames);
+                    return
+                        transform.GetComponentsInParent<Transform>()
+                            .Any(transform1 => source.TerrainNames.Contains(transform1.name));
             }
         }
 

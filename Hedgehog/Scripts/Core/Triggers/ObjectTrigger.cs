@@ -111,21 +111,6 @@ namespace Hedgehog.Core.Triggers
             }
         }
 
-        public virtual void OnEnable()
-        {
-            if (!TriggerFromChildren) return;
-            foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
-            {
-                if (childCollider.transform == transform || 
-                    childCollider.GetComponent<PlatformTrigger>() != null || 
-                    childCollider.GetComponent<AreaTrigger>() != null)
-                    continue;
-
-                if (childCollider.gameObject.GetComponent<ObjectTrigger>() == null)
-                    childCollider.gameObject.AddComponent<ObjectTrigger>();
-            }
-        }
-
         public void FixedUpdate()
         {
             foreach (var collision in Collisions)

@@ -58,7 +58,7 @@ namespace Hedgehog.Level.Platforms
             var anchor = new GameObject().AddComponent<MovingPlatformAnchor>();
             anchor.LinkController(controller);
             anchor.name = controller.name + "'s Moving Platform Anchor";
-            anchor.transform.SetParent(transform);
+            anchor.transform.SetParent(hit.Hit.transform);
             // We will update the anchor manually and lazily
             anchor.enabled = false;
 
@@ -75,7 +75,10 @@ namespace Hedgehog.Level.Platforms
         // Updates the anchor associated with the controller
         public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
         {
-            _linkedAnchors[_linkedControllers.IndexOf(controller)].TranslateController();
+            var anchor = _linkedAnchors[_linkedControllers.IndexOf(controller)];
+            if(anchor.transform.parent != hit.Hit.transform)
+                anchor.transform.SetParent(hit.Hit.transform);
+            anchor.TranslateController();
         }
 
         // Removes the anchor associated with the controller
