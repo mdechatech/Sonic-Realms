@@ -60,7 +60,7 @@ namespace Hedgehog.Level.Objects
             if ((BouncySides & hitSide) == 0) return;
 
             controller.Detach();
-            if (LockControl) controller.LockHorizontal();
+            if (LockControl) controller.DefaultGroundState.Lock();
 
             if (!AccurateBounce)
             {

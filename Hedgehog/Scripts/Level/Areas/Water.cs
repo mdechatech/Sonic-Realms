@@ -1,4 +1,5 @@
 ﻿using Hedgehog.Core.Actors;
+using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
 using UnityEngine;
@@ -69,18 +70,22 @@ namespace Hedgehog.Level.Areas
         // Apply new physics values based on viscosity.
         public override void OnAreaEnter(HedgehogController controller)
         {
-            controller.GroundAcceleration /= Viscosity;
-            controller.GroundBrake /= Viscosity;
-            controller.GroundDeceleration /= Viscosity;
-            controller.TopSpeed /= Viscosity;
+            controller.DefaultGroundState.Acceleration /= Viscosity;
+            controller.DefaultGroundState.Deceleration /= Viscosity;
+            controller.DefaultGroundState.TopSpeed /= Viscosity;
+            controller.GroundFriction /= Viscosity;
             controller.AirAcceleration /= Viscosity;
-            controller.JumpSpeed /= Viscosity;
-            controller.ReleaseJumpSpeed /= Viscosity;
             controller.AirGravity /= Viscosity;
             controller.SlopeGravity /= Viscosity;
             controller.Vx /= Viscosity;
             controller.Vy /= Viscosity*2.0f;
             controller.DetachSpeed /= Viscosity;
+
+            var jump = controller.GetMove<Jump>();
+            if (jump == null)
+                return;
+            jump.ActivateSpeed /= Viscosity;
+            jump.ReleaseSpeed /= Viscosity;
         }
         
         // Constantly apply buoyancy.
@@ -92,17 +97,21 @@ namespace Hedgehog.Level.Areas
         // Restore old physics values.
         public override void OnAreaExit(HedgehogController controller)
         {
-            controller.GroundAcceleration *= Viscosity;
-            controller.GroundBrake *= Viscosity;
-            controller.GroundDeceleration *= Viscosity;
-            controller.TopSpeed *= Viscosity;
+            controller.DefaultGroundState.Acceleration /= Viscosity;
+            controller.DefaultGroundState.Deceleration /= Viscosity;
+            controller.DefaultGroundState.TopSpeed *= Viscosity;
+            controller.GroundFriction *= Viscosity;
             controller.AirAcceleration *= Viscosity;
-            controller.JumpSpeed *= Viscosity;
-            controller.ReleaseJumpSpeed *= Viscosity;
             controller.AirGravity *= Viscosity;
             controller.SlopeGravity *= Viscosity;
             controller.Vy *= Viscosity;
             controller.DetachSpeed *= Viscosity;
+
+            var jump = controller.GetMove<Jump>();
+            if (jump == null)
+                return;
+            jump.ActivateSpeed /= Viscosity;
+            jump.ReleaseSpeed /= Viscosity;
         }
     }
 }

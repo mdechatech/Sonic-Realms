@@ -81,7 +81,7 @@ namespace Hedgehog.Level.Areas
                 }
 
                 if (AccountForFriction && !DMath.Equalsf(result))
-                    result += controller.GroundDeceleration*Mathf.Sign(result)*Time.fixedDeltaTime;
+                    result += controller.GroundFriction*Mathf.Sign(result)*Time.fixedDeltaTime;
 
                 controller.GroundVelocity += result;
 

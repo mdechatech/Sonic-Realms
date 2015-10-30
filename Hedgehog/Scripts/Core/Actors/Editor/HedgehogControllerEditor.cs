@@ -15,73 +15,73 @@ namespace Hedgehog.Core.Actors.Editor
         [SerializeField] private SerializedObject _serializedInstance;
         #endregion
         #region Foldout Variables
-        private static bool ShowCollision
+        protected static bool ShowMoves
+        {
+            get { return EditorPrefs.GetBool("HedgehogController.ShowMoves", false); }
+            set { EditorPrefs.SetBool("HedgehogController.ShowMoves", value); }
+        }
+
+        protected static bool ShowCollision
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowCollision", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowCollision", value); }
         }
 
-        private static bool ShowSensors
+        protected static bool ShowSensors
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowSensors", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowSensors", value);}
         }
 
-        private bool ShowSensorsGenerator
+        protected bool ShowSensorsGenerator
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowSensorsGenerator", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowSensorsGenerator", value); }
         }
 
-        private bool ShowAdvancedSensors
+        protected bool ShowAdvancedSensors
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedSensors", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedSensors", value); }
         }
 
-        private static bool ShowControls
-        {
-            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowControls", false); }
-            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowControls", value); }
-        }
-
-        private static bool ShowPhysics
+        protected static bool ShowPhysics
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPhysics", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysics", value); }
         }
 
-        private static bool ShowPhysicsPresets
+        protected static bool ShowPhysicsPresets
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPhysicsPresets", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysicsPresets", value); }
         }
 
-        private static bool ShowAdvancedPhysics
+        protected static bool ShowAdvancedPhysics
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysics", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysics", value); }
         }
 
-        private static bool ShowAdvancedPhysicsSpeeds
+        protected static bool ShowAdvancedPhysicsSpeeds
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSpeeds", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSpeeds", value); }
         }
 
-        private static bool ShowAdvancedPhysicsSurfaces
+        protected static bool ShowAdvancedPhysicsSurfaces
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSurfaces", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSurfaces", value); }
         }
 
-        private static bool ShowEvents
+        protected static bool ShowEvents
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowEvents", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowEvents", value); }
         }
 
-        private bool ShowDebugInfo
+        protected bool ShowDebugInfo
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowDebugInfo", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowDebugInfo", value); }
@@ -157,15 +157,14 @@ namespace Hedgehog.Core.Actors.Editor
             GUILayout.Label("<color=\"#0000ff\">Hedgehog Controller</color>", titleStyle);
             #endregion
 
-            #region Controls Foldout
-            ShowControls = EditorGUILayout.Foldout(ShowControls, "Controls", foldoutStyle);
-            if (ShowControls)
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "RendererObject", "Animator");
+
+            #region Moves Foldout
+            ShowMoves = EditorGUILayout.Foldout(ShowMoves, "Moves", foldoutStyle);
+            if (ShowMoves)
             {
-                _instance.JumpKey = (KeyCode)EditorGUILayout.EnumPopup("Jump Key", _instance.JumpKey);
-                _instance.LeftKey = (KeyCode)EditorGUILayout.EnumPopup("Left Key", _instance.LeftKey);
-                _instance.RightKey = (KeyCode)EditorGUILayout.EnumPopup("Right Key", _instance.RightKey);
-                _instance.DebugSpindashKey =
-                    (KeyCode) EditorGUILayout.EnumPopup("Debug Spindash Key", _instance.DebugSpindashKey);
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "DefaultGroundState", "DefaultAirState", "AutoFindMoves", "Moves");
             }
             #endregion
             #region Collision Foldout
@@ -345,13 +344,6 @@ namespace Hedgehog.Core.Actors.Editor
                 }
                 --EditorGUI.indentLevel;
                 #endregion
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.TopSpeed = EditorGUILayout.FloatField("Top Speed",
-                    _instance.TopSpeed);
-                EditorGUILayout.PrefixLabel("units/s");
-                EditorGUILayout.EndHorizontal();
-
                 EditorGUILayout.BeginHorizontal();
                 _instance.MaxSpeed = EditorGUILayout.FloatField("Max Speed",
                     _instance.MaxSpeed);
@@ -359,22 +351,9 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.Space();
-
                 EditorGUILayout.BeginHorizontal();
-                _instance.GroundAcceleration = EditorGUILayout.FloatField("Ground Acceleration",
-                    _instance.GroundAcceleration);
-                EditorGUILayout.PrefixLabel("units/s²");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.GroundDeceleration = EditorGUILayout.FloatField("Ground Deceleration",
-                    _instance.GroundDeceleration);
-                EditorGUILayout.PrefixLabel("units/s²");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.GroundBrake = EditorGUILayout.FloatField("Ground Brake",
-                    _instance.GroundBrake);
+                _instance.GroundFriction = EditorGUILayout.FloatField("Ground Deceleration",
+                    _instance.GroundFriction);
                 EditorGUILayout.PrefixLabel("units/s²");
                 EditorGUILayout.EndHorizontal();
 
@@ -408,18 +387,6 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.PrefixLabel("degrees");
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal();
-                _instance.JumpSpeed = EditorGUILayout.FloatField("Jump Speed",
-                    _instance.JumpSpeed);
-                EditorGUILayout.PrefixLabel("units/s");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.ReleaseJumpSpeed = EditorGUILayout.FloatField("Jump Release Speed",
-                    _instance.ReleaseJumpSpeed);
-                EditorGUILayout.PrefixLabel("units/s");
-                EditorGUILayout.EndHorizontal();
-
                 EditorGUILayout.Space();
                 #region Advanced Physics
                 ++EditorGUI.indentLevel;
@@ -451,20 +418,8 @@ namespace Hedgehog.Core.Actors.Editor
                         EditorGUILayout.EndHorizontal();
 
                         EditorGUILayout.BeginHorizontal();
-                        _instance.HorizontalLockTime = EditorGUILayout.FloatField("Horizontal Lock",
-                            _instance.HorizontalLockTime);
-                        EditorGUILayout.PrefixLabel("seconds");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
                         _instance.SlopeGravityBeginAngle = EditorGUILayout.FloatField("Slope Gravity Begin Angle",
                             _instance.SlopeGravityBeginAngle);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.ForceJumpAngleDifference = EditorGUILayout.FloatField("Force Jump Angle",
-                            _instance.ForceJumpAngleDifference);
                         EditorGUILayout.PrefixLabel("degrees");
                         EditorGUILayout.EndHorizontal();
                     }
@@ -524,19 +479,8 @@ namespace Hedgehog.Core.Actors.Editor
 
                 GUI.enabled = Application.isPlaying;
 
-                EditorGUILayout.LabelField("Control", headerStyle);
-
-                EditorGUILayout.Toggle("Jump Key Pressed", _instance.JumpKeyPressed);
-                EditorGUILayout.Toggle("Left Key Pressed", _instance.LeftKeyDown);
-                EditorGUILayout.Toggle("Right Key Pressed", _instance.RightKeyDown);
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.Toggle("Lock Upon Landing", _instance.LockUponLanding);
-                EditorGUILayout.Toggle("Horizontal Lock", _instance.HorizontalLock);
-                GUI.enabled = Application.isPlaying && _instance.HorizontalLock;
-                EditorGUILayout.FloatField("Countdown", _instance.HorizontalLockTimer);
-                GUI.enabled = Application.isPlaying;
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ControlState", "ActiveMoves",
+                    "AvailableMoves", "UnavailableMoves");
 
                 EditorGUILayout.Space();
 

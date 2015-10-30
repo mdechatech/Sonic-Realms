@@ -28,9 +28,8 @@ namespace Hedgehog.Core.Triggers
             base.Start();
 
             if (RegisteredEvents) return;
-
-            if (!AreaTrigger.InsideRules.Contains(IsInsideArea))
-                AreaTrigger.InsideRules.Add(IsInsideArea);
+            
+            AreaTrigger.InsideRules.Add(IsInsideArea);
             AreaTrigger.OnAreaEnter.AddListener(OnAreaEnter);
             AreaTrigger.OnAreaStay.AddListener(OnAreaStay);
             AreaTrigger.OnAreaExit.AddListener(OnAreaExit);

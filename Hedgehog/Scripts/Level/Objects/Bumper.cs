@@ -50,7 +50,7 @@ namespace Hedgehog.Level.Objects
         public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
         {
             controller.Detach();
-            if(LockControl) controller.LockHorizontal();
+            if(LockControl) controller.DefaultGroundState.Lock();
            
             var normal = hit.NormalAngle;
 

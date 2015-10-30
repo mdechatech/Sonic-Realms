@@ -14,7 +14,6 @@ namespace Hedgehog.Core.Utils.Editor
         /// Just a quick way to draw property fields.
         /// </summary>
         /// <param name="serializedObject"></param>
-        /// <param name="properties"></param>
         public static void DrawProperties(SerializedObject serializedObject)
         {
             DrawExcluding(serializedObject);
@@ -29,7 +28,7 @@ namespace Hedgehog.Core.Utils.Editor
         {
             foreach (var property in properties)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(property));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(property), true);
             }
         }
 
@@ -45,7 +44,7 @@ namespace Hedgehog.Core.Utils.Editor
             {
                 if (!excludingProperties.Contains(it.name))
                 {
-                    EditorGUILayout.PropertyField(it);
+                    EditorGUILayout.PropertyField(it, true);
                 }
             }
         }

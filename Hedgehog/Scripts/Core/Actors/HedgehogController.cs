@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
 using UnityEngine;
@@ -13,6 +15,48 @@ namespace Hedgehog.Core.Actors
     public class HedgehogController : MonoBehaviour
     {
         #region Inspector Fields
+        #region Components
+        /// <summary>
+        /// Game object that contains the renderer.
+        /// </summary>
+        [SerializeField]
+        public GameObject RendererObject;
+
+        /// <summary>
+        /// The controller's animator, if any.
+        /// </summary>
+        [SerializeField]
+        public Animator Animator;
+        #endregion
+        #region Moves and Control
+        /// <summary>
+        /// The default control state to enter when on the ground.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The default control state to enter when on the ground.")]
+        public GroundControl DefaultGroundState;
+
+        /// <summary>
+        /// The default control state to enter when in the air.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The default control state to enter when in the air.")]
+        public AirControl DefaultAirState;
+
+        /// <summary>
+        /// Whether to find moves on initialization. Searches through all children and itself.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Whether to find moves on initialization. Searches through all children and itself.")]
+        public bool AutoFindMoves;
+
+        /// <summary>
+        /// All of the controller's moves.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("All of the controller's moves.")]
+        public List<Move> Moves;
+        #endregion
         #region Collision
         [SerializeField]
         public CollisionMode CollisionMode = CollisionMode.Layers;
@@ -28,19 +72,6 @@ namespace Hedgehog.Core.Actors
 
         [SerializeField]
         public List<string> TerrainNames = new List<string>();
-        #endregion
-        #region Controls
-        [SerializeField]
-        public KeyCode JumpKey = KeyCode.W;
-
-        [SerializeField]
-        public KeyCode LeftKey = KeyCode.A;
-
-        [SerializeField]
-        public KeyCode RightKey = KeyCode.D;
-
-        [SerializeField]
-        public KeyCode DebugSpindashKey = KeyCode.Space;
         #endregion
         #region Sensors
         /// <summary>
@@ -64,28 +95,12 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Physics
         /// <summary>
-        /// The player's ground acceleration in units per second per second.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 0.25f)]
-        [Tooltip("Ground acceleration in units per second squared.")]
-        public float GroundAcceleration = 0.08f;
-
-        /// <summary>
         /// The player's friction on the ground in units per second per second.
         /// </summary>
         [SerializeField]
         [Range(0.0f, 0.25f)]
-        [Tooltip("Ground deceleration in units per second squared.")]
-        public float GroundDeceleration = 0.12f;
-
-        /// <summary>
-        /// The player's braking speed in units per second per second.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 1.00f)]
-        [Tooltip("Ground braking speed in units per second squared.")]
-        public float GroundBrake = 0.5f;
+        [Tooltip("Ground friction in units per second squared.")]
+        public float GroundFriction = 0.12f;
 
         /// <summary>
         /// The player's horizontal acceleration in the air in units per second per second.
@@ -121,19 +136,6 @@ namespace Hedgehog.Core.Actors
         public float AirDragCoefficient = 0.9738896f;
 
         /// <summary>
-        /// The speed of the player's jump in units per second.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 25.0f)]
-        [Tooltip("Jump speed in units per second.")]
-        public float JumpSpeed = 8.0f;
-
-        [SerializeField]
-        [Range(0.0f, 25.0f)]
-        [Tooltip("The maximum vertical speed the player can have after releasing the jump button.")]
-        public float ReleaseJumpSpeed = 5.0f;
-
-        /// <summary>
         /// The acceleration by gravity in units per second per second.
         /// </summary>
         [SerializeField]
@@ -156,15 +158,6 @@ namespace Hedgehog.Core.Actors
         [Range(0.0f, 360.0f)]
         [Tooltip("Direction of gravity in degrees. 0/360 is right, 90 is up, 180 is left, 270 is down.")]
         public float GravityDirection = 270.0f;
-
-        /// <summary>
-        /// The player's top speed, the maximum it can attain by running, it units per second.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 100.0f)]
-        [Tooltip("Maximum speed achieved through running in units per second.")]
-        public float TopSpeed = 20.0f;
-
         /// <summary>
         /// The player's maximum speed in units per second.
         /// </summary>
@@ -203,22 +196,6 @@ namespace Hedgehog.Core.Actors
         public float DetachSpeed = 3.0f;
 
         /// <summary>
-        /// The duration in seconds of the horizontal lock.
-        /// </summary>
-        [SerializeField]
-        public float HorizontalLockTime = 0.25f;
-
-        /// <summary>
-        /// If the player is moving very quickly and jumps, normally it will not make much of a difference
-        /// and the player will usually end up re-attaching to the surface.
-        /// 
-        /// With this constant, the player is forced to leave the ground by at least the specified angle
-        /// difference, in degrees.
-        /// </summary>
-        [SerializeField]
-        public float ForceJumpAngleDifference = 30.0f;
-
-        /// <summary>
         /// The maximum change in angle between two surfaces that the player can walk in.
         /// </summary>
         [SerializeField]
@@ -232,47 +209,54 @@ namespace Hedgehog.Core.Actors
         public float MaxVerticalDetachAngle = 5.0f;
         #endregion
         #region Events
+        /// <summary>
+        /// Invoked when the controller is touching something with both its top and ground sensors.
+        /// </summary>
         [SerializeField]
         public UnityEvent OnCrush;
+
+        /// <summary>
+        /// Invoked when the controller detaches from the ground for any reason.
+        /// </summary>
+        [SerializeField]
+        public UnityEvent OnDetach;
+
+        /// <summary>
+        /// Invoked when the controller detaches from the ground because it was moving too slowly on a steep
+        /// surface.
+        /// </summary>
+        [SerializeField]
+        public UnityEvent OnSteepDetach;
         #endregion
         #endregion
-        #region Input Variables
+        #region Control Variables
         /// <summary>
-        /// Whether the left key was held down since the last update. Key is determined by LeftKey.
+        /// The current control state.
         /// </summary>
-        [HideInInspector]
-        public bool LeftKeyDown;
+        [SerializeField]
+        [Tooltip("The current control state.")]
+        public ControlState ControlState;
 
         /// <summary>
-        /// Whether the right key was held down since the last update. Key is determined by RightKey.
+        /// The moves currently being performed.
         /// </summary>
-        [HideInInspector]
-        public bool RightKeyDown;
+        [SerializeField]
+        [Tooltip("The moves currently being performed.")]
+        public List<Move> ActiveMoves;
 
         /// <summary>
-        /// Whether the jump key was pressed since the last update. Key is determined by JumpKey.
+        /// The moves which can be performed given the controller's current state.
         /// </summary>
-        [HideInInspector]
-        public bool JumpKeyPressed;
+        [SerializeField]
+        [Tooltip("The moves which can be performed given the controller's current state.")]
+        public List<Move> AvailableMoves;
 
         /// <summary>
-        /// Whether the jump key was held down since the last update. Key is determined by JumpKey.
+        /// The moves which cannot be performed given the controller's current state.
         /// </summary>
-        [HideInInspector]
-        public bool JumpKeyDown;
-
-        /// <summary>
-        /// Whether the jump key was released since the last update.
-        /// </summary>
-        [HideInInspector]
-        public bool JumpKeyReleased;
-
-        /// <summary>
-        /// Temporary. Whether the debug spindash key was pressed since the last update. Key is
-        /// determined by DebugSpindashKey.
-        /// </summary>
-        [HideInInspector]
-        public bool DebugSpindashKeyDown;
+        [SerializeField]
+        [Tooltip("The moves which cannot be performed given the controller's current state.")]
+        public List<Move> UnavailableMoves; 
         #endregion
         #region Physics Variables
         /// <summary>
@@ -284,6 +268,46 @@ namespace Hedgehog.Core.Actors
         /// The default direction of gravity, in degrees.
         /// </summary>
         private const float DefaultGravityDirection = 270.0f;
+
+        /// <summary>
+        /// Whether to apply slope gravity on the controller when it's on steep ground.
+        /// </summary>
+        public bool ApplySlopeGravity;
+
+        /// <summary>
+        /// Whether to apply ground friction on the controller when it's on the ground.
+        /// </summary>
+        public bool ApplyGroundFriction;
+
+        /// <summary>
+        /// Whether to fall off walls and loops if ground speed is below DetachSpeed.
+        /// </summary>
+        public bool DetachWhenSlow;
+
+        /// <summary>
+        /// Whether to apply air gravity on the controller when it's in the air.
+        /// </summary>
+        public bool ApplyAirGravity;
+
+        /// <summary>
+        /// Whether to apply air drag on the controller when it's in the air.
+        /// </summary>
+        public bool ApplyAirDrag;
+
+        /// <summary>
+        /// Whether to flip the controller horizontally when traveling backwards on the ground, and vice versa.
+        /// </summary>
+        public bool AutoFlip;
+
+        /// <summary>
+        /// Whether to rotate the controller to the angle of its surface.
+        /// </summary>
+        public bool AutoRotate;
+
+        /// <summary>
+        /// Whether the controller is facing forward or backward.
+        /// </summary>
+        public bool FacingForward;
 
         /// <summary>
         /// The controller's velocity as a Vector2.
@@ -383,36 +407,6 @@ namespace Hedgehog.Core.Actors
         public Footing Footing;
 
         /// <summary>
-        /// Whether the player has control of horizontal ground movement.
-        /// </summary>
-        [HideInInspector]
-        public bool HorizontalLock;
-
-        /// <summary>
-        /// If horizontally locked, the time in seconds left on it.
-        /// </summary>
-        [HideInInspector]
-        public float HorizontalLockTimer;
-
-        /// <summary>
-        /// If not grounded, whether to activate the horizontal control lock when the player lands.
-        /// </summary>
-        [HideInInspector]
-        public bool LockUponLanding;
-
-        /// <summary>
-        /// Whether the player has just jumped. Is used to avoid collisions right after.
-        /// </summary>
-        [HideInInspector]
-        public bool JustJumped;
-
-        /// <summary>
-        /// Whether the player can release the jump key to reduce vertical speed.
-        /// </summary>
-        [HideInInspector]
-        public bool CanReleaseJump;
-
-        /// <summary>
         /// Whether the player has just detached. Is used to avoid reattachments right after.
         /// </summary>
         [HideInInspector]
@@ -449,25 +443,48 @@ namespace Hedgehog.Core.Actors
         #endregion
 
         #region Lifecycle Functions
+        public virtual void Reset()
+        {
+            AutoFindMoves = true;
+        }
+
         public void Awake()
         {
             Footing = Footing.None;
             Grounded = false;
             Vx = Vy = Vg = 0.0f;
-            LeftKeyDown = RightKeyDown = JumpKeyPressed = DebugSpindashKeyDown = false;
-            JustJumped = JustDetached = false;
+            JustDetached = false;
             QueuedTranslation = default(Vector3);
+
+            if (AutoFindMoves)
+            {
+                Moves = GetComponentsInChildren<Move>().ToList();
+            }
+
+            ActiveMoves = new List<Move>();
+            AvailableMoves = new List<Move>();
+            UnavailableMoves = new List<Move>(Moves);
+
+            ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
+            AutoFlip = AutoRotate = FacingForward = true;
+            EnterControlState(DefaultAirState);
         }
 
         public void Update()
         {
-            GetInput();
+            if(ControlState != null) ControlState.OnStateUpdate();
+            for (var i = ActiveMoves.Count - 1; i >= 0; i--)
+            {
+                ActiveMoves[i].OnActiveUpdate();
+            }
+
+            HandleMoves();
         }
 
         public void FixedUpdate()
         {
+            if(ControlState != null) ControlState.OnStateFixedUpdate();
             HandleForces();
-            HandleInput();
 
             if (QueuedTranslation != default(Vector3))
             {
@@ -509,116 +526,55 @@ namespace Hedgehog.Core.Actors
                 }
             }
 
+            for (var i = ActiveMoves.Count - 1; i >= 0; i--)
+            {
+                ActiveMoves[i].OnActiveFixedUpdate();
+            }
+
             HandleDisplay(Time.fixedDeltaTime);
         }
         #endregion
 
         #region Lifecycle Subroutines
-        /// <summary>
-        /// Stores keyboard input for the next fixed update (and HandleInput).
-        /// </summary>
-        private void GetInput()
+        public void HandleMoves()
         {
-            LeftKeyDown = Input.GetKey(LeftKey);
-            RightKeyDown = Input.GetKey(RightKey);
-            
-            if(!JumpKeyPressed) JumpKeyPressed = Input.GetKeyDown(JumpKey);
-
-            if (Grounded)
-                JumpKeyReleased = false;
-            else if (!JumpKeyReleased && JumpKeyDown && !Input.GetKey(JumpKey))
-                JumpKeyReleased = true;
-
-            JumpKeyDown = Input.GetKey(JumpKey);
-
-            if (Grounded) DebugSpindashKeyDown = Input.GetKey(DebugSpindashKey);
-        }
-
-        /// <summary>
-        /// Handles the input from the previous update using Time.fixedDeltaTime as the timestep.
-        /// </summary>
-        private void HandleInput()
-        {
-            HandleInput(Time.fixedDeltaTime);
-        }
-
-        /// <summary>
-        /// Handles the input from the previous update.
-        /// </summary>
-        private void HandleInput(float timestep)
-        {
-            if (Grounded)
+            for (var i = UnavailableMoves.Count - 1; i >= 0; i--)
             {
-                // Debug spindash
-                if (DebugSpindashKeyDown)
+                var move = UnavailableMoves[i];
+                if (move.Available())
                 {
-                    GroundVelocity = MaxSpeed*Mathf.Sign(GroundVelocity);
-                    DebugSpindashKeyDown = false;
+                    UnavailableMoves.RemoveAt(i);
+                    AvailableMoves.Add(move);
+                    move.ChangeState(Move.State.Available);
                 }
-                
-                // Horizontal lock timer update
-                if (HorizontalLock)
-                {
-                    HorizontalLockTimer -= timestep;
-                    if (HorizontalLockTimer < 0.0f)
-                    {
-                        HorizontalLock = false;
-                        HorizontalLockTimer = 0.0f;
-                    }
-                }
-
-                // Jump
-                if (JumpKeyPressed)
-                {
-                    Jump();
-                    JumpKeyPressed = false;
-                }
-
-                // Ground movement
-                if (!HorizontalLock)
-                {
-                    if (LeftKeyDown)
-                    {
-                        if (Vg > 0.0f)
-                        {
-                            Vg -= GroundBrake * timestep;
-                        }
-                        else if (Vg > -TopSpeed)
-                        {
-                            Vg -= GroundAcceleration * timestep;
-                        }
-                    }
-                    else if (RightKeyDown)
-                    {
-                        if (Vg < 0.0f)
-                        {
-                            Vg += GroundBrake * timestep;
-                        }
-                        else if (Vg < TopSpeed)
-                        {
-                            Vg += GroundAcceleration * timestep;
-                        }
-                    }
-                    else
-                    {
-                        // Ground friction
-                        Vg -= Mathf.Min(Mathf.Abs(Vg), GroundDeceleration * timestep) * Mathf.Sign(Vg);
-                    }
-                }
-                
             }
-            else
-            {
-                if (LeftKeyDown)
-                   RelativeVelocity += Vector2.left*AirAcceleration*timestep;
-                else if (RightKeyDown)
-                   RelativeVelocity += Vector2.right*AirAcceleration*timestep;
 
-                if (JumpKeyPressed) JumpKeyPressed = false;
-                if (JumpKeyReleased)
+            for (var i = AvailableMoves.Count - 1; i >= 0; i--)
+            {
+                var move = AvailableMoves[i];
+
+                if (!move.Available())
                 {
-                    ReleaseJump();
-                    JumpKeyReleased = false;
+                    AvailableMoves.RemoveAt(i);
+                    UnavailableMoves.Add(move);
+                    move.ChangeState(Move.State.Unavailable);
+                }
+                else if (move.InputActivate())
+                {
+                    AvailableMoves.RemoveAt(i);
+                    ActiveMoves.Add(move);
+                    move.ChangeState(Move.State.Active);
+                }
+            }
+
+            for (var i = ActiveMoves.Count - 1; i >= 0; i--)
+            {
+                var move = ActiveMoves[i];
+                if (move.InputDeactivate())
+                {
+                    ActiveMoves.RemoveAt(i);
+                    AvailableMoves.Add(move);
+                    move.ChangeState(Move.State.Available);
                 }
             }
         }
@@ -630,19 +586,30 @@ namespace Hedgehog.Core.Actors
 
         public void HandleDisplay(float timestep)
         {
-            // Do a little smoothness later
-            var globalRotation = SensorsRotation;
+            if (AutoFlip)
+            {
+                FacingForward = Grounded ? GroundVelocity >= 0.0f : RelativeVelocity.x >= 0.0f;
+            }
+
             if (!Grounded)
             {
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 
+                RendererObject.transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 
                     Mathf.LerpAngle(transform.eulerAngles.z, SensorsRotation, Time.fixedDeltaTime*20.0f));
             }
-            else
+            else if(AutoRotate)
             {
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
+                RendererObject.transform.eulerAngles = 
+                    new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
             }
-            
-            SensorsRotation = globalRotation;
+
+            if ((FacingForward && RendererObject.transform.localScale.x < 0.0f) || 
+                (!FacingForward && RendererObject.transform.localScale.x > 0.0f))
+            {
+                RendererObject.transform.localScale = new Vector3(
+                    -RendererObject.transform.localScale.x,
+                    RendererObject.transform.localScale.y,
+                    RendererObject.transform.localScale.z);
+            }
         }
 
         /// <summary>
@@ -663,34 +630,38 @@ namespace Hedgehog.Core.Actors
             if (Grounded)
             {
                 // Slope gravity
-                if (!DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
+                if (ApplySlopeGravity && 
+                    !DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
                 {
                     Vg -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
                 }
+
+                // Ground friction
+                if (ApplyGroundFriction)
+                    Vg -= Mathf.Min(Mathf.Abs(Vg), GroundFriction*timestep)*Mathf.Sign(Vg);
 
                 // Speed limit
                 if (Vg > MaxSpeed) Vg = MaxSpeed;
                 else if (Vg < -MaxSpeed) Vg = -MaxSpeed;
 
                 // Detachment from walls if speed is too low
-                if (Mathf.Abs(Vg) < DetachSpeed && DMath.AngleInRange_d(RelativeSurfaceAngle, 45.0f, 315.0f))
-                {
-                    if (DMath.AngleInRange_d(RelativeSurfaceAngle, 
+                if (DetachWhenSlow &&
+                    Mathf.Abs(Vg) < DetachSpeed && 
+                    DMath.AngleInRange_d(RelativeSurfaceAngle, 
                         90.0f - MaxVerticalDetachAngle,
                         270.0f + MaxVerticalDetachAngle))
-                    {
-                        Detach(true);
-                    }
-                    else
-                    {
-                        LockHorizontal();
-                    }
+                {
+                    Detach();
+                    OnSteepDetach.Invoke();
                 }
             }
             else
             {
-                Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
-                if (Vy > AirDragVerticalSpeed && Mathf.Abs(Vx) > AirDragHorizontalSpeed)
+                if(ApplyAirGravity)
+                    Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
+
+                if (ApplyAirDrag && 
+                    Vy > AirDragVerticalSpeed && Mathf.Abs(Vx) > AirDragHorizontalSpeed)
                 {
                     Vx *= Mathf.Pow(AirDragCoefficient, timestep);
                 }
@@ -704,7 +675,6 @@ namespace Hedgehog.Core.Actors
         public void HandleCollisions()
         {
             var anyHit = false;
-            var jumpedPreviousCheck = JustJumped;
 
             if(CrushCheck()) OnCrush.Invoke();
 
@@ -720,8 +690,6 @@ namespace Hedgehog.Core.Actors
                 if (!SurfaceAngleCheck()) Detach();
             }
 
-            if (JustJumped && jumpedPreviousCheck) JustJumped = false;
-            
             if (!anyHit && JustDetached)
                 JustDetached = false;
         }
@@ -740,14 +708,11 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                if (!JustJumped)
-                {
-                    if (RelativeVelocity.x < 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
-                }
-
                 transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
                                       ((Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position).normalized*
                                       DMath.Epsilon;
+
+                if (Vx < 0.0f) Vx = 0.0f;
 
                 NotifyCollision(sideLeftCheck);
 
@@ -755,14 +720,11 @@ namespace Hedgehog.Core.Actors
             }
             if (sideRightCheck)
             {
-                if (!JustJumped)
-                {
-                    if (RelativeVelocity.x > 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
-                }
-
                 transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
                                       ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
                                       .normalized * DMath.Epsilon;
+
+                if (Vx > 0.0f) Vx = 0.0f;
 
                 NotifyCollision(sideRightCheck);
 
@@ -783,7 +745,7 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
-                if((!JustDetached || JustJumped) && HandleImpact(leftCheck)) Footing = Footing.Left;
+                if((!JustDetached) && HandleImpact(leftCheck)) Footing = Footing.Left;
 
                 NotifyCollision(leftCheck);
 
@@ -795,7 +757,7 @@ namespace Hedgehog.Core.Actors
             if (rightCheck)
             {
                 transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
-                if((!JustDetached || JustJumped) && HandleImpact(rightCheck)) Footing = Footing.Right;
+                if((!JustDetached) && HandleImpact(rightCheck)) Footing = Footing.Right;
 
                 NotifyCollision(rightCheck);
 
@@ -816,36 +778,10 @@ namespace Hedgehog.Core.Actors
 
             if (groundLeftCheck || groundRightCheck)
             {
-                if (JustJumped)
+                if (groundLeftCheck && groundRightCheck)
                 {
-                    if (groundLeftCheck)
-                    {
-                        transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                        NotifyCollision(groundLeftCheck);
-                    }
-                    if (groundRightCheck)
-                    {
-                        transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
-                        NotifyCollision(groundRightCheck);
-                    }
-                }
-                else
-                {
-                    if (groundLeftCheck && groundRightCheck)
-                    {
-                        if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
-                                (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
-                        {
-                            if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
-                            NotifyCollision(groundLeftCheck);
-                        }
-                        else
-                        {
-                            if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
-                            NotifyCollision(groundRightCheck);
-                        }
-                    }
-                    else if (groundLeftCheck)
+                    if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
+                            (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
                     {
                         if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
                         NotifyCollision(groundLeftCheck);
@@ -855,6 +791,16 @@ namespace Hedgehog.Core.Actors
                         if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
                         NotifyCollision(groundRightCheck);
                     }
+                }
+                else if (groundLeftCheck)
+                {
+                    if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
+                    NotifyCollision(groundLeftCheck);
+                }
+                else
+                {
+                    if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
+                    NotifyCollision(groundRightCheck);
                 }
 
                 return true;
@@ -1138,66 +1084,144 @@ namespace Hedgehog.Core.Actors
 
         #region Control Functions
         /// <summary>
-        /// Locks the player's horizontal control on the ground for the time specified by HorizontalLockTime.
+        /// Enters the specified control state.
         /// </summary>
-        public void LockHorizontal()
+        /// <param name="state">The specified control state.</param>
+        public void EnterControlState(ControlState state)
         {
-            LockHorizontal(HorizontalLockTime);
+            if (ControlState != null)
+            {
+                ControlState.OnStateExit(state);
+                ControlState.IsCurrent = false;
+            }
+
+            state.OnStateEnter(ControlState);
+            ControlState = state;
+            ControlState.IsCurrent = true;
         }
 
         /// <summary>
-        /// Locks the player's horizontal control on the ground for the specified time.
+        /// Returns the first move of the specified type.
         /// </summary>
-        /// <param name="time">The specified time, in seconds</param>
-        public void LockHorizontal(float time)
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public TMove GetMove<TMove>() where TMove : Move
         {
-            HorizontalLock = true;
-            HorizontalLockTimer = HorizontalLockTime;
+            return Moves.FirstOrDefault(move => move is TMove) as TMove;
         }
 
-        public void Jump()
+        /// <summary>
+        /// Returns whether the first move of the specified type is available.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public bool IsAvailable<TMove>()
         {
-            JustJumped = true;
-
-            // Forces the player to leave the ground using the constant ForceJumpAngleDifference.
-            // Helps prevent sticking to surfaces when the player's gotta go fast.
-            var originalAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
-
-            var surfaceNormal = (SurfaceAngle + 90.0f) * Mathf.Deg2Rad;
-            Vx += JumpSpeed * Mathf.Cos(surfaceNormal);
-            Vy += JumpSpeed * Mathf.Sin(surfaceNormal);
-
-            if (DMath.Equalsf(Vg))
-            {
-                Detach();
-                return;
-            }
-
-            var newAngle = DMath.Modp(DMath.Angle(new Vector2(Vx, Vy)) * Mathf.Rad2Deg, 360.0f);
-            var angleDifference = DMath.ShortestArc_d(originalAngle, newAngle);
-
-            if (Mathf.Abs(angleDifference) < ForceJumpAngleDifference)
-            {
-                var targetAngle = originalAngle + ForceJumpAngleDifference * Mathf.Sign(angleDifference);
-                var magnitude = new Vector2(Vx, Vy).magnitude;
-
-                var targetAngleRadians = targetAngle * Mathf.Deg2Rad;
-                var newVelocity = new Vector2(magnitude * Mathf.Cos(targetAngleRadians),
-                    magnitude * Mathf.Sin(targetAngleRadians));
-
-                Vx = newVelocity.x;
-                Vy = newVelocity.y;
-            }
-
-            Detach();
+            return AvailableMoves.Any(move => move is TMove);
         }
 
-        public void ReleaseJump()
+        /// <summary>
+        /// Returns whether the first move of the specified type is active.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public bool IsActive<TMove>()
         {
-            if (RelativeVelocity.y > JumpSpeed)
-                RelativeVelocity += Vector2.down*(JumpSpeed - ReleaseJumpSpeed);
-            else if (RelativeVelocity.y > ReleaseJumpSpeed)
-                RelativeVelocity += Vector2.down*(RelativeVelocity.y - ReleaseJumpSpeed);
+            return ActiveMoves.Any(move => move is TMove);
+        }
+
+        /// <summary>
+        /// Forces the controller to perform the first move of the specified type, even if it's unavailable.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns>Whether the move was performed.</returns>
+        public bool ForcePerformMove<TMove>()
+        {
+            return ForcePerformMove(Moves.FirstOrDefault(m => m is TMove));
+        }
+
+        /// <summary>
+        /// Forces the controller to perform the specified move, even if it's unavailable.
+        /// </summary>
+        /// <param name="move">The specified move.</param>
+        /// <returns>Whether the move was performed.</returns>
+        public bool ForcePerformMove(Move move)
+        {
+            if (move == null || move.CurrentState == Move.State.Active)
+                return false;
+
+            if (move.CurrentState == Move.State.Unavailable)
+            {
+                UnavailableMoves.Remove(move);
+                ActiveMoves.Add(move);
+                return move.ChangeState(Move.State.Active);
+            }
+            else if (move.CurrentState == Move.State.Available)
+            {
+                return PerformMove(move);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Performs the first move of the specified type, if it's available.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns>Whether the move was performed.</returns>
+        public bool PerformMove<TMove>()
+        {
+            return PerformMove(AvailableMoves.FirstOrDefault(m => m is TMove));
+        }
+
+        /// <summary>
+        /// Performs the specified move, if it's available.
+        /// </summary>
+        /// <param name="move">The specified move.</param>
+        /// <returns>Whether the move was performed.</returns>
+        public bool PerformMove(Move move)
+        {
+            if (move == null || move.CurrentState != Move.State.Available)
+                return false;
+
+            AvailableMoves.Remove(move);
+            ActiveMoves.Add(move);
+            return move.ChangeState(Move.State.Active);
+        }
+
+        /// <summary>
+        /// Ends the first move of the specified type, if it's active.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns>Whether the move was ended.</returns>
+        public bool EndMove<TMove>()
+        {
+            return EndMove(ActiveMoves.FirstOrDefault(m => m is TMove));
+        }
+
+        /// <summary>
+        /// Ends the specified move, if it's active.
+        /// </summary>
+        /// <param name="move">The specified move.</param>
+        /// <returns>Whether the move was ended.</returns>
+        public bool EndMove(Move move)
+        {
+            if (move == null || move.CurrentState != Move.State.Active)
+                return false;
+
+            ActiveMoves.Remove(move);
+            if (move.Available())
+            {
+                AvailableMoves.Add(move);
+                move.ChangeState(Move.State.Available);
+            }
+            else
+            {
+                UnavailableMoves.Add(move);
+                move.ChangeState(Move.State.Unavailable);
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -1243,17 +1267,18 @@ namespace Hedgehog.Core.Actors
         /// Detach the player from whatever surface it is on. If the player is not grounded this has no effect
         /// other than setting lockUponLanding.
         /// </summary>
-        /// <param name="lockUponLanding">If set to <c>true</c> lock horizontal control when the player attaches.</param>
-        public void Detach(bool lockUponLanding = false)
+        public void Detach()
         {
-            Vg = 0.0f;
-            SurfaceAngle = RelativeAngle(0.0f);
+            // Don't invoke the event if the controller was already off the ground
+            if (Grounded)
+                OnDetach.Invoke();
+
             Grounded = false;
             JustDetached = true;
             Footing = Footing.None;
-            LockUponLanding = lockUponLanding;
             SensorsRotation = GravityDirection + 90.0f;
             SetSurface(null);
+            EnterControlState(DefaultAirState);
         }
 
         /// <summary>
@@ -1269,12 +1294,7 @@ namespace Hedgehog.Core.Actors
             SurfaceAngle = angleDegrees;
             SensorsRotation = SurfaceAngle;
             Grounded = true;
-
-            if (LockUponLanding)
-            {
-                LockUponLanding = false;
-                LockHorizontal();
-            }
+            EnterControlState(DefaultGroundState);
         }
 
         /// <summary>

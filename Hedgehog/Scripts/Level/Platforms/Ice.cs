@@ -37,15 +37,15 @@ namespace Hedgehog.Level.Platforms
             _capturedPhysicsValues.Add(controller.GetInstanceID(), HedgehogPhysicsValues.Capture(controller));
             if (DMath.Equalsf(Friction))
             {
-                controller.GroundAcceleration = 0.0f;
-                controller.GroundDeceleration = 0.0f;
-                controller.GroundBrake = 0.0f;
+                controller.DefaultGroundState.Acceleration = 0.0f;
+                controller.DefaultGroundState.Deceleration = 0.0f;
+                controller.GroundFriction = 0.0f;
             }
             else
             {
-                controller.GroundAcceleration *= Friction;
-                controller.GroundDeceleration *= Friction;
-                controller.GroundBrake *= Friction;
+                controller.DefaultGroundState.Acceleration *= Friction;
+                controller.DefaultGroundState.Deceleration *= Friction;
+                controller.GroundFriction *= Friction;
             }
         }
 
@@ -54,9 +54,9 @@ namespace Hedgehog.Level.Platforms
         {
             var physicsValues = _capturedPhysicsValues[controller.GetInstanceID()];
 
-            controller.GroundAcceleration = physicsValues.GroundAcceleration;
-            controller.GroundDeceleration = physicsValues.GroundDeceleration;
-            controller.GroundBrake = physicsValues.GroundBrake;
+            controller.DefaultGroundState.Acceleration = physicsValues.GroundAcceleration;
+            controller.DefaultGroundState.Deceleration = physicsValues.GroundBrake;
+            controller.GroundFriction = physicsValues.GroundDeceleration;
 
             _capturedPhysicsValues.Remove(controller.GetInstanceID());
         }

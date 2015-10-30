@@ -50,7 +50,7 @@ namespace Hedgehog.Level.Platforms
             if (AccelerateBothWays)
             {
                 if (AccountForFriction)
-                    controller.GroundVelocity += (controller.GroundDeceleration + Acceleration)
+                    controller.GroundVelocity += (controller.GroundFriction + Acceleration)
                                                  *Mathf.Sign(controller.GroundVelocity)*Time.fixedDeltaTime;
                 else
                     controller.GroundVelocity += Acceleration*Mathf.Sign(controller.GroundVelocity)*Time.fixedDeltaTime;
@@ -64,7 +64,7 @@ namespace Hedgehog.Level.Platforms
             else
             {
                 if (AccountForFriction)
-                    controller.GroundVelocity += (Acceleration + controller.GroundDeceleration*Mathf.Sign(Acceleration))
+                    controller.GroundVelocity += (Acceleration + controller.GroundFriction*Mathf.Sign(Acceleration))
                                                  *Time.fixedDeltaTime;
                 else
                     controller.GroundVelocity += Acceleration*Time.fixedDeltaTime;
