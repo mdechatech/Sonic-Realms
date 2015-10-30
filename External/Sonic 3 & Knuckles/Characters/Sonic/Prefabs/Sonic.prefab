@@ -30,6 +30,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &105384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 411496}
+  - 212: {fileID: 21216568}
+  - 95: {fileID: 9594506}
+  m_Layer: 0
+  m_Name: Sprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &118482
 GameObject:
   m_ObjectHideFlags: 1
@@ -113,10 +130,16 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 424606}
-  - 212: {fileID: 21292114}
-  - 95: {fileID: 9510806}
-  - 114: {fileID: 11405618}
   - 61: {fileID: 6187064}
+  - 50: {fileID: 5083970}
+  - 114: {fileID: 11405618}
+  - 114: {fileID: 11453498}
+  - 114: {fileID: 11497264}
+  - 114: {fileID: 11429268}
+  - 114: {fileID: 11405630}
+  - 114: {fileID: 11470654}
+  - 114: {fileID: 11474560}
+  - 114: {fileID: 11443282}
   m_Layer: 0
   m_Name: Sonic
   m_TagString: Untagged
@@ -267,6 +290,18 @@ Transform:
   - {fileID: 493184}
   m_Father: {fileID: 424606}
   m_RootOrder: 0
+--- !u!4 &411496
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105384}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 424606}
+  m_RootOrder: 1
 --- !u!4 &417646
 Transform:
   m_ObjectHideFlags: 1
@@ -286,10 +321,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.16999996, y: 1.03699994, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 403512}
+  - {fileID: 411496}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &427398
@@ -424,6 +460,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 403512}
   m_RootOrder: 0
+--- !u!50 &5083970
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &6187064
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -432,18 +484,18 @@ BoxCollider2D:
   m_GameObject: {fileID: 151248}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: .25999999, y: .379999995}
---- !u!95 &9510806
+--- !u!95 &9594506
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
+  m_GameObject: {fileID: 105384}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 3137e0f669f7352438e7e4da2d744a54, type: 2}
@@ -465,6 +517,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d5567b7e8f0f4892de869d9b03b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RendererObject: {fileID: 105384}
+  Animator: {fileID: 9594506}
+  DefaultGroundState: {fileID: 11453498}
+  DefaultAirState: {fileID: 11497264}
+  AutoFindMoves: 1
+  Moves: []
   CollisionMode: 2
   TerrainMask:
     serializedVersion: 2
@@ -472,32 +530,22 @@ MonoBehaviour:
   TerrainTags: []
   TerrainNames:
   - Always Collide
-  JumpKey: 119
-  LeftKey: 97
-  RightKey: 100
-  DebugSpindashKey: 32
+  - Path 1
   Sensors: {fileID: 11449732}
-  GroundAcceleration: 1.6875
-  GroundDeceleration: 1.6875
-  GroundBrake: 18
+  GroundFriction: 1.6875
   AirAcceleration: 3.375
   AirDragHorizontalSpeed: .075000003
   AirDragVerticalSpeed: 2.4000001
   AirDragCoefficient: .148834303
-  JumpSpeed: 3.9000001
-  ReleaseJumpSpeed: 2.4000001
   AirGravity: 7.875
   SlopeGravity: 4.5
   GravityDirection: 270
-  TopSpeed: 3.5999999
   MaxSpeed: 12
   LedgeClimbHeight: .159999996
   LedgeDropHeight: .159999996
   AntiTunnelingSpeed: 5
   SlopeGravityBeginAngle: 10
   DetachSpeed: 1.5
-  HorizontalLockTime: .5
-  ForceJumpAngleDifference: 30
   MaxSurfaceAngleDifference: 70
   MaxVerticalDetachAngle: 1.5
   OnCrush:
@@ -505,27 +553,96 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  LeftKeyDown: 0
-  RightKeyDown: 0
-  JumpKeyPressed: 0
-  JumpKeyDown: 0
-  JumpKeyReleased: 0
-  DebugSpindashKeyDown: 0
+  OnDetach:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnSteepDetach:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ControlState: {fileID: 0}
+  ActiveMoves: []
+  AvailableMoves: []
+  UnavailableMoves: []
+  ApplySlopeGravity: 0
+  ApplyGroundFriction: 0
+  DetachWhenSlow: 0
+  ApplyAirGravity: 0
+  ApplyAirDrag: 0
+  AutoFlip: 0
+  AutoRotate: 0
+  FacingForward: 0
   Vx: 0
   Vy: 0
   Vg: 0
   Grounded: 0
   SurfaceAngle: 0
   Footing: 0
-  HorizontalLock: 0
-  HorizontalLockTimer: 0
-  LockUponLanding: 0
-  JustJumped: 0
-  CanReleaseJump: 0
   JustDetached: 0
   PrimarySurface: {fileID: 0}
   SecondarySurface: {fileID: 0}
   QueuedTranslation: {x: 0, y: 0, z: 0}
+--- !u!114 &11405630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7514d680ed0ac744d87004eb35fc4580, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  ActiveTrigger: 
+  ActiveBool: Jumping
+  AvailableBool: 
+  ActivateInput: Jump
+  ActivateSpeed: 3.9000001
+  ReleaseSpeed: 2.4000001
+  HeldBool: 
+  ReleaseTrigger: 
+--- !u!114 &11429268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797331bf56043af418fcd734e955b173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  ActiveTrigger: 
+  ActiveBool: Rolling
+  AvailableBool: 
+  ActivateInput: Vertical
+  RequireNegative: 1
+  MinActivateSpeed: .618749976
+  UphillGravity: 2.8125
+  DownhillGravity: 11.25
+  Deceleration: 4.5
+  Friction: .845099986
+--- !u!114 &11443282
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b99b237d3dc3e1d40b435ab74ce992c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  ActiveTrigger: 
+  ActiveBool: Looking Up
+  AvailableBool: 
+  InputAxis: Vertical
 --- !u!114 &11449732
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -550,12 +667,101 @@ MonoBehaviour:
   LedgeClimbRight: {fileID: 493184}
   LedgeDropLeft: {fileID: 483620}
   LedgeDropRight: {fileID: 472500}
---- !u!212 &21292114
-SpriteRenderer:
+--- !u!114 &11453498
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb2f0e4529104042a3b39f3ae84b062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsCurrent: 0
+  InputAxis: Horizontal
+  InvertAxis: 0
+  Acceleration: 1.6875
+  AccelerationLocked: 0
+  Deceleration: 18
+  DecelerationLocked: 0
+  TopSpeed: 3.5999999
+  InputAxisFloat: 
+  GroundedBool: Grounded
+  AcceleratingBool: Accelerating
+  BrakingBool: Braking
+  SpeedFloat: Ground Speed
+  AbsoluteSpeedFloat: Absolute Ground Speed
+  SurfaceAngleFloat: 
+  TopSpeedBool: At Top Speed
+  ControlLockBool: 
+  ControlLockTimerFloat: 
+  ControlLocked: 0
+  ControlLockTimer: 0
+--- !u!114 &11470654
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1095e8583f53d4c9de57a4156eb719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  ActiveTrigger: 
+  ActiveBool: Ducking
+  AvailableBool: 
+  ActivateInput: Vertical
+  RequireNegative: 1
+  MaxActivateSpeed: .618749976
+--- !u!114 &11474560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f2eca7c11782a34aaf5564a40ddbf71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  ActiveTrigger: 
+  ActiveBool: Spindashing
+  AvailableBool: 
+  ChargeButton: Fire1
+  BasePower: 4.80000019
+  ChargePower: .600000024
+  ChargePowerDecay: 1.875
+  MaxChargePower: 2.4000001
+  CurrentChargePower: 0
+--- !u!114 &11497264
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95703b2ef2f45d14283e6492815cf5de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsCurrent: 0
+  InputAxis: Horizontal
+  InvertAxis: 0
+  Acceleration: 3.375
+  Deceleration: 3.375
+  TopSpeed: 3.5999999
+  HorizontalSpeedParameter: Air Speed X
+  VerticalSpeedParameter: Air Speed Y
+--- !u!212 &21216568
+SpriteRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105384}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -573,8 +779,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5ffc9551ee678e849a730196cd1455f0, type: 3}
+  m_SortingOrder: -1
+  m_Sprite: {fileID: 21300000, guid: 5a938bca86b40664888a14b33e3c812f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
