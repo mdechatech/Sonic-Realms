@@ -4,6 +4,7 @@ using UnityEditor;
 namespace Hedgehog.Core.Moves.Editor
 {
     [CustomEditor(typeof(Move), true)]
+    [CanEditMultipleObjects]
     public class MoveEditor : UnityEditor.Editor
     {
         protected bool ShowControlFoldout

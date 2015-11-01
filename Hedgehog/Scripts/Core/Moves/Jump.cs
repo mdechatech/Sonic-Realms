@@ -28,21 +28,6 @@ namespace Hedgehog.Core.Moves
         [Tooltip("Jump speed after moment of release, in units per second.")]
         public float ReleaseSpeed;
         #endregion
-        #region Animation
-        /// <summary>
-        /// Name of an Animator bool set to whether the jump key is being held.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether the jump key is being held.")]
-        public string HeldBool;
-
-        /// <summary>
-        /// Name of an Animator trigger set when the jump key is released.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator trigger set when the jump key is released.")]
-        public string ReleaseTrigger;
-        #endregion
 
         public override void Reset()
         {
@@ -52,8 +37,6 @@ namespace Hedgehog.Core.Moves
 
             ActivateSpeed = 3.9f;
             ReleaseSpeed = 2.4f;
-
-            HeldBool = ReleaseTrigger = "";
         }
 
         public override bool Available()
@@ -73,9 +56,6 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveEnter(State previousState)
         {
-            if (Animator != null && HeldBool.Length > 0)
-                Animator.SetBool(HeldBool, true);
-
             Controller.Detach();
             Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
         }
@@ -88,13 +68,8 @@ namespace Hedgehog.Core.Moves
         public override void OnActiveExit()
         {
             if (Animator == null) return;
-            if (HeldBool.Length > 0)
-                Animator.SetBool(HeldBool, false);
-
-            if (ReleaseTrigger.Length > 0)
-                Animator.SetTrigger(ReleaseTrigger);
-
             if (Controller.Grounded) return;
+
             if (Controller.RelativeVelocity.y > ActivateSpeed)
             {
                 Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x,

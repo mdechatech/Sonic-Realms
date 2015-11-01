@@ -285,6 +285,16 @@ namespace Hedgehog.Core.Actors
         public bool DetachWhenSlow;
 
         /// <summary>
+        /// When true, prevents the controller from falling off surfaces.
+        /// </summary>
+        public bool DetachLock;
+
+        /// <summary>
+        /// When true, prevents the controller from attaching to surfaces.
+        /// </summary>
+        public bool AttachLock;
+
+        /// <summary>
         /// Whether to apply air gravity on the controller when it's in the air.
         /// </summary>
         public bool ApplyAirGravity;
@@ -467,6 +477,7 @@ namespace Hedgehog.Core.Actors
 
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             AutoFlip = AutoRotate = FacingForward = true;
+            AttachLock = DetachLock = false;
             EnterControlState(DefaultAirState);
         }
 
@@ -588,7 +599,14 @@ namespace Hedgehog.Core.Actors
         {
             if (AutoFlip)
             {
-                FacingForward = Grounded ? GroundVelocity >= 0.0f : RelativeVelocity.x >= 0.0f;
+                if (Grounded && !DMath.Equalsf(GroundVelocity))
+                {
+                    FacingForward = GroundVelocity >= 0.0f;
+                }
+                else if (!Grounded && !DMath.Equalsf(RelativeVelocity.x))
+                {
+                    FacingForward = RelativeVelocity.x >= 0.0f;
+                }
             }
 
             if (!Grounded)
@@ -651,8 +669,8 @@ namespace Hedgehog.Core.Actors
                         90.0f - MaxVerticalDetachAngle,
                         270.0f + MaxVerticalDetachAngle))
                 {
-                    Detach();
-                    OnSteepDetach.Invoke();
+                    if(Detach())
+                        OnSteepDetach.Invoke();
                 }
             }
             else
@@ -1266,9 +1284,12 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Detach the player from whatever surface it is on. If the player is not grounded this has no effect
         /// other than setting lockUponLanding.
+        /// <returns>Whether the controller detached successfully.</returns>
         /// </summary>
-        public void Detach()
+        public bool Detach()
         {
+            if (DetachLock) return false;
+
             // Don't invoke the event if the controller was already off the ground
             if (Grounded)
                 OnDetach.Invoke();
@@ -1279,6 +1300,8 @@ namespace Hedgehog.Core.Actors
             SensorsRotation = GravityDirection + 90.0f;
             SetSurface(null);
             EnterControlState(DefaultAirState);
+
+            return false;
         }
 
         /// <summary>
@@ -1287,14 +1310,19 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <param name="groundSpeed">The ground speed of the player after attaching.</param>
         /// <param name="angleRadians">The angle of the surface, in radians.</param>
-        public void Attach(float groundSpeed, float angleRadians)
+        /// <returns>Whether the controller attached successfully.</returns>
+        public bool Attach(float groundSpeed, float angleRadians)
         {
+            if (AttachLock) return false;
+
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             Vg = groundSpeed;
             SurfaceAngle = angleDegrees;
             SensorsRotation = SurfaceAngle;
             Grounded = true;
             EnterControlState(DefaultGroundState);
+
+            return true;
         }
 
         /// <summary>

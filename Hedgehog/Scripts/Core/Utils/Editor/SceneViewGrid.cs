@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Hedgehog.Core.Utils.Editor
@@ -21,7 +17,7 @@ namespace Hedgehog.Core.Utils.Editor
         [MenuItem("Hedgehog/Show Grid")]
         public static void ShowWindow()
         {
-            var window = EditorWindow.GetWindow(typeof (SceneViewGrid), false, "Grid", true);
+            GetWindow(typeof (SceneViewGrid), false, "Grid", true);
         }
 
         private void OnFocus()
