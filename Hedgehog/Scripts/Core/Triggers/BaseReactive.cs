@@ -10,6 +10,15 @@ namespace Hedgehog.Core.Triggers
     {
         private ObjectTrigger _objectTrigger;
 
+        /// <summary>
+        /// Whether this component can activate object triggers, if it has any. Not necessary to override, used
+        /// by object effects for convenience.
+        /// </summary>
+        public virtual bool ActivatesObject
+        {
+            get { return false; }
+        }
+
         protected bool AutoActivate
         {
             get { return _objectTrigger == null ? false : _objectTrigger.AutoActivate; }

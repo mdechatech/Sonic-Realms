@@ -16,11 +16,5 @@ namespace Hedgehog.Core.Moves.Editor
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateSpeed", "ReleaseSpeed");
             base.DrawPhysicsProperties();
         }
-
-        protected override void DrawAnimationProperties()
-        {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "HeldBool", "ReleaseTrigger");
-            base.DrawAnimationProperties();
-        }
     }
 }

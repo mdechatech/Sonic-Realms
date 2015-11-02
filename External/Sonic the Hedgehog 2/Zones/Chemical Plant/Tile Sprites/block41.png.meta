@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 71027467b804c094fbddc6a2a42c92c4
-timeCreated: 1445960955
+guid: 40cf595f1e0ff084d8a9ab0f52c80cdc
+timeCreated: 1446422336
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -30,7 +30,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: 16
+    aniso: -1
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -50,7 +50,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: Chemical Plant Zone Tiles
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

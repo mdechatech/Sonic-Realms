@@ -21,8 +21,8 @@ namespace Hedgehog.Core.Moves
 
         public override bool Available()
         {
-            return DMath.Equalsf(Controller.GroundVelocity) && !Controller.DefaultGroundState.Accelerating &&
-                   !Controller.DefaultGroundState.Braking;
+            return DMath.Equalsf(Controller.GroundVelocity) && !Controller.GroundControl.Accelerating &&
+                   !Controller.GroundControl.Braking;
         }
 
         public override bool InputActivate()

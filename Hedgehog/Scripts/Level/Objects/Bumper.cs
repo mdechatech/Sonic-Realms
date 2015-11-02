@@ -34,6 +34,11 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether to lock the controller's horizontal control after being hit.")]
         public bool LockControl;
 
+        public override bool ActivatesObject
+        {
+            get { return true; }
+        }
+
         public void Reset()
         {
             Velocity = 10.0f;
@@ -50,7 +55,7 @@ namespace Hedgehog.Level.Objects
         public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
         {
             controller.Detach();
-            if(LockControl) controller.DefaultGroundState.Lock();
+            if(LockControl) controller.GroundControl.Lock();
            
             var normal = hit.NormalAngle;
 

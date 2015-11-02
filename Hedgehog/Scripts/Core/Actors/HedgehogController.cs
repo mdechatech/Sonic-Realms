@@ -34,14 +34,14 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [SerializeField]
         [Tooltip("The default control state to enter when on the ground.")]
-        public GroundControl DefaultGroundState;
+        public GroundControl GroundControl;
 
         /// <summary>
         /// The default control state to enter when in the air.
         /// </summary>
         [SerializeField]
         [Tooltip("The default control state to enter when in the air.")]
-        public AirControl DefaultAirState;
+        public AirControl AirControl;
 
         /// <summary>
         /// Whether to find moves on initialization. Searches through all children and itself.
@@ -58,26 +58,21 @@ namespace Hedgehog.Core.Actors
         public List<Move> Moves;
         #endregion
         #region Collision
-        [SerializeField]
-        public CollisionMode CollisionMode = CollisionMode.Layers;
-
         /// <summary>
-        /// The layer mask which represents the ground the player checks for collision with.
+        /// What paths the controller collides with. An object is on a path if it or one of its parents
+        /// has that path's name.
         /// </summary>
-        [HideInInspector]
-        public LayerMask TerrainMask;
-
         [SerializeField]
-        public List<string> TerrainTags = new List<string>();
-
-        [SerializeField]
-        public List<string> TerrainNames = new List<string>();
+        [Tooltip("What paths the controller is on. An object is on a path if it or one of its parents " +
+                 "has that path's name.")]
+        public List<string> Paths;
         #endregion
         #region Sensors
         /// <summary>
         /// Contains sensor data for hit detection.
         /// </summary>
         [SerializeField]
+        [Tooltip("Contains sensor data for hit detection.")]
         public HedgehogSensors Sensors;
 
         /// <summary>
@@ -98,115 +93,95 @@ namespace Hedgehog.Core.Actors
         /// The player's friction on the ground in units per second per second.
         /// </summary>
         [SerializeField]
-        [Range(0.0f, 0.25f)]
         [Tooltip("Ground friction in units per second squared.")]
-        public float GroundFriction = 0.12f;
-
-        /// <summary>
-        /// The player's horizontal acceleration in the air in units per second per second.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 0.25f)]
-        [Tooltip("Air acceleration in units per second squared.")]
-        public float AirAcceleration = 0.16f;
-
-        /// <summary>
-        /// Minimum horizontal speed requirement for air drag.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 20.0f)]
-        [Tooltip("Horizontal speed requirement for air drag.")]
-        public float AirDragHorizontalSpeed = 0.25f;
-
-        /// <summary>
-        /// Minimum vertical speed requirement for air drag.
-        /// </summary>
-        [SerializeField]
-        [Range(0.0f, 20.0f)]
-        [Tooltip("Vertical speed requirement for air drag.")]
-        public float AirDragVerticalSpeed = 4.8f;
+        public float GroundFriction;
 
         /// <summary>
         /// This coefficient is applied to horizontal speed when horizontal and vertical speed
         /// requirements are met.
         /// </summary>
         [SerializeField]
-        [Range(0.0f, 1.0f)]
         [Tooltip("Air drag coefficient applied if horizontal speed is greater than air drag speed.")]
-        public float AirDragCoefficient = 0.9738896f;
+        public float AirDrag;
+
+        /// <summary>
+        /// The speed above which air drag begins.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The speed above which air drag begins.")]
+        public Vector2 AirDragRequiredSpeed;
 
         /// <summary>
         /// The acceleration by gravity in units per second per second.
         /// </summary>
         [SerializeField]
-        [Range(0.0f, 1.0f)]
         [Tooltip("Acceleration in the air, in the downward direction, in units per second squared.")]
-        public float AirGravity = 0.3f;
+        public float AirGravity;
 
         /// <summary>
         /// The magnitude of the force applied to the player when going up or down slopes.
         /// </summary>
         [SerializeField]
-        [Range(0.0f, 1.0f)]
         [Tooltip("Acceleration on downward slopes, the maximum being this value, in units per second squared")]
-        public float SlopeGravity = 0.3f;
+        public float SlopeGravity;
 
         /// <summary>
         /// Direction of gravity. 0/360 is right, 90 is up, 180 is left, 270 is down.
         /// </summary>
         [SerializeField]
-        [Range(0.0f, 360.0f)]
         [Tooltip("Direction of gravity in degrees. 0/360 is right, 90 is up, 180 is left, 270 is down.")]
-        public float GravityDirection = 270.0f;
+        public float GravityDirection;
+
         /// <summary>
-        /// The player's maximum speed in units per second.
+        /// Maximum speed in units per second. The controller can NEVER go faster than this.
         /// </summary>
         [SerializeField]
-        [Range(0.0f, 100.0f)]
-        [Tooltip("Maximum speed in units per second.")]
-        public float MaxSpeed = 20.0f;
+        [Tooltip("Maximum speed in units per second. The controller can NEVER go faster than this.")]
+        public float MaxSpeed;
 
+        /// <summary>
+        /// The maximum height of a surface above the player's feet that it can snap onto without hindrance.
+        /// </summary>
         [SerializeField]
-        public float LedgeClimbHeight = 0.25f;
+        [Tooltip("The maximum height of a surface above the player's feet that it can snap onto without hindrance.")]
+        public float LedgeClimbHeight;
 
         /// <summary>
         /// The maximum depth of a surface below the player's feet that it can drop to without hindrance.
         /// </summary>
         [SerializeField]
-        public float LedgeDropHeight = 0.25f;
+        [Tooltip("The maximum depth of a surface below the player's feet that it can drop to without hindrance.")]
+        public float LedgeDropHeight;
 
         /// <summary>
         /// The minimum speed in units per second the player must be moving at to stagger each physics update,
         /// processing the movement in fractions.
         /// </summary>
         [SerializeField]
-        public float AntiTunnelingSpeed = 5.0f;
+        [Tooltip("The minimum speed in units per second the player must be moving at to stagger each physics update, " +
+                 "processing the movement in fractions.")]
+        public float AntiTunnelingSpeed;
 
         /// <summary>
         /// The minimum angle of an incline at which slope gravity is applied.
         /// </summary>
         [SerializeField]
-        public float SlopeGravityBeginAngle = 10.0f;
+        [Tooltip("The minimum angle of an incline at which slope gravity is applied.")]
+        public float SlopeGravityBeginAngle;
 
         /// <summary>
-        /// The speed in units per second below which the player must be traveling on a wall or ceiling to be
-        /// detached from it.
+        /// The controller falls off walls and ceilings if moving below this speed.
         /// </summary>
         [SerializeField]
-        public float DetachSpeed = 3.0f;
+        [Tooltip("The controller falls off walls and ceilings if moving below this speed.")]
+        public float DetachSpeed;
 
         /// <summary>
-        /// The maximum change in angle between two surfaces that the player can walk in.
+        /// The controller can't latch onto walls if they're this much steeper than the floor it's on, in degrees.
         /// </summary>
         [SerializeField]
-        public float MaxSurfaceAngleDifference = 70.0f;
-
-        /// <summary>
-        /// The maximum surface angle difference from a vertical wall at which a player is able to detach from
-        /// through use of the directional key opposite to the one in which it is traveling.
-        /// </summary>
-        [SerializeField]
-        public float MaxVerticalDetachAngle = 5.0f;
+        [Tooltip("The controller can't latch onto walls if they're this much steeper than the floor it's on, in degrees.")]
+        public float MaxClimbAngle;
         #endregion
         #region Events
         /// <summary>
@@ -214,6 +189,12 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [SerializeField]
         public UnityEvent OnCrush;
+
+        /// <summary>
+        /// Invoked when the controller lands on something.
+        /// </summary>
+        [SerializeField]
+        public UnityEvent OnAttach;
 
         /// <summary>
         /// Invoked when the controller detaches from the ground for any reason.
@@ -268,6 +249,13 @@ namespace Hedgehog.Core.Actors
         /// The default direction of gravity, in degrees.
         /// </summary>
         private const float DefaultGravityDirection = 270.0f;
+
+        /// <summary>
+        /// The maximum number of steps a controller's movement can be divided into.
+        /// This is in place to prevent the controller from crashing the game if it
+        /// tries to do a ton of steps.
+        /// </summary>
+        private const int CollisionStepLimit = 100;
 
         /// <summary>
         /// Whether to apply slope gravity on the controller when it's on steep ground.
@@ -350,17 +338,6 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// The controller's velocity on the ground; the faster it's running, the higher in magnitude
-        /// this number is. If it's moving forward (counter-clockwise inside a loop), this is positive.
-        /// If backwards (clockwise inside a loop), negative.
-        /// </summary>
-        public float GroundVelocity
-        {
-            get { return Vg; }
-            set { Vg = value; }
-        }
-
-        /// <summary>
         /// A unit vector pointing in the "downward" direction based on the controller's GravityDirection.
         /// </summary>
         public Vector2 GravityDown
@@ -372,33 +349,37 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// The player's horizontal velocity in units per second.
         /// </summary>
-        [HideInInspector]
+        [SerializeField]
+        [Tooltip("The player's horizontal velocity in units per second.")]
         public float Vx;
 
         /// <summary>
         /// The player's vertical velocity in units per second.
         /// </summary>
-        [HideInInspector]
+        [SerializeField]
+        [Tooltip("The player's vertical velocity in units per second.")]
         public float Vy;
 
         /// <summary>
-        /// If grounded, the player's ground velocity in units per second.
+        /// The controller's velocity on the ground in units per second. Positive if forward, negative if backward.
         /// </summary>
-        [HideInInspector]
-        public float Vg;
+        [SerializeField]
+        [Tooltip("The controller's velocity on the ground in units per second. Positive if forward, negative if backward.")]
+        public float GroundVelocity;
 
         /// <summary>
         /// Whether the player is touching the ground.
         /// </summary>
-        /// <value><c>true</c> if grounded; otherwise, <c>false</c>.</value>
-        [HideInInspector]
+        [SerializeField]
+        [Tooltip("Whether the player is touching the ground.")]
         public bool Grounded;
 
         /// <summary>
         /// If grounded, the angle of incline the controller is walking on in degrees. Goes hand-in-hand
         /// with rotation.
         /// </summary>
-        [HideInInspector]
+        [SerializeField]
+        [Tooltip("If grounded, the angle of incline the controller is walking on in degrees.")]
         public float SurfaceAngle;
 
         /// <summary>
@@ -455,14 +436,48 @@ namespace Hedgehog.Core.Actors
         #region Lifecycle Functions
         public virtual void Reset()
         {
+            RendererObject = GetComponentInChildren<Renderer>().gameObject;
+            Animator = RendererObject.GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
+
+            GroundControl = GetComponent<GroundControl>() ?? gameObject.AddComponent<GroundControl>();
+            AirControl = GetComponent<AirControl>() ?? gameObject.AddComponent<AirControl>();
             AutoFindMoves = true;
+
+            Paths = new List<string> {"Always Collide"};
+
+            Sensors = GetComponentInChildren<HedgehogSensors>();
+
+            MaxSpeed = 9001.0f;
+            GroundFriction = 1.6785f;
+            GravityDirection = 270.0f;
+            SlopeGravity = 4.5f;
+            AirGravity = 7.857f;
+            AirDrag = 0.1488343f;
+            AirDragRequiredSpeed = new Vector2(0.075f, 2.4f);
+            AntiTunnelingSpeed = 4.0f;
+            DetachSpeed = 1.5f;
+            SlopeGravityBeginAngle = 10.0f;
+            LedgeClimbHeight = 0.16f;
+            LedgeDropHeight = 0.16f;
+            MaxClimbAngle = 70.0f;
+
+            ApplyAirDrag = true;
+            ApplyAirGravity = true;
+            ApplyGroundFriction = true;
+            ApplySlopeGravity = true;
+            AttachLock = true;
+            DetachLock = true;
+            DetachWhenSlow = true;
+
+            AutoFlip = true;
+            AutoRotate = true;
         }
 
         public void Awake()
         {
             Footing = Footing.None;
             Grounded = false;
-            Vx = Vy = Vg = 0.0f;
+            Vx = Vy = GroundVelocity = 0.0f;
             JustDetached = false;
             QueuedTranslation = default(Vector3);
 
@@ -478,12 +493,14 @@ namespace Hedgehog.Core.Actors
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             AutoFlip = AutoRotate = FacingForward = true;
             AttachLock = DetachLock = false;
-            EnterControlState(DefaultAirState);
+            EnterControlState(AirControl);
         }
 
         public void Update()
         {
-            if(ControlState != null) ControlState.OnStateUpdate();
+            if(ControlState != null)
+                ControlState.OnStateUpdate();
+
             for (var i = ActiveMoves.Count - 1; i >= 0; i--)
             {
                 ActiveMoves[i].OnActiveUpdate();
@@ -494,59 +511,73 @@ namespace Hedgehog.Core.Actors
 
         public void FixedUpdate()
         {
-            if(ControlState != null) ControlState.OnStateFixedUpdate();
+            if(ControlState != null)
+                ControlState.OnStateFixedUpdate();
+
             HandleForces();
-
-            if (QueuedTranslation != default(Vector3))
-            {
-                transform.position += QueuedTranslation;
-                QueuedTranslation = default(Vector3);
-            }
-            
-            // Stagger routine - if the player's gotta go fast, move it in increments of AntiTunnelingSpeed
-            // to prevent tunneling.
-            var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
-            
-            if (vt < AntiTunnelingSpeed)
-            {
-                transform.position = new Vector2(transform.position.x + (Vx * Time.fixedDeltaTime), transform.position.y + (Vy * Time.fixedDeltaTime));
-                HandleCollisions();
-            }
-            else
-            {
-                var vc = vt;
-                while (vc > 0.0f)
-                {
-                    if (vc > AntiTunnelingSpeed)
-                    {
-                        transform.position += (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (AntiTunnelingSpeed / vt);
-                        vc -= AntiTunnelingSpeed;
-                    }
-                    else
-                    {
-                        transform.position += (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (vc / vt);
-                        vc = 0.0f;
-                    }
-
-                    HandleCollisions();
-
-                    // If the player's speed changes mid-stagger recalculate current velocity and total velocity
-                    var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
-                    vc *= vn / vt;
-                    vt *= vn / vt;
-                }
-            }
+            HandleQueuedTranslation();
+            HandleMovement();
 
             for (var i = ActiveMoves.Count - 1; i >= 0; i--)
             {
                 ActiveMoves[i].OnActiveFixedUpdate();
             }
 
-            HandleDisplay(Time.fixedDeltaTime);
+            HandleDisplay();
         }
         #endregion
 
         #region Lifecycle Subroutines
+        public void HandleMovement()
+        {
+            var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
+
+            if (vt < AntiTunnelingSpeed)
+            {
+                transform.position += new Vector3(Vx*Time.fixedDeltaTime, Vy*Time.fixedDeltaTime);
+                HandleCollisions();
+            }
+            else
+            {
+                // If the controller's gotta go fast, split up collision into steps. The speed limit becomes however many steps
+                // your computer can handle!
+                var vc = vt;
+                var steps = 0;
+                while (vc > 0.0f)
+                {
+                    if (vc > AntiTunnelingSpeed)
+                    {
+                        transform.position += 
+                            (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (AntiTunnelingSpeed / vt);
+                        vc -= AntiTunnelingSpeed;
+                    }
+                    else
+                    {
+                        transform.position += 
+                            (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (vc / vt);
+                        vc = 0.0f;
+                    }
+
+                    HandleCollisions();
+                    
+                    // If the player's speed changes mid-stagger recalculate current velocity and total velocity
+                    var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
+                    vc *= vn / vt;
+                    vt *= vn / vt;
+
+                    if (++steps > CollisionStepLimit) break;
+                }
+            }
+        }
+
+        public void HandleQueuedTranslation()
+        {
+            if (QueuedTranslation == Vector3.zero) return;
+
+            transform.position += QueuedTranslation;
+            QueuedTranslation = Vector3.zero;
+        }
+
         public void HandleMoves()
         {
             for (var i = UnavailableMoves.Count - 1; i >= 0; i--)
@@ -651,25 +682,23 @@ namespace Hedgehog.Core.Actors
                 if (ApplySlopeGravity && 
                     !DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
                 {
-                    Vg -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
+                    GroundVelocity -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
                 }
 
                 // Ground friction
                 if (ApplyGroundFriction)
-                    Vg -= Mathf.Min(Mathf.Abs(Vg), GroundFriction*timestep)*Mathf.Sign(Vg);
+                    GroundVelocity -= Mathf.Min(Mathf.Abs(GroundVelocity), GroundFriction*timestep)*Mathf.Sign(GroundVelocity);
 
                 // Speed limit
-                if (Vg > MaxSpeed) Vg = MaxSpeed;
-                else if (Vg < -MaxSpeed) Vg = -MaxSpeed;
+                if (GroundVelocity > MaxSpeed) GroundVelocity = MaxSpeed;
+                else if (GroundVelocity < -MaxSpeed) GroundVelocity = -MaxSpeed;
 
                 // Detachment from walls if speed is too low
                 if (DetachWhenSlow &&
-                    Mathf.Abs(Vg) < DetachSpeed && 
-                    DMath.AngleInRange_d(RelativeSurfaceAngle, 
-                        90.0f - MaxVerticalDetachAngle,
-                        270.0f + MaxVerticalDetachAngle))
+                    Mathf.Abs(GroundVelocity) < DetachSpeed &&
+                    DMath.AngleInRange_d(RelativeSurfaceAngle, 85.0f, 275.0f))
                 {
-                    if(Detach())
+                    if (Detach())
                         OnSteepDetach.Invoke();
                 }
             }
@@ -679,9 +708,9 @@ namespace Hedgehog.Core.Actors
                     Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
 
                 if (ApplyAirDrag && 
-                    Vy > AirDragVerticalSpeed && Mathf.Abs(Vx) > AirDragHorizontalSpeed)
+                    Vy > AirDragRequiredSpeed.y && Mathf.Abs(Vx) > AirDragRequiredSpeed.x)
                 {
-                    Vx *= Mathf.Pow(AirDragCoefficient, timestep);
+                    Vx *= Mathf.Pow(AirDrag, timestep);
                 }
             }
         }
@@ -726,9 +755,8 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
-                                      ((Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position).normalized*
-                                      DMath.Epsilon;
+                var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
+                transform.position += push + push.normalized*DMath.Epsilon;
 
                 if (Vx < 0.0f) Vx = 0.0f;
 
@@ -738,9 +766,8 @@ namespace Hedgehog.Core.Actors
             }
             if (sideRightCheck)
             {
-                transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
-                                      ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
-                                      .normalized * DMath.Epsilon;
+                var push = (Vector3) (sideRightCheck.Hit.point - (Vector2) Sensors.CenterRight.position);
+                transform.position += push + push.normalized*DMath.Epsilon;
 
                 if (Vx > 0.0f) Vx = 0.0f;
 
@@ -762,7 +789,7 @@ namespace Hedgehog.Core.Actors
 
             if (leftCheck)
             {
-                transform.position += (Vector3) leftCheck.Hit.point - Sensors.TopLeft.position;
+                transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
                 if((!JustDetached) && HandleImpact(leftCheck)) Footing = Footing.Left;
 
                 NotifyCollision(leftCheck);
@@ -774,7 +801,7 @@ namespace Hedgehog.Core.Actors
 
             if (rightCheck)
             {
-                transform.position += (Vector3) rightCheck.Hit.point - Sensors.TopRight.position;
+                transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
                 if((!JustDetached) && HandleImpact(rightCheck)) Footing = Footing.Right;
 
                 NotifyCollision(rightCheck);
@@ -839,14 +866,14 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                if(Vg < 0.0f) Vg = 0.0f;
-                transform.position += (Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position +
-                                      ((Vector3) sideLeftCheck.Hit.point - Sensors.CenterLeft.position).normalized*
-                                      DMath.Epsilon;
+                if(GroundVelocity < 0.0f) GroundVelocity = 0.0f;
+
+                var push = (Vector3) (sideLeftCheck.Hit.point - (Vector2) Sensors.CenterLeft.position);
+                transform.position += push + push.normalized*DMath.Epsilon;
 
                 // If running down a wall and hits the floor, orient the player onto the floor
                 if (DMath.AngleInRange_d(RelativeSurfaceAngle,
-                    MaxSurfaceAngleDifference, 180.0f - MaxSurfaceAngleDifference))
+                    MaxClimbAngle, 180.0f - MaxClimbAngle))
                 {
                     SurfaceAngle -= 90.0f;
                 }
@@ -858,14 +885,14 @@ namespace Hedgehog.Core.Actors
             }
             if (sideRightCheck)
             {
-                if(Vg > 0.0f) Vg = 0.0f;
-                transform.position += (Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position +
-                                      ((Vector3)sideRightCheck.Hit.point - Sensors.CenterRight.position)
-                                      .normalized * DMath.Epsilon;
+                if(GroundVelocity > 0.0f) GroundVelocity = 0.0f;
+
+                var push = (Vector3) (sideRightCheck.Hit.point - (Vector2) Sensors.CenterRight.position);
+                transform.position += push + push.normalized*DMath.Epsilon;
                 
                 // If running down a wall and hits the floor, orient the player onto the floor
                 if (DMath.AngleInRange_d(RelativeSurfaceAngle,
-                    180.0f + MaxSurfaceAngleDifference, 360.0f - MaxSurfaceAngleDifference))
+                    180.0f + MaxClimbAngle, 360.0f - MaxClimbAngle))
                 {
                     SurfaceAngle += 90.0f;
                 }
@@ -892,12 +919,10 @@ namespace Hedgehog.Core.Actors
 
             if (ceilLeftCheck)
             {
-                if(Vg < 0.0f) Vg = 0.0f;
+                if(GroundVelocity < 0.0f) GroundVelocity = 0.0f;
 
-                // Add epsilon to prevent sticky collisions
-                transform.position += (Vector3) ceilLeftCheck.Hit.point - Sensors.TopLeft.position +
-                                      ((Vector3) ceilLeftCheck.Hit.point - Sensors.TopLeft.position).normalized*
-                                      DMath.Epsilon;
+                var push = (Vector3) (ceilLeftCheck.Hit.point - (Vector2) Sensors.TopLeft.position);
+                transform.position += push + push.normalized*DMath.Epsilon;
 
                 NotifyCollision(ceilLeftCheck);
 
@@ -905,10 +930,10 @@ namespace Hedgehog.Core.Actors
             }
             if (ceilRightCheck)
             {
-                if (Vg > 0.0f) Vg = 0.0f;
-                transform.position += (Vector3) ceilRightCheck.Hit.point - Sensors.TopRight.position +
-                                      ((Vector3) ceilRightCheck.Hit.point - Sensors.TopRight.position)
-                                          .normalized*DMath.Epsilon;
+                if (GroundVelocity > 0.0f) GroundVelocity = 0.0f;
+
+                var push = (Vector3) (ceilRightCheck.Hit.point - (Vector2) Sensors.TopRight.position);
+                transform.position += push + push.normalized*DMath.Epsilon;
 
                 NotifyCollision(ceilRightCheck);
 
@@ -943,7 +968,7 @@ namespace Hedgehog.Core.Actors
             // Get easy checks out of the way
 
             // If we've found no surface, or they're all too steep, detach from the ground
-            if ((!left || leftDiff > MaxSurfaceAngleDifference) && (!right || rightDiff > MaxSurfaceAngleDifference))
+            if ((!left || leftDiff > MaxClimbAngle) && (!right || rightDiff > MaxClimbAngle))
                 goto detach;
 
             // If only one sensor found a surface we don't need any further checks
@@ -956,19 +981,19 @@ namespace Hedgehog.Core.Actors
             // Both feet have surfaces beneath them, things get complicated
 
             // If a surface is too steep, use only one surface (as long as that surface isn't too different from the current)
-            if (diff > MaxSurfaceAngleDifference || diff < -MaxSurfaceAngleDifference)
+            if (diff > MaxClimbAngle || diff < -MaxClimbAngle)
             {
-                if (leftDiff < rightDiff && leftDiff < MaxSurfaceAngleDifference/4.0f)
+                if (leftDiff < rightDiff && leftDiff < MaxClimbAngle/4.0f)
                     goto orientLeft;
 
-                if(rightDiff < MaxSurfaceAngleDifference/4.0f)
+                if(rightDiff < MaxClimbAngle/4.0f)
                     goto orientRight;
             }
 
             // Propose an angle that would rotate the controller between both surfaces
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
 
-            // If the proposed angle is between the angles of the two surfaces, it's works
+            // If the proposed angle is between the angles of the two surfaces, it'll do
             if ((DMath.Equalsf(diff) && 
                     DMath.Equalsf(overlap, left.SurfaceAngle) && DMath.Equalsf(overlap, right.SurfaceAngle)) ||
                 (diff > 0.0f && DMath.AngleInRange(overlap, left.SurfaceAngle, right.SurfaceAngle)) || 
@@ -982,7 +1007,7 @@ namespace Hedgehog.Core.Actors
             }
 
             // Otherwise use only one surface, check for steepness again
-            if (leftDiff < MaxSurfaceAngleDifference || rightDiff < MaxSurfaceAngleDifference)
+            if (leftDiff < MaxClimbAngle || rightDiff < MaxClimbAngle)
             {
                 // Angle closest to the current gets priority
                 if (leftDiff < rightDiff)
@@ -999,7 +1024,7 @@ namespace Hedgehog.Core.Actors
             orientLeft:
             Footing = Footing.Left;
             SensorsRotation = SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
-            transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
+            transform.position += (Vector3)(left.Hit.point - (Vector2) Sensors.BottomLeft.position);
 
             SetSurface(left);
             NotifyCollision(left);
@@ -1009,7 +1034,7 @@ namespace Hedgehog.Core.Actors
             orientRight:
             Footing = Footing.Right;
             SensorsRotation = SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
-            transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
+            transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
 
             SetSurface(right);
             NotifyCollision(right);
@@ -1019,7 +1044,7 @@ namespace Hedgehog.Core.Actors
             orientLeftBoth:
             Footing = Footing.Left;
             SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
-            transform.position += (Vector3)left.Hit.point - Sensors.BottomLeft.position;
+            transform.position += (Vector3)(left.Hit.point - (Vector2)Sensors.BottomLeft.position);
 
             SetSurface(left, right);
             NotifyCollision(left);
@@ -1030,7 +1055,7 @@ namespace Hedgehog.Core.Actors
             orientRightBoth:
             Footing = Footing.Right;
             SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
-            transform.position += (Vector3)right.Hit.point - Sensors.BottomRight.position;
+            transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
 
             SetSurface(right, left);
             NotifyCollision(right);
@@ -1073,8 +1098,8 @@ namespace Hedgehog.Core.Actors
             // Can only stay on the surface if angle difference is low enough
             if (Grounded)
             {
-                Vx = Vg * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
-                Vy = Vg * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
+                Vx = GroundVelocity * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
+                Vy = GroundVelocity * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
                 return true;
             }
 
@@ -1253,7 +1278,7 @@ namespace Hedgehog.Core.Actors
         public float SetGroundVelocity(Vector2 velocity)
         {
             if (!Grounded) return 0.0f;
-            return Vg = DMath.ScalarProjection(velocity, SurfaceAngle*Mathf.Deg2Rad);
+            return GroundVelocity = DMath.ScalarProjection(velocity, SurfaceAngle*Mathf.Deg2Rad);
         }
 
         /// <summary>
@@ -1267,7 +1292,7 @@ namespace Hedgehog.Core.Actors
         public float AddGroundVelocity(Vector2 velocity)
         {
             if (!Grounded) return 0.0f;
-            return Vg += DMath.ScalarProjection(velocity, SurfaceAngle * Mathf.Deg2Rad);
+            return GroundVelocity += DMath.ScalarProjection(velocity, SurfaceAngle * Mathf.Deg2Rad);
         }
 
         /// <summary>
@@ -1291,7 +1316,7 @@ namespace Hedgehog.Core.Actors
             if (DetachLock) return false;
 
             // Don't invoke the event if the controller was already off the ground
-            if (Grounded)
+            if (!Grounded)
                 OnDetach.Invoke();
 
             Grounded = false;
@@ -1299,7 +1324,7 @@ namespace Hedgehog.Core.Actors
             Footing = Footing.None;
             SensorsRotation = GravityDirection + 90.0f;
             SetSurface(null);
-            EnterControlState(DefaultAirState);
+            EnterControlState(AirControl);
 
             return false;
         }
@@ -1315,12 +1340,16 @@ namespace Hedgehog.Core.Actors
         {
             if (AttachLock) return false;
 
+            // Don't invoke the event if the controller was already on the ground
+            if (Grounded)
+                OnAttach.Invoke();
+
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
-            Vg = groundSpeed;
+            GroundVelocity = groundSpeed;
             SurfaceAngle = angleDegrees;
             SensorsRotation = SurfaceAngle;
             Grounded = true;
-            EnterControlState(DefaultGroundState);
+            EnterControlState(GroundControl);
 
             return true;
         }

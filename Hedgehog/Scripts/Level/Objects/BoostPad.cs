@@ -22,6 +22,11 @@ namespace Hedgehog.Level.Objects
         [SerializeField, Tooltip("Whether to go faster regardless of which way the controller is facing.")]
         public bool BoostBothWays;
 
+        public override bool ActivatesObject
+        {
+            get { return true; }
+        }
+
         public void Reset()
         {
             Velocity = 10.0f;

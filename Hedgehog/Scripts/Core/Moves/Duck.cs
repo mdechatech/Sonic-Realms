@@ -41,7 +41,7 @@ namespace Hedgehog.Core.Moves
         public override bool Available()
         {
             return Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
-                   !Controller.DefaultGroundState.Accelerating;
+                   !Controller.GroundControl.Accelerating;
         }
 
         public override bool InputActivate()

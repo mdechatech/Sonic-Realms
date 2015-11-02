@@ -245,7 +245,7 @@ namespace Hedgehog.Core.Triggers
             else
             {
                 SurfaceCollisions.Add(hit);
-
+                
                 if (_notifiedSurfaceCollisions.All(castHit => castHit.Source != controller))
                     _notifiedSurfaceCollisions.Add(hit);
 

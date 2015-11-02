@@ -15,10 +15,9 @@ namespace Hedgehog.Level.Platforms
         /// <summary>
         /// The friction coefficient; smaller than one and the surface becomes slippery.
         /// </summary>
-        [SerializeField, Range(0.0f, 2.0f)]
+        [SerializeField]
+        [Tooltip("The friction coefficient; smaller than one and the surface becomes slippery.")]
         public float Friction;
-
-        private Dictionary<int, HedgehogPhysicsValues> _capturedPhysicsValues;
 
         public void Reset()
         {
@@ -28,37 +27,23 @@ namespace Hedgehog.Level.Platforms
         public override void Awake()
         {
             base.Awake();
-            _capturedPhysicsValues = new Dictionary<int, HedgehogPhysicsValues>();
+            if (DMath.Equalsf(Friction)) Friction += DMath.Epsilon;
         }
 
         // Applies new physics values based on friction.
         public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
         {
-            _capturedPhysicsValues.Add(controller.GetInstanceID(), HedgehogPhysicsValues.Capture(controller));
-            if (DMath.Equalsf(Friction))
-            {
-                controller.DefaultGroundState.Acceleration = 0.0f;
-                controller.DefaultGroundState.Deceleration = 0.0f;
-                controller.GroundFriction = 0.0f;
-            }
-            else
-            {
-                controller.DefaultGroundState.Acceleration *= Friction;
-                controller.DefaultGroundState.Deceleration *= Friction;
-                controller.GroundFriction *= Friction;
-            }
+            controller.GroundControl.Acceleration *= Friction;
+            controller.GroundControl.Deceleration *= Friction;
+            controller.GroundFriction *= Friction;
         }
 
         // Restores old physics values.
         public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
         {
-            var physicsValues = _capturedPhysicsValues[controller.GetInstanceID()];
-
-            controller.DefaultGroundState.Acceleration = physicsValues.GroundAcceleration;
-            controller.DefaultGroundState.Deceleration = physicsValues.GroundBrake;
-            controller.GroundFriction = physicsValues.GroundDeceleration;
-
-            _capturedPhysicsValues.Remove(controller.GetInstanceID());
+            controller.GroundControl.Acceleration /= Friction;
+            controller.GroundControl.Deceleration /= Friction;
+            controller.GroundFriction /= Friction;
         }
     }
 }

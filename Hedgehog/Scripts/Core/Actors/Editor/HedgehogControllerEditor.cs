@@ -87,29 +87,6 @@ namespace Hedgehog.Core.Actors.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowDebugInfo", value); }
         }
         #endregion
-        #region Physics Preset Variables
-        private static readonly IDictionary<string, HedgehogPhysicsValues> PhysicsPresets =
-            new Dictionary<string, HedgehogPhysicsValues>
-            {
-                {"Genesis Era/Sonic and Tails", HedgehogUtility.SonicPhysicsValues},
-                {"Genesis Era/Knuckles", HedgehogUtility.KnucklesPhysicsValues}
-            };
-
-        private static readonly string[] PhysicsPresetResolutionSources = new string[]
-        {
-            "Player vs. Camera Size",
-            "Camera Size",
-            "Orthographic Size",
-            "Screen Size",
-        };
-
-        private int _physicsPresetIndex = 0;
-        private float _physicsPresetOrthographicSize = 5.0f;
-        private Vector2 _physicsPresetScreenSize;
-        private int _physicsPresetResolutionSourceIndex = 0;
-        private Camera _physicsPresetCamera;
-        private Vector2 _physicsPresetPlayerSize;
-        #endregion
         #region Sensor Creator Variables
         [SerializeField]
         private Renderer _fromRenderer;
@@ -164,27 +141,14 @@ namespace Hedgehog.Core.Actors.Editor
             if (ShowMoves)
             {
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "DefaultGroundState", "DefaultAirState", "AutoFindMoves", "Moves");
+                    "GroundControl", "AirControl", "AutoFindMoves", "Moves");
             }
             #endregion
             #region Collision Foldout
             ShowCollision = EditorGUILayout.Foldout(ShowCollision, "Collision", foldoutStyle);
             if (ShowCollision)
             {
-                _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
-                if (_instance.CollisionMode == CollisionMode.Layers)
-                {
-                    _instance.TerrainMask = 
-                        HedgehogEditorGUIUtility.LayerMaskField("Terrain Layer Mask", _instance.TerrainMask);
-                } else if (_instance.CollisionMode == CollisionMode.Tags)
-                {
-                    HedgehogEditorGUIUtility.ReorderableListField("Collide with Tags",
-                        _serializedInstance, _serializedInstance.FindProperty("TerrainTags"));
-                } else if (_instance.CollisionMode == CollisionMode.Names)
-                {
-                    HedgehogEditorGUIUtility.ReorderableListField("Collide with Names",
-                        _serializedInstance, _serializedInstance.FindProperty("TerrainNames"));
-                }
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Paths");
             }
             #endregion
             #region Sensors Foldout
@@ -230,164 +194,19 @@ namespace Hedgehog.Core.Actors.Editor
             ShowPhysics = EditorGUILayout.Foldout(ShowPhysics, "Physics", foldoutStyle);
             if (ShowPhysics)
             {
-                #region Generator
-                ++EditorGUI.indentLevel;
-                ShowPhysicsPresets = EditorGUILayout.Foldout(ShowPhysicsPresets, "Presets", foldoutStyle);
-                if (ShowPhysicsPresets)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel("Preset");
-                    --EditorGUI.indentLevel;
-                    _physicsPresetIndex = EditorGUILayout.Popup(_physicsPresetIndex, PhysicsPresets.Keys.ToArray());
-                    ++EditorGUI.indentLevel;
-                    EditorGUILayout.EndHorizontal();
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "MaxSpeed",
+                    "GroundFriction",
+                    "GravityDirection",
+                    "SlopeGravity",
+                    "AirGravity",
+                    "AirDrag",
+                    "DetachSpeed",
+                    "MaxClimbAngle",
+                    "LedgeClimbHeight",
+                    "LedgeDropHeight"
+                    );
 
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel("Use Resolution From");
-                    --EditorGUI.indentLevel;
-                    _physicsPresetResolutionSourceIndex =
-                        EditorGUILayout.Popup(_physicsPresetResolutionSourceIndex, PhysicsPresetResolutionSources);
-                    ++EditorGUI.indentLevel;
-                    EditorGUILayout.EndHorizontal();
-
-                    var resolutionSource = PhysicsPresetResolutionSources[_physicsPresetResolutionSourceIndex];
-
-                    switch (resolutionSource)
-                    {
-                        case "Camera Size":
-                            if (_physicsPresetCamera == null && Camera.main != null)
-                            {
-                                _physicsPresetCamera = Camera.main;
-                            }
-
-                            _physicsPresetCamera = EditorGUILayout.ObjectField("Camera", _physicsPresetCamera,
-                            typeof(Camera), true) as Camera;
-
-                            if (_physicsPresetCamera.orthographic)
-                            {
-                                _physicsPresetOrthographicSize = _physicsPresetCamera.orthographicSize;
-                            }
-                            else
-                            {
-                                EditorGUILayout.HelpBox("Using perspective projection is inaccurate. Try finding a similar orthographic size. You can switch back when you're done.",
-                                    MessageType.Warning);
-                                _physicsPresetOrthographicSize =
-                                    HedgehogUtility.FOV2OrthographicSize(_physicsPresetOrthographicSize);
-                            }
-                            break;
-
-                        case "Player vs. Camera Size":
-                            if (_physicsPresetOrthographicSize == default(float))
-                            {
-                                var camera = Camera.main;
-                                if (camera != null)
-                                    if (camera.orthographic)
-                                        _physicsPresetOrthographicSize = Camera.main.orthographicSize;
-                                    else
-                                        _physicsPresetOrthographicSize =
-                                            HedgehogUtility.FOV2OrthographicSize(_physicsPresetOrthographicSize);
-                            }
-
-                            _physicsPresetOrthographicSize = EditorGUILayout.FloatField("Camera Orthographic Size",
-                                _physicsPresetOrthographicSize);
-
-                            if (_physicsPresetPlayerSize == default(Vector2))
-                            {
-                                var sprite = _instance.GetComponent<SpriteRenderer>();
-                                if (sprite != null)
-                                    _physicsPresetPlayerSize = sprite.bounds.size;
-                            }
-
-                            _physicsPresetPlayerSize = EditorGUILayout.Vector2Field("Player Size (units)",
-                                _physicsPresetPlayerSize);
-                            break;
-
-                        case "Screen Size":
-                            _physicsPresetScreenSize = EditorGUILayout.Vector2Field("Screen Size (pixels)",
-                                _physicsPresetScreenSize);
-
-                            _physicsPresetOrthographicSize = _physicsPresetScreenSize.y/200.0f;
-                            break;
-
-                        case "Orthographic Size":
-                            if (_physicsPresetOrthographicSize == default(float))
-                            {
-                                var camera = Camera.main;
-                                if (camera != null)
-                                    if (camera.orthographic)
-                                        _physicsPresetOrthographicSize = Camera.main.orthographicSize;
-                                    else
-                                        _physicsPresetOrthographicSize =
-                                            HedgehogUtility.FOV2OrthographicSize(_physicsPresetOrthographicSize);
-                            }
-
-                            _physicsPresetOrthographicSize = EditorGUILayout.FloatField("Orthographic Size",
-                                _physicsPresetOrthographicSize);
-                            break;
-                    }
-
-                    var physicsPreset = PhysicsPresets[PhysicsPresets.Keys.ToArray()[_physicsPresetIndex]];
-
-                    if (GUILayout.Button("Apply Preset"))
-                    {
-                        if (EditorUtility.DisplayDialog("Apply Preset", "Are you sure? Please back up your " +
-                                                                        "current values first!", "Yes", "No"))
-                        {
-                            if (resolutionSource == "Player vs. Camera Size")
-                                (physicsPreset*(_physicsPresetPlayerSize.y/_physicsPresetOrthographicSize/
-                                                HedgehogUtility.MegadrivePlayerCameraRatio)).Apply(_instance);
-                            else
-                                (physicsPreset*(_physicsPresetOrthographicSize/physicsPreset.TargetOrthographicSize
-                                    .Value)).Apply(_instance);
-                        }
-                    }
-                }
-                --EditorGUI.indentLevel;
-                #endregion
-                EditorGUILayout.BeginHorizontal();
-                _instance.MaxSpeed = EditorGUILayout.FloatField("Max Speed",
-                    _instance.MaxSpeed);
-                EditorGUILayout.PrefixLabel("units/s");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space();
-                EditorGUILayout.BeginHorizontal();
-                _instance.GroundFriction = EditorGUILayout.FloatField("Ground Deceleration",
-                    _instance.GroundFriction);
-                EditorGUILayout.PrefixLabel("units/s²");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.SlopeGravity = EditorGUILayout.FloatField("Slope Gravity",
-                    _instance.SlopeGravity);
-                EditorGUILayout.PrefixLabel("units/s²");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.AirAcceleration = EditorGUILayout.FloatField("Air Acceleration",
-                    _instance.AirAcceleration);
-                EditorGUILayout.PrefixLabel("units/s²");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.AirDragCoefficient = EditorGUILayout.FloatField("Air Drag",
-                    _instance.AirDragCoefficient);
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                _instance.AirGravity = EditorGUILayout.FloatField("Air Gravity",
-                    _instance.AirGravity);
-                EditorGUILayout.PrefixLabel("units/s²");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("GravityDirection"));
-                EditorGUILayout.PrefixLabel("degrees");
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space();
                 #region Advanced Physics
                 ++EditorGUI.indentLevel;
 
@@ -395,64 +214,11 @@ namespace Hedgehog.Core.Actors.Editor
                 if (ShowAdvancedPhysics)
                 {
                     ++EditorGUI.indentLevel;
-                    #region Speed & Control
-                    ShowAdvancedPhysicsSpeeds = EditorGUILayout.Foldout(ShowAdvancedPhysicsSpeeds, "Speed & Control");
-                    if (ShowAdvancedPhysicsSpeeds)
-                    {
-                        Vector2 airDragVelocity =
-                        EditorGUILayout.Vector2Field("Min Air Drag Velocity",
-                            new Vector2(_instance.AirDragHorizontalSpeed, _instance.AirDragVerticalSpeed));
-                        _instance.AirDragHorizontalSpeed = airDragVelocity.x;
-                        _instance.AirDragVerticalSpeed = airDragVelocity.y;
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.AntiTunnelingSpeed = EditorGUILayout.FloatField("Anti-Tunneling Speed",
-                            _instance.AntiTunnelingSpeed);
-                        EditorGUILayout.PrefixLabel("units/s");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.DetachSpeed = EditorGUILayout.FloatField("Detach Speed",
-                            _instance.DetachSpeed);
-                        EditorGUILayout.PrefixLabel("units/s");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.SlopeGravityBeginAngle = EditorGUILayout.FloatField("Slope Gravity Begin Angle",
-                            _instance.SlopeGravityBeginAngle);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-                    }
-                    #endregion
-                    #region Surfaces
-                    ShowAdvancedPhysicsSurfaces = EditorGUILayout.Foldout(ShowAdvancedPhysicsSurfaces, "Surfaces");
-                    if (ShowAdvancedPhysicsSurfaces)
-                    {
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.LedgeClimbHeight = EditorGUILayout.FloatField("Ledge Climb Height",
-                            _instance.LedgeClimbHeight);
-                        EditorGUILayout.PrefixLabel("units");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.LedgeDropHeight = EditorGUILayout.FloatField("Ledge Drop Height",
-                            _instance.LedgeDropHeight);
-                        EditorGUILayout.PrefixLabel("units");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.MaxSurfaceAngleDifference = EditorGUILayout.FloatField("Max Surface Angle Difference",
-                            _instance.MaxSurfaceAngleDifference);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.BeginHorizontal();
-                        _instance.MaxVerticalDetachAngle = EditorGUILayout.FloatField("Max Vertical Detach Angle",
-                            _instance.MaxVerticalDetachAngle);
-                        EditorGUILayout.PrefixLabel("degrees");
-                        EditorGUILayout.EndHorizontal();
-                    }
-                    #endregion
+                    HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                        "AirDragRequiredSpeed",
+                        "AntiTunnelingSpeed",
+                        "SlopeGravityBeginAngle"
+                        );
                     --EditorGUI.indentLevel;
                 }
 
@@ -464,8 +230,8 @@ namespace Hedgehog.Core.Actors.Editor
             ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events", foldoutStyle);
             if (ShowEvents)
             {
-                HedgehogEditorGUIUtility.UnityEventField(_instance.OnCrush,
-                    _serializedInstance.FindProperty("OnCrush"));
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "OnCrush", "OnAttach",
+                    "OnDetach", "OnSteepDetach");
             }
             #endregion
             #region Debug Foldout
@@ -486,24 +252,7 @@ namespace Hedgehog.Core.Actors.Editor
 
                 EditorGUILayout.LabelField("Collision", headerStyle);
 
-                _instance.CollisionMode =
-                    (CollisionMode) EditorGUILayout.EnumPopup("Collision Mode", _instance.CollisionMode);
-
-                if (_instance.CollisionMode == CollisionMode.Layers)
-                {
-                    _instance.TerrainMask = HedgehogEditorGUIUtility.LayerMaskField("Terrain Mask",
-                        _instance.TerrainMask);
-                } else if (_instance.CollisionMode == CollisionMode.Tags)
-                {
-                    HedgehogEditorGUIUtility.ReorderableListField("Terrain Tags", _serializedInstance,
-                        _serializedInstance.FindProperty("TerrainTags"));
-                } else if (_instance.CollisionMode == CollisionMode.Names)
-                {
-                    HedgehogEditorGUIUtility.ReorderableListField("Terrain Names", _serializedInstance,
-                        _serializedInstance.FindProperty("TerrainNames"));
-                }
-
-                EditorGUILayout.Space();
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Paths");
 
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
@@ -521,7 +270,7 @@ namespace Hedgehog.Core.Actors.Editor
                 _instance.Vx = EditorGUILayout.FloatField("X", _instance.Vx);
                 _instance.Vy = EditorGUILayout.FloatField("Y", _instance.Vy);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
-                _instance.Vg = EditorGUILayout.FloatField("Ground", _instance.Vg);
+                _instance.GroundVelocity = EditorGUILayout.FloatField("Ground", _instance.GroundVelocity);
                 GUI.enabled = Application.isPlaying;
 
                 GUI.enabled = true;

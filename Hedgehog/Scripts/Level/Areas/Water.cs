@@ -67,14 +67,14 @@ namespace Hedgehog.Level.Areas
                    !AreaTrigger.HasController(hit.Source);
         }
         
-        // Apply new physics values based on viscosity.
+        // Apply new physics values based on viscosity
         public override void OnAreaEnter(HedgehogController controller)
         {
-            controller.DefaultGroundState.Acceleration /= Viscosity;
-            controller.DefaultGroundState.Deceleration /= Viscosity;
-            controller.DefaultGroundState.TopSpeed /= Viscosity;
+            controller.GroundControl.Acceleration /= Viscosity;
+            controller.GroundControl.Deceleration /= Viscosity;
+            controller.GroundControl.TopSpeed /= Viscosity;
             controller.GroundFriction /= Viscosity;
-            controller.AirAcceleration /= Viscosity;
+            controller.AirControl.Acceleration /= Viscosity;
             controller.AirGravity /= Viscosity;
             controller.SlopeGravity /= Viscosity;
             controller.Vx /= Viscosity;
@@ -97,11 +97,11 @@ namespace Hedgehog.Level.Areas
         // Restore old physics values.
         public override void OnAreaExit(HedgehogController controller)
         {
-            controller.DefaultGroundState.Acceleration /= Viscosity;
-            controller.DefaultGroundState.Deceleration /= Viscosity;
-            controller.DefaultGroundState.TopSpeed *= Viscosity;
+            controller.GroundControl.Acceleration /= Viscosity;
+            controller.GroundControl.Deceleration /= Viscosity;
+            controller.GroundControl.TopSpeed *= Viscosity;
             controller.GroundFriction *= Viscosity;
-            controller.AirAcceleration *= Viscosity;
+            controller.AirControl.Acceleration *= Viscosity;
             controller.AirGravity *= Viscosity;
             controller.SlopeGravity *= Viscosity;
             controller.Vy *= Viscosity;

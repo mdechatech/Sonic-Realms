@@ -14,119 +14,70 @@ namespace Hedgehog.Level.Objects
     public class SwitchPath : ReactiveObject
     {
         /// <summary>
-        /// The path switcher's collision mode.
+        /// Whether the controller must be on the ground to activate.
         /// </summary>
         [SerializeField]
-        public CollisionMode CollisionMode;
-        #region If CollisionMode.Layers
-        /// <summary>
-        /// The path switcher activates if it is in CollisionMode.Layers and
-        /// the controller's terrain mask has ANY of the layers in this layer mask.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Activates if the controller's terrain mask has ANY of the layers in this layer mask.")]
-        public LayerMask IfTerrainMaskHas;
+        [Tooltip("Whether the controller must be on the ground to activate.")]
+        public bool MustBeGrounded;
 
         /// <summary>
-        /// These layers are added to the player's terrain mask.
+        /// Whether to do the opposite (if on ToPath, switch to FromPath) if going backwards on the ground.
         /// </summary>
         [SerializeField]
-        [Tooltip("These layers are added to the player's terrain mask.")]
-        public LayerMask AddLayers;
+        [Tooltip("Whether to do the opposite (if on ToPath, switch to FromPath) if going backwards on the ground.")]
+        public bool UndoIfGoingBackwards;
 
         /// <summary>
-        /// These layers are removed from the player's terrain mask.
+        /// The name of the path the controller must be on to activate.
         /// </summary>
         [SerializeField]
-        [Tooltip("These layers are removed from the player's terrain mask.")]
-        public LayerMask RemoveLayers;
-        #endregion
-        #region If CollisionMode.Tags
-        /// <summary>
-        /// The path switcher activates if it is in CollisionMode.Tags and
-        /// the controller's terrain tag list has ANY of the tags in this tag list.
-        /// </summary>
-        [SerializeField]
-        public List<string> IfTerrainTagsHas;
+        [Tooltip("The name of the path the controller must be on to activate.")]
+        public string FromPath;
 
         /// <summary>
-        /// These tags are added to the player's terrain tag list.
+        /// The name of the path the controller is put onto.
         /// </summary>
         [SerializeField]
-        public List<string> AddTags;
+        [Tooltip("The name of the path the controller is put onto.")]
+        public string ToPath;
 
-        /// <summary>
-        /// These tags are removed from the player's terrain tag list.
-        /// </summary>
-        [SerializeField]
-        public List<string> RemoveTags;
-        #endregion
-        #region If CollisionMode.Names
-        /// <summary>
-        /// The path switcher activates if it is in CollisionMode.Names and
-        /// the controller's terrain names list has ANY of the name in this name list.
-        /// </summary>
-        [SerializeField]
-        public List<string> IfTerrainNamesHas;
-
-        /// <summary>
-        /// These names are added to the player's terrain name list.
-        /// </summary>
-        [SerializeField]
-        public List<string> AddNames;
-        /// <summary>
-        /// These names are removed from the player's terrain name list.
-        /// </summary>
-        [SerializeField]
-        public List<string> RemoveNames;
-
-        #endregion
+        public void Reset()
+        {
+            MustBeGrounded = true;
+            UndoIfGoingBackwards = true;
+            FromPath = "Path 1";
+            ToPath = "Path 2";
+        }
 
         public override void OnActivateEnter(HedgehogController controller)
         {
-            if(AppliesTo(controller)) Apply(controller);
-        }
-
-        public void Apply(HedgehogController controller)
-        {
-            switch (CollisionMode)
+            if (MustBeGrounded)
             {
-                case CollisionMode.Layers:
-                    controller.TerrainMask |= AddLayers;
-                    controller.TerrainMask &= ~RemoveLayers;
-                    break;
+                if (!controller.Grounded) return;
 
-                case CollisionMode.Tags:
-                    foreach (var tag in AddTags)
-                        controller.TerrainTags.Add(tag);
-                    foreach (var tag in RemoveTags)
-                        controller.TerrainTags.Remove(tag);
-                    break;
-
-                case CollisionMode.Names:
-                    foreach (var name in AddNames)
-                        controller.TerrainNames.Add(name);
-                    foreach (var name in RemoveNames)
-                        controller.TerrainNames.Remove(name);
-                    break;
+                if (UndoIfGoingBackwards)
+                {
+                    if (controller.GroundVelocity >= 0.0f && controller.Paths.Contains(FromPath))
+                    {
+                        controller.Paths.Remove(FromPath);
+                        controller.Paths.Add(ToPath);
+                    }
+                    else if(controller.Paths.Contains(ToPath))
+                    {
+                        controller.Paths.Remove(ToPath);
+                        controller.Paths.Add(FromPath);
+                    }
+                }
+                else if(controller.Paths.Contains(FromPath))
+                {
+                    controller.Paths.Remove(FromPath);
+                    controller.Paths.Add(ToPath);
+                }
             }
-        }
-
-        public bool AppliesTo(HedgehogController player)
-        {
-            switch (CollisionMode)
+            else if(controller.Paths.Contains(FromPath))
             {
-                case CollisionMode.Layers:
-                    return (player.TerrainMask | IfTerrainMaskHas) > 0;
-
-                case CollisionMode.Tags:
-                    return IfTerrainTagsHas.Any(tag => player.TerrainTags.Contains(tag));
-
-                case CollisionMode.Names:
-                    return IfTerrainNamesHas.Any(name => player.TerrainNames.Contains(name));
-
-                default:
-                    return true;
+                controller.Paths.Remove(FromPath);
+                controller.Paths.Add(ToPath);
             }
         }
     }

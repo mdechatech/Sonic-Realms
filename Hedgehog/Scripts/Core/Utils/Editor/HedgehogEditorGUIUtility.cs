@@ -81,42 +81,6 @@ namespace Hedgehog.Core.Utils.Editor
             return layerMask;
         }
 
-        public static CollisionMode CollisionModeField(CollisionMode value)
-        {
-            var buttonStyle = new GUIStyle(EditorStyles.toolbarButton);
-
-            var selectedButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
-            selectedButtonStyle.normal = selectedButtonStyle.active;
-
-            var headerStyle = new GUIStyle
-            {
-                fontSize = 11,
-                alignment = TextAnchor.MiddleCenter,
-            };
-
-            CollisionMode selected = value;
-
-            EditorGUILayout.LabelField("Collision Mode", headerStyle);
-
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Layers", value == CollisionMode.Layers ? selectedButtonStyle : buttonStyle))
-            {
-                selected = CollisionMode.Layers;
-            }
-            else if (GUILayout.Button("Tags", value == CollisionMode.Tags ? selectedButtonStyle : buttonStyle))
-            {
-                selected = CollisionMode.Tags;
-            }
-            else if (GUILayout.Button("Names", value == CollisionMode.Names ? selectedButtonStyle : buttonStyle))
-            {
-                selected = CollisionMode.Names;
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-            return selected;
-        }
-
         /// <summary>
         /// There is no return value - any changes to this field in the editor are immediately applied to the list.
         /// </summary>

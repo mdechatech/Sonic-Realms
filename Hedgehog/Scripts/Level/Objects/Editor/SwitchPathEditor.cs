@@ -1,61 +1,37 @@
-﻿using Hedgehog.Core.Actors;
+﻿using System.Linq;
 using Hedgehog.Core.Utils.Editor;
-using Hedgehog.Level.Areas;
-using Hedgehog.Level.Objects;
 using UnityEditor;
 using UnityEngine;
 
 namespace Hedgehog.Level.Objects.Editor
 {
     [CustomEditor(typeof(SwitchPath))]
+    [CanEditMultipleObjects]
     public class SwitchPathEditor : UnityEditor.Editor
     {
-        private SwitchPath _instance;
-        private SerializedObject _serializedInstance;
-
-        public void OnEnable()
-        {
-            _instance = target as SwitchPath;
-            _serializedInstance = new SerializedObject(_instance);
-        }
-
         public override void OnInspectorGUI()
         {
-            if (_instance == null)
-                return;
+            serializedObject.Update();
 
-            _instance.CollisionMode = HedgehogEditorGUIUtility.CollisionModeField(_instance.CollisionMode);
-            if (_instance.CollisionMode == CollisionMode.Layers)
+            if (targets.Count() <= 1)
             {
-                _instance.IfTerrainMaskHas = HedgehogEditorGUIUtility.LayerMaskField("If Terrain Mask Has",
-                    _instance.IfTerrainMaskHas);
-                _instance.AddLayers = HedgehogEditorGUIUtility.LayerMaskField("Then Add Layers", _instance.AddLayers);
-                _instance.RemoveLayers = HedgehogEditorGUIUtility.LayerMaskField("And Remove Layers",
-                    _instance.RemoveLayers);
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "MustBeGrounded");
+
+                var mustProp = serializedObject.FindProperty("MustBeGrounded");
+                var enabled = GUI.enabled;
+                GUI.enabled = mustProp.boolValue;
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UndoIfGoingBackwards");
+                GUI.enabled = enabled;
+
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "FromPath", "ToPath");
             }
-            else if (_instance.CollisionMode == CollisionMode.Tags)
+            else
             {
-                HedgehogEditorGUIUtility.ReorderableListField("If Terrain Tags Has", _serializedInstance,
-                    _serializedInstance.FindProperty("IfTerrainTagsHas"));
-                HedgehogEditorGUIUtility.ReorderableListField("Then Add Tags", _serializedInstance,
-                    _serializedInstance.FindProperty("AddTags"));
-                HedgehogEditorGUIUtility.ReorderableListField("And Remove Tags", _serializedInstance,
-                    _serializedInstance.FindProperty("RemoveTags"));
-            }
-            else if (_instance.CollisionMode == CollisionMode.Names)
-            {
-                HedgehogEditorGUIUtility.ReorderableListField("If Terrain Names Has", _serializedInstance,
-                    _serializedInstance.FindProperty("IfTerrainNamesHas"));
-                HedgehogEditorGUIUtility.ReorderableListField("Then Add Names", _serializedInstance,
-                    _serializedInstance.FindProperty("AddNames"));
-                HedgehogEditorGUIUtility.ReorderableListField("And Remove Names", _serializedInstance,
-                    _serializedInstance.FindProperty("RemoveNames"));
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "MustBeGrounded",
+                    "UndoIfGoingBackwards", "FromPath", "ToPath");
             }
 
-            if (GUI.changed)
-            {
-                EditorUtility.SetDirty(_instance);
-            }
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

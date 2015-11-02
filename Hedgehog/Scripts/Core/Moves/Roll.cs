@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Hedgehog.Core.Moves
 {
+    /// <summary>
+    /// Traditional Sonic rolling. Makes you not as slow going uphill and even faster going downhill.
+    /// </summary>
     public class Roll : Move
     {
         #region Controls
@@ -110,12 +113,12 @@ namespace Hedgehog.Core.Moves
 
             _originalSlopeGravity = Controller.SlopeGravity;
             _originalFriction = Controller.GroundFriction;
-            _originalDeceleration = Controller.DefaultGroundState.Deceleration;
+            _originalDeceleration = Controller.GroundControl.Deceleration;
 
             Controller.AutoRotate = false;
             Controller.GroundFriction = Friction;
-            Controller.DefaultGroundState.AccelerationLocked = true;
-            Controller.DefaultGroundState.Deceleration = Deceleration;
+            Controller.GroundControl.AccelerationLocked = true;
+            Controller.GroundControl.Deceleration = Deceleration;
         }
 
         public override void OnActiveFixedUpdate()
@@ -137,8 +140,8 @@ namespace Hedgehog.Core.Moves
             Controller.AutoRotate = true;
             Controller.SlopeGravity = _originalSlopeGravity;
             Controller.GroundFriction = _originalFriction;
-            Controller.DefaultGroundState.AccelerationLocked = false;
-            Controller.DefaultGroundState.Deceleration = _originalDeceleration;
+            Controller.GroundControl.AccelerationLocked = false;
+            Controller.GroundControl.Deceleration = _originalDeceleration;
         }
     }
 }

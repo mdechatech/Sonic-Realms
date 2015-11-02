@@ -127,7 +127,7 @@ namespace Hedgehog.Core.Triggers
         {
             var any = Collisions.Any();
             if (controller != null && !Collisions.Contains(controller)) Collisions.Add(controller);
-            if (!AllowReactivation || any) return;
+            if (!AllowReactivation && any) return;
 
             Activated = true;
             OnActivateEnter.Invoke(controller);

@@ -40,6 +40,11 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether to lock the controller's horizontal control after being hit.")]
         public bool LockControl;
 
+        public override bool ActivatesObject
+        {
+            get { return true; }
+        }
+
         public void Reset()
         {
             Power = 10.0f;
@@ -60,7 +65,7 @@ namespace Hedgehog.Level.Objects
             if ((BouncySides & hitSide) == 0) return;
 
             controller.Detach();
-            if (LockControl) controller.DefaultGroundState.Lock();
+            if (LockControl) controller.GroundControl.Lock();
 
             if (!AccurateBounce)
             {

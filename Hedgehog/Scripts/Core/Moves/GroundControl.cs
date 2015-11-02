@@ -358,7 +358,6 @@ namespace Hedgehog.Core.Moves
         public bool Accelerate(float magnitude, float timestep)
         {
             magnitude = Mathf.Clamp(magnitude, -1.0f, 1.0f);
-
             if (DMath.Equalsf(magnitude)) return false;
 
             if (magnitude < 0.0f)

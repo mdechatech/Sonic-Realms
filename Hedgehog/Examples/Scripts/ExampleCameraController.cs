@@ -13,6 +13,7 @@ namespace Hedgehog.Examples
         /// The target for the camera to follow.
         /// </summary>
         [SerializeField]
+        [Tooltip("The target for the camera to follow.")]
         public Transform FollowTarget;
 
         /// <summary>
@@ -50,15 +51,15 @@ namespace Hedgehog.Examples
 
             if (DMath.Equalsf(Smoothness))
             {
-                Camera.main.transform.position = new Vector3(FollowTarget.transform.position.x,
+                transform.position = new Vector3(FollowTarget.transform.position.x,
                     FollowTarget.transform.position.y,
-                    Camera.main.transform.position.z);
+                    transform.position.z);
             }
             else
             {
-                Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position,
+                transform.position = Vector3.Lerp(transform.position,
                     new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y,
-                        Camera.main.transform.position.z),
+                        transform.position.z),
                     Time.fixedDeltaTime * (1.0f / Smoothness)
                     );
             }
@@ -67,18 +68,18 @@ namespace Hedgehog.Examples
             {
                 if (DMath.Equalsf(RotationSmoothness))
                 {
-                    Camera.main.transform.eulerAngles = new Vector3(
-                        Camera.main.transform.eulerAngles.x,
-                        Camera.main.transform.eulerAngles.y,
+                    transform.eulerAngles = new Vector3(
+                        transform.eulerAngles.x,
+                        transform.eulerAngles.y,
                         RotateToGravity ? hedgehog.GravityDirection + 90.0f : 0.0f);
                 }
                 else
                 {
-                    Camera.main.transform.eulerAngles = new Vector3(
-                        Camera.main.transform.eulerAngles.x,
-                        Camera.main.transform.eulerAngles.y,
+                    transform.eulerAngles = new Vector3(
+                        transform.eulerAngles.x,
+                        transform.eulerAngles.y,
                         Mathf.LerpAngle(
-                            Camera.main.transform.eulerAngles.z,
+                            transform.eulerAngles.z,
                             RotateToGravity ? hedgehog.GravityDirection + 90.0f : 0.0f,
                             Time.fixedDeltaTime*(1.0f/RotationSmoothness)));
                 }

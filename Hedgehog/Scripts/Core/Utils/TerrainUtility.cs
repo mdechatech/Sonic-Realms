@@ -124,20 +124,8 @@ namespace Hedgehog.Core.Utils
         public static bool CollisionModeSelector(Transform transform, HedgehogController source = null)
         {
             if (source == null) return false;
-            switch (source.CollisionMode)
-            {
-                case CollisionMode.Layers:
-                    return (source.TerrainMask & (1 << transform.gameObject.layer)) > 0;
-
-                case CollisionMode.Tags:
-                    return source.TerrainTags.Contains(transform.tag);
-
-                case CollisionMode.Names:
-                default:
-                    return
-                        transform.GetComponentsInParent<Transform>()
-                            .Any(transform1 => source.TerrainNames.Contains(transform1.name));
-            }
+            return transform.GetComponentsInParent<Transform>()
+                    .Any(transform1 => source.Paths.Contains(transform1.name));
         }
 
         /// <summary>

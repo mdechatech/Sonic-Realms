@@ -8,10 +8,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 484418}
-  - 114: {fileID: 11453614}
   - 212: {fileID: 21264996}
   - 61: {fileID: 6186806}
-  - 114: {fileID: 11418448}
+  - 114: {fileID: 11442522}
+  - 114: {fileID: 11409990}
   m_Layer: 0
   m_Name: Path Switcher
   m_TagString: Untagged
@@ -44,7 +44,7 @@ BoxCollider2D:
   m_Offset: {x: -2.38418579e-07, y: 0}
   serializedVersion: 2
   m_Size: {x: .639999986, y: .639999986}
---- !u!114 &11418448
+--- !u!114 &11409990
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -52,7 +52,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 166206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f642f8aa1306f341a0eea7af35fda84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MustBeGrounded: 1
+  UndoIfGoingBackwards: 1
+  FromPath: Path 1
+  ToPath: Path 2
+--- !u!114 &11442522
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerFromChildren: 1
@@ -71,53 +86,25 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
-  OnAreaEnter:
+  Collisions: []
+  AutoActivate: 0
+  AllowReactivation: 1
+  OnActivateEnter:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  OnAreaStay:
+  OnActivateStay:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  OnAreaExit:
+  OnActivateExit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11453614
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 166206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78bd2b07b4f57cc4aa9489ca59e6c62f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MustBeGrounded: 1
-  CollisionMode: 2
-  IfTerrainMaskHas:
-    serializedVersion: 2
-    m_Bits: 0
-  AddLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  RemoveLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  IfTerrainTagsHas: []
-  AddTags: []
-  RemoveTags: []
-  IfTerrainNamesHas:
-  - Path 1
-  AddNames:
-  - Path 2
-  RemoveNames:
-  - Path 1
+  Activated: 0
 --- !u!212 &21264996
 SpriteRenderer:
   m_ObjectHideFlags: 1
