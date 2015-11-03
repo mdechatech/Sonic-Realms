@@ -580,43 +580,56 @@ namespace Hedgehog.Core.Actors
 
         public void HandleMoves()
         {
-            for (var i = UnavailableMoves.Count - 1; i >= 0; i--)
+            if (UnavailableMoves.Count > 0)
             {
-                var move = UnavailableMoves[i];
-                if (move.Available())
+                foreach (var move in new List<Move>(UnavailableMoves))
                 {
-                    UnavailableMoves.RemoveAt(i);
+                    if (!move.Available())
+                        continue;
+
+                    if (!UnavailableMoves.Remove(move))
+                        continue;
+
                     AvailableMoves.Add(move);
                     move.ChangeState(Move.State.Available);
                 }
             }
 
-            for (var i = AvailableMoves.Count - 1; i >= 0; i--)
+            if (AvailableMoves.Count > 0)
             {
-                var move = AvailableMoves[i];
+                foreach (var move in new List<Move>(AvailableMoves))
+                {
+                    if (!move.Available())
+                    {
+                        if (!AvailableMoves.Remove(move))
+                            continue;
 
-                if (!move.Available())
-                {
-                    AvailableMoves.RemoveAt(i);
-                    UnavailableMoves.Add(move);
-                    move.ChangeState(Move.State.Unavailable);
-                }
-                else if (move.InputActivate())
-                {
-                    AvailableMoves.RemoveAt(i);
-                    ActiveMoves.Add(move);
-                    move.ChangeState(Move.State.Active);
+                        UnavailableMoves.Add(move);
+                        move.ChangeState(Move.State.Unavailable);
+                    }
+                    else if (move.InputActivate())
+                    {
+                        if (!AvailableMoves.Remove(move))
+                            continue;
+
+                        ActiveMoves.Add(move);
+                        move.ChangeState(Move.State.Active);
+                    }
                 }
             }
 
-            for (var i = ActiveMoves.Count - 1; i >= 0; i--)
+            if (ActiveMoves.Count > 0)
             {
-                var move = ActiveMoves[i];
-                if (move.InputDeactivate())
+                foreach (var move in new List<Move>(ActiveMoves))
                 {
-                    ActiveMoves.RemoveAt(i);
-                    AvailableMoves.Add(move);
-                    move.ChangeState(Move.State.Available);
+                    if (move.InputDeactivate())
+                    {
+                        if (!ActiveMoves.Remove(move))
+                            continue;
+
+                        AvailableMoves.Add(move);
+                        move.ChangeState(Move.State.Available);
+                    }
                 }
             }
         }
@@ -733,12 +746,12 @@ namespace Hedgehog.Core.Actors
 
             if (Grounded)
             {
-                anyHit = GroundSideCheck() | GroundCeilingCheck() | GroundSurfaceCheck();
+                anyHit = GroundSideCheck() | GroundSurfaceCheck();
                 if (!SurfaceAngleCheck()) Detach();
             }
 
-            if (!anyHit && JustDetached)
-                JustDetached = false;
+            //if (!anyHit && JustDetached)
+            //    JustDetached = false;
         }
         #endregion
         #region Collision Subroutines
@@ -790,7 +803,7 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
-                if((!JustDetached) && HandleImpact(leftCheck)) Footing = Footing.Left;
+                if(HandleImpact(leftCheck)) Footing = Footing.Left;
 
                 NotifyCollision(leftCheck);
 
@@ -802,7 +815,7 @@ namespace Hedgehog.Core.Actors
             if (rightCheck)
             {
                 transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
-                if((!JustDetached) && HandleImpact(rightCheck)) Footing = Footing.Right;
+                if(HandleImpact(rightCheck)) Footing = Footing.Right;
 
                 NotifyCollision(rightCheck);
 
@@ -867,7 +880,6 @@ namespace Hedgehog.Core.Actors
             if (sideLeftCheck)
             {
                 if(GroundVelocity < 0.0f) GroundVelocity = 0.0f;
-
                 var push = (Vector3) (sideLeftCheck.Hit.point - (Vector2) Sensors.CenterLeft.position);
                 transform.position += push + push.normalized*DMath.Epsilon;
 
@@ -886,7 +898,7 @@ namespace Hedgehog.Core.Actors
             if (sideRightCheck)
             {
                 if(GroundVelocity > 0.0f) GroundVelocity = 0.0f;
-
+                
                 var push = (Vector3) (sideRightCheck.Hit.point - (Vector2) Sensors.CenterRight.position);
                 transform.position += push + push.normalized*DMath.Epsilon;
                 
@@ -1195,7 +1207,9 @@ namespace Hedgehog.Core.Actors
 
             if (move.CurrentState == Move.State.Unavailable)
             {
-                UnavailableMoves.Remove(move);
+                if (!UnavailableMoves.Remove(move))
+                    return false;
+
                 ActiveMoves.Add(move);
                 return move.ChangeState(Move.State.Active);
             }
@@ -1227,7 +1241,9 @@ namespace Hedgehog.Core.Actors
             if (move == null || move.CurrentState != Move.State.Available)
                 return false;
 
-            AvailableMoves.Remove(move);
+            if (!AvailableMoves.Remove(move))
+                return false;
+
             ActiveMoves.Add(move);
             return move.ChangeState(Move.State.Active);
         }
@@ -1252,7 +1268,7 @@ namespace Hedgehog.Core.Actors
             if (move == null || move.CurrentState != Move.State.Active)
                 return false;
 
-            ActiveMoves.Remove(move);
+            if (!ActiveMoves.Remove(move)) return false;
             if (move.Available())
             {
                 AvailableMoves.Add(move);
@@ -1328,7 +1344,7 @@ namespace Hedgehog.Core.Actors
             if (DetachLock) return false;
 
             // Don't invoke the event if the controller was already off the ground
-            if (!Grounded)
+            if (Grounded)
                 OnDetach.Invoke();
 
             Grounded = false;
@@ -1353,7 +1369,7 @@ namespace Hedgehog.Core.Actors
             if (AttachLock) return false;
 
             // Don't invoke the event if the controller was already on the ground
-            if (Grounded)
+            if (!Grounded)
                 OnAttach.Invoke();
 
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
@@ -1362,6 +1378,8 @@ namespace Hedgehog.Core.Actors
             SensorsRotation = SurfaceAngle;
             Grounded = true;
             EnterControlState(GroundControl);
+
+            GroundSurfaceCheck();
 
             return true;
         }

@@ -14,8 +14,8 @@ namespace Hedgehog.Core.Moves.Editor
 
         protected override void DrawPhysicsProperties()
         {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UphillGravity", "DownhillGravity",
-                "Deceleration", "Friction");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "HeightChange", "WidthChange",
+                "UphillGravity", "DownhillGravity", "Deceleration", "Friction");
         }
     }
 }

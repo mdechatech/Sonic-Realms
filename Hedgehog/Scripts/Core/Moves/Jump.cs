@@ -58,6 +58,7 @@ namespace Hedgehog.Core.Moves
         {
             Controller.Detach();
             Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
+            Controller.ForcePerformMove<Roll>();
         }
 
         public override void OnActiveUpdate()

@@ -82,7 +82,7 @@ namespace Hedgehog.Level.Objects
             var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);
             if ((BouncySides & hitSide) == 0) return;
 
-            if (LockControl) controller.GroundControl.Lock(0.2667f);
+            if (LockControl) controller.GroundControl.Lock(LockDuration);
             if (!KeepOnGround) controller.Detach();
 
             if (AccurateBounce)

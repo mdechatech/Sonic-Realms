@@ -34,6 +34,22 @@ namespace Hedgehog.Core.Moves
         #endregion
         #region Physics
         /// <summary>
+        /// Change in width (usually negative) while rolling, in units.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Change in sensor width (usually negative) while rolling, in units.")]
+        public float WidthChange;
+
+        /// <summary>
+        /// Change in sensor height (usually negative) while rolling, in units. The script makes sure that
+        /// the controller's ground sensors are still on the ground after the height change.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Change in sensor height (usually negative) while rolling, in units. The script makes sure " +
+                 "that the controller's ground sensors are still on the ground after the height change.")]
+        public float HeightChange;
+
+        /// <summary>
         /// Slope gravity when rolling uphill, in units per second squared.
         /// </summary>
         [SerializeField]
@@ -75,6 +91,8 @@ namespace Hedgehog.Core.Moves
             RequireNegative = true;
             MinActivateSpeed = 0.61875f;
 
+            HeightChange = -0.10f;
+            WidthChange = -0.04f;
             UphillGravity = 2.8125f;
             DownhillGravity = 11.25f;
             Friction = 0.8451f;
@@ -88,9 +106,24 @@ namespace Hedgehog.Core.Moves
             _rightDirection = false;
         }
 
+        public void OnEnable()
+        {
+            Controller.OnAttach.AddListener(OnAttach);
+        }
+
+        public void OnDisable()
+        {
+            Controller.OnDetach.RemoveListener(OnAttach);
+        }
+
+        protected void OnAttach()
+        {
+            End();
+        }
+
         public override bool Available()
         {
-            return Mathf.Abs(Controller.GroundVelocity) > MinActivateSpeed;
+            return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) > MinActivateSpeed;
         }
 
         public override bool InputActivate()
@@ -102,13 +135,14 @@ namespace Hedgehog.Core.Moves
 
         public override bool InputDeactivate()
         {
-            return DMath.Equalsf(Controller.GroundVelocity) || !Controller.Grounded ||
-                (_rightDirection && Controller.GroundVelocity < 0.0f && Controller.GroundVelocity > -MinActivateSpeed) ||
-                (!_rightDirection && Controller.GroundVelocity > 0.0f && Controller.GroundVelocity < MinActivateSpeed);
+            if (!Controller.Grounded) return false;
+            return (_rightDirection && Controller.GroundVelocity <= 0.0f && Controller.GroundVelocity > -MinActivateSpeed) ||
+                (!_rightDirection && Controller.GroundVelocity >= 0.0f && Controller.GroundVelocity < MinActivateSpeed);
         }
 
         public override void OnActiveEnter(State previousState)
         {
+            // Store original physics values to restore after leaving the roll
             _rightDirection = Controller.GroundVelocity > 0.0f;
 
             _originalSlopeGravity = Controller.SlopeGravity;
@@ -119,6 +153,14 @@ namespace Hedgehog.Core.Moves
             Controller.GroundFriction = Friction;
             Controller.GroundControl.AccelerationLocked = true;
             Controller.GroundControl.Deceleration = Deceleration;
+
+            Controller.Sensors.transform.position += Vector3.up*HeightChange/2.0f;
+            Controller.Sensors.TopOffset += HeightChange/2.0f;
+            Controller.Sensors.BottomOffset -= HeightChange/2.0f;
+
+            Controller.Sensors.LedgeWidth += WidthChange;
+            Controller.Sensors.BottomWidth += WidthChange;
+            Controller.Sensors.TopWidth += WidthChange;
         }
 
         public override void OnActiveFixedUpdate()
@@ -142,6 +184,14 @@ namespace Hedgehog.Core.Moves
             Controller.GroundFriction = _originalFriction;
             Controller.GroundControl.AccelerationLocked = false;
             Controller.GroundControl.Deceleration = _originalDeceleration;
+
+            Controller.Sensors.transform.position -= Vector3.up * HeightChange / 2.0f;
+            Controller.Sensors.TopOffset -= HeightChange / 2.0f;
+            Controller.Sensors.BottomOffset += HeightChange / 2.0f;
+
+            Controller.Sensors.LedgeWidth -= WidthChange;
+            Controller.Sensors.BottomWidth -= WidthChange;
+            Controller.Sensors.TopWidth -= WidthChange;
         }
     }
 }
