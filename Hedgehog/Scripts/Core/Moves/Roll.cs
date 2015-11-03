@@ -103,8 +103,8 @@ namespace Hedgehog.Core.Moves
         public override bool InputDeactivate()
         {
             return DMath.Equalsf(Controller.GroundVelocity) || !Controller.Grounded ||
-                (_rightDirection && Controller.GroundVelocity < 0.0f) ||
-                (!_rightDirection && Controller.GroundVelocity > 0.0f);
+                (_rightDirection && Controller.GroundVelocity < 0.0f && Controller.GroundVelocity > -MinActivateSpeed) ||
+                (!_rightDirection && Controller.GroundVelocity > 0.0f && Controller.GroundVelocity < MinActivateSpeed);
         }
 
         public override void OnActiveEnter(State previousState)

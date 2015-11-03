@@ -70,6 +70,29 @@ namespace Hedgehog.Core.Triggers
         [HideInInspector]
         public bool Activated;
 
+        #region Animation
+        /// <summary>
+        /// Reference to the target animator.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Reference to the target animator.")]
+        public Animator Animator;
+
+        /// <summary>
+        /// Name of an Animator trigger set when the object is activated.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator trigger set when the object is activated.")]
+        public string ActivatedTrigger;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether the object is activated.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator bool set to whether the object is activated.")]
+        public string ActivatedBool;
+        #endregion
+
         public override void Reset()
         {
             base.Reset();
@@ -79,6 +102,10 @@ namespace Hedgehog.Core.Triggers
             OnActivateEnter = new ObjectEvent();
             OnActivateStay = new ObjectEvent();
             OnActivateExit = new ObjectEvent();
+
+            Animator = GetComponentInChildren<Animator>();
+            ActivatedTrigger = "";
+            ActivatedBool = "";
         }
 
         public override void Awake()
@@ -90,6 +117,8 @@ namespace Hedgehog.Core.Triggers
             OnActivateStay = OnActivateStay ?? new ObjectEvent();
             OnActivateExit = OnActivateExit ?? new ObjectEvent();
             Activated = false;
+
+            Animator = Animator ?? GetComponentInChildren<Animator>();
         }
 
         public void Start()
@@ -117,6 +146,9 @@ namespace Hedgehog.Core.Triggers
             {
                 OnActivateStay.Invoke(collision);
             }
+
+            if(Animator != null && ActivatedBool.Length > 0)
+                Animator.SetBool(ActivatedBool, Activated);
         }
 
         /// <summary>
@@ -132,6 +164,9 @@ namespace Hedgehog.Core.Triggers
             Activated = true;
             OnActivateEnter.Invoke(controller);
             BubbleEvent(controller);
+
+            if (Animator != null && ActivatedTrigger.Length > 0)
+                Animator.SetTrigger(ActivatedTrigger);
         }
 
         /// <summary>

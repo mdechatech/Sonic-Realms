@@ -13,6 +13,12 @@ namespace Hedgehog.Core.Triggers.Editor
             set { EditorPrefs.SetBool("ObjectTriggerEditor.ShowObjectEvents", value); }
         }
 
+        protected static bool ShowAnimation
+        {
+            get { return EditorPrefs.GetBool("ObjectTriggerEditor.ShowAnimation", false); }
+            set { EditorPrefs.SetBool("ObjectTriggerEditor.ShowAnimation", value); }
+        }
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -29,6 +35,15 @@ namespace Hedgehog.Core.Triggers.Editor
                     "OnActivateEnter",
                     "OnActivateStay",
                     "OnActivateExit");
+            }
+
+            ShowAnimation = EditorGUILayout.Foldout(ShowAnimation, "Animation");
+            if (ShowAnimation)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "Animator",
+                    "ActivatedTrigger",
+                    "ActivatedBool");
             }
 
             serializedObject.ApplyModifiedProperties();

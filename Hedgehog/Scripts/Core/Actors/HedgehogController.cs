@@ -317,7 +317,7 @@ namespace Hedgehog.Core.Actors
             {
                 if (Grounded)
                 {
-                    SetGroundVelocity(Velocity);
+                    SetGroundVelocity(value);
                 }
                 else
                 {
@@ -1125,7 +1125,7 @@ namespace Hedgehog.Core.Actors
         }
         #endregion
 
-        #region Control Functions
+        #region Move and Control Functions
         /// <summary>
         /// Enters the specified control state.
         /// </summary>
@@ -1158,7 +1158,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns></returns>
-        public bool IsAvailable<TMove>()
+        public bool IsAvailable<TMove>() where TMove : Move
         {
             return AvailableMoves.Any(move => move is TMove);
         }
@@ -1168,7 +1168,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns></returns>
-        public bool IsActive<TMove>()
+        public bool IsActive<TMove>() where TMove : Move
         {
             return ActiveMoves.Any(move => move is TMove);
         }
@@ -1178,7 +1178,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns>Whether the move was performed.</returns>
-        public bool ForcePerformMove<TMove>()
+        public bool ForcePerformMove<TMove>() where TMove : Move
         {
             return ForcePerformMove(Moves.FirstOrDefault(m => m is TMove));
         }
@@ -1212,7 +1212,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns>Whether the move was performed.</returns>
-        public bool PerformMove<TMove>()
+        public bool PerformMove<TMove>() where TMove : Move
         {
             return PerformMove(AvailableMoves.FirstOrDefault(m => m is TMove));
         }
@@ -1237,7 +1237,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns>Whether the move was ended.</returns>
-        public bool EndMove<TMove>()
+        public bool EndMove<TMove>() where TMove : Move
         {
             return EndMove(ActiveMoves.FirstOrDefault(m => m is TMove));
         }
@@ -1278,7 +1278,13 @@ namespace Hedgehog.Core.Actors
         public float SetGroundVelocity(Vector2 velocity)
         {
             if (!Grounded) return 0.0f;
-            return GroundVelocity = DMath.ScalarProjection(velocity, SurfaceAngle*Mathf.Deg2Rad);
+            GroundVelocity = DMath.ScalarProjectionAbs(velocity, SurfaceAngle*Mathf.Deg2Rad);
+
+            var v = DMath.AngleToVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
+            Vx = v.x;
+            Vy = v.y;
+
+            return GroundVelocity;
         }
 
         /// <summary>
@@ -1292,7 +1298,13 @@ namespace Hedgehog.Core.Actors
         public float AddGroundVelocity(Vector2 velocity)
         {
             if (!Grounded) return 0.0f;
-            return GroundVelocity += DMath.ScalarProjection(velocity, SurfaceAngle * Mathf.Deg2Rad);
+            GroundVelocity += DMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
+
+            var v = DMath.AngleToVector(SurfaceAngle*Mathf.Deg2Rad)*GroundVelocity;
+            Vx = v.x;
+            Vy = v.y;
+
+            return GroundVelocity;
         }
 
         /// <summary>

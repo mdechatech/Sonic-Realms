@@ -26,6 +26,17 @@ namespace Hedgehog.Level.Objects.Editor
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, "BouncySides");
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Power", "AccurateBounce", "LockControl");
 
+            if (targets.Count() == 1)
+            {
+                var lockControlProp = serializedObject.FindProperty("LockControl");
+                if (lockControlProp.boolValue)
+                {
+                    HedgehogEditorGUIUtility.DrawProperties(serializedObject, "LockDuration");
+                }
+            }
+
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "KeepOnGround");
+
             serializedObject.ApplyModifiedProperties();
         }
 

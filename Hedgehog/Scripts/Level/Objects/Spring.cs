@@ -40,6 +40,22 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether to lock the controller's horizontal control after being hit.")]
         public bool LockControl;
 
+        /// <summary>
+        /// Duration of the control lock, if any.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Duration of the control lock, if any.")]
+        public float LockDuration;
+
+        /// <summary>
+        /// Whether to keep the controller on the ground after being hit. Works great for horizontal springs, not
+        /// so much for vertical.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Whether to keep the controller on the ground after being hit. Works great for horizontal springs, " +
+                 "not so much for vertical.")]
+        public bool KeepOnGround;
+
         public override bool ActivatesObject
         {
             get { return true; }
@@ -51,6 +67,8 @@ namespace Hedgehog.Level.Objects
             BouncySides = ControllerSide.Right;
             AccurateBounce = false;
             LockControl = false;
+            LockDuration = 0.266667f;
+            KeepOnGround = false;
         }
 
         public override void Start()
@@ -64,18 +82,18 @@ namespace Hedgehog.Level.Objects
             var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);
             if ((BouncySides & hitSide) == 0) return;
 
-            controller.Detach();
-            if (LockControl) controller.GroundControl.Lock();
+            if (LockControl) controller.GroundControl.Lock(0.2667f);
+            if (!KeepOnGround) controller.Detach();
 
-            if (!AccurateBounce)
-            {
-                controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
-            }
-            else
+            if (AccurateBounce)
             {
                 controller.Velocity = new Vector2(controller.Velocity.x*Mathf.Abs(Mathf.Sin(hit.NormalAngle)),
                     controller.Velocity.y*Mathf.Abs(Mathf.Cos(hit.NormalAngle)));
                 controller.Velocity += DMath.AngleToVector(hit.NormalAngle) * Power;
+            }
+            else
+            {
+                controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
             }
 
             TriggerObject(controller);
