@@ -194,13 +194,13 @@ namespace Hedgehog.Core.Moves
             ControlLockTimer = 0.0f;
         }
 
-        public override void OnStateEnter(ControlState previousState)
+        public override void OnControlStateEnter(ControlState previousState)
         {
             Controller.OnSteepDetach.AddListener(OnSteepDetach);
             Controller.AutoFlip = false;
         }
 
-        public override void OnStateExit(ControlState nextState)
+        public override void OnControlStateExit(ControlState nextState)
         {
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.AutoFlip = true;
@@ -213,7 +213,7 @@ namespace Hedgehog.Core.Moves
                 Animator.SetBool(BrakingBool, false);
         }
 
-        public override void OnStateUpdate()
+        public override void OnControlStateUpdate()
         {
             ControlLockTimer -= Time.deltaTime;
             if (ControlLockTimer < 0.0f)

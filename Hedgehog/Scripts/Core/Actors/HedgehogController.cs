@@ -443,7 +443,7 @@ namespace Hedgehog.Core.Actors
             AirControl = GetComponent<AirControl>() ?? gameObject.AddComponent<AirControl>();
             AutoFindMoves = true;
 
-            Paths = new List<string> {"Always Collide"};
+            Paths = new List<string> {"Always Collide", "Path 1"};
 
             Sensors = GetComponentInChildren<HedgehogSensors>();
 
@@ -499,7 +499,7 @@ namespace Hedgehog.Core.Actors
         public void Update()
         {
             if(ControlState != null)
-                ControlState.OnStateUpdate();
+                ControlState.OnControlStateUpdate();
 
             for (var i = ActiveMoves.Count - 1; i >= 0; i--)
             {
@@ -1134,11 +1134,11 @@ namespace Hedgehog.Core.Actors
         {
             if (ControlState != null)
             {
-                ControlState.OnStateExit(state);
+                ControlState.OnControlStateExit(state);
                 ControlState.IsCurrent = false;
             }
 
-            state.OnStateEnter(ControlState);
+            state.OnControlStateEnter(ControlState);
             ControlState = state;
             ControlState.IsCurrent = true;
         }

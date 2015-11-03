@@ -45,7 +45,7 @@ namespace Hedgehog.Core.Moves
         /// Called when the state is entered.
         /// </summary>
         /// <param name="previousState">The control state before </param>
-        public virtual void OnStateEnter(ControlState previousState)
+        public virtual void OnControlStateEnter(ControlState previousState)
         {
 
         }
@@ -54,7 +54,7 @@ namespace Hedgehog.Core.Moves
         /// Called when the state is exited.
         /// </summary>
         /// <param name="nextState">The control state that will be entered next.</param>
-        public virtual void OnStateExit(ControlState nextState)
+        public virtual void OnControlStateExit(ControlState nextState)
         {
 
         }
@@ -62,7 +62,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Called on Update while this is the current state.
         /// </summary>
-        public virtual void OnStateUpdate()
+        public virtual void OnControlStateUpdate()
         {
 
         }
