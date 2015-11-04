@@ -39,8 +39,8 @@ namespace Hedgehog.Core.Utils
             var any = false;
             foreach (var platformTrigger in GetTriggers<PlatformTrigger>(transform))
             {
-                platformTrigger.NotifyCollision(hit.Source, hit);
-                if (notifySurfaceCollision) platformTrigger.NotifySurfaceCollision(hit.Source, hit);
+                platformTrigger.NotifyCollision(hit.Controller, hit);
+                if (notifySurfaceCollision) platformTrigger.NotifySurfaceCollision(hit.Controller, hit);
                 any = true;
             }
 
@@ -62,7 +62,7 @@ namespace Hedgehog.Core.Utils
             bool any = false;
             foreach (var platformTrigger in GetTriggers<PlatformTrigger>(transform))
             {
-                platformTrigger.NotifySurfaceCollision(hit.Source, hit);
+                platformTrigger.NotifySurfaceCollision(hit.Controller, hit);
                 any = true;
             }
 

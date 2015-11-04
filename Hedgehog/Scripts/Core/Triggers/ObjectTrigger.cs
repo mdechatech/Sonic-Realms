@@ -126,8 +126,8 @@ namespace Hedgehog.Core.Triggers
             if (!AutoActivate) return;
             if ((_platformTrigger = GetComponent<PlatformTrigger>()) != null)
             {
-                _platformTrigger.OnSurfaceEnter.AddListener((controller, hit) => Activate(controller));
-                _platformTrigger.OnSurfaceExit.AddListener((controller, hit) => Deactivate(controller));
+                _platformTrigger.OnSurfaceEnter.AddListener(hit => Activate(hit.Controller));
+                _platformTrigger.OnSurfaceExit.AddListener(hit => Deactivate(hit.Controller));
                 _platformTrigger.TriggerFromChildren = TriggerFromChildren;
             }
             else

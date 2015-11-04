@@ -31,19 +31,19 @@ namespace Hedgehog.Level.Platforms
         }
 
         // Applies new physics values based on friction.
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceEnter(TerrainCastHit hit)
         {
-            controller.GroundControl.Acceleration *= Friction;
-            controller.GroundControl.Deceleration *= Friction;
-            controller.GroundFriction *= Friction;
+            hit.Controller.GroundControl.Acceleration *= Friction;
+            hit.Controller.GroundControl.Deceleration *= Friction;
+            hit.Controller.GroundFriction *= Friction;
         }
 
         // Restores old physics values.
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceExit(TerrainCastHit hit)
         {
-            controller.GroundControl.Acceleration /= Friction;
-            controller.GroundControl.Deceleration /= Friction;
-            controller.GroundFriction /= Friction;
+            hit.Controller.GroundControl.Acceleration /= Friction;
+            hit.Controller.GroundControl.Deceleration /= Friction;
+            hit.Controller.GroundFriction /= Friction;
         }
     }
 }

@@ -52,22 +52,22 @@ namespace Hedgehog.Level.Objects
             AutoActivate = false;
         }
 
-        public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
+        public override void OnPlatformEnter(TerrainCastHit hit)
         {
-            controller.Detach();
-            if(LockControl) controller.GroundControl.Lock();
+            hit.Controller.Detach();
+            if(LockControl) hit.Controller.GroundControl.Lock();
            
             var normal = hit.NormalAngle;
 
             if (AccurateBounce)
             {
-                controller.Velocity = new Vector2(controller.Velocity.x * Mathf.Abs(Mathf.Sin(normal)),
-                    controller.Velocity.y * Mathf.Abs(Mathf.Cos(normal)));
-                controller.Velocity += DMath.AngleToVector(normal) * Velocity;
+                hit.Controller.Velocity = new Vector2(hit.Controller.Velocity.x * Mathf.Abs(Mathf.Sin(normal)),
+                    hit.Controller.Velocity.y * Mathf.Abs(Mathf.Cos(normal)));
+                hit.Controller.Velocity += DMath.AngleToVector(normal) * Velocity;
             }
             else
             {
-                controller.Velocity = DMath.AngleToVector(normal) * Velocity;
+                hit.Controller.Velocity = DMath.AngleToVector(normal) * Velocity;
             }
 
             TriggerObject();

@@ -21,7 +21,7 @@ namespace Hedgehog.Core.Utils
         /// <summary>
         /// The controller that initiated the cast, if any.
         /// </summary>
-        public HedgehogController Source;
+        public HedgehogController Controller;
 
         /// <summary>
         /// The angle of incline of the terrain hit in radians, if any.
@@ -34,11 +34,11 @@ namespace Hedgehog.Core.Utils
         public float NormalAngle;
 
         public TerrainCastHit(RaycastHit2D hit, ControllerSide fromSide = ControllerSide.All,
-            HedgehogController source = null)
+            HedgehogController controller = null)
         {
             Hit = hit;
             Side = fromSide;
-            Source = source;
+            Controller = controller;
             NormalAngle = hit ? DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi) : 0.0f;
             SurfaceAngle = hit ? DMath.Modp(NormalAngle - DMath.HalfPi, DMath.DoublePi) : 0.0f;
         }

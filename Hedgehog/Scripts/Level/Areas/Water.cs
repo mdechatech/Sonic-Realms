@@ -58,13 +58,13 @@ namespace Hedgehog.Level.Areas
         // and running quickly enough.
         public override bool CollidesWith(TerrainCastHit hit)
         {
-            if (hit.Source == null || MinFloatSpeed <= 0.0f) return false;
+            if (hit.Controller == null || MinFloatSpeed <= 0.0f) return false;
             return base.CollidesWith(hit) &&
                    (hit.Side & ControllerSide.Bottom) > 0 &&
                    hit.Hit.fraction > 0.0f &&
-                   hit.Source.Grounded &&
-                   Mathf.Abs(hit.Source.GroundVelocity) >= MinFloatSpeed &&
-                   !AreaTrigger.HasController(hit.Source);
+                   hit.Controller.Grounded &&
+                   Mathf.Abs(hit.Controller.GroundVelocity) >= MinFloatSpeed &&
+                   !AreaTrigger.HasController(hit.Controller);
         }
         
         // Apply new physics values based on viscosity

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Hedgehog.Level.Platforms
 {
-    // TODO disable jumping while on slide
     /// <summary>
     /// Slide (or tunnel? rail?) that increases the controller's slope gravity.
     /// </summary>
@@ -49,37 +48,37 @@ namespace Hedgehog.Level.Platforms
 
         public override bool CollidesWith(TerrainCastHit hit)
         {
-            if (hit.Source == null) return true;
+            if (hit.Controller == null) return true;
             return base.CollidesWith(hit) && (!RequireGroundEntry ||
-                                              (RequireGroundEntry && hit.Source.Grounded &&
+                                              (RequireGroundEntry && hit.Controller.Grounded &&
                                                !DMath.Equalsf(hit.Hit.fraction)));
         }
 
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceEnter(TerrainCastHit hit)
         {
-            _originalSlopeGravities[controller.GetInstanceID()] = controller.SlopeGravity;
+            _originalSlopeGravities[hit.Controller.GetInstanceID()] = hit.Controller.SlopeGravity;
         }
 
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceStay(TerrainCastHit hit)
         {
-            var instanceID = controller.GetInstanceID();
+            var instanceID = hit.Controller.GetInstanceID();
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;
 
             var result = _originalSlopeGravities[instanceID];
-            if (-DMath.ScalarProjectionAbs(controller.Velocity, controller.GravityDirection*Mathf.Deg2Rad) < 0.0f)
+            if (-DMath.ScalarProjectionAbs(hit.Controller.Velocity, hit.Controller.GravityDirection*Mathf.Deg2Rad) < 0.0f)
                 result += DownhillSlopeGravity;
             else
                 result += UphillSlopeGravity;
 
-            controller.SlopeGravity = result;
+            hit.Controller.SlopeGravity = result;
         }
 
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceExit(TerrainCastHit hit)
         {
-            var instanceID = controller.GetInstanceID();
+            var instanceID = hit.Controller.GetInstanceID();
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;
 
-            controller.SlopeGravity = _originalSlopeGravities[instanceID];
+            hit.Controller.SlopeGravity = _originalSlopeGravities[instanceID];
             _originalSlopeGravities.Remove(instanceID);
         }
     }

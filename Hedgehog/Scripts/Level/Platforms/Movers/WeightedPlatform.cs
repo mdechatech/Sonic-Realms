@@ -98,19 +98,19 @@ namespace Hedgehog.Level.Platforms.Movers
         }
 
         // Check if a controller is on the platform
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceEnter(TerrainCastHit hit)
         {
             _colliding = true;
         }
 
         // Check if a controller is on the platform
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceStay(TerrainCastHit hit)
         {
             _colliding = true;
         }
-
+            
         // Check if a controller leaves the platform
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceExit(TerrainCastHit hit)
         {
             if (!_colliding) return;
             _colliding = false;

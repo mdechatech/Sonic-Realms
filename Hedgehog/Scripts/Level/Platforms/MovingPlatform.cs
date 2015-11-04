@@ -53,11 +53,11 @@ namespace Hedgehog.Level.Platforms
             _linkedAnchors = new List<MovingPlatformAnchor>();
         }
 
-        private MovingPlatformAnchor CreateAnchor(HedgehogController controller, TerrainCastHit hit)
+        private MovingPlatformAnchor CreateAnchor(TerrainCastHit hit)
         {
             var anchor = new GameObject().AddComponent<MovingPlatformAnchor>();
-            anchor.LinkController(controller);
-            anchor.name = controller.name + "'s Moving Platform Anchor";
+            anchor.LinkController(hit.Controller);
+            anchor.name = hit.Controller.name + "'s Moving Platform Anchor";
             anchor.transform.SetParent(hit.Hit.transform);
             // We will update the anchor manually and lazily
             anchor.enabled = false;
@@ -65,40 +65,40 @@ namespace Hedgehog.Level.Platforms
             return anchor;
         }
 
-        // Attaches the controller to the platform through a MovingPlatformAnchor
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
+        // Attaches the hit.Source to the platform through a MovingPlatformAnchor
+        public override void OnSurfaceEnter(TerrainCastHit hit)
         {
-            _linkedControllers.Add(controller);
-            _linkedAnchors.Add(CreateAnchor(controller, hit));
+            _linkedControllers.Add(hit.Controller);
+            _linkedAnchors.Add(CreateAnchor(hit));
         }
 
-        // Updates the anchor associated with the controller
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        // Updates the anchor associated with the hit.Source
+        public override void OnSurfaceStay(TerrainCastHit hit)
         {
-            var anchor = _linkedAnchors[_linkedControllers.IndexOf(controller)];
+            var anchor = _linkedAnchors[_linkedControllers.IndexOf(hit.Controller)];
             if(anchor.transform.parent != hit.Hit.transform)
                 anchor.transform.SetParent(hit.Hit.transform);
             anchor.TranslateController();
         }
 
-        // Removes the anchor associated with the controller
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        // Removes the anchor associated with the hit.Source
+        public override void OnSurfaceExit(TerrainCastHit hit)
         {
-            var velocity = (Vector2) _linkedAnchors[_linkedControllers.IndexOf(controller)].DeltaPosition
+            var velocity = (Vector2) _linkedAnchors[_linkedControllers.IndexOf(hit.Controller)].DeltaPosition
                            /Time.fixedDeltaTime;
 
-            if (controller.Grounded)
+            if (hit.Controller.Grounded)
             {
-                if(TransferMomentumGround) controller.AddGroundVelocity(velocity);
+                if(TransferMomentumGround) hit.Controller.AddGroundVelocity(velocity);
             }
             else
             {
-                controller.Velocity += new Vector2(
+                hit.Controller.Velocity += new Vector2(
                     TransferMomentumX ? velocity.x : 0.0f,
                     TransferMomentumY ? velocity.y : 0.0f);
             }
 
-            var index = _linkedControllers.IndexOf(controller);
+            var index = _linkedControllers.IndexOf(hit.Controller);
             _linkedControllers.RemoveAt(index);
             Destroy(_linkedAnchors[index].gameObject);
             _linkedAnchors.RemoveAt(index);

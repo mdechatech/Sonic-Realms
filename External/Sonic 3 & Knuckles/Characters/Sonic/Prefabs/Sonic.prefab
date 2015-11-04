@@ -308,7 +308,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 8.46000004, y: .180000007, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 411496}
@@ -645,6 +645,8 @@ MonoBehaviour:
   ActivateInput: Vertical
   RequireNegative: 1
   MinActivateSpeed: .618749976
+  WidthChange: -.0399999991
+  HeightChange: -.100000001
   UphillGravity: 2.8125
   DownhillGravity: 11.25
   Deceleration: 4.5
@@ -729,7 +731,7 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Spindashing
   AvailableBool: 
-  ChargeButton: Fire1
+  ChargeButton: Jump
   BasePower: 4.80000019
   ChargePower: .600000024
   ChargePowerDecay: 1.875

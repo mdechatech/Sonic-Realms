@@ -34,22 +34,22 @@ namespace Hedgehog.Level.Platforms
             _oldGravities = new Dictionary<int, float>();
         }
 
-        public override void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceEnter(TerrainCastHit hit)
         {
             if (!RestoreOnExit) return;
-            _oldGravities[controller.GetInstanceID()] = controller.GravityDirection;
+            _oldGravities[hit.Controller.GetInstanceID()] = hit.Controller.GravityDirection;
         }
 
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceStay(TerrainCastHit hit)
         {
-            controller.GravityDirection = DMath.PositiveAngle_d(controller.SurfaceAngle - 90.0f);
+            hit.Controller.GravityDirection = DMath.PositiveAngle_d(hit.Controller.SurfaceAngle - 90.0f);
         }
 
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceExit(TerrainCastHit hit)
         {
             if (!RestoreOnExit) return;
-            var instanceID = controller.GetInstanceID();
-            controller.GravityDirection = _oldGravities[instanceID];
+            var instanceID = hit.Controller.GetInstanceID();
+            hit.Controller.GravityDirection = _oldGravities[instanceID];
             _oldGravities.Remove(instanceID);
         }
     }

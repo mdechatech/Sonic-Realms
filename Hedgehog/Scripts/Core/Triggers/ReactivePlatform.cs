@@ -80,32 +80,32 @@ namespace Hedgehog.Core.Triggers
         }
 
         // Override these methods to react when a controller collides with the platform.
-        public virtual void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
+        public virtual void OnPlatformEnter(TerrainCastHit hit)
         {
 
         }
 
-        public virtual void OnPlatformStay(HedgehogController controller, TerrainCastHit hit)
+        public virtual void OnPlatformStay(TerrainCastHit hit)
         {
 
         }
 
-        public virtual void OnPlatformExit(HedgehogController controller, TerrainCastHit hit)
+        public virtual void OnPlatformExit(TerrainCastHit hit)
         {
 
         }
         // Override these methods to react when a controller stands on the platform.
-        public virtual void OnSurfaceEnter(HedgehogController controller, TerrainCastHit hit)
+        public virtual void OnSurfaceEnter(TerrainCastHit hit)
         {
             
         }
 
-        public virtual void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        public virtual void OnSurfaceStay(TerrainCastHit hit)
         {
             
         }
 
-        public virtual void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        public virtual void OnSurfaceExit(TerrainCastHit hit)
         {
             
         }

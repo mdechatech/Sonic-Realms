@@ -77,26 +77,26 @@ namespace Hedgehog.Level.Objects
             AutoActivate = false;
         }
 
-        public override void OnPlatformEnter(HedgehogController controller, TerrainCastHit hit)
+        public override void OnPlatformEnter(TerrainCastHit hit)
         {
             var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);
             if ((BouncySides & hitSide) == 0) return;
 
-            if (LockControl) controller.GroundControl.Lock(LockDuration);
-            if (!KeepOnGround) controller.Detach();
+            if (LockControl) hit.Controller.GroundControl.Lock(LockDuration);
+            if (!KeepOnGround) hit.Controller.Detach();
 
             if (AccurateBounce)
             {
-                controller.Velocity = new Vector2(controller.Velocity.x*Mathf.Abs(Mathf.Sin(hit.NormalAngle)),
-                    controller.Velocity.y*Mathf.Abs(Mathf.Cos(hit.NormalAngle)));
-                controller.Velocity += DMath.AngleToVector(hit.NormalAngle) * Power;
+                hit.Controller.Velocity = new Vector2(hit.Controller.Velocity.x*Mathf.Abs(Mathf.Sin(hit.NormalAngle)),
+                    hit.Controller.Velocity.y*Mathf.Abs(Mathf.Cos(hit.NormalAngle)));
+                hit.Controller.Velocity += DMath.AngleToVector(hit.NormalAngle) * Power;
             }
             else
             {
-                controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
+                hit.Controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
             }
 
-            TriggerObject(controller);
+            TriggerObject(hit.Controller);
         }
     }
 }

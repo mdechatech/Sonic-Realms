@@ -26,8 +26,11 @@ namespace Hedgehog.Level.Platforms
 
         // Translate the controller by the amount defined in Velocity and the direction defined by its
         // surface angle.
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceStay(TerrainCastHit hit)
         {
+            var controller = hit.Controller;
+            if (hit.Controller == null) return;
+
             controller.transform.Translate(DMath.AngleToVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
                                  Time.fixedDeltaTime);
 
@@ -35,8 +38,12 @@ namespace Hedgehog.Level.Platforms
         }
 
         // Transfer momentum to the controller when it leaves the conveyor belt.
-        public override void OnSurfaceExit(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceExit(TerrainCastHit hit)
         {
+            var controller = hit.Controller;
+            if (hit.Controller == null)
+                return;
+
             if (controller.Grounded)
                 controller.GroundVelocity += Velocity;
             else

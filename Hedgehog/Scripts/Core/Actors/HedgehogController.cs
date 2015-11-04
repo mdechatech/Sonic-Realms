@@ -197,6 +197,12 @@ namespace Hedgehog.Core.Actors
         public UnityEvent OnAttach;
 
         /// <summary>
+        /// Invoked when the controller collides with a platform.
+        /// </summary>
+        [SerializeField]
+        public PlatformCollisionEvent OnCollide;
+
+        /// <summary>
         /// Invoked when the controller detaches from the ground for any reason.
         /// </summary>
         [SerializeField]
@@ -306,6 +312,12 @@ namespace Hedgehog.Core.Actors
         /// Whether the controller is facing forward or backward.
         /// </summary>
         public bool FacingForward;
+
+        /// <summary>
+        /// Makes the controller keep going when it finds something in its way. Often used by objects that
+        /// destroy themselves and don't want the controller to stop, such as item boxes.
+        /// </summary>
+        public bool IgnoreNextCollision;
 
         /// <summary>
         /// The controller's velocity as a Vector2.
@@ -528,6 +540,9 @@ namespace Hedgehog.Core.Actors
         #endregion
 
         #region Lifecycle Subroutines
+        /// <summary>
+        /// Handles movement caused by velocity.
+        /// </summary>
         public void HandleMovement()
         {
             var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
@@ -570,6 +585,9 @@ namespace Hedgehog.Core.Actors
             }
         }
 
+        /// <summary>
+        /// Handles translations requested from outside sources.
+        /// </summary>
         public void HandleQueuedTranslation()
         {
             if (QueuedTranslation == Vector3.zero) return;
@@ -578,6 +596,9 @@ namespace Hedgehog.Core.Actors
             QueuedTranslation = Vector3.zero;
         }
 
+        /// <summary>
+        /// Handles move activation/deactivation and availability.
+        /// </summary>
         public void HandleMoves()
         {
             if (UnavailableMoves.Count > 0)
@@ -634,11 +655,18 @@ namespace Hedgehog.Core.Actors
             }
         }
 
+        /// <summary>
+        /// Uses Time.fixedDeltaTime as the timestep. Handles sprite rotation and other effects.
+        /// </summary>
         public void HandleDisplay()
         {
             HandleDisplay(Time.fixedDeltaTime);
         }
 
+        /// <summary>
+        /// Handles sprite rotation and other effects.
+        /// </summary>
+        /// <param name="timestep">The specified timestep, in seconds.</param>
         public void HandleDisplay(float timestep)
         {
             if (AutoFlip)
@@ -655,8 +683,9 @@ namespace Hedgehog.Core.Actors
 
             if (!Grounded)
             {
-                RendererObject.transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 
-                    Mathf.LerpAngle(transform.eulerAngles.z, SensorsRotation, Time.fixedDeltaTime*20.0f));
+                RendererObject.transform.eulerAngles = new Vector3(RendererObject.transform.eulerAngles.x, 
+                    RendererObject.transform.eulerAngles.y, 
+                    Mathf.LerpAngle(RendererObject.transform.eulerAngles.z, SensorsRotation, Time.fixedDeltaTime*10.0f));
             }
             else if(AutoRotate)
             {
@@ -734,24 +763,22 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public void HandleCollisions()
         {
-            var anyHit = false;
-
             if(CrushCheck()) OnCrush.Invoke();
 
             if (!Grounded)
             {
-                anyHit = AirSideCheck() | AirCeilingCheck() | AirGroundCheck();
+                AirSideCheck();
+                AirCeilingCheck();
+                AirGroundCheck();
                 SensorsRotation = GravityDirection + 90.0f;
             }
 
             if (Grounded)
             {
-                anyHit = GroundSideCheck() | GroundSurfaceCheck();
+                GroundSideCheck();
+                GroundSurfaceCheck();
                 if (!SurfaceAngleCheck()) Detach();
             }
-
-            //if (!anyHit && JustDetached)
-            //    JustDetached = false;
         }
         #endregion
         #region Collision Subroutines
@@ -768,24 +795,33 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
-                transform.position += push + push.normalized*DMath.Epsilon;
-
-                if (Vx < 0.0f) Vx = 0.0f;
-
                 NotifyCollision(sideLeftCheck);
 
+                if (!IgnoreNextCollision && RelativeVelocity.x < 0.0f)
+                {
+                    var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
+                    transform.position += push + push.normalized * DMath.Epsilon;
+
+                    RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
+
             if (sideRightCheck)
             {
-                var push = (Vector3) (sideRightCheck.Hit.point - (Vector2) Sensors.CenterRight.position);
-                transform.position += push + push.normalized*DMath.Epsilon;
-
-                if (Vx > 0.0f) Vx = 0.0f;
-
                 NotifyCollision(sideRightCheck);
 
+                if (!IgnoreNextCollision && RelativeVelocity.x > 0.0f)
+                {
+                    var push = (Vector3)(sideRightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
+                    transform.position += push + push.normalized * DMath.Epsilon;
+
+                    RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
 
@@ -802,11 +838,16 @@ namespace Hedgehog.Core.Actors
 
             if (leftCheck)
             {
-                transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
-                if(HandleImpact(leftCheck)) Footing = Footing.Left;
-
                 NotifyCollision(leftCheck);
 
+                if (!IgnoreNextCollision)
+                {
+                    transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
+                    if (HandleImpact(leftCheck))
+                        Footing = Footing.Left;
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
 
@@ -814,11 +855,16 @@ namespace Hedgehog.Core.Actors
 
             if (rightCheck)
             {
-                transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
-                if(HandleImpact(rightCheck)) Footing = Footing.Right;
-
                 NotifyCollision(rightCheck);
 
+                if (!IgnoreNextCollision)
+                {
+                    transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
+                    if (HandleImpact(rightCheck))
+                        Footing = Footing.Right;
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
 
@@ -841,24 +887,40 @@ namespace Hedgehog.Core.Actors
                     if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
                             (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
                     {
-                        if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
                         NotifyCollision(groundLeftCheck);
+
+                        if (!IgnoreNextCollision && HandleImpact(groundLeftCheck))
+                            Footing = Footing.Left;
+
+                        IgnoreNextCollision = false;
                     }
                     else
                     {
-                        if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
                         NotifyCollision(groundRightCheck);
+
+                        if (!IgnoreNextCollision && HandleImpact(groundRightCheck))
+                            Footing = Footing.Right;
+
+                        IgnoreNextCollision = false;
                     }
                 }
                 else if (groundLeftCheck)
                 {
-                    if (HandleImpact(groundLeftCheck)) Footing = Footing.Left;
                     NotifyCollision(groundLeftCheck);
+
+                    if (!IgnoreNextCollision && HandleImpact(groundLeftCheck))
+                        Footing = Footing.Left;
+
+                    IgnoreNextCollision = false;
                 }
                 else
                 {
-                    if (HandleImpact(groundRightCheck)) Footing = Footing.Right;
                     NotifyCollision(groundRightCheck);
+
+                    if (!IgnoreNextCollision && HandleImpact(groundRightCheck))
+                        Footing = Footing.Right;
+
+                    IgnoreNextCollision = false;
                 }
 
                 return true;
@@ -879,39 +941,51 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                if(GroundVelocity < 0.0f) GroundVelocity = 0.0f;
-                var push = (Vector3) (sideLeftCheck.Hit.point - (Vector2) Sensors.CenterLeft.position);
-                transform.position += push + push.normalized*DMath.Epsilon;
-
-                // If running down a wall and hits the floor, orient the player onto the floor
-                if (DMath.AngleInRange_d(RelativeSurfaceAngle,
-                    MaxClimbAngle, 180.0f - MaxClimbAngle))
-                {
-                    SurfaceAngle -= 90.0f;
-                }
-
-                SensorsRotation = SurfaceAngle;
                 NotifyCollision(sideLeftCheck);
 
+                if (!IgnoreNextCollision)
+                {
+                    if (GroundVelocity < 0.0f)
+                        GroundVelocity = 0.0f;
+                    var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
+                    transform.position += push + push.normalized * DMath.Epsilon;
+
+                    // If running down a wall and hits the floor, orient the player onto the floor
+                    if (DMath.AngleInRange_d(RelativeSurfaceAngle,
+                        MaxClimbAngle, 180.0f - MaxClimbAngle))
+                    {
+                        SurfaceAngle -= 90.0f;
+                    }
+
+                    SensorsRotation = SurfaceAngle;
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
             if (sideRightCheck)
             {
-                if(GroundVelocity > 0.0f) GroundVelocity = 0.0f;
-                
-                var push = (Vector3) (sideRightCheck.Hit.point - (Vector2) Sensors.CenterRight.position);
-                transform.position += push + push.normalized*DMath.Epsilon;
-                
-                // If running down a wall and hits the floor, orient the player onto the floor
-                if (DMath.AngleInRange_d(RelativeSurfaceAngle,
-                    180.0f + MaxClimbAngle, 360.0f - MaxClimbAngle))
-                {
-                    SurfaceAngle += 90.0f;
-                }
-
-                SensorsRotation = SurfaceAngle;
                 NotifyCollision(sideRightCheck);
 
+                if (!IgnoreNextCollision)
+                {
+                    if (GroundVelocity > 0.0f)
+                        GroundVelocity = 0.0f;
+
+                    var push = (Vector3)(sideRightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
+                    transform.position += push + push.normalized * DMath.Epsilon;
+
+                    // If running down a wall and hits the floor, orient the player onto the floor
+                    if (DMath.AngleInRange_d(RelativeSurfaceAngle,
+                        180.0f + MaxClimbAngle, 360.0f - MaxClimbAngle))
+                    {
+                        SurfaceAngle += 90.0f;
+                    }
+
+                    SensorsRotation = SurfaceAngle;
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
 
@@ -931,24 +1005,34 @@ namespace Hedgehog.Core.Actors
 
             if (ceilLeftCheck)
             {
-                if(GroundVelocity < 0.0f) GroundVelocity = 0.0f;
-
-                var push = (Vector3) (ceilLeftCheck.Hit.point - (Vector2) Sensors.TopLeft.position);
-                transform.position += push + push.normalized*DMath.Epsilon;
-
                 NotifyCollision(ceilLeftCheck);
 
+                if (!IgnoreNextCollision)
+                {
+                    if (GroundVelocity < 0.0f)
+                        GroundVelocity = 0.0f;
+
+                    var push = (Vector3)(ceilLeftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
+                    transform.position += push + push.normalized * DMath.Epsilon;
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
             if (ceilRightCheck)
             {
-                if (GroundVelocity > 0.0f) GroundVelocity = 0.0f;
-
-                var push = (Vector3) (ceilRightCheck.Hit.point - (Vector2) Sensors.TopRight.position);
-                transform.position += push + push.normalized*DMath.Epsilon;
-
                 NotifyCollision(ceilRightCheck);
 
+                if (!IgnoreNextCollision)
+                {
+                    if (GroundVelocity > 0.0f)
+                        GroundVelocity = 0.0f;
+
+                    var push = (Vector3)(ceilRightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
+                    transform.position += push + push.normalized * DMath.Epsilon;
+                }
+
+                IgnoreNextCollision = false;
                 return true;
             }
 
@@ -1034,44 +1118,60 @@ namespace Hedgehog.Core.Actors
             // Goto's actually seem to improve the code's readability here, so please don't sue me
             #region Orientation Goto's
             orientLeft:
-            Footing = Footing.Left;
-            SensorsRotation = SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
-            transform.position += (Vector3)(left.Hit.point - (Vector2) Sensors.BottomLeft.position);
-
-            SetSurface(left);
             NotifyCollision(left);
+
+            if (!IgnoreNextCollision)
+            {
+                Footing = Footing.Left;
+                SensorsRotation = SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
+                transform.position += (Vector3)(left.Hit.point - (Vector2)Sensors.BottomLeft.position);
+
+                SetSurface(left);
+            }
 
             goto finish;
 
             orientRight:
-            Footing = Footing.Right;
-            SensorsRotation = SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
-            transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
-
-            SetSurface(right);
             NotifyCollision(right);
+
+            if (!IgnoreNextCollision)
+            {
+                Footing = Footing.Right;
+                SensorsRotation = SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
+                transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
+
+                SetSurface(right);
+            }
 
             goto finish;
 
             orientLeftBoth:
-            Footing = Footing.Left;
-            SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
-            transform.position += (Vector3)(left.Hit.point - (Vector2)Sensors.BottomLeft.position);
-
-            SetSurface(left, right);
             NotifyCollision(left);
             NotifyCollision(right);
+
+            if (!IgnoreNextCollision)
+            {
+                Footing = Footing.Left;
+                SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point) * Mathf.Rad2Deg;
+                transform.position += (Vector3)(left.Hit.point - (Vector2)Sensors.BottomLeft.position);
+
+                SetSurface(left, right);
+            }
 
             goto finish;
 
             orientRightBoth:
-            Footing = Footing.Right;
-            SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point)*Mathf.Rad2Deg;
-            transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
-
-            SetSurface(right, left);
             NotifyCollision(right);
             NotifyCollision(left);
+
+            if (!IgnoreNextCollision)
+            {
+                Footing = Footing.Right;
+                SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point) * Mathf.Rad2Deg;
+                transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
+
+                SetSurface(right, left);
+            }
 
             goto finish;
 
@@ -1098,6 +1198,7 @@ namespace Hedgehog.Core.Actors
                 transform.eulerAngles = originalRotation;
             }
 
+            IgnoreNextCollision = false;
             return true;
         }
 
@@ -1412,7 +1513,7 @@ namespace Hedgehog.Core.Actors
             if (RelativeVelocity.y <= 0.0f)
             {
                 if (fixedAngled < 22.5f || fixedAngled > 337.5f)
-                {   
+                {
                     result = RelativeVelocity.x;
                 }
                 else if (fixedAngled < 45.0f)
@@ -1425,7 +1526,7 @@ namespace Hedgehog.Core.Actors
                 {
                     result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
                         ? RelativeVelocity.x
-                        : -0.5f * RelativeVelocity.y;
+                        : -0.5f*RelativeVelocity.y;
                 }
                 else if (fixedAngled < 90.0f)
                 {
@@ -1458,6 +1559,10 @@ namespace Hedgehog.Core.Actors
 
             if (result == null) return false;
 
+            // If we're gonna fall off because we're too slow, don't attach at all
+            if (DetachWhenSlow && (Mathf.Abs(result.Value) < DetachSpeed && fixedAngled > 90.0f && fixedAngled < 270.0f))
+                return false;
+    
             Attach(result.Value, sAngler);
             return true;
         }
@@ -1487,6 +1592,7 @@ namespace Hedgehog.Core.Actors
         private bool NotifyCollision(TerrainCastHit collision)
         {
             if (!collision || collision.Hit.transform == null) return false;
+            OnCollide.Invoke(collision);
             return TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
         }
 

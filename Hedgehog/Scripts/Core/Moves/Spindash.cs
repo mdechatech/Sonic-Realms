@@ -50,7 +50,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Reset();
 
-            ChargeButton = "Fire1";
+            ChargeButton = "Jump";
 
             ChargePower = 0.6f;
             MaxChargePower = 2.4f;
@@ -97,7 +97,6 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveExit()
         {
-            // TODO go backward if facing backward
             if(Controller.FacingForward)
                 Controller.GroundVelocity += BasePower + CurrentChargePower;
             else

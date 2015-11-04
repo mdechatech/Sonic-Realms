@@ -43,8 +43,11 @@ namespace Hedgehog.Level.Platforms
             AccountForFriction = true;
         }
 
-        public override void OnSurfaceStay(HedgehogController controller, TerrainCastHit hit)
+        public override void OnSurfaceStay(TerrainCastHit hit)
         {
+            var controller = hit.Controller;
+            if (hit.Controller == null) return;
+
             var oldVelocity = controller.GroundVelocity;
             
             if (AccelerateBothWays)

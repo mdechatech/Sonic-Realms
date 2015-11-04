@@ -13,14 +13,14 @@ namespace Hedgehog.Core.Triggers
     /// the offending platform.
     /// </summary>
     [Serializable]
-    public class PlatformSurfaceEvent : UnityEvent<HedgehogController, TerrainCastHit> { }
+    public class PlatformSurfaceEvent : UnityEvent<TerrainCastHit> { }
 
     /// <summary>
     /// An event for when a controller collides with a platform, invoked with the offending controller
     /// and the offending platform.
     /// </summary>
     [Serializable]
-    public class PlatformCollisionEvent : UnityEvent<HedgehogController, TerrainCastHit> { }
+    public class PlatformCollisionEvent : UnityEvent<TerrainCastHit> { }
 
     /// <summary>
     /// Hook up to these events to react when a controller lands on the object.
@@ -161,7 +161,7 @@ namespace Hedgehog.Core.Triggers
 
             // Invoke their "stay" events if they still fulfill CollidesWith.
             foreach (var collision in Collisions)
-                if(CollidesWith(collision)) OnPlatformStay.Invoke(collision.Source, collision);
+                if(CollidesWith(collision)) OnPlatformStay.Invoke(collision);
 
             // Make room in the collision list for the next update.
             _notifiedCollisions = new List<TerrainCastHit>();
@@ -174,7 +174,7 @@ namespace Hedgehog.Core.Triggers
 
             // Invoke their "stay" events if they still fulfill IsOnSurface.
             foreach (var collision in SurfaceCollisions)
-                if(IsOnSurface(collision.Source, collision)) OnSurfaceStay.Invoke(collision.Source, collision);
+                if(IsOnSurface(collision.Controller, collision)) OnSurfaceStay.Invoke(collision);
 
             // Make room in the surface collision list for the next update.
             _notifiedSurfaceCollisions = new List<TerrainCastHit>();
@@ -182,24 +182,24 @@ namespace Hedgehog.Core.Triggers
 
         public override bool HasController(HedgehogController controller)
         {
-            return Collisions.Any(hit => hit.Source == controller);
+            return Collisions.Any(hit => hit.Controller == controller);
         }
         #region Collision List Removers
         private bool CollisionsRemover(TerrainCastHit hit)
         {
-            if (_notifiedCollisions.Any(castHit => castHit.Source == hit.Source))
+            if (_notifiedCollisions.Any(castHit => castHit.Controller == hit.Controller))
                 return false;
 
-            OnPlatformExit.Invoke(hit.Source, hit);
+            OnPlatformExit.Invoke( hit);
             return true;
         }
 
         private bool SurfaceCollisionsRemover(TerrainCastHit hit)
         {
-            if (_notifiedSurfaceCollisions.Any(castHit => castHit.Source == hit.Source))
+            if (_notifiedSurfaceCollisions.Any(castHit => castHit.Controller == hit.Controller))
                 return false;
             
-            OnSurfaceExit.Invoke(hit.Source, hit);
+            OnSurfaceExit.Invoke(hit);
             return true;
         }
         #endregion
@@ -214,14 +214,14 @@ namespace Hedgehog.Core.Triggers
             if (!CollidesWith(hit))
                 return;
             
-            if (Collisions.All(castHit => castHit.Source != controller))
+            if (Collisions.All(castHit => castHit.Controller != controller))
             {
                 Collisions.Add(hit);
                 _notifiedCollisions.Add(hit);
                 
-                OnPlatformEnter.Invoke(controller, hit);
+                OnPlatformEnter.Invoke(hit);
             }
-            else if (_notifiedCollisions.All(castHit => castHit.Source != controller))
+            else if (_notifiedCollisions.All(castHit => castHit.Controller != controller))
             {
                 _notifiedCollisions.Add(hit);
             }
@@ -237,19 +237,19 @@ namespace Hedgehog.Core.Triggers
             if (!IsOnSurface(controller, hit))
                 return;
 
-            if (SurfaceCollisions.Any(castHit => castHit.Source == controller))
+            if (SurfaceCollisions.Any(castHit => castHit.Controller == controller))
             {
-                if (_notifiedSurfaceCollisions.All(castHit => castHit.Source != controller))
+                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != controller))
                     _notifiedSurfaceCollisions.Add(hit);
             }
             else
             {
                 SurfaceCollisions.Add(hit);
                 
-                if (_notifiedSurfaceCollisions.All(castHit => castHit.Source != controller))
+                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != controller))
                     _notifiedSurfaceCollisions.Add(hit);
 
-                OnSurfaceEnter.Invoke(controller, hit);
+                OnSurfaceEnter.Invoke(hit);
             }
         }
 
@@ -281,7 +281,7 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultCollisionRule(TerrainCastHit hit)
         {
-            return IgnoreLayers || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Source);
+            return IgnoreLayers || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Controller);
         }
         #endregion
     }
