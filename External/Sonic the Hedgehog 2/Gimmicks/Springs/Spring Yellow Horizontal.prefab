@@ -156,7 +156,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 0
+  IgnoreLayers: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -227,6 +227,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: IgnoreLayers
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

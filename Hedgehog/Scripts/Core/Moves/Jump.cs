@@ -29,6 +29,13 @@ namespace Hedgehog.Core.Moves
         public float ReleaseSpeed;
         #endregion
 
+        /// <summary>
+        /// Whether a jump happened. If false, the controller didn't leave the ground by jumping.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Whether a jump happened. If false, the controller didn't leave the ground by jumping.")]
+        public bool Used;
+
         public override void Reset()
         {
             base.Reset();
@@ -37,6 +44,28 @@ namespace Hedgehog.Core.Moves
 
             ActivateSpeed = 3.9f;
             ReleaseSpeed = 2.4f;
+        }
+
+        public override void Awake()
+        {
+            base.Awake();
+
+            Used = false;
+        }
+
+        public void OnEnable()
+        {
+            Controller.OnAttach.AddListener(OnAttach);
+        }
+
+        public void OnDisable()
+        {
+            Controller.OnAttach.RemoveListener(OnAttach);
+        }
+
+        public void OnAttach()
+        {
+            Used = false;
         }
 
         public override bool Available()
@@ -56,6 +85,8 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveEnter(State previousState)
         {
+            Used = true;
+
             Controller.Detach();
             Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
             Controller.ForcePerformMove<Roll>();

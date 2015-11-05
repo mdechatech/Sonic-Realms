@@ -746,9 +746,14 @@ namespace Hedgehog.Core.Actors
             }
             else
             {
-                if(ApplyAirGravity)
+                // Rotate sensors to direction of gravity
+                SensorsRotation = GravityDirection + 90.0f;
+
+                // Air gravity
+                if (ApplyAirGravity)
                     Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
 
+                // Air drag
                 if (ApplyAirDrag && 
                     Vy > AirDragRequiredSpeed.y && Mathf.Abs(Vx) > AirDragRequiredSpeed.x)
                 {
