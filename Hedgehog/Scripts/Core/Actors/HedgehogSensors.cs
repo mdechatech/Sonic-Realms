@@ -11,8 +11,11 @@ namespace Hedgehog.Core.Actors
 
         // These sensors are used for hit detection with ceilings.
         public Transform TopLeft;
+        public Transform TopLeftStart;
         public Transform TopCenter;
+        public Transform TopCenterStart;
         public Transform TopRight;
+        public Transform TopRightStart;
 
         // These sensors are used for hit detection with walls.
         public Transform CenterLeft;
@@ -40,8 +43,14 @@ namespace Hedgehog.Core.Actors
             {
                 TopLeft.localPosition = new Vector3(TopCenter.localPosition.x - value/2.0f, TopLeft.localPosition.y,
                     TopLeft.localPosition.z);
+                TopLeftStart.localPosition = new Vector3(TopCenter.localPosition.x - value/2.0f,
+                    TopLeftStart.localPosition.y,
+                    TopLeftStart.localPosition.z);
                 TopRight.localPosition = new Vector3(TopCenter.localPosition.x + value/2.0f, TopRight.localPosition.y,
                     TopRight.localPosition.z);
+                TopRightStart.localPosition = new Vector3(TopCenter.localPosition.x + value/2.0f,
+                    TopRightStart.localPosition.y,
+                    TopRightStart.localPosition.z);
             }
         }
 

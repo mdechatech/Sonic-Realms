@@ -63,8 +63,11 @@ namespace Hedgehog.Core.Utils
             else sensorsObject.transform.position = bounds.center;
 
             var topLeft = new GameObject {name = "Top Left"};
+            var topLeftStart = new GameObject {name = "Top Left Start"};
             var topCenter = new GameObject {name = "Top Mid"};
+            var topCenterStart = new GameObject {name = "Top Center Start"};
             var topRight = new GameObject {name = "Top Right"};
+            var topRightStart = new GameObject {name = "Top Right Start"};
 
             var centerLeft = new GameObject {name = "Center Left"};
             var center = new GameObject {name = "Center"};
@@ -82,11 +85,20 @@ namespace Hedgehog.Core.Utils
             topLeft.transform.SetParent(sensorsObject.transform);
             controller.Sensors.TopLeft = topLeft.transform;
 
+            topLeftStart.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.TopLeftStart = topLeftStart.transform;
+
             topCenter.transform.SetParent(sensorsObject.transform);
             controller.Sensors.TopCenter = topCenter.transform;
 
+            topCenterStart.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.TopCenterStart = topCenterStart.transform;
+
             topRight.transform.SetParent(sensorsObject.transform);
             controller.Sensors.TopRight = topRight.transform;
+
+            topRightStart.transform.SetParent(sensorsObject.transform);
+            controller.Sensors.TopRightStart = topRightStart.transform;
 
             centerLeft.transform.SetParent(sensorsObject.transform);
             controller.Sensors.CenterLeft = centerLeft.transform;
@@ -121,42 +133,54 @@ namespace Hedgehog.Core.Utils
             if (isLocal)
             {
                 topLeft.transform.localPosition = new Vector3(bounds.min.x, bounds.max.y);
+                topLeftStart.transform.localPosition = new Vector3(bounds.min.x, bounds.center.y);
                 topCenter.transform.localPosition = new Vector3(bounds.center.x, bounds.max.y);
+                topCenterStart.transform.localPosition = bounds.center;
                 topRight.transform.localPosition = bounds.max;
+                topRightStart.transform.localPosition = new Vector3(bounds.max.x, bounds.center.y);
+
                 centerLeft.transform.localPosition = new Vector3(bounds.min.x - 0.01f, bounds.center.y);
                 center.transform.localPosition = bounds.center;
                 centerRight.transform.localPosition = new Vector3(bounds.max.x + 0.01f, bounds.center.y);
+
                 bottomLeft.transform.localPosition = bounds.min;
                 botttomCenter.transform.localPosition = new Vector3(bounds.center.x, bounds.min.y);
                 bottomRight.transform.localPosition = new Vector3(bounds.max.x, bounds.min.y);
-                ledgeClimbLeft.transform.localPosition = Vector3.Lerp(topLeft.transform.localPosition,
-                    bottomLeft.transform.localPosition, 0.5f);
-                ledgeClimbRight.transform.localPosition = Vector3.Lerp(topRight.transform.localPosition,
-                    bottomRight.transform.localPosition, 0.5f);
+
+                ledgeClimbLeft.transform.localPosition = bottomLeft.transform.localPosition +
+                                                         Vector3.up*controller.LedgeClimbHeight;
+                ledgeClimbRight.transform.localPosition = bottomRight.transform.localPosition +
+                                                          Vector3.up*controller.LedgeClimbHeight;
                 ledgeDropLeft.transform.localPosition = bottomLeft.transform.localPosition +
-                                                         Vector3.down * controller.LedgeDropHeight;
+                                                        Vector3.down*controller.LedgeDropHeight;
                 ledgeDropRight.transform.localPosition = bottomRight.transform.localPosition +
-                                                         Vector3.down * controller.LedgeDropHeight;
+                                                         Vector3.down*controller.LedgeDropHeight;
             }
             else
             {
                 topLeft.transform.position = new Vector3(bounds.min.x, bounds.max.y);
+                topLeftStart.transform.position = new Vector3(bounds.min.x, bounds.center.y);
                 topCenter.transform.position = new Vector3(bounds.center.x, bounds.max.y);
+                topCenterStart.transform.position = bounds.center;
                 topRight.transform.position = bounds.max;
+                topRightStart.transform.position = new Vector3(bounds.max.x, bounds.center.y);
+
                 centerLeft.transform.position = new Vector3(bounds.min.x - 0.01f, bounds.center.y);
                 center.transform.position = bounds.center;
                 centerRight.transform.position = new Vector3(bounds.max.x + 0.01f, bounds.center.y);
+
                 bottomLeft.transform.position = bounds.min;
                 botttomCenter.transform.position = new Vector3(bounds.center.x, bounds.min.y);
                 bottomRight.transform.position = new Vector3(bounds.max.x, bounds.min.y);
-                ledgeClimbLeft.transform.position = Vector3.Lerp(topLeft.transform.position,
-                     bottomLeft.transform.position, 0.5f);
-                ledgeClimbRight.transform.position = Vector3.Lerp(topRight.transform.position,
-                    bottomRight.transform.position, 0.5f);
-                ledgeDropLeft.transform.localPosition = bottomLeft.transform.localPosition +
-                                                         Vector3.down * controller.LedgeDropHeight;
-                ledgeDropRight.transform.localPosition = bottomRight.transform.localPosition +
-                                                         Vector3.down * controller.LedgeDropHeight;
+
+                ledgeClimbLeft.transform.position = bottomLeft.transform.position +
+                                                    Vector3.up*controller.LedgeClimbHeight;
+                ledgeClimbRight.transform.position = bottomRight.transform.position +
+                                                     Vector3.up*controller.LedgeClimbHeight;
+                ledgeDropLeft.transform.position = bottomLeft.transform.position +
+                                                   Vector3.down*controller.LedgeDropHeight;
+                ledgeDropRight.transform.position = bottomRight.transform.position +
+                                                    Vector3.down*controller.LedgeDropHeight;
             }
         }
     }

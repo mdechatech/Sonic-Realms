@@ -802,12 +802,13 @@ namespace Hedgehog.Core.Actors
             {
                 NotifyCollision(sideLeftCheck);
 
-                if (!IgnoreNextCollision && RelativeVelocity.x < 0.0f)
+                if (!IgnoreNextCollision)
                 {
                     var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
-                    RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                    if(RelativeVelocity.x < 0.0f)
+                        RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
                 }
 
                 IgnoreNextCollision = false;
@@ -818,12 +819,13 @@ namespace Hedgehog.Core.Actors
             {
                 NotifyCollision(sideRightCheck);
 
-                if (!IgnoreNextCollision && RelativeVelocity.x > 0.0f)
+                if (!IgnoreNextCollision)
                 {
                     var push = (Vector3)(sideRightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
-                    RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                    if(RelativeVelocity.x > 0.0f)
+                        RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
                 }
 
                 IgnoreNextCollision = false;
@@ -839,30 +841,28 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirCeilingCheck()
         {
-            var leftCheck = this.TerrainCast(Sensors.CenterLeft.position, Sensors.TopLeft.position, ControllerSide.Top);
-
+            var leftCheck = this.TerrainCast(Sensors.TopLeftStart.position, Sensors.TopLeft.position, ControllerSide.Top);
             if (leftCheck)
             {
                 NotifyCollision(leftCheck);
 
-                if (!IgnoreNextCollision)
+                if (!IgnoreNextCollision && leftCheck.Hit.fraction > 0.0f)
                 {
                     transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
                     if (HandleImpact(leftCheck))
                         Footing = Footing.Left;
                 }
-
+                
                 IgnoreNextCollision = false;
                 return true;
             }
 
-            var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position, ControllerSide.Top);
-
+            var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position, ControllerSide.Top);
             if (rightCheck)
             {
                 NotifyCollision(rightCheck);
 
-                if (!IgnoreNextCollision)
+                if (!IgnoreNextCollision && rightCheck.Hit.fraction > 0.0f)
                 {
                     transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
                     if (HandleImpact(rightCheck))
@@ -890,7 +890,7 @@ namespace Hedgehog.Core.Actors
                 if (groundLeftCheck && groundRightCheck)
                 {
                     if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
-                            (GravityDirection + 360.0f)*Mathf.Deg2Rad) >= 0.0f)
+                            GravityDirection*Mathf.Deg2Rad) >= 0.0f)
                     {
                         NotifyCollision(groundLeftCheck);
 
@@ -952,6 +952,7 @@ namespace Hedgehog.Core.Actors
                 {
                     if (GroundVelocity < 0.0f)
                         GroundVelocity = 0.0f;
+
                     var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 

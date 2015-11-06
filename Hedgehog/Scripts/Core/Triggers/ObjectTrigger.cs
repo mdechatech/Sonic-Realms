@@ -124,19 +124,18 @@ namespace Hedgehog.Core.Triggers
         public void Start()
         {
             if (!AutoActivate) return;
-            if ((_platformTrigger = GetComponent<PlatformTrigger>()) != null)
+            if ((_areaTrigger = GetComponent<AreaTrigger>()) != null)
             {
-                _platformTrigger.OnSurfaceEnter.AddListener(hit => Activate(hit.Controller));
-                _platformTrigger.OnSurfaceExit.AddListener(hit => Deactivate(hit.Controller));
-                _platformTrigger.TriggerFromChildren = TriggerFromChildren;
-            }
-            else
-            {
-                _areaTrigger = GetComponent<AreaTrigger>() ?? gameObject.AddComponent<AreaTrigger>();
                 _areaTrigger.OnAreaEnter.AddListener(Activate);
                 _areaTrigger.OnAreaExit.AddListener(Deactivate);
                 _areaTrigger.IgnoreLayers = true;
                 _areaTrigger.TriggerFromChildren = TriggerFromChildren;
+            } else
+            {
+                _platformTrigger = GetComponent<PlatformTrigger>() ?? gameObject.AddComponent<PlatformTrigger>();
+                _platformTrigger.OnSurfaceEnter.AddListener(hit => Activate(hit.Controller));
+                _platformTrigger.OnSurfaceExit.AddListener(hit => Deactivate(hit.Controller));
+                _platformTrigger.TriggerFromChildren = TriggerFromChildren;
             }
         }
 

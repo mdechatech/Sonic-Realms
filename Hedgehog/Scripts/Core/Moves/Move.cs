@@ -25,6 +25,11 @@ namespace Hedgehog.Core.Moves
             Available,
             Active,
         }
+
+        /// <summary>
+        /// If the move is active, whether it was activated through player input.
+        /// </summary>
+        public bool InputActivated;
         #region Animation
         /// <summary>
         /// Name of an Animator trigger set when the move is activated.
@@ -54,6 +59,7 @@ namespace Hedgehog.Core.Moves
         {
             Controller = Controller ?? GetComponent<HedgehogController>();
             CurrentState = State.Unavailable;
+            InputActivated = false;
         }
 
         public virtual void Start()

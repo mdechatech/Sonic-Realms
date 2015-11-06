@@ -86,6 +86,20 @@ namespace Hedgehog.Core.Triggers
             var collider2D = GetComponent<Collider2D>();
             if (collider2D != null && GetComponent<PlatformTrigger>() == null)
                 collider2D.isTrigger = true;
+
+            if (!TriggerFromChildren)
+                return;
+            foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
+            {
+                if (childCollider.transform == transform ||
+                    childCollider.GetComponent<PlatformTrigger>() != null ||
+                    childCollider.GetComponent<ObjectTrigger>() != null)
+                    continue;
+
+                var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
+                                   childCollider.gameObject.AddComponent<AreaTrigger>();
+                childTrigger.IgnoreLayers |= IgnoreLayers;
+            }
         }
 
         public void FixedUpdate()
@@ -94,22 +108,6 @@ namespace Hedgehog.Core.Triggers
             {
                 OnAreaStay.Invoke(controller);
                 OnStay.Invoke(controller);
-            }
-        }
-
-        public void OnEnable()
-        {
-            if (!TriggerFromChildren) return;
-            foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
-            {
-                if (childCollider.transform == transform || 
-                    childCollider.GetComponent<PlatformTrigger>() != null || 
-                    childCollider.GetComponent<ObjectTrigger>() != null)
-                    continue;
-
-                var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
-                                   childCollider.gameObject.AddComponent<AreaTrigger>();
-                childTrigger.IgnoreLayers |= IgnoreLayers;
             }
         }
 

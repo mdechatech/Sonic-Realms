@@ -67,26 +67,27 @@ namespace Hedgehog.Level.Objects
 
         public override void OnPlatformEnter(TerrainCastHit hit)
         {
+            // Must be rolling; if in the air, mut be traveling down; 
+            // if on the ground, must be hitting from the side
             if (!hit.Controller.IsActive<Roll>()) return;
             if (!hit.Controller.Grounded && (hit.Controller.RelativeVelocity.y > 0.0f)) return;
-            if (hit.Controller.Grounded && hit.Side == ControllerSide.Bottom) return;
-            
-            if (!hit.Controller.Grounded)
-            {
-                var jump = hit.Controller.GetMove<Jump>();
+            if (hit.Controller.Grounded && 
+                (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top)) return;
 
-                if (jump == null || !jump.Used)
-                {
-                    hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
-                        -hit.Controller.RelativeVelocity.y);
-                }
-                else
-                {
-                    hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x, 
-                        jump.ReleaseSpeed);
-                }
+            // Rebound effect
+            var jump = hit.Controller.GetMove<Jump>();
+            if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used)
+            {
+                hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
+                    -hit.Controller.RelativeVelocity.y);
+            }
+            else
+            {
+                hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
+                    Mathf.Min(jump.ReleaseSpeed, -hit.Controller.RelativeVelocity.y));
             }
 
+            // Ignore collision with this since it's destroyed now
             hit.Controller.IgnoreNextCollision = true;
             GetComponent<Collider2D>().enabled = false;
             Controller = hit.Controller;
