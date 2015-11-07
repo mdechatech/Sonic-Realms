@@ -141,13 +141,15 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
-            foreach (var collision in Collisions)
+            if (Animator != null && ActivatedBool.Length > 0)
+                Animator.SetBool(ActivatedBool, Activated);
+
+            if (Collisions.Count <= 0) return;
+
+            foreach (var collision in new List<HedgehogController>(Collisions))
             {
                 OnActivateStay.Invoke(collision);
             }
-
-            if(Animator != null && ActivatedBool.Length > 0)
-                Animator.SetBool(ActivatedBool, Activated);
         }
 
         /// <summary>

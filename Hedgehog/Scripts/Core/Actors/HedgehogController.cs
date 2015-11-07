@@ -218,6 +218,12 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Control Variables
         /// <summary>
+        /// Whether the controller has collisions and physics turned off. Often used for set pieces.
+        /// </summary>
+        [Tooltip("Whether the controller has collisions and physics turned off. Often used for set pieces.")]
+        public bool Interrupted;
+
+        /// <summary>
         /// The current control state.
         /// </summary>
         [SerializeField]
@@ -510,6 +516,9 @@ namespace Hedgehog.Core.Actors
 
         public void Update()
         {
+            if (Interrupted)
+                return;
+
             if(ControlState != null)
                 ControlState.OnControlStateUpdate();
 
@@ -523,6 +532,9 @@ namespace Hedgehog.Core.Actors
 
         public void FixedUpdate()
         {
+            if (Interrupted)
+                return;
+
             if(ControlState != null)
                 ControlState.OnStateFixedUpdate();
 
@@ -1245,6 +1257,30 @@ namespace Hedgehog.Core.Actors
         #endregion
 
         #region Move and Control Functions
+        /// <summary>
+        /// Turns off the controller's physics, usually so it can be modified by set pieces.
+        /// </summary>
+        /// <param name="endMoves">Whether to stop whatever moves the controller is performing.</param>
+        public void Interrupt(bool endMoves = false)
+        {
+            Detach();
+            Interrupted = true;
+
+            if (!endMoves) return;
+            foreach (var move in new List<Move>(ActiveMoves))
+            {
+                EndMove(move);
+            }
+        }
+
+        /// <summary>
+        /// Turns on the controller's physics, usually after leaving a set piece.
+        /// </summary>
+        public void Resume()
+        {
+            Interrupted = false;
+        }
+
         /// <summary>
         /// Enters the specified control state.
         /// </summary>

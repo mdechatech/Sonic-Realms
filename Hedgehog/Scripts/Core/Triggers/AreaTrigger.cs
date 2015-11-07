@@ -104,7 +104,7 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
-            foreach (var controller in Collisions.Keys)
+            foreach (var controller in new List<HedgehogController>(Collisions.Keys))
             {
                 OnAreaStay.Invoke(controller);
                 OnStay.Invoke(controller);

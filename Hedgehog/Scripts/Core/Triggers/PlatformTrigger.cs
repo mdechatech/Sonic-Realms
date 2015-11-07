@@ -160,7 +160,7 @@ namespace Hedgehog.Core.Triggers
             Collisions = _notifiedCollisions;
 
             // Invoke their "stay" events if they still fulfill CollidesWith.
-            foreach (var collision in Collisions)
+            foreach (var collision in new List<TerrainCastHit>(Collisions))
                 if(CollidesWith(collision)) OnPlatformStay.Invoke(collision);
 
             // Make room in the collision list for the next update.
@@ -173,7 +173,7 @@ namespace Hedgehog.Core.Triggers
             SurfaceCollisions = _notifiedSurfaceCollisions;
 
             // Invoke their "stay" events if they still fulfill IsOnSurface.
-            foreach (var collision in SurfaceCollisions)
+            foreach (var collision in new List<TerrainCastHit>(SurfaceCollisions))
                 if(IsOnSurface(collision.Controller, collision)) OnSurfaceStay.Invoke(collision);
 
             // Make room in the surface collision list for the next update.
