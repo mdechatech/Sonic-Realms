@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
@@ -8,6 +9,10 @@ using UnityEngine.Events;
 
 namespace Hedgehog.Core.Actors
 {
+    #region Event Classes 
+    public class ControllerMoveEvent : UnityEvent<Move> { }
+    #endregion
+
     /// <summary>
     /// Controls the player.
     /// </summary>
@@ -203,6 +208,18 @@ namespace Hedgehog.Core.Actors
         public PlatformCollisionEvent OnCollide;
 
         /// <summary>
+        /// Invoked when the controller performs a move.
+        /// </summary>
+        [SerializeField]
+        public ControllerMoveEvent OnPerformMove;
+
+        /// <summary>
+        /// Invoked when the controller tries to perform a move while interrupted. Great for setpieces.
+        /// </summary>
+        [SerializeField]
+        public ControllerMoveEvent OnInterruptedMove;
+
+        /// <summary>
         /// Invoked when the controller detaches from the ground for any reason.
         /// </summary>
         [SerializeField]
@@ -222,6 +239,12 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [Tooltip("Whether the controller has collisions and physics turned off. Often used for set pieces.")]
         public bool Interrupted;
+
+        /// <summary>
+        /// Time left on the current interruption, if any.
+        /// </summary>
+        [Tooltip("Time left on the current interruption, if any.")]
+        public float InterruptTimer;
 
         /// <summary>
         /// The current control state.
@@ -517,7 +540,10 @@ namespace Hedgehog.Core.Actors
         public void Update()
         {
             if (Interrupted)
+            {
+                HandleInterrupt();
                 return;
+            }
 
             if(ControlState != null)
                 ControlState.OnControlStateUpdate();
@@ -552,6 +578,29 @@ namespace Hedgehog.Core.Actors
         #endregion
 
         #region Lifecycle Subroutines
+        /// <summary>
+        /// Handles the interruption timer, if any.
+        /// </summary>
+        public void HandleInterrupt()
+        {
+            HandleInterrupt(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// Uses Time.deltaTime as the timestep. Handles the interruption timer, if any.
+        /// </summary>
+        /// <param name="timestep"></param>
+        public void HandleInterrupt(float timestep)
+        {
+            HandleInterruptedMoves();
+            if (!Interrupted || InterruptTimer <= 0.0f) return;
+            if ((InterruptTimer -= timestep) <= 0.0f)
+            {
+                Interrupted = false;
+                InterruptTimer = 0.0f;
+            }
+        }
+
         /// <summary>
         /// Handles movement caused by velocity.
         /// </summary>
@@ -592,7 +641,7 @@ namespace Hedgehog.Core.Actors
                     vc *= vn / vt;
                     vt *= vn / vt;
 
-                    if (++steps > CollisionStepLimit) break;
+                    if (Interrupted || ++steps > CollisionStepLimit) break;
                 }
             }
         }
@@ -606,6 +655,31 @@ namespace Hedgehog.Core.Actors
 
             transform.position += QueuedTranslation;
             QueuedTranslation = Vector3.zero;
+        }
+
+        /// <summary>
+        /// Handles move activation/deactivation when interrupted. Moves are not performed during this time,
+        /// but some events are invoked.
+        /// </summary>
+        public void HandleInterruptedMoves()
+        {
+            var unavailableMoves = new List<Move>(UnavailableMoves);
+            var availableMoves = new List<Move>(AvailableMoves);
+            if (unavailableMoves.Count > 0)
+            {
+                foreach (var move in unavailableMoves)
+                {
+                    if (move.InputActivate()) OnInterruptedMove.Invoke(move);
+                }
+            }
+
+            if (availableMoves.Count > 0)
+            {
+                foreach (var move in availableMoves)
+                {
+                    if (move.InputActivate()) OnInterruptedMove.Invoke(move);
+                }
+            }
         }
 
         /// <summary>
@@ -1260,11 +1334,11 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Turns off the controller's physics, usually so it can be modified by set pieces.
         /// </summary>
-        /// <param name="endMoves">Whether to stop whatever moves the controller is performing.</param>
+        /// <param name="endMoves">Whether to stop all moves the controller is performing.</param>
         public void Interrupt(bool endMoves = false)
         {
-            Detach();
             Interrupted = true;
+            InterruptTimer = 0.0f;
 
             if (!endMoves) return;
             foreach (var move in new List<Move>(ActiveMoves))
@@ -1274,11 +1348,23 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
+        /// Turns off the controller's physics, usually so it can be modified by set pieces.
+        /// </summary>
+        /// <param name="time">The physics turns back on after this time, in seconds.</param>
+        /// <param name="endMoves">Whether to stop all moves the controller is performing.</param>
+        public void Interrupt(float time, bool endMoves = false)
+        {
+            Interrupt(endMoves);
+            InterruptTimer = Mathf.Max(DMath.Epsilon, time);
+        }
+
+        /// <summary>
         /// Turns on the controller's physics, usually after leaving a set piece.
         /// </summary>
         public void Resume()
         {
             Interrupted = false;
+            InterruptTimer = 0.0f;
         }
 
         /// <summary>

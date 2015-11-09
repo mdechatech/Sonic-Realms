@@ -1,4 +1,5 @@
-﻿using Hedgehog.Core.Actors;
+﻿using System.Collections.Generic;
+using Hedgehog.Core.Actors;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
@@ -6,6 +7,9 @@ using UnityEngine;
 
 namespace Hedgehog.Level.Objects
 {
+    /// <summary>
+    /// A wall that can be broken by rolling into it. Imitates the walls in Green Hill Zone.
+    /// </summary>
     public class BreakableWall : ReactivePlatform
     {
         /// <summary>
@@ -13,6 +17,12 @@ namespace Hedgehog.Level.Objects
         /// </summary>
         [SerializeField]
         public float MinGroundSpeed;
+
+        /// <summary>
+        /// Duration of the freeze frame when the wall is broken, in seconds.
+        /// </summary>
+        [SerializeField]
+        public float FreezeTime;
 
         public override bool ActivatesObject
         {
@@ -22,6 +32,7 @@ namespace Hedgehog.Level.Objects
         public void Reset()
         {
             MinGroundSpeed = 2.7f;
+            FreezeTime = 0.03333333f;
         }
 
         public override void OnPlatformEnter(TerrainCastHit hit)
@@ -33,6 +44,14 @@ namespace Hedgehog.Level.Objects
             hit.Controller.IgnoreNextCollision = true;
             ActivateObject(hit.Controller);
             Destroy(gameObject);
+
+            if (FreezeTime <= 0.0f) return;
+            hit.Controller.Interrupt(FreezeTime);
+        }
+
+        public override void OnPlatformStay(TerrainCastHit hit)
+        {
+            OnPlatformEnter(hit);
         }
     }
 }

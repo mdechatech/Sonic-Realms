@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MinGroundSpeed: 2.70000005
+  FreezeTime: .0333333313
 --- !u!114 &11486212
 MonoBehaviour:
   m_ObjectHideFlags: 1

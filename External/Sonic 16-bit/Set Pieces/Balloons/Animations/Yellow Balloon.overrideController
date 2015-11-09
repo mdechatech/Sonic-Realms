@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Yellow Balloon
+  m_Controller: {fileID: 9100000, guid: 261489683c446cc499b4cdc606bb47b0, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 9c53214f0eab35f40a8a517f35d0bc5e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bfc3f342e93febe4a9404922308673d0, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9319aa85f20f2704186187718931344d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d5c443d50016cb34eb0b2cfacba0ea12, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c7eb2407a8297a541b969e6a531d0be4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c7eb2407a8297a541b969e6a531d0be4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fc298b7e7544e614f8ba449eca1baf7e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: fc298b7e7544e614f8ba449eca1baf7e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a6f1aebb7f05aeb49b95f2b7f61507d2, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a6f1aebb7f05aeb49b95f2b7f61507d2, type: 2}
