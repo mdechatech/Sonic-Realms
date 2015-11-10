@@ -535,6 +535,14 @@ namespace Hedgehog.Core.Actors
             AutoFlip = AutoRotate = FacingForward = true;
             AttachLock = DetachLock = false;
             EnterControlState(AirControl);
+
+            OnCrush = OnCrush ?? new UnityEvent();
+            OnAttach = OnAttach ?? new UnityEvent();
+            OnCollide = OnCollide ?? new PlatformCollisionEvent();
+            OnPerformMove = OnPerformMove ?? new ControllerMoveEvent();
+            OnInterruptedMove = OnInterruptedMove ?? new ControllerMoveEvent();
+            OnDetach = OnDetach ?? new UnityEvent();
+            OnSteepDetach = OnSteepDetach ?? new UnityEvent();
         }
 
         public void Update()

@@ -130,7 +130,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 424606}
-  - 61: {fileID: 6187064}
   - 50: {fileID: 5083970}
   - 114: {fileID: 11405618}
   - 114: {fileID: 11453498}
@@ -172,6 +171,22 @@ GameObject:
   - 4: {fileID: 474326}
   m_Layer: 0
   m_Name: Ledge Drop Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &166310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 438320}
+  - 61: {fileID: 6118484}
+  m_Layer: 0
+  m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -292,7 +307,7 @@ GameObject:
   - 4: {fileID: 404068}
   - 114: {fileID: 11487382}
   m_Layer: 0
-  m_Name: __Generated Sensors__
+  m_Name: Sensors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,11 +408,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.67700005, y: 1.64400005, z: 0}
+  m_LocalPosition: {x: -.5, y: 3.13000011, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 411496}
   - {fileID: 404068}
+  - {fileID: 438320}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &425550
@@ -424,6 +440,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 404068}
   m_RootOrder: 13
+--- !u!4 &438320
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166310}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 424606}
+  m_RootOrder: 2
 --- !u!4 &440814
 Transform:
   m_ObjectHideFlags: 1
@@ -560,19 +588,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &6187064
+--- !u!61 &6118484
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
+  m_GameObject: {fileID: 166310}
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: .200000003, y: .400000006}
+  m_Size: {x: 1, y: 1}
 --- !u!95 &9594506
 Animator:
   serializedVersion: 3
@@ -649,6 +677,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  Interrupted: 0
+  InterruptTimer: 0
   ControlState: {fileID: 0}
   ActiveMoves: []
   AvailableMoves: []
@@ -691,6 +721,7 @@ MonoBehaviour:
   ActiveBool: Jumping
   AvailableBool: 
   ActivateInput: Jump
+  ClearanceHeight: .25
   ActivateSpeed: 3.9000001
   ReleaseSpeed: 2.4000001
   Used: 0
@@ -819,7 +850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7406431d84d33e44b62e26a55c3d66c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultSideOffset: .00999999978
+  BoxCollider: {fileID: 6118484}
   TopLeft: {fileID: 463510}
   TopLeftStart: {fileID: 496620}
   TopCenter: {fileID: 414772}

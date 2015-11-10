@@ -179,7 +179,7 @@ namespace Hedgehog.Core.Triggers
 
         public void OnTriggerEnter2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponent<HedgehogController>();
+            var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
             NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
@@ -187,7 +187,7 @@ namespace Hedgehog.Core.Triggers
 
         public void OnTriggerStay2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponent<HedgehogController>();
+            var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
             NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
@@ -195,7 +195,7 @@ namespace Hedgehog.Core.Triggers
 
         public void OnTriggerExit2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponent<HedgehogController>();
+            var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
             NotifyCollision(controller, transform, true);
             BubbleEvent(controller, transform, true);

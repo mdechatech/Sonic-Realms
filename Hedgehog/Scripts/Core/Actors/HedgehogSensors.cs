@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedgehog.Core.Utils;
+using UnityEngine;
 
 namespace Hedgehog.Core.Actors
 {
@@ -7,7 +8,11 @@ namespace Hedgehog.Core.Actors
     /// </summary>
     public class HedgehogSensors : MonoBehaviour
     {
-        public float DefaultSideOffset = 0.01f;
+        /// <summary>
+        /// This box collider will be modified based on the shape of the sensors.
+        /// </summary>
+        [Tooltip("This box collider will be modified based on the shape of the sensors.")]
+        public BoxCollider2D BoxCollider;
 
         // These sensors are used for hit detection with ceilings.
         public Transform TopLeft;
@@ -134,5 +139,27 @@ namespace Hedgehog.Core.Actors
             }
         }
         #endregion
+
+        public void FixedUpdate()
+        {
+            if (BoxCollider == null || !BoxCollider) return;
+            UpdateCollider();
+        }
+
+        public void UpdateCollider()
+        {
+            var center = new Vector3(
+                (CenterLeft.position.x + CenterRight.position.x)/2.0f, 
+                (TopCenter.position.y + BottomCenter.position.y)/2.0f,
+                Center.position.z
+                );
+            var size = new Vector2(
+                Vector2.Distance(CenterLeft.position, CenterRight.position),
+                Vector2.Distance(BottomCenter.position, TopCenter.position)
+                );
+            BoxCollider.transform.position = center;
+            BoxCollider.transform.eulerAngles = Center.transform.eulerAngles;
+            BoxCollider.size = size;
+        }
     }
 }

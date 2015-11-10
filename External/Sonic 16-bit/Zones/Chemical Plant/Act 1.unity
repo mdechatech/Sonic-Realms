@@ -4564,6 +4564,96 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 414336, guid: 5940b610296105e48a4040356aac62d1, type: 2}
   m_PrefabInternal: {fileID: 97873584}
+--- !u!1 &827905786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 827905787}
+  - 114: {fileID: 827905789}
+  - 114: {fileID: 827905788}
+  m_Layer: 0
+  m_Name: Current
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &827905787
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827905786}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.08999991, y: 2.8599999, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+--- !u!114 &827905788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827905786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae0667ace6f357418712b1dbfd576cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 25
+  TargetVelocity: {x: 2.5, y: 2.5}
+  WorkOnGround: 1
+  PullOffGround: 0
+  WorkInAir: 1
+  AccountForGravity: 1
+  AccountForFriction: 1
+--- !u!114 &827905789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827905786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IgnoreLayers: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &833482737
 Prefab:
   m_ObjectHideFlags: 0
@@ -6149,7 +6239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8579349f574e1ea4b8b3c238ef8a81ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowTarget: {fileID: 1408644792}
+  FollowTarget: {fileID: 0}
   Smoothness: 0
   RotateToGravity: 1
   RotationSmoothness: .200000003
@@ -8883,10 +8973,6 @@ Transform:
   - {fileID: 482065367}
   m_Father: {fileID: 1854168905}
   m_RootOrder: 1
---- !u!4 &1408644792 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 424606, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-  m_PrefabInternal: {fileID: 1923966913}
 --- !u!1001 &1410070964
 Prefab:
   m_ObjectHideFlags: 0

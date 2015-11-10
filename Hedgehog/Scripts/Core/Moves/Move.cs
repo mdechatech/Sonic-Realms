@@ -50,7 +50,7 @@ namespace Hedgehog.Core.Moves
         public virtual void Reset()
         {
             Controller = GetComponent<HedgehogController>();
-            Animator = GetComponent<Animator>();
+            Animator = Animator ?? Controller == null ? null : Controller.Animator;
 
             ActiveTrigger = AvailableBool = "";
         }
@@ -58,6 +58,8 @@ namespace Hedgehog.Core.Moves
         public virtual void Awake()
         {
             Controller = Controller ?? GetComponent<HedgehogController>();
+            Animator = Animator ?? Controller.Animator;
+
             CurrentState = State.Unavailable;
             InputActivated = false;
         }
