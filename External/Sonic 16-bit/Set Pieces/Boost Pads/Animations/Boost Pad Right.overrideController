@@ -1,0 +1,12 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Boost Pad Right
+  m_Controller: {fileID: 9100000, guid: cdd2c6ee44511ed40b19bdcfab08255f, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 72542e4f0b8771243a7186e50fcb6419, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5109e8a7c0a9e464e8a68650f818ca4b, type: 2}
