@@ -132,13 +132,6 @@ GameObject:
   - 4: {fileID: 424606}
   - 50: {fileID: 5083970}
   - 114: {fileID: 11405618}
-  - 114: {fileID: 11453498}
-  - 114: {fileID: 11497264}
-  - 114: {fileID: 11429268}
-  - 114: {fileID: 11405630}
-  - 114: {fileID: 11470654}
-  - 114: {fileID: 11474560}
-  - 114: {fileID: 11443282}
   m_Layer: 0
   m_Name: S3K Sonic
   m_TagString: Untagged
@@ -187,6 +180,29 @@ GameObject:
   - 61: {fileID: 6118484}
   m_Layer: 0
   m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &174116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 481582}
+  - 114: {fileID: 11451016}
+  - 114: {fileID: 11489168}
+  - 114: {fileID: 11498508}
+  - 114: {fileID: 11426138}
+  - 114: {fileID: 11472608}
+  - 114: {fileID: 11416224}
+  - 114: {fileID: 11493570}
+  - 114: {fileID: 11477054}
+  m_Layer: 0
+  m_Name: Moves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -340,7 +356,7 @@ Transform:
   - {fileID: 470720}
   - {fileID: 479926}
   m_Father: {fileID: 424606}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &410208
 Transform:
   m_ObjectHideFlags: 1
@@ -364,7 +380,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424606}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &414772
 Transform:
   m_ObjectHideFlags: 1
@@ -408,9 +424,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.5, y: 3.13000011, z: 0}
+  m_LocalPosition: {x: -3.53999996, y: .529999971, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 481582}
   - {fileID: 411496}
   - {fileID: 404068}
   - {fileID: 438320}
@@ -451,7 +468,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424606}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!4 &440814
 Transform:
   m_ObjectHideFlags: 1
@@ -548,6 +565,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 404068}
   m_RootOrder: 15
+--- !u!4 &481582
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 424606}
+  m_RootOrder: 0
 --- !u!4 &486686
 Transform:
   m_ObjectHideFlags: 1
@@ -629,12 +658,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d5567b7e8f0f4892de869d9b03b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoveManager: {fileID: 11451016}
   RendererObject: {fileID: 105384}
   Animator: {fileID: 9594506}
-  GroundControl: {fileID: 11453498}
-  AirControl: {fileID: 11497264}
-  AutoFindMoves: 1
-  Moves: []
   Paths:
   - Always Collide
   - Path 1
@@ -648,7 +674,7 @@ MonoBehaviour:
   MaxSpeed: 9001
   LedgeClimbHeight: .159999996
   LedgeDropHeight: .159999996
-  AntiTunnelingSpeed: 4
+  AntiTunnelingSpeed: 2
   SlopeGravityBeginAngle: 10
   DetachSpeed: 1.5
   MaxClimbAngle: 70
@@ -679,10 +705,8 @@ MonoBehaviour:
       PublicKeyToken=null
   Interrupted: 0
   InterruptTimer: 0
-  ControlState: {fileID: 0}
-  ActiveMoves: []
-  AvailableMoves: []
-  UnavailableMoves: []
+  GroundControl: {fileID: 0}
+  AirControl: {fileID: 0}
   ApplySlopeGravity: 1
   ApplyGroundFriction: 1
   DetachWhenSlow: 1
@@ -704,33 +728,51 @@ MonoBehaviour:
   PrimarySurface: {fileID: 0}
   SecondarySurface: {fileID: 0}
   QueuedTranslation: {x: 0, y: 0, z: 0}
---- !u!114 &11405630
+--- !u!114 &11416224
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
+  m_GameObject: {fileID: 174116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7514d680ed0ac744d87004eb35fc4580, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c1095e8583f53d4c9de57a4156eb719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   ActiveTrigger: 
-  ActiveBool: Jumping
+  ActiveBool: Ducking
   AvailableBool: 
-  ActivateInput: Jump
-  ClearanceHeight: .25
-  ActivateSpeed: 3.9000001
-  ReleaseSpeed: 2.4000001
-  Used: 0
---- !u!114 &11429268
+  ActivateAxis: Vertical
+  RequireNegative: 1
+  MaxActivateSpeed: .618749976
+--- !u!114 &11426138
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
+  m_GameObject: {fileID: 174116}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 797331bf56043af418fcd734e955b173, type: 3}
@@ -738,10 +780,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   ActiveTrigger: 
   ActiveBool: Rolling
   AvailableBool: 
-  ActivateInput: Vertical
+  ActivateAxis: Vertical
   RequireNegative: 1
   MinActivateSpeed: .618749976
   WidthChange: -.0399999991
@@ -750,12 +812,101 @@ MonoBehaviour:
   DownhillGravity: 11.25
   Deceleration: 4.5
   Friction: .845099986
---- !u!114 &11443282
+--- !u!114 &11451016
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0bde06da48532d4d88d7e6dafe028ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 11405618}
+  Moves:
+  - {fileID: 11489168}
+  - {fileID: 11498508}
+  - {fileID: 11426138}
+  - {fileID: 11472608}
+  - {fileID: 11416224}
+  - {fileID: 11493570}
+  - {fileID: 11477054}
+  ActiveMoves: []
+  AvailableMoves: []
+  UnavailableMoves: []
+  OnPerform:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Moves.MoveEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnInterrupted:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Moves.MoveEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Moves.MoveEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Moves.MoveEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Moves.MoveEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &11472608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7514d680ed0ac744d87004eb35fc4580, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: Jumping
+  AvailableBool: 
+  ActivateButton: Jump
+  ClearanceHeight: .25
+  ActivateSpeed: 3.9000001
+  ReleaseSpeed: 2.4000001
+  Used: 0
+--- !u!114 &11477054
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b99b237d3dc3e1d40b435ab74ce992c3, type: 3}
@@ -763,82 +914,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   ActiveTrigger: 
   ActiveBool: Looking Up
   AvailableBool: 
-  InputAxis: Vertical
---- !u!114 &11453498
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdb2f0e4529104042a3b39f3ae84b062, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsCurrent: 0
-  InputAxis: Horizontal
-  InvertAxis: 0
-  Acceleration: 1.6875
-  AccelerationLocked: 0
-  Deceleration: 18
-  DecelerationLocked: 0
-  TopSpeed: 3.5999999
-  InputAxisFloat: 
-  GroundedBool: Grounded
-  AcceleratingBool: Accelerating
-  BrakingBool: Braking
-  SpeedFloat: Ground Speed
-  AbsoluteSpeedFloat: Absolute Ground Speed
-  SurfaceAngleFloat: 
-  TopSpeedBool: At Top Speed
-  ControlLockBool: 
-  ControlLockTimerFloat: 
-  ControlLocked: 0
-  ControlLockTimer: 0
---- !u!114 &11470654
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c1095e8583f53d4c9de57a4156eb719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentState: 0
-  InputActivated: 0
-  ActiveTrigger: 
-  ActiveBool: Ducking
-  AvailableBool: 
-  ActivateInput: Vertical
-  RequireNegative: 1
-  MaxActivateSpeed: .618749976
---- !u!114 &11474560
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f2eca7c11782a34aaf5564a40ddbf71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentState: 0
-  InputActivated: 0
-  ActiveTrigger: 
-  ActiveBool: Spindashing
-  AvailableBool: 
-  ChargeButton: Jump
-  BasePower: 4.80000019
-  ChargePower: .600000024
-  ChargePowerDecay: 1.875
-  MaxChargePower: 2.4000001
-  CurrentChargePower: 0
+  ActivateAxis: Vertical
 --- !u!114 &11487382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -867,25 +966,146 @@ MonoBehaviour:
   LedgeClimbRight: {fileID: 479926}
   LedgeDropLeft: {fileID: 474326}
   LedgeDropRight: {fileID: 430194}
---- !u!114 &11497264
+--- !u!114 &11489168
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 151248}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb2f0e4529104042a3b39f3ae84b062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: 
+  AvailableBool: 
+  MovementAxis: Horizontal
+  InvertAxis: 0
+  Acceleration: 1.6875
+  AccelerationLocked: 0
+  Deceleration: 18
+  DecelerationLocked: 0
+  TopSpeed: 3.5999999
+  InputAxisFloat: 
+  GroundedBool: Grounded
+  AcceleratingBool: Accelerating
+  BrakingBool: Braking
+  SpeedFloat: Ground Speed
+  AbsoluteSpeedFloat: Absolute Ground Speed
+  SurfaceAngleFloat: 
+  TopSpeedBool: At Top Speed
+  ControlLockBool: 
+  ControlLockTimerFloat: 
+  ControlLocked: 0
+  ControlLockTimer: 0
+--- !u!114 &11493570
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f2eca7c11782a34aaf5564a40ddbf71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: Spindashing
+  AvailableBool: 
+  ChargeButton: Jump
+  BasePower: 4.80000019
+  ChargePower: .600000024
+  ChargePowerDecay: 1.875
+  MaxChargePower: 2.4000001
+  CurrentChargePower: 0
+--- !u!114 &11498508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95703b2ef2f45d14283e6492815cf5de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCurrent: 0
-  InputAxis: Horizontal
+  CurrentState: 0
+  InputActivated: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: 
+  AvailableBool: 
+  MovementAxis: Horizontal
   InvertAxis: 0
   Acceleration: 3.375
   Deceleration: 3.375
   TopSpeed: 3.5999999
-  HorizontalSpeedParameter: Air Speed X
-  VerticalSpeedParameter: Air Speed Y
+  HorizontalSpeedFloat: Air Speed X
+  VerticalSpeedFloat: Air Speed Y
 --- !u!212 &21216568
 SpriteRenderer:
   m_ObjectHideFlags: 1

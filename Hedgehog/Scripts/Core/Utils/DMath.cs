@@ -58,7 +58,7 @@ namespace Hedgehog.Core.Utils
         }
 
         /// <summary>
-        /// Returns the a unit vector2 pointing in the specified direction.
+        /// Returns a unit vector pointing in the specified direction.
         /// </summary>
         /// <param name="angle">The specified angle, in radians.</param>
         /// <returns></returns>

@@ -4,52 +4,27 @@ using UnityEditor;
 namespace Hedgehog.Core.Moves.Editor
 {
     [CustomEditor(typeof(AirControl))]
-    public class AirControlEditor : UnityEditor.Editor
+    public class AirControlEditor : MoveEditor
     {
-        protected bool ShowControlsFoldout
+        protected override void DrawAnimationProperties()
         {
-            get { return EditorPrefs.GetBool("AirControlEditor.ShowControlsFoldout", false); }
-            set { EditorPrefs.SetBool("AirControlEditor.ShowControlsFoldout", value); }
+            base.DrawAnimationProperties();
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                "HorizontalSpeedFloat", "VerticalSpeedFloat");
         }
 
-        protected bool ShowPhysicsFoldout
+        protected override void DrawControlProperties()
         {
-            get { return EditorPrefs.GetBool("AirControlEditor.ShowPhysicsFoldout", false); }
-            set { EditorPrefs.SetBool("AirControlEditor.ShowPhysicsFoldout", value); }
+            base.DrawControlProperties();
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                "MovementAxis", "InvertAxis");
         }
 
-        protected bool ShowAnimationFoldout
+        protected override void DrawPhysicsProperties()
         {
-            get { return EditorPrefs.GetBool("AirControlEditor.ShowAnimationFoldout", false); }
-            set { EditorPrefs.SetBool("AirControlEditor.ShowAnimationFoldout", value); }
-        }
-
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-            ShowControlsFoldout = EditorGUILayout.Foldout(ShowControlsFoldout, "Controls");
-            if (ShowControlsFoldout)
-            {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "InputAxis", "InvertAxis");
-            }
-
-            ShowPhysicsFoldout = EditorGUILayout.Foldout(ShowPhysicsFoldout, "Physics");
-            if (ShowPhysicsFoldout)
-            {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "Acceleration", "Deceleration", "TopSpeed");
-            }
-
-            ShowAnimationFoldout = EditorGUILayout.Foldout(ShowAnimationFoldout, "Animation");
-            if (ShowAnimationFoldout)
-            {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "HorizontalSpeedParameter", "VerticalSpeedParameter");
-            }
-
-            serializedObject.ApplyModifiedProperties();
+            base.DrawPhysicsProperties();
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                "Acceleration", "Deceleration", "TopSpeed");
         }
     }
 }

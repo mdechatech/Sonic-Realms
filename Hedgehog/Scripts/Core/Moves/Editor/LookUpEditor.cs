@@ -8,7 +8,7 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawControlProperties()
         {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "InputAxis");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis");
         }
 
         protected override void DrawPhysicsFoldout()

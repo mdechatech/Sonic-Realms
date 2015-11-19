@@ -8,7 +8,7 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawControlProperties()
         {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateInput", "ClearanceHeight");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateButton", "ClearanceHeight");
         }
 
         protected override void DrawPhysicsProperties()

@@ -67,7 +67,7 @@ namespace Hedgehog.Core.Moves
 
         public override bool Available()
         {
-            return Controller.IsActive<Duck>();
+            return Manager.IsActive<Duck>();
         }
 
         public override bool InputActivate()
@@ -77,7 +77,7 @@ namespace Hedgehog.Core.Moves
 
         public override bool InputDeactivate()
         {
-            return !Controller.IsActive<Duck>();
+            return !Manager.IsActive<Duck>();
         }
 
         public override void OnActiveEnter(State previousState)
@@ -102,7 +102,7 @@ namespace Hedgehog.Core.Moves
             else
                 Controller.GroundVelocity -= BasePower + CurrentChargePower;
 
-            Controller.ForcePerformMove<Roll>();
+            Manager.Perform<Roll>(true);
         }
     }
 }

@@ -69,13 +69,13 @@ namespace Hedgehog.Level.Objects
         {
             // Must be rolling; if in the air, mut be traveling down; 
             // if on the ground, must be hitting from the side
-            if (!hit.Controller.IsActive<Roll>()) return;
+            if (!hit.Controller.MoveManager.IsActive<Roll>()) return;
             if (!hit.Controller.Grounded && (hit.Controller.RelativeVelocity.y > 0.0f)) return;
             if (hit.Controller.Grounded && 
                 (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top)) return;
 
             // Rebound effect
-            var jump = hit.Controller.GetMove<Jump>();
+            var jump = hit.Controller.MoveManager.Get<Jump>();
             if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used)
             {
                 hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,

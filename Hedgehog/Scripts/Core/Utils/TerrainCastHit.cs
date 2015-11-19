@@ -33,9 +33,21 @@ namespace Hedgehog.Core.Utils
         /// </summary>
         public float NormalAngle;
 
+        /// <summary>
+        /// The start point of the terrain cast.
+        /// </summary>
+        public Vector2 Start;
+
+        /// <summary>
+        /// The end point of the terrain cast.
+        /// </summary>
+        public Vector2 End;
+
         public TerrainCastHit(RaycastHit2D hit, ControllerSide fromSide = ControllerSide.All,
-            HedgehogController controller = null)
+            HedgehogController controller = null, Vector2 start = default(Vector2), Vector2 end = default(Vector2))
         {
+            Start = start;
+            End = end;
             Hit = hit;
             Side = fromSide;
             Controller = controller;

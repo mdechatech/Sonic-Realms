@@ -32,7 +32,7 @@ namespace Hedgehog.Level.Objects
         {
             if (hit.Controller == null || hit.Controller.Grounded) return;
             if (hit.Side != ControllerSide.Bottom || hit.Controller.RelativeVelocity.y > 0.0f) return;
-            if (!hit.Controller.IsActive<Roll>()) return;
+            if (!hit.Controller.MoveManager.IsActive<Roll>()) return;
 
             hit.Controller.IgnoreNextCollision = true;
             hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x, BounceSpeed);

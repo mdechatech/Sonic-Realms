@@ -10,7 +10,7 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("Input string used for activation.")]
-        public string ActivateInput;
+        public string ActivateAxis;
 
         /// <summary>
         /// Whether to activate when the input is in the opposite direction (if ActivateInput is "Vertical" and this
@@ -34,26 +34,28 @@ namespace Hedgehog.Core.Moves
             base.Reset();
             
             MaxActivateSpeed = 0.61875f;
-            ActivateInput = "Vertical";
+            ActivateAxis = "Vertical";
             RequireNegative = true;
         }
 
         public override bool Available()
         {
+            var groundControl = Controller.GetMove<GroundControl>();
+
             return Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
-                   !Controller.GroundControl.Accelerating;
+                   (groundControl == null || !groundControl.Accelerating);
         }
 
         public override bool InputActivate()
         {
             return RequireNegative
-                ? Input.GetAxis(ActivateInput) < 0.0f
-                : Input.GetAxis(ActivateInput) > 0.0f;
+                ? Input.GetAxis(ActivateAxis) < 0.0f
+                : Input.GetAxis(ActivateAxis) > 0.0f;
         }
 
         public override bool InputDeactivate()
         {
-            return !Input.GetButton(ActivateInput) || !Available();
+            return !Input.GetButton(ActivateAxis) || !Available();
         }
     }
 }

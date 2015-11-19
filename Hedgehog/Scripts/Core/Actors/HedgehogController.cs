@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
@@ -9,10 +10,6 @@ using UnityEngine.Events;
 
 namespace Hedgehog.Core.Actors
 {
-    #region Event Classes 
-    public class ControllerMoveEvent : UnityEvent<Move> { }
-    #endregion
-
     /// <summary>
     /// Controls the player.
     /// </summary>
@@ -22,52 +19,28 @@ namespace Hedgehog.Core.Actors
         #region Inspector Fields
         #region Components
         /// <summary>
+        /// Component that handles the controller's moves.
+        /// </summary>
+        [Tooltip("Component that handles the controller's moves.")]
+        public MoveManager MoveManager;
+
+        /// <summary>
         /// Game object that contains the renderer.
         /// </summary>
-        [SerializeField]
+        [Tooltip("Game object that contains the renderer.")]
         public GameObject RendererObject;
 
         /// <summary>
         /// The controller's animator, if any.
         /// </summary>
-        [SerializeField]
+        [Tooltip("The controller's animator, if any.")]
         public Animator Animator;
-        #endregion
-        #region Moves and Control
-        /// <summary>
-        /// The default control state to enter when on the ground.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("The default control state to enter when on the ground.")]
-        public GroundControl GroundControl;
-
-        /// <summary>
-        /// The default control state to enter when in the air.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("The default control state to enter when in the air.")]
-        public AirControl AirControl;
-
-        /// <summary>
-        /// Whether to find moves on initialization. Searches through all children and itself.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Whether to find moves on initialization. Searches through all children and itself.")]
-        public bool AutoFindMoves;
-
-        /// <summary>
-        /// All of the controller's moves.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("All of the controller's moves.")]
-        public List<Move> Moves;
         #endregion
         #region Collision
         /// <summary>
         /// What paths the controller collides with. An object is on a path if it or one of its parents
         /// has that path's name.
         /// </summary>
-        [SerializeField]
         [Tooltip("What paths the controller is on. An object is on a path if it or one of its parents " +
                  "has that path's name.")]
         public List<string> Paths;
@@ -76,7 +49,6 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Contains sensor data for hit detection.
         /// </summary>
-        [SerializeField]
         [Tooltip("Contains sensor data for hit detection.")]
         public HedgehogSensors Sensors;
 
@@ -97,7 +69,6 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// The player's friction on the ground in units per second per second.
         /// </summary>
-        [SerializeField]
         [Tooltip("Ground friction in units per second squared.")]
         public float GroundFriction;
 
@@ -105,56 +76,48 @@ namespace Hedgehog.Core.Actors
         /// This coefficient is applied to horizontal speed when horizontal and vertical speed
         /// requirements are met.
         /// </summary>
-        [SerializeField]
         [Tooltip("Air drag coefficient applied if horizontal speed is greater than air drag speed.")]
         public float AirDrag;
 
         /// <summary>
         /// The speed above which air drag begins.
         /// </summary>
-        [SerializeField]
         [Tooltip("The speed above which air drag begins.")]
         public Vector2 AirDragRequiredSpeed;
 
         /// <summary>
         /// The acceleration by gravity in units per second per second.
         /// </summary>
-        [SerializeField]
         [Tooltip("Acceleration in the air, in the downward direction, in units per second squared.")]
         public float AirGravity;
 
         /// <summary>
         /// The magnitude of the force applied to the player when going up or down slopes.
         /// </summary>
-        [SerializeField]
         [Tooltip("Acceleration on downward slopes, the maximum being this value, in units per second squared")]
         public float SlopeGravity;
 
         /// <summary>
         /// Direction of gravity. 0/360 is right, 90 is up, 180 is left, 270 is down.
         /// </summary>
-        [SerializeField]
         [Tooltip("Direction of gravity in degrees. 0/360 is right, 90 is up, 180 is left, 270 is down.")]
         public float GravityDirection;
 
         /// <summary>
         /// Maximum speed in units per second. The controller can NEVER go faster than this.
         /// </summary>
-        [SerializeField]
         [Tooltip("Maximum speed in units per second. The controller can NEVER go faster than this.")]
         public float MaxSpeed;
 
         /// <summary>
         /// The maximum height of a surface above the player's feet that it can snap onto without hindrance.
         /// </summary>
-        [SerializeField]
         [Tooltip("The maximum height of a surface above the player's feet that it can snap onto without hindrance.")]
         public float LedgeClimbHeight;
 
         /// <summary>
         /// The maximum depth of a surface below the player's feet that it can drop to without hindrance.
         /// </summary>
-        [SerializeField]
         [Tooltip("The maximum depth of a surface below the player's feet that it can drop to without hindrance.")]
         public float LedgeDropHeight;
 
@@ -162,7 +125,6 @@ namespace Hedgehog.Core.Actors
         /// The minimum speed in units per second the player must be moving at to stagger each physics update,
         /// processing the movement in fractions.
         /// </summary>
-        [SerializeField]
         [Tooltip("The minimum speed in units per second the player must be moving at to stagger each physics update, " +
                  "processing the movement in fractions.")]
         public float AntiTunnelingSpeed;
@@ -170,21 +132,18 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// The minimum angle of an incline at which slope gravity is applied.
         /// </summary>
-        [SerializeField]
         [Tooltip("The minimum angle of an incline at which slope gravity is applied.")]
         public float SlopeGravityBeginAngle;
 
         /// <summary>
         /// The controller falls off walls and ceilings if moving below this speed.
         /// </summary>
-        [SerializeField]
         [Tooltip("The controller falls off walls and ceilings if moving below this speed.")]
         public float DetachSpeed;
 
         /// <summary>
         /// The controller can't latch onto walls if they're this much steeper than the floor it's on, in degrees.
         /// </summary>
-        [SerializeField]
         [Tooltip("The controller can't latch onto walls if they're this much steeper than the floor it's on, in degrees.")]
         public float MaxClimbAngle;
         #endregion
@@ -192,44 +151,27 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Invoked when the controller is touching something with both its top and ground sensors.
         /// </summary>
-        [SerializeField]
         public UnityEvent OnCrush;
 
         /// <summary>
         /// Invoked when the controller lands on something.
         /// </summary>
-        [SerializeField]
         public UnityEvent OnAttach;
 
         /// <summary>
         /// Invoked when the controller collides with a platform.
         /// </summary>
-        [SerializeField]
         public PlatformCollisionEvent OnCollide;
-
-        /// <summary>
-        /// Invoked when the controller performs a move.
-        /// </summary>
-        [SerializeField]
-        public ControllerMoveEvent OnPerformMove;
-
-        /// <summary>
-        /// Invoked when the controller tries to perform a move while interrupted. Great for setpieces.
-        /// </summary>
-        [SerializeField]
-        public ControllerMoveEvent OnInterruptedMove;
 
         /// <summary>
         /// Invoked when the controller detaches from the ground for any reason.
         /// </summary>
-        [SerializeField]
         public UnityEvent OnDetach;
 
         /// <summary>
         /// Invoked when the controller detaches from the ground because it was moving too slowly on a steep
         /// surface.
         /// </summary>
-        [SerializeField]
         public UnityEvent OnSteepDetach;
         #endregion
         #endregion
@@ -247,32 +189,52 @@ namespace Hedgehog.Core.Actors
         public float InterruptTimer;
 
         /// <summary>
-        /// The current control state.
+        /// The controller's ground control move, if any.
         /// </summary>
-        [SerializeField]
-        [Tooltip("The current control state.")]
-        public ControlState ControlState;
+        [Tooltip("The controller's ground control move, if any.")]
+        public GroundControl GroundControl;
+
+        /// <summary>
+        /// The controller's air control move, if any.
+        /// </summary>
+        [Tooltip("The controller's air control move, if any.")]
+        public AirControl AirControl;
+
+        /// <summary>
+        /// The move manager's list of moves. Does not perform null checks.
+        /// </summary>
+        public List<Move> Moves
+        {
+            get { return MoveManager.Moves; }
+            set { MoveManager.Moves = value; }
+        }
 
         /// <summary>
         /// The moves currently being performed.
         /// </summary>
-        [SerializeField]
-        [Tooltip("The moves currently being performed.")]
-        public List<Move> ActiveMoves;
+        public List<Move> ActiveMoves
+        {
+            get { return MoveManager.ActiveMoves; }
+            set { MoveManager.ActiveMoves = value; }
+        }
 
         /// <summary>
         /// The moves which can be performed given the controller's current state.
         /// </summary>
-        [SerializeField]
-        [Tooltip("The moves which can be performed given the controller's current state.")]
-        public List<Move> AvailableMoves;
+        public List<Move> AvailableMoves
+        {
+            get { return MoveManager.AvailableMoves; }
+            set { MoveManager.AvailableMoves = value; }
+        }
 
         /// <summary>
         /// The moves which cannot be performed given the controller's current state.
         /// </summary>
-        [SerializeField]
-        [Tooltip("The moves which cannot be performed given the controller's current state.")]
-        public List<Move> UnavailableMoves; 
+        public List<Move> UnavailableMoves
+        {
+            get { return MoveManager.UnavailableMoves; }
+            set { MoveManager.UnavailableMoves = value; }
+        }
         #endregion
         #region Physics Variables
         /// <summary>
@@ -390,28 +352,24 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// The player's horizontal velocity in units per second.
         /// </summary>
-        [SerializeField]
         [Tooltip("The player's horizontal velocity in units per second.")]
         public float Vx;
 
         /// <summary>
         /// The player's vertical velocity in units per second.
         /// </summary>
-        [SerializeField]
         [Tooltip("The player's vertical velocity in units per second.")]
         public float Vy;
 
         /// <summary>
         /// The controller's velocity on the ground in units per second. Positive if forward, negative if backward.
         /// </summary>
-        [SerializeField]
         [Tooltip("The controller's velocity on the ground in units per second. Positive if forward, negative if backward.")]
         public float GroundVelocity;
 
         /// <summary>
         /// Whether the player is touching the ground.
         /// </summary>
-        [SerializeField]
         [Tooltip("Whether the player is touching the ground.")]
         public bool Grounded;
 
@@ -419,7 +377,6 @@ namespace Hedgehog.Core.Actors
         /// If grounded, the angle of incline the controller is walking on in degrees. Goes hand-in-hand
         /// with rotation.
         /// </summary>
-        [SerializeField]
         [Tooltip("If grounded, the angle of incline the controller is walking on in degrees.")]
         public float SurfaceAngle;
 
@@ -480,10 +437,6 @@ namespace Hedgehog.Core.Actors
             RendererObject = GetComponentInChildren<Renderer>().gameObject;
             Animator = RendererObject.GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
 
-            GroundControl = GetComponent<GroundControl>() ?? gameObject.AddComponent<GroundControl>();
-            AirControl = GetComponent<AirControl>() ?? gameObject.AddComponent<AirControl>();
-            AutoFindMoves = true;
-
             Paths = new List<string> {"Always Collide", "Path 1"};
 
             Sensors = GetComponentInChildren<HedgehogSensors>();
@@ -522,25 +475,16 @@ namespace Hedgehog.Core.Actors
             JustDetached = false;
             QueuedTranslation = default(Vector3);
 
-            if (AutoFindMoves)
-            {
-                Moves = GetComponentsInChildren<Move>().ToList();
-            }
-
-            ActiveMoves = new List<Move>();
-            AvailableMoves = new List<Move>();
-            UnavailableMoves = new List<Move>(Moves);
+            AirControl = GetMove<AirControl>();
+            GroundControl = GetMove<GroundControl>();
 
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             AutoFlip = AutoRotate = FacingForward = true;
             AttachLock = DetachLock = false;
-            EnterControlState(AirControl);
 
             OnCrush = OnCrush ?? new UnityEvent();
             OnAttach = OnAttach ?? new UnityEvent();
             OnCollide = OnCollide ?? new PlatformCollisionEvent();
-            OnPerformMove = OnPerformMove ?? new ControllerMoveEvent();
-            OnInterruptedMove = OnInterruptedMove ?? new ControllerMoveEvent();
             OnDetach = OnDetach ?? new UnityEvent();
             OnSteepDetach = OnSteepDetach ?? new UnityEvent();
         }
@@ -552,16 +496,6 @@ namespace Hedgehog.Core.Actors
                 HandleInterrupt();
                 return;
             }
-
-            if(ControlState != null)
-                ControlState.OnControlStateUpdate();
-
-            for (var i = ActiveMoves.Count - 1; i >= 0; i--)
-            {
-                ActiveMoves[i].OnActiveUpdate();
-            }
-
-            HandleMoves();
         }
 
         public void FixedUpdate()
@@ -569,17 +503,17 @@ namespace Hedgehog.Core.Actors
             if (Interrupted)
                 return;
 
-            if(ControlState != null)
-                ControlState.OnStateFixedUpdate();
+            // Forces, then translations, then movement and collision, updating velocity each time ground velocity changes
+            UpdateGroundVelocity();
 
             HandleForces();
+
+            UpdateGroundVelocity();
+
             HandleQueuedTranslation();
             HandleMovement();
 
-            for (var i = ActiveMoves.Count - 1; i >= 0; i--)
-            {
-                ActiveMoves[i].OnActiveFixedUpdate();
-            }
+            UpdateGroundVelocity();
 
             HandleDisplay();
         }
@@ -600,7 +534,6 @@ namespace Hedgehog.Core.Actors
         /// <param name="timestep"></param>
         public void HandleInterrupt(float timestep)
         {
-            HandleInterruptedMoves();
             if (!Interrupted || InterruptTimer <= 0.0f) return;
             if ((InterruptTimer -= timestep) <= 0.0f)
             {
@@ -610,21 +543,30 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// Handles movement caused by velocity.
+        /// Uses Time.fixedDeltaTime as the timestep. Handles movement caused by velocity.
         /// </summary>
         public void HandleMovement()
         {
-            var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
+            HandleMovement(Time.fixedDeltaTime);
+        }
 
+        /// <summary>
+        /// Handles movement caused by velocity.
+        /// </summary>
+        public void HandleMovement(float timestep)
+        {
+            var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
+            
             if (vt < AntiTunnelingSpeed)
             {
-                transform.position += new Vector3(Vx*Time.fixedDeltaTime, Vy*Time.fixedDeltaTime);
+                transform.position += new Vector3(Vx*timestep, Vy*timestep);
                 HandleCollisions();
+                UpdateGroundVelocity();
             }
             else
             {
-                // If the controller's gotta go fast, split up collision into steps. The speed limit becomes however many steps
-                // your computer can handle!
+                // If the controller's gotta go fast, split up collision into steps so we don't glitch through walls.
+                // The speed limit becomes however many steps your computer can handle!
                 var vc = vt;
                 var steps = 0;
                 while (vc > 0.0f)
@@ -632,24 +574,26 @@ namespace Hedgehog.Core.Actors
                     if (vc > AntiTunnelingSpeed)
                     {
                         transform.position += 
-                            (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (AntiTunnelingSpeed / vt);
+                            (new Vector3(Vx * timestep, Vy * timestep)) * (AntiTunnelingSpeed / vt);
                         vc -= AntiTunnelingSpeed;
                     }
                     else
                     {
                         transform.position += 
-                            (new Vector3(Vx * Time.fixedDeltaTime, Vy * Time.fixedDeltaTime)) * (vc / vt);
+                            (new Vector3(Vx * timestep, Vy * timestep)) * (vc / vt);
                         vc = 0.0f;
                     }
 
                     HandleCollisions();
-                    
+                    UpdateGroundVelocity();
+
+                    if (DMath.Equalsf(Vx + Vy) || Interrupted || ++steps > CollisionStepLimit)
+                        break;
+
                     // If the player's speed changes mid-stagger recalculate current velocity and total velocity
                     var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
                     vc *= vn / vt;
                     vt *= vn / vt;
-
-                    if (Interrupted || ++steps > CollisionStepLimit) break;
                 }
             }
         }
@@ -663,90 +607,6 @@ namespace Hedgehog.Core.Actors
 
             transform.position += QueuedTranslation;
             QueuedTranslation = Vector3.zero;
-        }
-
-        /// <summary>
-        /// Handles move activation/deactivation when interrupted. Moves are not performed during this time,
-        /// but some events are invoked.
-        /// </summary>
-        public void HandleInterruptedMoves()
-        {
-            var unavailableMoves = new List<Move>(UnavailableMoves);
-            var availableMoves = new List<Move>(AvailableMoves);
-            if (unavailableMoves.Count > 0)
-            {
-                foreach (var move in unavailableMoves)
-                {
-                    if (move.InputActivate()) OnInterruptedMove.Invoke(move);
-                }
-            }
-
-            if (availableMoves.Count > 0)
-            {
-                foreach (var move in availableMoves)
-                {
-                    if (move.InputActivate()) OnInterruptedMove.Invoke(move);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles move activation/deactivation and availability.
-        /// </summary>
-        public void HandleMoves()
-        {
-            if (UnavailableMoves.Count > 0)
-            {
-                foreach (var move in new List<Move>(UnavailableMoves))
-                {
-                    if (!move.Available())
-                        continue;
-
-                    if (!UnavailableMoves.Remove(move))
-                        continue;
-
-                    AvailableMoves.Add(move);
-                    move.ChangeState(Move.State.Available);
-                }
-            }
-
-            if (AvailableMoves.Count > 0)
-            {
-                foreach (var move in new List<Move>(AvailableMoves))
-                {
-                    if (!move.Available())
-                    {
-                        if (!AvailableMoves.Remove(move))
-                            continue;
-
-                        UnavailableMoves.Add(move);
-                        move.ChangeState(Move.State.Unavailable);
-                    }
-                    else if (move.InputActivate())
-                    {
-                        if (!AvailableMoves.Remove(move))
-                            continue;
-
-                        ActiveMoves.Add(move);
-                        move.ChangeState(Move.State.Active);
-                    }
-                }
-            }
-
-            if (ActiveMoves.Count > 0)
-            {
-                foreach (var move in new List<Move>(ActiveMoves))
-                {
-                    if (move.InputDeactivate())
-                    {
-                        if (!ActiveMoves.Remove(move))
-                            continue;
-
-                        AvailableMoves.Add(move);
-                        move.ChangeState(Move.State.Available);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -875,9 +735,22 @@ namespace Hedgehog.Core.Actors
             if (Grounded)
             {
                 GroundSideCheck();
+                UpdateGroundVelocity();
+
                 GroundSurfaceCheck();
-                if (!SurfaceAngleCheck()) Detach();
+                UpdateGroundVelocity();
             }
+        }
+
+        /// <summary>
+        /// If grounded, sets x and y velocity based on ground velocity.
+        /// </summary>
+        public void UpdateGroundVelocity()
+        {
+            if (!Grounded) return;
+
+            Vx = GroundVelocity * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
+            Vy = GroundVelocity * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
         }
         #endregion
         #region Collision Subroutines
@@ -1048,7 +921,7 @@ namespace Hedgehog.Core.Actors
                         GroundVelocity = 0.0f;
 
                     var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
+                    transform.position += push + push.normalized*DMath.Epsilon;
 
                     // If running down a wall and hits the floor, orient the player onto the floor
                     if (DMath.AngleInRange_d(RelativeSurfaceAngle,
@@ -1073,7 +946,7 @@ namespace Hedgehog.Core.Actors
                         GroundVelocity = 0.0f;
 
                     var push = (Vector3)(sideRightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
+                    transform.position += push + push.normalized*DMath.Epsilon;
 
                     // If running down a wall and hits the floor, orient the player onto the floor
                     if (DMath.AngleInRange_d(RelativeSurfaceAngle,
@@ -1303,24 +1176,6 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// Check for changes in angle of incline for when player is on the ground.
-        /// </summary>
-        /// <returns><c>true</c> if the angle of incline is tolerable, <c>false</c> otherwise.</returns>
-        private bool SurfaceAngleCheck()
-        {
-            // Can only stay on the surface if angle difference is low enough
-            if (Grounded)
-            {
-                Vx = GroundVelocity * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
-                Vy = GroundVelocity * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
-                return true;
-            }
-
-            Detach();
-            return false;
-        }
-
-        /// <summary>
         /// Checks for terrain hitting both horizontal or both vertical sides of a player, aka crushing.
         /// </summary>
         /// <returns></returns>
@@ -1349,10 +1204,7 @@ namespace Hedgehog.Core.Actors
             InterruptTimer = 0.0f;
 
             if (!endMoves) return;
-            foreach (var move in new List<Move>(ActiveMoves))
-            {
-                EndMove(move);
-            }
+            MoveManager.EndAll();
         }
 
         /// <summary>
@@ -1373,151 +1225,6 @@ namespace Hedgehog.Core.Actors
         {
             Interrupted = false;
             InterruptTimer = 0.0f;
-        }
-
-        /// <summary>
-        /// Enters the specified control state.
-        /// </summary>
-        /// <param name="state">The specified control state.</param>
-        public void EnterControlState(ControlState state)
-        {
-            if (ControlState != null)
-            {
-                ControlState.OnControlStateExit(state);
-                ControlState.IsCurrent = false;
-            }
-
-            state.OnControlStateEnter(ControlState);
-            ControlState = state;
-            ControlState.IsCurrent = true;
-        }
-
-        /// <summary>
-        /// Returns the first move of the specified type.
-        /// </summary>
-        /// <typeparam name="TMove">The specified type.</typeparam>
-        /// <returns></returns>
-        public TMove GetMove<TMove>() where TMove : Move
-        {
-            return Moves.FirstOrDefault(move => move is TMove) as TMove;
-        }
-
-        /// <summary>
-        /// Returns whether the first move of the specified type is available.
-        /// </summary>
-        /// <typeparam name="TMove">The specified type.</typeparam>
-        /// <returns></returns>
-        public bool IsAvailable<TMove>() where TMove : Move
-        {
-            return AvailableMoves.Any(move => move is TMove);
-        }
-
-        /// <summary>
-        /// Returns whether the first move of the specified type is active.
-        /// </summary>
-        /// <typeparam name="TMove">The specified type.</typeparam>
-        /// <returns></returns>
-        public bool IsActive<TMove>() where TMove : Move
-        {
-            return ActiveMoves.Any(move => move is TMove);
-        }
-
-        /// <summary>
-        /// Forces the controller to perform the first move of the specified type, even if it's unavailable.
-        /// </summary>
-        /// <typeparam name="TMove">The specified type.</typeparam>
-        /// <returns>Whether the move was performed.</returns>
-        public bool ForcePerformMove<TMove>() where TMove : Move
-        {
-            return ForcePerformMove(Moves.FirstOrDefault(m => m is TMove));
-        }
-
-        /// <summary>
-        /// Forces the controller to perform the specified move, even if it's unavailable.
-        /// </summary>
-        /// <param name="move">The specified move.</param>
-        /// <returns>Whether the move was performed.</returns>
-        public bool ForcePerformMove(Move move)
-        {
-            if (move == null || move.CurrentState == Move.State.Active)
-                return false;
-
-            if (move.CurrentState == Move.State.Unavailable)
-            {
-                if (!UnavailableMoves.Remove(move))
-                    return false;
-
-                ActiveMoves.Add(move);
-                return move.ChangeState(Move.State.Active);
-            }
-            else if (move.CurrentState == Move.State.Available)
-            {
-                return PerformMove(move);
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Performs the first move of the specified type, if it's available.
-        /// </summary>
-        /// <typeparam name="TMove">The specified type.</typeparam>
-        /// <returns>Whether the move was performed.</returns>
-        public bool PerformMove<TMove>() where TMove : Move
-        {
-            return PerformMove(AvailableMoves.FirstOrDefault(m => m is TMove));
-        }
-
-        /// <summary>
-        /// Performs the specified move, if it's available.
-        /// </summary>
-        /// <param name="move">The specified move.</param>
-        /// <returns>Whether the move was performed.</returns>
-        public bool PerformMove(Move move)
-        {
-            if (move == null || move.CurrentState != Move.State.Available)
-                return false;
-
-            if (!AvailableMoves.Remove(move))
-                return false;
-
-            ActiveMoves.Add(move);
-            return move.ChangeState(Move.State.Active);
-        }
-
-        /// <summary>
-        /// Ends the first move of the specified type, if it's active.
-        /// </summary>
-        /// <typeparam name="TMove">The specified type.</typeparam>
-        /// <returns>Whether the move was ended.</returns>
-        public bool EndMove<TMove>() where TMove : Move
-        {
-            return EndMove(ActiveMoves.FirstOrDefault(m => m is TMove));
-        }
-
-        /// <summary>
-        /// Ends the specified move, if it's active.
-        /// </summary>
-        /// <param name="move">The specified move.</param>
-        /// <returns>Whether the move was ended.</returns>
-        public bool EndMove(Move move)
-        {
-            if (move == null || move.CurrentState != Move.State.Active)
-                return false;
-
-            if (!ActiveMoves.Remove(move)) return false;
-            if (move.Available())
-            {
-                AvailableMoves.Add(move);
-                move.ChangeState(Move.State.Available);
-            }
-            else
-            {
-                UnavailableMoves.Add(move);
-                move.ChangeState(Move.State.Unavailable);
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -1569,6 +1276,69 @@ namespace Hedgehog.Core.Actors
         {
             QueuedTranslation += amount;
         }
+
+        #region Move Manager Wrappers
+        // Aliases that call the same function in the controller's move manager. They do not perform null-checks.
+
+        /// <summary>
+        /// Returns the first move of the specified type.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public TMove GetMove<TMove>() where TMove : Move { return MoveManager.Get<TMove>(); }
+
+        /// <summary>
+        /// Returns whether the first move of the specified type is available.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public bool IsAvailableMove<TMove>() where TMove : Move { return MoveManager.IsAvailable<TMove>(); }
+
+        /// <summary>
+        /// Returns whether the first move of the specified type is active.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public bool IsActiveMove<TMove>() where TMove : Move { return MoveManager.IsActive<TMove>(); }
+
+        /// <summary>
+        /// Performs the first move of the specified type, if it's available.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <param name="force">Whether to perform the move even if it's unavailable.</param>
+        /// <returns>Whether the move was performed.</returns>
+        public bool PerformMove<TMove>(bool force = false) where TMove : Move { return MoveManager.Perform<TMove>(force); }
+
+        /// <summary>
+        /// Performs the specified move, if it's available.
+        /// </summary>
+        /// <param name="move">The specified move.</param>
+        /// <param name="force">Whether to perform the move even if it's unavailable.</param>
+        /// <returns>Whether the move was performed.</returns>
+        public bool PerformMove(Move move, bool force = false) { return MoveManager.Perform(move, force); }
+
+        /// <summary>
+        /// Ends the first move of the specified type, if it's active.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns>Whether the move was ended.</returns>
+        public bool EndMove<TMove>() where TMove : Move { return MoveManager.End<TMove>(); }
+
+        /// <summary>
+        /// Ends the specified move if it's active.
+        /// </summary>
+        /// <param name="move">The specified move.</param>
+        /// <returns>Whether the move was ended.</returns>
+        public bool EndMove(Move move) { return MoveManager.End(move); }
+
+        /// <summary>
+        /// Ends all moves.
+        /// </summary>
+        /// <param name="predicate">A move will be ended only if this predicate is true, if any.</param>
+        /// <returns>If there were no active moves, always returns true. Otherwise, returns whether all
+        /// moves were successfully ended.</returns>
+        public bool EndAllMoves(Predicate<Move> predicate = null) { return MoveManager.EndAll(predicate); }
+        #endregion
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
@@ -1589,7 +1359,6 @@ namespace Hedgehog.Core.Actors
             Footing = Footing.None;
             SensorsRotation = GravityDirection + 90.0f;
             SetSurface(null);
-            EnterControlState(AirControl);
 
             return false;
         }
@@ -1614,7 +1383,6 @@ namespace Hedgehog.Core.Actors
             SurfaceAngle = angleDegrees;
             SensorsRotation = SurfaceAngle;
             Grounded = true;
-            EnterControlState(GroundControl);
 
             GroundSurfaceCheck();
 
@@ -1751,8 +1519,7 @@ namespace Hedgehog.Core.Actors
 
             return result;
         }
-        #endregion
-        #region Surface Calculation Functions
+        
         /// <summary>
         /// Casts from LedgeClimbHeight to the player's geet.
         /// </summary>

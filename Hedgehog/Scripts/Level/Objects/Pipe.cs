@@ -122,7 +122,7 @@ namespace Hedgehog.Level.Objects
             var index = Controllers.IndexOf(controller);
             if (index >= 0) return;
             
-            controller.ForcePerformMove<Roll>();
+            controller.MoveManager.Perform<Roll>(true);
             controller.Interrupt();
 
             Controllers.Add(controller);

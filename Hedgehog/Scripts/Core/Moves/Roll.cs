@@ -14,14 +14,14 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("Input string used for activation.")]
-        public string ActivateInput;
+        public string ActivateAxis;
 
         /// <summary>
-        /// Whether to activate when the input is in the opposite direction (if ActivateInput is "Vertical" and this
+        /// Whether to activate when the input is in the opposite direction (if ActivateButton is "Vertical" and this
         /// is true, activates when input moves down instead of up).
         /// </summary>
         [SerializeField]
-        [Tooltip("Whether to activate when the input is in the opposite direction (if ActivateInput is \"Vertical\" " +
+        [Tooltip("Whether to activate when the input is in the opposite direction (if ActivateButton is \"Vertical\" " +
                  "and this is true, activates when input moves down instead of up.")]
         public bool RequireNegative;
 
@@ -87,7 +87,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Reset();
 
-            ActivateInput = "Vertical";
+            ActivateAxis = "Vertical";
             RequireNegative = true;
             MinActivateSpeed = 0.61875f;
 
@@ -102,17 +102,18 @@ namespace Hedgehog.Core.Moves
         public override void Awake()
         {
             base.Awake();
-
             _rightDirection = false;
         }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             Controller.OnAttach.AddListener(OnAttach);
         }
 
-        public void OnDisable()
+        public override void OnDisable()
         {
+            base.OnDisable();
             Controller.OnDetach.RemoveListener(OnAttach);
         }
 
@@ -129,8 +130,8 @@ namespace Hedgehog.Core.Moves
         public override bool InputActivate()
         {
             return RequireNegative
-                ? Input.GetAxis(ActivateInput) < 0.0f
-                : Input.GetAxis(ActivateInput) > 0.0f;
+                ? Input.GetAxis(ActivateAxis) < 0.0f
+                : Input.GetAxis(ActivateAxis) > 0.0f;
         }
 
         public override bool InputDeactivate()
@@ -154,7 +155,6 @@ namespace Hedgehog.Core.Moves
             Controller.GroundControl.AccelerationLocked = true;
             Controller.GroundControl.Deceleration = Deceleration;
 
-            Controller.Sensors.transform.position += Vector3.up*HeightChange/2.0f;
             Controller.Sensors.TopOffset += HeightChange/2.0f;
             Controller.Sensors.BottomOffset -= HeightChange/2.0f;
 
@@ -185,9 +185,8 @@ namespace Hedgehog.Core.Moves
             Controller.GroundControl.AccelerationLocked = false;
             Controller.GroundControl.Deceleration = _originalDeceleration;
 
-            Controller.Sensors.transform.position -= Vector3.up * HeightChange / 2.0f;
-            Controller.Sensors.TopOffset -= HeightChange / 2.0f;
-            Controller.Sensors.BottomOffset += HeightChange / 2.0f;
+            Controller.Sensors.TopOffset -= HeightChange/2.0f;
+            Controller.Sensors.BottomOffset += HeightChange/2.0f;
 
             Controller.Sensors.LedgeWidth -= WidthChange;
             Controller.Sensors.BottomWidth -= WidthChange;

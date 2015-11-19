@@ -10,29 +10,38 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("This input must be a positive axis to activate.")]
-        public string InputAxis;
+        public string ActivateAxis;
+
+        private GroundControl groundControl;
 
         public override void Reset()
         {
             base.Reset();
 
-            InputAxis = "Vertical";
+            ActivateAxis = "Vertical";
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            groundControl = Controller.GetMove<GroundControl>();
         }
 
         public override bool Available()
         {
-            return DMath.Equalsf(Controller.GroundVelocity) && !Controller.GroundControl.Accelerating &&
-                   !Controller.GroundControl.Braking;
+            return DMath.Equalsf(Controller.GroundVelocity) &&
+                   (groundControl == null || 
+                   (!groundControl.Braking && !groundControl.Accelerating));
         }
 
         public override bool InputActivate()
         {
-            return Input.GetAxis(InputAxis) > 0.0f;
+            return Input.GetAxis(ActivateAxis) > 0.0f;
         }
 
         public override bool InputDeactivate()
         {
-            return Input.GetAxis(InputAxis) <= 0.0f || !DMath.Equalsf(Controller.GroundVelocity);
+            return Input.GetAxis(ActivateAxis) <= 0.0f || !DMath.Equalsf(Controller.GroundVelocity);
         }
     }
 }

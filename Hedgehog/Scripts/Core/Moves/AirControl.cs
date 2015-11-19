@@ -2,7 +2,7 @@
 
 namespace Hedgehog.Core.Moves
 {
-    public class AirControl : ControlState
+    public class AirControl : Move
     {
         #region Control Fields
         /// <summary>
@@ -10,7 +10,7 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("The name of the input axis.")]
-        public string InputAxis;
+        public string MovementAxis;
 
         /// <summary>
         /// Whether to invert the axis input.
@@ -50,47 +50,78 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("Name of an Animator float set to horizontal ground speed in units per second.")]
-        public string HorizontalSpeedParameter;
+        public string HorizontalSpeedFloat;
 
         /// <summary>
         /// Name of an Animator float set to vertical ground speed in units per second.
         /// </summary>
         [SerializeField]
         [Tooltip("Name of an Animator float set to vertical ground speed in units per second.")]
-        public string VerticalSpeedParameter;
+        public string VerticalSpeedFloat;
         #endregion
 
-        private float _axisMagnitude;
+        private float _axis;
 
-        public void Reset()
+        public override void Reset()
         {
-            InputAxis = "Horizontal";
+            base.Reset();
+
+            MovementAxis = "Horizontal";
             InvertAxis = false;
 
             Acceleration = 3.375f;
             Deceleration = 3.375f;
             TopSpeed = 3.6f;
 
-            HorizontalSpeedParameter = VerticalSpeedParameter = "";
+            HorizontalSpeedFloat = VerticalSpeedFloat = "";
+        }
+
+        public override void Awake()
+        {
+            base.Awake();
+
+            _axis = 0.0f;
+        }
+
+        public override void OnEnable()
+        {
+            Controller.OnAttach.AddListener(OnAttach);
+            Controller.OnDetach.AddListener(OnDetach);
+        }
+
+        public override void OnDisable()
+        {
+            Controller.OnAttach.RemoveListener(OnAttach);
+            Controller.OnDetach.RemoveListener(OnDetach);
+        }
+
+        private void OnDetach()
+        {
+            Perform(true);
+        }
+
+        private void OnAttach()
+        {
+            End();
         }
 
         public override void SetAnimatorParameters()
         {
-            if(HorizontalSpeedParameter.Length > 0)
-            Animator.SetFloat(HorizontalSpeedParameter, Controller.Velocity.x);
+            if(HorizontalSpeedFloat.Length > 0)
+                Animator.SetFloat(HorizontalSpeedFloat, Controller.Velocity.x);
 
-            if(VerticalSpeedParameter.Length > 0)
-                Animator.SetFloat(VerticalSpeedParameter, Controller.Velocity.y);
+            if(VerticalSpeedFloat.Length > 0)
+                Animator.SetFloat(VerticalSpeedFloat, Controller.Velocity.y);
         }
 
-        public override void GetInput()
+        public override void OnActiveUpdate()
         {
-            _axisMagnitude = Input.GetAxis(InputAxis);
+            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
         }
 
-        public override void OnStateFixedUpdate()
+        public override void OnActiveFixedUpdate()
         {
-            Accelerate(_axisMagnitude);
+            Accelerate(_axis);
         }
 
         /// <summary>
@@ -120,7 +151,7 @@ namespace Hedgehog.Core.Moves
         /// it back.</param>
         public void Accelerate(float magnitude)
         {
-            Accelerate(magnitude, Time.fixedDeltaTime);
+            Accelerate(magnitude, Time.deltaTime);
         }
 
         /// <summary>

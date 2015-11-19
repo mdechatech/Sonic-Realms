@@ -56,7 +56,7 @@ namespace Hedgehog.Core.Utils
             Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
             var hit = BestRaycast(source, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
-            return new TerrainCastHit(hit, fromSide, source);
+            return new TerrainCastHit(hit, fromSide, source, start, end);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Hedgehog.Core.Utils
         public static TerrainCastHit TerrainCast(Vector2 start, Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
             var hit = BestRaycast(null, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
-            return new TerrainCastHit(hit, fromSide);
+            return new TerrainCastHit(hit, fromSide, null, start, end);
         }
 
         /// <summary>

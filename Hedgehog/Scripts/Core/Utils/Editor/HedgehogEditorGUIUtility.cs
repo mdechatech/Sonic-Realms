@@ -28,7 +28,14 @@ namespace Hedgehog.Core.Utils.Editor
         {
             foreach (var property in properties)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty(property), true);
+                var found = serializedObject.FindProperty(property);
+                if (found == null)
+                {
+                    Debug.LogError("Couldn't find property " + property + ".");
+                    continue;
+                }
+
+                EditorGUILayout.PropertyField(found, true);
             }
         }
 

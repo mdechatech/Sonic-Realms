@@ -14,7 +14,7 @@ namespace Hedgehog.Core.Utils
         public const float MegadriveOrthographicSize = 1.12f;
         public const float SegaCDOrthographicSize = 1.12f;
         
-        public const string GeneratedSensorsName = "__Generated Sensors__";
+        public const string GeneratedSensorsName = "Sensors";
 
         public static float FOV2OrthographicSize(float fieldOfView)
         {

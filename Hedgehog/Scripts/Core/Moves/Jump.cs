@@ -12,7 +12,7 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("Input string used for activation.")]
-        public string ActivateInput;
+        public string ActivateButton;
 
         /// <summary>
         /// Height above the controller's center that must be clear to allow jumping, in units.
@@ -50,7 +50,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Reset();
 
-            ActivateInput = "Jump";
+            ActivateButton = "Jump";
             ClearanceHeight = 0.25f;
 
             ActivateSpeed = 3.9f;
@@ -85,12 +85,13 @@ namespace Hedgehog.Core.Moves
             _clearanceSensorRight.transform.position = Controller.Sensors.TopRightStart.position + offset;
         }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             Controller.OnAttach.AddListener(OnAttach);
         }
 
-        public void OnDisable()
+        public override void OnDisable()
         {
             Controller.OnAttach.RemoveListener(OnAttach);
         }
@@ -103,19 +104,19 @@ namespace Hedgehog.Core.Moves
 
         public override bool Available()
         {
-            return !Controller.IsActive<Duck>() && Controller.Grounded &&
+            return !Manager.IsActive<Duck>() && Controller.Grounded &&
                    !Controller.TerrainCast(_clearanceSensorLeft.position, _clearanceSensorRight.transform.position,
                        ControllerSide.Top);
         }
 
         public override bool InputActivate()
         {
-            return Input.GetButtonDown(ActivateInput);
+            return Input.GetButtonDown(ActivateButton);
         }
 
         public override bool InputDeactivate()
         {
-            return Input.GetButtonUp(ActivateInput);
+            return Input.GetButtonUp(ActivateButton);
         }
 
         public override void OnActiveEnter(State previousState)
@@ -124,7 +125,16 @@ namespace Hedgehog.Core.Moves
 
             Controller.Detach();
             Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
-            Controller.ForcePerformMove<Roll>();
+
+            if (Manager.IsActive<Roll>())
+            {
+                // Disable air control if jumping while rolling
+                Manager.End<AirControl>();
+            }
+            else
+            {
+                Manager.Perform<Roll>(true);
+            }
         }
 
         public override void OnActiveExit()

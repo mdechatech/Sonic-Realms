@@ -15,12 +15,6 @@ namespace Hedgehog.Core.Actors.Editor
         [SerializeField] private SerializedObject _serializedInstance;
         #endregion
         #region Foldout Variables
-        protected static bool ShowMoves
-        {
-            get { return EditorPrefs.GetBool("HedgehogController.ShowMoves", false); }
-            set { EditorPrefs.SetBool("HedgehogController.ShowMoves", value); }
-        }
-
         protected static bool ShowCollision
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowCollision", false); }
@@ -134,16 +128,8 @@ namespace Hedgehog.Core.Actors.Editor
             GUILayout.Label("<color=\"#0000ff\">Hedgehog Controller</color>", titleStyle);
             #endregion
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "RendererObject", "Animator");
-
-            #region Moves Foldout
-            ShowMoves = EditorGUILayout.Foldout(ShowMoves, "Moves", foldoutStyle);
-            if (ShowMoves)
-            {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "GroundControl", "AirControl", "AutoFindMoves", "Moves");
-            }
-            #endregion
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                "MoveManager", "RendererObject", "Animator");
             #region Collision Foldout
             ShowCollision = EditorGUILayout.Foldout(ShowCollision, "Collision", foldoutStyle);
             if (ShowCollision)
@@ -230,8 +216,8 @@ namespace Hedgehog.Core.Actors.Editor
             ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events", foldoutStyle);
             if (ShowEvents)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "OnCrush", "OnAttach",
-                    "OnDetach", "OnSteepDetach", "OnPerformMove", "OnInterruptedMove");
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "OnCrush", "OnAttach", "OnDetach", "OnSteepDetach");
             }
             #endregion
             #region Debug Foldout
@@ -244,11 +230,6 @@ namespace Hedgehog.Core.Actors.Editor
                 }
 
                 GUI.enabled = Application.isPlaying;
-
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ControlState", "ActiveMoves",
-                    "AvailableMoves", "UnavailableMoves");
-
-                EditorGUILayout.Space();
 
                 EditorGUILayout.LabelField("Collision", headerStyle);
 

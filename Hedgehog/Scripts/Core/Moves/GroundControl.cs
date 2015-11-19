@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hedgehog.Core.Moves
 {
-    public class GroundControl : ControlState
+    public class GroundControl : Move
     {
         #region Control Fields
         /// <summary>
@@ -11,7 +11,7 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [SerializeField]
         [Tooltip("The name of the input axis.")]
-        public string InputAxis;
+        public string MovementAxis;
 
         /// <summary>
         /// Whether to invert the axis input.
@@ -132,8 +132,8 @@ namespace Hedgehog.Core.Moves
             get
             {
                 return !ControlLocked &&
-                       (Controller.GroundVelocity > 0.0f && _axisMagnitude > 0.0f ||
-                        Controller.GroundVelocity < 0.0f && _axisMagnitude < 0.0f);
+                       (Controller.GroundVelocity > 0.0f && _axis > 0.0f ||
+                        Controller.GroundVelocity < 0.0f && _axis < 0.0f);
             }
         }
 
@@ -145,8 +145,8 @@ namespace Hedgehog.Core.Moves
             get
             {
                 return !ControlLocked &&
-                       (Controller.GroundVelocity > 0.0f && _axisMagnitude < 0.0f ||
-                        Controller.GroundVelocity < 0.0f && _axisMagnitude > 0.0f);
+                       (Controller.GroundVelocity > 0.0f && _axis < 0.0f ||
+                        Controller.GroundVelocity < 0.0f && _axis > 0.0f);
             }
         }
 
@@ -158,7 +158,8 @@ namespace Hedgehog.Core.Moves
             get { return Mathf.Abs(Controller.GroundVelocity) - TopSpeed > -0.1f; }
         }
         #endregion
-        private float _axisMagnitude;
+
+        private float _axis;
 
         /// <summary>
         /// Whether the control lock is on.
@@ -170,9 +171,11 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         public float ControlLockTimer;
 
-        public void Reset()
+        public override void Reset()
         {
-            InputAxis = "Horizontal";
+            base.Reset();
+
+            MovementAxis = "Horizontal";
             InvertAxis = false;
 
             Acceleration = 1.6875f;
@@ -188,19 +191,43 @@ namespace Hedgehog.Core.Moves
         public override void Awake()
         {
             base.Awake();
-            _axisMagnitude = 0.0f;
+            _axis = 0.0f;
 
             ControlLocked = false;
             ControlLockTimer = 0.0f;
         }
 
-        public override void OnControlStateEnter(ControlState previousState)
+        public override void OnEnable()
+        {
+            base.OnEnable();
+            Controller.OnAttach.AddListener(OnAttach);
+            Controller.OnDetach.AddListener(OnDetach);
+        }
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            Controller.OnAttach.RemoveListener(OnAttach);
+            Controller.OnDetach.RemoveListener(OnDetach);
+        }
+
+        private void OnAttach()
+        {
+            Perform(true);
+        }
+
+        private void OnDetach()
+        {
+            End();
+        }
+
+        public override void OnActiveEnter(State previousState)
         {
             Controller.OnSteepDetach.AddListener(OnSteepDetach);
             Controller.AutoFlip = false;
         }
 
-        public override void OnControlStateExit(ControlState nextState)
+        public override void OnActiveExit()
         {
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.AutoFlip = true;
@@ -213,21 +240,20 @@ namespace Hedgehog.Core.Moves
                 Animator.SetBool(BrakingBool, false);
         }
 
-        public override void OnControlStateUpdate()
+        public override void OnActiveUpdate()
         {
-            ControlLockTimer -= Time.deltaTime;
-            if (ControlLockTimer < 0.0f)
-            {
-                Unlock();
-            }
+            if (ControlLocked)
+                return;
+
+            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
         }
 
-        public override void OnStateFixedUpdate()
+        public override void OnActiveFixedUpdate()
         {
             UpdateControlLockTimer();
             if (!ControlLocked)
             {
-                Controller.ApplyGroundFriction = !Accelerate(_axisMagnitude);
+                Controller.ApplyGroundFriction = !Accelerate(_axis);
             }
 
             if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed &&
@@ -236,19 +262,14 @@ namespace Hedgehog.Core.Moves
                 Lock();
             }
 
-            if (!DMath.Equalsf(_axisMagnitude))
+            if (!DMath.Equalsf(_axis))
                 Controller.FacingForward = Controller.GroundVelocity >= 0.0f;
-        }
-
-        public override void GetInput()
-        {
-            _axisMagnitude = Input.GetAxis(InputAxis)*(InvertAxis ? -1.0f : 1.0f);
         }
 
         public override void SetAnimatorParameters()
         {
             if(InputAxisFloat.Length > 0)
-                Animator.SetFloat(InputAxisFloat, _axisMagnitude);
+                Animator.SetFloat(InputAxisFloat, _axis);
 
             if(GroundedBool.Length > 0)
                 Animator.SetBool(GroundedBool, Controller.Grounded);

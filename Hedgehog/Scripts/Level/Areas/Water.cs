@@ -81,7 +81,7 @@ namespace Hedgehog.Level.Areas
             controller.Vy /= Viscosity*2.0f;
             controller.DetachSpeed /= Viscosity;
 
-            var jump = controller.GetMove<Jump>();
+            var jump = controller.MoveManager.Get<Jump>();
             if (jump == null)
                 return;
             jump.ActivateSpeed /= Viscosity;
@@ -107,7 +107,7 @@ namespace Hedgehog.Level.Areas
             controller.Vy *= Viscosity;
             controller.DetachSpeed *= Viscosity;
 
-            var jump = controller.GetMove<Jump>();
+            var jump = controller.MoveManager.Get<Jump>();
             if (jump == null)
                 return;
             jump.ActivateSpeed /= Viscosity;

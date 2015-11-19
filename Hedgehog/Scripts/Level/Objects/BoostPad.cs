@@ -29,7 +29,7 @@ namespace Hedgehog.Level.Objects
 
         public void Reset()
         {
-            Velocity = 10.0f;
+            Velocity = 7.2f;
             BoostBothWays = false;
         }
 

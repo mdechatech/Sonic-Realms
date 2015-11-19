@@ -37,14 +37,7 @@ namespace Hedgehog.Level.Effects
                 string.Equals(MoveName, move1.GetType().Name, StringComparison.CurrentCultureIgnoreCase));
 
             if (move == null) return;
-            if (ForcePerform)
-            {
-                controller.ForcePerformMove(move);
-            }
-            else
-            {
-                controller.PerformMove(move);
-            }
+            controller.MoveManager.Perform(move, ForcePerform);
         }
 
         public override void OnActivateStay(HedgehogController controller)

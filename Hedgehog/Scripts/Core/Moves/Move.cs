@@ -1,5 +1,7 @@
-﻿using Hedgehog.Core.Actors;
+﻿using System.Collections.Generic;
+using Hedgehog.Core.Actors;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Core.Moves
 {
@@ -9,6 +11,11 @@ namespace Hedgehog.Core.Moves
         /// Reference to the attached controller.
         /// </summary>
         protected HedgehogController Controller;
+
+        /// <summary>
+        /// Reference to the associated move manager.
+        /// </summary>
+        protected MoveManager Manager;
 
         /// <summary>
         /// Reference to the attached animator.
@@ -21,15 +28,36 @@ namespace Hedgehog.Core.Moves
         public State CurrentState;
         public enum State
         {
-            Unavailable,
-            Available,
-            Active,
+            Unavailable,    // Can't be performed unless forced to.
+            Available,      // Can be performed through player input.
+            Active,         // Currently being performed.
         }
 
         /// <summary>
         /// If the move is active, whether it was activated through player input.
         /// </summary>
         public bool InputActivated;
+        #region Events
+        /// <summary>
+        /// Invoked when the move is performed.
+        /// </summary>
+        public UnityEvent OnActive;
+
+        /// <summary>
+        /// Invoked when the move is ended.
+        /// </summary>
+        public UnityEvent OnEnd;
+
+        /// <summary>
+        /// Invoked when the move becomes available.
+        /// </summary>
+        public UnityEvent OnAvailable;
+
+        /// <summary>
+        /// Invoked when the move becomes unavailable.
+        /// </summary>
+        public UnityEvent OnUnavailable;
+        #endregion
         #region Animation
         /// <summary>
         /// Name of an Animator trigger set when the move is activated.
@@ -49,19 +77,32 @@ namespace Hedgehog.Core.Moves
 
         public virtual void Reset()
         {
-            Controller = GetComponent<HedgehogController>();
-            Animator = Animator ?? Controller == null ? null : Controller.Animator;
-
             ActiveTrigger = AvailableBool = "";
         }
 
         public virtual void Awake()
         {
-            Controller = Controller ?? GetComponent<HedgehogController>();
-            Animator = Animator ?? Controller.Animator;
+            Controller = GetComponentInParent<HedgehogController>();
+            Animator = Controller.Animator;
+            Manager = Controller.MoveManager;
 
             CurrentState = State.Unavailable;
             InputActivated = false;
+
+            OnActive = OnActive ?? new UnityEvent();
+            OnEnd = OnEnd ?? new UnityEvent();
+            OnAvailable = OnAvailable ?? new UnityEvent();
+            OnUnavailable = OnUnavailable ?? new UnityEvent();
+        }
+
+        public virtual void OnDisable()
+        {
+            End();
+        }
+
+        public virtual void OnEnable()
+        {
+            // I'm here for consistency!
         }
 
         public virtual void Start()
@@ -100,8 +141,24 @@ namespace Hedgehog.Core.Moves
             CurrentState = nextState;
             OnStateChanged(prevState);
 
-            if (prevState == State.Active) OnActiveExit();
-            else if(CurrentState == State.Active) OnActiveEnter(prevState);
+            if (prevState == State.Active)
+            {
+                OnActiveExit();
+                OnEnd.Invoke();
+            }
+            else if (CurrentState == State.Active)
+            {
+                OnActiveEnter(prevState);
+                OnActive.Invoke();
+            }
+            else if (CurrentState == State.Available)
+            {
+                OnAvailable.Invoke();
+            }
+            else if (CurrentState == State.Unavailable)
+            {
+                OnUnavailable.Invoke();
+            }
 
             if (Animator == null) return true;
             if (CurrentState == State.Active && ActiveTrigger.Length > 0)
@@ -116,18 +173,9 @@ namespace Hedgehog.Core.Moves
         /// Calls on the controller to perform the move. Works only if the move is available.
         /// </summary>
         /// <returns>Whether the move was performed.</returns>
-        public bool Perform()
+        public bool Perform(bool force = false)
         {
-            return Controller.PerformMove(this);
-        }
-
-        /// <summary>
-        /// Calls on the controller to force perform the move.
-        /// </summary>
-        /// <returns>Whether the move was performed. False could be returned because the move was already active.</returns>
-        public bool ForcePerform()
-        {
-            return Controller.ForcePerformMove(this);
+            return Manager.Perform(this, force);
         }
 
         /// <summary>
@@ -136,7 +184,7 @@ namespace Hedgehog.Core.Moves
         /// <returns>Whether the move was ended.</returns>
         public bool End()
         {
-            return Controller.EndMove(this);
+            return Manager.End(this);
         }
 
         /// <summary>
@@ -145,7 +193,7 @@ namespace Hedgehog.Core.Moves
         /// <returns></returns>
         public virtual bool Available()
         {
-            return false;
+            return true;
         }
 
         /// <summary>
