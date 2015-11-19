@@ -18,11 +18,11 @@ namespace Hedgehog.Core.Moves.Editor
         {
             serializedObject.Update();
 
-            if (targets.Count() == 1)
-            {
-                var moveManager = target as MoveManager;
-                moveManager.GetComponents(moveManager.Moves);
-            }
+            var moveManager = target as MoveManager;
+            moveManager.GetComponents(moveManager.Moves);
+
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
 
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "Controller", "Moves");

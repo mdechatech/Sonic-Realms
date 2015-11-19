@@ -26,11 +26,21 @@ namespace Hedgehog.Core.Moves
         /// The move's current state.
         /// </summary>
         public State CurrentState;
-        public enum State
+        public enum State   
         {
             Unavailable,    // Can't be performed unless forced to.
             Available,      // Can be performed through player input.
             Active,         // Currently being performed.
+        }
+
+        /// <summary>
+        /// Whether the move is currently active.
+        /// </summary>
+        public bool Active
+        {
+            get { return CurrentState == State.Active; }
+            set { ChangeState(value ? State.Active : CurrentState == State.Active ? State.Available : CurrentState); }
+
         }
 
         /// <summary>
@@ -82,7 +92,7 @@ namespace Hedgehog.Core.Moves
 
         public virtual void Awake()
         {
-            Controller = GetComponentInParent<HedgehogController>();
+            Controller = Controller ?? GetComponentInParent<HedgehogController>();
             Animator = Controller.Animator;
             Manager = Controller.MoveManager;
 
@@ -121,10 +131,10 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         public virtual void SetAnimatorParameters()
         {
-            if(ActiveBool.Length > 0)
+            if(!string.IsNullOrEmpty(ActiveBool))
                 Animator.SetBool(ActiveBool, CurrentState == State.Active);
 
-            if(AvailableBool.Length > 0)
+            if(!string.IsNullOrEmpty(AvailableBool))
                 Animator.SetBool(AvailableBool, CurrentState == State.Available);
         }
 

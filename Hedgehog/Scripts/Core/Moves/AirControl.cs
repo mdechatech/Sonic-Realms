@@ -107,10 +107,10 @@ namespace Hedgehog.Core.Moves
 
         public override void SetAnimatorParameters()
         {
-            if(HorizontalSpeedFloat.Length > 0)
+            if(!string.IsNullOrEmpty(HorizontalSpeedFloat))
                 Animator.SetFloat(HorizontalSpeedFloat, Controller.Velocity.x);
 
-            if(VerticalSpeedFloat.Length > 0)
+            if(!string.IsNullOrEmpty(VerticalSpeedFloat))
                 Animator.SetFloat(VerticalSpeedFloat, Controller.Velocity.y);
         }
 

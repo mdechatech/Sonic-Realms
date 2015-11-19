@@ -15,12 +15,6 @@ namespace Hedgehog.Core.Actors.Editor
         [SerializeField] private SerializedObject _serializedInstance;
         #endregion
         #region Foldout Variables
-        protected static bool ShowCollision
-        {
-            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowCollision", false); }
-            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowCollision", value); }
-        }
-
         protected static bool ShowSensors
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowSensors", false); }
@@ -130,13 +124,8 @@ namespace Hedgehog.Core.Actors.Editor
 
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "MoveManager", "RendererObject", "Animator");
-            #region Collision Foldout
-            ShowCollision = EditorGUILayout.Foldout(ShowCollision, "Collision", foldoutStyle);
-            if (ShowCollision)
-            {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Paths");
-            }
-            #endregion
+
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Paths");
             #region Sensors Foldout
             ShowSensors = EditorGUILayout.Foldout(ShowSensors, "Sensors", foldoutStyle);
             if (ShowSensors)

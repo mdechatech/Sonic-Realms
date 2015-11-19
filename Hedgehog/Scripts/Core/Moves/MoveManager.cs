@@ -86,6 +86,8 @@ namespace Hedgehog.Core.Moves
 
         public void Awake()
         {
+            GetComponents(Moves);
+
             ActiveMoves = new List<Move>();
             AvailableMoves = new List<Move>();
             UnavailableMoves = new List<Move>(Moves);
@@ -100,9 +102,7 @@ namespace Hedgehog.Core.Moves
         public void Update()
         {
             if (Controller.Interrupted)
-            {
                 return;
-            }
 
             // List copying is used abundantly since a move may remove itself or others from its own list,
             // causing iteration errors. There are faster ways to handle this, but at the moment the overhead
@@ -111,6 +111,13 @@ namespace Hedgehog.Core.Moves
             {
                 foreach (var move in new List<Move>(UnavailableMoves))
                 {
+                    if (!move)
+                    {
+                        UnavailableMoves.Remove(move);
+                        GetComponents(Moves);
+                        continue;
+                    }
+
                     if (!move.Available())
                         continue;
 
@@ -128,6 +135,13 @@ namespace Hedgehog.Core.Moves
             {
                 foreach (var move in new List<Move>(AvailableMoves))
                 {
+                    if (!move)
+                    {
+                        AvailableMoves.Remove(move);
+                        GetComponents(Moves);
+                        continue;
+                    }
+
                     if (!move.Available())
                     {
                         if (!AvailableMoves.Remove(move))
@@ -149,10 +163,16 @@ namespace Hedgehog.Core.Moves
             {
                 foreach (var move in new List<Move>(ActiveMoves))
                 {
+                    if (!move)
+                    {
+                        ActiveMoves.Remove(move);
+                        GetComponents(Moves);
+                        continue;
+                    }
+
                     if (move.InputDeactivate())
                     {
                         End(move);
-
                         OnAvailable.Invoke(move);
                     }
                     else
@@ -166,8 +186,15 @@ namespace Hedgehog.Core.Moves
         public void FixedUpdate()
         {
             if (Controller.Interrupted) return;
+
             foreach (var move in new List<Move>(ActiveMoves))
             {
+                if (!move)
+                {
+                    GetComponents(Moves);
+                    continue;
+                }
+
                 move.OnActiveFixedUpdate();
             }
         }

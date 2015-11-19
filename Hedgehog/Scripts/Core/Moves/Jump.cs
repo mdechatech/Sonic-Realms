@@ -126,7 +126,10 @@ namespace Hedgehog.Core.Moves
             Controller.Detach();
             Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
 
-            if (Manager.IsActive<Roll>())
+            var roll = Manager.Get<Roll>();
+            if (roll == null) return;
+
+            if (roll.Active)
             {
                 // Disable air control if jumping while rolling
                 Manager.End<AirControl>();
