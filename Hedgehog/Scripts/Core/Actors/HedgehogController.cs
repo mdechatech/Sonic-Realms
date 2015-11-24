@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
@@ -255,6 +253,11 @@ namespace Hedgehog.Core.Actors
         private const int CollisionStepLimit = 100;
 
         /// <summary>
+        /// Angle difference used when rotating between two surfaces, in radians.
+        /// </summary>
+        private const float SurfaceAngleTolerance = 0.82766f;
+
+        /// <summary>
         /// Whether to apply slope gravity on the controller when it's on steep ground.
         /// </summary>
         public bool ApplySlopeGravity;
@@ -425,10 +428,91 @@ namespace Hedgehog.Core.Actors
         public TerrainCastHit SecondarySurfaceHit;
 
         /// <summary>
+        /// The surface to the left of the player, if any.
+        /// </summary>
+        [Tooltip("The surface to the left of the player, if any.")]
+        public Transform LeftWall;
+
+        /// <summary>
+        /// The results from the terrain cast which found the surface to the left of the player, if any.
+        /// </summary>
+        [Tooltip("The results from the terrain cast which found the surface to the left of the player, if any.")]
+        public TerrainCastHit LeftWallHit;
+
+        /// <summary>
+        /// The surface to the right of the player, if any.
+        /// </summary>
+        [Tooltip("The surface to the right of the player, if any.")]
+        public Transform RightWall;
+
+        /// <summary>
+        /// The results from the terrain cast which found the surface to the right of the player, if any.
+        /// </summary>
+        [Tooltip("The results from the terrain cast which found the surface to the right of the player, if any.")]
+        public TerrainCastHit RightWallHit;
+
+        /// <summary>
         /// The controller will move this much in its next FixedUpdate. It is set using the Translate function,
         /// which guarantees that movement from outside sources is applied before collision checks.
         /// </summary>
         public Vector3 QueuedTranslation;
+        #endregion
+        #region Animation Variables
+        /// <summary>
+        /// Name of an Animator trigger set when the controller falls off a surface.
+        /// </summary>
+        [Tooltip("Name of an Animator trigger set when the controller falls off a surface.")]
+        public string DetachTrigger;
+
+        /// <summary>
+        /// Name of an Animator trigger set when the controller lands on a surface.
+        /// </summary>
+        [Tooltip("Name of an Animator trigger set when the controller lands on a surface.")]
+        public string AttachTrigger;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller is facing forward.
+        /// </summary>
+        [Tooltip("Name of an Animator bool set to whether the controller is facing forward.")]
+        public string FacingForwardBool;
+
+        /// <summary>
+        /// Name of an Animator float set to horizontal air speed, in units per second.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to horizontal air speed, in units per second.")]
+        public string AirSpeedXFloat;
+
+        /// <summary>
+        /// Name of an Animator float set to vertical air speed, in units per second.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to vertical air speed, in units per second.")]
+        public string AirSpeedYFloat;
+
+        /// <summary>
+        /// Name of Animator float set to whether the controller is grounded.
+        /// </summary>
+        [Tooltip("Name of Animator float set to whether the controller is grounded.")]
+        public string GroundedBool;
+
+        /// <summary>
+        /// Name of an Animator float set to the controller's ground speed, in units per second.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to the controller's ground speed, in units per second.")]
+        public string GroundSpeedFloat;
+
+        /// <summary>
+        /// Name of an Animator float set to the absolute value of the controller's ground speed, in units per second.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to the absolute value of the controller's ground speed, in units per " +
+                 "second.")]
+        public string AbsGroundSpeedFloat;
+
+        /// <summary>
+        /// Name of an Animator float set to the surface angle, in degrees.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to the surface angle, in degrees.")]
+        public string SurfaceAngleFloat;
+
         #endregion
 
         #region Lifecycle Functions
@@ -496,10 +580,15 @@ namespace Hedgehog.Core.Actors
                 HandleInterrupt();
                 return;
             }
+
+            HandleDisplay();
         }
 
         public void FixedUpdate()
         {
+            LeftWall = RightWall = null;
+            LeftWallHit = RightWallHit = null;
+
             if (Interrupted)
                 return;
 
@@ -514,8 +603,6 @@ namespace Hedgehog.Core.Actors
             HandleMovement();
 
             UpdateGroundVelocity();
-
-            HandleDisplay();
         }
         #endregion
 
@@ -587,7 +674,7 @@ namespace Hedgehog.Core.Actors
                     HandleCollisions();
                     UpdateGroundVelocity();
 
-                    if (DMath.Equalsf(Vx + Vy) || Interrupted || ++steps > CollisionStepLimit)
+                    if (DMath.Equalsf(Velocity.magnitude) || Interrupted || ++steps > CollisionStepLimit)
                         break;
 
                     // If the player's speed changes mid-stagger recalculate current velocity and total velocity
@@ -610,7 +697,7 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// Uses Time.fixedDeltaTime as the timestep. Handles sprite rotation and other effects.
+        /// Uses Time.fixedDeltaTime as the timestep. Handles sprite rotation, animation, and other effects.
         /// </summary>
         public void HandleDisplay()
         {
@@ -618,11 +705,12 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// Handles sprite rotation and other effects.
+        /// Handles sprite rotation, animation, and other effects.
         /// </summary>
         /// <param name="timestep">The specified timestep, in seconds.</param>
         public void HandleDisplay(float timestep)
         {
+            // Set FacingForward
             if (AutoFlip)
             {
                 if (Grounded && !DMath.Equalsf(GroundVelocity))
@@ -635,6 +723,7 @@ namespace Hedgehog.Core.Actors
                 }
             }
 
+            // Rotate to surface angle
             if (!Grounded)
             {
                 RendererObject.transform.eulerAngles = new Vector3(RendererObject.transform.eulerAngles.x, 
@@ -647,6 +736,7 @@ namespace Hedgehog.Core.Actors
                     new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
             }
 
+            // Flip based on FacingForward
             if ((FacingForward && RendererObject.transform.localScale.x < 0.0f) || 
                 (!FacingForward && RendererObject.transform.localScale.x > 0.0f))
             {
@@ -655,6 +745,31 @@ namespace Hedgehog.Core.Actors
                     RendererObject.transform.localScale.y,
                     RendererObject.transform.localScale.z);
             }
+
+            // Set animator parameters
+            if (Animator == null)
+                return;
+
+            if(!string.IsNullOrEmpty(FacingForwardBool))
+                Animator.SetBool(FacingForwardBool, FacingForward);
+
+            if(!string.IsNullOrEmpty(AirSpeedXFloat))
+                Animator.SetFloat(AirSpeedXFloat, Velocity.x);
+
+            if(!string.IsNullOrEmpty(AirSpeedYFloat))
+                Animator.SetFloat(AirSpeedYFloat, Velocity.y);
+
+            if(!string.IsNullOrEmpty(GroundedBool))
+                Animator.SetBool(GroundedBool, Grounded);
+
+            if(!string.IsNullOrEmpty(GroundSpeedFloat))
+                Animator.SetFloat(GroundSpeedFloat, GroundVelocity);
+
+            if(!string.IsNullOrEmpty(AbsGroundSpeedFloat))
+                Animator.SetFloat(AbsGroundSpeedFloat, Mathf.Abs(GroundVelocity));
+
+            if(!string.IsNullOrEmpty(SurfaceAngleFloat))
+                Animator.SetFloat(SurfaceAngleFloat, SurfaceAngle);
         }
 
         /// <summary>
@@ -1063,10 +1178,13 @@ namespace Hedgehog.Core.Actors
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
 
             // If the proposed angle is between the angles of the two surfaces, it'll do
-            if ((DMath.Equalsf(diff) && 
-                    DMath.Equalsf(overlap, left.SurfaceAngle) && DMath.Equalsf(overlap, right.SurfaceAngle)) ||
-                (diff > 0.0f && DMath.AngleInRange(overlap, left.SurfaceAngle, right.SurfaceAngle)) || 
-                (diff < 0.0f && DMath.AngleInRange(overlap, right.SurfaceAngle, left.SurfaceAngle)))
+            if ((DMath.Equalsf(diff) ||
+                 (diff > 0.0f && DMath.AngleInRange(overlap,
+                     left.SurfaceAngle - SurfaceAngleTolerance,
+                     right.SurfaceAngle + SurfaceAngleTolerance)) ||
+                 (diff < 0.0f && DMath.AngleInRange(overlap,
+                     right.SurfaceAngle - SurfaceAngleTolerance,
+                     left.SurfaceAngle + SurfaceAngleTolerance))))
             {
                 // Angle closest to the current gets priority
                 if (leftDiff < rightDiff)
@@ -1352,7 +1470,11 @@ namespace Hedgehog.Core.Actors
 
             // Don't invoke the event if the controller was already off the ground
             if (Grounded)
+            {
                 OnDetach.Invoke();
+                if (Animator != null && !string.IsNullOrEmpty(DetachTrigger))
+                    Animator.SetTrigger(DetachTrigger);
+            } 
 
             Grounded = false;
             JustDetached = true;
@@ -1376,7 +1498,11 @@ namespace Hedgehog.Core.Actors
 
             // Don't invoke the event if the controller was already on the ground
             if (!Grounded)
+            {
                 OnAttach.Invoke();
+                if (Animator != null && !string.IsNullOrEmpty(AttachTrigger))
+                    Animator.SetTrigger(AttachTrigger);
+            }
 
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             GroundVelocity = groundSpeed;
@@ -1496,6 +1622,18 @@ namespace Hedgehog.Core.Actors
         private bool NotifyCollision(TerrainCastHit collision)
         {
             if (!collision || collision.Hit.transform == null) return false;
+
+            if (collision.Side == ControllerSide.Left)
+            {
+                LeftWall = collision.Hit.transform;
+                LeftWallHit = collision;
+            }
+            else if (collision.Side == ControllerSide.Right)
+            {
+                RightWall = collision.Hit.transform;
+                RightWallHit = collision;
+            }
+
             OnCollide.Invoke(collision);
             return TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
         }

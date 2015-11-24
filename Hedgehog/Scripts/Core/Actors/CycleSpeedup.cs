@@ -50,9 +50,11 @@ namespace Hedgehog.Core.Actors
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.speed = UseAbsoluteValue
-                ? Mathf.Max(0.0f, Mathf.Abs(AnimationSpeedCurve.Evaluate(animator.GetFloat(SpeedParameter))))
-                : Mathf.Max(0.0f, AnimationSpeedCurve.Evaluate(animator.GetFloat(SpeedParameter)));
+            animator.speed =
+                Mathf.Max(0.0f,
+                    UseAbsoluteValue
+                        ? Mathf.Abs(AnimationSpeedCurve.Evaluate(animator.GetFloat(SpeedParameter)))
+                        : AnimationSpeedCurve.Evaluate(animator.GetFloat(SpeedParameter)));
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

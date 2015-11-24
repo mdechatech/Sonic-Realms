@@ -39,7 +39,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 411496}
   - 212: {fileID: 21216568}
-  - 95: {fileID: 9594506}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -132,6 +131,7 @@ GameObject:
   - 4: {fileID: 424606}
   - 50: {fileID: 5083970}
   - 114: {fileID: 11405618}
+  - 95: {fileID: 9582648}
   m_Layer: 0
   m_Name: S3K Sonic
   m_TagString: Untagged
@@ -201,6 +201,8 @@ GameObject:
   - 114: {fileID: 11416224}
   - 114: {fileID: 11493570}
   - 114: {fileID: 11477054}
+  - 114: {fileID: 11436076}
+  - 114: {fileID: 11491536}
   m_Layer: 0
   m_Name: Moves
   m_TagString: Untagged
@@ -424,7 +426,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.53999996, y: .529999971, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
@@ -630,16 +632,16 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
---- !u!95 &9594506
+--- !u!95 &9582648
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 105384}
+  m_GameObject: {fileID: 151248}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3137e0f669f7352438e7e4da2d744a54, type: 2}
+  m_Controller: {fileID: 9100000, guid: fcaebaac4f50fef46ba85bbc817154ae, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -660,7 +662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveManager: {fileID: 11451016}
   RendererObject: {fileID: 105384}
-  Animator: {fileID: 9594506}
+  Animator: {fileID: 9582648}
   Paths:
   - Always Collide
   - Path 1
@@ -727,7 +729,18 @@ MonoBehaviour:
   JustDetached: 0
   PrimarySurface: {fileID: 0}
   SecondarySurface: {fileID: 0}
+  LeftWall: {fileID: 0}
+  RightWall: {fileID: 0}
   QueuedTranslation: {x: 0, y: 0, z: 0}
+  DetachTrigger: 
+  AttachTrigger: 
+  FacingForwardBool: 
+  AirSpeedXFloat: 
+  AirSpeedYFloat: Air Speed Y
+  GroundedBool: Grounded
+  GroundSpeedFloat: 
+  AbsGroundSpeedFloat: Absolute Ground Speed
+  SurfaceAngleFloat: 
 --- !u!114 &11416224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -741,6 +754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -780,6 +794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -812,6 +827,48 @@ MonoBehaviour:
   DownhillGravity: 11.25
   Deceleration: 4.5
   Friction: .845099986
+--- !u!114 &11436076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad90d6e2ef2e4a14faa48173a9c897ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  InputEnabled: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: Balancing
+  AvailableBool: 
+  MaxDistance: .100000001
+  AllowDuck: 0
+  AllowLookUp: 0
+  DistanceFloat: Edge Distance
+  EdgeDistance: 0
 --- !u!114 &11451016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -832,6 +889,7 @@ MonoBehaviour:
   - {fileID: 11416224}
   - {fileID: 11493570}
   - {fileID: 11477054}
+  - {fileID: 11436076}
   ActiveMoves: []
   AvailableMoves: []
   UnavailableMoves: []
@@ -873,6 +931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -914,6 +973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -979,6 +1039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1010,17 +1071,52 @@ MonoBehaviour:
   DecelerationLocked: 0
   TopSpeed: 3.5999999
   InputAxisFloat: 
-  GroundedBool: Grounded
   AcceleratingBool: Accelerating
   BrakingBool: Braking
-  SpeedFloat: Ground Speed
-  AbsoluteSpeedFloat: Absolute Ground Speed
-  SurfaceAngleFloat: 
   TopSpeedBool: At Top Speed
   ControlLockBool: 
   ControlLockTimerFloat: 
   ControlLocked: 0
   ControlLockTimer: 0
+--- !u!114 &11491536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f89f3b2bbf00cc4eb11d73303458afc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  InputEnabled: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: Pushing
+  AvailableBool: 
+  ActivateAxis: 
+  UseControlInput: 1
 --- !u!114 &11493570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1034,6 +1130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1076,6 +1173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 0
   InputActivated: 0
+  InputEnabled: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1104,8 +1202,6 @@ MonoBehaviour:
   Acceleration: 3.375
   Deceleration: 3.375
   TopSpeed: 3.5999999
-  HorizontalSpeedFloat: Air Speed X
-  VerticalSpeedFloat: Air Speed Y
 --- !u!212 &21216568
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1130,7 +1226,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 5a938bca86b40664888a14b33e3c812f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61f87ae41c879084e9d3883dcc9cbb8f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
@@ -1138,7 +1234,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 151248}

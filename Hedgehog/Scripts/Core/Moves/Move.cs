@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Hedgehog.Core.Actors;
+﻿using Hedgehog.Core.Actors;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,6 +46,12 @@ namespace Hedgehog.Core.Moves
         /// If the move is active, whether it was activated through player input.
         /// </summary>
         public bool InputActivated;
+
+        /// <summary>
+        /// Whether the move can be activated through input.
+        /// </summary>
+        [Tooltip("Whether the move can be activated through input.")]
+        public bool InputEnabled;
         #region Events
         /// <summary>
         /// Invoked when the move is performed.
@@ -72,16 +77,19 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator trigger set when the move is activated.
         /// </summary>
+        [Tooltip("Name of an Animator trigger set when the move is activated.")]
         public string ActiveTrigger;
 
         /// <summary>
         /// Name of an Animator bool set to whether the move is active.
         /// </summary>
+        [Tooltip("Name of an Animator bool set to whether the move is active.")]
         public string ActiveBool;
 
         /// <summary>
         /// Name of an Animator bool set to whether the move is available.
         /// </summary>
+        [Tooltip("Name of an Animator bool set to whether the move is available.")]
         public string AvailableBool;
         #endregion
 
@@ -98,6 +106,7 @@ namespace Hedgehog.Core.Moves
 
             CurrentState = State.Unavailable;
             InputActivated = false;
+            InputEnabled = true;
 
             OnActive = OnActive ?? new UnityEvent();
             OnEnd = OnEnd ?? new UnityEvent();
@@ -105,14 +114,14 @@ namespace Hedgehog.Core.Moves
             OnUnavailable = OnUnavailable ?? new UnityEvent();
         }
 
-        public virtual void OnDisable()
-        {
-            End();
-        }
-
         public virtual void OnEnable()
         {
             // I'm here for consistency!
+        }
+
+        public virtual void OnDisable()
+        {
+            End();
         }
 
         public virtual void Start()
@@ -170,11 +179,11 @@ namespace Hedgehog.Core.Moves
                 OnUnavailable.Invoke();
             }
 
-            if (Animator == null) return true;
-            if (CurrentState == State.Active && ActiveTrigger.Length > 0)
-            {
+            if (Animator == null)
+                return true;
+
+            if (CurrentState == State.Active && !string.IsNullOrEmpty(ActiveTrigger))
                 Animator.SetTrigger(ActiveTrigger);
-            }
 
             return true;
         }

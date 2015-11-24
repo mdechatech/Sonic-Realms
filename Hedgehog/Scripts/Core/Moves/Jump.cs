@@ -43,8 +43,8 @@ namespace Hedgehog.Core.Moves
         [Tooltip("Whether a jump happened. If false, the controller didn't leave the ground by jumping.")]
         public bool Used;
 
-        private Transform _clearanceSensorLeft;
-        private Transform _clearanceSensorRight;
+        private Transform ClearanceSensorLeft;
+        private Transform ClearanceSensorRight;
 
         public override void Reset()
         {
@@ -71,18 +71,18 @@ namespace Hedgehog.Core.Moves
 
         protected void CreateClearanceSensors()
         {
-            if(_clearanceSensorLeft) Destroy(_clearanceSensorLeft.gameObject);
-            if (_clearanceSensorRight) Destroy(_clearanceSensorRight.gameObject);
+            if(ClearanceSensorLeft) Destroy(ClearanceSensorLeft.gameObject);
+            if (ClearanceSensorRight) Destroy(ClearanceSensorRight.gameObject);
 
             var offset = (Controller.Sensors.TopCenter.position - Controller.Sensors.Center.position).normalized
                          *ClearanceHeight;
-            _clearanceSensorLeft = new GameObject {name = "Clearance Left"}.transform;
-            _clearanceSensorLeft.transform.SetParent(Controller.Sensors.transform);
-            _clearanceSensorLeft.transform.position = Controller.Sensors.TopLeftStart.position + offset;
+            ClearanceSensorLeft = new GameObject {name = "Clearance Left"}.transform;
+            ClearanceSensorLeft.transform.SetParent(Controller.Sensors.transform);
+            ClearanceSensorLeft.transform.position = Controller.Sensors.TopLeftStart.position + offset;
 
-            _clearanceSensorRight = new GameObject {name = "Clearance Right"}.transform;
-            _clearanceSensorRight.transform.SetParent(Controller.Sensors.transform);
-            _clearanceSensorRight.transform.position = Controller.Sensors.TopRightStart.position + offset;
+            ClearanceSensorRight = new GameObject {name = "Clearance Right"}.transform;
+            ClearanceSensorRight.transform.SetParent(Controller.Sensors.transform);
+            ClearanceSensorRight.transform.position = Controller.Sensors.TopRightStart.position + offset;
         }
 
         public override void OnEnable()
@@ -96,6 +96,12 @@ namespace Hedgehog.Core.Moves
             Controller.OnAttach.RemoveListener(OnAttach);
         }
 
+        public void OnDestroy()
+        {
+            Destroy(ClearanceSensorRight.gameObject);
+            Destroy(ClearanceSensorLeft.gameObject);
+        }
+
         public void OnAttach()
         {
             Used = false;
@@ -105,7 +111,7 @@ namespace Hedgehog.Core.Moves
         public override bool Available()
         {
             return !Manager.IsActive<Duck>() && Controller.Grounded &&
-                   !Controller.TerrainCast(_clearanceSensorLeft.position, _clearanceSensorRight.transform.position,
+                   !Controller.TerrainCast(ClearanceSensorLeft.position, ClearanceSensorRight.transform.position,
                        ControllerSide.Top);
         }
 

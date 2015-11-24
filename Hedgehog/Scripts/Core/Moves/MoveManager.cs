@@ -152,7 +152,7 @@ namespace Hedgehog.Core.Moves
 
                         OnUnavailable.Invoke(move);
                     }
-                    else if (move.InputActivate())
+                    else if (move.InputEnabled && move.InputActivate())
                     {
                         Perform(move);
                     }

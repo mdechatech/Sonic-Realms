@@ -51,6 +51,14 @@ namespace Hedgehog.Core.Moves
         [SerializeField]
         [Tooltip("Top running speed in units per second.")]
         public float TopSpeed;
+
+        /// <summary>
+        /// Minimum ground speed at which slope gravity is applied, in units per second. Allows Sonic to stand still on
+        /// steep slopes.
+        /// </summary>
+        [Tooltip("Minimum ground speed at which slope gravity is applied, in units per second. Allows Sonic to stand still on " +
+                 "steep slopes.")]
+        public float MinSlopeGravitySpeed;
         #endregion
         #region Animation Fields
         /// <summary>
@@ -61,11 +69,10 @@ namespace Hedgehog.Core.Moves
         public string InputAxisFloat;
 
         /// <summary>
-        /// Name of an Animator bool set to whether the controller is grounded.
+        /// Name of an Animator bool set to whether there is any input.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether the controller is grounded.")]
-        public string GroundedBool;
+        [Tooltip("Name of an Animator bool set to whether there is any input.")]
+        public string InputBool;
 
         /// <summary>
         /// Name of an Animator bool set to whether the controller is accelerating.
@@ -80,27 +87,6 @@ namespace Hedgehog.Core.Moves
         [SerializeField]
         [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
         public string BrakingBool;
-
-        /// <summary>
-        /// Name of an Animator float set to ground speed in units per second.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to ground speed in units per second.")]
-        public string SpeedFloat;
-
-        /// <summary>
-        /// Name of an Animator float set to absolute ground speed in units per second.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to absolute ground speed in units per second.")]
-        public string AbsoluteSpeedFloat;
-
-        /// <summary>
-        /// Name of an Animator float set to surface angle in degrees per second.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to surface angle in degrees per second.")]
-        public string SurfaceAngleFloat;
 
         /// <summary>
         /// Name of an Animator bool set to whether running at top speed or faster.
@@ -178,14 +164,16 @@ namespace Hedgehog.Core.Moves
             MovementAxis = "Horizontal";
             InvertAxis = false;
 
+            InputAxisFloat = InputBool = AcceleratingBool =
+                BrakingBool = TopSpeedBool = ControlLockBool =
+                ControlLockTimerFloat = "";
+
             Acceleration = 1.6875f;
             AccelerationLocked = false;
             Deceleration = 18.0f;
             DecelerationLocked = false;
             TopSpeed = 3.6f;
-
-            SpeedFloat = GroundedBool = SurfaceAngleFloat = ControlLockBool = ControlLockTimerFloat = 
-                TopSpeedBool = "";
+            MinSlopeGravitySpeed = 0.1f;
         }
 
         public override void Awake()
@@ -231,12 +219,13 @@ namespace Hedgehog.Core.Moves
         {
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.AutoFlip = true;
+            Controller.ApplySlopeGravity = true;
 
             if(Animator == null) return;
-            if(AcceleratingBool.Length > 0)
+            if(!string.IsNullOrEmpty(AcceleratingBool))
                 Animator.SetBool(AcceleratingBool, false);
 
-            if(BrakingBool.Length > 0)
+            if(!string.IsNullOrEmpty(BrakingBool))
                 Animator.SetBool(BrakingBool, false);
         }
 
@@ -256,46 +245,42 @@ namespace Hedgehog.Core.Moves
                 Controller.ApplyGroundFriction = !Accelerate(_axis);
             }
 
-            if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed &&
-                DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 50.0f, 310.0f))
+            if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed)
             {
-                Lock();
+                if (DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 50.0f, 310.0f))
+                {
+                    Lock();
+                }
             }
 
-            if (!DMath.Equalsf(_axis))
+            Controller.ApplySlopeGravity = Accelerating || ControlLocked ||
+                                           Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed;
+
+            if (!ControlLocked && !DMath.Equalsf(_axis))
                 Controller.FacingForward = Controller.GroundVelocity >= 0.0f;
         }
 
         public override void SetAnimatorParameters()
         {
-            if(InputAxisFloat.Length > 0)
+            if(!string.IsNullOrEmpty(InputAxisFloat))
                 Animator.SetFloat(InputAxisFloat, _axis);
 
-            if(GroundedBool.Length > 0)
-                Animator.SetBool(GroundedBool, Controller.Grounded);
+            if(!string.IsNullOrEmpty(InputBool))
+                Animator.SetBool(InputBool, !DMath.Equalsf(_axis));
 
-            if(AcceleratingBool.Length > 0)
+            if(!string.IsNullOrEmpty(AcceleratingBool))
                 Animator.SetBool(AcceleratingBool, Accelerating);
 
-            if(BrakingBool.Length > 0)
+            if(!string.IsNullOrEmpty(BrakingBool))
                 Animator.SetBool(BrakingBool, Braking);
 
-            if (SpeedFloat.Length > 0)
-                Animator.SetFloat(SpeedFloat, Controller.GroundVelocity);
-
-            if(AbsoluteSpeedFloat.Length > 0)
-                Animator.SetFloat(AbsoluteSpeedFloat, Mathf.Abs(Controller.GroundVelocity));
-
-            if(SurfaceAngleFloat.Length > 0)
-                Animator.SetFloat(SurfaceAngleFloat, Controller.SurfaceAngle);
-
-            if(TopSpeedBool.Length > 0)
+            if(!string.IsNullOrEmpty(TopSpeedBool))
                 Animator.SetBool(TopSpeedBool, AtTopSpeed);
 
-            if(ControlLockBool.Length > 0)
+            if(!string.IsNullOrEmpty(ControlLockBool))
                 Animator.SetBool(ControlLockBool, ControlLocked);
 
-            if(ControlLockTimerFloat.Length > 0)
+            if(!string.IsNullOrEmpty(ControlLockTimerFloat))
                 Animator.SetFloat(ControlLockTimerFloat, ControlLockTimer);
         }
 

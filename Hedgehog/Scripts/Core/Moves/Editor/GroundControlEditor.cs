@@ -9,21 +9,24 @@ namespace Hedgehog.Core.Moves.Editor
         protected override void DrawAnimationProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "InputAxisFloat", "GroundedBool", "AcceleratingBool", "BrakingBool",
-                    "SpeedFloat", "AbsoluteSpeedFloat", "SurfaceAngleFloat", "ControlLockBool",
-                    "ControlLockTimerFloat", "TopSpeedBool");
+                    "InputAxisFloat", "InputBool", "AcceleratingBool",
+                    "BrakingBool", "ControlLockBool", "ControlLockTimerFloat",
+                    "TopSpeedBool");
+            base.DrawAnimationProperties();
         }
 
         protected override void DrawControlProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "MovementAxis", "InvertAxis");
+            base.DrawControlProperties();
         }
 
         protected override void DrawPhysicsProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "Acceleration", "Deceleration", "TopSpeed");
+                    "Acceleration", "Deceleration", "TopSpeed", "MinSlopeGravitySpeed");
+            base.DrawPhysicsProperties();
         }
     }
 }

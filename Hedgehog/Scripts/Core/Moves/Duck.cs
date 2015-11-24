@@ -29,6 +29,8 @@ namespace Hedgehog.Core.Moves
         public float MaxActivateSpeed;
         #endregion
 
+        protected GroundControl GroundControl;
+
         public override void Reset()
         {
             base.Reset();
@@ -40,9 +42,9 @@ namespace Hedgehog.Core.Moves
 
         public override bool Available()
         {
-            var groundControl = Controller.GetMove<GroundControl>();
+            var groundControl = Controller.GroundControl;
 
-            return Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
+            return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
                    (groundControl == null || !groundControl.Accelerating);
         }
 

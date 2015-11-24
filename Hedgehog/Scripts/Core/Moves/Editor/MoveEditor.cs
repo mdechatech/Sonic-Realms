@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hedgehog.Core.Moves.Editor
 {
-    [CustomEditor(typeof(Move), true)]
+    [CustomEditor(typeof(Move))]
     public class MoveEditor : UnityEditor.Editor
     {
         protected bool ShowControlFoldout
@@ -34,22 +34,22 @@ namespace Hedgehog.Core.Moves.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            
+
+            DrawAnimationFoldout();
+            if (ShowAnimationFoldout)
+                DrawAnimationProperties();
+
             DrawControlFoldout();
             if(ShowControlFoldout)
                 DrawControlProperties();
 
-            DrawPhysicsFoldout();
-            if(ShowPhysicsFoldout)
-                DrawPhysicsProperties();
-            
             DrawEventsFoldout();
             if (ShowEventsFoldout)
                 DrawEventsProperties();
 
-            DrawAnimationFoldout();
-            if(ShowAnimationFoldout)
-                DrawAnimationProperties();
+            DrawPhysicsFoldout();
+            if(ShowPhysicsFoldout)
+                DrawPhysicsProperties();
 
             serializedObject.ApplyModifiedProperties();
         }

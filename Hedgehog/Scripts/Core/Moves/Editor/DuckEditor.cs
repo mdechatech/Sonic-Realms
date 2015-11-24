@@ -10,6 +10,7 @@ namespace Hedgehog.Core.Moves.Editor
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis", "RequireNegative",
                 "MaxActivateSpeed");
+            base.DrawControlProperties();
         }
     }
 }

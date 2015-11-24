@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: baa6c9900ddec5e45a605a0d2be15137
-timeCreated: 1445940271
+guid: 010d5822f1602f64f94a7cec8b6d2d33
+timeCreated: 1448049079
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -26,7 +26,7 @@ TextureImporter:
   cubemapConvolutionSteps: 8
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -2
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
@@ -50,7 +50,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: sonic_S3K
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

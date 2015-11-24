@@ -27,22 +27,10 @@ namespace Hedgehog.Core.Actors.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowSensorsGenerator", value); }
         }
 
-        protected bool ShowAdvancedSensors
-        {
-            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedSensors", false); }
-            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedSensors", value); }
-        }
-
         protected static bool ShowPhysics
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPhysics", false); }
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysics", value); }
-        }
-
-        protected static bool ShowPhysicsPresets
-        {
-            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPhysicsPresets", false); }
-            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysicsPresets", value); }
         }
 
         protected static bool ShowAdvancedPhysics
@@ -51,16 +39,10 @@ namespace Hedgehog.Core.Actors.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysics", value); }
         }
 
-        protected static bool ShowAdvancedPhysicsSpeeds
+        protected static bool ShowAnimation
         {
-            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSpeeds", false); }
-            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSpeeds", value); }
-        }
-
-        protected static bool ShowAdvancedPhysicsSurfaces
-        {
-            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSurfaces", false); }
-            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAdvancedPhysicsSurfaces", value); }
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAnimation", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowAnimation", value); }
         }
 
         protected static bool ShowEvents
@@ -201,6 +183,17 @@ namespace Hedgehog.Core.Actors.Editor
                 #endregion
             }
             #endregion
+            #region Animation Foldout
+
+            ShowAnimation = EditorGUILayout.Foldout(ShowAnimation, "Animation", foldoutStyle);
+            if (ShowAnimation)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "AttachTrigger", "DetachTrigger", "AirSpeedXFloat",
+                    "AirSpeedYFloat", "GroundedBool", "FacingForwardBool",
+                    "GroundSpeedFloat", "AbsGroundSpeedFloat", "SurfaceAngleFloat");
+            }
+            #endregion
             #region Events Foldout
             ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events", foldoutStyle);
             if (ShowEvents)
@@ -222,8 +215,8 @@ namespace Hedgehog.Core.Actors.Editor
 
                 EditorGUILayout.LabelField("Collision", headerStyle);
 
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Paths");
-
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
+                    "Paths", "Grounded", "LeftWall", "RightWall");
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
@@ -231,7 +224,6 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("PrimarySurface"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("SecondarySurface"));
                 GUI.enabled = Application.isPlaying;
-                _instance.Grounded = EditorGUILayout.Toggle("Grounded", _instance.Grounded);
 
                 EditorGUILayout.Space();
 

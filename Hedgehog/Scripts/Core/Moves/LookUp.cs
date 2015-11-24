@@ -24,12 +24,12 @@ namespace Hedgehog.Core.Moves
         public override void Start()
         {
             base.Start();
-            groundControl = Controller.GetMove<GroundControl>();
+            groundControl = Controller.GroundControl;
         }
 
         public override bool Available()
         {
-            return DMath.Equalsf(Controller.GroundVelocity) &&
+            return Controller.Grounded && DMath.Equalsf(Controller.GroundVelocity) &&
                    (groundControl == null || 
                    (!groundControl.Braking && !groundControl.Accelerating));
         }

@@ -26,7 +26,7 @@ AnimationClip:
     - time: .200000003
       value: {fileID: 21300000, guid: 6ec91aac5ccb3904989ef1d5a4e0888e, type: 3}
     attribute: m_Sprite
-    path: 
+    path: Sprite
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 15
@@ -36,7 +36,7 @@ AnimationClip:
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
     genericBindings:
-    - path: 0
+    - path: 850496168
       attribute: 0
       script: {fileID: 0}
       classID: 212
@@ -54,7 +54,7 @@ AnimationClip:
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0

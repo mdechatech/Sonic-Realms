@@ -10,12 +10,14 @@ namespace Hedgehog.Core.Moves.Editor
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis", "RequireNegative", 
                 "MinActivateSpeed");
+            base.DrawControlProperties();
         }
 
         protected override void DrawPhysicsProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "HeightChange", "WidthChange",
                 "UphillGravity", "DownhillGravity", "Deceleration", "Friction");
+            base.DrawPhysicsProperties();
         }
     }
 }

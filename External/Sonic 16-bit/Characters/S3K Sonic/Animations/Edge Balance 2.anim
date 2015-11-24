@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Idle Enter
+  m_Name: Edge Balance 2
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -18,36 +18,36 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 24ac9a834a821ef4eb1acfe69eaf4129, type: 3}
-    - time: .166666672
-      value: {fileID: 21300000, guid: 78cb7e726d7f4b2438719fd7cd1c98ad, type: 3}
-    - time: .483333319
-      value: {fileID: 21300000, guid: 78cb7e726d7f4b2438719fd7cd1c98ad, type: 3}
+      value: {fileID: 21300000, guid: c39a2222533cfba41b741205b1c6c516, type: 3}
+    - time: .100000001
+      value: {fileID: 21300000, guid: 8df939353252acf4aa2a6400cd3a104b, type: 3}
+    - time: .200000003
+      value: {fileID: 21300000, guid: c80c48f43d2ee4a409eabe8a20aa194d, type: 3}
     attribute: m_Sprite
-    path: 
+    path: Sprite
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 60
+  m_SampleRate: 10
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
     genericBindings:
-    - path: 0
+    - path: 850496168
       attribute: 0
       script: {fileID: 0}
       classID: 212
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 24ac9a834a821ef4eb1acfe69eaf4129, type: 3}
-    - {fileID: 21300000, guid: 78cb7e726d7f4b2438719fd7cd1c98ad, type: 3}
-    - {fileID: 21300000, guid: 78cb7e726d7f4b2438719fd7cd1c98ad, type: 3}
+    - {fileID: 21300000, guid: c39a2222533cfba41b741205b1c6c516, type: 3}
+    - {fileID: 21300000, guid: 8df939353252acf4aa2a6400cd3a104b, type: 3}
+    - {fileID: 21300000, guid: c80c48f43d2ee4a409eabe8a20aa194d, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StartTime: 0
-    m_StopTime: .5
+    m_StopTime: .300000012
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

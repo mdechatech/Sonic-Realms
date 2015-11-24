@@ -84,7 +84,7 @@ namespace Hedgehog.Core.Triggers
         public virtual void Start()
         {
             var collider2D = GetComponent<Collider2D>();
-            if (collider2D != null && GetComponent<PlatformTrigger>() == null)
+            if (collider2D != null && GetComponentInParent<PlatformTrigger>() == null)
                 collider2D.isTrigger = true;
 
             if (!TriggerFromChildren)

@@ -41,30 +41,21 @@ namespace Hedgehog.Level.Areas
             MinFloatSpeed = 5.0f;
         }
 
-        public override void Start()
-        {
-            base.Start();
-            _collider2D = GetComponent<Collider2D>();
-            _collider2D.isTrigger = false;
-        }
-
-        // The controller must be at least half submerged underwater to apply new physics values.
         public override bool IsInsideArea(HedgehogController controller)
         {
-            return _collider2D.OverlapPoint(controller.Sensors.Center.position);
+            return base.IsInsideArea(controller) && !PlatformTrigger.HasController(controller);
         }
 
         // The water is a surface if the player is upright, on top of it, grounded, not already submerged,
         // and running quickly enough.
         public override bool CollidesWith(TerrainCastHit hit)
         {
-            if (hit.Controller == null || MinFloatSpeed <= 0.0f) return false;
+            if (hit.Controller == null) return false;
             return base.CollidesWith(hit) &&
                    (hit.Side & ControllerSide.Bottom) > 0 &&
                    hit.Hit.fraction > 0.0f &&
                    hit.Controller.Grounded &&
-                   Mathf.Abs(hit.Controller.GroundVelocity) >= MinFloatSpeed &&
-                   !AreaTrigger.HasController(hit.Controller);
+                   Mathf.Abs(hit.Controller.GroundVelocity) >= MinFloatSpeed;
         }
         
         // Apply new physics values based on viscosity
@@ -76,7 +67,6 @@ namespace Hedgehog.Level.Areas
             controller.GroundFriction /= Viscosity;
             controller.AirControl.Acceleration /= Viscosity;
             controller.AirGravity /= Viscosity;
-            controller.SlopeGravity /= Viscosity;
             controller.Vx /= Viscosity;
             controller.Vy /= Viscosity*2.0f;
             controller.DetachSpeed /= Viscosity;
@@ -97,21 +87,20 @@ namespace Hedgehog.Level.Areas
         // Restore old physics values.
         public override void OnAreaExit(HedgehogController controller)
         {
-            controller.GroundControl.Acceleration /= Viscosity;
-            controller.GroundControl.Deceleration /= Viscosity;
+            controller.GroundControl.Acceleration *= Viscosity;
+            controller.GroundControl.Deceleration *= Viscosity;
             controller.GroundControl.TopSpeed *= Viscosity;
             controller.GroundFriction *= Viscosity;
             controller.AirControl.Acceleration *= Viscosity;
             controller.AirGravity *= Viscosity;
-            controller.SlopeGravity *= Viscosity;
             controller.Vy *= Viscosity;
             controller.DetachSpeed *= Viscosity;
 
             var jump = controller.MoveManager.Get<Jump>();
             if (jump == null)
                 return;
-            jump.ActivateSpeed /= Viscosity;
-            jump.ReleaseSpeed /= Viscosity;
+            jump.ActivateSpeed *= Viscosity;
+            jump.ReleaseSpeed *= Viscosity;
         }
     }
 }

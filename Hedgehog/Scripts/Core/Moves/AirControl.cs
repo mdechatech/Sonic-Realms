@@ -44,21 +44,6 @@ namespace Hedgehog.Core.Moves
         public float TopSpeed;
 
         #endregion
-        #region Animation Fields
-        /// <summary>
-        /// Name of an Animator float set to horizontal ground speed in units per second.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to horizontal ground speed in units per second.")]
-        public string HorizontalSpeedFloat;
-
-        /// <summary>
-        /// Name of an Animator float set to vertical ground speed in units per second.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to vertical ground speed in units per second.")]
-        public string VerticalSpeedFloat;
-        #endregion
 
         private float _axis;
 
@@ -72,8 +57,6 @@ namespace Hedgehog.Core.Moves
             Acceleration = 3.375f;
             Deceleration = 3.375f;
             TopSpeed = 3.6f;
-
-            HorizontalSpeedFloat = VerticalSpeedFloat = "";
         }
 
         public override void Awake()
@@ -103,15 +86,6 @@ namespace Hedgehog.Core.Moves
         private void OnAttach()
         {
             End();
-        }
-
-        public override void SetAnimatorParameters()
-        {
-            if(!string.IsNullOrEmpty(HorizontalSpeedFloat))
-                Animator.SetFloat(HorizontalSpeedFloat, Controller.Velocity.x);
-
-            if(!string.IsNullOrEmpty(VerticalSpeedFloat))
-                Animator.SetFloat(VerticalSpeedFloat, Controller.Velocity.y);
         }
 
         public override void OnActiveUpdate()
