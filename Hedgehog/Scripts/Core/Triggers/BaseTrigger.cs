@@ -20,7 +20,6 @@ namespace Hedgehog.Core.Triggers
         /// Whether children of the trigger can set off events. Turning this on makes
         /// it easy to work with groups of colliders/objects.
         /// </summary>
-        [SerializeField]
         [Tooltip("Whether children of the trigger can set off events. Turning this on makes it easy to work" +
                  " with groups of colliders/objects.")]
         public bool TriggerFromChildren;
@@ -28,19 +27,16 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Called when a controller enters the trigger.
         /// </summary>
-        [SerializeField]
         public TriggerEvent OnEnter;
 
         /// <summary>
         /// Called when a controller stays on the trigger.
         /// </summary>
-        [SerializeField]
         public TriggerEvent OnStay;
 
         /// <summary>
         /// Called when a controller exits the trigger.
         /// </summary>
-        [SerializeField]
         public TriggerEvent OnExit;
 
         public virtual void Reset()
@@ -80,10 +76,17 @@ namespace Hedgehog.Core.Triggers
             return false;
         }
 
-        public static bool Selector<TTrigger>(TTrigger trigger, Transform originalTransform)
+        /// <summary>
+        /// Returns whether the specified trigger would receive events from the specified transform.
+        /// </summary>
+        /// <typeparam name="TTrigger"></typeparam>
+        /// <param name="trigger"></param>
+        /// <param name="transform"></param>
+        /// <returns></returns>
+        public static bool Selector<TTrigger>(TTrigger trigger, Transform transform)
             where TTrigger : BaseTrigger
         {
-            return originalTransform == trigger.transform || trigger.TriggerFromChildren;
+            return trigger.enabled && (transform == trigger.transform || trigger.TriggerFromChildren);
         }
     }
 }

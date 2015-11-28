@@ -181,12 +181,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed7e6807cb9696418d3f22ec696eb4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   BouncySides: 2
   Power: 6
   AccurateBounce: 1
   LockControl: 0
   LockDuration: 0
   KeepOnGround: 0
+  HitTrigger: Hit Spring
 --- !u!212 &21254480
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -231,6 +237,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: IgnoreLayers
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: HitTrigger
+      value: Hit Spring
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

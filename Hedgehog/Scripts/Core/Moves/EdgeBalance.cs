@@ -92,7 +92,9 @@ namespace Hedgehog.Core.Moves
 
         public override bool Available()
         {
-            return Controller.Grounded && Controller.SecondarySurface == null;
+            return Controller.Grounded && 
+                DMath.Equalsf(Controller.GroundVelocity) &&
+                Controller.SecondarySurface == null;
         }
 
         public override bool InputActivate()

@@ -23,8 +23,9 @@ namespace Hedgehog.Level.Platforms
 
         private Dictionary<int, float> _oldGravities; 
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             RestoreOnExit = false;
         }
 

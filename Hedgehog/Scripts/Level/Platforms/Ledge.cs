@@ -39,19 +39,20 @@ namespace Hedgehog.Level.Platforms
         [Tooltip("Whether the right side of the platform is solid.")]
         public bool RightSolid;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             TopSolid = true;
             BottomSolid = LeftSolid = RightSolid = false;
         }
 
         // The platform can be collided with if the player is checking its bottom side and
         // the result of the check did not stop where it started.
-        public override bool CollidesWith(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit hit)
         {
             // Check must be coming from player's bottom side and be close to the top
             // of the platform
-            return base.CollidesWith(hit) && 
+            return base.IsSolid(hit) && 
                 hit.Hit.fraction > 0.0f &&
                    (TopSolid && (hit.Side & ControllerSide.Bottom) > 0) ||
                    (BottomSolid && (hit.Side & ControllerSide.Top) > 0) ||

@@ -19,8 +19,9 @@ namespace Hedgehog.Level.Platforms
 
         private float _lastSurfaceAngle;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Velocity = 2.5f;
         }
 

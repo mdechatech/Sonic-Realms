@@ -54,8 +54,9 @@ namespace Hedgehog.Level.Platforms.Movers
         [HideInInspector]
         public int CyclesCompleted;
 
-        public virtual void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Duration = 1.0f;
             CurrentTime = 0.0f;
             PositionCurve = AnimationCurve.EaseInOut(0.0f, 0.0f, 1.0f, 1.0f);

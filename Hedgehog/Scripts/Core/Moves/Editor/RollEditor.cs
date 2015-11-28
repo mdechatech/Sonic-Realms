@@ -6,6 +6,12 @@ namespace Hedgehog.Core.Moves.Editor
     [CustomEditor(typeof (Roll))]
     public class RollEditor : MoveEditor
     {
+        protected override void DrawAnimationProperties()
+        {
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UphillBool");
+            base.DrawAnimationProperties();
+        }
+
         protected override void DrawControlProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis", "RequireNegative", 

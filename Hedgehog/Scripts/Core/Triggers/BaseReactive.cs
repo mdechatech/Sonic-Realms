@@ -1,8 +1,14 @@
 ﻿using Hedgehog.Core.Actors;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Core.Triggers
 {
+    /// <summary>
+    /// An event for when a controller enters or exits a reactive.
+    /// </summary>
+    public class ReactiveEvent : UnityEvent<BaseReactive> { }
+
     /// <summary>
     /// Base class for creating things that react to controllers.
     /// </summary>
@@ -23,6 +29,11 @@ namespace Hedgehog.Core.Triggers
         {
             get { return _objectTrigger == null ? false : _objectTrigger.AutoActivate; }
             set { if (_objectTrigger != null) _objectTrigger.AutoActivate = value; }
+        }
+
+        public virtual void Reset()
+        {
+
         }
 
         public virtual void Awake()

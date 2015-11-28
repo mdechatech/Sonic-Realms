@@ -11,7 +11,7 @@ namespace Hedgehog.Core.Moves.Editor
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                     "InputAxisFloat", "InputBool", "AcceleratingBool",
                     "BrakingBool", "ControlLockBool", "ControlLockTimerFloat",
-                    "TopSpeedBool");
+                    "TopSpeedBool", "TopSpeedPercentFloat");
             base.DrawAnimationProperties();
         }
 

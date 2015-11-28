@@ -30,8 +30,9 @@ namespace Hedgehog.Level.Platforms
 
         private Dictionary<int, float> _originalSlopeGravities;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             DownhillSlopeGravity = 5.0f;
             UphillSlopeGravity = -5.0f;
             RequireGroundEntry = false;
@@ -46,10 +47,10 @@ namespace Hedgehog.Level.Platforms
             _originalSlopeGravities = new Dictionary<int, float>();
         }
 
-        public override bool CollidesWith(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit hit)
         {
             if (hit.Controller == null) return true;
-            return base.CollidesWith(hit) && (!RequireGroundEntry ||
+            return base.IsSolid(hit) && (!RequireGroundEntry ||
                                               (RequireGroundEntry && hit.Controller.Grounded &&
                                                !DMath.Equalsf(hit.Hit.fraction)));
         }

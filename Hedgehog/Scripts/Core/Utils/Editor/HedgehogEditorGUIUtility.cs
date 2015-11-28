@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Hedgehog.Core.Actors;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -10,6 +9,11 @@ namespace Hedgehog.Core.Utils.Editor
 {
     public class HedgehogEditorGUIUtility
     {
+        /// <summary>
+        /// The name of the Script property that shows up on all vanilla inspector scripts.
+        /// </summary>
+        public const string ScriptPropertyName = "m_Script";
+
         /// <summary>
         /// Just a quick way to draw property fields.
         /// </summary>

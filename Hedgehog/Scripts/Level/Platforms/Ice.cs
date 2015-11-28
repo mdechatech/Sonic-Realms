@@ -19,8 +19,9 @@ namespace Hedgehog.Level.Platforms
         [Tooltip("The friction coefficient; smaller than one and the surface becomes slippery.")]
         public float Friction;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Friction = 0.2f;
         }
 

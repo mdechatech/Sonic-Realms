@@ -40,8 +40,9 @@ namespace Hedgehog.Level.Platforms
         private List<HedgehogController> _linkedControllers;
         private List<MovingPlatformAnchor> _linkedAnchors;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             TransferMomentumX = TransferMomentumY = TransferMomentumGround = false;
         }
 

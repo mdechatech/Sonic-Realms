@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
@@ -42,6 +43,12 @@ namespace Hedgehog.Core.Actors
         [Tooltip("What paths the controller is on. An object is on a path if it or one of its parents " +
                  "has that path's name.")]
         public List<string> Paths;
+
+        /// <summary>
+        /// What reactives the controller is on.
+        /// </summary>
+        [Tooltip("What reactives the controller is on.")]
+        public List<BaseReactive> Reactives;
         #endregion
         #region Sensors
         /// <summary>
@@ -171,6 +178,19 @@ namespace Hedgehog.Core.Actors
         /// surface.
         /// </summary>
         public UnityEvent OnSteepDetach;
+
+        // Events with reactives. Exposing them to the UI is unnecessary, they are only useful in scripts which can check
+        // whether the reactive is a spring, button, body of water, etc.
+
+        /// <summary>
+        /// Invoked when the controller enters any reactive thing.
+        /// </summary>
+        public ReactiveEvent OnReactiveEnter;
+        
+        /// <summary>
+        /// Invoked when the controller exits any reactive thing.
+        /// </summary>
+        public ReactiveEvent OnReactiveExit;
         #endregion
         #endregion
         #region Control Variables
@@ -255,7 +275,7 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Angle difference used when rotating between two surfaces, in radians.
         /// </summary>
-        private const float SurfaceAngleTolerance = 0.82766f;
+        private const float SurfaceAngleTolerance = 0.087222f;
 
         /// <summary>
         /// Whether to apply slope gravity on the controller when it's on steep ground.
@@ -522,6 +542,7 @@ namespace Hedgehog.Core.Actors
             Animator = RendererObject.GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
 
             Paths = new List<string> {"Always Collide", "Path 1"};
+            Reactives = new List<BaseReactive>();
 
             Sensors = GetComponentInChildren<HedgehogSensors>();
 
@@ -571,6 +592,8 @@ namespace Hedgehog.Core.Actors
             OnCollide = OnCollide ?? new PlatformCollisionEvent();
             OnDetach = OnDetach ?? new UnityEvent();
             OnSteepDetach = OnSteepDetach ?? new UnityEvent();
+            OnReactiveEnter = OnReactiveEnter ?? new ReactiveEvent();
+            OnReactiveExit = OnReactiveExit ?? new ReactiveEvent();
         }
 
         public void Update()
@@ -882,7 +905,7 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                NotifyCollision(sideLeftCheck);
+                NotifyTriggers(sideLeftCheck);
 
                 if (!IgnoreNextCollision)
                 {
@@ -899,7 +922,7 @@ namespace Hedgehog.Core.Actors
 
             if (sideRightCheck)
             {
-                NotifyCollision(sideRightCheck);
+                NotifyTriggers(sideRightCheck);
 
                 if (!IgnoreNextCollision)
                 {
@@ -926,7 +949,7 @@ namespace Hedgehog.Core.Actors
             var leftCheck = this.TerrainCast(Sensors.TopLeftStart.position, Sensors.TopLeft.position, ControllerSide.Top);
             if (leftCheck)
             {
-                NotifyCollision(leftCheck);
+                NotifyTriggers(leftCheck);
 
                 if (!IgnoreNextCollision && leftCheck.Hit.fraction > 0.0f)
                 {
@@ -942,7 +965,7 @@ namespace Hedgehog.Core.Actors
             var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position, ControllerSide.Top);
             if (rightCheck)
             {
-                NotifyCollision(rightCheck);
+                NotifyTriggers(rightCheck);
 
                 if (!IgnoreNextCollision && rightCheck.Hit.fraction > 0.0f)
                 {
@@ -974,7 +997,7 @@ namespace Hedgehog.Core.Actors
                     if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
                             GravityDirection*Mathf.Deg2Rad) >= 0.0f)
                     {
-                        NotifyCollision(groundLeftCheck);
+                        NotifyTriggers(groundLeftCheck);
 
                         if (!IgnoreNextCollision && HandleImpact(groundLeftCheck))
                             Footing = Footing.Left;
@@ -983,7 +1006,7 @@ namespace Hedgehog.Core.Actors
                     }
                     else
                     {
-                        NotifyCollision(groundRightCheck);
+                        NotifyTriggers(groundRightCheck);
 
                         if (!IgnoreNextCollision && HandleImpact(groundRightCheck))
                             Footing = Footing.Right;
@@ -993,7 +1016,7 @@ namespace Hedgehog.Core.Actors
                 }
                 else if (groundLeftCheck)
                 {
-                    NotifyCollision(groundLeftCheck);
+                    NotifyTriggers(groundLeftCheck);
 
                     if (!IgnoreNextCollision && HandleImpact(groundLeftCheck))
                         Footing = Footing.Left;
@@ -1002,7 +1025,7 @@ namespace Hedgehog.Core.Actors
                 }
                 else
                 {
-                    NotifyCollision(groundRightCheck);
+                    NotifyTriggers(groundRightCheck);
 
                     if (!IgnoreNextCollision && HandleImpact(groundRightCheck))
                         Footing = Footing.Right;
@@ -1028,7 +1051,7 @@ namespace Hedgehog.Core.Actors
 
             if (sideLeftCheck)
             {
-                NotifyCollision(sideLeftCheck);
+                NotifyTriggers(sideLeftCheck);
 
                 if (!IgnoreNextCollision)
                 {
@@ -1053,7 +1076,7 @@ namespace Hedgehog.Core.Actors
             }
             if (sideRightCheck)
             {
-                NotifyCollision(sideRightCheck);
+                NotifyTriggers(sideRightCheck);
 
                 if (!IgnoreNextCollision)
                 {
@@ -1093,7 +1116,7 @@ namespace Hedgehog.Core.Actors
 
             if (ceilLeftCheck)
             {
-                NotifyCollision(ceilLeftCheck);
+                NotifyTriggers(ceilLeftCheck);
 
                 if (!IgnoreNextCollision)
                 {
@@ -1109,7 +1132,7 @@ namespace Hedgehog.Core.Actors
             }
             if (ceilRightCheck)
             {
-                NotifyCollision(ceilRightCheck);
+                NotifyTriggers(ceilRightCheck);
 
                 if (!IgnoreNextCollision)
                 {
@@ -1178,13 +1201,15 @@ namespace Hedgehog.Core.Actors
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
 
             // If the proposed angle is between the angles of the two surfaces, it'll do
-            if ((DMath.Equalsf(diff) ||
-                 (diff > 0.0f && DMath.AngleInRange(overlap,
-                     left.SurfaceAngle - SurfaceAngleTolerance,
-                     right.SurfaceAngle + SurfaceAngleTolerance)) ||
-                 (diff < 0.0f && DMath.AngleInRange(overlap,
-                     right.SurfaceAngle - SurfaceAngleTolerance,
-                     left.SurfaceAngle + SurfaceAngleTolerance))))
+            if ((DMath.Equalsf(diff) && Mathf.Abs(DMath.ShortestArc(overlap, left.SurfaceAngle)) < SurfaceAngleTolerance) || 
+
+                 (diff > 0.0f && 
+                 DMath.AngleInRange(overlap,
+                     left.SurfaceAngle - SurfaceAngleTolerance, right.SurfaceAngle + SurfaceAngleTolerance)) ||
+
+                 (diff < 0.0f && 
+                 DMath.AngleInRange(overlap,
+                     right.SurfaceAngle - SurfaceAngleTolerance, left.SurfaceAngle + SurfaceAngleTolerance)))
             {
                 // Angle closest to the current gets priority
                 if (leftDiff < rightDiff)
@@ -1209,7 +1234,7 @@ namespace Hedgehog.Core.Actors
             // Goto's actually seem to improve the code's readability here, so please don't sue me
             #region Orientation Goto's
             orientLeft:
-            NotifyCollision(left);
+            NotifyTriggers(left);
 
             if (!IgnoreNextCollision)
             {
@@ -1223,7 +1248,7 @@ namespace Hedgehog.Core.Actors
             goto finish;
 
             orientRight:
-            NotifyCollision(right);
+            NotifyTriggers(right);
 
             if (!IgnoreNextCollision)
             {
@@ -1237,8 +1262,8 @@ namespace Hedgehog.Core.Actors
             goto finish;
 
             orientLeftBoth:
-            NotifyCollision(left);
-            NotifyCollision(right);
+            NotifyTriggers(left);
+            NotifyTriggers(right);
 
             if (!IgnoreNextCollision)
             {
@@ -1252,8 +1277,8 @@ namespace Hedgehog.Core.Actors
             goto finish;
 
             orientRightBoth:
-            NotifyCollision(right);
-            NotifyCollision(left);
+            NotifyTriggers(right);
+            NotifyTriggers(left);
 
             if (!IgnoreNextCollision)
             {
@@ -1395,7 +1420,7 @@ namespace Hedgehog.Core.Actors
             QueuedTranslation += amount;
         }
 
-        #region Move Manager Wrappers
+        #region Move Manager Helpers
         // Aliases that call the same function in the controller's move manager. They do not perform null-checks.
 
         /// <summary>
@@ -1457,6 +1482,118 @@ namespace Hedgehog.Core.Actors
         /// moves were successfully ended.</returns>
         public bool EndAllMoves(Predicate<Move> predicate = null) { return MoveManager.EndAll(predicate); }
         #endregion
+        #endregion
+        #region Trigger Helpers
+        /// <summary>
+        /// Lets a platform's trigger know about a collision, if it has one.
+        /// </summary>
+        /// <param name="collision"></param>
+        /// <returns>Whether a platform trigger was notified.</returns>
+        private bool NotifyTriggers(TerrainCastHit collision)
+        {
+            if (!collision || collision.Hit.transform == null)
+                return false;
+
+            if (collision.Side == ControllerSide.Left)
+            {
+                LeftWall = collision.Hit.transform;
+                LeftWallHit = collision;
+            }
+            else if (collision.Side == ControllerSide.Right)
+            {
+                RightWall = collision.Hit.transform;
+                RightWallHit = collision;
+            }
+
+            OnCollide.Invoke(collision);
+            return TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
+        }
+
+        /// <summary>
+        /// Sets the controller's primary and secondary surfaces and triggers their platform events, if any.
+        /// </summary>
+        /// <param name="primarySurfaceHit">The new primary surface.</param>
+        /// <param name="secondarySurfaceHit">The new secondary surface.</param>
+        public bool SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
+        {
+            PrimarySurfaceHit = primarySurfaceHit;
+            PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Hit.transform : null;
+
+            SecondarySurfaceHit = secondarySurfaceHit;
+            SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Hit.transform : null;
+
+            var result = false;
+            result = TriggerUtility.NotifySurfaceCollision(PrimarySurface, primarySurfaceHit);
+            TriggerUtility.NotifySurfaceCollision(SecondarySurface, secondarySurfaceHit);
+
+            return result;
+        }
+
+        public void NotifyReactiveEnter(BaseReactive reactive)
+        {
+            Reactives.Add(reactive);
+            OnReactiveEnter.Invoke(reactive);
+        }
+
+        public void NotifyReactiveExit(BaseReactive reactive)
+        {
+            Reactives.Remove(reactive);
+            OnReactiveExit.Invoke(reactive);
+        }
+
+        public bool InteractingWith<TReactive>() where TReactive : BaseReactive
+        {
+            return Reactives.Any(reactive => reactive is TReactive);
+        }
+
+        public bool InteractingWith(BaseReactive reactive)
+        {
+            return Reactives.Contains(reactive);
+        }
+
+        public bool Inside<TReactiveArea>()
+        {
+            if (typeof(TReactiveArea).IsSubclassOf(typeof(ReactiveArea)))
+            {
+                return Reactives.Any(reactive =>
+                    reactive is TReactiveArea &&
+                    ((ReactiveArea) reactive).AreaTrigger.HasController(this));
+            }
+
+            if (typeof(TReactiveArea).IsSubclassOf(typeof(ReactivePlatformArea)))
+            {
+                return Reactives.Any(reactive =>
+                    reactive is TReactiveArea &&
+                    ((ReactivePlatformArea)reactive).AreaTrigger.HasController(this));
+            }
+
+            return false;
+        }
+
+        public bool Inside(ReactiveArea area)
+        {
+            return area.AreaTrigger.HasController(this);
+        }
+
+        public bool Inside(ReactivePlatformArea area)
+        {
+            return area.AreaTrigger.HasController(this);
+        }
+
+        public bool StandingOn<TReactivePlatform>() where TReactivePlatform : ReactivePlatform
+        {
+            return Reactives.Any(reactive => reactive is TReactivePlatform);
+        }
+
+        public bool StandingOn(Transform platform)
+        {
+            return Grounded && (platform == PrimarySurface || platform == SecondarySurface);
+        }
+
+        public bool StandingOn(ReactivePlatform platform)
+        {
+            return StandingOn(platform.transform) || platform.PlatformTrigger.HasController(this);
+        }
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
@@ -1613,50 +1750,6 @@ namespace Hedgehog.Core.Actors
         {
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
-
-        /// <summary>
-        /// Lets a platform's trigger know about a collision, if it has one.
-        /// </summary>
-        /// <param name="collision"></param>
-        /// <returns>Whether a platform trigger was notified.</returns>
-        private bool NotifyCollision(TerrainCastHit collision)
-        {
-            if (!collision || collision.Hit.transform == null) return false;
-
-            if (collision.Side == ControllerSide.Left)
-            {
-                LeftWall = collision.Hit.transform;
-                LeftWallHit = collision;
-            }
-            else if (collision.Side == ControllerSide.Right)
-            {
-                RightWall = collision.Hit.transform;
-                RightWallHit = collision;
-            }
-
-            OnCollide.Invoke(collision);
-            return TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
-        }
-
-        /// <summary>
-        /// Sets the controller's primary and secondary surfaces and triggers their platform events, if any.
-        /// </summary>
-        /// <param name="primarySurfaceHit">The new primary surface.</param>
-        /// <param name="secondarySurfaceHit">The new secondary surface.</param>
-        public bool SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
-        {
-            PrimarySurfaceHit = primarySurfaceHit;
-            PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Hit.transform : null;
-
-            SecondarySurfaceHit = secondarySurfaceHit;
-            SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Hit.transform : null;
-
-            var result = false;
-            result = TriggerUtility.NotifySurfaceCollision(PrimarySurface, primarySurfaceHit);
-                     TriggerUtility.NotifySurfaceCollision(SecondarySurface, secondarySurfaceHit);
-
-            return result;
-        }
         
         /// <summary>
         /// Casts from LedgeClimbHeight to the player's geet.
@@ -1698,7 +1791,8 @@ namespace Hedgehog.Core.Actors
                 {
                     return default(TerrainCastHit);
                 }
-                return DMath.Equalsf(cast.Hit.fraction, 0.0f) ? default(TerrainCastHit) : cast;
+                //return DMath.Equalsf(cast.Hit.fraction, 0.0f) ? default(TerrainCastHit) : cast;
+                return cast;
             }
             cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
                 ControllerSide.Bottom);
@@ -1707,11 +1801,12 @@ namespace Hedgehog.Core.Actors
             {
                 return default(TerrainCastHit);
             }
+            /*
             if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
             {
                 return default(TerrainCastHit);
             }
-
+            */
             return cast;
         }
         #endregion

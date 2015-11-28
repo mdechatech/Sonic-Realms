@@ -40,7 +40,6 @@ namespace Hedgehog.Level.Platforms.Movers
         public override void Start()
         {
             base.Start();
-
             ReconstructPath();
         }
 

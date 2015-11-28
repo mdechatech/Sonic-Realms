@@ -161,7 +161,7 @@ namespace Hedgehog.Core.Triggers
 
             // Invoke their "stay" events if they still fulfill CollidesWith.
             foreach (var collision in new List<TerrainCastHit>(Collisions))
-                if(CollidesWith(collision)) OnPlatformStay.Invoke(collision);
+                if(IsSolid(collision)) OnPlatformStay.Invoke(collision);
 
             // Make room in the collision list for the next update.
             _notifiedCollisions = new List<TerrainCastHit>();
@@ -211,7 +211,7 @@ namespace Hedgehog.Core.Triggers
         /// <param name="hit">The collision data.</param>
         public void NotifyCollision(HedgehogController controller, TerrainCastHit hit)
         {
-            if (!CollidesWith(hit))
+            if (!IsSolid(hit))
                 return;
             
             if (Collisions.All(castHit => castHit.Controller != controller))
@@ -267,7 +267,7 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="hit">The specified results of a terrain cast.</param>
         /// <returns></returns>
-        public bool CollidesWith(TerrainCastHit hit)
+        public bool IsSolid(TerrainCastHit hit)
         {
             if (!CollisionRules.Any()) return DefaultCollisionRule(hit);
             return CollisionRules.All(predicate => predicate(hit));

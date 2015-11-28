@@ -39,8 +39,9 @@ namespace Hedgehog.Level.Effects
         [Tooltip("The name of the path the controller is put onto.")]
         public string ToPath;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             MustBeGrounded = true;
             UndoIfGoingBackwards = true;
             FromPath = "Path 1";

@@ -34,8 +34,9 @@ namespace Hedgehog.Level.Objects
         /// </summary>
         protected float ActivationCountdown;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             ActivateDelay = 0.53333333f;
         }
 

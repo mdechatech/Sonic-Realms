@@ -22,8 +22,11 @@ namespace Hedgehog.Level.Objects.Editor
         {
             serializedObject.Update();
 
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "HitTrigger");
+
             if(targets.Count() <= 1)
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, "BouncySides");
+
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Power", "AccurateBounce", "LockControl");
 
             if (targets.Count() == 1)

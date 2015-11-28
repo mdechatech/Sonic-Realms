@@ -84,11 +84,14 @@ namespace Hedgehog.Core.Triggers
         public virtual void Start()
         {
             var collider2D = GetComponent<Collider2D>();
-            if (collider2D != null && GetComponentInParent<PlatformTrigger>() == null)
+            var platformTriggers = TriggerUtility.GetTriggers<PlatformTrigger>(transform);
+
+            if (collider2D != null && !platformTriggers.Any())
                 collider2D.isTrigger = true;
 
             if (!TriggerFromChildren)
                 return;
+
             foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
             {
                 if (childCollider.transform == transform ||
@@ -156,6 +159,7 @@ namespace Hedgehog.Core.Triggers
             {
                 if (isExit) return;
                 if (!CollidesWith(controller)) return;
+
                 Collisions[controller] = new List<Transform> {hit};
                 OnAreaEnter.Invoke(controller);
                 OnEnter.Invoke(controller);
@@ -181,6 +185,7 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
+
             NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
         }
@@ -189,6 +194,7 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
+
             NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
         }
@@ -197,6 +203,7 @@ namespace Hedgehog.Core.Triggers
         {
             var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
+
             NotifyCollision(controller, transform, true);
             BubbleEvent(controller, transform, true);
         }

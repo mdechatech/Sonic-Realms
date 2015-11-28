@@ -1,4 +1,5 @@
 ﻿using Hedgehog.Core.Actors;
+using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
 using UnityEngine;
@@ -56,19 +57,27 @@ namespace Hedgehog.Level.Objects
                  "not so much for vertical.")]
         public bool KeepOnGround;
 
+        /// <summary>
+        /// Name of an Animator trigger on the controller to set when it triggers the spring.
+        /// </summary>
+        [Tooltip("Name of an Animator trigger on the controller to set when it triggers the spring.")]
+        public string HitTrigger;
+
         public override bool ActivatesObject
         {
             get { return true; }
         }
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Power = 10.0f;
             BouncySides = ControllerSide.Right;
             AccurateBounce = false;
             LockControl = false;
             LockDuration = 0.266667f;
             KeepOnGround = false;
+            HitTrigger = "";
         }
 
         public override void Start()
@@ -83,7 +92,12 @@ namespace Hedgehog.Level.Objects
             if ((BouncySides & hitSide) == 0) return;
 
             if (LockControl) hit.Controller.GroundControl.Lock(LockDuration);
-            if (!KeepOnGround) hit.Controller.Detach();
+            if (!KeepOnGround)
+            {
+                hit.Controller.Detach();
+                hit.Controller.EndMove<Roll>();
+                hit.Controller.PerformMove<AirControl>(true);
+            }
 
             if (AccurateBounce)
             {
@@ -94,6 +108,14 @@ namespace Hedgehog.Level.Objects
             else
             {
                 hit.Controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
+            }
+
+            if (hit.Controller.Animator != null)
+            {
+                var logWarnings = hit.Controller.Animator.logWarnings;
+                if (!string.IsNullOrEmpty(HitTrigger))
+                    hit.Controller.Animator.SetTrigger(HitTrigger);
+                hit.Controller.Animator.logWarnings = logWarnings;
             }
 
             TriggerObject(hit.Controller);

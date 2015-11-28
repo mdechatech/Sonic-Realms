@@ -39,8 +39,9 @@ namespace Hedgehog.Level.Objects
             get { return true; }
         }
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Velocity = 10.0f;
             AccurateBounce = false;
             LockControl = false;

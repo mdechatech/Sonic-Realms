@@ -21,7 +21,7 @@ namespace Hedgehog.Core.Utils
             where TTrigger : BaseTrigger
         {
             return transform.GetComponentsInParent<TTrigger>().Where(trigger =>
-                trigger.transform == transform || trigger.TriggerFromChildren);
+                BaseTrigger.Selector(trigger, transform));
         }
 
         /// <summary>

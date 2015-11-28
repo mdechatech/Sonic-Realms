@@ -27,15 +27,16 @@ namespace Hedgehog.Level.Objects
             get { return true; }
         }
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Velocity = 7.2f;
             BoostBothWays = false;
         }
 
-        public override bool IsInsideArea(HedgehogController controller)
+        public override bool IsInside(HedgehogController controller)
         {
-            return base.IsInsideArea(controller) && controller.Grounded;
+            return base.IsInside(controller) && controller.Grounded;
         }
 
         public override void OnAreaEnter(HedgehogController controller)

@@ -107,7 +107,7 @@ namespace Hedgehog.Core.Utils
 
             if (platformTriggers.Any())
                 return
-                    platformTriggers.All(trigger => trigger.CollidesWith(terrainCastHit));
+                    platformTriggers.All(trigger => trigger.IsSolid(terrainCastHit));
 
             if (GetTriggers<AreaTrigger>(hit.transform).Any()) return false;
 
@@ -147,7 +147,7 @@ namespace Hedgehog.Core.Utils
             if (platformTriggers.Any())
             {
                 return platformTriggers.All(
-                           trigger => trigger.CollidesWith(new TerrainCastHit(hit, raycastSide, source)));
+                           trigger => trigger.IsSolid(new TerrainCastHit(hit, raycastSide, source)));
             }
 
             return false;

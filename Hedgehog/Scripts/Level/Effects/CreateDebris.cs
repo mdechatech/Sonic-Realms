@@ -39,8 +39,9 @@ namespace Hedgehog.Level.Effects
         [Tooltip("The sprite renderer to break up.")]
         public SpriteRenderer SpriteRenderer;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             UseSprite = true;
             SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
             DebrisSize = new Vector2(0.16f, 0.16f);

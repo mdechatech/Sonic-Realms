@@ -77,15 +77,26 @@ namespace Hedgehog.Core.Moves
         [Tooltip("Friction while rolling, in units per second squared.")]
         public float Friction;
         #endregion
+        #region Animation
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller is going uphill.
+        /// </summary>
+        [Tooltip("Name of an Animator bool set to whether the controller is going uphill.")]
+        public string UphillBool;
+        #endregion
         private bool _rightDirection;
 
         private float _originalSlopeGravity;
         private float _originalFriction;
         private float _originalDeceleration;
 
+        public bool Uphill;
+
         public override void Reset()
         {
             base.Reset();
+
+            UphillBool = "";
 
             ActivateAxis = "Vertical";
             RequireNegative = true;
@@ -103,6 +114,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Awake();
             _rightDirection = false;
+            Uphill = false;
         }
 
         public override void OnEnable()
@@ -141,6 +153,14 @@ namespace Hedgehog.Core.Moves
                 (!_rightDirection && Controller.GroundVelocity >= 0.0f && Controller.GroundVelocity < MinActivateSpeed);
         }
 
+        public override void SetAnimatorParameters()
+        {
+            base.SetAnimatorParameters();
+
+            if (!string.IsNullOrEmpty(UphillBool))
+                Controller.Animator.SetBool(UphillBool, Uphill);
+        }
+
         public override void OnActiveEnter(State previousState)
         {
             // Store original physics values to restore after leaving the roll
@@ -165,16 +185,18 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveFixedUpdate()
         {
-            bool uphill = false;
             if (Controller.GroundVelocity > 0.0f)
             {
-                uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0.0f, 180.0f);
+                Uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0.0f, 180.0f);
             } else if (Controller.GroundVelocity < 0.0f)
             {
-                uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 180.0f, 360.0f);
+                Uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 180.0f, 360.0f);
             }
 
-            Controller.SlopeGravity = uphill ? UphillGravity : DownhillGravity;
+            if (Controller.SlopeGravity != (Uphill ? UphillGravity : DownhillGravity))
+                _originalSlopeGravity = Controller.SlopeGravity;
+
+            Controller.SlopeGravity = Uphill ? UphillGravity : DownhillGravity;
         }
 
         public override void OnActiveExit()

@@ -25,8 +25,9 @@ namespace Hedgehog.Level.Effects
                  "do anything for controllers that don't have the move.")]
         public bool ForcePerform;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             MoveName = "Jump";
             ForcePerform = true;
         }

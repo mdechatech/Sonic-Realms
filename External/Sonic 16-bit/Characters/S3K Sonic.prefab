@@ -426,7 +426,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 63.6100006, y: -.0399999991, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
@@ -641,7 +641,7 @@ Animator:
   m_GameObject: {fileID: 151248}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fcaebaac4f50fef46ba85bbc817154ae, type: 2}
+  m_Controller: {fileID: 9100000, guid: a1adccd8e6ab9aa49ac792cf50d35656, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -666,6 +666,7 @@ MonoBehaviour:
   Paths:
   - Always Collide
   - Path 1
+  Reactives: []
   Sensors: {fileID: 11487382}
   GroundFriction: 1.67850006
   AirDrag: .148834303
@@ -827,6 +828,8 @@ MonoBehaviour:
   DownhillGravity: 11.25
   Deceleration: 4.5
   Friction: .845099986
+  UphillBool: 
+  Uphill: 0
 --- !u!114 &11436076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -865,7 +868,7 @@ MonoBehaviour:
   ActiveBool: Balancing
   AvailableBool: 
   MaxDistance: .100000001
-  AllowDuck: 0
+  AllowDuck: 1
   AllowLookUp: 0
   DistanceFloat: Edge Distance
   EdgeDistance: 0
@@ -890,6 +893,7 @@ MonoBehaviour:
   - {fileID: 11493570}
   - {fileID: 11477054}
   - {fileID: 11436076}
+  - {fileID: 11491536}
   ActiveMoves: []
   AvailableMoves: []
   UnavailableMoves: []
@@ -1063,6 +1067,14 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: 
   AvailableBool: 
+  InputAxisFloat: 
+  InputBool: 
+  AcceleratingBool: Accelerating
+  BrakingBool: Braking
+  TopSpeedBool: At Top Speed
+  TopSpeedPercentFloat: Top Speed %
+  ControlLockBool: 
+  ControlLockTimerFloat: 
   MovementAxis: Horizontal
   InvertAxis: 0
   Acceleration: 1.6875
@@ -1070,12 +1082,7 @@ MonoBehaviour:
   Deceleration: 18
   DecelerationLocked: 0
   TopSpeed: 3.5999999
-  InputAxisFloat: 
-  AcceleratingBool: Accelerating
-  BrakingBool: Braking
-  TopSpeedBool: At Top Speed
-  ControlLockBool: 
-  ControlLockTimerFloat: 
+  MinSlopeGravitySpeed: .100000001
   ControlLocked: 0
   ControlLockTimer: 0
 --- !u!114 &11491536

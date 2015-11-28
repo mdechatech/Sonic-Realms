@@ -35,8 +35,9 @@ namespace Hedgehog.Level.Platforms
         [SerializeField, Tooltip("Whether to account for friction.")]
         public bool AccountForFriction;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Acceleration = 5.0f;
             TargetVelocity = 5.0f;
             AccelerateBothWays = false;

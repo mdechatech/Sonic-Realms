@@ -47,7 +47,7 @@ namespace Hedgehog.Level.Areas
         /// </summary>
         [SerializeField] public bool AccountForFriction;
 
-        public void Reset()
+        public override void Reset()
         {
             Power = 25.0f;
             TargetVelocity = new Vector2(2.5f, 2.5f);

@@ -68,8 +68,9 @@ namespace Hedgehog.Level.Objects
         private Vector2[] _cachedPath;
         private float _cachedLength;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             TravelSpeed = 4.2f;
             ExitSpeed = 4.2f;
             Path = GetComponentInChildren<Collider2D>();

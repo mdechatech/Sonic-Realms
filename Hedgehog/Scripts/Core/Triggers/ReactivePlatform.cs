@@ -1,6 +1,8 @@
-﻿using Hedgehog.Core.Actors;
+﻿using System;
+using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Core.Triggers
 {
@@ -11,8 +13,36 @@ namespace Hedgehog.Core.Triggers
     [RequireComponent(typeof(PlatformTrigger))]
     public class ReactivePlatform : BaseReactive
     {
-        protected PlatformTrigger PlatformTrigger;
+        [HideInInspector]
+        public PlatformTrigger PlatformTrigger;
+
         protected bool RegisteredEvents;
+
+        /// <summary>
+        /// Name of an Animator trigger on the controller to set when it collides with the platform.
+        /// </summary>
+        public string CollidingTrigger;
+
+        /// <summary>
+        /// Name of an Animator bool on the controller to set to true while it's colliding with the platform.
+        /// </summary>
+        public string CollidingBool;
+
+        /// <summary>
+        /// Name of an Animator trigger on the controller to set when it stands on the platform.
+        /// </summary>
+        public string SurfaceTrigger;
+
+        /// <summary>
+        /// Name of an Animator bool on the controller to set to true while it's on the platform.
+        /// </summary>
+        public string SurfaceBool;
+
+        public override void Reset()
+        {
+            base.Reset();
+            CollidingTrigger = CollidingBool = SurfaceTrigger = SurfaceBool = "";
+        }
 
         public override void Awake()
         {
@@ -33,15 +63,15 @@ namespace Hedgehog.Core.Triggers
 
             if (RegisteredEvents) return;
 
-            PlatformTrigger.CollisionRules.Add(CollidesWith);
-            PlatformTrigger.OnPlatformEnter.AddListener(OnPlatformEnter);
-            PlatformTrigger.OnPlatformStay.AddListener(OnPlatformStay);
-            PlatformTrigger.OnPlatformExit.AddListener(OnPlatformExit);
+            PlatformTrigger.CollisionRules.Add(IsSolid);
+            PlatformTrigger.OnPlatformEnter.AddListener(NotifyPlatformEnter);
+            PlatformTrigger.OnPlatformStay.AddListener(NotifyPlatformStay);
+            PlatformTrigger.OnPlatformExit.AddListener(NotifyPlatformExit);
 
             PlatformTrigger.SurfaceRules.Add(IsOnSurface);
-            PlatformTrigger.OnSurfaceEnter.AddListener(OnSurfaceEnter);
-            PlatformTrigger.OnSurfaceStay.AddListener(OnSurfaceStay);
-            PlatformTrigger.OnSurfaceExit.AddListener(OnSurfaceExit);
+            PlatformTrigger.OnSurfaceEnter.AddListener(NotifySurfaceEnter);
+            PlatformTrigger.OnSurfaceStay.AddListener(NotifySurfaceStay);
+            PlatformTrigger.OnSurfaceExit.AddListener(NotifySurfaceExit);
 
             RegisteredEvents = true;
         }
@@ -50,15 +80,15 @@ namespace Hedgehog.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
-            PlatformTrigger.CollisionRules.Remove(CollidesWith);
-            PlatformTrigger.OnPlatformEnter.RemoveListener(OnPlatformEnter);
-            PlatformTrigger.OnPlatformStay.RemoveListener(OnPlatformStay);
-            PlatformTrigger.OnPlatformExit.RemoveListener(OnPlatformExit);
+            PlatformTrigger.CollisionRules.Remove(IsSolid);
+            PlatformTrigger.OnPlatformEnter.RemoveListener(NotifyPlatformEnter);
+            PlatformTrigger.OnPlatformStay.RemoveListener(NotifyPlatformStay);
+            PlatformTrigger.OnPlatformExit.RemoveListener(NotifyPlatformExit);
 
             PlatformTrigger.SurfaceRules.Remove(IsOnSurface);
-            PlatformTrigger.OnSurfaceEnter.RemoveListener(OnSurfaceEnter);
-            PlatformTrigger.OnSurfaceStay.RemoveListener(OnSurfaceStay);
-            PlatformTrigger.OnSurfaceExit.RemoveListener(OnSurfaceExit);
+            PlatformTrigger.OnSurfaceEnter.RemoveListener(NotifySurfaceEnter);
+            PlatformTrigger.OnSurfaceStay.RemoveListener(NotifySurfaceStay);
+            PlatformTrigger.OnSurfaceExit.RemoveListener(NotifySurfaceExit);
 
             RegisteredEvents = false;
         }
@@ -74,7 +104,7 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Default collision rule. Uses the trigger's default collision rule.
         /// </summary>
-        public virtual bool CollidesWith(TerrainCastHit hit)
+        public virtual bool IsSolid(TerrainCastHit hit)
         {
             return PlatformTrigger.DefaultCollisionRule(hit);
         }
@@ -109,5 +139,116 @@ namespace Hedgehog.Core.Triggers
         {
             
         }
+        #region Notify Methods
+        public void NotifyPlatformEnter(TerrainCastHit hit)
+        {
+            OnPlatformEnter(hit);
+            hit.Controller.NotifyReactiveEnter(this);
+
+            var controller = hit.Controller;
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            SetPlatformEnterParameters(controller);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+
+        protected virtual void SetPlatformEnterParameters(HedgehogController controller)
+        {
+            if (!string.IsNullOrEmpty(CollidingTrigger))
+                controller.Animator.SetTrigger(CollidingTrigger);
+
+            if (!string.IsNullOrEmpty(CollidingBool))
+                controller.Animator.SetBool(CollidingBool, true);
+        }
+
+        public void NotifyPlatformStay(TerrainCastHit hit)
+        {
+            // here for consistency, may add something later
+            OnPlatformStay(hit);
+        }
+
+        public void NotifyPlatformExit(TerrainCastHit hit)
+        {
+            OnPlatformExit(hit);
+            hit.Controller.NotifyReactiveExit(this);
+
+            var controller = hit.Controller;
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            SetPlatformExitParameters(controller);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+
+        protected virtual void SetPlatformExitParameters(HedgehogController controller)
+        {
+            if (!string.IsNullOrEmpty(CollidingBool))
+                controller.Animator.SetBool(CollidingBool, false);
+        }
+
+        public void NotifySurfaceEnter(TerrainCastHit hit)
+        {
+            OnSurfaceEnter(hit);
+            hit.Controller.NotifyReactiveEnter(this);
+
+            var controller = hit.Controller;
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            SetSurfaceEnterParameters(controller);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+
+        protected virtual void SetSurfaceEnterParameters(HedgehogController controller)
+        {
+            if (!string.IsNullOrEmpty(SurfaceTrigger))
+                controller.Animator.SetTrigger(SurfaceTrigger);
+
+            if (!string.IsNullOrEmpty(SurfaceBool))
+                controller.Animator.SetBool(SurfaceBool, true);
+        }
+
+        public void NotifySurfaceStay(TerrainCastHit hit)
+        {
+            // here for consistency, may add something later
+            OnSurfaceStay(hit);
+        }
+
+        public void NotifySurfaceExit(TerrainCastHit hit)
+        {
+            OnSurfaceExit(hit);
+            hit.Controller.NotifyReactiveExit(this);
+
+            var controller = hit.Controller;
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            SetSurfaceExitParameters(controller);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+
+        protected virtual void SetSurfaceExitParameters(HedgehogController controller)
+        {
+            if (!string.IsNullOrEmpty(SurfaceBool))
+                controller.Animator.SetBool(SurfaceBool, false);
+        }
+        #endregion
     }
 }

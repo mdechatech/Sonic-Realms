@@ -34,24 +34,24 @@ namespace Hedgehog.Level.Areas
 
         private Collider2D _collider2D;
 
-        public void Reset()
+        public override void Reset()
         {
             Viscosity = 2.0f;
             Buoyancy = 0.0f;
             MinFloatSpeed = 5.0f;
         }
 
-        public override bool IsInsideArea(HedgehogController controller)
+        public override bool IsInside(HedgehogController controller)
         {
-            return base.IsInsideArea(controller) && !PlatformTrigger.HasController(controller);
+            return base.IsInside(controller) && !PlatformTrigger.HasController(controller);
         }
 
         // The water is a surface if the player is upright, on top of it, grounded, not already submerged,
         // and running quickly enough.
-        public override bool CollidesWith(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit hit)
         {
             if (hit.Controller == null) return false;
-            return base.CollidesWith(hit) &&
+            return base.IsSolid(hit) &&
                    (hit.Side & ControllerSide.Bottom) > 0 &&
                    hit.Hit.fraction > 0.0f &&
                    hit.Controller.Grounded &&

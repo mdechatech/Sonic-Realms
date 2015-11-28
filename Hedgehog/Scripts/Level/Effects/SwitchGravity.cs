@@ -69,8 +69,9 @@ namespace Hedgehog.Level.Effects
 
         private Dictionary<int, GravityData> _oldGravities;
 
-        public void Reset()
+        public override void Reset()
         {
+            base.Reset();
             Direction = 90.0f;
             ModifyDirection = true;
             AirStrength = GroundStrength = 0.0f;

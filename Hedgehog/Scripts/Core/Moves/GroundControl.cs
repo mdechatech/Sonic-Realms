@@ -5,7 +5,62 @@ namespace Hedgehog.Core.Moves
 {
     public class GroundControl : Move
     {
-        #region Control Fields
+        #region Animation
+        /// <summary>
+        /// Name of an Animator float set to magnitude of ground control input.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator float set to magnitude of ground control input.")]
+        public string InputAxisFloat;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether there is any input.
+        /// </summary>
+        [Tooltip("Name of an Animator bool set to whether there is any input.")]
+        public string InputBool;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller is accelerating.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator bool set to whether the controller is accelerating.")]
+        public string AcceleratingBool;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller is braking.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
+        public string BrakingBool;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether running at top speed or faster.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator bool set to whether running at top speed or faster.")]
+        public string TopSpeedBool;
+
+        /// <summary>
+        /// Name of an Animator float set to absolute ground speed divided by top speed.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to absolute ground speed divided by top speed.")]
+        public string TopSpeedPercentFloat;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether the control lock is on.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator bool set to whether the control lock is on.")]
+        public string ControlLockBool;
+
+        /// <summary>
+        /// Name of an Animator float set to the control lock timer.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Name of an Animator float set to the control lock timer.")]
+        public string ControlLockTimerFloat;
+        #endregion
+        #region Control
         /// <summary>
         /// The name of the input axis.
         /// </summary>
@@ -20,7 +75,7 @@ namespace Hedgehog.Core.Moves
         [Tooltip("Whether to invert the axis input.")]
         public bool InvertAxis;
         #endregion
-        #region Physics Fields
+        #region Physics
         /// <summary>
         /// Ground acceleration in units per second squared.
         /// </summary>
@@ -60,55 +115,7 @@ namespace Hedgehog.Core.Moves
                  "steep slopes.")]
         public float MinSlopeGravitySpeed;
         #endregion
-        #region Animation Fields
-        /// <summary>
-        /// Name of an Animator float set to magnitude of ground control input.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to magnitude of ground control input.")]
-        public string InputAxisFloat;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether there is any input.
-        /// </summary>
-        [Tooltip("Name of an Animator bool set to whether there is any input.")]
-        public string InputBool;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether the controller is accelerating.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether the controller is accelerating.")]
-        public string AcceleratingBool;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether the controller is braking.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
-        public string BrakingBool;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether running at top speed or faster.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether running at top speed or faster.")]
-        public string TopSpeedBool;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether the control lock is on.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether the control lock is on.")]
-        public string ControlLockBool;
-
-        /// <summary>
-        /// Name of an Animator float set to the control lock timer.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to the control lock timer.")]
-        public string ControlLockTimerFloat;
-        #endregion
+        
         #region Properties
         /// <summary>
         /// Whether the controller is accelerating.
@@ -166,7 +173,7 @@ namespace Hedgehog.Core.Moves
 
             InputAxisFloat = InputBool = AcceleratingBool =
                 BrakingBool = TopSpeedBool = ControlLockBool =
-                ControlLockTimerFloat = "";
+                ControlLockTimerFloat = TopSpeedPercentFloat = "";
 
             Acceleration = 1.6875f;
             AccelerationLocked = false;
@@ -276,6 +283,9 @@ namespace Hedgehog.Core.Moves
 
             if(!string.IsNullOrEmpty(TopSpeedBool))
                 Animator.SetBool(TopSpeedBool, AtTopSpeed);
+
+            if(!string.IsNullOrEmpty(TopSpeedPercentFloat))
+                Animator.SetFloat(TopSpeedPercentFloat, Mathf.Abs(Controller.GroundVelocity)/TopSpeed);
 
             if(!string.IsNullOrEmpty(ControlLockBool))
                 Animator.SetBool(ControlLockBool, ControlLocked);

@@ -216,7 +216,7 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.LabelField("Collision", headerStyle);
 
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
-                    "Paths", "Grounded", "LeftWall", "RightWall");
+                    "Paths", "Reactives", "Grounded", "LeftWall", "RightWall");
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);

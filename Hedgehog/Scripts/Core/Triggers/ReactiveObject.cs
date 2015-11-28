@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Hedgehog.Core.Actors;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Core.Triggers
 {
@@ -11,7 +13,9 @@ namespace Hedgehog.Core.Triggers
     [RequireComponent(typeof(ObjectTrigger))]
     public class ReactiveObject : BaseReactive
     {
-        protected ObjectTrigger ObjectTrigger;
+        [HideInInspector]
+        public ObjectTrigger ObjectTrigger;
+
         protected bool RegisteredEvents;
 
         public override void Awake()
@@ -50,9 +54,9 @@ namespace Hedgehog.Core.Triggers
 
             if (RegisteredEvents) return;
 
-            ObjectTrigger.OnActivateEnter.AddListener(OnActivateEnter);
-            ObjectTrigger.OnActivateStay.AddListener(OnActivateStay);
-            ObjectTrigger.OnActivateExit.AddListener(OnActivateExit);
+            ObjectTrigger.OnActivateEnter.AddListener(NotifyActivateEnter);
+            ObjectTrigger.OnActivateStay.AddListener(NotifyActivateStay);
+            ObjectTrigger.OnActivateExit.AddListener(NotifyActivateExit);
 
             RegisteredEvents = true;
         }
@@ -61,9 +65,9 @@ namespace Hedgehog.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
-            ObjectTrigger.OnActivateEnter.RemoveListener(OnActivateEnter);
-            ObjectTrigger.OnActivateStay.RemoveListener(OnActivateStay);
-            ObjectTrigger.OnActivateExit.RemoveListener(OnActivateExit);
+            ObjectTrigger.OnActivateEnter.RemoveListener(NotifyActivateEnter);
+            ObjectTrigger.OnActivateStay.RemoveListener(NotifyActivateStay);
+            ObjectTrigger.OnActivateExit.RemoveListener(NotifyActivateExit);
 
             RegisteredEvents = false;
         }
@@ -82,5 +86,24 @@ namespace Hedgehog.Core.Triggers
         {
             
         }
+        #region Notify Methods
+        public void NotifyActivateEnter(HedgehogController controller)
+        {
+            controller.NotifyReactiveEnter(this);
+            OnActivateEnter(controller);
+        }
+
+        public void NotifyActivateStay(HedgehogController controller)
+        {
+            // here for consistency, may add something later
+            OnActivateStay(controller);
+        }
+
+        public void NotifyActivateExit(HedgehogController controller)
+        {
+            controller.NotifyReactiveExit(this);
+            OnActivateExit(controller);
+        }
+        #endregion
     }
 }
