@@ -79,23 +79,26 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [Tooltip("Name of an Animator trigger set when the move is activated.")]
         public string ActiveTrigger;
+        protected int ActiveTriggerHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether the move is active.
         /// </summary>
         [Tooltip("Name of an Animator bool set to whether the move is active.")]
         public string ActiveBool;
+        protected int ActiveBoolHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether the move is available.
         /// </summary>
         [Tooltip("Name of an Animator bool set to whether the move is available.")]
         public string AvailableBool;
+        protected int AvailableBoolHash;
         #endregion
 
         public virtual void Reset()
         {
-            ActiveTrigger = AvailableBool = "";
+            ActiveTrigger = ActiveBool = AvailableBool = "";
         }
 
         public virtual void Awake()
@@ -107,6 +110,10 @@ namespace Hedgehog.Core.Moves
             CurrentState = State.Unavailable;
             InputActivated = false;
             InputEnabled = true;
+
+            ActiveTriggerHash = ActiveTrigger == null ? 0 : Animator.StringToHash(ActiveTrigger);
+            ActiveBoolHash = ActiveBool == null ? 0 : Animator.StringToHash(ActiveBool);
+            AvailableBoolHash = AvailableBool == null ? 0 : Animator.StringToHash(AvailableBool);
 
             OnActive = OnActive ?? new UnityEvent();
             OnEnd = OnEnd ?? new UnityEvent();
@@ -140,11 +147,11 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         public virtual void SetAnimatorParameters()
         {
-            if(!string.IsNullOrEmpty(ActiveBool))
-                Animator.SetBool(ActiveBool, CurrentState == State.Active);
+            if(ActiveBoolHash != 0)
+                Animator.SetBool(ActiveBoolHash, CurrentState == State.Active);
 
-            if(!string.IsNullOrEmpty(AvailableBool))
-                Animator.SetBool(AvailableBool, CurrentState == State.Available);
+            if(AvailableBoolHash != 0)
+                Animator.SetBool(AvailableBoolHash, CurrentState == State.Available);
         }
 
         /// <summary>
@@ -182,8 +189,8 @@ namespace Hedgehog.Core.Moves
             if (Animator == null)
                 return true;
 
-            if (CurrentState == State.Active && !string.IsNullOrEmpty(ActiveTrigger))
-                Animator.SetTrigger(ActiveTrigger);
+            if (CurrentState == State.Active && ActiveTriggerHash != 0)
+                Animator.SetTrigger(ActiveTriggerHash);
 
             return true;
         }

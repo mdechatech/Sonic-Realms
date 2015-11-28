@@ -741,6 +741,7 @@ MonoBehaviour:
   GroundedBool: Grounded
   GroundSpeedFloat: 
   AbsGroundSpeedFloat: Absolute Ground Speed
+  GroundSpeedBool: Ground Moving
   SurfaceAngleFloat: 
 --- !u!114 &11416224
 MonoBehaviour:
@@ -1071,10 +1072,7 @@ MonoBehaviour:
   InputBool: 
   AcceleratingBool: Accelerating
   BrakingBool: Braking
-  TopSpeedBool: At Top Speed
   TopSpeedPercentFloat: Top Speed %
-  ControlLockBool: 
-  ControlLockTimerFloat: 
   MovementAxis: Horizontal
   InvertAxis: 0
   Acceleration: 1.6875

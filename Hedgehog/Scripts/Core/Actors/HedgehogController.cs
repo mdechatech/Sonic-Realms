@@ -483,42 +483,49 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [Tooltip("Name of an Animator trigger set when the controller falls off a surface.")]
         public string DetachTrigger;
+        protected int DetachTriggerHash;
 
         /// <summary>
         /// Name of an Animator trigger set when the controller lands on a surface.
         /// </summary>
         [Tooltip("Name of an Animator trigger set when the controller lands on a surface.")]
         public string AttachTrigger;
+        protected int AttachTriggerHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether the controller is facing forward.
         /// </summary>
         [Tooltip("Name of an Animator bool set to whether the controller is facing forward.")]
         public string FacingForwardBool;
+        protected int FacingForwardBoolHash;
 
         /// <summary>
         /// Name of an Animator float set to horizontal air speed, in units per second.
         /// </summary>
         [Tooltip("Name of an Animator float set to horizontal air speed, in units per second.")]
         public string AirSpeedXFloat;
+        protected int AirSpeedXFloatHash;
 
         /// <summary>
         /// Name of an Animator float set to vertical air speed, in units per second.
         /// </summary>
         [Tooltip("Name of an Animator float set to vertical air speed, in units per second.")]
         public string AirSpeedYFloat;
+        protected int AirSpeedYFloatHash;
 
         /// <summary>
         /// Name of Animator float set to whether the controller is grounded.
         /// </summary>
         [Tooltip("Name of Animator float set to whether the controller is grounded.")]
         public string GroundedBool;
+        protected int GroundedBoolHash;
 
         /// <summary>
         /// Name of an Animator float set to the controller's ground speed, in units per second.
         /// </summary>
         [Tooltip("Name of an Animator float set to the controller's ground speed, in units per second.")]
         public string GroundSpeedFloat;
+        protected int GroundSpeedFloatHash;
 
         /// <summary>
         /// Name of an Animator float set to the absolute value of the controller's ground speed, in units per second.
@@ -526,13 +533,21 @@ namespace Hedgehog.Core.Actors
         [Tooltip("Name of an Animator float set to the absolute value of the controller's ground speed, in units per " +
                  "second.")]
         public string AbsGroundSpeedFloat;
+        protected int AbsGroundSpeedFloatHash;
+
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller has any ground speed.
+        /// </summary>
+        [Tooltip("Name of an Animator bool set to whether the controller has any ground speed.")]
+        public string GroundSpeedBool;
+        protected int GroundSpeedBoolHash;
 
         /// <summary>
         /// Name of an Animator float set to the surface angle, in degrees.
         /// </summary>
         [Tooltip("Name of an Animator float set to the surface angle, in degrees.")]
         public string SurfaceAngleFloat;
-
+        protected int SurfaceAngleFloatHash;
         #endregion
 
         #region Lifecycle Functions
@@ -570,6 +585,10 @@ namespace Hedgehog.Core.Actors
 
             AutoFlip = true;
             AutoRotate = true;
+
+            DetachTrigger = AttachTrigger = FacingForwardBool = AirSpeedXFloat =
+                AirSpeedYFloat = GroundedBool = GroundSpeedFloat = AbsGroundSpeedFloat = 
+                SurfaceAngleFloat = GroundSpeedBool = "";
         }
 
         public void Awake()
@@ -594,6 +613,19 @@ namespace Hedgehog.Core.Actors
             OnSteepDetach = OnSteepDetach ?? new UnityEvent();
             OnReactiveEnter = OnReactiveEnter ?? new ReactiveEvent();
             OnReactiveExit = OnReactiveExit ?? new ReactiveEvent();
+
+            if (Animator == null) return;
+
+            DetachTriggerHash = string.IsNullOrEmpty(DetachTrigger) ? 0 : Animator.StringToHash(DetachTrigger);
+            AttachTriggerHash = string.IsNullOrEmpty(AttachTrigger) ? 0 : Animator.StringToHash(AttachTrigger);
+            FacingForwardBoolHash = string.IsNullOrEmpty(FacingForwardBool) ? 0 : Animator.StringToHash(FacingForwardBool);
+            AirSpeedXFloatHash = string.IsNullOrEmpty(AirSpeedXFloat) ? 0 : Animator.StringToHash(AirSpeedXFloat);
+            AirSpeedYFloatHash = string.IsNullOrEmpty(AirSpeedYFloat) ? 0 : Animator.StringToHash(AirSpeedYFloat);
+            GroundedBoolHash = string.IsNullOrEmpty(GroundedBool) ? 0 : Animator.StringToHash(GroundedBool);
+            GroundSpeedFloatHash = string.IsNullOrEmpty(GroundSpeedFloat) ? 0 : Animator.StringToHash(GroundSpeedFloat);
+            GroundSpeedBoolHash = string.IsNullOrEmpty(GroundSpeedBool) ? 0 : Animator.StringToHash(GroundSpeedBool);
+            AbsGroundSpeedFloatHash = string.IsNullOrEmpty(AbsGroundSpeedFloat) ? 0 : Animator.StringToHash(AbsGroundSpeedFloat);
+            SurfaceAngleFloatHash = string.IsNullOrEmpty(SurfaceAngleFloat) ? 0 : Animator.StringToHash(SurfaceAngleFloat);
         }
 
         public void Update()
@@ -773,26 +805,29 @@ namespace Hedgehog.Core.Actors
             if (Animator == null)
                 return;
 
-            if(!string.IsNullOrEmpty(FacingForwardBool))
-                Animator.SetBool(FacingForwardBool, FacingForward);
+            if(FacingForwardBoolHash != 0)
+                Animator.SetBool(FacingForwardBoolHash, FacingForward);
 
-            if(!string.IsNullOrEmpty(AirSpeedXFloat))
-                Animator.SetFloat(AirSpeedXFloat, Velocity.x);
+            if(AirSpeedXFloatHash != 0)
+                Animator.SetFloat(AirSpeedXFloatHash, Velocity.x);
 
-            if(!string.IsNullOrEmpty(AirSpeedYFloat))
-                Animator.SetFloat(AirSpeedYFloat, Velocity.y);
+            if(AirSpeedYFloatHash != 0)
+                Animator.SetFloat(AirSpeedYFloatHash, Velocity.y);
 
-            if(!string.IsNullOrEmpty(GroundedBool))
-                Animator.SetBool(GroundedBool, Grounded);
+            if(GroundedBoolHash != 0)
+                Animator.SetBool(GroundedBoolHash, Grounded);
 
-            if(!string.IsNullOrEmpty(GroundSpeedFloat))
-                Animator.SetFloat(GroundSpeedFloat, GroundVelocity);
+            if(GroundSpeedFloatHash != 0)
+                Animator.SetFloat(GroundSpeedFloatHash, GroundVelocity);
 
-            if(!string.IsNullOrEmpty(AbsGroundSpeedFloat))
-                Animator.SetFloat(AbsGroundSpeedFloat, Mathf.Abs(GroundVelocity));
+            if(GroundSpeedBoolHash != 0)
+                Animator.SetBool(GroundSpeedBool, GroundVelocity != 0.0f);
 
-            if(!string.IsNullOrEmpty(SurfaceAngleFloat))
-                Animator.SetFloat(SurfaceAngleFloat, SurfaceAngle);
+            if(AbsGroundSpeedFloatHash != 0)
+                Animator.SetFloat(AbsGroundSpeedFloatHash, Mathf.Abs(GroundVelocity));
+
+            if(SurfaceAngleFloatHash != 0)
+                Animator.SetFloat(SurfaceAngleFloatHash, SurfaceAngle);
         }
 
         /// <summary>
@@ -1609,8 +1644,8 @@ namespace Hedgehog.Core.Actors
             if (Grounded)
             {
                 OnDetach.Invoke();
-                if (Animator != null && !string.IsNullOrEmpty(DetachTrigger))
-                    Animator.SetTrigger(DetachTrigger);
+                if (Animator != null && DetachTriggerHash != 0)
+                    Animator.SetTrigger(DetachTriggerHash);
             } 
 
             Grounded = false;
@@ -1637,8 +1672,8 @@ namespace Hedgehog.Core.Actors
             if (!Grounded)
             {
                 OnAttach.Invoke();
-                if (Animator != null && !string.IsNullOrEmpty(AttachTrigger))
-                    Animator.SetTrigger(AttachTrigger);
+                if (Animator != null && AttachTriggerHash != 0)
+                    Animator.SetTrigger(AttachTriggerHash);
             }
 
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);

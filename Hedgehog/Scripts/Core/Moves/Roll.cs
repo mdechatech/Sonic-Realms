@@ -83,6 +83,7 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         [Tooltip("Name of an Animator bool set to whether the controller is going uphill.")]
         public string UphillBool;
+        protected int UphillBoolHash;
         #endregion
         private bool _rightDirection;
 
@@ -115,6 +116,8 @@ namespace Hedgehog.Core.Moves
             base.Awake();
             _rightDirection = false;
             Uphill = false;
+
+            UphillBoolHash = string.IsNullOrEmpty(UphillBool) ? 0 : Animator.StringToHash(UphillBool);
         }
 
         public override void OnEnable()

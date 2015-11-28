@@ -21,7 +21,6 @@ namespace Hedgehog.Core.Moves
 
         #endregion
         #region Physics Fields
-
         /// <summary>
         /// Air acceleration in units per second squared.
         /// </summary>

@@ -34,6 +34,7 @@ namespace Hedgehog.Core.Moves
         /// of the platform, or 0 if inactive.
         /// </summary>
         public string DistanceFloat;
+        protected int DistanceFloatHash;
         #endregion
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Awake();
             EdgeDistance = 0.0f;
+            DistanceFloatHash = string.IsNullOrEmpty(DistanceFloat) ? 0 : Animator.StringToHash(DistanceFloat);
         }
 
         public override void Start()
@@ -86,8 +88,8 @@ namespace Hedgehog.Core.Moves
         public override void SetAnimatorParameters()
         {
             base.SetAnimatorParameters();
-            if(!string.IsNullOrEmpty(DistanceFloat))
-                Animator.SetFloat(DistanceFloat, EdgeDistance);
+            if(DistanceFloatHash != 0)
+                Animator.SetFloat(DistanceFloatHash, EdgeDistance);
         }
 
         public override bool Available()

@@ -32,7 +32,6 @@ namespace Hedgehog.Core.Triggers
         /// or area trigger, an area trigger is automatically added. If there is already a platform
         /// trigger, the object is activated when it is landed on.
         /// </summary>
-        [SerializeField]
         [Tooltip("Whether to automatically trigger when the object is touched.")]
         public bool AutoActivate;
 
@@ -43,28 +42,24 @@ namespace Hedgehog.Core.Triggers
         /// Whether the trigger can be activated if it is already on. If true, OnActivateEnter and
         /// OnActivateExit will be invoked for any number of objects that trigger it.
         /// </summary>
-        [SerializeField]
         [Tooltip("Whether the trigger can be activated if it is already on.")]
         public bool AllowReactivation;
 
         /// <summary>
         /// Invoked when the object is activated. This will not occur if the object is already activated.
         /// </summary>
-        [SerializeField]
         public ObjectEvent OnActivateEnter;
 
         /// <summary>
         /// Invoked while the object is activated, each FixedUpdate. This will occur for every controller
         /// that is activating it.
         /// </summary>
-        [SerializeField]
         public ObjectEvent OnActivateStay;
 
         /// <summary>
         /// Invoked when the object is deactivated. This will not occur if the object still has something
         /// activating it.
         /// </summary>
-        [SerializeField]
         public ObjectEvent OnActivateExit;
 
         [HideInInspector]
@@ -74,23 +69,22 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Reference to the target animator.
         /// </summary>
-        [SerializeField]
         [Tooltip("Reference to the target animator.")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when the object is activated.
         /// </summary>
-        [SerializeField]
         [Tooltip("Name of an Animator trigger set when the object is activated.")]
         public string ActivatedTrigger;
+        protected int ActivatedTriggerHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether the object is activated.
         /// </summary>
-        [SerializeField]
         [Tooltip("Name of an Animator bool set to whether the object is activated.")]
         public string ActivatedBool;
+        protected int ActivatedBoolHash;
         #endregion
 
         public override void Reset()
@@ -119,6 +113,10 @@ namespace Hedgehog.Core.Triggers
             Activated = false;
 
             Animator = Animator ?? GetComponentInChildren<Animator>();
+            if (Animator == null) return;
+
+            ActivatedTriggerHash = string.IsNullOrEmpty(ActivatedTrigger) ? 0 : Animator.StringToHash(ActivatedTrigger);
+            ActivatedBoolHash = string.IsNullOrEmpty(ActivatedBool) ? 0 : Animator.StringToHash(ActivatedBool);
         }
 
         public void Start()
@@ -141,8 +139,8 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
-            if (Animator != null && ActivatedBool.Length > 0)
-                Animator.SetBool(ActivatedBool, Activated);
+            if (Animator != null && ActivatedBoolHash != 0)
+                Animator.SetBool(ActivatedBoolHash, Activated);
 
             if (Collisions.Count <= 0) return;
 
@@ -166,8 +164,8 @@ namespace Hedgehog.Core.Triggers
             OnActivateEnter.Invoke(controller);
             BubbleEvent(controller);
 
-            if (Animator != null && ActivatedTrigger.Length > 0)
-                Animator.SetTrigger(ActivatedTrigger);
+            if (Animator != null && ActivatedTriggerHash != 0)
+                Animator.SetTrigger(ActivatedTriggerHash);
         }
 
         /// <summary>

@@ -9,56 +9,37 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator float set to magnitude of ground control input.
         /// </summary>
-        [SerializeField]
         [Tooltip("Name of an Animator float set to magnitude of ground control input.")]
         public string InputAxisFloat;
+        protected int InputAxisFloatHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether there is any input.
         /// </summary>
         [Tooltip("Name of an Animator bool set to whether there is any input.")]
         public string InputBool;
+        protected int InputBoolHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether the controller is accelerating.
         /// </summary>
-        [SerializeField]
         [Tooltip("Name of an Animator bool set to whether the controller is accelerating.")]
         public string AcceleratingBool;
+        protected int AcceleratingBoolHash;
 
         /// <summary>
         /// Name of an Animator bool set to whether the controller is braking.
         /// </summary>
-        [SerializeField]
         [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
         public string BrakingBool;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether running at top speed or faster.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether running at top speed or faster.")]
-        public string TopSpeedBool;
+        protected int BrakingBoolHash;
 
         /// <summary>
         /// Name of an Animator float set to absolute ground speed divided by top speed.
         /// </summary>
         [Tooltip("Name of an Animator float set to absolute ground speed divided by top speed.")]
         public string TopSpeedPercentFloat;
-
-        /// <summary>
-        /// Name of an Animator bool set to whether the control lock is on.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator bool set to whether the control lock is on.")]
-        public string ControlLockBool;
-
-        /// <summary>
-        /// Name of an Animator float set to the control lock timer.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Name of an Animator float set to the control lock timer.")]
-        public string ControlLockTimerFloat;
+        protected int TopSpeedPercentFloatHash;
         #endregion
         #region Control
         /// <summary>
@@ -172,8 +153,7 @@ namespace Hedgehog.Core.Moves
             InvertAxis = false;
 
             InputAxisFloat = InputBool = AcceleratingBool =
-                BrakingBool = TopSpeedBool = ControlLockBool =
-                ControlLockTimerFloat = TopSpeedPercentFloat = "";
+                BrakingBool = TopSpeedPercentFloat = "";
 
             Acceleration = 1.6875f;
             AccelerationLocked = false;
@@ -190,6 +170,12 @@ namespace Hedgehog.Core.Moves
 
             ControlLocked = false;
             ControlLockTimer = 0.0f;
+
+            InputAxisFloatHash = string.IsNullOrEmpty(InputAxisFloat) ? 0 : Animator.StringToHash(InputAxisFloat);
+            InputBoolHash = string.IsNullOrEmpty(InputBool) ? 0 : Animator.StringToHash(InputBool);
+            AcceleratingBoolHash = string.IsNullOrEmpty(AcceleratingBool) ? 0 : Animator.StringToHash(AcceleratingBool);
+            BrakingBoolHash = string.IsNullOrEmpty(BrakingBool) ? 0 : Animator.StringToHash(BrakingBool);
+            TopSpeedPercentFloatHash = string.IsNullOrEmpty(TopSpeedPercentFloat) ? 0 : Animator.StringToHash(TopSpeedPercentFloat);
         }
 
         public override void OnEnable()
@@ -269,29 +255,20 @@ namespace Hedgehog.Core.Moves
 
         public override void SetAnimatorParameters()
         {
-            if(!string.IsNullOrEmpty(InputAxisFloat))
-                Animator.SetFloat(InputAxisFloat, _axis);
+            if(InputAxisFloatHash != 0)
+                Animator.SetFloat(InputAxisFloatHash, _axis);
 
-            if(!string.IsNullOrEmpty(InputBool))
-                Animator.SetBool(InputBool, !DMath.Equalsf(_axis));
+            if(InputBoolHash != 0)
+                Animator.SetBool(InputBoolHash, !DMath.Equalsf(_axis));
 
-            if(!string.IsNullOrEmpty(AcceleratingBool))
-                Animator.SetBool(AcceleratingBool, Accelerating);
+            if(AcceleratingBoolHash != 0)
+                Animator.SetBool(AcceleratingBoolHash, Accelerating);
 
-            if(!string.IsNullOrEmpty(BrakingBool))
-                Animator.SetBool(BrakingBool, Braking);
+            if(BrakingBoolHash != 0)
+                Animator.SetBool(BrakingBoolHash, Braking);
 
-            if(!string.IsNullOrEmpty(TopSpeedBool))
-                Animator.SetBool(TopSpeedBool, AtTopSpeed);
-
-            if(!string.IsNullOrEmpty(TopSpeedPercentFloat))
-                Animator.SetFloat(TopSpeedPercentFloat, Mathf.Abs(Controller.GroundVelocity)/TopSpeed);
-
-            if(!string.IsNullOrEmpty(ControlLockBool))
-                Animator.SetBool(ControlLockBool, ControlLocked);
-
-            if(!string.IsNullOrEmpty(ControlLockTimerFloat))
-                Animator.SetFloat(ControlLockTimerFloat, ControlLockTimer);
+            if(TopSpeedPercentFloatHash != 0)
+                Animator.SetFloat(TopSpeedPercentFloatHash, Mathf.Abs(Controller.GroundVelocity)/TopSpeed);
         }
 
         public void OnSteepDetach()

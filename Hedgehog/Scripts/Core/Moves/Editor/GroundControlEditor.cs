@@ -10,8 +10,7 @@ namespace Hedgehog.Core.Moves.Editor
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                     "InputAxisFloat", "InputBool", "AcceleratingBool",
-                    "BrakingBool", "ControlLockBool", "ControlLockTimerFloat",
-                    "TopSpeedBool", "TopSpeedPercentFloat");
+                    "BrakingBool", "TopSpeedPercentFloat");
             base.DrawAnimationProperties();
         }
 

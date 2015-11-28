@@ -191,7 +191,8 @@ namespace Hedgehog.Core.Actors.Editor
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                     "AttachTrigger", "DetachTrigger", "AirSpeedXFloat",
                     "AirSpeedYFloat", "GroundedBool", "FacingForwardBool",
-                    "GroundSpeedFloat", "AbsGroundSpeedFloat", "SurfaceAngleFloat");
+                    "GroundSpeedFloat", "GroundSpeedBool", "AbsGroundSpeedFloat",
+                    "SurfaceAngleFloat");
             }
             #endregion
             #region Events Foldout
