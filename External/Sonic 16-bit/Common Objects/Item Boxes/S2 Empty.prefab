@@ -285,6 +285,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a559950131d2045bf2c80c2cf6408a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   ActivateDelay: .533333302
   BrokenTrigger: Broken
 --- !u!114 &11494046

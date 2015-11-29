@@ -113,8 +113,11 @@ namespace Hedgehog.Level.Objects
             if (hit.Controller.Animator != null)
             {
                 var logWarnings = hit.Controller.Animator.logWarnings;
+                hit.Controller.Animator.logWarnings = false;
+
                 if (!string.IsNullOrEmpty(HitTrigger))
                     hit.Controller.Animator.SetTrigger(HitTrigger);
+
                 hit.Controller.Animator.logWarnings = logWarnings;
             }
 

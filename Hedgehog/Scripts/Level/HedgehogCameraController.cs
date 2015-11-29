@@ -197,6 +197,7 @@ namespace Hedgehog.Level
 
         public void Start()
         {
+            // Try and find a target if one isn't specified
             if (Target == null)
             {
                 Target = FindObjectOfType<HedgehogController>();
@@ -235,6 +236,7 @@ namespace Hedgehog.Level
         /// <param name="previousTarget">The camera's previous target. Nullable.</param>
         public void OnChangeTarget(HedgehogController previousTarget)
         {
+            // Add listeners for look up and duck
             Target.MoveManager.OnPerform.AddListener(OnPerformMove);
             Target.MoveManager.OnEnd.AddListener(OnEndMove);
 
@@ -243,10 +245,12 @@ namespace Hedgehog.Level
             _previousTargetPosition = Target.transform.position;
             _previousTarget = Target;
 
+            // Cache moves for speed
             LookUp = Target.GetMove<LookUp>();
             Duck = Target.GetMove<Duck>();
             Spindash = Target.GetMove<Spindash>();
 
+            // Clean up listeners from the last target
             if (previousTarget == null)
                 return;
             previousTarget.MoveManager.OnPerform.RemoveListener(OnPerformMove);
@@ -273,7 +277,8 @@ namespace Hedgehog.Level
 
             if (CurrentState == State.Follow)
             {
-                if (LookUp.Active)
+                // State change for looking up
+                if (LookUp != null && LookUp.Active)
                 {
                     CurrentState = State.LookUp;
                     LagTimer = LookUpLag;
@@ -281,7 +286,8 @@ namespace Hedgehog.Level
                     return;
                 }
 
-                if (Duck.Active && !Spindash.Active)
+                // State change for ducking (and not spindashing)
+                if (Duck != null && Duck.Active && (Spindash == null || !Spindash.Active))
                 {
                     CurrentState = State.LookDown;
                     LagTimer = LookDownLag;
@@ -289,6 +295,7 @@ namespace Hedgehog.Level
                     return;
                 }
 
+                // State change for Sonic CD forward shift, check horizontal speed
                 if (DoForwardShift && Target.RelativeVelocity.x > ForwardShiftMinSpeed)
                 {
                     CurrentState = State.ForwardShift;
@@ -296,10 +303,14 @@ namespace Hedgehog.Level
                     return;
                 }
 
+                // Get the controller's distance from the camera
                 var offset = (Vector2)(t.position - (transform.position + (Vector3)FollowCenter));
-                var followSpeed = FollowSpeed * Time.deltaTime;
+
+                // Get maximum camera movement
+                var followSpeed = FollowSpeed*Time.deltaTime;
                 float changeX = 0.0f, changeY = 0.0f;
 
+                // If controller distance is greater than follow radius, set changes in position
                 if (offset.x < -FollowRadius.x)
                 {
                     changeX = offset.x + FollowRadius.x;
@@ -318,12 +329,16 @@ namespace Hedgehog.Level
                     changeY = offset.y - FollowRadius.y;
                 }
 
+                // Limit position change to follow speed
                 var change = new Vector3(Mathf.Clamp(changeX, -followSpeed, followSpeed),
                     Mathf.Clamp(changeY, -followSpeed, followSpeed));
+
+                // Apply position change
                 transform.position += change;
             }
             else if (CurrentState == State.Lag)
             {
+                // Decrease lag timer, back to normal if it's zero
                 LagTimer -= Time.deltaTime;
                 if (LagTimer < 0.0f)
                 {
@@ -333,7 +348,7 @@ namespace Hedgehog.Level
             }
             else if (CurrentState == State.LookUp)
             {
-                // 
+                // Lag before beginning camera movement
                 LagTimer -= Time.deltaTime;
                 if (LagTimer < 0.0f)
                     LagTimer = 0.0f;
@@ -343,7 +358,10 @@ namespace Hedgehog.Level
                 Vector2 change;
                 if (LookReturning)
                 {
+                    // Keep track of how much the camera's gone back
                     LookAmount -= LookUpPanSpeed * Time.deltaTime;
+
+                    // If look amount is zero, we're back to normal
                     if (LookAmount < 0.0f)
                     {
                         LookAmount = 0.0f;
@@ -352,40 +370,48 @@ namespace Hedgehog.Level
                         return;
                     }
 
-                    change = -DMath.AngleToVector((Target.GravityDirection + 180.0f) * Mathf.Deg2Rad) * LookUpPanSpeed *
+                    // Return to original position by moving in the opposite direction
+                    change = -DMath.AngleToVector((Target.GravityDirection + 180.0f)*Mathf.Deg2Rad)*LookUpPanSpeed*
                              Time.deltaTime;
                 }
                 else
                 {
-                    LookAmount += LookUpPanSpeed * Time.deltaTime;
+                    // Keep track of how far the camera's gone
+                    LookAmount += LookUpPanSpeed*Time.deltaTime;
                     if (LookAmount > LookUpPanAmount)
                     {
                         LookAmount = LookUpPanAmount;
                         return;
                     }
 
-                    change = DMath.AngleToVector((Target.GravityDirection + 180.0f) * Mathf.Deg2Rad) * LookUpPanSpeed *
+                    // Translate based on gravity, pan speed, and change in time
+                    change = DMath.AngleToVector((Target.GravityDirection + 180.0f)*Mathf.Deg2Rad)*LookUpPanSpeed*
                              Time.deltaTime;
                 }
 
+                // Apply translation
                 To((Vector2)transform.position + change);
             }
             else if (CurrentState == State.LookDown)
             {
+                // Lag before beginning camera movement
                 LagTimer -= Time.deltaTime;
                 if (LagTimer < 0.0f)
                     LagTimer = 0.0f;
                 else
                     return;
 
+                // Back to normal if a spindash starts
                 if (Spindash.Active)
                 {
                     LookReturning = true;
                 }
 
+                // If look amount is zero, we're back to normal
                 Vector2 change;
                 if (LookReturning)
                 {
+                    // Keep track of how much the camera's gone back
                     LookAmount -= LookDownPanSpeed * Time.deltaTime;
                     if (LookAmount < 0.0f)
                     {
@@ -395,11 +421,13 @@ namespace Hedgehog.Level
                         return;
                     }
 
+                    // Return to original position by moving in the opposite direction
                     change = -DMath.AngleToVector(Target.GravityDirection * Mathf.Deg2Rad) * LookDownPanSpeed *
                              Time.deltaTime;
                 }
                 else
                 {
+                    // Keep track of how far the camera's gone
                     LookAmount += LookDownPanSpeed * Time.deltaTime;
                     if (LookAmount > LookDownPanAmount)
                     {
@@ -407,16 +435,21 @@ namespace Hedgehog.Level
                         return;
                     }
 
+                    // Translate based on gravity, pan speed, and change in time
                     change = DMath.AngleToVector(Target.GravityDirection * Mathf.Deg2Rad) * LookDownPanSpeed *
                              Time.deltaTime;
                 }
 
+                // Apply translation
                 To((Vector2)transform.position + change);
             }
             else if (CurrentState == State.ForwardShift)
             {
+                // Apply change in position from the last update, necessary here since the camera is panning
+                // forward and following the target simulataneously
                 To((Vector2)transform.position + ((Vector2)t.position - _previousTargetPosition));
 
+                // Pan back if target doesn't meet the conditions anymore
                 if (Target.RelativeVelocity.x < ForwardShiftMinSpeed || !DoForwardShift)
                 {
                     LookReturning = true;
@@ -425,7 +458,10 @@ namespace Hedgehog.Level
                 Vector2 change;
                 if (LookReturning)
                 {
+                    // Keep track of how much the camera's gone back
                     LookAmount -= ForwardShiftPanSpeed*Time.deltaTime;
+
+                    // If look amount is zero, we're back to normal
                     if (LookAmount < 0.0f)
                     {
                         LookAmount = 0.0f;
@@ -434,11 +470,13 @@ namespace Hedgehog.Level
                         return;
                     }
 
+                    // Return to original position by moving in the opposite direction
                     change = -DMath.AngleToVector((Target.GravityDirection + 90.0f)*Mathf.Deg2Rad)*ForwardShiftPanSpeed*
                              Time.deltaTime;
                 }
                 else
                 {
+                    // Keep track of how far the camera's gone
                     LookAmount += ForwardShiftPanSpeed * Time.deltaTime;
                     if (LookAmount > ForwardShiftPanAmount)
                     {
@@ -446,24 +484,37 @@ namespace Hedgehog.Level
                         return;
                     }
 
+                    // Translate based on gravity, pan speed, and change in time
                     change = DMath.AngleToVector((Target.GravityDirection + 90.0f)*Mathf.Deg2Rad)*ForwardShiftPanSpeed*
                              Time.deltaTime;
                 }
 
+                // Apply translation
                 To((Vector2)transform.position + change);
             }
         }
 
+        /// <summary>
+        /// Sets only the x and y components of the camera's position to the specified position.
+        /// </summary>
+        /// <param name="position">The specified position.</param>
         public void To(Vector2 position)
         {
             transform.position = new Vector3(position.x, position.y, transform.position.z);
         }
 
+        /// <summary>
+        /// Rotates the camera about the z-axis to the specified orientation.
+        /// </summary>
+        /// <param name="degrees">The specified orientation, in degrees.</param>
         public void Rotate(float degrees)
         {
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, degrees);
         }
 
+        /// <summary>
+        /// Begins the spindash lag timer.
+        /// </summary>
         public void DoSpindashLag()
         {
             LagTimer = SpindashLag;
