@@ -57,10 +57,11 @@ GameObject:
   - 4: {fileID: 452124}
   - 61: {fileID: 6118934}
   - 114: {fileID: 11435878}
-  - 114: {fileID: 11425826}
   - 114: {fileID: 11456672}
   - 95: {fileID: 9557104}
   - 212: {fileID: 21285934}
+  - 114: {fileID: 11425826}
+  - 114: {fileID: 11442966}
   m_Layer: 0
   m_Name: S2 Super Ring
   m_TagString: Untagged
@@ -148,7 +149,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157062}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 64.0712509, y: -.981733322, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 450792}
@@ -217,7 +218,7 @@ Animator:
   m_GameObject: {fileID: 164050}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 061cd25f6500e1448a813a4874cd8801, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -236,6 +237,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a559950131d2045bf2c80c2cf6408a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   ActivateDelay: .533333302
   BrokenTrigger: Broken
 --- !u!114 &11435878
@@ -296,6 +302,19 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &11442966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 157062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6476a3aa8a87e3448860639cf29a49cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Amount: 10
 --- !u!114 &11456672
 MonoBehaviour:
   m_ObjectHideFlags: 1

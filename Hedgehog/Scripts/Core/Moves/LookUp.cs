@@ -17,7 +17,6 @@ namespace Hedgehog.Core.Moves
         public override void Reset()
         {
             base.Reset();
-
             ActivateAxis = "Vertical";
         }
 
@@ -41,7 +40,7 @@ namespace Hedgehog.Core.Moves
 
         public override bool InputDeactivate()
         {
-            return Input.GetAxis(ActivateAxis) <= 0.0f || !DMath.Equalsf(Controller.GroundVelocity);
+            return !Available() || !InputActivate();
         }
     }
 }

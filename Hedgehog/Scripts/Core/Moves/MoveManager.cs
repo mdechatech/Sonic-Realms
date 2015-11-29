@@ -334,6 +334,8 @@ namespace Hedgehog.Core.Moves
                 move.ChangeState(Move.State.Unavailable);
             }
 
+            OnEnd.Invoke(move);
+
             return true;
         }
 
