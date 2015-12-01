@@ -188,6 +188,8 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveFixedUpdate()
         {
+            var previousUphill = Uphill;
+
             if (Controller.GroundVelocity > 0.0f)
             {
                 Uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0.0f, 180.0f);
@@ -196,7 +198,7 @@ namespace Hedgehog.Core.Moves
                 Uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 180.0f, 360.0f);
             }
 
-            if (Controller.SlopeGravity != (Uphill ? UphillGravity : DownhillGravity))
+            if (Controller.SlopeGravity != (previousUphill ? UphillGravity : DownhillGravity))
                 _originalSlopeGravity = Controller.SlopeGravity;
 
             Controller.SlopeGravity = Uphill ? UphillGravity : DownhillGravity;

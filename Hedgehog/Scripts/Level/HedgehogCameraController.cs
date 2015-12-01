@@ -25,6 +25,12 @@ namespace Hedgehog.Level
         public bool RotateToGravity;
 
         /// <summary>
+        /// Whether to round position to the nearest pixel (0.01 unit).
+        /// </summary>
+        [Tooltip("Whether to round position to the nearest pixel (0.01 unit).")]
+        public bool PixelPerfect;
+
+        /// <summary>
         /// Whether to snap right onto the controller the first time around, instead of being limited by Follow Speed.
         /// </summary>
         [Tooltip("Whether to snap right onto the controller the first time around, instead of being limited by Follow Speed.")]
@@ -166,6 +172,7 @@ namespace Hedgehog.Level
         {
             Target = FindObjectOfType<HedgehogController>();
             RotateToGravity = true;
+            PixelPerfect = true;
             SnapOnInit = false;
 
             FollowSpeed = 9.6f;
@@ -224,10 +231,18 @@ namespace Hedgehog.Level
             CheckChangeTarget();
             HandleState();
 
-            if(RotateToGravity)
-                Rotate(Target.GravityDirection + 90.0f);
+            if(RotateToGravity) Rotate(Target.GravityDirection + 90.0f);
 
             _previousTargetPosition = Target.transform.position;
+
+            if (PixelPerfect) DoPixelPerfect();
+        }
+
+        public void DoPixelPerfect()
+        {
+            To(new Vector2(
+                Mathf.Round(transform.position.x*100.0f)/100.0f,
+                Mathf.Round(transform.position.y*100.0f)/100.0f));
         }
 
         /// <summary>

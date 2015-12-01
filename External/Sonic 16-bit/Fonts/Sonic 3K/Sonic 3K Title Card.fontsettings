@@ -1,0 +1,891 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!128 &12800000
+Font:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sonic 3K Title Card
+  serializedVersion: 4
+  m_AsciiStartOffset: 0
+  m_Kerning: 1
+  m_LineSpacing: 32
+  m_CharacterSpacing: 1
+  m_CharacterPadding: 0
+  m_ConvertCase: 0
+  m_DefaultMaterial: {fileID: 2100000, guid: e34b2035a2871cc4fa65fc7338a4db0c, type: 2}
+  m_CharacterRects:
+  - serializedVersion: 2
+    index: 114
+    uv:
+      serializedVersion: 2
+      x: .26171875
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 82
+    uv:
+      serializedVersion: 2
+      x: .26171875
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 121
+    uv:
+      serializedVersion: 2
+      x: .78515625
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 89
+    uv:
+      serializedVersion: 2
+      x: .78515625
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 122
+    uv:
+      serializedVersion: 2
+      x: .8515625
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 102
+    uv:
+      serializedVersion: 2
+      x: .33203125
+      y: .5703125
+      width: .046875
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 12
+      height: -24
+    width: 12
+    flipped: 0
+  - serializedVersion: 2
+    index: 108
+    uv:
+      serializedVersion: 2
+      x: .7109375
+      y: .5703125
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 76
+    uv:
+      serializedVersion: 2
+      x: .7109375
+      y: .859375
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 113
+    uv:
+      serializedVersion: 2
+      x: .1640625
+      y: .42578125
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 111
+    uv:
+      serializedVersion: 2
+      x: 0
+      y: .42578125
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 81
+    uv:
+      serializedVersion: 2
+      x: .1640625
+      y: .71484375
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 79
+    uv:
+      serializedVersion: 2
+      x: 0
+      y: .71484375
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 66
+    uv:
+      serializedVersion: 2
+      x: .0703125
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 65
+    uv:
+      serializedVersion: 2
+      x: 0
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 84
+    uv:
+      serializedVersion: 2
+      x: .3828125
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 116
+    uv:
+      serializedVersion: 2
+      x: .3828125
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 97
+    uv:
+      serializedVersion: 2
+      x: 0
+      y: .5703125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 98
+    uv:
+      serializedVersion: 2
+      x: .0703125
+      y: .5703125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 70
+    uv:
+      serializedVersion: 2
+      x: .33203125
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 110
+    uv:
+      serializedVersion: 2
+      x: .84375
+      y: .5703125
+      width: .05078125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 13
+      height: -24
+    width: 13
+    flipped: 0
+  - serializedVersion: 2
+    index: 78
+    uv:
+      serializedVersion: 2
+      x: .84375
+      y: .859375
+      width: .05078125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 13
+      height: -24
+    width: 13
+    flipped: 0
+  - serializedVersion: 2
+    index: 105
+    uv:
+      serializedVersion: 2
+      x: .56640625
+      y: .5703125
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 73
+    uv:
+      serializedVersion: 2
+      x: .56640625
+      y: .859375
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 103
+    uv:
+      serializedVersion: 2
+      x: .39453125
+      y: .5703125
+      width: .0625
+      height: .09765625
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -25
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 101
+    uv:
+      serializedVersion: 2
+      x: .26171875
+      y: .5703125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 104
+    uv:
+      serializedVersion: 2
+      x: .5
+      y: .5703125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 72
+    uv:
+      serializedVersion: 2
+      x: .5
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 68
+    uv:
+      serializedVersion: 2
+      x: .1953125
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 100
+    uv:
+      serializedVersion: 2
+      x: .1953125
+      y: .5703125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 99
+    uv:
+      serializedVersion: 2
+      x: .1328125
+      y: .5703125
+      width: .05859375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 15
+      height: -24
+    width: 15
+    flipped: 0
+  - serializedVersion: 2
+    index: 67
+    uv:
+      serializedVersion: 2
+      x: .1328125
+      y: .859375
+      width: .05859375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 15
+      height: -24
+    width: 15
+    flipped: 0
+  - serializedVersion: 2
+    index: 109
+    uv:
+      serializedVersion: 2
+      x: .74609375
+      y: .5703125
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 77
+    uv:
+      serializedVersion: 2
+      x: .74609375
+      y: .859375
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 71
+    uv:
+      serializedVersion: 2
+      x: .39453125
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 90
+    uv:
+      serializedVersion: 2
+      x: .8515625
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 107
+    uv:
+      serializedVersion: 2
+      x: .640625
+      y: .5703125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 106
+    uv:
+      serializedVersion: 2
+      x: .60546875
+      y: .5703125
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 74
+    uv:
+      serializedVersion: 2
+      x: .60546875
+      y: .859375
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 75
+    uv:
+      serializedVersion: 2
+      x: .640625
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 115
+    uv:
+      serializedVersion: 2
+      x: .32421875
+      y: .42578125
+      width: .0546875
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 14
+      height: -24
+    width: 14
+    flipped: 0
+  - serializedVersion: 2
+    index: 83
+    uv:
+      serializedVersion: 2
+      x: .32421875
+      y: .71484375
+      width: .0546875
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 14
+      height: -24
+    width: 14
+    flipped: 0
+  - serializedVersion: 2
+    index: 117
+    uv:
+      serializedVersion: 2
+      x: .49609375
+      y: .42578125
+      width: .0546875
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 14
+      height: -24
+    width: 14
+    flipped: 0
+  - serializedVersion: 2
+    index: 85
+    uv:
+      serializedVersion: 2
+      x: .49609375
+      y: .71484375
+      width: .0546875
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 14
+      height: -24
+    width: 14
+    flipped: 0
+  - serializedVersion: 2
+    index: 112
+    uv:
+      serializedVersion: 2
+      x: .09765625
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 80
+    uv:
+      serializedVersion: 2
+      x: .09765625
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 118
+    uv:
+      serializedVersion: 2
+      x: .5625
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 86
+    uv:
+      serializedVersion: 2
+      x: .5625
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 119
+    uv:
+      serializedVersion: 2
+      x: .62890625
+      y: .42578125
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 87
+    uv:
+      serializedVersion: 2
+      x: .62890625
+      y: .71484375
+      width: .09375
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 24
+      height: -24
+    width: 24
+    flipped: 0
+  - serializedVersion: 2
+    index: 120
+    uv:
+      serializedVersion: 2
+      x: .72265625
+      y: .42578125
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 88
+    uv:
+      serializedVersion: 2
+      x: .72265625
+      y: .71484375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 32
+    uv:
+      serializedVersion: 2
+      x: .8984375
+      y: .5703125
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 69
+    uv:
+      serializedVersion: 2
+      x: .26171875
+      y: .859375
+      width: .0625
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 16
+      height: -24
+    width: 16
+    flipped: 0
+  - serializedVersion: 2
+    index: 95
+    uv:
+      serializedVersion: 2
+      x: .91796875
+      y: .71484375
+      width: .03125
+      height: .09375
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: -24
+    width: 8
+    flipped: 0
+  m_Texture: {fileID: 0}
+  m_KerningValues: []
+  m_PixelScale: .100000001
+  m_FontData: 
+  m_FontSize: 0
+  m_Ascent: 0
+  m_DefaultStyle: 0
+  m_FontNames: []
+  m_FallbackFonts: []
+  m_FontRenderingMode: 0

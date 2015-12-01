@@ -328,8 +328,14 @@ namespace Hedgehog.Core.Actors
         public bool FacingForward;
 
         /// <summary>
-        /// Makes the controller keep going when it finds something in its way. Often used by objects that
-        /// destroy themselves and don't want the controller to stop, such as item boxes.
+        /// Whether to ignore collisions with EVERYTHING.
+        /// </summary>
+        public bool IgnoreCollision;
+
+        /// <summary>
+        /// Makes the controller ignore the first thing in its way. Often used by objects that
+        /// destroy themselves after being touched; setting this to true makes the controller keep going
+        /// afterward.
         /// </summary>
         public bool IgnoreNextCollision;
 
@@ -605,6 +611,7 @@ namespace Hedgehog.Core.Actors
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             AutoFlip = AutoRotate = FacingForward = true;
             AttachLock = DetachLock = false;
+            IgnoreCollision = IgnoreNextCollision = false;
 
             OnCrush = OnCrush ?? new UnityEvent();
             OnAttach = OnAttach ?? new UnityEvent();
