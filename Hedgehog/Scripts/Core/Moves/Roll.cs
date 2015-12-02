@@ -173,7 +173,6 @@ namespace Hedgehog.Core.Moves
             _originalFriction = Controller.GroundFriction;
             _originalDeceleration = Controller.GroundControl.Deceleration;
 
-            Controller.AutoRotate = false;
             Controller.GroundFriction = Friction;
             Controller.GroundControl.AccelerationLocked = true;
             Controller.GroundControl.Deceleration = Deceleration;
@@ -206,7 +205,6 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveExit()
         {
-            Controller.AutoRotate = true;
             Controller.SlopeGravity = _originalSlopeGravity;
             Controller.GroundFriction = _originalFriction;
             Controller.GroundControl.AccelerationLocked = false;

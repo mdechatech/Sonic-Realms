@@ -1,41 +1,43 @@
 fileFormatVersion: 2
-guid: 1b9ee84c1dcb6ba48a6f6281a6ea562e
-timeCreated: 1448939494
+guid: a8667a3bf32dbbf4d870d840cbe857a7
+timeCreated: 1449016265
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Sonic 3K Got Through_71
-    21300002: Sonic 3K Got Through_84
-    21300004: Sonic 3K Got Through_72
-    21300006: Sonic 3K Got Through_82
-    21300008: Sonic 3K Got Through_85
-    21300010: Sonic 3K Got Through_79
-    21300012: Sonic 3K Got Through_32
-    21300014: Sonic 3K Got Through_71
-    21300016: Sonic 3K Got Through_65
-    21300018: Sonic 3K Got Through_66
-    21300020: Sonic 3K Got Through_67
-    21300022: Sonic 3K Got Through_68
-    21300024: Sonic 3K Got Through_69
-    21300026: Sonic 3K Got Through_70
-    21300028: Sonic 3K Got Through_73
-    21300030: Sonic 3K Got Through_74
-    21300032: Sonic 3K Got Through_75
-    21300034: Sonic 3K Got Through_76
-    21300036: Sonic 3K Got Through_77
-    21300038: Sonic 3K Got Through_78
-    21300040: Sonic 3K Got Through_80
-    21300042: Sonic 3K Got Through_81
-    21300044: Sonic 3K Got Through_83
-    21300046: Sonic 3K Got Through_86
-    21300048: Sonic 3K Got Through_87
-    21300050: Sonic 3K Got Through_88
-    21300052: Sonic 3K Got Through_89
-    21300054: Sonic 3K Got Through_90
+    21300000: Sonic CD Act Clear_65
+    21300002: Sonic CD Act Clear_66
+    21300004: Sonic CD Act Clear_67
+    21300006: Sonic CD Act Clear_68
+    21300008: Sonic CD Act Clear_69
+    21300010: Sonic CD Act Clear_70
+    21300012: Sonic CD Act Clear_71
+    21300014: Sonic CD Act Clear_72
+    21300016: Sonic CD Act Clear_73
+    21300018: Sonic CD Act Clear_74
+    21300020: Sonic CD Act Clear_75
+    21300022: Sonic CD Act Clear_76
+    21300024: Sonic CD Act Clear_77
+    21300026: Sonic CD Act Clear_78
+    21300028: Sonic CD Act Clear_80
+    21300030: Sonic CD Act Clear_81
+    21300032: Sonic CD Act Clear_82
+    21300034: Sonic CD Act Clear_83
+    21300036: Sonic CD Act Clear_84
+    21300038: Sonic CD Act Clear_85
+    21300040: Sonic CD Act Clear_86
+    21300042: Sonic CD Act Clear_87
+    21300044: Sonic CD Act Clear_88
+    21300046: Sonic CD Act Clear_89
+    21300048: Sonic CD Act Clear_90
+    21300050: Sonic CD Act Clear_111
+    21300052: Sonic CD Act Clear_110
+    21300054: Sonic CD Act Clear_101
+    21300056: Sonic CD Act Clear_79
+    21300058: Sonic CD Act Clear_32
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -78,273 +80,303 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: Sonic 3K Got Through_71
+    - name: Sonic CD Act Clear_65
       rect:
         serializedVersion: 2
         x: 0
-        y: 112
+        y: 51
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_84
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 112
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_72
-      rect:
-        serializedVersion: 2
-        x: 36
-        y: 112
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_82
-      rect:
-        serializedVersion: 2
-        x: 53
-        y: 112
-        width: 17
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_85
-      rect:
-        serializedVersion: 2
-        x: 72
-        y: 112
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_79
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 112
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_65
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 95
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_66
+    - name: Sonic CD Act Clear_66
       rect:
         serializedVersion: 2
         x: 17
-        y: 95
+        y: 51
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_67
+    - name: Sonic CD Act Clear_67
       rect:
         serializedVersion: 2
         x: 34
-        y: 95
+        y: 51
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_68
+    - name: Sonic CD Act Clear_68
       rect:
         serializedVersion: 2
         x: 51
-        y: 95
+        y: 51
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_69
+    - name: Sonic CD Act Clear_69
       rect:
         serializedVersion: 2
         x: 68
-        y: 95
-        width: 14
-        height: 16
+        y: 51
+        width: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_70
+    - name: Sonic CD Act Clear_70
       rect:
         serializedVersion: 2
         x: 85
-        y: 95
-        width: 14
-        height: 16
+        y: 51
+        width: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_73
+    - name: Sonic CD Act Clear_71
       rect:
         serializedVersion: 2
         x: 102
-        y: 95
-        width: 10
-        height: 16
+        y: 51
+        width: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_74
+    - name: Sonic CD Act Clear_72
       rect:
         serializedVersion: 2
         x: 0
-        y: 78
+        y: 37
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_75
+    - name: Sonic CD Act Clear_73
       rect:
         serializedVersion: 2
         x: 17
-        y: 78
-        width: 15
-        height: 16
+        y: 37
+        width: 8
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_76
+    - name: Sonic CD Act Clear_74
       rect:
         serializedVersion: 2
-        x: 34
-        y: 78
-        width: 12
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_77
-      rect:
-        serializedVersion: 2
-        x: 51
-        y: 78
+        x: 26
+        y: 37
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_78
+    - name: Sonic CD Act Clear_75
       rect:
         serializedVersion: 2
-        x: 68
-        y: 78
+        x: 43
+        y: 37
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_80
+    - name: Sonic CD Act Clear_76
       rect:
         serializedVersion: 2
-        x: 85
-        y: 78
+        x: 60
+        y: 37
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_81
-      rect:
-        serializedVersion: 2
-        x: 102
-        y: 78
-        width: 17
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_83
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 61
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_86
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 61
-        width: 17
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_87
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 61
-        width: 23
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_88
-      rect:
-        serializedVersion: 2
-        x: 59
-        y: 61
-        width: 17
-        height: 16
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_89
+    - name: Sonic CD Act Clear_77
       rect:
         serializedVersion: 2
         x: 77
-        y: 61
+        y: 37
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_90
+    - name: Sonic CD Act Clear_78
       rect:
         serializedVersion: 2
-        x: 94
-        y: 61
+        x: 95
+        y: 37
         width: 16
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 3K Got Through_32
+    - name: Sonic CD Act Clear_80
       rect:
         serializedVersion: 2
-        x: 106
-        y: 112
+        x: 0
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_81
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_82
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_83
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_84
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_85
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_86
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_87
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_88
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_89
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_90
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_111
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 9
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_110
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 9
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_101
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 9
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_79
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic CD Act Clear_32
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 51
         width: 8
-        height: 16
+        height: 13
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

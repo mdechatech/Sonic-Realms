@@ -132,6 +132,8 @@ GameObject:
   - 50: {fileID: 5083970}
   - 114: {fileID: 11405618}
   - 95: {fileID: 9582648}
+  - 114: {fileID: 11417206}
+  - 114: {fileID: 11426680}
   m_Layer: 0
   m_Name: S3K Sonic
   m_TagString: Untagged
@@ -717,9 +719,9 @@ MonoBehaviour:
   AttachLock: 1
   ApplyAirGravity: 1
   ApplyAirDrag: 1
-  AutoFlip: 1
-  AutoRotate: 1
+  AutoFacingForward: 0
   FacingForward: 0
+  IgnoreCollision: 0
   IgnoreNextCollision: 0
   Vx: 0
   Vy: 0
@@ -783,6 +785,28 @@ MonoBehaviour:
   ActivateAxis: Vertical
   RequireNegative: 1
   MaxActivateSpeed: .618749976
+--- !u!114 &11417206
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31397037b659ac042ae61a3f350afa47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 11405618}
+  Amount: 525
+  AmountInt: 
+  CanCollect: 1
+  SpilledRingBase: {fileID: 11460168, guid: 2e2263e18fc063342b7f046e500c1bf9, type: 2}
+  SpillCollectDisableTime: 1.06666696
+  MaxSpilledRings: 32
+  RingsPerCircle: 16
+  CircleSpeeds:
+  - 4
+  - 2
 --- !u!114 &11426138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -831,6 +855,25 @@ MonoBehaviour:
   Friction: .845099986
   UphillBool: 
   Uphill: 0
+--- !u!114 &11426680
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af2c9103a0ccc1d40bfb15337f94e3b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 11405618}
+  RendererTransform: {fileID: 411496}
+  RotateToGravity: 1
+  RotateDuringRoll: 0
+  RotateDuringStand: 0
+  AirRecoveryRate: 180
+  MinimumAngle: 22.5
+  Precision: 8
 --- !u!114 &11436076
 MonoBehaviour:
   m_ObjectHideFlags: 1

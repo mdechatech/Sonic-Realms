@@ -29,6 +29,32 @@ namespace Hedgehog.Core.Utils
         public const float DoublePi = 6.283185f;
 
         /// <summary>
+        /// Rounds the specified value to the nearest interval with the specified offset. For example,
+        /// rounding 21 to the interval 10 with offset 3 returns 23.
+        /// </summary>
+        /// <param name="value">The specified value to round.</param>
+        /// <param name="interval">The interval to round to.</param>
+        /// <param name="offset">How much to add to the rounded value.</param>
+        /// <returns></returns>
+        public static float Round(float value, float interval = 1.0f, float offset = 0.0f)
+        {
+            return Mathf.Round(value/interval)*interval + offset;
+        }
+
+        /// <summary>
+        /// Rounds the specified value to the nearest interval with the specified offset. For example,
+        /// rounding 21 to the interval 10 with offset 3 returns 23.
+        /// </summary>
+        /// <param name="value">The specified value to round.</param>
+        /// <param name="interval">The interval to round to.</param>
+        /// <param name="offset">How much to add to the rounded value.</param>
+        /// <returns></returns>
+        public static int Round(int value, int interval = 1, int offset = 0)
+        {
+            return Mathf.RoundToInt(value/(float)interval)*interval + offset;
+        }
+
+        /// <summary>
         /// Performs a modulus that is positive as long as the divisor is positive.
         /// </summary>
         /// <param name="dividend">The dividend.</param>

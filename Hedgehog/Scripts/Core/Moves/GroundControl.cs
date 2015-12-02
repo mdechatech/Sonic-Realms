@@ -205,13 +205,13 @@ namespace Hedgehog.Core.Moves
         public override void OnActiveEnter(State previousState)
         {
             Controller.OnSteepDetach.AddListener(OnSteepDetach);
-            Controller.AutoFlip = false;
+            Controller.AutoFacingForward = false;
         }
 
         public override void OnActiveExit()
         {
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
-            Controller.AutoFlip = true;
+            Controller.AutoFacingForward = true;
             Controller.ApplySlopeGravity = true;
 
             if(Animator == null) return;

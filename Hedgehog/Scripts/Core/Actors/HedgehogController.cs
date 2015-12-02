@@ -315,12 +315,7 @@ namespace Hedgehog.Core.Actors
         /// <summary>
         /// Whether to flip the controller horizontally when traveling backwards on the ground, and vice versa.
         /// </summary>
-        public bool AutoFlip;
-
-        /// <summary>
-        /// Whether to rotate the controller to the angle of its surface.
-        /// </summary>
-        public bool AutoRotate;
+        public bool AutoFacingForward;
 
         /// <summary>
         /// Whether the controller is facing forward or backward.
@@ -370,9 +365,18 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
+        /// Direction of "right" given the current direction of gravity.
+        /// </summary>
+        public float GravityRight
+        {
+            get { return GravityDirection + 90.0f; }
+            set { GravityDirection = value - 90.0f; }
+        }
+
+        /// <summary>
         /// A unit vector pointing in the "downward" direction based on the controller's GravityDirection.
         /// </summary>
-        public Vector2 GravityDown
+        public Vector2 GravityDownVector
         {
             get { return DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad); }
             set { GravityDirection = DMath.Modp(DMath.Angle(value)*Mathf.Rad2Deg, 360.0f); }
@@ -589,8 +593,7 @@ namespace Hedgehog.Core.Actors
             DetachLock = true;
             DetachWhenSlow = true;
 
-            AutoFlip = true;
-            AutoRotate = true;
+            AutoFacingForward = true;
 
             DetachTrigger = AttachTrigger = FacingForwardBool = AirSpeedXFloat =
                 AirSpeedYFloat = GroundedBool = GroundSpeedFloat = AbsGroundSpeedFloat = 
@@ -609,7 +612,7 @@ namespace Hedgehog.Core.Actors
             GroundControl = GetMove<GroundControl>();
 
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
-            AutoFlip = AutoRotate = FacingForward = true;
+            AutoFacingForward = FacingForward = true;
             AttachLock = DetachLock = false;
             IgnoreCollision = IgnoreNextCollision = false;
 
@@ -773,7 +776,7 @@ namespace Hedgehog.Core.Actors
         public void HandleDisplay(float timestep)
         {
             // Set FacingForward
-            if (AutoFlip)
+            if (AutoFacingForward)
             {
                 if (Grounded && !DMath.Equalsf(GroundVelocity))
                 {
@@ -783,19 +786,6 @@ namespace Hedgehog.Core.Actors
                 {
                     FacingForward = RelativeVelocity.x >= 0.0f;
                 }
-            }
-
-            // Rotate to surface angle
-            if (!Grounded)
-            {
-                RendererObject.transform.eulerAngles = new Vector3(RendererObject.transform.eulerAngles.x, 
-                    RendererObject.transform.eulerAngles.y, 
-                    Mathf.LerpAngle(RendererObject.transform.eulerAngles.z, SensorsRotation, Time.fixedDeltaTime*10.0f));
-            }
-            else if(AutoRotate)
-            {
-                RendererObject.transform.eulerAngles = 
-                    new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, SensorsRotation);
             }
 
             // Flip based on FacingForward

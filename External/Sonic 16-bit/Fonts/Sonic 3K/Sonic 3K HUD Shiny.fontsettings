@@ -5,7 +5,7 @@ Font:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Sonic 3K HUD
+  m_Name: Sonic 3K HUD Shiny
   serializedVersion: 4
   m_AsciiStartOffset: 0
   m_Kerning: 1
@@ -13,24 +13,8 @@ Font:
   m_CharacterSpacing: 1
   m_CharacterPadding: 0
   m_ConvertCase: 0
-  m_DefaultMaterial: {fileID: 2100000, guid: f84f1547444f1114aa4826606c904e3c, type: 2}
+  m_DefaultMaterial: {fileID: 2100000, guid: 2e1d02df75d834141bfebe57a0e49f6b, type: 2}
   m_CharacterRects:
-  - serializedVersion: 2
-    index: 32
-    uv:
-      serializedVersion: 2
-      x: .234375
-      y: .203125
-      width: .078125
-      height: .1875
-    vert:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 10
-      height: -12
-    width: 10
-    flipped: 0
   - serializedVersion: 2
     index: 48
     uv:
@@ -46,6 +30,22 @@ Font:
       width: 8
       height: -12
     width: 8
+    flipped: 0
+  - serializedVersion: 2
+    index: 32
+    uv:
+      serializedVersion: 2
+      x: .234375
+      y: .203125
+      width: .078125
+      height: .1875
+    vert:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 10
+      height: -12
+    width: 10
     flipped: 0
   - serializedVersion: 2
     index: 49
