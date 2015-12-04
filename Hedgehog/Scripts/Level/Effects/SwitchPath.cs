@@ -79,5 +79,10 @@ namespace Hedgehog.Level.Effects
                 controller.Paths.Add(ToPath);
             }
         }
+
+        public override void OnActivateStay(HedgehogController controller)
+        {
+            OnActivateEnter(controller);
+        }
     }
 }

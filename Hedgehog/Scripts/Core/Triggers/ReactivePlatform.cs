@@ -1,8 +1,6 @@
-﻿using System;
-using Hedgehog.Core.Actors;
+﻿using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Hedgehog.Core.Triggers
 {
@@ -63,6 +61,7 @@ namespace Hedgehog.Core.Triggers
 
             if (RegisteredEvents) return;
 
+            // Add listeners to the platform trigger
             PlatformTrigger.CollisionRules.Add(IsSolid);
             PlatformTrigger.OnPlatformEnter.AddListener(NotifyPlatformEnter);
             PlatformTrigger.OnPlatformStay.AddListener(NotifyPlatformStay);
@@ -80,6 +79,7 @@ namespace Hedgehog.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
+            // Remove listeners from the platform trigger
             PlatformTrigger.CollisionRules.Remove(IsSolid);
             PlatformTrigger.OnPlatformEnter.RemoveListener(NotifyPlatformEnter);
             PlatformTrigger.OnPlatformStay.RemoveListener(NotifyPlatformStay);
@@ -168,8 +168,23 @@ namespace Hedgehog.Core.Triggers
 
         public void NotifyPlatformStay(TerrainCastHit hit)
         {
-            // here for consistency, may add something later
             OnPlatformStay(hit);
+            var controller = hit.Controller;
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            SetPlatformStayParameters(controller);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+
+        protected virtual void SetPlatformStayParameters(HedgehogController controller)
+        {
+            if(!string.IsNullOrEmpty(CollidingBool))
+                controller.Animator.SetBool(CollidingBool, true);
         }
 
         public void NotifyPlatformExit(TerrainCastHit hit)
@@ -223,8 +238,25 @@ namespace Hedgehog.Core.Triggers
 
         public void NotifySurfaceStay(TerrainCastHit hit)
         {
-            // here for consistency, may add something later
             OnSurfaceStay(hit);
+            hit.Controller.NotifyReactiveEnter(this);
+
+            var controller = hit.Controller;
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            SetSurfaceStayParameters(controller);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+
+        protected virtual void SetSurfaceStayParameters(HedgehogController controller)
+        {
+            if(!string.IsNullOrEmpty(SurfaceBool))
+                controller.Animator.SetBool(SurfaceBool, true);
         }
 
         public void NotifySurfaceExit(TerrainCastHit hit)

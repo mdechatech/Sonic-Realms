@@ -31,12 +31,12 @@ namespace Hedgehog.Level.Objects
             hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x, Velocity);
             GetComponent<Collider2D>().enabled = false;
 
-            ActivateObject();
+            ActivateObject(hit.Controller);
         }
 
         public override void OnPlatformStay(TerrainCastHit hit)
         {
-            OnPlatformEnter(hit);
+            if(!ObjectTrigger.Activated) OnPlatformEnter(hit);
         }
     }
 }

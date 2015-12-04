@@ -5,6 +5,7 @@ using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Hedgehog.Core.Triggers
 {
@@ -29,41 +30,41 @@ namespace Hedgehog.Core.Triggers
     public class PlatformTrigger : BaseTrigger
     {
         /// <summary>
-        /// Whether to always collide regardless of a controller's collision flags.
+        /// Whether to always collide regardless of a controller's path.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Whether to always collide regardless of a controller's collision flags.")]
-        public bool IgnoreLayers;
+        [FormerlySerializedAs("IgnoreLayers")]
+        [Tooltip("Whether to always collide regardless of a controller's path.")]
+        public bool AlwaysCollide;
 
         /// <summary>
         /// Called when a controller lands on the surface of the platform.
         /// </summary>
-        [SerializeField] public PlatformSurfaceEvent OnSurfaceEnter;
+        public PlatformSurfaceEvent OnSurfaceEnter;
 
         /// <summary>
         /// Called while a controller is on the surface of the platform.
         /// </summary>
-        [SerializeField] public PlatformSurfaceEvent OnSurfaceStay;
+        public PlatformSurfaceEvent OnSurfaceStay;
 
         /// <summary>
         /// Called when a controller exits the surface of the platform.
         /// </summary>
-        [SerializeField] public PlatformSurfaceEvent OnSurfaceExit;
+        public PlatformSurfaceEvent OnSurfaceExit;
 
         /// <summary>
         /// Called when a controller begins colliding with the platform.
         /// </summary>
-        [SerializeField] public PlatformCollisionEvent OnPlatformEnter;
+        public PlatformCollisionEvent OnPlatformEnter;
 
         /// <summary>
         /// Called while a controller is colliding with the platform.
         /// </summary>
-        [SerializeField] public PlatformCollisionEvent OnPlatformStay;
+        public PlatformCollisionEvent OnPlatformStay;
 
         /// <summary>
         /// Called when a controller stops colliding with the platform.
         /// </summary>
-        [SerializeField] public PlatformCollisionEvent OnPlatformExit;
+        public PlatformCollisionEvent OnPlatformExit;
 
         /// <summary>
         /// Returns whether the platform should be collided with based on the result of the specified
@@ -109,7 +110,7 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            IgnoreLayers = false;
+            AlwaysCollide = false;
 
             OnPlatformEnter = new PlatformCollisionEvent();
             OnPlatformStay = new PlatformCollisionEvent();
@@ -139,12 +140,6 @@ namespace Hedgehog.Core.Triggers
             SurfaceRules = new List<SurfacePredicate>();
             SurfaceCollisions = new List<TerrainCastHit>();
             _notifiedSurfaceCollisions = new List<TerrainCastHit>();
-        }
-
-        public virtual void Start()
-        {
-            var collider2D = GetComponent<Collider2D>();
-            if (collider2D != null) collider2D.isTrigger = false;
         }
 
         public virtual void FixedUpdate()
@@ -190,7 +185,7 @@ namespace Hedgehog.Core.Triggers
             if (_notifiedCollisions.Any(castHit => castHit.Controller == hit.Controller))
                 return false;
 
-            OnPlatformExit.Invoke( hit);
+            OnPlatformExit.Invoke(hit);
             return true;
         }
 
@@ -281,7 +276,7 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultCollisionRule(TerrainCastHit hit)
         {
-            return IgnoreLayers || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Controller);
+            return AlwaysCollide || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Controller);
         }
         #endregion
     }

@@ -146,7 +146,8 @@ namespace Hedgehog.Level.Objects
             Velocities[index] = (walk - (Vector2)controller.transform.position)/Time.fixedDeltaTime;
             controller.transform.position = new Vector3(walk.x, walk.y, controller.transform.position.z);
 
-            if (ControllerProgress[index] > 1.0f) ObjectTrigger.Deactivate(controller);
+            if (ControllerProgress[index] > 1.0f)
+                ObjectTrigger.Deactivate(controller);
         }
 
         public override void OnActivateExit(HedgehogController controller)

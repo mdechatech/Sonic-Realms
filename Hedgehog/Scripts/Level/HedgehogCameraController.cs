@@ -40,6 +40,7 @@ namespace Hedgehog.Level
         protected LookUp LookUp;
         protected Duck Duck;
         protected Spindash Spindash;
+        protected Death Death;
 
         [HideInInspector]
         public State CurrentState;
@@ -226,7 +227,7 @@ namespace Hedgehog.Level
             OnChangeTarget(null);
         }
 
-        public void LateUpdate()
+        public void FixedUpdate()
         {
             CheckChangeTarget();
             HandleState();
@@ -249,7 +250,7 @@ namespace Hedgehog.Level
         /// Called automatically when the camera detects a change in target.
         /// </summary>
         /// <param name="previousTarget">The camera's previous target. Nullable.</param>
-        public void OnChangeTarget(HedgehogController previousTarget)
+        public virtual void OnChangeTarget(HedgehogController previousTarget)
         {
             // Add listeners for look up and duck
             Target.MoveManager.OnPerform.AddListener(OnPerformMove);
@@ -264,6 +265,7 @@ namespace Hedgehog.Level
             LookUp = Target.GetMove<LookUp>();
             Duck = Target.GetMove<Duck>();
             Spindash = Target.GetMove<Spindash>();
+            Death = Target.GetMove<Death>();
 
             // Clean up listeners from the last target
             if (previousTarget == null)
@@ -289,6 +291,12 @@ namespace Hedgehog.Level
         protected void HandleState()
         {
             var t = Target.transform;
+
+            if (Death != null && Death.Active)
+            {
+                CurrentState = State.Idle;
+                return;
+            }
 
             if (CurrentState == State.Follow)
             {

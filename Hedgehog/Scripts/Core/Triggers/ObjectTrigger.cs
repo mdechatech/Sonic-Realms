@@ -126,7 +126,7 @@ namespace Hedgehog.Core.Triggers
             {
                 _areaTrigger.OnAreaEnter.AddListener(Activate);
                 _areaTrigger.OnAreaExit.AddListener(Deactivate);
-                _areaTrigger.IgnoreLayers = true;
+                _areaTrigger.AlwaysCollide = true;
                 _areaTrigger.TriggerFromChildren = TriggerFromChildren;
             } else
             {
@@ -159,7 +159,7 @@ namespace Hedgehog.Core.Triggers
             var any = Collisions.Any();
             if (controller != null && !Collisions.Contains(controller)) Collisions.Add(controller);
             if (!AllowReactivation && any) return;
-
+            
             Activated = true;
             OnActivateEnter.Invoke(controller);
             BubbleEvent(controller);
@@ -175,9 +175,11 @@ namespace Hedgehog.Core.Triggers
         public void Deactivate(HedgehogController controller = null)
         {
             if (controller != null) Collisions.Remove(controller);
-            if (!AllowReactivation || Collisions.Any()) return;
 
-            Activated = false;
+            var any = Collisions.Any();
+            if (!AllowReactivation && any) return;
+
+            if(!any) Activated = false;
             OnActivateExit.Invoke(controller);
             BubbleEvent(controller, true);
         }

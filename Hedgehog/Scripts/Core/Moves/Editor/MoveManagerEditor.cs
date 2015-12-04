@@ -19,7 +19,7 @@ namespace Hedgehog.Core.Moves.Editor
             serializedObject.Update();
 
             var moveManager = target as MoveManager;
-            moveManager.GetComponents(moveManager.Moves);
+            moveManager.GetComponentsInChildren(moveManager.Moves);
 
             serializedObject.ApplyModifiedProperties();
             serializedObject.Update();

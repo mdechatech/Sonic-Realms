@@ -111,9 +111,9 @@ namespace Hedgehog.Core.Moves
             InputActivated = false;
             InputEnabled = true;
 
-            ActiveTriggerHash = ActiveTrigger == null ? 0 : Animator.StringToHash(ActiveTrigger);
-            ActiveBoolHash = ActiveBool == null ? 0 : Animator.StringToHash(ActiveBool);
-            AvailableBoolHash = AvailableBool == null ? 0 : Animator.StringToHash(AvailableBool);
+            ActiveTriggerHash = string.IsNullOrEmpty(ActiveTrigger) ? 0 : Animator.StringToHash(ActiveTrigger);
+            ActiveBoolHash = string.IsNullOrEmpty(ActiveBool) ? 0 : Animator.StringToHash(ActiveBool);
+            AvailableBoolHash = string.IsNullOrEmpty(AvailableBool) ? 0 : Animator.StringToHash(AvailableBool);
 
             OnActive = OnActive ?? new UnityEvent();
             OnEnd = OnEnd ?? new UnityEvent();

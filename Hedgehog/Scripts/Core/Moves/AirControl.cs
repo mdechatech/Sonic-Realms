@@ -41,8 +41,13 @@ namespace Hedgehog.Core.Moves
         [SerializeField]
         [Tooltip("Top air speed in units per second.")]
         public float TopSpeed;
-
         #endregion
+
+        /// <summary>
+        /// If true, disables input.
+        /// </summary>
+        [HideInInspector]
+        public bool ControlLock;
 
         private float _axis;
 
@@ -89,7 +94,8 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveUpdate()
         {
-            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+            if (ControlLock) _axis = 0.0f;
+            else _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
         }
 
         public override void OnActiveFixedUpdate()

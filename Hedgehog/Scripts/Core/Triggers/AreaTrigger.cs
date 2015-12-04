@@ -5,6 +5,7 @@ using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Hedgehog.Core.Triggers
 {
@@ -21,25 +22,26 @@ namespace Hedgehog.Core.Triggers
     public class AreaTrigger : BaseTrigger
     {
         /// <summary>
-        /// Whether to ignore the controller's collision mask/tags/names and always
-        /// collide with the controller.
+        /// Whether to always collide regardless of a controller's path.
         /// </summary>
-        [SerializeField] public bool IgnoreLayers;
+        [FormerlySerializedAs("IgnoreLayers")]
+        [Tooltip("Whether to always collide regardless of a controller's path.")]
+        public bool AlwaysCollide;
 
         /// <summary>
         /// Invoked when a controller enters the area.
         /// </summary>
-        [SerializeField] public AreaEvent OnAreaEnter;
+        public AreaEvent OnAreaEnter;
 
         /// <summary>
         /// Invoked when a controller stays in the area.
         /// </summary>
-        [SerializeField] public AreaEvent OnAreaStay;
+        public AreaEvent OnAreaStay;
 
         /// <summary>
         /// Invoked when a controller exits the area.
         /// </summary>
-        [SerializeField] public AreaEvent OnAreaExit;
+        public AreaEvent OnAreaExit;
 
         /// <summary>
         /// Defines whether the controller should collide with the area. The trigger ONLY checks
@@ -64,7 +66,7 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            IgnoreLayers = true;
+            AlwaysCollide = true;
             OnAreaEnter = new AreaEvent();
             OnAreaStay = new AreaEvent();
             OnAreaExit = new AreaEvent();
@@ -84,10 +86,7 @@ namespace Hedgehog.Core.Triggers
         public virtual void Start()
         {
             var collider2D = GetComponent<Collider2D>();
-            var platformTriggers = TriggerUtility.GetTriggers<PlatformTrigger>(transform);
-
-            if (collider2D != null && !platformTriggers.Any())
-                collider2D.isTrigger = true;
+            collider2D.isTrigger = true;
 
             if (!TriggerFromChildren)
                 return;
@@ -101,7 +100,7 @@ namespace Hedgehog.Core.Triggers
 
                 var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
                                    childCollider.gameObject.AddComponent<AreaTrigger>();
-                childTrigger.IgnoreLayers |= IgnoreLayers;
+                childTrigger.AlwaysCollide |= AlwaysCollide;
             }
         }
 
@@ -132,7 +131,7 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultCollisionRule(HedgehogController controller)
         {
-            return controller != null && (IgnoreLayers || TerrainUtility.CollisionModeSelector(transform, controller));
+            return controller != null && (AlwaysCollide || TerrainUtility.CollisionModeSelector(transform, controller));
         }
 
         public void NotifyCollision(HedgehogController controller, Transform hit, bool isExit = false)

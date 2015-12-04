@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Hedgehog.Core.Utils
 {
@@ -20,6 +21,29 @@ namespace Hedgehog.Core.Utils
         public void DestroySelf()
         {
             Destroy(gameObject);
+        }
+
+        /// <summary>
+        /// Disables the component with the specified type name.
+        /// </summary>
+        /// <param name="type">The specified type name.</param>
+        public void DisableComponent(string type)
+        {
+            var component = GetComponents<Behaviour>().
+                FirstOrDefault(component1 => component1.GetType().Name == type);
+            if (component != null) component.enabled = false;
+        }
+
+        /// <summary>
+        /// Enables the component with the specified type name.
+        /// </summary>
+        /// <param name="type">The specified type name.</param>
+        public void EnableComponent(string type)
+        {
+            var component = GetComponents<Behaviour>().
+                FirstOrDefault(component1 => component1.GetType().Name == type);
+            if (component != null)
+                component.enabled = true;
         }
     }
 }

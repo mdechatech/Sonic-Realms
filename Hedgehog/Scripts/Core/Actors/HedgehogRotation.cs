@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Utils;
 using UnityEngine;
@@ -129,6 +130,9 @@ namespace Hedgehog.Core.Actors
             FixRotation();
         }
 
+        /// <summary>
+        /// Rounds rotation to the nearest precision.
+        /// </summary>
         public void FixRotation()
         {
             Rotation = DMath.Round(TrueRotation, 360.0f/Precision, Controller.GravityRight);

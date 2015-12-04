@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Hedgehog.Core.Utils;
 using Hedgehog.Level.Objects;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine;
 namespace Hedgehog.Core.Actors
 {
     /// <summary>
-    /// Keeps track of rings and hooks them up to animation.
+    /// Allows ring collection and spilling.
     /// </summary>
     public class RingCollector : MonoBehaviour
     {
@@ -74,7 +73,7 @@ namespace Hedgehog.Core.Actors
 
             CanCollect = true;
 
-            // Default values from Sonic Physics Guide
+            // Default values from https://info.sonicretro.org/SPG:Ring_Loss
             SpillCollectDisableTime = 1.066667f;
             MaxSpilledRings = 32;
             RingsPerCircle = 16;
@@ -108,11 +107,18 @@ namespace Hedgehog.Core.Actors
             }
         }
 
+        /// <summary>
+        /// Disables ring collection for the value specified by SpillCollectDisableTime.
+        /// </summary>
         public void DisableCollection()
         {
             DisableCollection(SpillCollectDisableTime);
         }
 
+        /// <summary>
+        /// Disables ring collection for the specified duration.
+        /// </summary>
+        /// <param name="duration">The specified duration, in seconds.</param>
         public void DisableCollection(float duration)
         {
             CanCollectTimer = duration;
@@ -127,10 +133,14 @@ namespace Hedgehog.Core.Actors
                 return;
             }
 
+            // So that the controller doesn't instantly pick them back up
             DisableCollection();
 
+            // Calculate the rings to spill and the amount to deduct from the total
             var toSpill = Mathf.Min(Mathf.Min(amount, Amount), MaxSpilledRings);
+            Amount = Mathf.Max(Amount - amount, 0);
 
+            // Ring spilling algorithm from https://info.sonicretro.org/SPG:Ring_Loss
             var angle = 101.25f;
             var angleDelta = 360.0f/RingsPerCircle;
             var flip = false;
@@ -157,10 +167,12 @@ namespace Hedgehog.Core.Actors
 
                 flip = !flip;
             }
-
-            Amount -= toSpill;
         }
 
+        /// <summary>
+        /// Returns the ring amount in the ring collector.
+        /// </summary>
+        /// <param name="ringCollector">The ring collector to cast.</param>
         public static implicit operator int (RingCollector ringCollector)
         {
             return ringCollector ? ringCollector.Amount : 0;

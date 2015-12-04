@@ -22,8 +22,6 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Name of an Animator trigger set when the item box is broken.")]
         public string BrokenTrigger;
 
-        protected Animator Animator;
-
         /// <summary>
         /// Stores the controller that broke the item box.
         /// </summary>
@@ -58,12 +56,11 @@ namespace Hedgehog.Level.Objects
             if (Controller == null) return;
 
             ActivationCountdown -= Time.deltaTime;
-            if (ActivationCountdown <= 0.0f)
-            {
-                ActivationCountdown = 0.0f;
-                ActivateObject(Controller);
-                Controller = null;
-            }
+            if (!(ActivationCountdown < 0.0f)) return;
+
+            ActivationCountdown = 0.0f;
+            TriggerObject(Controller);
+            Controller = null;
         }
 
         public override void OnPlatformEnter(TerrainCastHit hit)

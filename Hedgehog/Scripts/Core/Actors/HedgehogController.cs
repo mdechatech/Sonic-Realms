@@ -10,7 +10,7 @@ using UnityEngine.Events;
 namespace Hedgehog.Core.Actors
 {
     /// <summary>
-    /// Controls the player.
+    /// Implements Sonic-style physics and lets platform triggers know when they're touched.
     /// </summary>
     [AddComponentMenu("Hedgehog/Actors/Hedgehog")]
     public class HedgehogController : MonoBehaviour
@@ -154,11 +154,6 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Events
         /// <summary>
-        /// Invoked when the controller is touching something with both its top and ground sensors.
-        /// </summary>
-        public UnityEvent OnCrush;
-
-        /// <summary>
         /// Invoked when the controller lands on something.
         /// </summary>
         public UnityEvent OnAttach;
@@ -255,11 +250,6 @@ namespace Hedgehog.Core.Actors
         }
         #endregion
         #region Physics Variables
-        /// <summary>
-        /// Used for sanity check during surface rotation.
-        /// </summary>
-        private const float SurfaceReversionThreshold = 0.05f;
-
         /// <summary>
         /// The default direction of gravity, in degrees.
         /// </summary>
@@ -412,6 +402,12 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [Tooltip("If grounded, the angle of incline the controller is walking on in degrees.")]
         public float SurfaceAngle;
+
+        /// <summary>
+        /// Whether to bypass surface angle calculations the next FixedUpdate. Allows you to set your own.
+        /// </summary>
+        [Tooltip("Whether to bypass surface angle calculations the next FixedUpdate. Allows you to set your own.")]
+        public bool ForceSurfaceAngle;
 
         /// <summary>
         /// If grounded, the angle of incline the controller is walking on
@@ -616,7 +612,6 @@ namespace Hedgehog.Core.Actors
             AttachLock = DetachLock = false;
             IgnoreCollision = IgnoreNextCollision = false;
 
-            OnCrush = OnCrush ?? new UnityEvent();
             OnAttach = OnAttach ?? new UnityEvent();
             OnCollide = OnCollide ?? new PlatformCollisionEvent();
             OnDetach = OnDetach ?? new UnityEvent();
@@ -640,13 +635,15 @@ namespace Hedgehog.Core.Actors
 
         public void Update()
         {
+            HandleDisplay();
+            if (Animator != null)
+                SetAnimatorParameters();
+
             if (Interrupted)
             {
                 HandleInterrupt();
                 return;
             }
-
-            HandleDisplay();
         }
 
         public void FixedUpdate()
@@ -708,8 +705,14 @@ namespace Hedgehog.Core.Actors
         public void HandleMovement(float timestep)
         {
             var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
-            
-            if (vt < AntiTunnelingSpeed)
+
+            var surfaceAngle = SurfaceAngle;
+
+            if (IgnoreCollision)
+            {
+                transform.position += new Vector3(Vx*timestep, Vy*timestep);
+                UpdateGroundVelocity();
+            } else if (vt < AntiTunnelingSpeed)
             {
                 transform.position += new Vector3(Vx*timestep, Vy*timestep);
                 HandleCollisions();
@@ -747,6 +750,12 @@ namespace Hedgehog.Core.Actors
                     vc *= vn / vt;
                     vt *= vn / vt;
                 }
+            }
+
+            if (ForceSurfaceAngle)
+            {
+                SurfaceAngle = surfaceAngle;
+                ForceSurfaceAngle = false;
             }
         }
 
@@ -797,33 +806,35 @@ namespace Hedgehog.Core.Actors
                     RendererObject.transform.localScale.y,
                     RendererObject.transform.localScale.z);
             }
+        }
 
-            // Set animator parameters
-            if (Animator == null)
-                return;
-
-            if(FacingForwardBoolHash != 0)
+        /// <summary>
+        /// Sets the controller's animator parameters.
+        /// </summary>
+        public void SetAnimatorParameters()
+        {
+            if (FacingForwardBoolHash != 0)
                 Animator.SetBool(FacingForwardBoolHash, FacingForward);
 
-            if(AirSpeedXFloatHash != 0)
+            if (AirSpeedXFloatHash != 0)
                 Animator.SetFloat(AirSpeedXFloatHash, Velocity.x);
 
-            if(AirSpeedYFloatHash != 0)
+            if (AirSpeedYFloatHash != 0)
                 Animator.SetFloat(AirSpeedYFloatHash, Velocity.y);
 
-            if(GroundedBoolHash != 0)
+            if (GroundedBoolHash != 0)
                 Animator.SetBool(GroundedBoolHash, Grounded);
 
-            if(GroundSpeedFloatHash != 0)
+            if (GroundSpeedFloatHash != 0)
                 Animator.SetFloat(GroundSpeedFloatHash, GroundVelocity);
 
-            if(GroundSpeedBoolHash != 0)
+            if (GroundSpeedBoolHash != 0)
                 Animator.SetBool(GroundSpeedBool, GroundVelocity != 0.0f);
 
-            if(AbsGroundSpeedFloatHash != 0)
+            if (AbsGroundSpeedFloatHash != 0)
                 Animator.SetFloat(AbsGroundSpeedFloatHash, Mathf.Abs(GroundVelocity));
 
-            if(SurfaceAngleFloatHash != 0)
+            if (SurfaceAngleFloatHash != 0)
                 Animator.SetFloat(SurfaceAngleFloatHash, SurfaceAngle);
         }
 
@@ -892,8 +903,6 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public void HandleCollisions()
         {
-            if(CrushCheck()) OnCrush.Invoke();
-
             if (!Grounded)
             {
                 AirSideCheck();
@@ -1191,12 +1200,6 @@ namespace Hedgehog.Core.Actors
             var left = Surfacecast(Footing.Left);
             var right = Surfacecast(Footing.Right);
 
-            var originalPosition = transform.position;
-            var originalRotation = transform.eulerAngles;
-            var originalPrimary = PrimarySurfaceHit;
-            var originalSecondary = SecondarySurfaceHit;
-            TerrainCastHit recheck;
-
             var leftAngle = left ? left.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
             var rightAngle = right ? right.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
             var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
@@ -1327,44 +1330,10 @@ namespace Hedgehog.Core.Actors
             Detach();
             return false;
             #endregion
-            // It's possible to come up short after surface checks because the sensors shift
-            // during rotation. If we check after rotation and the sensor can't find the ground
-            // directly beneath it as we expect, we have to undo everything.
+
             finish:
-            recheck = Footing == Footing.Left
-                ? this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
-                    ControllerSide.Bottom)
-                : this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
-                    ControllerSide.Bottom);
-
-            if (recheck && Vector2.Distance(recheck.Hit.point, Footing == Footing.Left
-                ? Sensors.BottomRight.position
-                : Sensors.BottomLeft.position) > SurfaceReversionThreshold)
-            {
-                SetSurface(originalPrimary, originalSecondary);
-                transform.position = originalPosition;
-                transform.eulerAngles = originalRotation;
-            }
-
             IgnoreNextCollision = false;
             return true;
-        }
-
-        /// <summary>
-        /// Checks for terrain hitting both horizontal or both vertical sides of a player, aka crushing.
-        /// </summary>
-        /// <returns></returns>
-        private bool CrushCheck()
-        {
-            return (this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
-                        ControllerSide.Left) &&
-                    this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
-                        ControllerSide.Right)) ||
-
-                   (this.TerrainCast(Sensors.Center.position, Sensors.TopCenter.position,
-                       ControllerSide.Top) &&
-                    this.TerrainCast(Sensors.Center.position, Sensors.BottomCenter.position,
-                        ControllerSide.Bottom));
         }
         #endregion
 
@@ -1637,19 +1606,21 @@ namespace Hedgehog.Core.Actors
         {
             if (DetachLock) return false;
 
-            // Don't invoke the event if the controller was already off the ground
-            if (Grounded)
-            {
-                OnDetach.Invoke();
-                if (Animator != null && DetachTriggerHash != 0)
-                    Animator.SetTrigger(DetachTriggerHash);
-            } 
+            var wasGrounded = Grounded;
 
             Grounded = false;
             JustDetached = true;
             Footing = Footing.None;
             SensorsRotation = GravityDirection + 90.0f;
             SetSurface(null);
+
+            // Don't invoke the event if the controller was already off the ground
+            if (wasGrounded)
+            {
+                OnDetach.Invoke();
+                if (Animator != null && DetachTriggerHash != 0)
+                    Animator.SetTrigger(DetachTriggerHash);
+            }
 
             return false;
         }
@@ -1664,14 +1635,7 @@ namespace Hedgehog.Core.Actors
         public bool Attach(float groundSpeed, float angleRadians)
         {
             if (AttachLock) return false;
-
-            // Don't invoke the event if the controller was already on the ground
-            if (!Grounded)
-            {
-                OnAttach.Invoke();
-                if (Animator != null && AttachTriggerHash != 0)
-                    Animator.SetTrigger(AttachTriggerHash);
-            }
+            var wasGrounded = Grounded;
 
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             GroundVelocity = groundSpeed;
@@ -1680,6 +1644,14 @@ namespace Hedgehog.Core.Actors
             Grounded = true;
 
             GroundSurfaceCheck();
+
+            // Don't invoke the event if the controller was already on the ground
+            if (!wasGrounded)
+            {
+                OnAttach.Invoke();
+                if (Animator != null && AttachTriggerHash != 0)
+                    Animator.SetTrigger(AttachTriggerHash);
+            }
 
             return true;
         }
@@ -1812,34 +1784,11 @@ namespace Hedgehog.Core.Actors
         /// <param name="footing">The side to linecast from.</param>
         private TerrainCastHit Surfacecast(Footing footing)
         {
-            TerrainCastHit cast;
-            if (footing == Footing.Left)
-            {
-                // Cast from the player's side to below the player's feet based on its wall mode (Wallmode)
-                cast = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
+            return footing == Footing.Left
+                ? this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
+                    ControllerSide.Bottom)
+                : this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
                     ControllerSide.Bottom);
-
-                if (!cast)
-                {
-                    return default(TerrainCastHit);
-                }
-                //return DMath.Equalsf(cast.Hit.fraction, 0.0f) ? default(TerrainCastHit) : cast;
-                return cast;
-            }
-            cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
-                ControllerSide.Bottom);
-
-            if (!cast)
-            {
-                return default(TerrainCastHit);
-            }
-            /*
-            if (DMath.Equalsf(cast.Hit.fraction, 0.0f))
-            {
-                return default(TerrainCastHit);
-            }
-            */
-            return cast;
         }
         #endregion
     }

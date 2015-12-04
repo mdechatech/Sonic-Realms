@@ -13,14 +13,6 @@ namespace Hedgehog.Core.Triggers
     [RequireComponent(typeof(ObjectTrigger))]
     public class ReactiveObject : BaseReactive
     {
-        [HideInInspector]
-        public ObjectTrigger ObjectTrigger;
-
-        public Animator Animator
-        {
-            get { return ObjectTrigger == null ? null : ObjectTrigger.Animator; }
-        }
-
         protected bool RegisteredEvents;
 
         public override void Awake()

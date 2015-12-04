@@ -102,13 +102,14 @@ namespace Hedgehog.Level.Objects
             CurrentLife = Life;
             Gravity = 3.375f;
             Radius = 0.08f;
-            _previousPosition = transform.position;
         }
 
         public void Start()
         {
-            // So we don't collide with ourself when circlecasting
+            // So we don't collide with ourselves when circlecasting
             GetComponent<Collider2D>().isTrigger = true;
+
+            _previousPosition = transform.position; 
 
             // Cache animator parameters to hashes
             if (Animator == null || string.IsNullOrEmpty(LifePercentFloat)) return;

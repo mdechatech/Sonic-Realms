@@ -20,7 +20,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="transform">The specified transform.</param>
         /// <param name="name">The specified name.</param>
         /// <returns></returns>
-        public static bool HasNameRecursive(Transform transform, string name)
+        public static bool ParentHasName(Transform transform, string name)
         {
             var check = transform;
             while (check != null)
@@ -38,9 +38,16 @@ namespace Hedgehog.Core.Utils
         /// <param name="transform">The specified transform.</param>
         /// <param name="names">The specified name list.</param>
         /// <returns></returns>
-        public static bool HasNameRecursive(Transform transform, ICollection<string> names)
+        public static bool ParentHasName(Transform transform, ICollection<string> names)
         {
-            return names.Any(name => HasNameRecursive(transform, name));
+            var check = transform;
+            while (check != null)
+            {
+                if (names.Contains(check.name)) return true;
+                check = check.parent;
+            }
+
+            return false;
         }
         #endregion
         #region Terrain Utilities
@@ -68,7 +75,10 @@ namespace Hedgehog.Core.Utils
         /// <returns></returns>
         public static TerrainCastHit TerrainCast(Vector2 start, Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
-            var hit = BestRaycast(null, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
+            var linecasts = Physics2DUtility.LinecastNonAlloc(start, end);
+            if (!linecasts.Any()) return null;
+
+            var hit = BestRaycast(null, linecasts);
             return new TerrainCastHit(hit, fromSide, null, start, end);
         }
 
@@ -83,11 +93,19 @@ namespace Hedgehog.Core.Utils
         public static RaycastHit2D BestRaycast(HedgehogController source, RaycastHit2D[] raycasts,
             ControllerSide raycastSide = ControllerSide.All)
         {
-            return raycasts.Where(raycastHit2D => raycastHit2D &&
-                TransformSelector(raycastHit2D, source, raycastSide)).FirstOrDefault();
+            foreach (var hit in raycasts)
+            {
+                if (!hit) continue;
+                if (!TransformSelector(hit, source, raycastSide)) continue;
+                return hit;
+            }
+
+            return default(RaycastHit2D);
         }
         #endregion
         #region Terrain Cast Selectors
+        private static readonly List<PlatformTrigger> TransformSelectorPlatformTriggers = new List<PlatformTrigger>();
+
         /// <summary>
         /// Returns whether the specified raycast hit can be collided with based on the source's
         /// collision info and the transform's terrain properties.
@@ -99,17 +117,13 @@ namespace Hedgehog.Core.Utils
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
             ControllerSide raycastSide = ControllerSide.All)
         {
-            if (hit.collider.isTrigger) return false;
-
-            var platformEnumerable = TriggerUtility.GetTriggers<PlatformTrigger>(hit.transform);
-            var platformTriggers = platformEnumerable as PlatformTrigger[] ?? platformEnumerable.ToArray();
+            TriggerUtility.GetTriggers(hit.transform, TransformSelectorPlatformTriggers);
             var terrainCastHit = new TerrainCastHit(hit, raycastSide, source);
 
-            if (platformTriggers.Any())
-                return
-                    platformTriggers.All(trigger => trigger.IsSolid(terrainCastHit));
+            if (TransformSelectorPlatformTriggers.Any())
+                return TransformSelectorPlatformTriggers.All(trigger => trigger.IsSolid(terrainCastHit));
 
-            if (GetTriggers<AreaTrigger>(hit.transform).Any()) return false;
+            if (hit.transform.GetComponent<AreaTrigger>() != null) return false;
 
             return CollisionModeSelector(hit.transform, source);
         }
@@ -124,8 +138,7 @@ namespace Hedgehog.Core.Utils
         public static bool CollisionModeSelector(Transform transform, HedgehogController source = null)
         {
             if (source == null) return false;
-            return transform.GetComponentsInParent<Transform>()
-                    .Any(transform1 => source.Paths.Contains(transform1.name));
+            return ParentHasName(transform, source.Paths);
         }
 
         /// <summary>
@@ -180,6 +193,12 @@ namespace Hedgehog.Core.Utils
             }
         }
 
+        /// <summary>
+        /// Turns the specified normal angle and returns the closest side. For example,
+        /// a surface whose normal is 90 will return the top side.
+        /// </summary>
+        /// <param name="normal">The specified normal angle, in degrees.</param>
+        /// <returns></returns>
         public static ControllerSide NormalToControllerSide(float normal)
         {
             normal = DMath.PositiveAngle_d(normal);

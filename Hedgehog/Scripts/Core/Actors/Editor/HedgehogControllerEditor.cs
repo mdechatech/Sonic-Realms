@@ -200,7 +200,7 @@ namespace Hedgehog.Core.Actors.Editor
             if (ShowEvents)
             {
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                    "OnCrush", "OnAttach", "OnDetach", "OnSteepDetach");
+                    "OnAttach", "OnDetach", "OnSteepDetach");
             }
             #endregion
             #region Debug Foldout

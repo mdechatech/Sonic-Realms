@@ -10,7 +10,7 @@ namespace Hedgehog.Core.Utils
     public static class Physics2DUtility
     {
         #region Raycast Allocation Variables
-        private const int MaxRaycastResults = 16;
+        private const int MaxRaycastResults = 8;
         private static readonly RaycastHit2D[] RaycastResults = new RaycastHit2D[MaxRaycastResults];
 
         private static int _previousRaycastResultAmount;
@@ -32,14 +32,11 @@ namespace Hedgehog.Core.Utils
             _previousRaycastResultAmount = _raycastResultAmount;
             _raycastResultAmount = Physics2D.LinecastNonAlloc(start, end, RaycastResults, layerMask);
 
-            if (_raycastResultAmount < _previousRaycastResultAmount)
+            if (_raycastResultAmount >= _previousRaycastResultAmount) return RaycastResults;
+
+            for (var i = _raycastResultAmount; i < _previousRaycastResultAmount; ++i)
             {
-                for (var i = _raycastResultAmount;
-                    i < _previousRaycastResultAmount;
-                    i++)
-                {
-                    RaycastResults[i] = default(RaycastHit2D);
-                }
+                RaycastResults[i] = default(RaycastHit2D);
             }
 
             return RaycastResults;
@@ -226,8 +223,10 @@ namespace Hedgehog.Core.Utils
         public static Vector2 Walk(Vector2[] path, float t, bool connectFirstAndLastPoints = true)
         {
             // Check for easy cases
-            if (path.Length < 2)
+            if (path.Length == 0)
                 return default(Vector2);
+            if (path.Length == 1)
+                return path[0];
 
             t = Mathf.Clamp01(t);
             if (t == 0.0f || (t == 1.0f && connectFirstAndLastPoints))
@@ -239,10 +238,11 @@ namespace Hedgehog.Core.Utils
             var length = GetPathLength(path, connectFirstAndLastPoints);
 
             // Walk the path again for the answer
-            var target = t * length;
+            var target = t*length;
             var walkLength = 0.0f;
             for (var i = 0; i < path.Length; i++)
             {
+                // Get the length between the current point and the next
                 float sideLength;
                 if (i == path.Length - 1)
                     if (connectFirstAndLastPoints)

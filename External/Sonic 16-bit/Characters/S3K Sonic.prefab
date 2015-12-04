@@ -130,10 +130,12 @@ GameObject:
   m_Component:
   - 4: {fileID: 424606}
   - 50: {fileID: 5083970}
-  - 114: {fileID: 11405618}
   - 95: {fileID: 9582648}
+  - 114: {fileID: 11405618}
   - 114: {fileID: 11417206}
   - 114: {fileID: 11426680}
+  - 114: {fileID: 11479486}
+  - 114: {fileID: 11461214}
   m_Layer: 0
   m_Name: S3K Sonic
   m_TagString: Untagged
@@ -195,7 +197,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 481582}
-  - 114: {fileID: 11451016}
   - 114: {fileID: 11489168}
   - 114: {fileID: 11498508}
   - 114: {fileID: 11426138}
@@ -205,6 +206,8 @@ GameObject:
   - 114: {fileID: 11477054}
   - 114: {fileID: 11436076}
   - 114: {fileID: 11491536}
+  - 114: {fileID: 11461730}
+  - 114: {fileID: 11439158}
   m_Layer: 0
   m_Name: Moves
   m_TagString: Untagged
@@ -662,7 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d5567b7e8f0f4892de869d9b03b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveManager: {fileID: 11451016}
+  MoveManager: {fileID: 11461214}
   RendererObject: {fileID: 105384}
   Animator: {fileID: 9582648}
   Paths:
@@ -679,15 +682,10 @@ MonoBehaviour:
   MaxSpeed: 9001
   LedgeClimbHeight: .159999996
   LedgeDropHeight: .159999996
-  AntiTunnelingSpeed: 2
+  AntiTunnelingSpeed: 3.5
   SlopeGravityBeginAngle: 10
   DetachSpeed: 1.5
   MaxClimbAngle: 70
-  OnCrush:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   OnAttach:
     m_PersistentCalls:
       m_Calls: []
@@ -728,6 +726,7 @@ MonoBehaviour:
   GroundVelocity: 0
   Grounded: 0
   SurfaceAngle: 0
+  ForceSurfaceAngle: 0
   Footing: 0
   JustDetached: 0
   PrimarySurface: {fileID: 0}
@@ -805,8 +804,8 @@ MonoBehaviour:
   MaxSpilledRings: 32
   RingsPerCircle: 16
   CircleSpeeds:
-  - 4
-  - 2
+  - 2.4000001
+  - 1.20000005
 --- !u!114 &11426138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -916,7 +915,7 @@ MonoBehaviour:
   AllowLookUp: 0
   DistanceFloat: Edge Distance
   EdgeDistance: 0
---- !u!114 &11451016
+--- !u!114 &11439158
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -924,20 +923,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 174116}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3e90912b8931048aa30dd1cad65ab3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  InputEnabled: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: Death
+  ActiveBool: 
+  AvailableBool: 
+  Velocity: 4.19999981
+  RestartDelay: 2.33333302
+  RestartTimer: 0
+  Restarting: 0
+--- !u!114 &11461214
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0bde06da48532d4d88d7e6dafe028ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 11405618}
-  Moves:
-  - {fileID: 11489168}
-  - {fileID: 11498508}
-  - {fileID: 11426138}
-  - {fileID: 11472608}
-  - {fileID: 11416224}
-  - {fileID: 11493570}
-  - {fileID: 11477054}
-  - {fileID: 11436076}
-  - {fileID: 11491536}
+  Moves: []
   ActiveMoves: []
   AvailableMoves: []
   UnavailableMoves: []
@@ -966,6 +997,44 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Moves.MoveEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+--- !u!114 &11461730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f7d680b60fb6547aaca31135aeae22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 0
+  InputActivated: 0
+  InputEnabled: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: Hurt
+  AvailableBool: 
+  ReboundSpeed: {x: 1.20000005, y: 2.4000001}
 --- !u!114 &11472608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1046,6 +1115,26 @@ MonoBehaviour:
   ActiveBool: Looking Up
   AvailableBool: 
   ActivateAxis: Vertical
+--- !u!114 &11479486
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd45fbedbc4d2b4a801466d01d6ae32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 11405618}
+  HurtReboundMove: {fileID: 11461730}
+  RingCollector: {fileID: 11417206}
+  RingsLost: 9001
+  HurtInvinciblilityTime: 2
+  HurtInvincibleBool: Hurt Invincible
+  Invincible: 0
+  HurtInvincible: 0
+  HurtInvincibilityTimer: 0
 --- !u!114 &11487382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1250,6 +1339,7 @@ MonoBehaviour:
   Acceleration: 3.375
   Deceleration: 3.375
   TopSpeed: 3.5999999
+  ControlLock: 0
 --- !u!212 &21216568
 SpriteRenderer:
   m_ObjectHideFlags: 1

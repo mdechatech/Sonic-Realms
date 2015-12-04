@@ -33,20 +33,25 @@ namespace Hedgehog.Level.Effects
         {
             base.Awake();
             if (Animator != null && !string.IsNullOrEmpty(GivenTrigger))
-            {
                 GivenTriggerHash = Animator.StringToHash(GivenTrigger);
-            }
         }
 
         public override void OnActivateEnter(HedgehogController controller)
         {
             var counter = controller.GetComponentInChildren<RingCollector>();
-            if (counter == null || !counter.CanCollect) return;
-            
+            if (counter == null || !counter.CanCollect)
+                return;
+
             counter.Amount += Amount;
 
-            if(GivenTriggerHash != 0)
+            if (GivenTriggerHash != 0)
                 Animator.SetTrigger(GivenTriggerHash);
+        }
+
+        public override void OnActivateStay(HedgehogController controller)
+        {
+            if (Activated) return;
+            OnActivateEnter(controller);
         }
     }
 }

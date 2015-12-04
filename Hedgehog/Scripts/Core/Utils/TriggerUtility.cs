@@ -24,6 +24,13 @@ namespace Hedgehog.Core.Utils
                 BaseTrigger.Selector(trigger, transform));
         }
 
+        public static void GetTriggers<TTrigger>(Transform transform, List<TTrigger> results)
+            where TTrigger : BaseTrigger
+        {
+            transform.GetComponentsInParent(false, results);
+            results.RemoveAll(trigger => !BaseTrigger.Selector(trigger, transform));
+        }
+
         /// <summary>
         /// Notifies all platform triggers eligible to the specified transform about a collision.
         /// </summary>

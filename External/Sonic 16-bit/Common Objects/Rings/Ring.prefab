@@ -9,11 +9,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 400436}
   - 95: {fileID: 9531890}
-  - 114: {fileID: 11428370}
-  - 114: {fileID: 11433330}
   - 114: {fileID: 11477166}
   - 114: {fileID: 11474316}
   - 58: {fileID: 5868578}
+  - 114: {fileID: 11473342}
   m_Layer: 0
   m_Name: Ring
   m_TagString: Untagged
@@ -44,7 +43,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -41.5, y: -243.240005, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 457578}
@@ -70,7 +69,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 124706}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
@@ -92,7 +91,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11428370
+--- !u!114 &11473342
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -100,61 +99,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 124706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  Collisions: []
-  AutoActivate: 1
-  AllowReactivation: 1
-  OnActivateEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnActivateStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnActivateExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  Activated: 0
-  Animator: {fileID: 9531890}
-  ActivatedTrigger: 
-  ActivatedBool: 
---- !u!114 &11433330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 124706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6476a3aa8a87e3448860639cf29a49cd, type: 3}
+  m_Script: {fileID: 11500000, guid: da937e89372bce94c84c4756782e86b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectTrigger: {fileID: 0}
-  Amount: 1
-  GivenTrigger: Get
+  Animator: {fileID: 9531890}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+  Value: 1
+  CollectedTrigger: Get
+  Collected: 0
 --- !u!114 &11474316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,7 +148,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
+  AlwaysCollide: 1
   OnAreaEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -257,6 +212,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: ActivatedTrigger
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Value
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

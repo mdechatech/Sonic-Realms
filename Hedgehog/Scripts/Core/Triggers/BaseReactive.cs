@@ -14,7 +14,15 @@ namespace Hedgehog.Core.Triggers
     /// </summary>
     public abstract class BaseReactive : MonoBehaviour
     {
-        private ObjectTrigger _objectTrigger;
+        /// <summary>
+        /// The object's object trigger, if any.
+        /// </summary>
+        public ObjectTrigger ObjectTrigger;
+
+        /// <summary>
+        /// The object's animator, if any.
+        /// </summary>
+        public Animator Animator;
 
         /// <summary>
         /// Whether this component can activate object triggers, if it has any. Not necessary to override, used
@@ -25,15 +33,33 @@ namespace Hedgehog.Core.Triggers
             get { return false; }
         }
 
+        /// <summary>
+        /// Whether the object trigger is auto activated, or false if there isn't one.
+        /// </summary>
         protected bool AutoActivate
         {
-            get { return _objectTrigger == null ? false : _objectTrigger.AutoActivate; }
-            set { if (_objectTrigger != null) _objectTrigger.AutoActivate = value; }
+            get { return ObjectTrigger == null ? false : ObjectTrigger.AutoActivate; }
+            set { if (ObjectTrigger != null) ObjectTrigger.AutoActivate = value; }
+        }
+
+        /// <summary>
+        /// Whether the object trigger is activated, or false if there isn't one.
+        /// </summary>
+        public bool Activated
+        {
+            get { return ObjectTrigger == null ? false : ObjectTrigger.Activated; }
+            set
+            {
+                if (ObjectTrigger == null) return;
+                if (value) ObjectTrigger.Activate();
+                else ObjectTrigger.Deactivate();
+            }
         }
 
         public virtual void Reset()
         {
-
+            ObjectTrigger = GetComponent<ObjectTrigger>();
+            Animator = GetComponent<Animator>();
         }
 
         public virtual void Awake()
@@ -43,7 +69,8 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void Start()
         {
-            _objectTrigger = GetComponent<ObjectTrigger>();
+            ObjectTrigger = ObjectTrigger ?? GetComponent<ObjectTrigger>();
+            Animator = Animator ?? GetComponent<Animator>();
         }
 
         /// <summary>
@@ -53,8 +80,8 @@ namespace Hedgehog.Core.Triggers
         /// <returns>True if there is an object trigger.</returns>
         protected bool ActivateObject(HedgehogController controller = null)
         {
-            if (_objectTrigger == null) return false;
-            _objectTrigger.Activate(controller);
+            if (ObjectTrigger == null) return false;
+            ObjectTrigger.Activate(controller);
             return true;
         }
 
@@ -65,8 +92,8 @@ namespace Hedgehog.Core.Triggers
         /// <returns>True if there is an object trigger.</returns>
         protected bool DeactivateObject(HedgehogController controller = null)
         {
-            if (_objectTrigger == null) return false;
-            _objectTrigger.Deactivate(controller);
+            if (ObjectTrigger == null) return false;
+            ObjectTrigger.Deactivate(controller);
             return true;
         }
 
@@ -77,8 +104,8 @@ namespace Hedgehog.Core.Triggers
         /// <returns>True if there is an object trigger.</returns>
         protected bool TriggerObject(HedgehogController controller = null)
         {
-            if (_objectTrigger == null) return false;
-            _objectTrigger.Trigger(controller);
+            if (ObjectTrigger == null) return false;
+            ObjectTrigger.Trigger(controller);
             return true;
         }
     }

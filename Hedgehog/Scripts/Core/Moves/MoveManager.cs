@@ -81,12 +81,12 @@ namespace Hedgehog.Core.Moves
         public void Reset()
         {
             Controller = GetComponentInParent<HedgehogController>();
-            GetComponents(Moves);
+            GetComponentsInChildren(Moves);
         }
 
         public void Awake()
         {
-            GetComponents(Moves);
+            GetComponentsInChildren(Moves);
 
             ActiveMoves = new List<Move>();
             AvailableMoves = new List<Move>();
@@ -247,6 +247,15 @@ namespace Hedgehog.Core.Moves
                 return false;
 
             return Perform(foundMove, force);
+        }
+
+        /// <summary>
+        /// Performs the first move of the specified name (invocable from the UI).
+        /// </summary>
+        /// <param name="moveType"></param>
+        public void Perform(string moveType)
+        {
+            Perform(Moves.FirstOrDefault(move => move.GetType().Name == moveType));
         }
 
         /// <summary>

@@ -11,11 +11,25 @@ namespace Hedgehog.Core.Triggers.Editor
             set { EditorPrefs.SetBool(GetType().Name + ".ShowAnimationFoldout", value); }
         }
 
+        protected bool ShowComponentsFoldout
+        {
+            get { return EditorPrefs.GetBool(GetType().Name + ".ShowComponentsFoldout", false); }
+            set { EditorPrefs.SetBool(GetType().Name + ".ShowComponentsFoldout", value); }
+        }
+
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+
             DrawAnimationFoldout();
             if(ShowAnimationFoldout)
                 DrawAnimationProperties();
+
+            DrawComponentsFoldout();
+            if (ShowComponentsFoldout)
+                DrawComponentsProperties();
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected virtual void DrawAnimationFoldout()
@@ -24,5 +38,15 @@ namespace Hedgehog.Core.Triggers.Editor
         }
 
         protected abstract void DrawAnimationProperties();
+
+        protected virtual void DrawComponentsFoldout()
+        {
+            ShowComponentsFoldout = EditorGUILayout.Foldout(ShowComponentsFoldout, "Components");
+        }
+
+        protected virtual void DrawComponentsProperties()
+        {
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Animator", "ObjectTrigger");
+        }
     }
 }
