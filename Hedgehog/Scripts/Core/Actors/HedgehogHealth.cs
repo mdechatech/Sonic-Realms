@@ -1,5 +1,6 @@
 ﻿using Hedgehog.Core.Moves;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Core.Actors
 {
@@ -11,7 +12,10 @@ namespace Hedgehog.Core.Actors
     {
         public HedgehogController Controller;
         public HurtRebound HurtReboundMove;
+        public Death DeathMove;
         public RingCollector RingCollector;
+
+        public UnityEvent OnHurt;
 
         /// <summary>
         /// The max number of rings lost when hurt.
@@ -52,8 +56,11 @@ namespace Hedgehog.Core.Actors
 
         public void Reset()
         {
+            OnHurt = new UnityEvent();
+
             Controller = GetComponentInParent<HedgehogController>();
             HurtReboundMove = Controller.GetMove<HurtRebound>();
+            DeathMove = Controller.GetMove<Death>();
             RingCollector = GetComponentInChildren<RingCollector>();
 
             RingsLost = 9001;
@@ -62,6 +69,8 @@ namespace Hedgehog.Core.Actors
 
         public void Awake()
         {
+            OnHurt = OnHurt ?? new UnityEvent();
+
             Controller = Controller ?? GetComponentInParent<HedgehogController>();
             HurtReboundMove = HurtReboundMove ?? Controller.GetMove<HurtRebound>();
             RingCollector = RingCollector ?? GetComponentInChildren<RingCollector>();
@@ -103,17 +112,35 @@ namespace Hedgehog.Core.Actors
 
             HurtReboundMove.ThreatPosition = threatPosition;
             HurtReboundMove.OnEnd.AddListener(OnHurtReboundEnd);
-
-            if (HurtReboundMove.Perform())
-                RingCollector.Spill(RingsLost);
+            HurtReboundMove.Perform();
 
             HurtInvincibilityTimer = HurtInvinciblilityTime;
+            HurtInvincible = Invincible = true;
+
+            var shield = Controller.MoveManager.GetMove(MoveGroup.Shield);
+            if (shield == null)
+            {
+                if (RingCollector.Amount <= 0)
+                {
+                    Kill();
+                    return;
+                }
+
+                RingCollector.Spill(RingsLost);
+            }
+
+            OnHurt.Invoke();
         }
 
         public void OnHurtReboundEnd()
         {
             HurtInvincible = Invincible = true;
             HurtReboundMove.OnEnd.RemoveListener(OnHurtReboundEnd);
+        }
+
+        public void Kill()
+        {
+            Controller.PerformMove<Death>();
         }
     }
 }

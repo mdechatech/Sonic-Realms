@@ -25,7 +25,6 @@ namespace Hedgehog.Core.Triggers.Editor
 
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "TriggerFromChildren",
-                "AutoActivate",
                 "AllowReactivation");
 
             ShowObjectEvents = EditorGUILayout.Foldout(ShowObjectEvents, "Object Events");

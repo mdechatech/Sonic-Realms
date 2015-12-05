@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: S3K Item Box
+  m_Controller: {fileID: 9100000, guid: 3a3d14d136421af4e96f96c1ff485c0d, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: efff9d47a802bb84f8e6b4aa62e4bda6, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ca15eef0c58726e4eb088d4664d8d29b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 1c1a2fb7255c4654a8084be55d10102a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2189a715c3ecd5d4bbcc8bbf5107b505, type: 2}

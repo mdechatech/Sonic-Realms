@@ -135,6 +135,75 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 439408, guid: c39a07be463517f4181a277ec216c389, type: 2}
   m_PrefabInternal: {fileID: 282089169}
+--- !u!1 &6587838 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1988380306}
+--- !u!114 &6587839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 6587838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 6587840}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &6587840 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1988380306}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &6587841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 6587838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &7328720 stripped
 Transform:
   m_PrefabParentObject: {fileID: 487460, guid: 1699b03880a446b41875511fc40bbe2e, type: 2}
@@ -647,6 +716,48 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &65455253
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 39.4510002
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -4.88500023
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 450884, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 0d8fadfc3ac11384f824e51c7e1229d1, type: 2}
+  m_IsPrefabParent: 0
 --- !u!4 &66171938 stripped
 Transform:
   m_PrefabParentObject: {fileID: 447916, guid: f5560f9f459b1f34f96b727e92dd3dd6, type: 2}
@@ -1045,6 +1156,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &101619623 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 2077447096}
+--- !u!114 &101619624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 101619623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 101619625}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &101619625 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 2077447096}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &101619626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 101619623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &105945803 stripped
 Transform:
   m_PrefabParentObject: {fileID: 451808, guid: ba6ad47dc74ee66438d88ca8f361326b, type: 2}
@@ -1076,6 +1256,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1854168905}
   m_RootOrder: 5
+--- !u!1001 &118703180
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 39.1195335
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -4.58149433
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 412774, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e68109ec7eb80704bb4cb7d52ba8087c, type: 2}
+  m_IsPrefabParent: 0
 --- !u!4 &122052656 stripped
 Transform:
   m_PrefabParentObject: {fileID: 457632, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
@@ -1775,6 +1997,48 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ba6ad47dc74ee66438d88ca8f361326b, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &160332222
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 38.8129997
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -4.89499998
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 429828, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 5a2e007689fd99d4b99e0afa1d9d1634, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &163019890
 Prefab:
   m_ObjectHideFlags: 0
@@ -2236,11 +2500,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 473401143}
-  m_RootOrder: 4
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 3
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -46, y: 109.5}
+  m_AnchoredPosition: {x: 104, y: 116.5}
   m_SizeDelta: {x: 32, y: 7}
   m_Pivot: {x: 0, y: .5}
 --- !u!114 &195074361
@@ -2447,6 +2711,8 @@ GameObject:
   - 61: {fileID: 210866798}
   - 114: {fileID: 210866797}
   - 114: {fileID: 210866796}
+  - 114: {fileID: 210866801}
+  - 114: {fileID: 210866800}
   m_Layer: 0
   m_Name: Path 2 Enter
   m_TagString: Untagged
@@ -2513,7 +2779,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -2575,6 +2840,65 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: f40afa7251d5a4640a4894b2828fe9bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &210866800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 210866794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 210866797}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &210866801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 210866794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &212643394
 Prefab:
   m_ObjectHideFlags: 0
@@ -2885,6 +3209,58 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &256307805 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 181912, guid: e8d253de4b094d84e87331ce31400a52, type: 2}
+  m_PrefabInternal: {fileID: 886439358}
+--- !u!114 &256307807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 256307805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Collisions: []
+  AllowReactivation: 1
+  OnActivateEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnActivateStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnActivateExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Activated: 0
+  Animator: {fileID: 0}
+  ActivatedTrigger: 
+  ActivatedBool: 
 --- !u!1 &256645989
 GameObject:
   m_ObjectHideFlags: 0
@@ -2939,6 +3315,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1139116792}
   m_RootOrder: 105
+--- !u!1 &259258921 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 559790021}
+--- !u!114 &259258922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 259258921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 259258923}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &259258923 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 559790021}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &259258924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 259258921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &260657922
 Prefab:
   m_ObjectHideFlags: 0
@@ -2989,10 +3434,207 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 472336, guid: 7d22c41a4782c2242a46e4aae9dd2def, type: 2}
   m_PrefabInternal: {fileID: 260657922}
+--- !u!1 &264080771 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1582940787}
+--- !u!114 &264080772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 264080771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 264080773}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &264080773 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1582940787}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &264080774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 264080771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &267794081 stripped
 Transform:
   m_PrefabParentObject: {fileID: 412156, guid: 0a0977eefd4ac134292bf62307ed7b1c, type: 2}
   m_PrefabInternal: {fileID: 907401771}
+--- !u!1 &270865499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 270865500}
+  - 222: {fileID: 270865503}
+  - 114: {fileID: 270865502}
+  - 114: {fileID: 270865501}
+  m_Layer: 5
+  m_Name: Text (7)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &270865500
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 270865499}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 7
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 34, y: 102.5}
+  m_SizeDelta: {x: 72, y: 7}
+  m_Pivot: {x: 0, y: .5}
+--- !u!114 &270865501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 270865499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 270865502}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1565636342}
+        m_MethodName: AddPowerup
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 177786, guid: 8b5a31eacc526624a8c304361d879aff,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: Death
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &270865502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 270865499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 336b0709164a29c44bc630f7eab932a3, type: 2}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'S2 SHIELD
+
+'
+--- !u!222 &270865503
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 270865499}
 --- !u!1001 &274238581
 Prefab:
   m_ObjectHideFlags: 0
@@ -3513,6 +4155,48 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 457632, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_PrefabInternal: {fileID: 1258383322}
+--- !u!1001 &319994129
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 38.8132515
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -4.57321644
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 429880, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ec843b2fa7b1ec546abdbb127843fe8a, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &324968975
 Prefab:
   m_ObjectHideFlags: 0
@@ -3736,6 +4420,75 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 417172, guid: 0cae5a6f3ec120d43a34ac7b8c9af990, type: 2}
   m_PrefabInternal: {fileID: 208158414}
+--- !u!1 &351994903 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1507137838}
+--- !u!114 &351994904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 351994903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 351994905}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &351994905 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1507137838}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &351994906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 351994903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &355662375
 Prefab:
   m_ObjectHideFlags: 0
@@ -3832,6 +4585,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 400184, guid: ceff0235f107164459fa165c1b9bc6eb, type: 2}
   m_PrefabInternal: {fileID: 357076856}
+--- !u!1 &359314731 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1650985357}
+--- !u!114 &359314732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 359314731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 359314733}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &359314733 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1650985357}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &359314734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 359314731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &359605499
 Prefab:
   m_ObjectHideFlags: 0
@@ -4179,6 +5001,132 @@ SpriteRenderer:
 Transform:
   m_PrefabParentObject: {fileID: 417172, guid: 0cae5a6f3ec120d43a34ac7b8c9af990, type: 2}
   m_PrefabInternal: {fileID: 1428222801}
+--- !u!1 &369718890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 369718891}
+  - 222: {fileID: 369718894}
+  - 114: {fileID: 369718893}
+  - 114: {fileID: 369718892}
+  m_Layer: 5
+  m_Name: Text (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &369718891
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 369718890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 4
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: -45.9999962, y: 109.5}
+  m_SizeDelta: {x: 40, y: 7}
+  m_Pivot: {x: 0, y: .5}
+--- !u!114 &369718892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 369718890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 369718893}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1565636342}
+        m_MethodName: AddPowerup
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 148158, guid: f3f409b52bec69f4db6dc255b12d22dc,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: Death
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &369718893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 369718890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 336b0709164a29c44bc630f7eab932a3, type: 2}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: FLAME
+--- !u!222 &369718894
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 369718890}
 --- !u!4 &372472120 stripped
 Transform:
   m_PrefabParentObject: {fileID: 476390, guid: c64bae84c8a908c40a7df55b93635064, type: 2}
@@ -4627,6 +5575,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 484220, guid: f452eb7b0f89ab0438b651ef9ab3c280, type: 2}
   m_PrefabInternal: {fileID: 426601411}
+--- !u!1 &430412383 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 100493537}
+--- !u!114 &430412384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 430412383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 430412385}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &430412385 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 100493537}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &430412386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 430412383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &430917942
 Prefab:
   m_ObjectHideFlags: 0
@@ -4677,6 +5694,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1699b03880a446b41875511fc40bbe2e, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &443600098 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 310660990}
+--- !u!114 &443600099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 443600098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 443600100}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &443600100 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 310660990}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &443600101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 443600098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &443996137
 Prefab:
   m_ObjectHideFlags: 0
@@ -5092,6 +6178,8 @@ GameObject:
   - 61: {fileID: 471556957}
   - 114: {fileID: 471556956}
   - 114: {fileID: 471556955}
+  - 114: {fileID: 471556960}
+  - 114: {fileID: 471556959}
   m_Layer: 0
   m_Name: Path 1 to Path 2
   m_TagString: Untagged
@@ -5158,7 +6246,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -5220,6 +6307,65 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: f40afa7251d5a4640a4894b2828fe9bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &471556959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 471556953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 471556956}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &471556960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 471556953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &473401139
 GameObject:
   m_ObjectHideFlags: 0
@@ -5303,12 +6449,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1541665166}
-  - {fileID: 1253532645}
-  - {fileID: 1259588385}
-  - {fileID: 739083835}
-  - {fileID: 195074360}
+  - {fileID: 895181685}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -6500,6 +7643,75 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300132, guid: ff14b51ee4221fa40a3e7e6113ec0b3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &588768111 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 963722724}
+--- !u!114 &588768112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 588768111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 588768113}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &588768113 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 963722724}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &588768114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 588768111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &589024389
 Prefab:
   m_ObjectHideFlags: 0
@@ -7311,6 +8523,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &667590267 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 451628497}
+--- !u!114 &667590268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 667590267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 667590269}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &667590269 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 451628497}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &667590270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 667590267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &668841105
 Prefab:
   m_ObjectHideFlags: 0
@@ -8191,8 +9472,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 473401143}
-  m_RootOrder: 3
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 2
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 64, y: 116.5}
@@ -8922,7 +10203,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -10809,6 +12089,47 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 444946, guid: 4eceb7c45f06b384cb4799b28eb7e1b9, type: 2}
   m_PrefabInternal: {fileID: 1986626541}
+--- !u!1 &895181684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 895181685}
+  m_Layer: 5
+  m_Name: DEBUG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &895181685
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 895181684}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1253532645}
+  - {fileID: 1259588385}
+  - {fileID: 739083835}
+  - {fileID: 195074360}
+  - {fileID: 369718891}
+  - {fileID: 1834258982}
+  - {fileID: 1128425927}
+  - {fileID: 270865500}
+  - {fileID: 1685563314}
+  m_Father: {fileID: 473401143}
+  m_RootOrder: 1
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: .191047668, y: 3.81469727e-06}
+  m_SizeDelta: {x: .350006104, y: 0}
+  m_Pivot: {x: .5, y: .5}
 --- !u!4 &895236522 stripped
 Transform:
   m_PrefabParentObject: {fileID: 438544, guid: 46733898f5b60a843b9a3d7205c2c7dd, type: 2}
@@ -11473,7 +12794,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -13191,6 +14511,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 313380170}
   m_RootOrder: 0
+--- !u!1 &1037960797 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 950145310}
+--- !u!114 &1037960798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1037960797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1037960799}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1037960799 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 950145310}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1037960800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1037960797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &1062995689 stripped
 Transform:
   m_PrefabParentObject: {fileID: 484220, guid: f452eb7b0f89ab0438b651ef9ab3c280, type: 2}
@@ -13725,6 +15114,158 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 457632, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_PrefabInternal: {fileID: 1114008325}
+--- !u!1 &1128425926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1128425927}
+  - 222: {fileID: 1128425930}
+  - 114: {fileID: 1128425929}
+  - 114: {fileID: 1128425928}
+  m_Layer: 5
+  m_Name: Text (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1128425927
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1128425926}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 6
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 57.9999962, y: 109.5}
+  m_SizeDelta: {x: 64, y: 7}
+  m_Pivot: {x: 0, y: .5}
+--- !u!114 &1128425928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1128425926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1128425929}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1565636342}
+        m_MethodName: AddPowerup
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 131022, guid: ddbcc8090d033c846a7e7b0d251407dc,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: Death
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1128425929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1128425926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 336b0709164a29c44bc630f7eab932a3, type: 2}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ELECTRIC
+--- !u!222 &1128425930
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1128425926}
+--- !u!1 &1131581058 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 153754, guid: 5686f5a431136cc4381bdeb6b2c9c74d, type: 2}
+  m_PrefabInternal: {fileID: 1601723807}
+--- !u!114 &1131581061 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11451352, guid: 5686f5a431136cc4381bdeb6b2c9c74d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1601723807}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1131581063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1131581058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1131581061}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
 --- !u!1001 &1137877354
 Prefab:
   m_ObjectHideFlags: 0
@@ -14388,6 +15929,75 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 422566, guid: 6c174d4679bb59440bd48046437e8822, type: 2}
   m_PrefabInternal: {fileID: 606291535}
+--- !u!1 &1152155462 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1429363767}
+--- !u!114 &1152155463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1152155462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1152155464}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1152155464 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1429363767}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1152155465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1152155462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1155311741
 Prefab:
   m_ObjectHideFlags: 0
@@ -14718,6 +16328,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 494758, guid: 1f562a8a098a38f48a9c048de5bc6356, type: 2}
   m_PrefabInternal: {fileID: 1204973780}
+--- !u!1 &1205005641 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1850916540}
+--- !u!114 &1205005642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1205005641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1205005643}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1205005643 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1850916540}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1205005644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1205005641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1206599081
 Prefab:
   m_ObjectHideFlags: 0
@@ -15425,8 +17104,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 473401143}
-  m_RootOrder: 1
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: -46, y: 116.5}
@@ -15608,8 +17287,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 473401143}
-  m_RootOrder: 2
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 2, y: 116.5}
@@ -15897,6 +17576,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 493880, guid: 370e282936671974980b8674b29b3ba8, type: 2}
   m_PrefabInternal: {fileID: 1277453016}
+--- !u!1 &1279427140 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 44810126}
+--- !u!114 &1279427141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1279427140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1279427142}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1279427142 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 44810126}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1279427143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1279427140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1280254821
 Prefab:
   m_ObjectHideFlags: 0
@@ -16398,10 +18146,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 424606, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
       propertyPath: m_LocalPosition.x
       value: 40.8400002
@@ -16432,60 +18176,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 424606, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 11439158, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: ActiveTrigger
-      value: 
+    - target: {fileID: 11405618, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
+      propertyPath: GravityDirection
+      value: 270
       objectReference: {fileID: 0}
-    - target: {fileID: 11439158, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: ActiveBool
-      value: Dying
-      objectReference: {fileID: 0}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[0]
-      value: 
-      objectReference: {fileID: 1307398239}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[1]
-      value: 
-      objectReference: {fileID: 1307398238}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[2]
-      value: 
-      objectReference: {fileID: 1307398237}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[3]
-      value: 
-      objectReference: {fileID: 1307398236}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[4]
-      value: 
-      objectReference: {fileID: 1307398235}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[5]
-      value: 
-      objectReference: {fileID: 1307398234}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[6]
-      value: 
-      objectReference: {fileID: 1307398233}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[7]
-      value: 
-      objectReference: {fileID: 1307398232}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[8]
-      value: 
-      objectReference: {fileID: 1307398231}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[9]
-      value: 
-      objectReference: {fileID: 1307398240}
-    - target: {fileID: 11461214, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
-      propertyPath: Moves.Array.data[10]
-      value: 
-      objectReference: {fileID: 1307398241}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dbca39c759708bb4dbdc512f0b2a13b2, type: 2}
   m_IsPrefabParent: 0
@@ -16585,66 +18281,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 446930, guid: e8d253de4b094d84e87331ce31400a52, type: 2}
   m_PrefabInternal: {fileID: 1306059092}
---- !u!114 &1307398231 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11491536, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 0f89f3b2bbf00cc4eb11d73303458afc, type: 3}
---- !u!114 &1307398232 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11436076, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: ad90d6e2ef2e4a14faa48173a9c897ff, type: 3}
---- !u!114 &1307398233 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11477054, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: b99b237d3dc3e1d40b435ab74ce992c3, type: 3}
---- !u!114 &1307398234 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11493570, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 3f2eca7c11782a34aaf5564a40ddbf71, type: 3}
---- !u!114 &1307398235 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11416224, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 4c1095e8583f53d4c9de57a4156eb719, type: 3}
---- !u!114 &1307398236 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11472608, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 7514d680ed0ac744d87004eb35fc4580, type: 3}
---- !u!114 &1307398237 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11426138, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 797331bf56043af418fcd734e955b173, type: 3}
---- !u!114 &1307398238 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11498508, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 95703b2ef2f45d14283e6492815cf5de, type: 3}
---- !u!114 &1307398239 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11489168, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: cdb2f0e4529104042a3b39f3ae84b062, type: 3}
---- !u!114 &1307398240 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11461730, guid: dbca39c759708bb4dbdc512f0b2a13b2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1303770823}
-  m_Script: {fileID: 11500000, guid: 59f7d680b60fb6547aaca31135aeae22, type: 3}
 --- !u!114 &1307398241 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11439158, guid: dbca39c759708bb4dbdc512f0b2a13b2,
@@ -17400,7 +19036,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -17660,7 +19295,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -18111,7 +19745,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
 --- !u!1001 &1409492428
 Prefab:
   m_ObjectHideFlags: 0
@@ -18452,6 +20086,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 91e2f8bec5940fd488cdb5339ecba4d0, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1446847167 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1618036283}
+--- !u!114 &1446847168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1446847167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1446847169}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1446847169 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1618036283}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1446847170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1446847167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1449896955
 Prefab:
   m_ObjectHideFlags: 0
@@ -18887,6 +20590,75 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9c067d3e679913c408be4d3dbe520682, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &1484633906 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 72491175}
+--- !u!114 &1484633907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1484633906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1484633908}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1484633908 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 72491175}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1484633909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1484633906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &1489571165 stripped
 Transform:
   m_PrefabParentObject: {fileID: 471070, guid: 37b18c5beaca9c043881dd0fcb34e718, type: 2}
@@ -19315,6 +21087,11 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 484418, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
   m_PrefabInternal: {fileID: 1507137838}
+--- !u!95 &1509502216 stripped
+Animator:
+  m_PrefabParentObject: {fileID: 9539936, guid: 47d2000d24dfa054fa411433b6eb0580,
+    type: 2}
+  m_PrefabInternal: {fileID: 1540363768}
 --- !u!4 &1511797093 stripped
 Transform:
   m_PrefabParentObject: {fileID: 459996, guid: 55ea362f46d9807459efef85cabd74f3, type: 2}
@@ -19876,6 +21653,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 144
       objectReference: {fileID: 0}
+    - target: {fileID: 11463636, guid: 47d2000d24dfa054fa411433b6eb0580, type: 2}
+      propertyPath: Animator
+      value: 
+      objectReference: {fileID: 1509502216}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47d2000d24dfa054fa411433b6eb0580, type: 2}
   m_IsPrefabParent: 0
@@ -19884,6 +21665,75 @@ RectTransform:
   m_PrefabParentObject: {fileID: 22423814, guid: a3954a50fb7d0c74f8714f842f55f190,
     type: 2}
   m_PrefabInternal: {fileID: 1232490014}
+--- !u!1 &1552838228 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1568239947}
+--- !u!114 &1552838229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1552838228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1552838230}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1552838230 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1568239947}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1552838231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1552838228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1558967071
 GameObject:
   m_ObjectHideFlags: 0
@@ -19958,6 +21808,75 @@ SpriteRenderer:
 Transform:
   m_PrefabParentObject: {fileID: 451452, guid: 8b07fd2258af77e4b94f63cffd1df24f, type: 2}
   m_PrefabInternal: {fileID: 1578984991}
+--- !u!1 &1565236555 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 833480858}
+--- !u!114 &1565236556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1565236555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1565236557}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1565236557 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 833480858}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1565236558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1565236555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &1565636341 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11479486, guid: dbca39c759708bb4dbdc512f0b2a13b2,
@@ -21668,6 +23587,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 55ea362f46d9807459efef85cabd74f3, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1668462606 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 397086529}
+--- !u!114 &1668462607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1668462606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1668462608}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1668462608 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 397086529}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1668462609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1668462606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1668658167
 GameObject:
   m_ObjectHideFlags: 0
@@ -22087,6 +24075,134 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 65d4f886c668b5945a0bf8f7e6640b6d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1685563313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1685563314}
+  - 222: {fileID: 1685563317}
+  - 114: {fileID: 1685563316}
+  - 114: {fileID: 1685563315}
+  m_Layer: 5
+  m_Name: Text (8)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1685563314
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1685563313}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 8
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: -45.9999924, y: 102.499985}
+  m_SizeDelta: {x: 72, y: 7}
+  m_Pivot: {x: 0, y: .5}
+--- !u!114 &1685563315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1685563313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1685563316}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1565636342}
+        m_MethodName: AddPowerup
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 132248, guid: fe6f7d79d5dc65144982da1f0095baa6,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: Death
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1685563316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1685563313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 336b0709164a29c44bc630f7eab932a3, type: 2}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'S1 SHIELD
+
+'
+--- !u!222 &1685563317
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1685563313}
 --- !u!1001 &1688123489
 Prefab:
   m_ObjectHideFlags: 0
@@ -22205,6 +24321,48 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b39a9af5a84edc441ac45c36cd7f22a3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1001 &1699347702
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 39.1119995
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -4.89499998
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 421188, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 309fb8f392b57504bb11a248d6079b1f, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &1702927266
 Prefab:
   m_ObjectHideFlags: 0
@@ -22301,48 +24459,6 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 457632, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_PrefabInternal: {fileID: 754679811}
---- !u!1001 &1710178372
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 23.7674179
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1.51911294
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 431906, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 223242d1a96993045a9b6704b2b2da25, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &1720402345
 Prefab:
   m_ObjectHideFlags: 0
@@ -23264,52 +25380,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 490068, guid: ae4b379c9f6a3b847b272e077cdd75ff, type: 2}
   m_PrefabInternal: {fileID: 795097386}
---- !u!1001 &1821625219
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 24.0869999
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1.51911294
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 157062, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_Name
-      value: S2 Super Ring (2)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-  m_IsPrefabParent: 0
 --- !u!4 &1829684812 stripped
 Transform:
   m_PrefabParentObject: {fileID: 493534, guid: caadee5467db55a45a7ef203de0e8485, type: 2}
@@ -23318,6 +25388,132 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 427762, guid: ed875b0e059a29f4f97302e461c743f4, type: 2}
   m_PrefabInternal: {fileID: 1895918397}
+--- !u!1 &1834258981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1834258982}
+  - 222: {fileID: 1834258985}
+  - 114: {fileID: 1834258984}
+  - 114: {fileID: 1834258983}
+  m_Layer: 5
+  m_Name: Text (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1834258982
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1834258981}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 895181685}
+  m_RootOrder: 5
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 2, y: 109.5}
+  m_SizeDelta: {x: 48, y: 7}
+  m_Pivot: {x: 0, y: .5}
+--- !u!114 &1834258983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1834258981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1834258984}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1565636342}
+        m_MethodName: AddPowerup
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 196572, guid: 065b1aa7f8001364ca9c2e90f2a7cb2e,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: Death
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1834258984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1834258981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 336b0709164a29c44bc630f7eab932a3, type: 2}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: BUBBLE
+--- !u!222 &1834258985
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1834258981}
 --- !u!4 &1839410146 stripped
 Transform:
   m_PrefabParentObject: {fileID: 497046, guid: e2274effee6c41b47a0f99e4e9cb0660, type: 2}
@@ -23772,7 +25968,7 @@ Transform:
   - {fileID: 133576840}
   - {fileID: 114672574}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
 --- !u!1 &1855858679
 GameObject:
   m_ObjectHideFlags: 0
@@ -24579,6 +26775,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 494758, guid: 1f562a8a098a38f48a9c048de5bc6356, type: 2}
   m_PrefabInternal: {fileID: 1922538647}
+--- !u!1 &1924356358 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 1006029896}
+--- !u!114 &1924356359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1924356358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 1924356360}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &1924356360 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1006029896}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &1924356361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1924356358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1934839219
 Prefab:
   m_ObjectHideFlags: 0
@@ -25732,52 +27997,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 457632, guid: 5a08ec9bc89a15c46884752787693d86, type: 2}
   m_PrefabInternal: {fileID: 760906578}
---- !u!1001 &2062177875
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 64.0712509
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -.981733322
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 452124, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 9591884, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 061cd25f6500e1448a813a4874cd8801, type: 2}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: c3dd0de472efcaa4fbea91771140d709, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &2069692699
 Prefab:
   m_ObjectHideFlags: 0
@@ -25828,6 +28047,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 461422, guid: b3c5cc377d1e5f24983cabfc24ca424f, type: 2}
   m_PrefabInternal: {fileID: 2069692699}
+--- !u!1 &2076394662 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 94501799}
+--- !u!114 &2076394663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2076394662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 2076394664}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &2076394664 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 94501799}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &2076394665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2076394662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &2077447096
 Prefab:
   m_ObjectHideFlags: 0
@@ -26032,6 +28320,75 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 442036, guid: 8b49a285c86250643bf91eff61b0020c, type: 2}
   m_PrefabInternal: {fileID: 2090359858}
+--- !u!1 &2096181308 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 143905249}
+--- !u!114 &2096181309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2096181308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 2096181310}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &2096181310 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 143905249}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &2096181311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2096181308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &2107240682
 GameObject:
   m_ObjectHideFlags: 0
@@ -26474,6 +28831,8 @@ GameObject:
   - 61: {fileID: 2128461990}
   - 114: {fileID: 2128461989}
   - 114: {fileID: 2128461988}
+  - 114: {fileID: 2128461993}
+  - 114: {fileID: 2128461992}
   m_Layer: 0
   m_Name: Path 1 Enter
   m_TagString: Untagged
@@ -26540,7 +28899,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -26602,6 +28960,65 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: f40afa7251d5a4640a4894b2828fe9bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &2128461992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2128461986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 2128461989}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &2128461993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2128461986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &2137026963
 Prefab:
   m_ObjectHideFlags: 0
@@ -26840,6 +29257,75 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bfc729fad5e17234292ca9c41268782d, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2145100394 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 166206, guid: 1df4856af48998740bd308f1eab0634e, type: 2}
+  m_PrefabInternal: {fileID: 708508089}
+--- !u!114 &2145100395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2145100394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8763661f8a158b747bc15db0c8478b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 2145100396}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
+--- !u!114 &2145100396 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11442522, guid: 1df4856af48998740bd308f1eab0634e,
+    type: 2}
+  m_PrefabInternal: {fileID: 708508089}
+  m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
+--- !u!114 &2145100397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2145100394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  AlwaysCollide: 1
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &2145862606
 Prefab:
   m_ObjectHideFlags: 0

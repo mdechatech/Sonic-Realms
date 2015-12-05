@@ -41,9 +41,12 @@ namespace Hedgehog.Level.Objects
         public override void Awake()
         {
             base.Awake();
-
-            Animator = GetComponent<Animator>();
             ActivationCountdown = ActivateDelay;
+        }
+
+        public override void Start()
+        {
+            base.Start();
         }
 
         public override bool ActivatesObject
@@ -73,7 +76,7 @@ namespace Hedgehog.Level.Objects
                 (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top)) return;
 
             // Rebound effect
-            var jump = hit.Controller.MoveManager.Get<Jump>();
+            var jump = hit.Controller.MoveManager.GetMove<Jump>();
             if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used)
             {
                 hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,

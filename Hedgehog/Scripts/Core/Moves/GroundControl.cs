@@ -178,18 +178,11 @@ namespace Hedgehog.Core.Moves
             TopSpeedPercentFloatHash = string.IsNullOrEmpty(TopSpeedPercentFloat) ? 0 : Animator.StringToHash(TopSpeedPercentFloat);
         }
 
-        public override void OnEnable()
+        public override void Start()
         {
-            base.OnEnable();
+            base.Start();
             Controller.OnAttach.AddListener(OnAttach);
             Controller.OnDetach.AddListener(OnDetach);
-        }
-
-        public override void OnDisable()
-        {
-            base.OnDisable();
-            Controller.OnAttach.RemoveListener(OnAttach);
-            Controller.OnDetach.RemoveListener(OnDetach);
         }
 
         private void OnAttach()

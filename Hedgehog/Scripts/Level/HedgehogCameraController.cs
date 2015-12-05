@@ -546,7 +546,10 @@ namespace Hedgehog.Level
 
         public void OnPerformMove(Move move)
         {
-            
+            if (move is FlameSpecial)
+            {
+                DoSpindashLag();
+            }
         }
 
         public void OnEndMove(Move move)

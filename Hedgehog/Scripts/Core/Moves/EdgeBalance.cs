@@ -139,14 +139,14 @@ namespace Hedgehog.Core.Moves
         {
             if (!AllowDuck)
             {
-                var duck = Manager.Get<Duck>();
+                var duck = Manager.GetMove<Duck>();
                 if (duck != null)
                     duck.InputEnabled = false;
             }
 
             if (!AllowLookUp)
             {
-                var lookUp = Manager.Get<LookUp>();
+                var lookUp = Manager.GetMove<LookUp>();
                 if (lookUp != null)
                     lookUp.InputEnabled = false;
             }
@@ -161,14 +161,14 @@ namespace Hedgehog.Core.Moves
         {
             if (!AllowDuck)
             {
-                var duck = Manager.Get<Duck>();
+                var duck = Manager.GetMove<Duck>();
                 if (duck != null)
                     duck.InputEnabled = true;
             }
 
             if (!AllowLookUp)
             {
-                var lookUp = Manager.Get<LookUp>();
+                var lookUp = Manager.GetMove<LookUp>();
                 if (lookUp != null)
                     lookUp.InputEnabled = true;
             }

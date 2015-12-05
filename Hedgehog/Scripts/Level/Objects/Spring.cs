@@ -80,12 +80,6 @@ namespace Hedgehog.Level.Objects
             HitTrigger = "";
         }
 
-        public override void Start()
-        {
-            base.Start();
-            AutoActivate = false;
-        }
-
         public override void OnPlatformEnter(TerrainCastHit hit)
         {
             var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);

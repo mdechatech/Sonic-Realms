@@ -1429,7 +1429,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns></returns>
-        public TMove GetMove<TMove>() where TMove : Move { return MoveManager.Get<TMove>(); }
+        public TMove GetMove<TMove>() where TMove : Move { return MoveManager.GetMove<TMove>(); }
 
         /// <summary>
         /// Returns whether the first move of the specified type is available.
@@ -1506,8 +1506,9 @@ namespace Hedgehog.Core.Actors
                 RightWallHit = collision;
             }
 
+            var result = TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
             OnCollide.Invoke(collision);
-            return TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
+            return result;
         }
 
         /// <summary>

@@ -43,6 +43,11 @@ namespace Hedgehog.Core.Moves
         public float TopSpeed;
         #endregion
 
+        public override MoveGroup[] Groups
+        {
+            get { return new []{MoveGroup.Control, MoveGroup.Air}; }
+        }
+
         /// <summary>
         /// If true, disables input.
         /// </summary>
@@ -66,20 +71,14 @@ namespace Hedgehog.Core.Moves
         public override void Awake()
         {
             base.Awake();
-
             _axis = 0.0f;
         }
 
-        public override void OnEnable()
+        public override void Start()
         {
+            base.Start();
             Controller.OnAttach.AddListener(OnAttach);
             Controller.OnDetach.AddListener(OnDetach);
-        }
-
-        public override void OnDisable()
-        {
-            Controller.OnAttach.RemoveListener(OnAttach);
-            Controller.OnDetach.RemoveListener(OnDetach);
         }
 
         private void OnDetach()

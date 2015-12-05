@@ -28,6 +28,11 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether the ring has been collected.")]
         public bool Collected;
 
+        public override bool ActivatesObject
+        {
+            get { return true; }
+        }
+
         public override void Reset()
         {
             base.Reset();

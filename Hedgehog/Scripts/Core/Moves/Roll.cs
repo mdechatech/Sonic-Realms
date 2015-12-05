@@ -120,16 +120,10 @@ namespace Hedgehog.Core.Moves
             UphillBoolHash = string.IsNullOrEmpty(UphillBool) ? 0 : Animator.StringToHash(UphillBool);
         }
 
-        public override void OnEnable()
+        public override void Start()
         {
-            base.OnEnable();
+            base.Start();
             Controller.OnAttach.AddListener(OnAttach);
-        }
-
-        public override void OnDisable()
-        {
-            base.OnDisable();
-            Controller.OnDetach.RemoveListener(OnAttach);
         }
 
         protected void OnAttach()

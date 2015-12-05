@@ -67,6 +67,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Start();
             CreateClearanceSensors();
+            Controller.OnAttach.AddListener(OnAttach);
         }
 
         protected void CreateClearanceSensors()
@@ -83,17 +84,6 @@ namespace Hedgehog.Core.Moves
             ClearanceSensorRight = new GameObject {name = "Clearance Right"}.transform;
             ClearanceSensorRight.transform.SetParent(Controller.Sensors.transform);
             ClearanceSensorRight.transform.position = Controller.Sensors.TopRightStart.position + offset;
-        }
-
-        public override void OnEnable()
-        {
-            base.OnEnable();
-            Controller.OnAttach.AddListener(OnAttach);
-        }
-
-        public override void OnDisable()
-        {
-            Controller.OnAttach.RemoveListener(OnAttach);
         }
 
         public void OnDestroy()
@@ -132,7 +122,7 @@ namespace Hedgehog.Core.Moves
             Controller.Detach();
             Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
 
-            var roll = Manager.Get<Roll>();
+            var roll = Manager.GetMove<Roll>();
             if (roll == null) return;
 
             if (roll.Active)

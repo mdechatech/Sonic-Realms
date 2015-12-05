@@ -30,10 +30,10 @@ namespace Hedgehog.Core.Moves
             base.Start();
             if (!UseControlInput) return;
 
-            var groundControl = Manager.Get<GroundControl>();
+            var groundControl = Manager.GetMove<GroundControl>();
             if (groundControl == null)
             {
-                var airControl = Manager.Get<AirControl>();
+                var airControl = Manager.GetMove<AirControl>();
                 if (airControl == null)
                     return;
 

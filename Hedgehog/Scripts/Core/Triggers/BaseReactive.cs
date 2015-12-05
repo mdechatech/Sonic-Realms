@@ -34,15 +34,6 @@ namespace Hedgehog.Core.Triggers
         }
 
         /// <summary>
-        /// Whether the object trigger is auto activated, or false if there isn't one.
-        /// </summary>
-        protected bool AutoActivate
-        {
-            get { return ObjectTrigger == null ? false : ObjectTrigger.AutoActivate; }
-            set { if (ObjectTrigger != null) ObjectTrigger.AutoActivate = value; }
-        }
-
-        /// <summary>
         /// Whether the object trigger is activated, or false if there isn't one.
         /// </summary>
         public bool Activated
@@ -69,8 +60,8 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void Start()
         {
-            ObjectTrigger = ObjectTrigger ?? GetComponent<ObjectTrigger>();
-            Animator = Animator ?? GetComponent<Animator>();
+            ObjectTrigger = ObjectTrigger ? ObjectTrigger : GetComponent<ObjectTrigger>();
+            Animator = Animator ? Animator : GetComponent<Animator>();
         }
 
         /// <summary>

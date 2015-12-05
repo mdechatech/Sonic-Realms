@@ -62,9 +62,17 @@ namespace Hedgehog.Core.Utils
         public static TerrainCastHit TerrainCast(this HedgehogController source, Vector2 start,
             Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
-            var hit = BestRaycast(source, Physics2DUtility.LinecastNonAlloc(start, end), fromSide);
+            var amount = Physics2D.LinecastNonAlloc(start, end, TerrainCastResults);
+            if (amount < 1)
+                return null;
+
+            var hit = BestRaycast(source, TerrainCastResults, amount, fromSide);
             return new TerrainCastHit(hit, fromSide, source, start, end);
         }
+
+        private const int MaxTerrainCastResults = 128;
+        private static readonly RaycastHit2D[] TerrainCastResults = 
+            new RaycastHit2D[MaxTerrainCastResults];
 
         /// <summary>
         /// Performs a linecast against the terrain.
@@ -75,10 +83,10 @@ namespace Hedgehog.Core.Utils
         /// <returns></returns>
         public static TerrainCastHit TerrainCast(Vector2 start, Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
-            var linecasts = Physics2DUtility.LinecastNonAlloc(start, end);
-            if (!linecasts.Any()) return null;
+            var amount = Physics2D.LinecastNonAlloc(start, end, TerrainCastResults);
+            if (amount < 1) return null;
 
-            var hit = BestRaycast(null, linecasts);
+            var hit = BestRaycast(null, TerrainCastResults, amount, fromSide);
             return new TerrainCastHit(hit, fromSide, null, start, end);
         }
 
@@ -88,13 +96,16 @@ namespace Hedgehog.Core.Utils
         /// </summary>
         /// <param name="source">The controller that queried the info.</param>
         /// <param name="raycasts">The list of raycasts to filter.</param>
+        /// <param name="amount">The number of results in the list.</param>
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
         public static RaycastHit2D BestRaycast(HedgehogController source, RaycastHit2D[] raycasts,
-            ControllerSide raycastSide = ControllerSide.All)
+            int amount = int.MaxValue, ControllerSide raycastSide = ControllerSide.All)
         {
-            foreach (var hit in raycasts)
+            var iterations = Mathf.Min(amount, raycasts.Length);
+            for (var i = 0; i < iterations; ++i)
             {
+                var hit = raycasts[i];
                 if (!hit) continue;
                 if (!TransformSelector(hit, source, raycastSide)) continue;
                 return hit;
@@ -102,6 +113,7 @@ namespace Hedgehog.Core.Utils
 
             return default(RaycastHit2D);
         }
+
         #endregion
         #region Terrain Cast Selectors
         private static readonly List<PlatformTrigger> TransformSelectorPlatformTriggers = new List<PlatformTrigger>();
@@ -123,9 +135,9 @@ namespace Hedgehog.Core.Utils
             if (TransformSelectorPlatformTriggers.Any())
                 return TransformSelectorPlatformTriggers.All(trigger => trigger.IsSolid(terrainCastHit));
 
-            if (hit.transform.GetComponent<AreaTrigger>() != null) return false;
+            if (terrainCastHit.Transform.GetComponent<AreaTrigger>() != null) return false;
 
-            return CollisionModeSelector(hit.transform, source);
+            return CollisionModeSelector(terrainCastHit.Transform, source);
         }
 
         /// <summary>

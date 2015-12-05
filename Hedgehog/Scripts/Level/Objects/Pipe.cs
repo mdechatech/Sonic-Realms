@@ -92,7 +92,6 @@ namespace Hedgehog.Level.Objects
         {
             base.Start();
 
-            ObjectTrigger.AutoActivate = false;
             ObjectTrigger.TriggerFromChildren = false;
             EntryPoint.OnActivateEnter.AddListener(ObjectTrigger.Activate);
             ReconstructPath();

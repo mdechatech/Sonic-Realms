@@ -65,7 +65,7 @@ namespace Hedgehog.Level
 
         public void OnDeathComplete()
         {
-            Debug.Log("Time to fade out :(");
+            Application.LoadLevel(Application.loadedLevel);
         }
     }
 }

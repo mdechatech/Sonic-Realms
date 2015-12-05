@@ -19,25 +19,6 @@ namespace Hedgehog.Core.Triggers
         {
             base.Awake();
             ObjectTrigger = GetComponent<ObjectTrigger>();
-
-            if (ObjectTrigger.AutoActivate || GetComponents<BaseReactive>().Any(reactive => reactive.ActivatesObject))
-                return;
-
-            // If there's no activator, we can guess whether we want to act like a platform or an area
-            var collider2D = GetComponent<Collider2D>();
-            if (collider2D == null)
-                return;
-
-            ObjectTrigger.AutoActivate = true;
-            if (collider2D.isTrigger)
-            {
-                if (GetComponent<AreaTrigger>() == null)
-                    gameObject.AddComponent<AreaTrigger>();
-            }
-            else if (GetComponent<PlatformTrigger>() == null)
-            {
-                gameObject.AddComponent<PlatformTrigger>();
-            }
         }
 
         public virtual void OnEnable()

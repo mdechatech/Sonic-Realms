@@ -8,8 +8,14 @@ namespace Hedgehog.Core.Moves
     /// </summary>
     public class Death : Move
     {
+        /// <summary>
+        /// How quickly the controller bounces off the map.
+        /// </summary>
         public float Velocity;
 
+        /// <summary>
+        /// How long to wait before ending the move, causing the zone manager to restart the game.
+        /// </summary>
         public float RestartDelay;
 
         [HideInInspector]
@@ -17,6 +23,11 @@ namespace Hedgehog.Core.Moves
 
         [HideInInspector]
         public bool Restarting;
+
+        public override MoveGroup[] Groups
+        {
+            get { return new[] {MoveGroup.Death}; }
+        }
 
         public override void Reset()
         {

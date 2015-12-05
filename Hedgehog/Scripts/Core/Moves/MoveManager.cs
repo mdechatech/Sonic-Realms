@@ -15,7 +15,6 @@ namespace Hedgehog.Core.Moves
     public class MoveEvent : UnityEvent<Move> { }
     #endregion
 
-
     /// <summary>
     /// Handles a controller's moves.
     /// </summary>
@@ -111,10 +110,10 @@ namespace Hedgehog.Core.Moves
             {
                 foreach (var move in new List<Move>(UnavailableMoves))
                 {
+                    // If the move is null or destroyed we need to remove it and update the list
                     if (!move)
                     {
-                        UnavailableMoves.Remove(move);
-                        GetComponents(Moves);
+                        UpdateList();
                         continue;
                     }
 
@@ -135,10 +134,10 @@ namespace Hedgehog.Core.Moves
             {
                 foreach (var move in new List<Move>(AvailableMoves))
                 {
+                    // If the move is null or destroyed we need to remove it and update the list
                     if (!move)
                     {
-                        AvailableMoves.Remove(move);
-                        GetComponents(Moves);
+                        UpdateList();
                         continue;
                     }
 
@@ -163,10 +162,10 @@ namespace Hedgehog.Core.Moves
             {
                 foreach (var move in new List<Move>(ActiveMoves))
                 {
+                    // If the move is null or destroyed we need to remove it and update the list
                     if (!move)
                     {
-                        ActiveMoves.Remove(move);
-                        GetComponents(Moves);
+                        UpdateList();
                         continue;
                     }
 
@@ -189,9 +188,10 @@ namespace Hedgehog.Core.Moves
 
             foreach (var move in new List<Move>(ActiveMoves))
             {
+                // Might as well check to see if the move has been destroyed - if it has, update the list
                 if (!move)
                 {
-                    GetComponents(Moves);
+                    UpdateList();
                     continue;
                 }
 
@@ -201,13 +201,94 @@ namespace Hedgehog.Core.Moves
 
         #region Move Helpers
         /// <summary>
+        /// Updates the move list. This is done automatically if it finds a move has been removed or
+        /// destroyed, but not when added.
+        /// </summary>
+        public void UpdateList()
+        {
+            // Remove all destroyed/transferred moves and notify them
+            Moves.RemoveAll(move =>
+            {
+                if (move && move.transform.IsChildOf(transform)) return false;
+
+                switch (move.CurrentState)
+                {
+                    case Move.State.Active:
+                        ActiveMoves.Remove(move);
+                        break;
+
+                    case Move.State.Available:
+                        AvailableMoves.Remove(move);
+                        break;
+
+                    case Move.State.Unavailable:
+                        UnavailableMoves.Remove(move);
+                        break;
+                }
+
+                move.OnManagerRemove();
+                move.OnRemove.Invoke();
+                return true;
+            });
+
+            // Copy the current list before filling it with new moves
+            var moves = new List<Move>(Moves);
+            GetComponentsInChildren(Moves);
+            
+            // Compare the copied list with the new, add/notify the ones they don't have in common
+            foreach (var move in Moves.Where(move => !moves.Contains(move)))
+            {
+                move.Controller = Controller;
+                move.Manager = this;
+
+                move.ChangeState(Move.State.Unavailable);
+                UnavailableMoves.Add(move);
+
+                move.OnManagerAdd();
+                move.OnAdd.Invoke();
+            }
+        }
+
+        /// <summary>
         /// Returns the first move of the specified type.
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns></returns>
-        public TMove Get<TMove>() where TMove : Move
+        public TMove GetMove<TMove>() where TMove : Move
         {
             return Moves.FirstOrDefault(move => move is TMove) as TMove;
+        }
+
+        /// <summary>
+        /// Returns the first move in the specified group.
+        /// </summary>
+        /// <param name="moveGroup">The specified group.</param>
+        /// <returns></returns>
+        public Move GetMove(MoveGroup moveGroup)
+        {
+            return moveGroup == MoveGroup.All
+                ? Moves.FirstOrDefault()
+                : Moves.FirstOrDefault(move => move.Groups.Contains(moveGroup));
+        }
+
+        /// <summary>
+        /// Returns all moves of the specified type.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public IEnumerable<TMove> GetMoves<TMove>() where TMove : Move
+        {
+            return Moves.OfType<TMove>();
+        }
+
+        /// <summary>
+        /// Returns all moves of the specified group.
+        /// </summary>
+        /// <param name="moveGroup">The specified group.</param>
+        /// <returns></returns>
+        public IEnumerable<Move> GetMoves(MoveGroup moveGroup)
+        {
+            return Moves.Where(move => move.Groups.Contains(moveGroup));
         }
 
         /// <summary>
@@ -374,6 +455,43 @@ namespace Hedgehog.Core.Moves
             }
 
             return result;
+        }
+        #endregion
+        #region Powerup Helpers
+        // Powerups are just objects that have moves on them. These objects can be added under
+        // the manager's transform, at which point their moves will be added to the move list.
+
+        /// <summary>
+        /// Adds a copy of the specified powerup to the manager.
+        /// </summary>
+        /// <param name="powerup">The specified powerup to copy.</param>
+        public void AddPowerup(GameObject powerup)
+        {
+            var p = Instantiate(powerup);
+            p.transform.SetParent(Controller.transform);
+            p.transform.position = Controller.transform.position;
+            UpdateList();
+        }
+
+        /// <summary>
+        /// Transfers the specified powerup to the manager.
+        /// </summary>
+        /// <param name="powerup">The specified powerup.</param>
+        public void TransferPowerup(GameObject powerup)
+        {
+            powerup.transform.SetParent(Controller.transform);
+            powerup.transform.position = Controller.transform.position;
+            UpdateList();
+        }
+
+        /// <summary>
+        /// Removes the specified powerup from the manager.
+        /// </summary>
+        /// <param name="powerup">The specified powerup.</param>
+        public void RemovePowerup(GameObject powerup)
+        {
+            Destroy(powerup);
+            UpdateList();
         }
         #endregion
     }

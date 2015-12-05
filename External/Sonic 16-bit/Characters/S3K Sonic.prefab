@@ -431,7 +431,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 40.8400002, y: -3.25999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
@@ -949,8 +949,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  ActiveTrigger: Death
-  ActiveBool: 
+  ActiveTrigger: 
+  ActiveBool: Dying
   AvailableBool: 
   Velocity: 4.19999981
   RestartDelay: 2.33333302
@@ -968,7 +968,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 11405618}
-  Moves: []
+  Moves:
+  - {fileID: 11489168}
+  - {fileID: 11498508}
+  - {fileID: 11426138}
+  - {fileID: 11472608}
+  - {fileID: 11416224}
+  - {fileID: 11493570}
+  - {fileID: 11477054}
+  - {fileID: 11436076}
+  - {fileID: 11491536}
+  - {fileID: 11461730}
+  - {fileID: 11439158}
   ActiveMoves: []
   AvailableMoves: []
   UnavailableMoves: []
@@ -1128,6 +1139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 11405618}
   HurtReboundMove: {fileID: 11461730}
+  DeathMove: {fileID: 11439158}
   RingCollector: {fileID: 11417206}
   RingsLost: 9001
   HurtInvinciblilityTime: 2

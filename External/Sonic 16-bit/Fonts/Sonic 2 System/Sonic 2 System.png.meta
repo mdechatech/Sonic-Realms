@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e6ecfa526a918d643bb2edcbbeae0d70
-timeCreated: 1449042247
+timeCreated: 1449310913
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -30,16 +30,16 @@ TextureImporter:
     21300046: Sonic 2 System_88
     21300048: Sonic 2 System_89
     21300050: Sonic 2 System_90
-    21300052: Sonic 2 System_48
-    21300054: Sonic 2 System_49
-    21300056: Sonic 2 System_50
-    21300058: Sonic 2 System_51
-    21300060: Sonic 2 System_52
-    21300062: Sonic 2 System_53
-    21300064: Sonic 2 System_54
-    21300066: Sonic 2 System_55
-    21300068: Sonic 2 System_56
-    21300070: Sonic 2 System_57
+    21300052: Sonic 2 System_49
+    21300054: Sonic 2 System_50
+    21300056: Sonic 2 System_51
+    21300058: Sonic 2 System_52
+    21300060: Sonic 2 System_53
+    21300062: Sonic 2 System_54
+    21300064: Sonic 2 System_55
+    21300066: Sonic 2 System_56
+    21300068: Sonic 2 System_57
+    21300070: Sonic 2 System_48
     21300072: Sonic 2 System_42
     21300074: Sonic 2 System_32
   serializedVersion: 2
@@ -348,20 +348,10 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sonic 2 System_48
-      rect:
-        serializedVersion: 2
-        x: 45
-        y: 33
-        width: 8
-        height: 7
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Sonic 2 System_49
       rect:
         serializedVersion: 2
-        x: 54
+        x: 45
         y: 33
         width: 8
         height: 7
@@ -371,8 +361,8 @@ TextureImporter:
     - name: Sonic 2 System_50
       rect:
         serializedVersion: 2
-        x: 0
-        y: 25
+        x: 54
+        y: 33
         width: 8
         height: 7
       alignment: 0
@@ -381,7 +371,7 @@ TextureImporter:
     - name: Sonic 2 System_51
       rect:
         serializedVersion: 2
-        x: 9
+        x: 0
         y: 25
         width: 8
         height: 7
@@ -391,7 +381,7 @@ TextureImporter:
     - name: Sonic 2 System_52
       rect:
         serializedVersion: 2
-        x: 18
+        x: 9
         y: 25
         width: 8
         height: 7
@@ -401,7 +391,7 @@ TextureImporter:
     - name: Sonic 2 System_53
       rect:
         serializedVersion: 2
-        x: 27
+        x: 18
         y: 25
         width: 8
         height: 7
@@ -411,7 +401,7 @@ TextureImporter:
     - name: Sonic 2 System_54
       rect:
         serializedVersion: 2
-        x: 36
+        x: 27
         y: 25
         width: 8
         height: 7
@@ -421,7 +411,7 @@ TextureImporter:
     - name: Sonic 2 System_55
       rect:
         serializedVersion: 2
-        x: 45
+        x: 36
         y: 25
         width: 8
         height: 7
@@ -431,7 +421,7 @@ TextureImporter:
     - name: Sonic 2 System_56
       rect:
         serializedVersion: 2
-        x: 54
+        x: 45
         y: 25
         width: 8
         height: 7
@@ -439,6 +429,16 @@ TextureImporter:
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Sonic 2 System_57
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_48
       rect:
         serializedVersion: 2
         x: 0

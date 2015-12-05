@@ -22,6 +22,11 @@ namespace Hedgehog.Core.Utils
         /// The controller that initiated the cast, if any.
         /// </summary>
         public HedgehogController Controller;
+        
+        /// <summary>
+        /// The transform of the object hit, if any.
+        /// </summary>
+        public Transform Transform;
 
         /// <summary>
         /// The angle of incline of the terrain hit in radians, if any.
@@ -53,6 +58,7 @@ namespace Hedgehog.Core.Utils
             Controller = controller;
             NormalAngle = DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi);
             SurfaceAngle = DMath.Modp(NormalAngle - DMath.HalfPi, DMath.DoublePi);
+            Transform = hit.transform;
         }
 
         public static implicit operator bool(TerrainCastHit terrainInfo)

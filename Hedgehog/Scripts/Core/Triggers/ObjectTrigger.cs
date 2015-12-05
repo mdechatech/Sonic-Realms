@@ -27,14 +27,6 @@ namespace Hedgehog.Core.Triggers
         [HideInInspector]
         public List<HedgehogController> Collisions;
 
-        /// <summary>
-        /// Whether to automatically trigger when the object is touched. If there is no platform
-        /// or area trigger, an area trigger is automatically added. If there is already a platform
-        /// trigger, the object is activated when it is landed on.
-        /// </summary>
-        [Tooltip("Whether to automatically trigger when the object is touched.")]
-        public bool AutoActivate;
-
         private PlatformTrigger _platformTrigger;
         private AreaTrigger _areaTrigger;
         
@@ -91,7 +83,6 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            AutoActivate = false;
             AllowReactivation = true;
             OnActivateEnter = new ObjectEvent();
             OnActivateStay = new ObjectEvent();
@@ -117,24 +108,6 @@ namespace Hedgehog.Core.Triggers
 
             ActivatedTriggerHash = string.IsNullOrEmpty(ActivatedTrigger) ? 0 : Animator.StringToHash(ActivatedTrigger);
             ActivatedBoolHash = string.IsNullOrEmpty(ActivatedBool) ? 0 : Animator.StringToHash(ActivatedBool);
-        }
-
-        public void Start()
-        {
-            if (!AutoActivate) return;
-            if ((_areaTrigger = GetComponent<AreaTrigger>()) != null)
-            {
-                _areaTrigger.OnAreaEnter.AddListener(Activate);
-                _areaTrigger.OnAreaExit.AddListener(Deactivate);
-                _areaTrigger.AlwaysCollide = true;
-                _areaTrigger.TriggerFromChildren = TriggerFromChildren;
-            } else
-            {
-                _platformTrigger = GetComponent<PlatformTrigger>() ?? gameObject.AddComponent<PlatformTrigger>();
-                _platformTrigger.OnSurfaceEnter.AddListener(hit => Activate(hit.Controller));
-                _platformTrigger.OnSurfaceExit.AddListener(hit => Deactivate(hit.Controller));
-                _platformTrigger.TriggerFromChildren = TriggerFromChildren;
-            }
         }
 
         public void FixedUpdate()

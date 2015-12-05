@@ -9,17 +9,19 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Reference to the attached controller.
         /// </summary>
-        protected HedgehogController Controller;
+        [HideInInspector]
+        public HedgehogController Controller;
 
         /// <summary>
         /// Reference to the associated move manager.
         /// </summary>
-        protected MoveManager Manager;
+        [HideInInspector]
+        public MoveManager Manager;
 
         /// <summary>
         /// Reference to the attached animator.
         /// </summary>
-        protected Animator Animator;
+        public Animator Animator;
 
         /// <summary>
         /// The move's current state.
@@ -33,13 +35,25 @@ namespace Hedgehog.Core.Moves
         }
 
         /// <summary>
+        /// Default groups a move is in, which is none.
+        /// </summary>
+        public static readonly MoveGroup[] DefaultGroups = {MoveGroup.All};
+
+        /// <summary>
+        /// List of groups the move is in. The move can be found by its move group.
+        /// </summary>
+        public virtual MoveGroup[] Groups
+        {
+            get { return DefaultGroups; }
+        }
+
+        /// <summary>
         /// Whether the move is currently active.
         /// </summary>
         public bool Active
         {
             get { return CurrentState == State.Active; }
             set { ChangeState(value ? State.Active : CurrentState == State.Active ? State.Available : CurrentState); }
-
         }
 
         /// <summary>
@@ -62,6 +76,16 @@ namespace Hedgehog.Core.Moves
         /// Invoked when the move is ended.
         /// </summary>
         public UnityEvent OnEnd;
+
+        /// <summary>
+        /// Invoked when the move is added to a manager.
+        /// </summary>
+        public UnityEvent OnAdd;
+
+        /// <summary>
+        /// Invoked when the move is removed from a manager.
+        /// </summary>
+        public UnityEvent OnRemove;
 
         /// <summary>
         /// Invoked when the move becomes available.
@@ -103,22 +127,20 @@ namespace Hedgehog.Core.Moves
 
         public virtual void Awake()
         {
-            Controller = Controller ?? GetComponentInParent<HedgehogController>();
-            Animator = Controller.Animator;
-            Manager = Controller.MoveManager;
-
-            CurrentState = State.Unavailable;
-            InputActivated = false;
-            InputEnabled = true;
+            OnActive = OnActive ?? new UnityEvent();
+            OnEnd = OnEnd ?? new UnityEvent();
+            OnAvailable = OnAvailable ?? new UnityEvent();
+            OnUnavailable = OnUnavailable ?? new UnityEvent();
+            OnAdd = OnAdd ?? new UnityEvent();
+            OnRemove = OnRemove ?? new UnityEvent();
 
             ActiveTriggerHash = string.IsNullOrEmpty(ActiveTrigger) ? 0 : Animator.StringToHash(ActiveTrigger);
             ActiveBoolHash = string.IsNullOrEmpty(ActiveBool) ? 0 : Animator.StringToHash(ActiveBool);
             AvailableBoolHash = string.IsNullOrEmpty(AvailableBool) ? 0 : Animator.StringToHash(AvailableBool);
 
-            OnActive = OnActive ?? new UnityEvent();
-            OnEnd = OnEnd ?? new UnityEvent();
-            OnAvailable = OnAvailable ?? new UnityEvent();
-            OnUnavailable = OnUnavailable ?? new UnityEvent();
+            CurrentState = State.Unavailable;
+            InputActivated = false;
+            InputEnabled = true;
         }
 
         public virtual void OnEnable()
@@ -133,7 +155,9 @@ namespace Hedgehog.Core.Moves
 
         public virtual void Start()
         {
-            Animator = Controller.Animator;
+            Controller = Controller ? Controller : GetComponentInParent<HedgehogController>();
+            Animator = Animator ? Animator : Controller.Animator;
+            Manager = Manager ? Manager : Controller.MoveManager;
         }
 
         public virtual void Update()
@@ -176,6 +200,12 @@ namespace Hedgehog.Core.Moves
             {
                 OnActiveEnter(prevState);
                 OnActive.Invoke();
+
+                if (Animator == null)
+                    return true;
+
+                if(ActiveTriggerHash != 0)
+                    Animator.SetTrigger(ActiveTriggerHash);
             }
             else if (CurrentState == State.Available)
             {
@@ -185,12 +215,6 @@ namespace Hedgehog.Core.Moves
             {
                 OnUnavailable.Invoke();
             }
-
-            if (Animator == null)
-                return true;
-
-            if (CurrentState == State.Active && ActiveTriggerHash != 0)
-                Animator.SetTrigger(ActiveTriggerHash);
 
             return true;
         }
@@ -211,6 +235,22 @@ namespace Hedgehog.Core.Moves
         public bool End()
         {
             return Manager.End(this);
+        }
+
+        /// <summary>
+        /// Called when the manager adds this move to its move list.
+        /// </summary>
+        public virtual void OnManagerAdd()
+        {
+
+        }
+        
+        /// <summary>
+        /// Called when the manager removes this move from its move list.
+        /// </summary>
+        public virtual void OnManagerRemove()
+        {
+
         }
 
         /// <summary>

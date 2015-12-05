@@ -45,5 +45,15 @@ namespace Hedgehog.Core.Utils
             if (component != null)
                 component.enabled = true;
         }
+
+        /// <summary>
+        /// Sets the sorting order of the sprite.
+        /// </summary>
+        public void SetSortingOrder(int sortingOrder)
+        {
+            var sprite = GetComponentInChildren<SpriteRenderer>();
+            if (sprite == null) return;
+            sprite.sortingOrder = sortingOrder;
+        }
     }
 }

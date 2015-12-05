@@ -38,7 +38,7 @@ namespace Hedgehog.Core.Utils
         /// <returns></returns>
         public static float Round(float value, float interval = 1.0f, float offset = 0.0f)
         {
-            return Mathf.Round(value/interval)*interval + offset;
+            return Mathf.Round((value - offset)/interval)*interval + offset;
         }
 
         /// <summary>

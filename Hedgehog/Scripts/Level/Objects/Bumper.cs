@@ -34,23 +34,12 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether to lock the controller's horizontal control after being hit.")]
         public bool LockControl;
 
-        public override bool ActivatesObject
-        {
-            get { return true; }
-        }
-
         public override void Reset()
         {
             base.Reset();
             Velocity = 10.0f;
             AccurateBounce = false;
             LockControl = false;
-        }
-
-        public override void Start()
-        {
-            base.Start();
-            AutoActivate = false;
         }
 
         public override void OnPlatformEnter(TerrainCastHit hit)
