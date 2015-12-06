@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5b189e98aff2ed04facbb5276cda553e
-timeCreated: 1449284690
+timeCreated: 1449386664
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -18,8 +18,8 @@ TextureImporter:
     21300022: s2_static_01
     21300024: s2_static_02
     21300026: s2_itembox_sonic
-    21300028: s2_itembox_teleport_01
-    21300030: s2_itembox_teleport_02
+    21300028: s2_itembox_swap
+    21300030: s2_itembox_robotnik
     21300032: s2_itembox_speed
     21300034: s2_itembox_ring
     21300036: s2_itembox_invincible
@@ -38,7 +38,7 @@ TextureImporter:
     21300062: s3k_itembox_super
     21300064: s3k_itembox_electric
     21300066: s3k_itembox_fire
-    21300068: s3k_itembox_eggman
+    21300068: s3k_itembox_robotnik
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -225,7 +225,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: s2_itembox_teleport_01
+    - name: s2_itembox_swap
       rect:
         serializedVersion: 2
         x: 17
@@ -235,7 +235,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: s2_itembox_teleport_02
+    - name: s2_itembox_robotnik
       rect:
         serializedVersion: 2
         x: 34
@@ -425,7 +425,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: s3k_itembox_eggman
+    - name: s3k_itembox_robotnik
       rect:
         serializedVersion: 2
         x: 51

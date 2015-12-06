@@ -24,11 +24,6 @@ namespace Hedgehog.Level.Objects
         [SerializeField]
         public float FreezeTime;
 
-        public override bool ActivatesObject
-        {
-            get { return true; }
-        }
-
         public override void Reset()
         {
             base.Reset();

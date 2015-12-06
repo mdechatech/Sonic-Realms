@@ -44,16 +44,6 @@ namespace Hedgehog.Level.Objects
             ActivationCountdown = ActivateDelay;
         }
 
-        public override void Start()
-        {
-            base.Start();
-        }
-
-        public override bool ActivatesObject
-        {
-            get { return true; }
-        }
-
         public void Update()
         {
             if (Controller == null) return;

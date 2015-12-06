@@ -11,11 +11,6 @@ namespace Hedgehog.Level.Objects
     {
         public float Velocity;
 
-        public override bool ActivatesObject
-        {
-            get { return true; }
-        }
-
         public override void Reset()
         {
             base.Reset();

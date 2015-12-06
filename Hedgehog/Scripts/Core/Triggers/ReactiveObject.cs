@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using Hedgehog.Core.Actors;
+﻿using Hedgehog.Core.Actors;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Hedgehog.Core.Triggers
 {

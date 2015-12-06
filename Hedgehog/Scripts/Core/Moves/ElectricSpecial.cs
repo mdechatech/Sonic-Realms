@@ -5,7 +5,7 @@ namespace Hedgehog.Core.Moves
     /// <summary>
     /// The double jump that Sonic can perform when he has an electric shield.
     /// </summary>
-    public class ElectricSpecial : DoubleJumpMove
+    public class ElectricSpecial : DoubleJump
     {
         /// <summary>
         /// The vertical velocity of the special move, in units per second.
@@ -19,9 +19,9 @@ namespace Hedgehog.Core.Moves
             Velocity = 3.3f;
         }
 
-        public override void OnActiveEnter(State previousState)
+        public override void OnActiveEnter()
         {
-            base.OnActiveEnter(previousState);
+            base.OnActiveEnter();
             Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x, Velocity);
             End();
         }

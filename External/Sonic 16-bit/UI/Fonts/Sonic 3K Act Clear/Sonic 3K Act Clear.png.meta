@@ -1,0 +1,354 @@
+fileFormatVersion: 2
+guid: 1b9ee84c1dcb6ba48a6f6281a6ea562e
+timeCreated: 1448939494
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sonic 3K Got Through_71
+    21300002: Sonic 3K Got Through_84
+    21300004: Sonic 3K Got Through_72
+    21300006: Sonic 3K Got Through_82
+    21300008: Sonic 3K Got Through_85
+    21300010: Sonic 3K Got Through_79
+    21300012: Sonic 3K Got Through_32
+    21300014: Sonic 3K Got Through_71
+    21300016: Sonic 3K Got Through_65
+    21300018: Sonic 3K Got Through_66
+    21300020: Sonic 3K Got Through_67
+    21300022: Sonic 3K Got Through_68
+    21300024: Sonic 3K Got Through_69
+    21300026: Sonic 3K Got Through_70
+    21300028: Sonic 3K Got Through_73
+    21300030: Sonic 3K Got Through_74
+    21300032: Sonic 3K Got Through_75
+    21300034: Sonic 3K Got Through_76
+    21300036: Sonic 3K Got Through_77
+    21300038: Sonic 3K Got Through_78
+    21300040: Sonic 3K Got Through_80
+    21300042: Sonic 3K Got Through_81
+    21300044: Sonic 3K Got Through_83
+    21300046: Sonic 3K Got Through_86
+    21300048: Sonic 3K Got Through_87
+    21300050: Sonic 3K Got Through_88
+    21300052: Sonic 3K Got Through_89
+    21300054: Sonic 3K Got Through_90
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Sonic 3K Got Through_71
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_84
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_72
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_82
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 112
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_85
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_79
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 95
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_66
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 95
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_67
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 95
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_68
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 95
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_69
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 95
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_70
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 95
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_73
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 95
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_74
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 78
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_75
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 78
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_76
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 78
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_77
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 78
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_78
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 78
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_80
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 78
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_81
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 78
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_83
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 61
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_86
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 61
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_87
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 61
+        width: 23
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_88
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 61
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_89
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 61
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_90
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 61
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Got Through_32
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 112
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: Fonts
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

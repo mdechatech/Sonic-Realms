@@ -1,0 +1,474 @@
+fileFormatVersion: 2
+guid: c7c4256ff0b8db644937c3c901a1bcf4
+timeCreated: 1449007627
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sonic 3K HUD Shiny_48
+    21300002: Sonic 3K HUD Shiny_49
+    21300004: Sonic 3K HUD Shiny_50
+    21300006: Sonic 3K HUD Shiny_51
+    21300008: Sonic 3K HUD Shiny_52
+    21300010: Sonic 3K HUD Shiny_53
+    21300012: Sonic 3K HUD Shiny_54
+    21300014: Sonic 3K HUD Shiny_55
+    21300016: Sonic 3K HUD Shiny_56
+    21300018: Sonic 3K HUD Shiny_57
+    21300020: Sonic 3K HUD Shiny_58
+    21300022: Sonic 3K HUD Shiny_65
+    21300024: Sonic 3K HUD Shiny_66
+    21300026: Sonic 3K HUD Shiny_67
+    21300028: Sonic 3K HUD Shiny_68
+    21300030: Sonic 3K HUD Shiny_69
+    21300032: Sonic 3K HUD Shiny_70
+    21300034: Sonic 3K HUD Shiny_71
+    21300036: Sonic 3K HUD Shiny_72
+    21300038: Sonic 3K HUD Shiny_73
+    21300040: Sonic 3K HUD Shiny_74
+    21300042: Sonic 3K HUD Shiny_75
+    21300044: Sonic 3K HUD Shiny_76
+    21300046: Sonic 3K HUD Shiny_77
+    21300048: Sonic 3K HUD Shiny_78
+    21300050: Sonic 3K HUD Shiny_79
+    21300052: Sonic 3K HUD Shiny_80
+    21300054: Sonic 3K HUD Shiny_81
+    21300056: Sonic 3K HUD Shiny_82
+    21300058: Sonic 3K HUD Shiny_83
+    21300060: Sonic 3K HUD Shiny_84
+    21300062: Sonic 3K HUD Shiny_85
+    21300064: Sonic 3K HUD Shiny_86
+    21300066: Sonic 3K HUD Shiny_87
+    21300068: Sonic 3K HUD Shiny_88
+    21300070: Sonic 3K HUD Shiny_89
+    21300072: Sonic 3K HUD Shiny_90
+    21300074: Sonic 3K HUD Shiny_32
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Sonic 3K HUD Shiny_48
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_49
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_50
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_51
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_52
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_53
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_54
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_55
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_56
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_57
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 52
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_58
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_65
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_66
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_67
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_68
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_69
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_70
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_71
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_72
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 39
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_73
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 39
+        width: 5
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_74
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 26
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_75
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 26
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_76
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 26
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_77
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 13
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_78
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 26
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_79
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 26
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_80
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 26
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_81
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 26
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_82
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 26
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_83
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 26
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_84
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 13
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_85
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 13
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_86
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 13
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_87
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 13
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_88
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 13
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_89
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 13
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_90
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 13
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K HUD Shiny_32
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 13
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: Fonts
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

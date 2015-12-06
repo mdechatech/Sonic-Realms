@@ -96,9 +96,9 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Default surface rule. Uses the trigger's default surface rule.
         /// </summary>
-        public virtual bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
+        public virtual bool IsOnSurface(TerrainCastHit hit)
         {
-            return PlatformTrigger.DefaultSurfaceRule(controller, hit);
+            return PlatformTrigger.DefaultSurfaceRule(hit);
         }
 
         /// <summary>

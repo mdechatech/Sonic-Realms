@@ -443,15 +443,11 @@ namespace Hedgehog.Core.Moves
             var result = true;
             foreach (var move in new List<Move>(ActiveMoves))
             {
-                if (predicate == null)
+                if (predicate == null || predicate(move))
                 {
                     result &= End(move);
                 }
-                else
-                {
-                    if (predicate(move))
-                        result &= End(move);
-                }
+                    
             }
 
             return result;

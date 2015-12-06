@@ -25,15 +25,6 @@ namespace Hedgehog.Core.Triggers
         public Animator Animator;
 
         /// <summary>
-        /// Whether this component can activate object triggers, if it has any. Not necessary to override, used
-        /// by object effects for convenience.
-        /// </summary>
-        public virtual bool ActivatesObject
-        {
-            get { return false; }
-        }
-
-        /// <summary>
         /// Whether the object trigger is activated, or false if there isn't one.
         /// </summary>
         public bool Activated

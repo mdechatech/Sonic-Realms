@@ -45,6 +45,9 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveEnter(State previousState)
         {
+            // End all moves (except for this one)
+            Manager.EndAll(move => move != this);
+
             // Bounce up and ignore collisions
             Controller.Detach();
             Controller.IgnoreCollision = true;
@@ -61,9 +64,6 @@ namespace Hedgehog.Core.Moves
             // Start the death timer
             RestartTimer = RestartDelay;
             Restarting = true;
-
-            // End all moves (except for this one)
-            Manager.EndAll(move => move != this);
         }
 
         public override void OnActiveUpdate()

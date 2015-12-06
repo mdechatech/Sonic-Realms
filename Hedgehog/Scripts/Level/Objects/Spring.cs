@@ -63,11 +63,6 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Name of an Animator trigger on the controller to set when it triggers the spring.")]
         public string HitTrigger;
 
-        public override bool ActivatesObject
-        {
-            get { return true; }
-        }
-
         public override void Reset()
         {
             base.Reset();

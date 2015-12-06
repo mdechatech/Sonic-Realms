@@ -62,6 +62,7 @@ GameObject:
   - 114: {fileID: 11402228}
   - 95: {fileID: 9515296}
   - 212: {fileID: 21246730}
+  - 114: {fileID: 11404414}
   m_Layer: 0
   m_Name: S1 Shield
   m_TagString: Untagged
@@ -143,7 +144,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 163332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.8133888, y: -3.49088335, z: 0}
+  m_LocalPosition: {x: 38.8132515, y: -4.57321644, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 445464}
@@ -255,6 +256,20 @@ MonoBehaviour:
   Animator: {fileID: 9515296}
   ActivatedTrigger: 
   ActivatedBool: 
+--- !u!114 &11404414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 163332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ad8d7970a600774e95a9cb7c66f7494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 11402228}
+  Animator: {fileID: 9515296}
+  Powerup: {fileID: 132248, guid: fe6f7d79d5dc65144982da1f0095baa6, type: 2}
 --- !u!114 &11428750
 MonoBehaviour:
   m_ObjectHideFlags: 1

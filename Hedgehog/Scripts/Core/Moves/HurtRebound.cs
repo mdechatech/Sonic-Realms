@@ -45,7 +45,7 @@ namespace Hedgehog.Core.Moves
         public override void OnActiveExit()
         {
             Controller.OnAttach.RemoveListener(OnAttach);
-            if (!Controller.Grounded)
+            if (!Controller.Grounded && !Manager.IsActive<Death>())
                 Controller.PerformMove<AirControl>();
 
             Controller.AirControl.OnActive.RemoveListener(OnPerformAirControl);

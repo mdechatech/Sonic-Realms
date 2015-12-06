@@ -1,8 +1,11 @@
 ﻿using Hedgehog.Core.Actors;
 using Hedgehog.Core.Triggers;
 
-namespace Hedgehog.Level.Objects
+namespace Hedgehog.Level.Effects
 {
+    /// <summary>
+    /// Hurts the player when activated.
+    /// </summary>
     public class HurtPlayer : ReactiveObject
     {
         public override void OnActivateEnter(HedgehogController controller)

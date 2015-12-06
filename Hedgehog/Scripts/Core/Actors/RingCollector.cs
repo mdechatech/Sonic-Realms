@@ -161,7 +161,7 @@ namespace Hedgehog.Core.Actors
 
                 if (flip)
                 {
-                    ring.VelocityX *= -1;
+                    ring.Velocity = new Vector2(-ring.Velocity.x, ring.Velocity.y);
                     angle += angleDelta;
                 }
 

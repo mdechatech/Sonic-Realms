@@ -18,11 +18,6 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Bounces the controller off at this speed after breaking it.")]
         public float BounceSpeed;
 
-        public override bool ActivatesObject
-        {
-            get { return true; }
-        }
-
         public override void Reset()
         {
             base.Reset();

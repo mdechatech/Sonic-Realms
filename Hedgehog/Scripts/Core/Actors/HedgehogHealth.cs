@@ -129,6 +129,7 @@ namespace Hedgehog.Core.Actors
                 RingCollector.Spill(RingsLost);
             }
 
+            Controller.EndMove<Roll>();
             OnHurt.Invoke();
         }
 

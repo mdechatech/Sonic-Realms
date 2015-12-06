@@ -1,13 +1,13 @@
 ﻿using System;
 using Hedgehog.Core.Utils;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Hedgehog.Level.Objects
 {
     /// <summary>
     /// Gives a ring bounce physics, as if it were spilled after Sonic got hit.
     /// </summary>
+    [RequireComponent(typeof(Rigidbody2D))]
     public class SpilledRing : MonoBehaviour
     {
         protected Animator Animator;
@@ -35,25 +35,17 @@ namespace Hedgehog.Level.Objects
         public float Gravity;
 
         /// <summary>
-        /// The ring's horizontal velocity.
+        /// The ring's rigidbody2D.
         /// </summary>
-        [Tooltip("The ring's horizontal velocity.")]
-        public float VelocityX;
+        public Rigidbody2D Rigidbody2D;
 
         /// <summary>
-        /// The ring's vertical velocity.
+        /// The ring's rigidbody2D's current velocity, in units per second.
         /// </summary>
-        [Tooltip("The ring's vertical velocity.")]
-        public float VelocityY;
-
         public Vector2 Velocity
         {
-            get { return new Vector2(VelocityX, VelocityY); }
-            set
-            {
-                VelocityX = value.x;
-                VelocityY = value.y;
-            }
+            get { return Rigidbody2D.velocity; }
+            set { Rigidbody2D.velocity = value; }
         }
 
         /// <summary>
@@ -90,7 +82,6 @@ namespace Hedgehog.Level.Objects
             Life = 4.2666667f;
             Gravity = 3.375f;
             Radius = 0.08f;
-            Velocity = Random.insideUnitCircle*Random.Range(2.0f, 4.0f);
             BounceLoss = new Vector2(0.25f, 0.75f);
             AccurateBounceLoss = 0.75f;
             AccurateBounce = false;
@@ -108,6 +99,9 @@ namespace Hedgehog.Level.Objects
         {
             // So we don't collide with ourselves when circlecasting
             GetComponent<Collider2D>().isTrigger = true;
+
+            Rigidbody2D = GetComponent<Rigidbody2D>();
+            Rigidbody2D.gravityScale = 0.0f;
 
             _previousPosition = transform.position; 
 
@@ -134,13 +128,9 @@ namespace Hedgehog.Level.Objects
         public void FixedUpdate()
         {
             // Apply gravity
-            VelocityY -= Gravity*Time.fixedDeltaTime;
+            Rigidbody2D.velocity -= Vector2.up*Gravity*Time.fixedDeltaTime;
 
-            // Store our change in position
-            var diff = Velocity * Time.fixedDeltaTime;
-            transform.position += (Vector3) diff;
-
-            if (Velocity.magnitude > 0.01f)
+            if (Rigidbody2D.velocity.magnitude > 0.01f)
             {
                 // Make sure we don't hit ourselves
                 var queriesHitTriggers = Physics2D.queriesHitTriggers;
@@ -150,6 +140,8 @@ namespace Hedgehog.Level.Objects
                 var result = Physics2D.CircleCast(_previousPosition, Radius, transform.position - _previousPosition,
                     (transform.position - _previousPosition).magnitude);
 
+                Vector2 velocity = Rigidbody2D.velocity;
+
                 if (result && result.fraction > 0.0f)
                 {
                     // Store positive angle in degrees
@@ -157,7 +149,7 @@ namespace Hedgehog.Level.Objects
                     if (AccurateBounce)
                     {
                         // For an accurate bounce, just reflect off the normal
-                        Velocity = Vector2.Reflect(Velocity, result.normal)*AccurateBounceLoss;
+                        velocity = Vector2.Reflect(velocity, result.normal)*AccurateBounceLoss;
                     }
                     else
                     {
@@ -165,31 +157,38 @@ namespace Hedgehog.Level.Objects
                         if ((angle > 22.5f && angle < 157.5f) || (angle > 202.5f && angle < 337.5f))
                         {
                             // Horizontal surface, bounce vertically
-                            VelocityY *= -BounceLoss.y;
+                            velocity = new Vector2(velocity.x, -BounceLoss.y);
 
                             // If we've lost all momentum, set horizontal velocity to zero too
-                            if (VelocityY < 0.01f)
-                                VelocityX = 0.0f;
+                            if (velocity.y < 0.01f)
+                                velocity = new Vector2(0.0f, 0.0f);
                         }
                         else
                         {
                             // Vertical surface, bounce horizontally
-                            VelocityX *= -BounceLoss.x;
+                            velocity = new Vector2(-BounceLoss.x, velocity.y);
 
                             // If we've lost all momentum, set vertical velocity to zero too
-                            if (VelocityX < 0.01f)
-                                VelocityY = 0.0f;
+                            if (velocity.x < 0.01f)
+                                velocity = new Vector2(0.0f, 0.0f);
                         }
                     }
 
                     // We hit something, revert the position change
-                    transform.position -= (Vector3)diff;
+                    transform.position = _previousPosition;
                 }
+
+                Rigidbody2D.velocity = velocity;
                 
                 Physics2D.queriesHitTriggers = queriesHitTriggers;
             }
 
             _previousPosition = transform.position;
+        }
+
+        public void OnDisable()
+        {
+            Velocity = new Vector2();
         }
     }
 }

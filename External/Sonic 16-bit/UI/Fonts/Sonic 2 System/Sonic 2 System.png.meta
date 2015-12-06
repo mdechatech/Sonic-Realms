@@ -1,0 +1,474 @@
+fileFormatVersion: 2
+guid: e6ecfa526a918d643bb2edcbbeae0d70
+timeCreated: 1449310913
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sonic 2 System_65
+    21300002: Sonic 2 System_66
+    21300004: Sonic 2 System_67
+    21300006: Sonic 2 System_68
+    21300008: Sonic 2 System_69
+    21300010: Sonic 2 System_70
+    21300012: Sonic 2 System_71
+    21300014: Sonic 2 System_72
+    21300016: Sonic 2 System_73
+    21300018: Sonic 2 System_74
+    21300020: Sonic 2 System_75
+    21300022: Sonic 2 System_76
+    21300024: Sonic 2 System_77
+    21300026: Sonic 2 System_78
+    21300028: Sonic 2 System_79
+    21300030: Sonic 2 System_80
+    21300032: Sonic 2 System_81
+    21300034: Sonic 2 System_82
+    21300036: Sonic 2 System_83
+    21300038: Sonic 2 System_84
+    21300040: Sonic 2 System_85
+    21300042: Sonic 2 System_86
+    21300044: Sonic 2 System_87
+    21300046: Sonic 2 System_88
+    21300048: Sonic 2 System_89
+    21300050: Sonic 2 System_90
+    21300052: Sonic 2 System_49
+    21300054: Sonic 2 System_50
+    21300056: Sonic 2 System_51
+    21300058: Sonic 2 System_52
+    21300060: Sonic 2 System_53
+    21300062: Sonic 2 System_54
+    21300064: Sonic 2 System_55
+    21300066: Sonic 2 System_56
+    21300068: Sonic 2 System_57
+    21300070: Sonic 2 System_48
+    21300072: Sonic 2 System_42
+    21300074: Sonic 2 System_32
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Sonic 2 System_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_66
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_67
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_68
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_69
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_70
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_71
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 57
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_72
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_73
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_74
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_75
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_76
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_77
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_78
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 49
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_79
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_80
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_81
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_82
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_83
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_84
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_85
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 41
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_86
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_87
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_88
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_89
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_90
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_49
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_50
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 33
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_51
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_52
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_53
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_54
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_55
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_56
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_57
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 25
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 17
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_42
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 17
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 2 System_32
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 17
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: Fonts
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

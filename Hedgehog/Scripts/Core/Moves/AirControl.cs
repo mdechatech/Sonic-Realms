@@ -83,7 +83,7 @@ namespace Hedgehog.Core.Moves
 
         private void OnDetach()
         {
-            Perform(true);
+            Perform();
         }
 
         private void OnAttach()

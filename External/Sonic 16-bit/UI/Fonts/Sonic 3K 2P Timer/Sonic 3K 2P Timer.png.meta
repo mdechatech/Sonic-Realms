@@ -1,0 +1,177 @@
+fileFormatVersion: 2
+guid: c41c8d312fab6814a8551be311fd17d8
+timeCreated: 1449012025
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sonic 3K 2P Timer_48
+    21300002: Sonic 3K 2P Timer_49
+    21300004: Sonic 3K 2P Timer_50
+    21300006: Sonic 3K 2P Timer_51
+    21300008: Sonic 3K 2P Timer_52
+    21300010: Sonic 3K 2P Timer_53
+    21300012: Sonic 3K 2P Timer_54
+    21300014: Sonic 3K 2P Timer_55
+    21300016: Sonic 3K 2P Timer_56
+    21300018: Sonic 3K 2P Timer_57
+    21300020: Sonic 3K 2P Timer_32
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Sonic 3K 2P Timer_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_49
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 48
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_50
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 48
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_51
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 48
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_52
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 48
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_53
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 31
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_54
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 31
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_55
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 31
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_56
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 31
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_57
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 31
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K 2P Timer_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 14
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: Fonts
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

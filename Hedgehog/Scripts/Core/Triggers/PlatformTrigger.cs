@@ -84,7 +84,7 @@ namespace Hedgehog.Core.Triggers
         /// Returns whether the controller is considered to be on the surface.
         /// </summary>
         /// <returns></returns>
-        public delegate bool SurfacePredicate(HedgehogController controller, TerrainCastHit hit);
+        public delegate bool SurfacePredicate(TerrainCastHit hit);
 
         /// <summary>
         /// A list of predicates which invokes surface events based on whether it is empty or all
@@ -169,7 +169,7 @@ namespace Hedgehog.Core.Triggers
 
             // Invoke their "stay" events if they still fulfill IsOnSurface.
             foreach (var collision in new List<TerrainCastHit>(SurfaceCollisions))
-                if(IsOnSurface(collision.Controller, collision)) OnSurfaceStay.Invoke(collision);
+                if(IsOnSurface(collision)) OnSurfaceStay.Invoke(collision);
 
             // Make room in the surface collision list for the next update.
             _notifiedSurfaceCollisions = new List<TerrainCastHit>();
@@ -227,21 +227,21 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <param name="hit">The collision data.</param>
-        public void NotifySurfaceCollision(HedgehogController controller, TerrainCastHit hit)
+        public void NotifySurfaceCollision(TerrainCastHit hit)
         {
-            if (!IsOnSurface(controller, hit))
+            if (!IsOnSurface(hit))
                 return;
 
-            if (SurfaceCollisions.Any(castHit => castHit.Controller == controller))
+            if (SurfaceCollisions.Any(castHit => castHit.Controller == hit.Controller))
             {
-                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != controller))
+                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != hit.Controller))
                     _notifiedSurfaceCollisions.Add(hit);
             }
             else
             {
                 SurfaceCollisions.Add(hit);
                 
-                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != controller))
+                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != hit.Controller))
                     _notifiedSurfaceCollisions.Add(hit);
 
                 OnSurfaceEnter.Invoke(hit);
@@ -250,10 +250,16 @@ namespace Hedgehog.Core.Triggers
 
         #endregion
         #region Collision Rules
-        public bool IsOnSurface(HedgehogController controller, TerrainCastHit hit)
+        /// <summary>
+        /// Whether the controller is on the surface given the terrain cast results. This doesn't affect
+        /// the controller's physics, but rather will not invoke surface events if false.
+        /// </summary>
+        /// <param name="hit">The terrain cast results.</param>
+        /// <returns></returns>
+        public bool IsOnSurface(TerrainCastHit hit)
         {
-            if (!SurfaceRules.Any()) return DefaultSurfaceRule(controller, hit);
-            return SurfaceRules.All(predicate => predicate(controller, hit));
+            if (!SurfaceRules.Any()) return DefaultSurfaceRule(hit);
+            return SurfaceRules.All(predicate => predicate(hit));
         }
 
         /// <summary>
@@ -268,10 +274,10 @@ namespace Hedgehog.Core.Triggers
             return CollisionRules.All(predicate => predicate(hit));
         }
 
-        public bool DefaultSurfaceRule(HedgehogController controller, TerrainCastHit hit)
+        public bool DefaultSurfaceRule(TerrainCastHit hit)
         {
-            if (!controller.Grounded) return false;
-            return hit.Hit.transform == controller.PrimarySurface || hit.Hit.transform == controller.SecondarySurface;
+            if (!hit.Controller.Grounded) return false;
+            return hit.Controller.StandingOn(hit.Transform);
         }
 
         public bool DefaultCollisionRule(TerrainCastHit hit)

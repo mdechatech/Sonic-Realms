@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Hedgehog.Level.Areas;
+using UnityEngine;
 
 namespace Hedgehog.Core.Moves
 {
     /// <summary>
     /// The air dash that Sonic can perform when he has a flame shield.
     /// </summary>
-    public class FlameSpecial : DoubleJumpMove
+    public class FlameSpecial : DoubleJump
     {
         /// <summary>
         /// The velocity of the dash, in units per second.
@@ -24,9 +25,9 @@ namespace Hedgehog.Core.Moves
             DashVelocity = new Vector2(4.8f, 0.0f);
         }
 
-        public override void OnActiveEnter(State previousState)
+        public override void OnActiveEnter()
         {
-            base.OnActiveEnter(previousState);
+            base.OnActiveEnter();
 
             // Dash based on what direction we're facing
             if (Controller.FacingForward)

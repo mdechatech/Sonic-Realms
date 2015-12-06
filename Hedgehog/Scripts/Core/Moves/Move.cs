@@ -198,6 +198,7 @@ namespace Hedgehog.Core.Moves
             }
             else if (CurrentState == State.Active)
             {
+                OnActiveEnter();
                 OnActiveEnter(prevState);
                 OnActive.Invoke();
 
@@ -225,7 +226,7 @@ namespace Hedgehog.Core.Moves
         /// <returns>Whether the move was performed.</returns>
         public bool Perform(bool force = false)
         {
-            return Manager.Perform(this, force);
+            return Manager && Manager.Perform(this, force);
         }
 
         /// <summary>
@@ -234,7 +235,7 @@ namespace Hedgehog.Core.Moves
         /// <returns>Whether the move was ended.</returns>
         public bool End()
         {
-            return Manager.End(this);
+            return Manager && Manager.End(this);
         }
 
         /// <summary>
@@ -285,6 +286,14 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         /// <param name="previousState">The move's previous state.</param>
         public virtual void OnStateChanged(State previousState)
+        {
+
+        }
+
+        /// <summary>
+        /// Called when the move is activated.
+        /// </summary>
+        public virtual void OnActiveEnter()
         {
 
         }

@@ -478,6 +478,30 @@ namespace Hedgehog.Core.Actors
         public TerrainCastHit RightWallHit;
 
         /// <summary>
+        /// The ceiling at the left side of the player, if any.
+        /// </summary>
+        [Tooltip("The ceiling at the left side of the player, if any.")]
+        public Transform LeftCeiling;
+
+        /// <summary>
+        /// The results from the terrain cast which found the surface at the left ceiling of the player, if any.
+        /// </summary>
+        [Tooltip("The results from the terrain cast which found the surface at the left ceiling of the player, if any.")]
+        public TerrainCastHit LeftCeilingHit;
+
+        /// <summary>
+        /// The ceiling at the right side of the player, if any.
+        /// </summary>
+        [Tooltip("The ceiling at the right side of the player, if any.")]
+        public Transform RightCeiling;
+
+        /// <summary>
+        /// The results from the terrain cast which found the surface at the right ceiling of the player, if any.
+        /// </summary>
+        [Tooltip("The results from the terrain cast which found the surface at the right ceiling of the player, if any.")]
+        public TerrainCastHit RightCeilingHit;
+
+        /// <summary>
         /// The controller will move this much in its next FixedUpdate. It is set using the Translate function,
         /// which guarantees that movement from outside sources is applied before collision checks.
         /// </summary>
@@ -648,8 +672,8 @@ namespace Hedgehog.Core.Actors
 
         public void FixedUpdate()
         {
-            LeftWall = RightWall = null;
-            LeftWallHit = RightWallHit = null;
+            LeftWall = RightWall = LeftCeiling = RightCeiling = null;
+            LeftWallHit = RightWallHit = LeftCeilingHit = RightCeilingHit = null;
 
             if (Interrupted)
                 return;
@@ -914,6 +938,7 @@ namespace Hedgehog.Core.Actors
             if (Grounded)
             {
                 GroundSideCheck();
+                GroundCeilingCheck();
                 UpdateGroundVelocity();
 
                 GroundSurfaceCheck();
@@ -939,18 +964,23 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirSideCheck()
         {
-            var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
+            var leftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
                 ControllerSide.Left);
-            var sideRightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
+            var rightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                 ControllerSide.Right);
 
-            if (sideLeftCheck)
+            LeftWallHit = leftCheck;
+            LeftWall = LeftWallHit ? leftCheck.Transform : null;
+            RightWallHit = rightCheck;
+            RightWall = RightWallHit ? rightCheck.Transform : null;
+
+            if (leftCheck)
             {
-                NotifyTriggers(sideLeftCheck);
+                NotifyTriggers(leftCheck);
 
                 if (!IgnoreNextCollision)
                 {
-                    var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
+                    var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
                     if(RelativeVelocity.x < 0.0f)
@@ -961,13 +991,13 @@ namespace Hedgehog.Core.Actors
                 return true;
             }
 
-            if (sideRightCheck)
+            if (rightCheck)
             {
-                NotifyTriggers(sideRightCheck);
+                NotifyTriggers(rightCheck);
 
                 if (!IgnoreNextCollision)
                 {
-                    var push = (Vector3)(sideRightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
+                    var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
                     if(RelativeVelocity.x > 0.0f)
@@ -988,6 +1018,20 @@ namespace Hedgehog.Core.Actors
         private bool AirCeilingCheck()
         {
             var leftCheck = this.TerrainCast(Sensors.TopLeftStart.position, Sensors.TopLeft.position, ControllerSide.Top);
+            var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position, ControllerSide.Top);
+
+            if (leftCheck)
+            {
+                LeftCeilingHit = leftCheck;
+                LeftCeiling = leftCheck.Transform;
+            }
+
+            if (rightCheck)
+            {
+                RightCeilingHit = rightCheck;
+                RightCeiling = rightCheck.Transform;
+            }
+
             if (leftCheck)
             {
                 NotifyTriggers(leftCheck);
@@ -1003,7 +1047,6 @@ namespace Hedgehog.Core.Actors
                 return true;
             }
 
-            var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position, ControllerSide.Top);
             if (rightCheck)
             {
                 NotifyTriggers(rightCheck);
@@ -1086,20 +1129,25 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSideCheck()
         {
-            var sideLeftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position, ControllerSide.Left);
-            var sideRightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
+            var leftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position, ControllerSide.Left);
+            var rightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                 ControllerSide.Right);
 
-            if (sideLeftCheck)
+            LeftWallHit = leftCheck;
+            LeftWall = LeftWallHit ? leftCheck.Transform : null;
+            RightWallHit = rightCheck;
+            RightWall = RightWallHit ? rightCheck.Transform : null;
+
+            if (leftCheck)
             {
-                NotifyTriggers(sideLeftCheck);
+                NotifyTriggers(leftCheck);
 
                 if (!IgnoreNextCollision)
                 {
                     if (GroundVelocity < 0.0f)
                         GroundVelocity = 0.0f;
 
-                    var push = (Vector3)(sideLeftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
+                    var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized*DMath.Epsilon;
 
                     // If running down a wall and hits the floor, orient the player onto the floor
@@ -1115,16 +1163,17 @@ namespace Hedgehog.Core.Actors
                 IgnoreNextCollision = false;
                 return true;
             }
-            if (sideRightCheck)
+
+            if (rightCheck)
             {
-                NotifyTriggers(sideRightCheck);
+                NotifyTriggers(rightCheck);
 
                 if (!IgnoreNextCollision)
                 {
                     if (GroundVelocity > 0.0f)
                         GroundVelocity = 0.0f;
 
-                    var push = (Vector3)(sideRightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
+                    var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized*DMath.Epsilon;
 
                     // If running down a wall and hits the floor, orient the player onto the floor
@@ -1151,39 +1200,31 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundCeilingCheck()
         {
-            var ceilLeftCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopLeft.position, ControllerSide.Left);
-            var ceilRightCheck = this.TerrainCast(Sensors.TopCenter.position, Sensors.TopRight.position,
+            var leftCheck = this.TerrainCast(Sensors.CenterLeft.position, Sensors.TopLeft.position, ControllerSide.Left);
+            var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position,
                 ControllerSide.Right);
 
-            if (ceilLeftCheck)
+            LeftCeilingHit = leftCheck;
+            LeftCeiling = LeftCeilingHit ? leftCheck.Transform : null;
+            RightCeilingHit = rightCheck;
+            RightCeiling = RightCeilingHit ? rightCheck.Transform : null;
+
+            // There is nothing to do here but set variables. This information is used for crushers.
+            if (leftCheck)
             {
-                NotifyTriggers(ceilLeftCheck);
+                LeftCeilingHit = leftCheck;
+                LeftCeiling = leftCheck.Transform;
 
-                if (!IgnoreNextCollision)
-                {
-                    if (GroundVelocity < 0.0f)
-                        GroundVelocity = 0.0f;
-
-                    var push = (Vector3)(ceilLeftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
-                }
-
+                NotifyTriggers(leftCheck);
                 IgnoreNextCollision = false;
                 return true;
             }
-            if (ceilRightCheck)
+            if (rightCheck)
             {
-                NotifyTriggers(ceilRightCheck);
+                RightCeilingHit = rightCheck;
+                RightCeiling = rightCheck.Transform;
 
-                if (!IgnoreNextCollision)
-                {
-                    if (GroundVelocity > 0.0f)
-                        GroundVelocity = 0.0f;
-
-                    var push = (Vector3)(ceilRightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
-                }
-
+                NotifyTriggers(rightCheck);
                 IgnoreNextCollision = false;
                 return true;
             }
@@ -1495,17 +1536,6 @@ namespace Hedgehog.Core.Actors
             if (!collision || collision.Hit.transform == null)
                 return false;
 
-            if (collision.Side == ControllerSide.Left)
-            {
-                LeftWall = collision.Hit.transform;
-                LeftWallHit = collision;
-            }
-            else if (collision.Side == ControllerSide.Right)
-            {
-                RightWall = collision.Hit.transform;
-                RightWallHit = collision;
-            }
-
             var result = TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
             OnCollide.Invoke(collision);
             return result;
@@ -1516,6 +1546,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <param name="primarySurfaceHit">The new primary surface.</param>
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
+        /// <returns>Whether any platform triggers were notified of the collisions.</returns>
         public bool SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
         {
             PrimarySurfaceHit = primarySurfaceHit;
@@ -1524,9 +1555,8 @@ namespace Hedgehog.Core.Actors
             SecondarySurfaceHit = secondarySurfaceHit;
             SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Hit.transform : null;
 
-            var result = false;
-            result = TriggerUtility.NotifySurfaceCollision(PrimarySurface, primarySurfaceHit);
-            TriggerUtility.NotifySurfaceCollision(SecondarySurface, secondarySurfaceHit);
+            var result = TriggerUtility.NotifySurfaceCollision(PrimarySurface, primarySurfaceHit);
+            result |= TriggerUtility.NotifySurfaceCollision(SecondarySurface, secondarySurfaceHit);
 
             return result;
         }
@@ -1543,6 +1573,11 @@ namespace Hedgehog.Core.Actors
             OnReactiveExit.Invoke(reactive);
         }
 
+        public TReactive GetReactive<TReactive>() where TReactive : BaseReactive
+        {
+            return Reactives.FirstOrDefault(reactive => reactive is TReactive) as TReactive;
+        }
+
         public bool InteractingWith<TReactive>() where TReactive : BaseReactive
         {
             return Reactives.Any(reactive => reactive is TReactive);
@@ -1557,9 +1592,7 @@ namespace Hedgehog.Core.Actors
         {
             if (typeof(TReactiveArea).IsSubclassOf(typeof(ReactiveArea)))
             {
-                return Reactives.Any(reactive =>
-                    reactive is TReactiveArea &&
-                    ((ReactiveArea) reactive).AreaTrigger.HasController(this));
+                return Reactives.Any(reactive => reactive is TReactiveArea);
             }
 
             if (typeof(TReactiveArea).IsSubclassOf(typeof(ReactivePlatformArea)))

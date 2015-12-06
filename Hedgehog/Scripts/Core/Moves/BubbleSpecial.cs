@@ -7,7 +7,7 @@ namespace Hedgehog.Core.Moves
     /// <summary>
     /// The special move performed when Sonic has the bubble shield. Dives down and then bounces back up.
     /// </summary>
-    public class BubbleSpecial : DoubleJumpMove
+    public class BubbleSpecial : DoubleJump
     {
         /// <summary>
         /// The velocity at which to dive, in units per second.
@@ -46,7 +46,7 @@ namespace Hedgehog.Core.Moves
             Controller.OnCollide.RemoveListener(OnCollide);
             End();
 
-            // Normally we can't use a double jump again after standing on the floor, so make
+            // Normally we can't use a double jump again until we attach to the floor, so make
             // it available manually
             Used = false;
         }

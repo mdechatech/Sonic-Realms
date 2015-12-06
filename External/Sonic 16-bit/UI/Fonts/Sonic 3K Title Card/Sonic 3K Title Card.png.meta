@@ -1,0 +1,677 @@
+fileFormatVersion: 2
+guid: 967b48a6e35fc544c9662895b76f58be
+timeCreated: 1448948680
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: 65
+    21300002: 66
+    21300004: 67
+    21300006: 68
+    21300008: 69
+    21300010: 70
+    21300012: 71
+    21300014: 72
+    21300016: 73
+    21300018: 74
+    21300020: 75
+    21300022: 76
+    21300024: 77
+    21300026: 78
+    21300028: 79
+    21300030: 80
+    21300032: 81
+    21300034: 82
+    21300036: 83
+    21300038: 84
+    21300040: 85
+    21300042: 86
+    21300044: 87
+    21300046: 88
+    21300048: 89
+    21300050: 90
+    21300052: 32
+    21300054: Sonic 3K Title Card_114
+    21300056: Sonic 3K Title Card_82
+    21300058: Sonic 3K Title Card_121
+    21300060: Sonic 3K Title Card_89
+    21300062: Sonic 3K Title Card_122
+    21300064: Sonic 3K Title Card_102
+    21300066: Sonic 3K Title Card_108
+    21300068: Sonic 3K Title Card_76
+    21300070: Sonic 3K Title Card_113
+    21300072: Sonic 3K Title Card_111
+    21300074: Sonic 3K Title Card_81
+    21300076: Sonic 3K Title Card_79
+    21300078: Sonic 3K Title Card_66
+    21300080: Sonic 3K Title Card_65
+    21300082: Sonic 3K Title Card_84
+    21300084: Sonic 3K Title Card_116
+    21300086: Sonic 3K Title Card_97
+    21300088: Sonic 3K Title Card_98
+    21300090: Sonic 3K Title Card_70
+    21300092: Sonic 3K Title Card_110
+    21300094: Sonic 3K Title Card_78
+    21300096: Sonic 3K Title Card_105
+    21300098: Sonic 3K Title Card_73
+    21300100: Sonic 3K Title Card_103
+    21300102: Sonic 3K Title Card_101
+    21300104: Sonic 3K Title Card_104
+    21300106: Sonic 3K Title Card_72
+    21300108: Sonic 3K Title Card_68
+    21300110: Sonic 3K Title Card_100
+    21300112: Sonic 3K Title Card_99
+    21300114: Sonic 3K Title Card_67
+    21300116: Sonic 3K Title Card_109
+    21300118: Sonic 3K Title Card_77
+    21300120: Sonic 3K Title Card_71
+    21300122: Sonic 3K Title Card_90
+    21300124: Sonic 3K Title Card_107
+    21300126: Sonic 3K Title Card_106
+    21300128: Sonic 3K Title Card_74
+    21300130: Sonic 3K Title Card_75
+    21300132: Sonic 3K Title Card_115
+    21300134: Sonic 3K Title Card_83
+    21300136: Sonic 3K Title Card_117
+    21300138: Sonic 3K Title Card_85
+    21300140: Sonic 3K Title Card_112
+    21300142: Sonic 3K Title Card_80
+    21300144: Sonic 3K Title Card_118
+    21300146: Sonic 3K Title Card_86
+    21300148: Sonic 3K Title Card_119
+    21300150: Sonic 3K Title Card_87
+    21300152: Sonic 3K Title Card_120
+    21300154: Sonic 3K Title Card_88
+    21300156: Sonic 3K Title Card_32
+    21300158: Sonic 3K Title Card_69
+    21300160: Sonic 3K Title Card_95
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Sonic 3K Title Card_114
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_82
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_121
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_89
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_122
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_102
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 146
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_108
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 146
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_76
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 220
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_113
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 109
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_111
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 109
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_81
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 183
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_79
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 183
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_66
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_84
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_116
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_97
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 146
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_98
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 146
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_70
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_110
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 146
+        width: 13
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_78
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 220
+        width: 13
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_105
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 146
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_73
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 220
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_103
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 146
+        width: 16
+        height: 25
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_101
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 146
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_104
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 146
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_72
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_68
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_100
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 146
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_99
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 146
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_67
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 220
+        width: 15
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_109
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 146
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_77
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 220
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_71
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_90
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_107
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 146
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_106
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 146
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_74
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 220
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_75
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_115
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 109
+        width: 14
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_83
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 183
+        width: 14
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_117
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 109
+        width: 14
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_85
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 183
+        width: 14
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_112
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_80
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_118
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_86
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_119
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 109
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_87
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 183
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_120
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 109
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_88
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 183
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_32
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 146
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_69
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 220
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sonic 3K Title Card_95
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 183
+        width: 8
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: Fonts
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

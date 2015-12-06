@@ -1,4 +1,6 @@
-﻿using Hedgehog.Core.Actors;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Hedgehog.Core.Actors;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
@@ -32,18 +34,26 @@ namespace Hedgehog.Level.Areas
         [SerializeField]
         public float MinFloatSpeed;
 
-        private Collider2D _collider2D;
+        private Collider2D[] _colliders;
 
         public override void Reset()
         {
+            base.Reset();
             Viscosity = 2.0f;
             Buoyancy = 0.0f;
             MinFloatSpeed = 5.0f;
         }
 
+        public override void Start()
+        {
+            base.Start();
+            _colliders = GetComponentsInChildren<Collider2D>(false);
+        }
+
         public override bool IsInside(HedgehogController controller)
         {
-            return base.IsInside(controller) && !PlatformTrigger.HasController(controller);
+            return base.IsInside(controller) && !PlatformTrigger.HasController(controller) &&
+                   _colliders.Any(collider => collider.OverlapPoint(controller.Sensors.Center.position));
         }
 
         // The water is a surface if the player is upright, on top of it, grounded, not already submerged,
