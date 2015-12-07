@@ -87,7 +87,9 @@ namespace Hedgehog.Level.Platforms
         /// <returns></returns>
         public bool CheckHorizontal(HedgehogController controller)
         {
-            return (controller.LeftWall != null &&
+            return controller.LeftWall != controller.RightWall && 
+
+                    (controller.LeftWall != null &&
                     controller.LeftWallHit.Hit.fraction <= 1.0f - HorizontalTolerance) &&
 
                    (controller.RightWall != null &&

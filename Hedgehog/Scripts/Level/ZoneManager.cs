@@ -14,53 +14,87 @@ namespace Hedgehog.Level
         /// <summary>
         /// The target player.
         /// </summary>
+        [Tooltip("The target player.")]
         public HedgehogController Player;
 
         /// <summary>
-        /// The move that the player performs on death. The level will restart after the move ends.
+        /// The player's health system.
         /// </summary>
-        public Death DeathMove;
-
-        /// <summary>
-        /// The current level time.
-        /// </summary>
-        public DateTime LevelTime;
-
-        /// <summary>
-        /// The display on which to show the level time.
-        /// </summary>
-        public TimerDisplay Timer;
+        [Tooltip("The player's health system.")]
+        public HedgehogHealth Health;
 
         /// <summary>
         /// The display on which to show the player's rings.
         /// </summary>
+        [Tooltip("The display on which to show the player's rings.")]
         public RingDisplay RingDisplay;
+
+        /// <summary>
+        /// The current level time.
+        /// </summary>
+        public TimeSpan LevelTime;
+
+        /// <summary>
+        /// The current level time in seconds.
+        /// </summary>
+        [Header("Timer")]
+        /// <summary>
+        /// The display on which to show the level time.
+        /// </summary>
+        [Tooltip("The display on which to show the level time.")]
+        public TimerDisplay Timer;
+
+        /// <summary>
+        /// The current level time in seconds.
+        /// </summary>
+        [Tooltip("The current level time in seconds.")]
+        public float LevelTimeSeconds;
+
+        /// <summary>
+        /// Used to check if LevelTimeSeconds is changed manually.
+        /// </summary>
+        private float _previousSeconds;
+
+        /// <summary>
+        /// Number of seconds after which the player dies due to a time over.
+        /// </summary>
+        [Tooltip("Number of seconds after which the player dies due to a time over.")]
+        public float TimeOverSeconds;
 
         public void Reset()
         {
             Player = FindObjectOfType<HedgehogController>();
-            DeathMove = Player == null ? null : Player.GetMove<Death>();
-            Timer = FindObjectOfType<TimerDisplay>();
-            RingDisplay = FindObjectOfType<RingDisplay>();
+            Health = Player ? Player.GetComponent<HedgehogHealth>() : null;
+            RingDisplay = GetComponentInChildren<RingDisplay>();
+
+            Timer = GetComponentInChildren<TimerDisplay>();
+            LevelTimeSeconds = 0.0f;
+            TimeOverSeconds = 599.0f;
         }
 
         public void Awake()
         {
-            LevelTime = new DateTime();
+            LevelTime = TimeSpan.FromSeconds(LevelTimeSeconds);
+            _previousSeconds = LevelTimeSeconds;
         }
 
         public void Start()
         {
             RingDisplay.Target = Player.GetComponentInChildren<RingCollector>();
-
-            DeathMove = DeathMove ?? Player.GetMove<Death>();
-            DeathMove.OnEnd.AddListener(OnDeathComplete);
+            Health.OnDeathComplete.AddListener(OnDeathComplete);
         }
 
         public void Update()
         {
-            LevelTime = LevelTime.AddSeconds(Time.deltaTime);
+            if (_previousSeconds != LevelTimeSeconds)
+                LevelTime = TimeSpan.FromSeconds(LevelTimeSeconds);
+
+            LevelTime = LevelTime.Add(TimeSpan.FromSeconds(Time.deltaTime));
+            LevelTimeSeconds = _previousSeconds = (float)LevelTime.TotalSeconds;
             Timer.Display(LevelTime);
+
+            if (LevelTimeSeconds > TimeOverSeconds)
+                Health.Kill();
         }
 
         public void OnDeathComplete()

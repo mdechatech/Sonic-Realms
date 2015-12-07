@@ -46,7 +46,7 @@ namespace Hedgehog.Core.Utils
             var any = false;
             foreach (var platformTrigger in GetTriggers<PlatformTrigger>(transform))
             {
-                platformTrigger.NotifyCollision(hit.Controller, hit);
+                platformTrigger.NotifyCollision(hit);
                 if (notifySurfaceCollision) platformTrigger.NotifySurfaceCollision(hit);
                 any = true;
             }

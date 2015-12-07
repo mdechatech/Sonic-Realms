@@ -129,6 +129,7 @@ MonoBehaviour:
   Used: 0
   DiveVelocity: {x: 0, y: -4.80000019}
   BounceVelocity: {x: 0, y: 3.29999995}
+  GiveAir: 1
 --- !u!114 &11469088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -179,6 +180,7 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: 
   AvailableBool: 
+  DestroyInWater: 0
 --- !u!212 &21204532
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -219,6 +221,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: ActiveBool
       value: Active
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: GiveAir
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

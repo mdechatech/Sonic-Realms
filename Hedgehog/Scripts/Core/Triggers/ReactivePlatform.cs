@@ -239,7 +239,6 @@ namespace Hedgehog.Core.Triggers
         public void NotifySurfaceStay(TerrainCastHit hit)
         {
             OnSurfaceStay(hit);
-            hit.Controller.NotifyReactiveEnter(this);
 
             var controller = hit.Controller;
             if (controller.Animator == null)

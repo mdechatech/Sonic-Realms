@@ -4,36 +4,81 @@ using UnityEngine.UI;
 
 namespace Hedgehog.UI
 {
-    [RequireComponent(typeof(Text))]
+    /// <summary>
+    /// Formatted timer display.
+    /// </summary>
     public class TimerDisplay : MonoBehaviour
     {
+        /// <summary>
+        /// The text on which to show the timer.
+        /// </summary>
+        [Tooltip("The text on which to show the timer.")]
         public Text Text;
+
+        /// <summary>
+        /// How to format the current time. Formatting guide is here:
+        /// https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
+        /// 
+        /// Common specifiers are:
+        /// m: minutes
+        /// ss: seconds
+        /// ff: milliseconds
+        /// </summary>
+        [Tooltip("How to format the current time. Common specifiers are m for minutes, ss for seconds, and " +
+                 "ff for milliseconds.")]
         public string Format;
+
+        /// <summary>
+        /// The target animator.
+        /// </summary>
+        [Header("Animation")]
+        [Tooltip("The target animator.")]
+        public Animator Animator;
+
+        /// <summary>
+        /// Name of an Animator float set to the seconds on the timer.
+        /// </summary>
+        [Tooltip("Name of an Animator float set to the seconds on the timer.")]
+        public string SecondsFloat;
+        protected int SecondsFloatHash;
 
         public void Reset()
         {
-            Text = GetComponent<Text>();
+            Text = GetComponentInChildren<Text>();
             Format = "mm:ss:ff";
+
+            Animator = GetComponent<Animator>();
+            SecondsFloat = "";
         }
 
-        public void Display(DateTime time)
+        public void Start()
         {
-            Text.text = time.ToString(Format);
+            Animator = Animator ? Animator : GetComponent<Animator>();
+            SecondsFloatHash = Animator == null ? 0 : Animator.StringToHash(SecondsFloat);
         }
 
-        public void Display(DateTime time, string format)
+        public void Display(TimeSpan time)
         {
-            Text.text = time.ToString(format);
+            Display(time, Format);
         }
 
         public void Display(float seconds)
         {
-            Text.text = new DateTime().Add(TimeSpan.FromSeconds(seconds)).ToString(Format);
+            Display(TimeSpan.FromSeconds(seconds));
         }
 
         public void Display(float seconds, string format)
         {
-            Text.text = new DateTime().Add(TimeSpan.FromSeconds(seconds)).ToString(format);
+            Display(TimeSpan.FromSeconds(seconds), format);
+        }
+
+        public void Display(TimeSpan time, string format)
+        {
+            Text.text = new DateTime().Add(time).ToString(format);
+
+            if (Animator == null) return;
+            if (SecondsFloatHash != 0)
+                Animator.SetFloat(SecondsFloatHash, (float)time.TotalSeconds);
         }
     }
 }

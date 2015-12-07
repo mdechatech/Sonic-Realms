@@ -15,7 +15,20 @@ namespace Hedgehog.Core.Actors
         public Death DeathMove;
         public RingCollector RingCollector;
 
+        /// <summary>
+        /// Called when the controller is hurt.
+        /// </summary>
         public UnityEvent OnHurt;
+
+        /// <summary>
+        /// Called when the controller dies.
+        /// </summary>
+        public UnityEvent OnDeath;
+
+        /// <summary>
+        /// Called when the controller's death animation is complete.
+        /// </summary>
+        public UnityEvent OnDeathComplete;
 
         /// <summary>
         /// The max number of rings lost when hurt.
@@ -57,6 +70,8 @@ namespace Hedgehog.Core.Actors
         public void Reset()
         {
             OnHurt = new UnityEvent();
+            OnDeath = new UnityEvent();
+            OnDeathComplete = new UnityEvent();;
 
             Controller = GetComponentInParent<HedgehogController>();
             HurtReboundMove = Controller.GetMove<HurtRebound>();
@@ -70,6 +85,8 @@ namespace Hedgehog.Core.Actors
         public void Awake()
         {
             OnHurt = OnHurt ?? new UnityEvent();
+            OnDeath = OnDeath ?? new UnityEvent();
+            OnDeathComplete = OnDeathComplete ?? new UnityEvent();
 
             Controller = Controller ?? GetComponentInParent<HedgehogController>();
             HurtReboundMove = HurtReboundMove ?? Controller.GetMove<HurtRebound>();
@@ -139,9 +156,18 @@ namespace Hedgehog.Core.Actors
             HurtReboundMove.OnEnd.RemoveListener(OnHurtReboundEnd);
         }
 
+        public void OnDeathEnd()
+        {
+            OnDeathComplete.Invoke();
+            DeathMove.OnEnd.RemoveListener(OnDeathEnd);
+        }
+
         public void Kill()
         {
-            Controller.PerformMove<Death>();
+            if (DeathMove.Active) return;
+
+            DeathMove.Perform();
+            DeathMove.OnEnd.AddListener(OnDeathEnd);
         }
     }
 }

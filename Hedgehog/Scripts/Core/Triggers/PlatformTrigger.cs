@@ -96,14 +96,12 @@ namespace Hedgehog.Core.Triggers
         /// A list of current collisions;
         /// </summary>
         public List<TerrainCastHit> Collisions;
-
         private List<TerrainCastHit> _notifiedCollisions;
 
         /// <summary>
         /// A list of current surface collisions.
         /// </summary>
         public List<TerrainCastHit> SurfaceCollisions;
-
         private List<TerrainCastHit> _notifiedSurfaceCollisions;
 
         public override void Reset()
@@ -202,21 +200,20 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Lets the trigger know about a collision with a controller.
         /// </summary>
-        /// <param name="controller">The specified controller.</param>
         /// <param name="hit">The collision data.</param>
-        public void NotifyCollision(HedgehogController controller, TerrainCastHit hit)
+        public void NotifyCollision(TerrainCastHit hit)
         {
             if (!IsSolid(hit))
                 return;
             
-            if (Collisions.All(castHit => castHit.Controller != controller))
+            if (Collisions.All(castHit => castHit.Controller != hit.Controller))
             {
                 Collisions.Add(hit);
                 _notifiedCollisions.Add(hit);
                 
                 OnPlatformEnter.Invoke(hit);
             }
-            else if (_notifiedCollisions.All(castHit => castHit.Controller != controller))
+            else if (_notifiedCollisions.All(castHit => castHit.Controller != hit.Controller))
             {
                 _notifiedCollisions.Add(hit);
             }
