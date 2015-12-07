@@ -23,6 +23,7 @@ namespace Hedgehog.Core.Moves
         public override void OnManagerAdd()
         {
             Jump = Manager.GetMove<Jump>();
+            Jump.OnActive.AddListener(OnJump);
             InputName = Jump.ActivateButton;
 
             Roll = Manager.GetMove<Roll>();
@@ -33,6 +34,12 @@ namespace Hedgehog.Core.Moves
         protected void OnRollEnd()
         {
             if (!Controller.Grounded) Used = true;
+        }
+
+        protected void OnJump()
+        {
+            // Double jump move becomes available again when the jump begins
+            Used = false;
         }
 
         public override bool Available()
@@ -47,15 +54,9 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveEnter()
         {
+            // Become unavailable once used
             Used = true;
             Manager.Perform<AirControl>();
-            Controller.OnAttach.AddListener(OnAttach);
-        }
-
-        private void OnAttach()
-        {
-            Used = false;
-            Controller.OnAttach.RemoveListener(OnAttach);
         }
     }
 }

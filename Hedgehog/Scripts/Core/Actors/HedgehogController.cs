@@ -1537,8 +1537,8 @@ namespace Hedgehog.Core.Actors
             if (!collision || collision.Hit.transform == null)
                 return false;
 
-            var result = TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
             OnCollide.Invoke(collision);
+            var result = TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
             return result;
         }
 

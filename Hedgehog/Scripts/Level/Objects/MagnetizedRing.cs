@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedgehog.Core.Utils;
+using UnityEngine;
 
 namespace Hedgehog.Level.Objects
 {
@@ -18,7 +19,7 @@ namespace Hedgehog.Level.Objects
         /// The ring's acceleration, in units per second squared.
         /// </summary>
         [Tooltip("The ring's acceleration, in units per second squared.")]
-        public Vector2 Acceleration;
+        public float Acceleration;
 
         /// <summary>
         /// The ring's rigidbody.
@@ -27,13 +28,12 @@ namespace Hedgehog.Level.Objects
 
         public void Reset()
         {
-            Acceleration = new Vector2(6.75f, 6.75f);
+            Acceleration = 6.75f;
         }
 
         public void Awake()
         {
-            if(Acceleration == default(Vector2))
-                Acceleration = new Vector2(6.75f, 6.75f);
+            if(Acceleration == default(float)) Acceleration = 6.75f;
         }
 
         public void Start()
@@ -45,10 +45,15 @@ namespace Hedgehog.Level.Objects
         public void FixedUpdate()
         {
             if (!Target) return;
-            Rigidbody2D.velocity += new Vector2(
-                Target.position.x > transform.position.x ? Acceleration.x : -Acceleration.x,
-                Target.position.y > transform.position.y ? Acceleration.y : -Acceleration.y)
-                                    *Time.fixedDeltaTime;
+
+            Rigidbody2D.velocity += (Vector2) (Target.position - transform.position).normalized*Acceleration*
+                                    Time.deltaTime;
+            Rigidbody2D.velocity *= 0.989f;
+        }
+
+        public void OnDisable()
+        {
+            Rigidbody2D.velocity = new Vector2();
         }
     }
 }
