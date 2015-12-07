@@ -37,7 +37,7 @@ namespace Hedgehog.Core.Moves
 
         public override bool Available()
         {
-            return !Controller.Grounded && Jump.Used && !Used;
+            return !Controller.Grounded && Jump.Used && !Used && Roll.Active;
         }
 
         public override bool InputActivate()

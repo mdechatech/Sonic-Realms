@@ -71,21 +71,8 @@ namespace Hedgehog.Level.Areas
         // Apply new physics values based on viscosity
         public override void OnAreaEnter(HedgehogController controller)
         {
-            controller.GroundControl.Acceleration /= Viscosity;
-            controller.GroundControl.Deceleration /= Viscosity;
-            controller.GroundControl.TopSpeed /= Viscosity;
-            controller.GroundFriction /= Viscosity;
-            controller.AirControl.Acceleration /= Viscosity;
-            controller.AirGravity /= Viscosity;
             controller.Vx /= Viscosity;
             controller.Vy /= Viscosity*2.0f;
-            controller.DetachSpeed /= Viscosity;
-
-            var jump = controller.MoveManager.GetMove<Jump>();
-            if (jump == null)
-                return;
-            jump.ActivateSpeed /= Viscosity;
-            jump.ReleaseSpeed /= Viscosity;
         }
         
         // Constantly apply buoyancy.
@@ -97,20 +84,7 @@ namespace Hedgehog.Level.Areas
         // Restore old physics values.
         public override void OnAreaExit(HedgehogController controller)
         {
-            controller.GroundControl.Acceleration *= Viscosity;
-            controller.GroundControl.Deceleration *= Viscosity;
-            controller.GroundControl.TopSpeed *= Viscosity;
-            controller.GroundFriction *= Viscosity;
-            controller.AirControl.Acceleration *= Viscosity;
-            controller.AirGravity *= Viscosity;
             controller.Vy *= Viscosity;
-            controller.DetachSpeed *= Viscosity;
-
-            var jump = controller.MoveManager.GetMove<Jump>();
-            if (jump == null)
-                return;
-            jump.ActivateSpeed *= Viscosity;
-            jump.ReleaseSpeed *= Viscosity;
         }
     }
 }

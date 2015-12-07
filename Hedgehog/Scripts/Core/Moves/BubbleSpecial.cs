@@ -63,13 +63,13 @@ namespace Hedgehog.Core.Moves
             // Bounce only if it's the controller's bottom colliding with the floor
             if ((hit.Side & ControllerSide.Bottom) == 0) return;
 
-            Controller.RelativeVelocity = BounceVelocity;
-            Controller.OnCollide.RemoveListener(OnCollide);
-            End();
-
             // Normally we can't use a double jump again until we attach to the floor, so make
             // it available manually
             Used = false;
+
+            Controller.RelativeVelocity = BounceVelocity;
+            Controller.OnCollide.RemoveListener(OnCollide);
+            End();
         }
     }
 }

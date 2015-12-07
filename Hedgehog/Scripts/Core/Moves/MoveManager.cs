@@ -75,6 +75,16 @@ namespace Hedgehog.Core.Moves
         /// Invoked when a move becomes unavailable.
         /// </summary>
         public MoveEvent OnUnavailable;
+
+        /// <summary>
+        /// Invoked when a move is added to the list.
+        /// </summary>
+        public MoveEvent OnAdd;
+
+        /// <summary>
+        /// Invoked when a move is removed from the list.
+        /// </summary>
+        public MoveEvent OnRemove;
         #endregion
 
         public void Reset()
@@ -85,17 +95,27 @@ namespace Hedgehog.Core.Moves
 
         public void Awake()
         {
-            GetComponentsInChildren(Moves);
-
-            ActiveMoves = new List<Move>();
-            AvailableMoves = new List<Move>();
-            UnavailableMoves = new List<Move>(Moves);
-
             OnPerform = OnPerform ?? new MoveEvent();
             OnInterrupted = OnInterrupted ?? new MoveEvent();
             OnEnd = OnEnd ?? new MoveEvent();
             OnAvailable = OnAvailable ?? new MoveEvent();
             OnUnavailable = OnUnavailable ?? new MoveEvent();
+            OnAdd = OnAdd ?? new MoveEvent();
+            OnRemove = OnRemove ?? new MoveEvent();
+
+            ActiveMoves = new List<Move>();
+            AvailableMoves = new List<Move>();
+            UnavailableMoves = new List<Move>();
+        }
+
+        public void Start()
+        {
+            foreach (var move in Moves)
+            {
+                AddMove(move);
+            }
+
+            UpdateList();
         }
 
         public void Update()
@@ -227,6 +247,7 @@ namespace Hedgehog.Core.Moves
                 }
 
                 move.OnManagerRemove();
+                OnRemove.Invoke(move);
                 move.OnRemove.Invoke();
                 return true;
             });
@@ -238,15 +259,25 @@ namespace Hedgehog.Core.Moves
             // Compare the copied list with the new, add/notify the ones they don't have in common
             foreach (var move in Moves.Where(move => !moves.Contains(move)))
             {
-                move.Controller = Controller;
-                move.Manager = this;
-
-                move.ChangeState(Move.State.Unavailable);
-                UnavailableMoves.Add(move);
-
-                move.OnManagerAdd();
-                move.OnAdd.Invoke();
+                AddMove(move);
             }
+        }
+
+        /// <summary>
+        /// Adds the specified move to the move list.
+        /// </summary>
+        /// <param name="move"></param>
+        protected void AddMove(Move move)
+        {
+            move.Controller = Controller;
+            move.Manager = this;
+
+            move.ChangeState(Move.State.Unavailable);
+            UnavailableMoves.Add(move);
+
+            move.OnManagerAdd();
+            OnAdd.Invoke(move);
+            move.OnAdd.Invoke();
         }
 
         /// <summary>

@@ -45,11 +45,12 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveEnter(State previousState)
         {
+            // Bounce up and ignore collisions
+            Controller.Detach();
+
             // End all moves (except for this one)
             Manager.EndAll(move => move != this);
 
-            // Bounce up and ignore collisions
-            Controller.Detach();
             Controller.IgnoreCollision = true;
             Controller.RelativeVelocity = new Vector2(0.0f, Velocity);
 
