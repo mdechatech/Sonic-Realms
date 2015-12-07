@@ -181,6 +181,7 @@ MonoBehaviour:
   ActiveBool: 
   AvailableBool: 
   DestroyInWater: 0
+  RotateToGravity: 1
 --- !u!212 &21204532
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -224,6 +225,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: GiveAir
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: RotateToGravity
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

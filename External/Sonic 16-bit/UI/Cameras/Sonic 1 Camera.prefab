@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   RotateToGravity: 1
+  RotationSmoothness: .200000003
   PixelPerfect: 1
   SnapOnInit: 1
   CurrentState: 0
@@ -148,6 +149,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: PixelPerfect
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: RotationSmoothness
+      value: .200000003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

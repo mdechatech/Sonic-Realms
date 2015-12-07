@@ -32,6 +32,12 @@ namespace Hedgehog.Level.Platforms
         public bool CrushVertically;
 
         /// <summary>
+        /// The fraction of the sensor test is checked each frame. This allows the crusher to work only
+        /// if the object is moving down.
+        /// </summary>
+        private float _previousVerticalFraction;
+
+        /// <summary>
         /// How much to allow grounds and ceilings to touch before crushing.
         /// </summary>
         [Range(0.0f, 1.0f)]
@@ -48,6 +54,12 @@ namespace Hedgehog.Level.Platforms
 
             CrushVertically = true;
             VerticalTolerance = 0.5f;
+        }
+
+        public override void Awake()
+        {
+            base.Awake();
+            _previousVerticalFraction = 1.0f;
         }
 
         /// <summary>
@@ -69,14 +81,29 @@ namespace Hedgehog.Level.Platforms
         /// <returns></returns>
         public bool CheckVertical(HedgehogController controller)
         {
-            if (!controller.Grounded)
+            if (!controller.Grounded || controller.LeftCeilingHit == null || controller.RightCeilingHit == null)
+            {
+                _previousVerticalFraction = 1.0f;
                 return false;
+            }
 
-            return (controller.LeftCeiling != null &&
-                    controller.LeftCeilingHit.Hit.fraction <= 1.0f - VerticalTolerance) &&
+            var averageFraction = (controller.LeftCeilingHit.Hit.fraction + controller.RightCeilingHit.Hit.fraction)/
+                                  2.0f;
 
-                   (controller.RightCeiling != null &&
-                    controller.RightCeilingHit.Hit.fraction <= 1.0f - VerticalTolerance);
+            // If fraction is 1, the controller only started hitting the ceiling this frame, so excuse fraction checks
+            if (_previousVerticalFraction == 1.0f) _previousVerticalFraction = averageFraction;
+
+            // Check for fractions vs tolerances
+            var result = controller.LeftCeilingHit.Hit.fraction <= 1.0f - VerticalTolerance &&
+                         controller.RightCeilingHit.Hit.fraction <= 1.0f - VerticalTolerance;
+
+            // The average fraction must also be less than the one last frame - this makes the check false
+            // if the object away or stood still
+            result &= (DMath.Equalsf(averageFraction) || averageFraction < _previousVerticalFraction - DMath.Epsilon);
+
+            _previousVerticalFraction = averageFraction;
+
+            return result;
         }
 
         /// <summary>

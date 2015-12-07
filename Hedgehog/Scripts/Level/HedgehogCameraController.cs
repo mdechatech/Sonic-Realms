@@ -25,6 +25,19 @@ namespace Hedgehog.Level
         public bool RotateToGravity;
 
         /// <summary>
+        /// How smoothly the rotation occurs, 1 being smoothest and 0 being instant.
+        /// </summary>
+        [Range(0.0f, 1.0f)]
+        [Tooltip("How smoothly the rotation occurs, 1 being smoothest and 0 being instant.")]
+        public float RotationSmoothness;
+
+        public float Rotation
+        {
+            get { return transform.eulerAngles.z; }
+            set { transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, value); }
+        }
+
+        /// <summary>
         /// Whether to round position to the nearest pixel (0.01 unit).
         /// </summary>
         [Tooltip("Whether to round position to the nearest pixel (0.01 unit).")]
@@ -173,6 +186,7 @@ namespace Hedgehog.Level
         {
             Target = FindObjectOfType<HedgehogController>();
             RotateToGravity = true;
+            RotationSmoothness = 0.2f;
             PixelPerfect = true;
             SnapOnInit = false;
 
@@ -232,7 +246,22 @@ namespace Hedgehog.Level
             CheckChangeTarget();
             HandleState();
 
-            if(RotateToGravity) Rotate(Target.GravityDirection + 90.0f);
+            if (RotateToGravity)
+            {
+                if (DMath.Equalsf(RotationSmoothness))
+                {
+                    Rotate(Target.GravityDirection + 90.0f);
+                }
+                else
+                {
+                    Rotate(Mathf.LerpAngle(Rotation, Target.GravityDirection + 90.0f,
+                        Time.fixedDeltaTime * (1.0f / RotationSmoothness)));
+                }
+            }
+            else
+            {
+                Rotate(0.0f);
+            }
 
             _previousTargetPosition = Target.transform.position;
 

@@ -1204,26 +1204,27 @@ namespace Hedgehog.Core.Actors
             var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position,
                 ControllerSide.Right);
 
-            LeftCeilingHit = leftCheck;
-            LeftCeiling = LeftCeilingHit ? leftCheck.Transform : null;
-            RightCeilingHit = rightCheck;
-            RightCeiling = RightCeilingHit ? rightCheck.Transform : null;
-
             // There is nothing to do here but set variables. This information is used for crushers.
             if (leftCheck)
             {
                 LeftCeilingHit = leftCheck;
                 LeftCeiling = leftCheck.Transform;
+            }
 
+            if (rightCheck)
+            {
+                RightCeilingHit = rightCheck;
+                RightCeiling = rightCheck.Transform;
+            }
+
+            if (leftCheck)
+            {
                 NotifyTriggers(leftCheck);
                 IgnoreNextCollision = false;
                 return true;
             }
             if (rightCheck)
             {
-                RightCeilingHit = rightCheck;
-                RightCeiling = rightCheck.Transform;
-
                 NotifyTriggers(rightCheck);
                 IgnoreNextCollision = false;
                 return true;

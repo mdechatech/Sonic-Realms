@@ -14,11 +14,6 @@ namespace Hedgehog.Core.Moves
         [Tooltip("The velocity of the dash, in units per second.")]
         public Vector2 DashVelocity;
 
-        /// <summary>
-        /// Keeps track of whether we need to flip the sprite when performing the dash.
-        /// </summary>
-        private bool _flipped;
-
         public override void Reset()
         {
             base.Reset();
@@ -37,21 +32,10 @@ namespace Hedgehog.Core.Moves
 
             End();
 
-            // Store whether or not we flipped the sprite so we can flip back later
-            _flipped = !Controller.FacingForward;
-            if (_flipped)
-                transform.localScale -= new Vector3(transform.localScale.x * 2.0f, 0.0f);
-
-            // Going to flip the sprite back when we land
-            Controller.OnAttach.AddListener(OnAttach);
-        }
-
-        public void OnAttach()
-        {
-            // If we flipped during the dash then flip the sprite back
-            if (_flipped)
-                transform.localScale -= new Vector3(transform.localScale.x * 2.0f, 0.0f);
-            Controller.OnAttach.RemoveListener(OnAttach);
+            // Flip the shield based on which way we're facing
+            if ((!Controller.FacingForward && transform.localScale.x > 0.0f) ||
+                (Controller.FacingForward && transform.localScale.x < 0.0f))
+                transform.localScale -= new Vector3(transform.localScale.x*2.0f, 0.0f);
         }
     }
 }

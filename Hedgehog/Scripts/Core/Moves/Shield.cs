@@ -14,6 +14,12 @@ namespace Hedgehog.Core.Moves
         [Tooltip("Whether to destroy the powerup when underwater.")]
         public bool DestroyInWater;
 
+        /// <summary>
+        /// Whether to rotate the shield with the direction of gravity.
+        /// </summary>
+        [Tooltip("Whether to rotate the shield with the direction of gravity.")]
+        public bool RotateToGravity;
+
         public override MoveGroup[] Groups
         {
             get { return new[] {MoveGroup.Shield}; }
@@ -47,6 +53,8 @@ namespace Hedgehog.Core.Moves
             {
                 Controller.OnReactiveEnter.AddListener(OnReactiveEnter);
             }
+
+            Perform(true);
         }
 
         public override void OnManagerRemove()
@@ -64,6 +72,15 @@ namespace Hedgehog.Core.Moves
         {
             if (DestroyInWater && Controller.Inside<Water>())
                 Destroy(gameObject);
+        }
+
+        public override void OnActiveUpdate()
+        {
+            if (RotateToGravity)
+                transform.eulerAngles = new Vector3(
+                    transform.eulerAngles.x,
+                    transform.eulerAngles.y,
+                    Controller.GravityDirection + 90.0f);
         }
     }
 }
