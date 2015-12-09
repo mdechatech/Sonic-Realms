@@ -79,7 +79,7 @@ namespace Hedgehog.Level.Objects
             }
 
             // Ignore collision with this since it's destroyed now
-            hit.Controller.IgnoreNextCollision = true;
+            hit.Controller.IgnoreThisCollision();
             GetComponent<Collider2D>().enabled = false;
             Controller = hit.Controller;
 

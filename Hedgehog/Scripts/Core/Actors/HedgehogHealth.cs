@@ -134,7 +134,7 @@ namespace Hedgehog.Core.Actors
             HurtInvincibilityTimer = HurtInvinciblilityTime;
             HurtInvincible = Invincible = true;
 
-            var shield = Controller.MoveManager.GetMove(MoveGroup.Shield);
+            var shield = Controller.MoveManager.GetMove<Shield>();
             if (shield == null)
             {
                 if (RingCollector.Amount <= 0)

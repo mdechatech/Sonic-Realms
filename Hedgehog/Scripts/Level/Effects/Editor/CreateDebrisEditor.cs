@@ -1,6 +1,6 @@
 ﻿using System.Linq;
+using Hedgehog.Core.Triggers.Editor;
 using Hedgehog.Core.Utils.Editor;
-using Hedgehog.Level.Effects;
 using UnityEditor;
 
 namespace Hedgehog.Level.Effects.Editor
@@ -12,6 +12,8 @@ namespace Hedgehog.Level.Effects.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
+            ReactiveObjectEditor.DrawActivatorCheck(targets);
 
             if (targets.Count() > 1)
             {

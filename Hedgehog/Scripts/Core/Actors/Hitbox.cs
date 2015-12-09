@@ -8,7 +8,6 @@ namespace Hedgehog.Core.Actors
     [RequireComponent(typeof(Collider2D))]
     public class Hitbox : MonoBehaviour
     {
-
-        
+       
     }
 }

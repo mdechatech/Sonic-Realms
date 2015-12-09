@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Hedgehog.Core.Utils
 {
@@ -12,7 +15,7 @@ namespace Hedgehog.Core.Utils
         /// Colors in a palette. 
         /// 
         /// WARNING: if you change this, you must also add the appropriate variables in the shader.
-        /// Also, the palettes you currently have will not work... will fix that later.
+        /// Also, the palettes you currently have will get messed up... gonna fix this later.
         /// </summary>
         public const int ColorsPerPalette = 16;
 
@@ -52,12 +55,6 @@ namespace Hedgehog.Core.Utils
         public Material PaletteMaterial;
 
         /// <summary>
-        /// Whether to copy the material or use the shared version.
-        /// </summary>
-        [Tooltip("Whether to copy the material or use the shared version.")]
-        public bool UseCopy;
-
-        /// <summary>
         /// Whether to ignore transparent colors on the palette when cycling it.
         /// </summary>
         [Tooltip("Whether to ignore transparent colors on the palette when cycling it.")]
@@ -67,9 +64,10 @@ namespace Hedgehog.Core.Utils
         /// A list of colors, virtually grouped by their palette index. For example, if there are 16 colors in a palette,
         /// the second palette starts from the 16th color in the list.
         /// </summary>
+        [FormerlySerializedAs("Palettes")]
         [Tooltip("A list of colors, virtually grouped by their palette index.For example, if there are 16 colors in " +
                  "a palette, the second palette starts from the 16th color in the list.")]
-        public List<Color> Palettes;
+        public List<Color> AllColors;
 
         /// <summary>
         /// The index of the palette currently being used.
@@ -77,42 +75,53 @@ namespace Hedgehog.Core.Utils
         [Tooltip("The index of the palette currently being used.")]
         public int CurrentIndex;
 
+        public UnityEvent OnPaletteChange;
+
+        public IEnumerable<Color> this[int index]
+        {
+            get { return AllColors.GetRange(index*ColorsPerPalette, ColorsPerPalette); }
+            set
+            {
+                var offset = index*ColorsPerPalette;
+                foreach (var color in value)
+                    AllColors[offset++] = color;
+            }
+        }
+
         public int PaletteCount
         {
-            get { return Palettes.Count/ColorsPerPalette; }
+            get { return AllColors.Count/ColorsPerPalette; }
         }
 
         public void Reset()
         {
             PaletteMaterial = GetComponent<SpriteRenderer>() ? GetComponent<SpriteRenderer>().sharedMaterial : null;
-            UseCopy = false;
 
             SetColorFrom = true;
             ColorFromIndex = 0;
 
             IgnoreTransparent = true;
 
-            Palettes = new List<Color>();
+            AllColors = new List<Color>();
+            OnPaletteChange = new UnityEvent();
         }
 
         public void Awake()
         {
             CurrentIndex = 0;
+            OnPaletteChange = OnPaletteChange ?? new UnityEvent();
         }
 
         public void Start()
         {
-            // Get our copy of the material
-            if (UseCopy) PaletteMaterial = new Material(PaletteMaterial);
-
             // Set color from
             if (SetColorFrom)
             {
                 for (var i = 0; i < ColorsPerPalette; ++i)
                 {
                     var absolute = i + ColorFromIndex*ColorsPerPalette;
-                    if (!IgnoreTransparent || Palettes[absolute].a != 0.0f)
-                        PaletteMaterial.SetColor(ColorFrom + (i + 1), Palettes[absolute]);
+                    if (!IgnoreTransparent || AllColors[absolute].a != 0.0f)
+                        PaletteMaterial.SetColor(ColorFrom + (i + 1), AllColors[absolute]);
                 }
             }
 
@@ -130,15 +139,23 @@ namespace Hedgehog.Core.Utils
         {
             // If the number is out of bounds just mod it
             index = DMath.Modp(index, PaletteCount);
-
+            
             for (var i = 0; i < ColorsPerPalette; ++i)
             {
                 var absolute = i + index*ColorsPerPalette;
-                if(!IgnoreTransparent || Palettes[absolute].a != 0.0f)
-                    PaletteMaterial.SetColor(ColorToIDs[i], Palettes[absolute]);
+                if (!IgnoreTransparent || AllColors[absolute].a != 0.0f)
+                {
+#if UNITY_EDITOR
+                    PaletteMaterial.SetColor(ColorTo + (i + 1), AllColors[absolute]);
+#else
+                    PaletteMaterial.SetColor(ColorToIDs[i], AllColors[absolute]);
+#endif
+                }
+                    
             }
 
             CurrentIndex = index;
+            OnPaletteChange.Invoke();
         }
 
         /// <summary>

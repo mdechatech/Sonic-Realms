@@ -245,7 +245,7 @@ MonoBehaviour:
   AvailableBool: 
   Radius: .639999986
   RingSpeed: 6.75
-  CheckTime: .25
+  CheckTime: .0500000007
 --- !u!212 &21234764
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -290,6 +290,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: RotateToGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: CheckTime
+      value: .0500000007
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

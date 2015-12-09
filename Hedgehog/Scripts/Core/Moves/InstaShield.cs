@@ -76,25 +76,25 @@ namespace Hedgehog.Core.Moves
             base.OnManagerAdd();
             
             // Listening for when the controller gets a shield, so we can disable ourselves
-            Manager.OnAdd.AddListener(OnMoveList);
-            Manager.OnRemove.AddListener(OnMoveList);
+            Manager.OnAdd.AddListener(OnManager);
+            Manager.OnRemove.AddListener(OnManager);
         }
 
         public override void OnManagerRemove()
         {
             base.OnManagerRemove();
-            Manager.OnAdd.RemoveListener(OnMoveList);
-            Manager.OnRemove.RemoveListener(OnMoveList);
+            Manager.OnAdd.RemoveListener(OnManager);
+            Manager.OnRemove.RemoveListener(OnManager);
         }
 
-        protected void OnMoveList(Move move)
+        protected void OnManager(Move move)
         {
             HasShield = Manager.GetMove<Shield>();
         }
 
         public override bool Available()
         {
-            return base.Available() && !HasShield;
+            return !HasShield && base.Available();
         }
 
         public override void OnActiveEnter()

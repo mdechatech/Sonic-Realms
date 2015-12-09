@@ -1,6 +1,5 @@
 ﻿using System;
 using Hedgehog.Core.Actors;
-using Hedgehog.Core.Moves;
 using Hedgehog.UI;
 using UnityEngine;
 
@@ -35,12 +34,9 @@ namespace Hedgehog.Level
         public TimeSpan LevelTime;
 
         /// <summary>
-        /// The current level time in seconds.
-        /// </summary>
-        [Header("Timer")]
-        /// <summary>
         /// The display on which to show the level time.
         /// </summary>
+        [Header("Timer")]
         [Tooltip("The display on which to show the level time.")]
         public TimerDisplay Timer;
 
@@ -69,7 +65,7 @@ namespace Hedgehog.Level
 
             Timer = GetComponentInChildren<TimerDisplay>();
             LevelTimeSeconds = 0.0f;
-            TimeOverSeconds = 599.0f;
+            TimeOverSeconds = 599.9f;
         }
 
         public void Awake()

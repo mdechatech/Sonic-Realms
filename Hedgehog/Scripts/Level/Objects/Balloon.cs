@@ -22,7 +22,7 @@ namespace Hedgehog.Level.Objects
             if (hit.Controller == null) return;
 
             hit.Controller.Detach();
-            hit.Controller.IgnoreNextCollision = true;
+            hit.Controller.IgnoreThisCollision();
             hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x, Velocity);
             GetComponent<Collider2D>().enabled = false;
 

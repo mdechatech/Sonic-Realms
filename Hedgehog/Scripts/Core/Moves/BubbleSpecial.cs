@@ -68,6 +68,7 @@ namespace Hedgehog.Core.Moves
             Used = false;
 
             Controller.RelativeVelocity = BounceVelocity;
+            Controller.IgnoreThisCollision();
             Controller.OnCollide.RemoveListener(OnCollide);
             End();
         }

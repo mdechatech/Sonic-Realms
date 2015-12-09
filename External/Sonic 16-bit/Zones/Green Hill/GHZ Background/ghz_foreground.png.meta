@@ -1,0 +1,298 @@
+fileFormatVersion: 2
+guid: ca9013b2be8ca69419e20d700498a11e
+timeCreated: 1449643716
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: ghz_foreground_0
+    21300002: ghz_foreground_1
+    21300004: ghz_foreground_2
+    21300006: ghz_foreground_3
+    21300008: ghz_foreground_4
+    21300010: ghz_foreground_5
+    21300012: ghz_foreground_6
+    21300014: ghz_foreground_7
+    21300016: ghz_foreground_8
+    21300018: ghz_foreground_9
+    21300020: ghz_foreground_10
+    21300022: ghz_foreground_11
+    21300024: ghz_foreground_12
+    21300026: ghz_foreground_13
+    21300028: ghz_foreground_14
+    21300030: ghz_foreground_15
+    21300032: ghz_foreground_16
+    21300034: ghz_foreground_17
+    21300036: ghz_foreground_18
+    21300038: ghz_foreground_19
+    21300040: ghz_foreground_20
+    21300042: ghz_foreground_21
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: ghz_foreground_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 504
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 495
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 486
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 477
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 468
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 459
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 450
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 441
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 432
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 423
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 414
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 405
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 396
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 289
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 248
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 207
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 166
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 125
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 84
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 43
+        width: 256
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 34
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ghz_foreground_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 25
+        width: 256
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: GHZ Foreground
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

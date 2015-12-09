@@ -181,22 +181,18 @@ namespace Hedgehog.Core.Moves
         public override void Start()
         {
             base.Start();
+            if (Controller.Grounded) Perform(true);
             Controller.OnAttach.AddListener(OnAttach);
-            Controller.OnDetach.AddListener(OnDetach);
         }
 
-        private void OnAttach()
+        public void OnAttach()
         {
-            Perform(true);
-        }
-
-        private void OnDetach()
-        {
-            End();
+            Perform();
         }
 
         public override void OnActiveEnter(State previousState)
         {
+            Manager.End<AirControl>();
             Controller.OnSteepDetach.AddListener(OnSteepDetach);
             Controller.AutoFacingForward = false;
         }

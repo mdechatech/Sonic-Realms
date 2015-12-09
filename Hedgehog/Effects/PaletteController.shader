@@ -3,7 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-
+		
+		// From almost zero to sqrt(3), which is the distance between (0, 0, 0) and (1, 1, 1)
 		_Threshold("Threshold", Range(0.0000005, 1.733)) = 0.0000005
 		
 		_ColorFrom1 ("Color From 1", Color) = (0, 0, 0, 0)
@@ -47,6 +48,10 @@
 
 		Pass
 		{
+			ZWrite Off
+			Tags {"Queue" = "Transparent"}
+			Blend SrcAlpha OneMinusSrcAlpha
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -106,14 +111,9 @@
 			float4 _MainTex_ST;
 			float _Threshold;
 
-			float color_distance(fixed4 a, fixed4 b)
-			{
-				return distance(a.rgb, b.rgb);
-			}
-
 			bool color_within(fixed4 a, fixed4 b)
 			{
-				return color_distance(a, b) < _Threshold;
+				return distance(a.rgb, b.rgb) < _Threshold;
 			}
 			
 			v2f vert (appdata v)

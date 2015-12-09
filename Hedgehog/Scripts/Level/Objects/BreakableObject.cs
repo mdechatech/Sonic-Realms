@@ -30,7 +30,7 @@ namespace Hedgehog.Level.Objects
             if (hit.Side != ControllerSide.Bottom || hit.Controller.RelativeVelocity.y > 0.0f) return;
             if (!hit.Controller.MoveManager.IsActive<Roll>()) return;
 
-            hit.Controller.IgnoreNextCollision = true;
+            hit.Controller.IgnoreThisCollision();
             hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x, BounceSpeed);
             ActivateObject(hit.Controller);
             Destroy(gameObject);

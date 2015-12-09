@@ -513,7 +513,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: .400000006, y: .800000012, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
@@ -1285,6 +1285,7 @@ MonoBehaviour:
   - {fileID: 11491536}
   - {fileID: 11461730}
   - {fileID: 11439158}
+  - {fileID: 11457154}
   ActiveMoves: []
   AvailableMoves: []
   UnavailableMoves: []

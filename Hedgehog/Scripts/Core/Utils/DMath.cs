@@ -29,6 +29,55 @@ namespace Hedgehog.Core.Utils
         public const float DoublePi = 6.283185f;
 
         /// <summary>
+        /// Returns c in the formula a/b = c/d.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static float Proportion(float a, float b, float d)
+        {
+            return a/b*d;
+        }
+
+        /// <summary>
+        /// Flips the specified value over a midpoint.
+        /// </summary>
+        /// <param name="value">The specified value.</param>
+        /// <param name="over">The midpoint.</param>
+        /// <returns></returns>
+        public static float Flip(float value, float over = 0.0f)
+        {
+            return -(value - over) + over;
+        }
+
+        /// <summary>
+        /// Floors the specified value to the specified interval with the specified offset. For example,
+        /// floor-ing 21 to the interval 10 with offset 3 returns 13.
+        /// </summary>
+        /// <param name="value">The specified value to round.</param>
+        /// <param name="interval">The interval to round to.</param>
+        /// <param name="offset">How much to add to the rounded value.</param>
+        /// <returns></returns>
+        public static float Floor(float value, float interval = 1, float offset = 0)
+        {
+            return Mathf.Floor((value - offset)/interval)*interval + offset;
+        }
+
+        /// <summary>
+        /// Ceils the specified value to the specified interval with the specified offset. For example,
+        /// ceil-ing 21 to the interval 10 with offset 3 returns 23.
+        /// </summary>
+        /// <param name="value">The specified value to round.</param>
+        /// <param name="interval">The interval to round to.</param>
+        /// <param name="offset">How much to add to the rounded value.</param>
+        /// <returns></returns>
+        public static float Ceil(float value, float interval = 1, float offset = 0)
+        {
+            return Mathf.Ceil((value - offset)/interval)*interval + offset;
+        }
+
+        /// <summary>
         /// Rounds the specified value to the nearest interval with the specified offset. For example,
         /// rounding 21 to the interval 10 with offset 3 returns 23.
         /// </summary>
@@ -42,26 +91,13 @@ namespace Hedgehog.Core.Utils
         }
 
         /// <summary>
-        /// Rounds the specified value to the nearest interval with the specified offset. For example,
-        /// rounding 21 to the interval 10 with offset 3 returns 23.
-        /// </summary>
-        /// <param name="value">The specified value to round.</param>
-        /// <param name="interval">The interval to round to.</param>
-        /// <param name="offset">How much to add to the rounded value.</param>
-        /// <returns></returns>
-        public static int Round(int value, int interval = 1, int offset = 0)
-        {
-            return Mathf.RoundToInt(value/(float)interval)*interval + offset;
-        }
-
-        /// <summary>
         /// Performs a modulus that is positive as long as the divisor is positive.
         /// </summary>
         /// <param name="dividend">The dividend.</param>
         /// <param name="divisor">The divisor.</param>
         public static int Modp(int dividend, int divisor)
         {
-            return ((dividend % divisor) + divisor) % divisor;
+            return ((dividend%divisor) + divisor)%divisor;
         }
 
         /// <summary>
@@ -71,7 +107,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="divisor">The divisor.</param>
         public static float Modp(float dividend, float divisor)
         {
-            return ((dividend % divisor) + divisor) % divisor;
+            return ((dividend%divisor) + divisor)%divisor;
         }
 
         /// <summary>
@@ -123,7 +159,7 @@ namespace Hedgehog.Core.Utils
             if (Equalsf(direction, Mathf.PI)) return b.x - a.x;
             if (Equalsf(direction, OneThreeFourthsPi)) return b.y - a.y;
 
-            Vector2 diff = Projection(a, direction) - Projection(b, direction);
+            Vector2 diff = Project(a, direction) - Project(b, direction);
             return (Mathf.Abs(Angle(diff) - direction) < HalfPi) ? diff.magnitude : -diff.magnitude;
         }
 
@@ -158,9 +194,9 @@ namespace Hedgehog.Core.Utils
         /// </summary>
         /// <param name="q">The point q.</param>
         /// <param name="angle">The angle of the line.</param>
-        public static Vector2 Projection(Vector2 q, float angle)
+        public static Vector2 Project(Vector2 q, float angle)
         {
-            return Projection(q, new Vector2(), angle);
+            return Project(q, new Vector2(), angle);
         }
 
         /// <summary>
@@ -169,9 +205,9 @@ namespace Hedgehog.Core.Utils
         /// <param name="q">The point q.</param>
         /// <param name="p">The point p.</param>
         /// <param name="angle">The angle of the line.</param>
-        public static Vector2 Projection(Vector2 q, Vector2 p, float angle)
+        public static Vector2 Project(Vector2 q, Vector2 p, float angle)
         {
-            return Projection(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
+            return Project(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
         }
 
         /// <summary>
@@ -180,10 +216,10 @@ namespace Hedgehog.Core.Utils
         /// <param name="q">The point q.</param>
         /// <param name="lineA">The point lineA which defines a line with lineB.</param>
         /// <param name="lineB">The point lineB which defines a line with lineA.</param>
-        public static Vector2 Projection(Vector2 q, Vector2 lineA, Vector2 lineB)
+        public static Vector2 Project(Vector2 q, Vector2 lineA, Vector2 lineB)
         {
             Vector2 ab = lineB - lineA;
-            return lineA + ((Vector2.Dot(q - lineA, ab) / Vector2.Dot(ab, ab)) * ab);
+            return lineA + ((Vector2.Dot(q - lineA, ab)/Vector2.Dot(ab, ab))*ab);
         }
 
         /// <summary>
@@ -243,7 +279,7 @@ namespace Hedgehog.Core.Utils
 
             Vector2 npoint = point - origin;
 
-            return new Vector2(npoint.x * c - npoint.y * s + origin.x, npoint.x * s + npoint.y * c + origin.y);
+            return new Vector2(npoint.x*c - npoint.y*s + origin.x, npoint.x*s + npoint.y*c + origin.y);
         }
 
         /// <summary>
@@ -265,7 +301,7 @@ namespace Hedgehog.Core.Utils
         public static void RotateBy(Transform transform, float angle, Vector2 origin)
         {
             transform.position = RotateBy(transform.position, angle, origin);
-            transform.eulerAngles = new Vector3(0.0f, 0.0f, transform.eulerAngles.z + (angle * Mathf.Rad2Deg));
+            transform.eulerAngles = new Vector3(0.0f, 0.0f, transform.eulerAngles.z + (angle*Mathf.Rad2Deg));
         }
 
         /// <summary>
@@ -308,7 +344,7 @@ namespace Hedgehog.Core.Utils
         public static void RotateTo(Transform transform, float angle, Vector2 origin)
         {
             transform.position = RotateTo(transform.position, angle, origin);
-            transform.eulerAngles = new Vector3(0.0f, 0.0f, angle * Mathf.Rad2Deg);
+            transform.eulerAngles = new Vector3(0.0f, 0.0f, angle*Mathf.Rad2Deg);
         }
 
         /// <summary>
@@ -318,7 +354,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="b">The point b.</param>
         public static Vector2 Midpoint(Vector2 a, Vector2 b)
         {
-            return (a + b) / 2.0f;
+            return (a + b)/2.0f;
         }
 
         /// <summary>
@@ -401,7 +437,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="b">The second vector.</param>
         public static float ShortestArc_d(Vector2 a, Vector2 b)
         {
-            return ShortestArc_d(Angle(a) * Mathf.Rad2Deg, Angle(b) * Mathf.Rad2Deg);
+            return ShortestArc_d(Angle(a)*Mathf.Rad2Deg, Angle(b)*Mathf.Rad2Deg);
         }
 
         /// <summary>

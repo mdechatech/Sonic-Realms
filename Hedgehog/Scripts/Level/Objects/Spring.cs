@@ -86,6 +86,7 @@ namespace Hedgehog.Level.Objects
                 hit.Controller.Detach();
                 hit.Controller.EndMove<Roll>();
                 hit.Controller.PerformMove<AirControl>(true);
+                hit.Controller.IgnoreThisCollision();
             }
 
             if (AccurateBounce)

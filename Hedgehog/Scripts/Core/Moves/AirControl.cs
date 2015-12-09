@@ -74,21 +74,20 @@ namespace Hedgehog.Core.Moves
             _axis = 0.0f;
         }
 
-        public override void Start()
+        public override void OnManagerAdd()
         {
-            base.Start();
-            Controller.OnAttach.AddListener(OnAttach);
+            if (!Controller.Grounded) Perform(true);
             Controller.OnDetach.AddListener(OnDetach);
         }
 
-        private void OnDetach()
+        public void OnDetach()
         {
             Perform();
         }
 
-        private void OnAttach()
+        public override void OnActiveEnter()
         {
-            End();
+            Manager.End<GroundControl>();
         }
 
         public override void OnActiveUpdate()

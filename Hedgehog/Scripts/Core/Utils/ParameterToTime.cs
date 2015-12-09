@@ -5,7 +5,7 @@ namespace Hedgehog.Core.Utils
     /// <summary>
     /// Sets the motion's normalized time to the specified parameter.
     /// </summary>
-    public class ParamaterToTime : StateMachineBehaviour
+    public class ParameterToTime : StateMachineBehaviour
     {
         /// <summary>
         /// Sets the motion's normalized time to this parameter.

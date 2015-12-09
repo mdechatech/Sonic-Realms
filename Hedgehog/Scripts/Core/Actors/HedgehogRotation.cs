@@ -135,7 +135,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         public void FixRotation()
         {
-            Rotation = DMath.Round(TrueRotation, 360.0f/Precision, Controller.GravityRight);
+            Rotation = DMath.Floor(TrueRotation, 360.0f/Precision, Controller.GravityRight);
         }
     }
 }

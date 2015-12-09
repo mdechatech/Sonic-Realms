@@ -20,11 +20,6 @@ namespace Hedgehog.Core.Moves
         [Tooltip("Whether to rotate the shield with the direction of gravity.")]
         public bool RotateToGravity;
 
-        public override MoveGroup[] Groups
-        {
-            get { return new[] {MoveGroup.Shield}; }
-        }
-
         public override void Reset()
         {
             base.Reset();
@@ -42,7 +37,7 @@ namespace Hedgehog.Core.Moves
             health.OnHurt.AddListener(OnHurt);
 
             // Replace any previous shields
-            var shield = Manager.GetMoves(MoveGroup.Shield).FirstOrDefault(move => move != this);
+            var shield = Manager.GetMoves<Shield>().FirstOrDefault(move => move != this);
             if (shield != null) Destroy(shield.gameObject);
 
             if (DestroyInWater && Controller.Inside<Water>())

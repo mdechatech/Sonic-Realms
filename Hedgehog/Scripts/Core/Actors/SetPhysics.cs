@@ -43,7 +43,7 @@ namespace Hedgehog.Core.Actors
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             Controller = Controller ?? animator.GetComponentInParent<HedgehogController>();
-
+            
             if (GroundFriction != UnchangedValue)
                 Controller.GroundFriction = GroundFriction;
 

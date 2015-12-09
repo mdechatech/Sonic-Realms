@@ -8,19 +8,49 @@ namespace Hedgehog.Core.Utils
     /// </summary>
     public class AnimationEvents : MonoBehaviour
     {
+        /// <summary>
+        /// Destroys the specified game object.
+        /// </summary>
+        /// <param name="gameObject">The specified game object.</param>
         public void DestroyGameObject(GameObject gameObject)
         {
             Destroy(gameObject);
         }
 
+        /// <summary>
+        /// Destroys the specified component.
+        /// </summary>
+        /// <param name="component">The specified component.</param>
         public void DestroyComponent(Component component)
         {
             Destroy(component);
         }
 
+        /// <summary>
+        /// Destroys this component's game object.
+        /// </summary>
         public void DestroySelf()
         {
             Destroy(gameObject);
+        }
+
+        /// <summary>
+        /// Copies the specified object at the transform's position, at the top level of the hierarchy
+        /// </summary>
+        /// <param name="original">The specified object.</param>
+        public void AddObject(GameObject original)
+        {
+            Instantiate(original, transform.position, transform.rotation);
+        }
+
+        /// <summary>
+        /// Copies the specified object at the transform's position, at a child of the transform.
+        /// </summary>
+        /// <param name="original">The specified object.</param>
+        public void AddObjectAsChild(GameObject original)
+        {
+            var copy = (GameObject)Instantiate(original, transform.position, transform.rotation);
+            copy.transform.position = transform.position;
         }
 
         /// <summary>

@@ -227,9 +227,10 @@ namespace Hedgehog.Core.Moves
         public void UpdateList()
         {
             // Remove all destroyed/transferred moves and notify them
-            Moves.RemoveAll(move =>
+            foreach (var move in new List<Move>(Moves))
             {
-                if (move && move.transform.IsChildOf(transform)) return false;
+                if (move && move.transform.IsChildOf(transform))
+                    continue;
 
                 switch (move.CurrentState)
                 {
@@ -246,11 +247,12 @@ namespace Hedgehog.Core.Moves
                         break;
                 }
 
+                Moves.Remove(move);
+
                 move.OnManagerRemove();
                 OnRemove.Invoke(move);
                 move.OnRemove.Invoke();
-                return true;
-            });
+            }
 
             // Copy the current list before filling it with new moves
             var moves = new List<Move>(Moves);

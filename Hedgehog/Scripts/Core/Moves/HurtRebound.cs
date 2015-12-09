@@ -40,6 +40,7 @@ namespace Hedgehog.Core.Moves
 
             Controller.EndMove<AirControl>();
             Controller.AirControl.OnActive.AddListener(OnPerformAirControl);
+            Controller.IgnoreThisCollision();
         }
 
         public override void OnActiveExit()

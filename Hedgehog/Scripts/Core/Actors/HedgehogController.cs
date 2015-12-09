@@ -318,11 +318,10 @@ namespace Hedgehog.Core.Actors
         public bool IgnoreCollision;
 
         /// <summary>
-        /// Makes the controller ignore the first thing in its way. Often used by objects that
-        /// destroy themselves after being touched; setting this to true makes the controller keep going
-        /// afterward.
+        /// Whether the controller is ignoring the result of its current collision check. Set by triggers during
+        /// HandleCollisions.
         /// </summary>
-        public bool IgnoreNextCollision;
+        public bool IgnoringThisCollision;
 
         /// <summary>
         /// The controller's velocity as a Vector2.
@@ -634,7 +633,7 @@ namespace Hedgehog.Core.Actors
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             AutoFacingForward = FacingForward = true;
             AttachLock = DetachLock = false;
-            IgnoreCollision = IgnoreNextCollision = false;
+            IgnoreCollision = IgnoringThisCollision = false;
 
             OnAttach = OnAttach ?? new UnityEvent();
             OnCollide = OnCollide ?? new PlatformCollisionEvent();
@@ -969,16 +968,14 @@ namespace Hedgehog.Core.Actors
             var rightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                 ControllerSide.Right);
 
-            LeftWallHit = leftCheck;
-            LeftWall = LeftWallHit ? leftCheck.Transform : null;
-            RightWallHit = rightCheck;
-            RightWall = RightWallHit ? rightCheck.Transform : null;
-
             if (leftCheck)
             {
+                LeftWallHit = leftCheck;
+                LeftWall = leftCheck.Transform ;
+
                 NotifyTriggers(leftCheck);
 
-                if (!IgnoreNextCollision)
+                if (!IgnoringThisCollision)
                 {
                     var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
@@ -987,15 +984,18 @@ namespace Hedgehog.Core.Actors
                         RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
                 }
 
-                IgnoreNextCollision = false;
+                IgnoringThisCollision = false;
                 return true;
             }
 
             if (rightCheck)
             {
+                RightWallHit = rightCheck;
+                RightWall = rightCheck.Transform;
+
                 NotifyTriggers(rightCheck);
 
-                if (!IgnoreNextCollision)
+                if (!IgnoringThisCollision)
                 {
                     var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
@@ -1004,7 +1004,7 @@ namespace Hedgehog.Core.Actors
                         RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
                 }
 
-                IgnoreNextCollision = false;
+                IgnoringThisCollision = false;
                 return true;
             }
 
@@ -1024,42 +1024,43 @@ namespace Hedgehog.Core.Actors
             {
                 LeftCeilingHit = leftCheck;
                 LeftCeiling = leftCheck.Transform;
+
+                NotifyTriggers(leftCheck);
+
+                var impact = CheckImpact(leftCheck);
+                if (!IgnoringThisCollision && leftCheck.Hit.fraction > 0.0f)
+                {
+                    transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
+                    IgnoringThisCollision = false;
+
+                    if (impact.HasValue)
+                        Attach(impact.Value, leftCheck.SurfaceAngle);
+
+                    return true;
+                }
+
+                IgnoringThisCollision = false;
+                return false;
             }
 
             if (rightCheck)
             {
                 RightCeilingHit = rightCheck;
                 RightCeiling = rightCheck.Transform;
-            }
 
-            if (leftCheck)
-            {
-                NotifyTriggers(leftCheck);
-
-                if (!IgnoreNextCollision && leftCheck.Hit.fraction > 0.0f)
-                {
-                    transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
-                    if (HandleImpact(leftCheck))
-                        Footing = Footing.Left;
-                }
-                
-                IgnoreNextCollision = false;
-                return true;
-            }
-
-            if (rightCheck)
-            {
                 NotifyTriggers(rightCheck);
 
-                if (!IgnoreNextCollision && rightCheck.Hit.fraction > 0.0f)
+                var impact = CheckImpact(rightCheck);
+                if (!IgnoringThisCollision && rightCheck.Hit.fraction > 0.0f)
                 {
                     transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
-                    if (HandleImpact(rightCheck))
-                        Footing = Footing.Right;
-                }
+                    IgnoringThisCollision = false;
 
-                IgnoreNextCollision = false;
-                return true;
+                    if (impact.HasValue)
+                        Attach(impact.Value, leftCheck.SurfaceAngle);
+
+                    return true;
+                }
             }
 
             return false;
@@ -1081,40 +1082,60 @@ namespace Hedgehog.Core.Actors
                     if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
                             GravityDirection*Mathf.Deg2Rad) >= 0.0f)
                     {
-                        NotifyTriggers(groundLeftCheck);
+                        var impact = CheckImpact(groundLeftCheck);
 
-                        if (!IgnoreNextCollision && HandleImpact(groundLeftCheck))
-                            Footing = Footing.Left;
+                        if (impact.HasValue)
+                        {
+                            NotifyTriggers(groundLeftCheck);
 
-                        IgnoreNextCollision = false;
+                            if (!IgnoringThisCollision)
+                                Attach(impact.Value, groundLeftCheck.SurfaceAngle);
+
+                            IgnoringThisCollision = false;
+                        }
                     }
                     else
                     {
-                        NotifyTriggers(groundRightCheck);
+                        var impact = CheckImpact(groundRightCheck);
 
-                        if (!IgnoreNextCollision && HandleImpact(groundRightCheck))
-                            Footing = Footing.Right;
+                        if (impact.HasValue)
+                        {
+                            NotifyTriggers(groundRightCheck);
 
-                        IgnoreNextCollision = false;
+                            if (!IgnoringThisCollision)
+                                Attach(impact.Value, groundRightCheck.SurfaceAngle);
+
+                            IgnoringThisCollision = false;
+                        }
                     }
                 }
                 else if (groundLeftCheck)
                 {
-                    NotifyTriggers(groundLeftCheck);
+                    var impact = CheckImpact(groundLeftCheck);
 
-                    if (!IgnoreNextCollision && HandleImpact(groundLeftCheck))
-                        Footing = Footing.Left;
+                    if (impact.HasValue)
+                    {
+                        NotifyTriggers(groundLeftCheck);
 
-                    IgnoreNextCollision = false;
+                        if (!IgnoringThisCollision)
+                            Attach(impact.Value, groundLeftCheck.SurfaceAngle);
+
+                        IgnoringThisCollision = false;
+                    }
                 }
                 else
                 {
-                    NotifyTriggers(groundRightCheck);
+                    var impact = CheckImpact(groundRightCheck);
 
-                    if (!IgnoreNextCollision && HandleImpact(groundRightCheck))
-                        Footing = Footing.Right;
+                    if (impact.HasValue)
+                    {
+                        NotifyTriggers(groundRightCheck);
 
-                    IgnoreNextCollision = false;
+                        if (!IgnoringThisCollision)
+                            Attach(impact.Value, groundRightCheck.SurfaceAngle);
+
+                        IgnoringThisCollision = false;
+                    }
                 }
 
                 return true;
@@ -1142,7 +1163,7 @@ namespace Hedgehog.Core.Actors
             {
                 NotifyTriggers(leftCheck);
 
-                if (!IgnoreNextCollision)
+                if (!IgnoringThisCollision)
                 {
                     if (GroundVelocity < 0.0f)
                         GroundVelocity = 0.0f;
@@ -1160,7 +1181,7 @@ namespace Hedgehog.Core.Actors
                     SensorsRotation = SurfaceAngle;
                 }
 
-                IgnoreNextCollision = false;
+                IgnoringThisCollision = false;
                 return true;
             }
 
@@ -1168,7 +1189,7 @@ namespace Hedgehog.Core.Actors
             {
                 NotifyTriggers(rightCheck);
 
-                if (!IgnoreNextCollision)
+                if (!IgnoringThisCollision)
                 {
                     if (GroundVelocity > 0.0f)
                         GroundVelocity = 0.0f;
@@ -1186,7 +1207,7 @@ namespace Hedgehog.Core.Actors
                     SensorsRotation = SurfaceAngle;
                 }
 
-                IgnoreNextCollision = false;
+                IgnoringThisCollision = false;
                 return true;
             }
 
@@ -1220,13 +1241,13 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 NotifyTriggers(leftCheck);
-                IgnoreNextCollision = false;
+                IgnoringThisCollision = false;
                 return true;
             }
             if (rightCheck)
             {
                 NotifyTriggers(rightCheck);
-                IgnoreNextCollision = false;
+                IgnoringThisCollision = false;
                 return true;
             }
 
@@ -1313,7 +1334,7 @@ namespace Hedgehog.Core.Actors
             orientLeft:
             NotifyTriggers(left);
 
-            if (!IgnoreNextCollision)
+            if (!IgnoringThisCollision)
             {
                 Footing = Footing.Left;
                 SensorsRotation = SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
@@ -1327,7 +1348,7 @@ namespace Hedgehog.Core.Actors
             orientRight:
             NotifyTriggers(right);
 
-            if (!IgnoreNextCollision)
+            if (!IgnoringThisCollision)
             {
                 Footing = Footing.Right;
                 SensorsRotation = SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
@@ -1342,7 +1363,7 @@ namespace Hedgehog.Core.Actors
             NotifyTriggers(left);
             NotifyTriggers(right);
 
-            if (!IgnoreNextCollision)
+            if (!IgnoringThisCollision)
             {
                 Footing = Footing.Left;
                 SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point) * Mathf.Rad2Deg;
@@ -1357,7 +1378,7 @@ namespace Hedgehog.Core.Actors
             NotifyTriggers(right);
             NotifyTriggers(left);
 
-            if (!IgnoreNextCollision)
+            if (!IgnoringThisCollision)
             {
                 Footing = Footing.Right;
                 SensorsRotation = SurfaceAngle = DMath.Angle(right.Hit.point - left.Hit.point) * Mathf.Rad2Deg;
@@ -1374,7 +1395,7 @@ namespace Hedgehog.Core.Actors
             #endregion
 
             finish:
-            IgnoreNextCollision = false;
+            IgnoringThisCollision = false;
             return true;
         }
         #endregion
@@ -1411,6 +1432,19 @@ namespace Hedgehog.Core.Actors
         {
             Interrupted = false;
             InterruptTimer = 0.0f;
+        }
+
+        /// <summary>
+        /// When called during a collision check, tells the controller to not respond to the collision.
+        /// This can be called by platform triggers to prevent their effects being overwritten by
+        /// the controller.
+        /// 
+        /// For example, the controller will normally land on any flat ground. However, when it hits a spring,
+        /// IgnoreThisCollision is called, preventing this and allowing the controller to stay in the air.
+        /// </summary>
+        public void IgnoreThisCollision()
+        {
+            IgnoringThisCollision = true;
         }
 
         /// <summary>
@@ -1697,12 +1731,11 @@ namespace Hedgehog.Core.Actors
         /// Uses the algorithm here: https://info.sonicretro.org/SPG:Solid_Tiles#Reacquisition_Of_The_Ground
         /// adapted for 360° gravity.
         /// </summary>
-        /// <returns>Whether the player should attach to the specified incline.</returns>
+        /// <returns>The value the controller's ground velocity should be set to, or null if it should not attach.</returns>
         /// <param name="impact">The impact data as th result of a terrain cast.</param>
-        public bool HandleImpact(TerrainCastHit impact)
+        public float? CheckImpact(TerrainCastHit impact)
         {
             var sAngled = DMath.PositiveAngle_d(impact.SurfaceAngle * Mathf.Rad2Deg);
-            var sAngler = sAngled * Mathf.Deg2Rad;
 
             // The player can't possibly land on something if he's traveling 90 degrees
             // within the normal
@@ -1711,7 +1744,7 @@ namespace Hedgehog.Core.Actors
             var surfaceDifference = DMath.ShortestArc_d(playerAngle, surfaceNormal);
             if (Mathf.Abs(surfaceDifference) < 90.0f)
             {
-                return false;
+                return null;
             }
 
             float? result = null;
@@ -1763,14 +1796,13 @@ namespace Hedgehog.Core.Actors
                 }
             }
 
-            if (result == null) return false;
+            if (result == null) return null;
 
             // If we're gonna fall off because we're too slow, don't attach at all
             if (DetachWhenSlow && (Mathf.Abs(result.Value) < DetachSpeed && fixedAngled > 90.0f && fixedAngled < 270.0f))
-                return false;
-    
-            Attach(result.Value, sAngler);
-            return true;
+                return null;
+
+            return result;
         }
 
         /// <summary>

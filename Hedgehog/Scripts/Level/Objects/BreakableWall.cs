@@ -37,7 +37,7 @@ namespace Hedgehog.Level.Objects
             if (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top) return;
             if (!hit.Controller.MoveManager.IsActive<Roll>() || Mathf.Abs(hit.Controller.GroundVelocity) < MinGroundSpeed) return;
 
-            hit.Controller.IgnoreNextCollision = true;
+            hit.Controller.IgnoreThisCollision();
             ActivateObject(hit.Controller);
             Destroy(gameObject);
 
