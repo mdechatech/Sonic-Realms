@@ -24,6 +24,7 @@ namespace Hedgehog.Core.Triggers.Editor
 
         protected override void DrawAnimationProperties()
         {
+            base.DrawAnimationProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "InsideTrigger", "InsideBool");
         }

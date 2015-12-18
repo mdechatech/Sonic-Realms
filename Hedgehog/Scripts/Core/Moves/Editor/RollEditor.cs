@@ -8,22 +8,22 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawAnimationProperties()
         {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UphillBool");
             base.DrawAnimationProperties();
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UphillBool");
         }
 
         protected override void DrawControlProperties()
         {
+            base.DrawControlProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis", "RequireNegative", 
                 "MinActivateSpeed");
-            base.DrawControlProperties();
         }
 
         protected override void DrawPhysicsProperties()
         {
+            base.DrawPhysicsProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "HeightChange", "WidthChange",
                 "UphillGravity", "DownhillGravity", "Deceleration", "Friction");
-            base.DrawPhysicsProperties();
         }
     }
 }

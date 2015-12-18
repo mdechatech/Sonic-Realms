@@ -57,15 +57,17 @@ namespace Hedgehog.Core.Moves
         }
 
         /// <summary>
-        /// If the move is active, whether it was activated through player input.
+        /// Whether the move can be used through the usual means (ShouldPerform).
         /// </summary>
-        public bool InputActivated;
+        [Tooltip("Whether the move can be used through the usual means (ShouldPerform).")]
+        public bool AllowShouldPerform;
 
         /// <summary>
-        /// Whether the move can be activated through input.
+        /// Whether the move can be ended through the usual means (ShouldEnd).
         /// </summary>
-        [Tooltip("Whether the move can be activated through input.")]
-        public bool InputEnabled;
+        [Tooltip("Whether the move can be ended through the usual means (ShouldEnd).")]
+        public bool AllowShouldEnd;
+
         #region Events
         /// <summary>
         /// Invoked when the move is performed.
@@ -122,7 +124,14 @@ namespace Hedgehog.Core.Moves
 
         public virtual void Reset()
         {
+            Animator = GetComponentInParent<Animator>();
             ActiveTrigger = ActiveBool = AvailableBool = "";
+
+            OnActive = new UnityEvent();
+            OnEnd = new UnityEvent();
+            OnAvailable = new UnityEvent();
+            OnAdd = new UnityEvent();
+            OnRemove = new UnityEvent();
         }
 
         public virtual void Awake()
@@ -139,8 +148,7 @@ namespace Hedgehog.Core.Moves
             AvailableBoolHash = string.IsNullOrEmpty(AvailableBool) ? 0 : Animator.StringToHash(AvailableBool);
 
             CurrentState = State.Unavailable;
-            InputActivated = false;
-            InputEnabled = true;
+            AllowShouldPerform = AllowShouldEnd = true;
         }
 
         public virtual void OnEnable()
@@ -189,7 +197,7 @@ namespace Hedgehog.Core.Moves
 
             var prevState = CurrentState;
             CurrentState = nextState;
-            OnStateChanged(prevState);
+            OnStateChange(prevState);
 
             if (prevState == State.Active)
             {
@@ -221,8 +229,9 @@ namespace Hedgehog.Core.Moves
         }
 
         /// <summary>
-        /// Calls on the controller to perform the move. Works only if the move is available.
+        /// Tells the manager to perform this move.
         /// </summary>
+        /// <param name="force">Whether to perform the move even if it's unavailable.</param>
         /// <returns>Whether the move was performed.</returns>
         public bool Perform(bool force = false)
         {
@@ -230,12 +239,41 @@ namespace Hedgehog.Core.Moves
         }
 
         /// <summary>
-        /// Calls on the controller to end the move. Only works if the move is active.
+        /// Tells the manager to end this move.
         /// </summary>
         /// <returns>Whether the move was ended.</returns>
         public bool End()
         {
             return Manager && Manager.End(this);
+        }
+
+        /// <summary>
+        /// Tells the manager to remove this move. WARNING: DESTROYS THE ENTIRE GAMEOBJECT.
+        /// </summary>
+        public void Remove()
+        {
+            Remove(true);
+        }
+
+        /// <summary>
+        /// Tells the manager to remove this move.
+        /// <param name="destroyGameObject">Whether to destroy the move's object. Great for powerups, not so much
+        /// for moves.</param>
+        /// </summary>
+        public void Remove(bool destroyGameObject)
+        {
+            if (destroyGameObject) Manager.RemovePowerup(gameObject);
+            else Destroy(this);
+        }
+
+        /// <summary>
+        /// Tells the manager to transfer this move to the specified target. WARNING: THIS TRANSFERS THE ENTIRE
+        /// GAMEOBJECT.
+        /// </summary>
+        /// <param name="target">The target move manager.</param>
+        public void Transfer(MoveManager target)
+        {
+            Manager.TransferPowerup(target.gameObject);
         }
 
         /// <summary>
@@ -257,35 +295,35 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Let the controller know your move can be triggered through input here.
         /// </summary>
-        /// <returns></returns>
-        public virtual bool Available()
+        /// <value></value>
+        public virtual bool Available
         {
-            return true;
+            get { return true; }
         }
 
         /// <summary>
-        /// Let the controller know your move should be activated based on the current input here.
+        /// Let the controller know your move should be performed based on the current input here.
         /// </summary>
-        /// <returns></returns>
-        public virtual bool InputActivate()
+        /// <value></value>
+        public virtual bool ShouldPerform
         {
-            return false;
+            get { return false; }
         }
 
         /// <summary>
-        /// Let the controller know your move should be deactivated based on the current conditions here.
+        /// Let the controller know your move should be ended based on the current conditions here.
         /// </summary>
-        /// <returns></returns>
-        public virtual bool InputDeactivate()
+        /// <value></value>
+        public virtual bool ShouldEnd
         {
-            return false;
+            get { return false; }
         }
-        
+
         /// <summary>
         /// Called when the move's state changes.
         /// </summary>
         /// <param name="previousState">The move's previous state.</param>
-        public virtual void OnStateChanged(State previousState)
+        public virtual void OnStateChange(State previousState)
         {
 
         }

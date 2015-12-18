@@ -98,21 +98,24 @@ namespace Hedgehog.Core.Moves
             End();
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return !Manager.IsActive<Duck>() && Controller.Grounded &&
-                   !Controller.TerrainCast(ClearanceSensorLeft.position, ClearanceSensorRight.transform.position,
-                       ControllerSide.Top);
+            get
+            {
+                return !Manager.IsActive<Duck>() && Controller.Grounded &&
+                       !Controller.TerrainCast(ClearanceSensorLeft.position, ClearanceSensorRight.transform.position,
+                           ControllerSide.Top);
+            }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return Input.GetButtonDown(ActivateButton);
+            get { return Input.GetButtonDown(ActivateButton); }
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            return Input.GetButtonUp(ActivateButton);
+            get { return Input.GetButtonUp(ActivateButton); }
         }
 
         public override void OnActiveEnter(State previousState)
@@ -140,6 +143,7 @@ namespace Hedgehog.Core.Moves
         {
             if (Controller.Grounded) return;
 
+            // Set vertical speed to release speed if it's greater
             if (Controller.RelativeVelocity.y > ActivateSpeed)
             {
                 Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x,

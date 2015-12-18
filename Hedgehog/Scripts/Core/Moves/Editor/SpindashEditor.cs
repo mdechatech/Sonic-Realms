@@ -10,15 +10,15 @@ namespace Hedgehog.Scripts.Core.Moves.Editor
     {
         protected override void DrawControlProperties()
         {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ChargeButton");
             base.DrawControlProperties();
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ChargeButton");
         }
 
         protected override void DrawPhysicsProperties()
         {
+            base.DrawPhysicsProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "BasePower", "ChargePower",
                 "ChargePowerDecay", "MaxChargePower");
-            base.DrawPhysicsProperties();
         }
     }
 }

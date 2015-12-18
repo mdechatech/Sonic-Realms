@@ -92,9 +92,9 @@ namespace Hedgehog.Core.Moves
             HasShield = Manager.GetMove<Shield>();
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return !HasShield && base.Available();
+            get { return !HasShield && base.Available; }
         }
 
         public override void OnActiveEnter()

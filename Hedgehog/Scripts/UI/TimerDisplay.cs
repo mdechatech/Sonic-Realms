@@ -29,6 +29,11 @@ namespace Hedgehog.UI
         public string Format;
 
         /// <summary>
+        /// The timer will be updated only once a second if the format doesn't contain milliseconds.
+        /// </summary>
+        private bool _alwaysUpdate;
+
+        /// <summary>
         /// The target animator.
         /// </summary>
         [Header("Animation")]

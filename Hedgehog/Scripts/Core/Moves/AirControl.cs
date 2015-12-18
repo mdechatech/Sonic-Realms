@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hedgehog.Core.Utils;
+using UnityEngine;
 
 namespace Hedgehog.Core.Moves
 {
@@ -88,17 +89,26 @@ namespace Hedgehog.Core.Moves
         public override void OnActiveEnter()
         {
             Manager.End<GroundControl>();
+            Controller.AutoFacingForward = false;
         }
 
         public override void OnActiveUpdate()
         {
             if (ControlLock) _axis = 0.0f;
             else _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+
+            if (DMath.Equalsf(_axis)) return;
+            Controller.FacingForward = _axis > 0.0f;
         }
 
         public override void OnActiveFixedUpdate()
         {
             Accelerate(_axis);
+        }
+
+        public override void OnActiveExit()
+        {
+            Controller.AutoFacingForward = true;
         }
 
         /// <summary>
@@ -139,6 +149,7 @@ namespace Hedgehog.Core.Moves
         /// <param name="timestep">The timestep, in seconds</param>
         public void Accelerate(float magnitude, float timestep)
         {
+            if(DMath.Equalsf(magnitude)) return;
             magnitude = Mathf.Clamp(magnitude, -1.0f, 1.0f);
 
             if (magnitude < 0.0f)

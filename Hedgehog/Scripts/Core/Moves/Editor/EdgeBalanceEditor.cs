@@ -8,21 +8,16 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawAnimationProperties()
         {
+            base.DrawAnimationProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "DistanceFloat");
-            base.DrawAnimationProperties();
         }
 
         protected override void DrawControlProperties()
         {
+            base.DrawControlProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "MaxDistance", "AllowDuck", "AllowLookUp");
-            base.DrawControlProperties();
-        }
-
-        protected override void DrawPhysicsFoldout()
-        {
-            // do nothing
         }
     }
 }

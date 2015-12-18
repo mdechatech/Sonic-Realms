@@ -90,7 +90,7 @@ namespace Hedgehog.Level.Platforms
 
             if (hit.Controller.Grounded)
             {
-                if(TransferMomentumGround) hit.Controller.AddGroundVelocity(velocity);
+                if(TransferMomentumGround) hit.Controller.PushOnGround(velocity);
             }
             else
             {

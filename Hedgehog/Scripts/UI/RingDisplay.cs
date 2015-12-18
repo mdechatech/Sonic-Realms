@@ -49,6 +49,12 @@ namespace Hedgehog.UI
         {
             Animator = Animator ? Animator : GetComponent<Animator>();
             AmountIntHash = Animator == null ? 0 : Animator.StringToHash(AmountInt);
+            if(Target != null) Target.OnAmountChange.AddListener(OnAmountChange);
+        }
+
+        public void OnAmountChange()
+        {
+            Display(Target.Amount);
         }
 
         public void Display(int value)
@@ -59,8 +65,6 @@ namespace Hedgehog.UI
         public void Update()
         {
             if (Target == null) return;
-            Text.text = Target.Amount.ToString();
-
             if (!Animator) return;
             if(AmountIntHash != 0) Animator.SetInteger(AmountIntHash, Target.Amount);
         }

@@ -1,34 +1,34 @@
-﻿using Hedgehog.Core.Utils.Editor;
+﻿using System.Reflection;
+using Hedgehog.Core.Utils.Editor;
 using UnityEditor;
-using UnityEngine;
 
 namespace Hedgehog.Core.Moves.Editor
 {
-    [CustomEditor(typeof(Move))]
+    [CustomEditor(typeof(Move), true)]
     public class MoveEditor : UnityEditor.Editor
     {
         protected bool ShowControlFoldout
         {
-            get { return EditorPrefs.GetBool(GetType().Name + ".ShowControlFoldout", false); }
-            set { EditorPrefs.SetBool(GetType().Name + ".ShowControlFoldout", value); }
+            get { return EditorPrefs.GetBool(target.GetType().Name + ".ShowControlFoldout", false); }
+            set { EditorPrefs.SetBool(target.GetType().Name + ".ShowControlFoldout", value); }
         }
 
         protected bool ShowPhysicsFoldout
         {
-            get { return EditorPrefs.GetBool(GetType().Name + ".ShowPhysicsFoldout", false); }
-            set { EditorPrefs.SetBool(GetType().Name + ".ShowPhysicsFoldout", value); }
+            get { return EditorPrefs.GetBool(target.GetType().Name + ".ShowPhysicsFoldout", false); }
+            set { EditorPrefs.SetBool(target.GetType().Name + ".ShowPhysicsFoldout", value); }
         }
 
         protected bool ShowEventsFoldout
         {
-            get { return EditorPrefs.GetBool(GetType().Name + ".ShowEventsFoldout", false); }
-            set { EditorPrefs.SetBool(GetType().Name + ".ShowEventsFoldout", value); }
+            get { return EditorPrefs.GetBool(target.GetType().Name + ".ShowEventsFoldout", false); }
+            set { EditorPrefs.SetBool(target.GetType().Name + ".ShowEventsFoldout", value); }
         }
 
         protected bool ShowAnimationFoldout
         {
-            get { return EditorPrefs.GetBool(GetType().Name + ".ShowAnimationFoldout", false); }
-            set { EditorPrefs.SetBool(GetType().Name + ".ShowAnimationFoldout", value); }
+            get { return EditorPrefs.GetBool(target.GetType().Name + ".ShowAnimationFoldout", false); }
+            set { EditorPrefs.SetBool(target.GetType().Name + ".ShowAnimationFoldout", value); }
         }
 
         public override void OnInspectorGUI()
@@ -61,11 +61,28 @@ namespace Hedgehog.Core.Moves.Editor
 
         protected virtual void DrawControlProperties()
         {
+            // If this method is overridden then back out so we don't draw duplicate properties
+            if (GetType()
+                .GetMethod("DrawControlProperties", BindingFlags.Instance | BindingFlags.NonPublic)
+                .DeclaringType != typeof (MoveEditor))
+                return;
 
+            // By default draw every property that isn't inherited from Move
+            HedgehogEditorGUIUtility.DrawExcluding(serializedObject,
+                "OnActive", "OnEnd", "OnAvailable", "OnUnavailable", "OnAdd", "OnRemove",
+                "Animator", "CurrentState", "InputActivated", "InputEnabled",
+                "ActiveTrigger", "ActiveBool", "AvailableBool",
+                HedgehogEditorGUIUtility.ScriptPropertyName);
         }
 
         protected virtual void DrawPhysicsFoldout()
         {
+            // If DrawPhysicsProperties isn't overriden then we have nothing to draw inside the foldout
+            if (GetType()
+                .GetMethod("DrawPhysicsProperties", BindingFlags.Instance | BindingFlags.NonPublic)
+                .DeclaringType == typeof(MoveEditor))
+                return;
+
             ShowPhysicsFoldout = EditorGUILayout.Foldout(ShowPhysicsFoldout, "Physics");
         }
 
@@ -82,7 +99,7 @@ namespace Hedgehog.Core.Moves.Editor
         protected virtual void DrawEventsProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                "OnActive", "OnEnd", "OnAvailable", "OnUnavailable");
+                "OnActive", "OnEnd", "OnAvailable", "OnUnavailable", "OnAdd", "OnRemove");
         }
 
         protected virtual void DrawAnimationFoldout()
@@ -90,11 +107,10 @@ namespace Hedgehog.Core.Moves.Editor
             ShowAnimationFoldout = EditorGUILayout.Foldout(ShowAnimationFoldout, "Animation");
         }
 
-
         protected virtual void DrawAnimationProperties()
         {
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                "ActiveTrigger", "ActiveBool", "AvailableBool");
+                "Animator", "ActiveTrigger", "ActiveBool", "AvailableBool");
         }
     }
 }

@@ -44,19 +44,19 @@ namespace Hedgehog.Core.Moves
             ActivateAxis = groundControl.MovementAxis;
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return Controller.Grounded && (Controller.LeftWall != null || Controller.RightWall != null);
+            get { return Controller.Grounded && (Controller.LeftWall != null || Controller.RightWall != null); }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return Input.GetButton(ActivateAxis);
+            get { return Input.GetButton(ActivateAxis); }
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            return !InputActivate() || !Available();
+            get { return !ShouldPerform || !Available; }
         }
     }
 }

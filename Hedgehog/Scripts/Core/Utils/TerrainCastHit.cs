@@ -51,6 +51,12 @@ namespace Hedgehog.Core.Utils
         public TerrainCastHit(RaycastHit2D hit, ControllerSide fromSide = ControllerSide.All,
             HedgehogController controller = null, Vector2 start = default(Vector2), Vector2 end = default(Vector2))
         {
+            Initialize(hit, fromSide, controller, start, end);
+        }
+
+        public TerrainCastHit Initialize(RaycastHit2D hit, ControllerSide fromSide = ControllerSide.All,
+            HedgehogController controller = null, Vector2 start = default(Vector2), Vector2 end = default(Vector2))
+        {
             Start = start;
             End = end;
             Hit = hit;
@@ -59,6 +65,8 @@ namespace Hedgehog.Core.Utils
             NormalAngle = DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi);
             SurfaceAngle = DMath.Modp(NormalAngle - DMath.HalfPi, DMath.DoublePi);
             Transform = hit.transform;
+
+            return this;
         }
 
         public static implicit operator bool(TerrainCastHit terrainInfo)

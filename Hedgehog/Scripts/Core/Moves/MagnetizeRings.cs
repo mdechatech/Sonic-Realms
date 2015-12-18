@@ -1,4 +1,5 @@
-﻿using Hedgehog.Level.Objects;
+﻿using System.Collections.Generic;
+using Hedgehog.Level.Objects;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves
@@ -30,6 +31,8 @@ namespace Hedgehog.Core.Moves
         private const int MaxResults = 16;
         private Collider2D[] _results;
 
+        private List<MagnetizedRing> _magnetizedRings;
+
         public override void Reset()
         {
             base.Reset();
@@ -42,11 +45,23 @@ namespace Hedgehog.Core.Moves
         {
             _results = new Collider2D[MaxResults];
             CheckTimer = CheckTime;
+
+            _magnetizedRings = new List<MagnetizedRing>();
         }
 
         public override void OnManagerAdd()
         {
             Perform(true);
+        }
+
+        public override void OnManagerRemove()
+        {
+            foreach (var magnetized in _magnetizedRings)
+            {
+                if (!magnetized) continue;
+                Destroy(magnetized);
+                Destroy(magnetized.gameObject, 2.0f);
+            }
         }
         
         public override void OnActiveFixedUpdate()
@@ -68,13 +83,20 @@ namespace Hedgehog.Core.Moves
                 if (!ring)
                     continue;
 
-                if (ring.GetComponent<MagnetizedRing>() != null)
-                    continue;
-
-                var magnetized = ring.gameObject.AddComponent<MagnetizedRing>();
-                magnetized.Acceleration = RingSpeed;
-                magnetized.Target = Controller.transform;
+                Magnetize(ring);
             }
+        }
+
+        public void Magnetize(Ring ring)
+        {
+            if (ring.GetComponent<MagnetizedRing>() != null)
+                return;
+
+            var magnetized = ring.gameObject.AddComponent<MagnetizedRing>();
+            magnetized.Acceleration = RingSpeed;
+            magnetized.Target = Controller.transform;
+
+            _magnetizedRings.Add(magnetized);
         }
     }
 }

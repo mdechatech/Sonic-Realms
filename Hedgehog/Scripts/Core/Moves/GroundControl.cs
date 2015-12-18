@@ -213,9 +213,7 @@ namespace Hedgehog.Core.Moves
 
         public override void OnActiveUpdate()
         {
-            if (ControlLocked)
-                return;
-
+            if (ControlLocked) return;
             _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
         }
 

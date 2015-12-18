@@ -9,6 +9,7 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawControlProperties()
         {
+            base.DrawControlProperties();
             var useControlInput = serializedObject.FindProperty("UseControlInput");
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UseControlInput");
 
@@ -18,8 +19,6 @@ namespace Hedgehog.Core.Moves.Editor
             GUI.enabled = !useControlInput.boolValue;
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis");
             GUI.enabled = enabled;
-
-            base.DrawControlProperties();
         }
     }
 }

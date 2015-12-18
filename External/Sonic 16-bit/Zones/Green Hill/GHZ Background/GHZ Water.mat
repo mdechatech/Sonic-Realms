@@ -130,7 +130,7 @@ Material:
       data:
         first:
           name: _Threshold
-        second: .125
+        second: .133000001
     m_Colors:
       data:
         first:
@@ -142,20 +142,52 @@ Material:
         second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
-          name: _ColorTo1
+          name: _ColorFrom1
         second: {r: .427451015, g: .572549045, b: .713725507, a: 1}
       data:
         first:
-          name: _ColorTo2
+          name: _ColorFrom2
         second: {r: .427451015, g: .572549045, b: 1, a: 1}
       data:
         first:
-          name: _ColorTo3
+          name: _ColorFrom3
         second: {r: .572549045, g: .713725507, b: 1, a: 1}
       data:
         first:
-          name: _ColorTo4
+          name: _ColorFrom4
         second: {r: .713725507, g: .858823597, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorFrom5
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _ColorFrom6
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _ColorFrom7
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _ColorFrom8
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _ColorTo1
+        second: {r: .713725507, g: .858823597, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorTo2
+        second: {r: .427451015, g: .572549045, b: .713725507, a: 1}
+      data:
+        first:
+          name: _ColorTo3
+        second: {r: .427451015, g: .572549045, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorTo4
+        second: {r: .572549045, g: .713725507, b: 1, a: 1}
       data:
         first:
           name: _ColorTo5
@@ -203,38 +235,6 @@ Material:
       data:
         first:
           name: _ColorTo16
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorFrom1
-        second: {r: .427451015, g: .572549045, b: .713725507, a: 1}
-      data:
-        first:
-          name: _ColorFrom2
-        second: {r: .427451015, g: .572549045, b: 1, a: 1}
-      data:
-        first:
-          name: _ColorFrom3
-        second: {r: .572549045, g: .713725507, b: 1, a: 1}
-      data:
-        first:
-          name: _ColorFrom4
-        second: {r: .713725507, g: .858823597, b: 1, a: 1}
-      data:
-        first:
-          name: _ColorFrom5
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorFrom6
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorFrom7
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorFrom8
         second: {r: 0, g: 0, b: 0, a: 0}
       data:
         first:

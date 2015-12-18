@@ -40,24 +40,30 @@ namespace Hedgehog.Core.Moves
             RequireNegative = true;
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            var groundControl = Controller.GroundControl;
+            get
+            {
+                var groundControl = Controller.GroundControl;
 
-            return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
-                   (groundControl == null || !groundControl.Accelerating);
+                return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
+                       (groundControl == null || !groundControl.Accelerating) && !Manager.IsActive<Roll>();
+            }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return RequireNegative
-                ? Input.GetAxis(ActivateAxis) < 0.0f
-                : Input.GetAxis(ActivateAxis) > 0.0f;
+            get
+            {
+                return RequireNegative
+                    ? Input.GetAxis(ActivateAxis) < 0.0f
+                    : Input.GetAxis(ActivateAxis) > 0.0f;
+            }
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            return !Input.GetButton(ActivateAxis) || !Available();
+            get { return !Input.GetButton(ActivateAxis) || !Available; }
         }
     }
 }

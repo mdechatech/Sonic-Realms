@@ -1,5 +1,6 @@
 ﻿using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
+using Hedgehog.Level.Areas;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves
@@ -16,37 +17,62 @@ namespace Hedgehog.Core.Moves
         public Vector2 DiveVelocity;
 
         /// <summary>
-        /// The velocity at which to bounce, in units per second.
+        /// The velocity at which to bounce off the surface, in units per second.
         /// </summary>
-        [Tooltip("The velocity at which to bounce, in units per second.")]
-        public Vector2 BounceVelocity;
+        [Tooltip("The speed at which to bounce off the surface, in units per second.")]
+        public float BounceSpeed;
 
         /// <summary>
-        /// Whether to give the controller an air source while underwater.
+        /// The velocity of the bounce after releasing the jump key, in units per second.
         /// </summary>
-        [Tooltip("Whether to give the controller an air source while underwater.")]
-        public bool GiveAir;
-        protected BreathMeter BreathMeter;
+        [Tooltip("The velocity of the bounce after releasing the jump key, in units per second.")]
+        public float BounceReleaseSpeed;
+
+        /// <summary>
+        /// When underwater, the velocity at which to bounce off the surface, in units per second.
+        /// </summary>
+        [Tooltip("When underwater, the velocity at which to bounce off the surface, in units per second.")]
+        public float UnderwaterBounceSpeed;
+
+        /// <summary>
+        /// When underwater, the velocity of the bounce after releasing the jump key, in units per second.
+        /// </summary>
+        [Tooltip("When underwater, the velocity at which to bounce off the surface, in units per second.")]
+        public float UnderwaterBounceReleaseSpeed;
+
+        /// <summary>
+        /// Name of an Animator trigger to set when the controller bounces.
+        /// </summary>
+        [Tooltip("Name of an Animator trigger to set when the controller bounces.")]
+        public string BounceTrigger;
+        protected int BounceTriggerHash;
+
+        /// <summary>
+        /// Whether the controller is currently bouncing.
+        /// </summary>
+        public bool Bouncing;
 
         public override void Reset()
         {
             base.Reset();
             DiveVelocity = new Vector2(0.0f, -4.8f);
-            BounceVelocity = new Vector2(0.0f, 3.3f);
-            GiveAir = true;
+            BounceSpeed = 4.5f;
+            BounceReleaseSpeed = 2.4f;
+
+            // These values are not taken from the disassembly and were not available in the guide -
+            // they were guesstimated. If you have more accurate values please let me know!
+            UnderwaterBounceSpeed = 2.4f;
+            UnderwaterBounceReleaseSpeed = 1.2f;
+
+            BounceTrigger = "";
         }
 
         public override void OnManagerAdd()
         {
             base.OnManagerAdd();
-            BreathMeter = Controller.GetComponent<BreathMeter>();
-            if (BreathMeter != null && GiveAir) BreathMeter.HasAir = true;
-        }
 
-        public override void OnManagerRemove()
-        {
-            base.OnManagerRemove();
-            if (BreathMeter != null && GiveAir) BreathMeter.HasAir = false;
+            if (Animator == null) return;
+            BounceTriggerHash = string.IsNullOrEmpty(BounceTrigger) ? 0 : Animator.StringToHash(BounceTrigger);
         }
 
         public override void OnActiveEnter()
@@ -58,6 +84,38 @@ namespace Hedgehog.Core.Moves
             Controller.OnCollide.AddListener(OnCollide);
         }
 
+        public override void OnActiveUpdate()
+        {
+            base.OnActiveUpdate();
+            if (!Bouncing) return;
+
+            // End if the jump key is released mid-bounce
+            if (!Input.GetButton(InputName))
+            {
+                End();
+
+                // Set vertical speed to release speed based on whether underwater
+                if (Controller.Underwater)
+                {
+                    if (Controller.RelativeVelocity.y > UnderwaterBounceReleaseSpeed)
+                        Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x,
+                            UnderwaterBounceReleaseSpeed);
+                }
+                else
+                {
+                    if (Controller.RelativeVelocity.y > BounceReleaseSpeed)
+                        Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x, BounceReleaseSpeed);
+                }
+               
+            }
+        }
+
+        public override void OnActiveExit()
+        {
+            base.OnActiveExit();
+            Bouncing = false;
+        }
+
         public void OnCollide(TerrainCastHit hit)
         {
             // Bounce only if it's the controller's bottom colliding with the floor
@@ -67,10 +125,29 @@ namespace Hedgehog.Core.Moves
             // it available manually
             Used = false;
 
-            Controller.RelativeVelocity = BounceVelocity;
+            // Set bounce velocity based on surface normal and jump input
+            if (Input.GetButton(InputName))
+            {
+                Controller.Velocity = Vector2.Reflect(Controller.Velocity, hit.Hit.normal).normalized*
+                                      (Controller.Underwater ? UnderwaterBounceSpeed : BounceSpeed);
+            }
+            else
+            {
+                Controller.Velocity = Vector2.Reflect(Controller.Velocity, hit.Hit.normal).normalized *
+                                      (Controller.Underwater ? UnderwaterBounceReleaseSpeed : BounceReleaseSpeed);
+
+                // If the jump input is no longer held down end the move immediately
+                End();
+            }
+
+            // Prevent controller from landing on the surface it just hit
             Controller.IgnoreThisCollision();
+
             Controller.OnCollide.RemoveListener(OnCollide);
-            End();
+
+            Bouncing = true;
+            if (Animator != null && BounceTriggerHash != 0)
+                Animator.SetTrigger(BounceTriggerHash);
         }
     }
 }

@@ -32,23 +32,8 @@ namespace Hedgehog.Core.Moves
         [Tooltip("List of moves.")]
         public List<Move> Moves;
 
-        /// <summary>
-        /// The moves currently being performed.
-        /// </summary>
-        [Tooltip("The moves currently being performed.")]
-        public List<Move> ActiveMoves;
-
-        /// <summary>
-        /// The moves which can be performed given the controller's current state.
-        /// </summary>
-        [Tooltip("The moves which can be performed given the controller's current state.")]
-        public List<Move> AvailableMoves;
-
-        /// <summary>
-        /// The moves which cannot be performed given the controller's current state.
-        /// </summary>
-        [Tooltip("The moves which cannot be performed given the controller's current state.")]
-        public List<Move> UnavailableMoves;
+        // Used for list copying
+        private List<Move> _moves;
 
         #region Events
         /// <summary>
@@ -102,10 +87,8 @@ namespace Hedgehog.Core.Moves
             OnUnavailable = OnUnavailable ?? new MoveEvent();
             OnAdd = OnAdd ?? new MoveEvent();
             OnRemove = OnRemove ?? new MoveEvent();
-
-            ActiveMoves = new List<Move>();
-            AvailableMoves = new List<Move>();
-            UnavailableMoves = new List<Move>();
+            Moves = Moves ?? new List<Move>();
+            _moves = new List<Move>();
         }
 
         public void Start()
@@ -123,73 +106,39 @@ namespace Hedgehog.Core.Moves
             if (Controller.Interrupted)
                 return;
 
-            // List copying is used abundantly since a move may remove itself or others from its own list,
-            // causing iteration errors. There are faster ways to handle this, but at the moment the overhead
-            // doesn't justify the effort.
-            if (UnavailableMoves.Any())
+            for (var i = Moves.Count - 1; i >= 0; --i,
+                i = i >= Moves.Count ? Moves.Count - 1 : i)
             {
-                foreach (var move in new List<Move>(UnavailableMoves))
+                var move = Moves[i];
+
+                if (!move)
                 {
-                    // If the move is null or destroyed we need to remove it and update the list
-                    if (!move)
-                    {
-                        UpdateList();
-                        continue;
-                    }
-
-                    if (!move.Available())
-                        continue;
-
-                    if (!UnavailableMoves.Remove(move))
-                        continue;
-
-                    AvailableMoves.Add(move);
-                    move.ChangeState(Move.State.Available);
-
-                    OnAvailable.Invoke(move);
+                    UpdateList();
+                    continue;
                 }
-            }
-            
-            if (AvailableMoves.Any())
-            {
-                foreach (var move in new List<Move>(AvailableMoves))
+
+                if (!move.enabled) continue;
+
+                if (move.CurrentState == Move.State.Unavailable)
                 {
-                    // If the move is null or destroyed we need to remove it and update the list
-                    if (!move)
-                    {
-                        UpdateList();
-                        continue;
-                    }
+                    if (!move.Available) continue;
 
-                    if (!move.Available())
+                    move.ChangeState(Move.State.Available);
+                    OnAvailable.Invoke(move);
+                } else if (move.CurrentState == Move.State.Available)
+                {
+                    if (!move.Available)
                     {
-                        if (!AvailableMoves.Remove(move))
-                            continue;
-
-                        UnavailableMoves.Add(move);
                         move.ChangeState(Move.State.Unavailable);
-
                         OnUnavailable.Invoke(move);
                     }
-                    else if (move.InputEnabled && move.InputActivate())
+                    else if (move.AllowShouldPerform && move.ShouldPerform)
                     {
                         Perform(move);
                     }
-                }
-            }
-            
-            if (ActiveMoves.Any())
-            {
-                foreach (var move in new List<Move>(ActiveMoves))
+                } else if (move.CurrentState == Move.State.Active)
                 {
-                    // If the move is null or destroyed we need to remove it and update the list
-                    if (!move)
-                    {
-                        UpdateList();
-                        continue;
-                    }
-
-                    if (move.InputDeactivate())
+                    if (move.AllowShouldEnd && move.ShouldEnd)
                     {
                         End(move);
                         OnAvailable.Invoke(move);
@@ -206,8 +155,10 @@ namespace Hedgehog.Core.Moves
         {
             if (Controller.Interrupted) return;
 
-            foreach (var move in new List<Move>(ActiveMoves))
+            for (var i = 0; i < Moves.Count; ++i)
             {
+                var move = Moves[i];
+
                 // Might as well check to see if the move has been destroyed - if it has, update the list
                 if (!move)
                 {
@@ -215,7 +166,7 @@ namespace Hedgehog.Core.Moves
                     continue;
                 }
 
-                move.OnActiveFixedUpdate();
+                if(move.CurrentState == Move.State.Active) move.OnActiveFixedUpdate();
             }
         }
 
@@ -227,25 +178,14 @@ namespace Hedgehog.Core.Moves
         public void UpdateList()
         {
             // Remove all destroyed/transferred moves and notify them
-            foreach (var move in new List<Move>(Moves))
+            for(var i = Moves.Count - 1; i >= 0; --i,
+                i = i >= Moves.Count ? Moves.Count - 1 : i)
             {
+                if (i >= Moves.Count) i = Moves.Count - 1;
+                var move = Moves[i];
+
                 if (move && move.transform.IsChildOf(transform))
                     continue;
-
-                switch (move.CurrentState)
-                {
-                    case Move.State.Active:
-                        ActiveMoves.Remove(move);
-                        break;
-
-                    case Move.State.Available:
-                        AvailableMoves.Remove(move);
-                        break;
-
-                    case Move.State.Unavailable:
-                        UnavailableMoves.Remove(move);
-                        break;
-                }
 
                 Moves.Remove(move);
 
@@ -255,13 +195,19 @@ namespace Hedgehog.Core.Moves
             }
 
             // Copy the current list before filling it with new moves
-            var moves = new List<Move>(Moves);
+            _moves.Clear();
+            for (var i = Moves.Count - 1; i >= 0; --i,
+                i = i >= Moves.Count ? Moves.Count - 1 : i)
+                _moves.Add(Moves[i]);
+
             GetComponentsInChildren(Moves);
-            
+
             // Compare the copied list with the new, add/notify the ones they don't have in common
-            foreach (var move in Moves.Where(move => !moves.Contains(move)))
+            for (var i = Moves.Count - 1; i >= 0; --i, 
+                i = i >= Moves.Count ? Moves.Count - 1 : i)
             {
-                AddMove(move);
+                var move = Moves[i];
+                if(!_moves.Contains(move)) AddMove(move);
             }
         }
 
@@ -274,12 +220,26 @@ namespace Hedgehog.Core.Moves
             move.Controller = Controller;
             move.Manager = this;
 
-            move.ChangeState(Move.State.Unavailable);
-            UnavailableMoves.Add(move);
+            // Pretend the move is available to see if it wants to be performed on initialization
+            move.CurrentState = Move.State.Available;
 
             move.OnManagerAdd();
             OnAdd.Invoke(move);
             move.OnAdd.Invoke();
+
+            // If the move didn't perform itself immediately, continue as normal
+            if (!move) return;
+
+            if (move.Active) return;
+
+            if (move.ShouldPerform)
+            {
+                Perform(move);
+            }
+            else if (!move.Available)
+            {
+                move.CurrentState = Move.State.Unavailable;
+            }
         }
 
         /// <summary>
@@ -331,7 +291,7 @@ namespace Hedgehog.Core.Moves
         /// <returns></returns>
         public bool IsAvailable<TMove>() where TMove : Move
         {
-            return AvailableMoves.Any(move => move is TMove);
+            return Moves.Any(move => move.CurrentState == Move.State.Available && move is TMove);
         }
 
         /// <summary>
@@ -341,7 +301,16 @@ namespace Hedgehog.Core.Moves
         /// <returns></returns>
         public bool IsActive<TMove>() where TMove : Move
         {
-            return ActiveMoves.Any(move => move is TMove);
+            for(var i = 0; i < Moves.Count; ++i)
+            {
+                var move = Moves[i];
+                if (move.CurrentState != Move.State.Active) continue;
+                if (move is TMove) return true;
+            }
+
+            return false;
+
+            //return Moves.Any(move => move.CurrentState == Move.State.Active && move is TMove);
         }
 
         /// <summary>
@@ -352,10 +321,10 @@ namespace Hedgehog.Core.Moves
         /// <returns>Whether the move was performed.</returns>
         public bool Perform<TMove>(bool force = false) where TMove : Move
         {
-            var foundMove = AvailableMoves.FirstOrDefault(move => move is TMove);
+            var foundMove = Moves.FirstOrDefault(move => move.CurrentState == Move.State.Available && move is TMove);
 
             if (force && foundMove == null)
-                foundMove = UnavailableMoves.FirstOrDefault(move => move is TMove);
+                foundMove = Moves.FirstOrDefault(move => move.CurrentState == Move.State.Unavailable && move is TMove);
 
             if (foundMove == null)
                 return false;
@@ -393,18 +362,13 @@ namespace Hedgehog.Core.Moves
             {
                 if (move.CurrentState == Move.State.Unavailable)
                 {
-                    if (!UnavailableMoves.Remove(move))
-                        return false;
-                    
-                    ActiveMoves.Add(move);
                     var result = move.ChangeState(Move.State.Active);
                     OnPerform.Invoke(move);
                     return result;
                 }
-                else if (move.CurrentState == Move.State.Available)
-                {
+
+                if (move.CurrentState == Move.State.Available)
                     return Perform(move, false);
-                }
 
                 return false;
             }
@@ -413,10 +377,6 @@ namespace Hedgehog.Core.Moves
                 if (move.CurrentState != Move.State.Available)
                     return false;
 
-                if (!AvailableMoves.Remove(move))
-                    return false;
-
-                ActiveMoves.Add(move);
                 var result = move.ChangeState(Move.State.Active);
                 OnPerform.Invoke(move);
                 return result;
@@ -430,7 +390,7 @@ namespace Hedgehog.Core.Moves
         /// <returns>Whether the move was ended.</returns>
         public bool End<TMove>() where TMove : Move
         {
-            return End(ActiveMoves.FirstOrDefault(m => m is TMove));
+            return End(Moves.FirstOrDefault(m => m.CurrentState == Move.State.Active && m is TMove));
         }
 
         /// <summary>
@@ -440,23 +400,9 @@ namespace Hedgehog.Core.Moves
         /// <returns>Whether the move was ended.</returns>
         public bool End(Move move)
         {
-            if (move == null || move.CurrentState != Move.State.Active)
-                return false;
+            if (move == null || move.CurrentState != Move.State.Active) return false;
 
-            if (!ActiveMoves.Remove(move))
-                return false;
-
-            if (move.Available())
-            {
-                AvailableMoves.Add(move);
-                move.ChangeState(Move.State.Available);
-            }
-            else
-            {
-                UnavailableMoves.Add(move);
-                move.ChangeState(Move.State.Unavailable);
-            }
-
+            move.ChangeState(move.Available ? Move.State.Available : Move.State.Unavailable);
             OnEnd.Invoke(move);
 
             return true;
@@ -470,17 +416,11 @@ namespace Hedgehog.Core.Moves
         /// moves were successfully ended.</returns>
         public bool EndAll(Predicate<Move> predicate = null)
         {
-            if (!ActiveMoves.Any())
-                return true;
-
             var result = true;
-            foreach (var move in new List<Move>(ActiveMoves))
+            foreach (var move in new List<Move>(Moves))
             {
-                if (predicate == null || predicate(move))
-                {
+                if (move.CurrentState == Move.State.Active && predicate == null || predicate(move))
                     result &= End(move);
-                }
-                    
             }
 
             return result;

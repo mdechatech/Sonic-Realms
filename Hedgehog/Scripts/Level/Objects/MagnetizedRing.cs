@@ -50,10 +50,5 @@ namespace Hedgehog.Level.Objects
                                     Time.deltaTime;
             Rigidbody2D.velocity *= 0.989f;
         }
-
-        public void OnDisable()
-        {
-            Rigidbody2D.velocity = new Vector2();
-        }
     }
 }

@@ -33,6 +33,7 @@ namespace Hedgehog.Core.Moves
 
         protected void OnRollEnd()
         {
+            // Becomes unusable if our roll ends, caused by some outside force such as springs
             if (!Controller.Grounded) Used = true;
         }
 
@@ -42,21 +43,26 @@ namespace Hedgehog.Core.Moves
             Used = false;
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return !Controller.Grounded && Jump.Used && !Used && Roll.Active;
+            get { return !Controller.Grounded && Jump.Used && !Used && Roll.Active; }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return Input.GetButtonDown(InputName);
+            get { return Input.GetButtonDown(InputName); }
         }
 
         public override void OnActiveEnter()
         {
-            // Become unavailable once used
-            Used = true;
+            // Double jump moves restore control
             Manager.Perform<AirControl>();
+            Used = true;
+        }
+
+        public override void OnActiveUpdate()
+        {
+            if (Controller.Grounded) End();
         }
     }
 }

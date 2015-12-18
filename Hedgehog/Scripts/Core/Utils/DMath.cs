@@ -97,7 +97,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="divisor">The divisor.</param>
         public static int Modp(int dividend, int divisor)
         {
-            return ((dividend%divisor) + divisor)%divisor;
+            return (dividend%divisor + divisor)%divisor;
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="divisor">The divisor.</param>
         public static float Modp(float dividend, float divisor)
         {
-            return ((dividend%divisor) + divisor)%divisor;
+            return (dividend%divisor + divisor)%divisor;
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Hedgehog.Core.Utils
         public static Vector2 Project(Vector2 q, Vector2 lineA, Vector2 lineB)
         {
             Vector2 ab = lineB - lineA;
-            return lineA + ((Vector2.Dot(q - lineA, ab)/Vector2.Dot(ab, ab))*ab);
+            return lineA + Vector2.Dot(q - lineA, ab)/Vector2.Dot(ab, ab)*ab;
         }
 
         /// <summary>
@@ -388,17 +388,6 @@ namespace Hedgehog.Core.Utils
         }
 
         /// <summary>
-        /// Clamps the number to the specified range.
-        /// </summary>
-        /// <param name="number">The number.</param>
-        /// <param name="min">The range minimum.</param>
-        /// <param name="max">The range maximum.</param>
-        public static float Clamp(float number, float min, float max)
-        {
-            return (number < min) ? min : (number > max) ? max : number;
-        }
-
-        /// <summary>
         /// Returns the signed angle, in radians, between two vectors.
         /// 
         /// If the shortest arc from a to b is counterclockwise (increasing in angle),
@@ -524,48 +513,6 @@ namespace Hedgehog.Core.Utils
         public static bool AngleInRange_d(float angle, float a, float b)
         {
             return PositiveArc_d(a, angle) <= PositiveArc_d(a, b);
-        }
-
-        /// <summary>
-        /// Inclusive floor. If the value is a whole number, the value is reduced
-        /// by one. Otherwise the floor of the value is returned.
-        /// </summary>
-        /// <returns>The inclusive floor of the value.</returns>
-        /// <param name="value">The value.</param>
-        public static float IncFloor(float value)
-        {
-            return (Modp(value, 1.0f) == 0.0f) ? value - 1 : Mathf.Floor(value);
-        }
-
-        /// <summary>
-        /// Inclusive ceiling. If the value is a whole number, the value is increased
-        /// by one. Otherwise the ceiling of the value is returned.
-        /// </summary>
-        /// <returns>The inclusive ceiling of the value.</returns>
-        /// <param name="value">The value.</param>
-        public static float IncCeil(float value)
-        {
-            return (Modp(value, 1.0f) == 0.0f) ? value + 1 : Mathf.Ceil(value);
-        }
-
-        /// <summary>
-        /// Inverse floor.
-        /// </summary>
-        /// <returns>The inverse floor of the value.</returns>
-        /// <param name="value">The value.</param>
-        public static float InvFloor(float value)
-        {
-            return (Modp(value, 1.0f) == 0.0f) ? value - 1 : value;
-        }
-
-        /// <summary>
-        /// Inverse ceiling. Increases the value by one only if it is a whole number.
-        /// </summary>
-        /// <returns>The inverse ceiling of the value.</returns>
-        /// <param name="value">The value.</param>
-        public static float InvCeil(float value)
-        {
-            return (Modp(value, 1.0f) == 0.0f) ? value + 1 : value;
         }
     }
 }

@@ -51,6 +51,8 @@ namespace Hedgehog.Core.Triggers
         public override void Reset()
         {
             base.Reset();
+            if (!GetComponent<ObjectTrigger>()) gameObject.AddComponent<ObjectTrigger>();
+
             WhenColliding = false;
             WhenOnSurface = true;
 

@@ -2,6 +2,7 @@
 using Hedgehog.Core.Utils;
 using Hedgehog.Level.Objects;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Hedgehog.Core.Actors
 {
@@ -11,7 +12,22 @@ namespace Hedgehog.Core.Actors
     public class RingCollector : MonoBehaviour
     {
         public HedgehogController Controller;
-        public int Amount;
+        public int Amount
+        {
+            get { return _amount; }
+            set
+            {
+                if (_amount == value) return;
+                _amount = value;
+                OnAmountChange.Invoke();
+            }
+        }
+        private int _amount;
+
+        /// <summary>
+        /// Invoked when the ring total changes.
+        /// </summary>
+        public UnityEvent OnAmountChange;
 
         protected Animator Animator;
 

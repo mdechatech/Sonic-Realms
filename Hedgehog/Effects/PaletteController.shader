@@ -4,8 +4,8 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		
-		// From almost zero to sqrt(3), which is the distance between (0, 0, 0) and (1, 1, 1)
-		_Threshold("Threshold", Range(0.0000005, 1.733)) = 0.0000005
+		// From zero to sqrt(3), which is the distance between (0, 0, 0) and (1, 1, 1)
+		_Threshold ("Threshold", Range(0, 1.733)) = 0.125
 		
 		_ColorFrom1 ("Color From 1", Color) = (0, 0, 0, 0)
 		_ColorFrom2 ("Color From 2", Color) = (0, 0, 0, 0)
@@ -15,6 +15,7 @@
 		_ColorFrom6 ("Color From 6", Color) = (0, 0, 0, 0)
 		_ColorFrom7 ("Color From 7", Color) = (0, 0, 0, 0)
 		_ColorFrom8 ("Color From 8", Color) = (0, 0, 0, 0)
+			/*
 		_ColorFrom9 ("Color From 9", Color) = (0, 0, 0, 0)
 		_ColorFrom10 ("Color From 10", Color) = (0, 0, 0, 0)
 		_ColorFrom11 ("Color From 11", Color) = (0, 0, 0, 0)
@@ -23,6 +24,7 @@
 		_ColorFrom14 ("Color From 14", Color) = (0, 0, 0, 0)
 		_ColorFrom15 ("Color From 15", Color) = (0, 0, 0, 0)
 		_ColorFrom16 ("Color From 16", Color) = (0, 0, 0, 0)
+		*/
 
 		_ColorTo1 ("Color To 1", Color) = (0, 0, 0, 0)
 		_ColorTo2 ("Color To 2", Color) = (0, 0, 0, 0)
@@ -32,6 +34,7 @@
 		_ColorTo6 ("Color To 6", Color) = (0, 0, 0, 0)
 		_ColorTo7 ("Color To 7", Color) = (0, 0, 0, 0)
 		_ColorTo8 ("Color To 8", Color) = (0, 0, 0, 0)
+			/*
 		_ColorTo9 ("Color To 9", Color) = (0, 0, 0, 0)
 		_ColorTo10 ("Color To 10", Color) = (0, 0, 0, 0)
 		_ColorTo11 ("Color To 11", Color) = (0, 0, 0, 0)
@@ -40,6 +43,7 @@
 		_ColorTo14 ("Color To 14", Color) = (0, 0, 0, 0)
 		_ColorTo15 ("Color To 15", Color) = (0, 0, 0, 0)
 		_ColorTo16 ("Color To 16", Color) = (0, 0, 0, 0)
+		*/
 	}
 	SubShader
 	{
@@ -55,6 +59,7 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+
 			// make fog work
 			#pragma multi_compile_fog
 			
@@ -81,6 +86,7 @@
 			float4 _ColorFrom6;
 			float4 _ColorFrom7;
 			float4 _ColorFrom8;
+			/*
 			float4 _ColorFrom9;
 			float4 _ColorFrom10;
 			float4 _ColorFrom11;
@@ -89,6 +95,7 @@
 			float4 _ColorFrom14;
 			float4 _ColorFrom15;
 			float4 _ColorFrom16;
+			*/
 
 			float4 _ColorTo1;
 			float4 _ColorTo2;
@@ -98,6 +105,7 @@
 			float4 _ColorTo6;
 			float4 _ColorTo7;
 			float4 _ColorTo8;
+			/*
 			float4 _ColorTo9;
 			float4 _ColorTo10;
 			float4 _ColorTo11;
@@ -106,6 +114,7 @@
 			float4 _ColorTo14;
 			float4 _ColorTo15;
 			float4 _ColorTo16;
+			*/
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
@@ -141,6 +150,7 @@
 				if (color_within(col, _ColorFrom6)) return _ColorTo6;
 				if (color_within(col, _ColorFrom7)) return _ColorTo7;
 				if (color_within(col, _ColorFrom8)) return _ColorTo8;
+				/*
 				if (color_within(col, _ColorFrom9)) return _ColorTo9;
 				if (color_within(col, _ColorFrom10)) return _ColorTo10;
 				if (color_within(col, _ColorFrom11)) return _ColorTo11;
@@ -149,7 +159,7 @@
 				if (color_within(col, _ColorFrom14)) return _ColorTo14;
 				if (color_within(col, _ColorFrom15)) return _ColorTo15;
 				if (color_within(col, _ColorFrom16)) return _ColorTo16;
-
+				*/
 				return col;
 			}
 			ENDCG

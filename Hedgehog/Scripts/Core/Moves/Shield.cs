@@ -34,6 +34,13 @@ namespace Hedgehog.Core.Moves
         public override void OnManagerAdd()
         {
             var health = Controller.GetComponent<HedgehogHealth>();
+            if (health == null)
+            {
+                Debug.LogWarning("Tried to add shield, but the controller has no health system!");
+                enabled = false;
+                return;
+            }
+
             health.OnHurt.AddListener(OnHurt);
 
             // Replace any previous shields

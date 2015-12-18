@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Hedgehog.Core.Actors;
 using Hedgehog.UI;
 using UnityEngine;
@@ -39,6 +40,7 @@ namespace Hedgehog.Level
         [Header("Timer")]
         [Tooltip("The display on which to show the level time.")]
         public TimerDisplay Timer;
+        private bool _alwaysUpdateTimer;
 
         /// <summary>
         /// The current level time in seconds.
@@ -78,6 +80,7 @@ namespace Hedgehog.Level
         {
             RingDisplay.Target = Player.GetComponentInChildren<RingCollector>();
             Health.OnDeathComplete.AddListener(OnDeathComplete);
+            _alwaysUpdateTimer = Timer.Format.Contains("f");
         }
 
         public void Update()
@@ -85,9 +88,12 @@ namespace Hedgehog.Level
             if (_previousSeconds != LevelTimeSeconds)
                 LevelTime = TimeSpan.FromSeconds(LevelTimeSeconds);
 
+            float previousMillis = LevelTime.Milliseconds;
             LevelTime = LevelTime.Add(TimeSpan.FromSeconds(Time.deltaTime));
             LevelTimeSeconds = _previousSeconds = (float)LevelTime.TotalSeconds;
-            Timer.Display(LevelTime);
+
+            if (_alwaysUpdateTimer || LevelTime.Milliseconds < previousMillis)
+                Timer.Display(LevelTime);
 
             if (LevelTimeSeconds > TimeOverSeconds)
                 Health.Kill();

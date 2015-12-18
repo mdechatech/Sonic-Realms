@@ -26,21 +26,25 @@ namespace Hedgehog.Core.Moves
             groundControl = Controller.GroundControl;
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return Controller.Grounded && DMath.Equalsf(Controller.GroundVelocity) &&
-                   (groundControl == null || 
-                   (!groundControl.Braking && !groundControl.Accelerating));
+            get
+            {
+                return Controller.Grounded && DMath.Equalsf(Controller.GroundVelocity) &&
+                       (groundControl == null ||
+                        (!groundControl.Braking && !groundControl.Accelerating)) &&
+                       !Manager.IsActive<Roll>();
+            }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return Input.GetAxis(ActivateAxis) > 0.0f;
+            get { return Input.GetAxis(ActivateAxis) > 0.0f; }
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            return !Available() || !InputActivate();
+            get { return !Available || !ShouldPerform; }
         }
     }
 }

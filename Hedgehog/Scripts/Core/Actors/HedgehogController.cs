@@ -4,6 +4,7 @@ using System.Linq;
 using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
+using Hedgehog.Level.Areas;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -221,33 +222,6 @@ namespace Hedgehog.Core.Actors
             get { return MoveManager.Moves; }
             set { MoveManager.Moves = value; }
         }
-
-        /// <summary>
-        /// The moves currently being performed.
-        /// </summary>
-        public List<Move> ActiveMoves
-        {
-            get { return MoveManager.ActiveMoves; }
-            set { MoveManager.ActiveMoves = value; }
-        }
-
-        /// <summary>
-        /// The moves which can be performed given the controller's current state.
-        /// </summary>
-        public List<Move> AvailableMoves
-        {
-            get { return MoveManager.AvailableMoves; }
-            set { MoveManager.AvailableMoves = value; }
-        }
-
-        /// <summary>
-        /// The moves which cannot be performed given the controller's current state.
-        /// </summary>
-        public List<Move> UnavailableMoves
-        {
-            get { return MoveManager.UnavailableMoves; }
-            set { MoveManager.UnavailableMoves = value; }
-        }
         #endregion
         #region Physics Variables
         /// <summary>
@@ -324,7 +298,8 @@ namespace Hedgehog.Core.Actors
         public bool IgnoringThisCollision;
 
         /// <summary>
-        /// The controller's velocity as a Vector2.
+        /// The controller's velocity as a Vector2. If set while on the ground, the controller will not
+        /// fall off and instead set ground velocity to the specified value's scalar projection onto the surface.
         /// </summary>
         public Vector2 Velocity
         {
@@ -369,6 +344,14 @@ namespace Hedgehog.Core.Actors
         {
             get { return DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad); }
             set { GravityDirection = DMath.Modp(DMath.Angle(value)*Mathf.Rad2Deg, 360.0f); }
+        }
+
+        /// <summary>
+        /// Returns whether the controller is underwater.
+        /// </summary>
+        public bool Underwater
+        {
+            get { return Inside<Water>(); }
         }
 
         /// <summary>
@@ -807,19 +790,6 @@ namespace Hedgehog.Core.Actors
         /// <param name="timestep">The specified timestep, in seconds.</param>
         public void HandleDisplay(float timestep)
         {
-            // Set FacingForward
-            if (AutoFacingForward)
-            {
-                if (Grounded && !DMath.Equalsf(GroundVelocity))
-                {
-                    FacingForward = GroundVelocity >= 0.0f;
-                }
-                else if (!Grounded && !DMath.Equalsf(RelativeVelocity.x))
-                {
-                    FacingForward = RelativeVelocity.x >= 0.0f;
-                }
-            }
-
             // Flip based on FacingForward
             if ((FacingForward && RendererObject.transform.localScale.x < 0.0f) || 
                 (!FacingForward && RendererObject.transform.localScale.x > 0.0f))
@@ -971,7 +941,7 @@ namespace Hedgehog.Core.Actors
             if (leftCheck)
             {
                 LeftWallHit = leftCheck;
-                LeftWall = leftCheck.Transform ;
+                LeftWall = leftCheck.Transform;
 
                 NotifyTriggers(leftCheck);
 
@@ -1057,7 +1027,7 @@ namespace Hedgehog.Core.Actors
                     IgnoringThisCollision = false;
 
                     if (impact.HasValue)
-                        Attach(impact.Value, leftCheck.SurfaceAngle);
+                        Attach(impact.Value, rightCheck.SurfaceAngle);
 
                     return true;
                 }
@@ -1260,13 +1230,18 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSurfaceCheck()
         {
-            var left = Surfacecast(Footing.Left);
-            var right = Surfacecast(Footing.Right);
+            // Get the surfaces at the left and right sensors
+            var left = GetSurface(Footing.Left);
+            var right = GetSurface(Footing.Right);
 
+            // Get the angles of their surfaces in degrees
             var leftAngle = left ? left.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
             var rightAngle = right ? right.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
+
+            // Get the difference between the two surfaces
             var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
 
+            // Get the differences between the two surfaces and the angle of the last surface
             var leftDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle));
             var rightDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle));
 
@@ -1298,7 +1273,7 @@ namespace Hedgehog.Core.Actors
             // Propose an angle that would rotate the controller between both surfaces
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
 
-            // If the proposed angle is between the angles of the two surfaces, it'll do
+            // If it's between the angles of the two surfaces, it'll do
             if ((DMath.Equalsf(diff) && Mathf.Abs(DMath.ShortestArc(overlap, left.SurfaceAngle)) < SurfaceAngleTolerance) || 
 
                  (diff > 0.0f && 
@@ -1448,10 +1423,11 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// If grounded, sets the controller's ground velocity based on how much the specified velocity
-        /// "fits" with its current surface angle (scalar projection). For example, if the controller
-        /// is on a flat horizontal surface and the specified velocity points straight up, the resulting
-        /// ground velocity will be zero.
+        /// If grounded, sets ground velocity to the scalar projection of the specified
+        /// velocity against the angle of the surface the controller is standing on.
+        /// 
+        /// For example, if the controller is on a flat horizontal surface and the specified velocity 
+        /// points straight up, there will be no change in ground velocity.
         /// </summary>
         /// <param name="velocity">The specified velocity as a vector with x and y components.</param>
         /// <returns>The resulting ground velocity.</returns>
@@ -1468,14 +1444,15 @@ namespace Hedgehog.Core.Actors
         }
 
         /// <summary>
-        /// If grounded, adds to the controller's ground velocity based on how much the specified velocity
-        /// "fits" with its current surface angle (scalar projection). For example, if the controller
-        /// is on a flat horizontal surface and the specified velocity points straight up, there will be
-        /// no change in ground velocity.
+        /// If grounded, adds to the controller's ground velocity the scalar projection of the specified
+        /// velocity against the angle of the surface the controller is standing on.
+        /// 
+        /// For example, if the controller is on a flat horizontal surface and the specified velocity 
+        /// points straight up, there will be no change in ground velocity.
         /// </summary>
         /// <param name="velocity">The specified velocity as a vector with x and y components.</param>
         /// <returns>The resulting change in ground velocity.</returns>
-        public float AddGroundVelocity(Vector2 velocity)
+        public float PushOnGround(Vector2 velocity)
         {
             if (!Grounded) return 0.0f;
             GroundVelocity += DMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
@@ -1512,14 +1489,14 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns></returns>
-        public bool IsAvailableMove<TMove>() where TMove : Move { return MoveManager.IsAvailable<TMove>(); }
+        public bool IsAvailable<TMove>() where TMove : Move { return MoveManager.IsAvailable<TMove>(); }
 
         /// <summary>
         /// Returns whether the first move of the specified type is active.
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <returns></returns>
-        public bool IsActiveMove<TMove>() where TMove : Move { return MoveManager.IsActive<TMove>(); }
+        public bool IsActive<TMove>() where TMove : Move { return MoveManager.IsActive<TMove>(); }
 
         /// <summary>
         /// Performs the first move of the specified type, if it's available.
@@ -1571,8 +1548,10 @@ namespace Hedgehog.Core.Actors
             if (!collision || collision.Hit.transform == null)
                 return false;
 
-            OnCollide.Invoke(collision);
             var result = TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
+            if (IgnoringThisCollision) return false;
+
+            OnCollide.Invoke(collision);
             return result;
         }
 
@@ -1596,33 +1575,61 @@ namespace Hedgehog.Core.Actors
             return result;
         }
 
+        /// <summary>
+        /// Called by reactives to let the controller know it's entered them.
+        /// </summary>
+        /// <param name="reactive">The specified reactive.</param>
         public void NotifyReactiveEnter(BaseReactive reactive)
         {
             Reactives.Add(reactive);
             OnReactiveEnter.Invoke(reactive);
         }
 
+        /// <summary>
+        /// Called by reactives to let the controller know it's exited them.
+        /// </summary>
+        /// <param name="reactive">The specified reactive.</param>
         public void NotifyReactiveExit(BaseReactive reactive)
         {
             Reactives.Remove(reactive);
             OnReactiveExit.Invoke(reactive);
         }
 
+        /// <summary>
+        /// Finds the first reactive of the specified type the controller is interacting with, if any.
+        /// </summary>
+        /// <typeparam name="TReactive">The specified type.</typeparam>
+        /// <returns></returns>
         public TReactive GetReactive<TReactive>() where TReactive : BaseReactive
         {
             return Reactives.FirstOrDefault(reactive => reactive is TReactive) as TReactive;
         }
 
+        /// <summary>
+        /// Returns whether the controller is interacting with a reactive of the specified type.
+        /// </summary>
+        /// <typeparam name="TReactive">The specified type.</typeparam>
+        /// <returns></returns>
         public bool InteractingWith<TReactive>() where TReactive : BaseReactive
         {
             return Reactives.Any(reactive => reactive is TReactive);
         }
 
+        /// <summary>
+        /// Returns whether the controller is interacting with the specified reactive.
+        /// </summary>
+        /// <param name="reactive">The specified reactive.</param>
+        /// <returns></returns>
         public bool InteractingWith(BaseReactive reactive)
         {
             return Reactives.Contains(reactive);
         }
 
+        /// <summary>
+        /// Returns whether the controller is inside a reactive area of the specified type.
+        /// </summary>
+        /// <typeparam name="TReactiveArea">The specified type.</typeparam>
+        /// <returns></returns>
         public bool Inside<TReactiveArea>()
         {
             if (typeof(TReactiveArea).IsSubclassOf(typeof(ReactiveArea)))
@@ -1640,26 +1647,56 @@ namespace Hedgehog.Core.Actors
             return false;
         }
 
+        /// <summary>
+        /// Returns whether the controller is inside the specified reactive area.
+        /// </summary>
+        /// <param name="area">The specified reactive area.</param>
+        /// <returns></returns>
         public bool Inside(ReactiveArea area)
         {
             return area.AreaTrigger.HasController(this);
         }
 
+        /// <summary>
+        /// Returns whether the controller is inside the specified reactive area.
+        /// </summary>
+        /// <param name="area">The specified reactive area.</param>
+        /// <returns></returns>
         public bool Inside(ReactivePlatformArea area)
         {
             return area.AreaTrigger.HasController(this);
         }
 
+        /// <summary>
+        /// Returns whether the controller is inside the specified
+        /// </summary>
+        /// <typeparam name="TReactivePlatform"></typeparam>
+        /// <returns></returns>
         public bool StandingOn<TReactivePlatform>() where TReactivePlatform : ReactivePlatform
         {
             return Reactives.Any(reactive => reactive is TReactivePlatform);
         }
 
-        public bool StandingOn(Transform platform)
+        /// <summary>
+        /// Returns whether the controller is standing on the specified object.
+        /// </summary>
+        /// <param name="platform">The specified object.</param>
+        /// <param name="checkParents">Whether to also check if the object is a parent of what the controller
+        /// is standing on.</param>
+        /// <returns></returns>
+        public bool StandingOn(Transform platform, bool checkParents = false)
         {
-            return Grounded && (platform == PrimarySurface || platform == SecondarySurface);
+            return Grounded && (checkParents
+                ? (PrimarySurface && PrimarySurface.IsChildOf(platform) ||
+                   (SecondarySurface && SecondarySurface.IsChildOf(platform)))
+                : platform == PrimarySurface || platform == SecondarySurface);
         }
 
+        /// <summary>
+        /// Returns whether the controller is standing on the specified reactive platform.
+        /// </summary>
+        /// <param name="platform">The specified platform.</param>
+        /// <returns></returns>
         public bool StandingOn(ReactivePlatform platform)
         {
             return StandingOn(platform.transform) || platform.PlatformTrigger.HasController(this);
@@ -1849,7 +1886,7 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <returns>The result of the linecast.</returns>
         /// <param name="footing">The side to linecast from.</param>
-        private TerrainCastHit Surfacecast(Footing footing)
+        private TerrainCastHit GetSurface(Footing footing)
         {
             return footing == Footing.Left
                 ? this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,

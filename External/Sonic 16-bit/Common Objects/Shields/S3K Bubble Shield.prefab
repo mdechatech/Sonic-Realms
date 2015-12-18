@@ -27,6 +27,7 @@ GameObject:
   - 95: {fileID: 9560710}
   - 114: {fileID: 11469088}
   - 114: {fileID: 11449494}
+  - 114: {fileID: 11432050}
   m_Layer: 0
   m_Name: S3K Bubble Shield
   m_TagString: Untagged
@@ -76,6 +77,59 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11432050
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ac84f41f2918cd4aa2fbe22188631b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
+  Manager: {fileID: 0}
+  Animator: {fileID: 0}
+  CurrentState: 0
+  InputActivated: 0
+  InputEnabled: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnRemove:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: 
+  AvailableBool: 
+  LimitedDuration: 0
+  Duration: 60
+  RemainingTime: 0
 --- !u!114 &11449494
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -123,13 +177,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  ActiveTrigger: 
-  ActiveBool: Active
+  ActiveTrigger: Dive
+  ActiveBool: 
   AvailableBool: 
   Used: 0
   DiveVelocity: {x: 0, y: -4.80000019}
-  BounceVelocity: {x: 0, y: 3.29999995}
-  GiveAir: 1
+  BounceSpeed: 4.5
+  BounceReleaseSpeed: 2.4000001
+  UnderwaterBounceSpeed: 2.5
+  UnderwaterBounceReleaseSpeed: 1.20000005
+  BounceTrigger: Bounce
+  Bouncing: 0
 --- !u!114 &11469088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,7 +279,7 @@ Prefab:
       objectReference: {fileID: 9560710}
     - target: {fileID: 0}
       propertyPath: ActiveBool
-      value: Active
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: GiveAir
@@ -230,6 +288,38 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: RotateToGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: BounceSpeed
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: BounceReleaseSpeed
+      value: 2.4000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Bouncing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: BounceTrigger
+      value: Bounce
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ActiveTrigger
+      value: Dive
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: LimitedDuration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: UnderwaterBounceSpeed
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: UnderwaterBounceReleaseSpeed
+      value: 1.20000005
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

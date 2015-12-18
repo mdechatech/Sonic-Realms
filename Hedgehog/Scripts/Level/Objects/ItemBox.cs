@@ -49,18 +49,18 @@ namespace Hedgehog.Level.Objects
             if (Controller == null) return;
 
             ActivationCountdown -= Time.deltaTime;
-            if (!(ActivationCountdown < 0.0f)) return;
+            if (ActivationCountdown >= 0.0f) return;
 
             ActivationCountdown = 0.0f;
             TriggerObject(Controller);
-            Controller = null;
+            enabled = false;
         }
 
         public override void OnPlatformEnter(TerrainCastHit hit)
         {
-            // Must be rolling; if in the air, mut be traveling down; 
+            // Must be rolling; if in the air, must be traveling down; 
             // if on the ground, must be hitting from the side
-            if (!hit.Controller.MoveManager.IsActive<Roll>()) return;
+            if (!hit.Controller.IsActive<Roll>()) return;
             if (!hit.Controller.Grounded && (hit.Controller.RelativeVelocity.y > 0.0f)) return;
             if (hit.Controller.Grounded && 
                 (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top)) return;
@@ -70,12 +70,13 @@ namespace Hedgehog.Level.Objects
             if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used)
             {
                 hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
-                    -hit.Controller.RelativeVelocity.y);
+                    -hit.Controller.RelativeVelocity.y + hit.Controller.AirGravity*Time.deltaTime);
             }
             else
             {
                 hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
-                    Mathf.Min(jump.ReleaseSpeed, -hit.Controller.RelativeVelocity.y));
+                    Mathf.Min(jump.ReleaseSpeed, -hit.Controller.RelativeVelocity.y + 
+                    hit.Controller.AirGravity*Time.deltaTime));
             }
 
             // Ignore collision with this since it's destroyed now

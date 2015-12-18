@@ -14,22 +14,38 @@ namespace Hedgehog.Core.Utils
         /// <summary>
         /// Gets all the triggers that would receive events from the specified transform.
         /// </summary>
-        /// <typeparam name="TTrigger"></typeparam>
-        /// <param name="transform"></param>
+        /// <typeparam name="TTrigger">The trigger type.</typeparam>
+        /// <param name="transform">The specified transform.</param>
         /// <returns></returns>
         public static IEnumerable<TTrigger> GetTriggers<TTrigger>(Transform transform) 
             where TTrigger : BaseTrigger
         {
-            return transform.GetComponentsInParent<TTrigger>().Where(trigger =>
+            return transform.GetComponentsInParent<TTrigger>(false).Where(trigger =>
                 BaseTrigger.Selector(trigger, transform));
         }
 
+        /// <summary>
+        /// Gets all the triggers that would receive events from the specified transform and puts them
+        /// into the specified list.
+        /// </summary>
+        /// <typeparam name="TTrigger">The trigger type.</typeparam>
+        /// <param name="transform">The specified transform.</param>
         public static void GetTriggers<TTrigger>(Transform transform, List<TTrigger> results)
             where TTrigger : BaseTrigger
         {
-            transform.GetComponentsInParent(false, results);
-            results.RemoveAll(trigger => !BaseTrigger.Selector(trigger, transform));
+            results.Clear();
+
+            var check = transform;
+            while (check != null)
+            {
+                var trigger = check.GetComponent<TTrigger>();
+                if (BaseTrigger.Selector(trigger, transform)) results.Add(trigger);
+
+                check = check.parent;
+            }
         }
+
+        private static readonly List<PlatformTrigger> NotifyPlatformTriggerCache = new List<PlatformTrigger>(); 
 
         /// <summary>
         /// Notifies all platform triggers eligible to the specified transform about a collision.
@@ -43,15 +59,17 @@ namespace Hedgehog.Core.Utils
         {
             if (transform == null || !hit) return false;
 
-            var any = false;
-            foreach (var platformTrigger in GetTriggers<PlatformTrigger>(transform))
+            GetTriggers(transform, NotifyPlatformTriggerCache);
+            if (NotifyPlatformTriggerCache.Count == 0) return false;
+
+            for(var i = 0; i < NotifyPlatformTriggerCache.Count; ++i)
             {
+                var platformTrigger = NotifyPlatformTriggerCache[i];
                 platformTrigger.NotifyCollision(hit);
                 if (notifySurfaceCollision) platformTrigger.NotifySurfaceCollision(hit);
-                any = true;
             }
 
-            return any;
+            return true;
         }
 
         /// <summary>
@@ -65,15 +83,18 @@ namespace Hedgehog.Core.Utils
         {
             if (transform == null || !hit)
                 return false;
+
+            GetTriggers(transform, NotifyPlatformTriggerCache);
+            if (NotifyPlatformTriggerCache.Count == 0) return false;
             
-            bool any = false;
-            foreach (var platformTrigger in GetTriggers<PlatformTrigger>(transform))
+            for(var i = 0; i < NotifyPlatformTriggerCache.Count; ++i)
             {
+                var platformTrigger = NotifyPlatformTriggerCache[i];
                 platformTrigger.NotifySurfaceCollision(hit);
-                any = true;
+                if (notifyCollision) platformTrigger.NotifyCollision(hit);
             }
 
-            return any;
+            return true;
         }
 
         /// <summary>

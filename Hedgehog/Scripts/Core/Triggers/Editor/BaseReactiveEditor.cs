@@ -37,7 +37,10 @@ namespace Hedgehog.Core.Triggers.Editor
             ShowAnimationFoldout = EditorGUILayout.Foldout(ShowAnimationFoldout, "Animation");
         }
 
-        protected abstract void DrawAnimationProperties();
+        protected virtual void DrawAnimationProperties()
+        {
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Animator");
+        }
 
         protected virtual void DrawComponentsFoldout()
         {
@@ -46,7 +49,7 @@ namespace Hedgehog.Core.Triggers.Editor
 
         protected virtual void DrawComponentsProperties()
         {
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Animator", "ObjectTrigger");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ObjectTrigger");
         }
     }
 }

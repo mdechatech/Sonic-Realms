@@ -86,7 +86,7 @@ namespace Hedgehog.Core.Triggers
         public static bool Selector<TTrigger>(TTrigger trigger, Transform transform)
             where TTrigger : BaseTrigger
         {
-            return trigger.enabled && (transform == trigger.transform || trigger.TriggerFromChildren);
+            return trigger && trigger.enabled && (transform == trigger.transform || trigger.TriggerFromChildren);
         }
     }
 }

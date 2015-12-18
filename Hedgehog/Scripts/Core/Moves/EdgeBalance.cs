@@ -92,35 +92,45 @@ namespace Hedgehog.Core.Moves
                 Animator.SetFloat(DistanceFloatHash, EdgeDistance);
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return Controller.Grounded && 
-                DMath.Equalsf(Controller.GroundVelocity) &&
-                Controller.SecondarySurface == null;
+            get
+            {
+                return Controller.Grounded &&
+                       DMath.Equalsf(Controller.GroundVelocity) &&
+                       Controller.SecondarySurface == null;
+            }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            if (CheckEdge() < MaxDistance)
-                return true;
+            get
+            {
+                if (CheckEdge() < MaxDistance)
+                    return true;
 
-            End();
-            return false;
+                End();
+                return false;
+            }
         }
 
         public float CheckEdge()
         {
             TerrainCastHit hit;
-            float distance = 0.0f;
+            float distance = float.MaxValue;
 
             if (Controller.Footing == Footing.Left)
             {
                 hit = Controller.TerrainCast(EdgeSensorRight.position, EdgeSensorLeft.position, ControllerSide.Bottom);
+                if (hit == null) return distance;
+
                 distance = Vector2.Distance(hit.Hit.point, EdgeSensorRight.position);
             }
             else if (Controller.Footing == Footing.Right)
             {
                 hit = Controller.TerrainCast(EdgeSensorLeft.position, EdgeSensorRight.position, ControllerSide.Bottom);
+                if (hit == null) return distance;
+
                 distance = Vector2.Distance(hit.Hit.point, EdgeSensorLeft.position);
             }
 
@@ -130,9 +140,9 @@ namespace Hedgehog.Core.Moves
             return distance;
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            return CheckEdge() > MaxDistance || !Available();
+            get { return CheckEdge() > MaxDistance || !Available; }
         }
 
         public override void OnActiveEnter(State previousState)
@@ -141,14 +151,14 @@ namespace Hedgehog.Core.Moves
             {
                 var duck = Manager.GetMove<Duck>();
                 if (duck != null)
-                    duck.InputEnabled = false;
+                    duck.AllowShouldPerform = false;
             }
 
             if (!AllowLookUp)
             {
                 var lookUp = Manager.GetMove<LookUp>();
                 if (lookUp != null)
-                    lookUp.InputEnabled = false;
+                    lookUp.AllowShouldPerform = false;
             }
         }
 
@@ -163,14 +173,14 @@ namespace Hedgehog.Core.Moves
             {
                 var duck = Manager.GetMove<Duck>();
                 if (duck != null)
-                    duck.InputEnabled = true;
+                    duck.AllowShouldPerform = true;
             }
 
             if (!AllowLookUp)
             {
                 var lookUp = Manager.GetMove<LookUp>();
                 if (lookUp != null)
-                    lookUp.InputEnabled = true;
+                    lookUp.AllowShouldPerform = true;
             }
         }
     }

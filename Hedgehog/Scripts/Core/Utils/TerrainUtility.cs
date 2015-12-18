@@ -13,8 +13,12 @@ namespace Hedgehog.Core.Utils
     public static class TerrainUtility
     {
         #region Name Utilities
+        // Getting the names of transforms is really expensive in Unity for some reason. Caching them saves an
+        // absurd amount of garbage.
+        private static readonly Dictionary<Transform, string> ParentHasNameCache = new Dictionary<Transform, string>(128);
+
         /// <summary>
-        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
+        /// Returns whether the transform or one of its parents has the specified name.
         /// the specified name.
         /// </summary>
         /// <param name="transform">The specified transform.</param>
@@ -25,25 +29,41 @@ namespace Hedgehog.Core.Utils
             var check = transform;
             while (check != null)
             {
-                if (check.name == name) return true;
+                string cachedName;
+                if (!ParentHasNameCache.TryGetValue(check, out cachedName))
+                    ParentHasNameCache.Add(check, cachedName = check.name);
+
+                if (cachedName == name) return true;
+
                 check = check.parent;
             }
 
             return false;
         }
         /// <summary>
-        /// Returns whether the specified transform, or its parent, or grandparent, and so on, has
-        /// a name contained in the specified name list.
+        /// Returns whether the transform or one of its parents has its name in the given list.
         /// </summary>
         /// <param name="transform">The specified transform.</param>
         /// <param name="names">The specified name list.</param>
         /// <returns></returns>
-        public static bool ParentHasName(Transform transform, ICollection<string> names)
+        public static bool ParentHasName(Transform transform, IList<string> names)
         {
+            var count = names.Count;
+            if (count == 0) return false;
+            if (ParentHasName(transform, names[0])) return true;
+            if (count == 1) return false;
+
             var check = transform;
             while (check != null)
             {
-                if (names.Contains(check.name)) return true;
+                string cachedName;
+
+                if (!ParentHasNameCache.TryGetValue(check, out cachedName))
+                    ParentHasNameCache.Add(check, cachedName = check.name);
+
+                for (var i = 0; i < count; ++i)
+                    if(names[i] == cachedName) return true;
+
                 check = check.parent;
             }
 
@@ -51,6 +71,28 @@ namespace Hedgehog.Core.Utils
         }
         #endregion
         #region Terrain Utilities
+
+        private const int TerrainCastHitCount = 256;
+        private static readonly TerrainCastHit[] TerrainCastHitCache = new TerrainCastHit[TerrainCastHitCount];
+        private static int TerrainCastHitIndex = 0;
+
+        static TerrainUtility()
+        {
+            for (var i = 0; i < TerrainCastHitCache.Length; ++i)
+                TerrainCastHitCache[i] = new TerrainCastHit(default(RaycastHit2D));
+        }
+
+        private static TerrainCastHit GetTerrainCastHit()
+        {
+            var result = TerrainCastHitCache[TerrainCastHitIndex];
+            TerrainCastHitIndex = (TerrainCastHitIndex + 1)%TerrainCastHitCount;
+            return result;
+        }
+
+        private const int MaxTerrainCastResults = 128;
+        private static readonly RaycastHit2D[] TerrainCastResults =
+            new RaycastHit2D[MaxTerrainCastResults];
+
         /// <summary>
         /// Performs a linecast against the terrain taking into account a controller's attributes.
         /// </summary>
@@ -63,16 +105,24 @@ namespace Hedgehog.Core.Utils
             Vector2 end, ControllerSide fromSide = ControllerSide.All)
         {
             var amount = Physics2D.LinecastNonAlloc(start, end, TerrainCastResults);
-            if (amount < 1)
-                return null;
+            if (amount < 1) return null;
 
-            var hit = BestRaycast(source, TerrainCastResults, amount, fromSide);
-            return new TerrainCastHit(hit, fromSide, source, start, end);
+            var sourceTransform = source.transform;
+            var found = false;
+
+            var i = 0;
+            for ( ; i < amount; ++i)
+            {
+                if (TerrainCastResults[i].transform == sourceTransform) continue;
+                found = true;
+                break;
+            }
+
+            if (!found) return null;
+
+            var hit = BestRaycast(source, TerrainCastResults, i, amount, fromSide);
+            return hit ? GetTerrainCastHit().Initialize(hit, fromSide, source, start, end) : null;
         }
-
-        private const int MaxTerrainCastResults = 128;
-        private static readonly RaycastHit2D[] TerrainCastResults = 
-            new RaycastHit2D[MaxTerrainCastResults];
 
         /// <summary>
         /// Performs a linecast against the terrain.
@@ -86,7 +136,7 @@ namespace Hedgehog.Core.Utils
             var amount = Physics2D.LinecastNonAlloc(start, end, TerrainCastResults);
             if (amount < 1) return null;
 
-            var hit = BestRaycast(null, TerrainCastResults, amount, fromSide);
+            var hit = BestRaycast(null, TerrainCastResults, 0, amount, fromSide);
             return new TerrainCastHit(hit, fromSide, null, start, end);
         }
 
@@ -100,17 +150,15 @@ namespace Hedgehog.Core.Utils
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
         public static RaycastHit2D BestRaycast(HedgehogController source, RaycastHit2D[] raycasts,
-            int amount = int.MaxValue, ControllerSide raycastSide = ControllerSide.All)
+            int firstIndex = 0, int lastIndex = 0, ControllerSide raycastSide = ControllerSide.All)
         {
-            var iterations = Mathf.Min(amount, raycasts.Length);
-            for (var i = 0; i < iterations; ++i)
+            for (var i = firstIndex; i < lastIndex; ++i)
             {
                 var hit = raycasts[i];
                 if (!hit) continue;
                 if (!TransformSelector(hit, source, raycastSide)) continue;
                 return hit;
             }
-
             return default(RaycastHit2D);
         }
 
@@ -129,15 +177,28 @@ namespace Hedgehog.Core.Utils
         private static bool TransformSelector(RaycastHit2D hit, HedgehogController source,
             ControllerSide raycastSide = ControllerSide.All)
         {
-            TriggerUtility.GetTriggers(hit.transform, TransformSelectorPlatformTriggers);
-            var terrainCastHit = new TerrainCastHit(hit, raycastSide, source);
+            var transform = hit.transform;
 
-            if (TransformSelectorPlatformTriggers.Any())
-                return TransformSelectorPlatformTriggers.All(trigger => trigger.IsSolid(terrainCastHit));
+            TriggerUtility.GetTriggers(transform, TransformSelectorPlatformTriggers);
 
-            if (terrainCastHit.Transform.GetComponent<AreaTrigger>() != null) return false;
+            // If there are any platform triggers, check that they all consider the object solid
+            if (TransformSelectorPlatformTriggers.Count > 0)
+            {
+                for (var i = 0; i < TransformSelectorPlatformTriggers.Count; ++i)
+                {
+                    if (!TransformSelectorPlatformTriggers[i].IsSolid(
+                        GetTerrainCastHit().Initialize(hit, raycastSide, source)))
+                        return false;
+                }
 
-            return CollisionModeSelector(terrainCastHit.Transform, source);
+                return true;
+            }
+
+            // Otherwise if there are any area triggers, the object is not solid
+            if (transform.GetComponent<AreaTrigger>() != null) return false;
+
+            // Otherwise the object is solid if the transform is in one of the controller's paths
+            return CollisionModeSelector(transform, source);
         }
 
         /// <summary>
@@ -161,6 +222,7 @@ namespace Hedgehog.Core.Utils
         /// <param name="source">The controller which initiated the raycast, if any.</param>
         /// <param name="raycastSide">The side from which the raycast originated, if any.</param>
         /// <returns></returns>
+        [Obsolete("Not currently used. Remove soon?")]
         public static bool TriggerSelector(RaycastHit2D hit, HedgehogController source = null,
             ControllerSide raycastSide = ControllerSide.All)
         {

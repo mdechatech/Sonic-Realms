@@ -13,6 +13,7 @@ GameObject:
   - 114: {fileID: 11466982}
   - 114: {fileID: 11439198}
   - 114: {fileID: 11485932}
+  - 114: {fileID: 11445646}
   m_Layer: 0
   m_Name: S3K Electric Shield
   m_TagString: Untagged
@@ -130,6 +131,57 @@ MonoBehaviour:
   AvailableBool: 
   Used: 0
   Velocity: 3.29999995
+--- !u!114 &11445646
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2383a077f83e9d540aa5a6d786b0bdfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
+  Manager: {fileID: 0}
+  Animator: {fileID: 0}
+  CurrentState: 0
+  InputActivated: 0
+  InputEnabled: 0
+  OnActive:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnRemove:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnUnavailable:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  ActiveTrigger: 
+  ActiveBool: 
+  AvailableBool: 
+  DestroyOnContact: 1
 --- !u!114 &11466982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -191,7 +243,7 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: 
   AvailableBool: 
-  DestroyInWater: 1
+  DestroyInWater: 0
   RotateToGravity: 1
 --- !u!114 &11485932
 MonoBehaviour:
@@ -285,7 +337,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: DestroyInWater
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: RotateToGravity

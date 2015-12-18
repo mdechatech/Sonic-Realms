@@ -513,7 +513,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .400000006, y: .800000012, z: 0}
+  m_LocalPosition: {x: 60.4900017, y: 5.71999979, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
@@ -914,7 +914,7 @@ MonoBehaviour:
   AutoFacingForward: 0
   FacingForward: 0
   IgnoreCollision: 0
-  IgnoreNextCollision: 0
+  IgnoringThisCollision: 0
   Vx: 0
   Vy: 0
   GroundVelocity: 0
@@ -1337,7 +1337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 0}
   Manager: {fileID: 0}
-  Animator: {fileID: 0}
+  Animator: {fileID: 9582648}
   CurrentState: 0
   InputActivated: 0
   InputEnabled: 0
@@ -1375,6 +1375,7 @@ MonoBehaviour:
   ActiveBool: Hurt
   AvailableBool: 
   ReboundSpeed: {x: 1.20000005, y: 2.4000001}
+  UnderwaterReboundSpeed: {x: 1.20000005, y: .800000012}
 --- !u!114 &11472608
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -131,23 +131,29 @@ namespace Hedgehog.Core.Moves
             End();
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) > MinActivateSpeed;
+            get { return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) > MinActivateSpeed; }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return RequireNegative
-                ? Input.GetAxis(ActivateAxis) < 0.0f
-                : Input.GetAxis(ActivateAxis) > 0.0f;
+            get
+            {
+                return RequireNegative
+                    ? Input.GetAxis(ActivateAxis) < 0.0f
+                    : Input.GetAxis(ActivateAxis) > 0.0f;
+            }
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            if (!Controller.Grounded) return false;
-            return (_rightDirection && Controller.GroundVelocity <= 0.0f && Controller.GroundVelocity > -MinActivateSpeed) ||
-                (!_rightDirection && Controller.GroundVelocity >= 0.0f && Controller.GroundVelocity < MinActivateSpeed);
+            get
+            {
+                if (!Controller.Grounded) return false;
+                return (_rightDirection && Controller.GroundVelocity <= 0.0f && Controller.GroundVelocity > -MinActivateSpeed) ||
+                       (!_rightDirection && Controller.GroundVelocity >= 0.0f && Controller.GroundVelocity < MinActivateSpeed);
+            }
         }
 
         public override void SetAnimatorParameters()

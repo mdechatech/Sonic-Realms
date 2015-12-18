@@ -60,7 +60,9 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Maps a controller to the areas it is colliding with (can collide with multiple child areas).
         /// </summary>
-        protected Dictionary<HedgehogController, List<Transform>> Collisions; 
+        protected Dictionary<HedgehogController, List<Transform>> Collisions;
+
+        protected HashSet<Collider2D> MiscCollisions; 
 
         public override void Reset()
         {
@@ -80,6 +82,7 @@ namespace Hedgehog.Core.Triggers
             OnAreaStay = OnAreaStay ?? new AreaEvent();
             OnAreaExit = OnAreaExit ?? new AreaEvent();
             Collisions = new Dictionary<HedgehogController, List<Transform>>();
+            MiscCollisions = new HashSet<Collider2D>();
             InsideRules = new List<InsidePredicate>();
         }
 
@@ -106,6 +109,8 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
+            if (!Collisions.Any()) return;
+
             foreach (var controller in new List<HedgehogController>(Collisions.Keys))
             {
                 OnAreaStay.Invoke(controller);
@@ -182,8 +187,13 @@ namespace Hedgehog.Core.Triggers
 
         public void OnTriggerEnter2D(Collider2D collider2D)
         {
+            if (MiscCollisions.Contains(collider2D)) return;
+
             var controller = collider2D.GetComponentInParent<HedgehogController>();
-            if (controller == null) return;
+            if (controller == null)
+            {
+                MiscCollisions.Add(collider2D);
+            }
 
             NotifyCollision(controller, transform);
             BubbleEvent(controller, transform);
@@ -191,6 +201,8 @@ namespace Hedgehog.Core.Triggers
 
         public void OnTriggerStay2D(Collider2D collider2D)
         {
+            if (MiscCollisions.Contains(collider2D)) return;
+
             var controller = collider2D.GetComponentInParent<HedgehogController>();
             if (controller == null) return;
 
@@ -201,7 +213,10 @@ namespace Hedgehog.Core.Triggers
         public void OnTriggerExit2D(Collider2D collider2D)
         {
             var controller = collider2D.GetComponentInParent<HedgehogController>();
-            if (controller == null) return;
+            if (controller == null)
+            {
+                MiscCollisions.Remove(collider2D);
+            }
 
             NotifyCollision(controller, transform, true);
             BubbleEvent(controller, transform, true);

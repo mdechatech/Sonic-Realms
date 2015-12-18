@@ -40,6 +40,7 @@ namespace Hedgehog.Core.Triggers.Editor
         protected override void DrawAnimationProperties()
         {
             // nothing here... YET
+            base.DrawAnimationProperties();
         }
     }
 }

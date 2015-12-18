@@ -42,7 +42,7 @@ namespace Hedgehog.Core.Moves
         public float MaxChargePower;
 
         /// <summary>
-        /// Current charge power.
+        /// Current charge power, or zero if not currently active.
         /// </summary>
         public float CurrentChargePower;
 
@@ -61,23 +61,22 @@ namespace Hedgehog.Core.Moves
         public override void Awake()
         {
             base.Awake();
-
             CurrentChargePower = 0.0f;
         }
 
-        public override bool Available()
+        public override bool Available
         {
-            return Manager.IsActive<Duck>();
+            get { return Manager.IsActive<Duck>(); }
         }
 
-        public override bool InputActivate()
+        public override bool ShouldPerform
         {
-            return Input.GetButton(ChargeButton);
+            get { return Input.GetButton(ChargeButton); }
         }
 
-        public override bool InputDeactivate()
+        public override bool ShouldEnd
         {
-            return !Manager.IsActive<Duck>();
+            get { return !Manager.IsActive<Duck>(); }
         }
 
         public override void OnActiveEnter(State previousState)

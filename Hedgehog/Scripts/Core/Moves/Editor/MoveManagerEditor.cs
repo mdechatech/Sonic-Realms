@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using Hedgehog.Core.Utils.Editor;
+﻿using Hedgehog.Core.Utils.Editor;
 using UnityEditor;
-using UnityEngine;
 
 namespace Hedgehog.Core.Moves.Editor
 {
@@ -33,16 +31,6 @@ namespace Hedgehog.Core.Moves.Editor
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                     "OnPerform", "OnEnd", "OnAvailable", "OnUnavailable", "OnInterrupted");
             }
-
-            var enabled = GUI.enabled;
-            GUI.enabled = Application.isPlaying;
-
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                "ActiveMoves",
-                "AvailableMoves",
-                "UnavailableMoves");
-
-            GUI.enabled = enabled;
 
             serializedObject.ApplyModifiedProperties();
         }

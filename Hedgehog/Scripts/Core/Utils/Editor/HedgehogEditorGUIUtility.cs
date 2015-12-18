@@ -10,7 +10,7 @@ namespace Hedgehog.Core.Utils.Editor
     public class HedgehogEditorGUIUtility
     {
         /// <summary>
-        /// The name of the Script property that shows up on all vanilla inspector scripts.
+        /// The name of the Script property that shows up on all unmodified component editors.
         /// </summary>
         public const string ScriptPropertyName = "m_Script";
 

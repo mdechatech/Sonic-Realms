@@ -17,7 +17,7 @@ namespace Hedgehog.Core.Utils
         /// WARNING: if you change this, you must also add the appropriate variables in the shader.
         /// Also, the palettes you currently have will get messed up... gonna fix this later.
         /// </summary>
-        public const int ColorsPerPalette = 16;
+        public const int ColorsPerPalette = 8;
 
         /// <summary>
         /// The base name of the material's Color From property.
@@ -65,8 +65,6 @@ namespace Hedgehog.Core.Utils
         /// the second palette starts from the 16th color in the list.
         /// </summary>
         [FormerlySerializedAs("Palettes")]
-        [Tooltip("A list of colors, virtually grouped by their palette index.For example, if there are 16 colors in " +
-                 "a palette, the second palette starts from the 16th color in the list.")]
         public List<Color> AllColors;
 
         /// <summary>

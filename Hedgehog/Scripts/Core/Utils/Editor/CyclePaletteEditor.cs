@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Hedgehog.Core.Utils.Editor
 {
+    // TODO document this behemoth
     [CustomEditor(typeof(CyclePalette))]
     public class CyclePaletteEditor : UnityEditor.Editor
     {
@@ -64,7 +65,7 @@ namespace Hedgehog.Core.Utils.Editor
             Divisions.AddRange(Enumerable.Range(0, Instance.AllColors.Count/ColorsPerPalette));
 
             Palettes = new ReorderableList(Divisions, typeof(Color));
-            Palettes.elementHeight = 17*Rows;
+            Palettes.elementHeight = 17*Mathf.Max(Rows, 2);
 
             Palettes.drawHeaderCallback = rect =>
             {

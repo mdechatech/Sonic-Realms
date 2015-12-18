@@ -8,9 +8,9 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawControlProperties()
         {
+            base.DrawControlProperties();
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis", "RequireNegative",
                 "MaxActivateSpeed");
-            base.DrawControlProperties();
         }
     }
 }

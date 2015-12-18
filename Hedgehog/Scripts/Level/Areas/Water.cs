@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Hedgehog.Core.Actors;
-using Hedgehog.Core.Moves;
 using Hedgehog.Core.Triggers;
 using Hedgehog.Core.Utils;
 using UnityEngine;
@@ -34,6 +32,13 @@ namespace Hedgehog.Level.Areas
         [SerializeField]
         public float MinFloatSpeed;
 
+        /// <summary>
+        /// Name of an Animator trigger set when the water is electrocuted.
+        /// </summary>
+        [Tooltip("Name of an Animator trigger set when the water is electrocuted.")]
+        public string ElectrocutedTrigger;
+        protected int ElectrocutedTriggerHash;
+
         private Collider2D[] _colliders;
 
         public override void Reset()
@@ -42,12 +47,27 @@ namespace Hedgehog.Level.Areas
             Viscosity = 2.0f;
             Buoyancy = 0.0f;
             MinFloatSpeed = 5.0f;
+            ElectrocutedTrigger = "";
         }
 
         public override void Start()
         {
             base.Start();
             _colliders = GetComponentsInChildren<Collider2D>(false);
+
+            if (!Animator) return;
+            ElectrocutedTriggerHash = string.IsNullOrEmpty(ElectrocutedTrigger)
+                ? 0
+                : Animator.StringToHash(ElectrocutedTrigger);
+        }
+
+        /// <summary>
+        /// Electrocutes the water.
+        /// </summary>
+        public virtual void Electrocute()
+        {
+            // TODO destroy badniks?
+            if(Animator && ElectrocutedTriggerHash != 0) Animator.SetTrigger(ElectrocutedTriggerHash);
         }
 
         public override bool IsInside(HedgehogController controller)
