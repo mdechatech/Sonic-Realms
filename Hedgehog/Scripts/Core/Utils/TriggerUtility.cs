@@ -21,7 +21,7 @@ namespace Hedgehog.Core.Utils
             where TTrigger : BaseTrigger
         {
             return transform.GetComponentsInParent<TTrigger>(false).Where(trigger =>
-                BaseTrigger.Selector(trigger, transform));
+                BaseTrigger.ReceivesEvents(trigger, transform));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Hedgehog.Core.Utils
             while (check != null)
             {
                 var trigger = check.GetComponent<TTrigger>();
-                if (BaseTrigger.Selector(trigger, transform)) results.Add(trigger);
+                if (BaseTrigger.ReceivesEvents(trigger, transform)) results.Add(trigger);
 
                 check = check.parent;
             }
@@ -55,9 +55,21 @@ namespace Hedgehog.Core.Utils
         /// <param name="notifySurfaceCollision">Whether to also notify the triggers of a surface collision.</param>
         /// <returns></returns>
         public static bool NotifyPlatformCollision(Transform transform, TerrainCastHit hit,
-            bool notifySurfaceCollision = false)
+            bool notifySurfaceCollision = false, List<PlatformTrigger> platformTriggers = null)
         {
             if (transform == null || !hit) return false;
+
+            if (platformTriggers != null)
+            {
+                for (var i = 0; i < platformTriggers.Count; ++i)
+                {
+                    var platformTrigger = platformTriggers[i];
+                    platformTrigger.NotifyCollision(hit);
+                    if (notifySurfaceCollision) platformTrigger.NotifySurfaceCollision(hit);
+                }
+
+                return true;
+            }
 
             GetTriggers(transform, NotifyPlatformTriggerCache);
             if (NotifyPlatformTriggerCache.Count == 0) return false;
@@ -79,10 +91,23 @@ namespace Hedgehog.Core.Utils
         /// <param name="hit">The collision data to send.</param>
         /// <param name="notifyCollision">Whether to also notify the triggers of an ordinary collision.</param>
         /// <returns></returns>
-        public static bool NotifySurfaceCollision(Transform transform, TerrainCastHit hit, bool notifyCollision = false)
+        public static bool NotifySurfaceCollision(Transform transform, TerrainCastHit hit, bool notifyCollision = false,
+            List<PlatformTrigger> platformTriggers = null)
         {
             if (transform == null || !hit)
                 return false;
+
+            if (platformTriggers != null)
+            {
+                for (var i = 0; i < platformTriggers.Count; ++i)
+                {
+                    var platformTrigger = platformTriggers[i];
+                    platformTrigger.NotifySurfaceCollision(hit);
+                    if (notifyCollision) platformTrigger.NotifyCollision(hit);
+                }
+
+                return true;
+            }
 
             GetTriggers(transform, NotifyPlatformTriggerCache);
             if (NotifyPlatformTriggerCache.Count == 0) return false;

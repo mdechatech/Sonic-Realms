@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 431752}
   - 212: {fileID: 21217118}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 411262}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 442404}
   - 212: {fileID: 21220640}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 411082}
   - 212: {fileID: 21240874}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - 95: {fileID: 9540854}
   - 212: {fileID: 21293364}
   - 114: {fileID: 11458094}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S2 Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 459400}
   - 212: {fileID: 21266660}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -490,6 +490,10 @@ Prefab:
       value: 
       objectReference: {fileID: 22100000, guid: 04f9d893540e56c49a65bb77a8279b0e,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 176984}

@@ -26,16 +26,10 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Hook up to these events to react when a controller lands on the object.
     /// </summary>
+    [DisallowMultipleComponent]
     [AddComponentMenu("Hedgehog/Triggers/Platform Trigger")]
     public class PlatformTrigger : BaseTrigger
     {
-        /// <summary>
-        /// Whether to always collide regardless of a controller's path.
-        /// </summary>
-        [FormerlySerializedAs("IgnoreLayers")]
-        [Tooltip("Whether to always collide regardless of a controller's path.")]
-        public bool AlwaysCollide;
-
         /// <summary>
         /// Called when a controller lands on the surface of the platform.
         /// </summary>
@@ -78,7 +72,7 @@ namespace Hedgehog.Core.Triggers
         /// A list of predicates which, if empty or all return true, allow collision with the
         /// platform.
         /// </summary>
-        public ICollection<CollisionPredicate> CollisionRules;
+        public List<CollisionPredicate> CollisionRules;
 
         /// <summary>
         /// Returns whether the controller is considered to be on the surface.
@@ -90,7 +84,7 @@ namespace Hedgehog.Core.Triggers
         /// A list of predicates which invokes surface events based on whether it is empty or all
         /// return true.
         /// </summary>
-        public ICollection<SurfacePredicate> SurfaceRules;
+        public List<SurfacePredicate> SurfaceRules;
 
         /// <summary>
         /// A list of current collisions;
@@ -104,11 +98,11 @@ namespace Hedgehog.Core.Triggers
         public List<TerrainCastHit> SurfaceCollisions;
         private List<TerrainCastHit> _notifiedSurfaceCollisions;
 
+        protected List<PlatformTrigger> Parents; 
+
         public override void Reset()
         {
             base.Reset();
-
-            AlwaysCollide = false;
 
             OnPlatformEnter = new PlatformCollisionEvent();
             OnPlatformStay = new PlatformCollisionEvent();
@@ -138,39 +132,67 @@ namespace Hedgehog.Core.Triggers
             SurfaceRules = new List<SurfacePredicate>();
             SurfaceCollisions = new List<TerrainCastHit>();
             _notifiedSurfaceCollisions = new List<TerrainCastHit>();
+
+            Parents = new List<PlatformTrigger>();
+            GetComponentsInParent(true, Parents);
+        }
+
+        public void Start()
+        {
+            if (!TriggerFromChildren) return;
+            foreach (var child in GetComponentsInChildren<Collider2D>())
+            {
+                if (((1 << child.gameObject.layer) & CollisionLayers.AllMask) == 0) continue;
+                if (child.GetComponent<PlatformTrigger>() || child.GetComponent<AreaTrigger>()) continue;
+
+                var trigger = child.gameObject.AddComponent<PlatformTrigger>();
+                trigger.TriggerFromChildren = true;
+            }
         }
 
         public virtual void FixedUpdate()
         {
-            if (!(Collisions.Any() || _notifiedCollisions.Any() || SurfaceCollisions.Any() ||
-                _notifiedSurfaceCollisions.Any()))
+            if (Collisions.Count == 0 && SurfaceCollisions.Count == 0 &&
+                _notifiedCollisions.Count == 0 && _notifiedSurfaceCollisions.Count == 0)
+            {
+                enabled = false;
                 return;
+            }
 
-            // Remove collisions that were recorded last update but not this one. Invoke their "exit" events.
+            // Remove collisions that were recorded last update but not this one and invoke their "exit" events
             Collisions.RemoveAll(CollisionsRemover);
 
-            // Move this update's collision list to the last update's.
+            // Move this update's collision list to the last update's
             Collisions = _notifiedCollisions;
 
-            // Invoke their "stay" events if they still fulfill CollidesWith.
-            foreach (var collision in new List<TerrainCastHit>(Collisions))
-                if(IsSolid(collision)) OnPlatformStay.Invoke(collision);
+            // Invoke their "stay" events if they still fulfill IsSolid
+            for (var i = Collisions.Count - 1; i >= 0; i = --i >= Collisions.Count ? Collisions.Count - 1 : i)
+            {
+                var collision = Collisions[i];
+                if (IsSolid(collision)) OnPlatformStay.Invoke(collision);
+            }
 
-            // Make room in the collision list for the next update.
+            // Make room in the collision list for the next update
             _notifiedCollisions = new List<TerrainCastHit>();
 
-            // Remove surface collisions that were recorded last update but not this one. Invoke their "exit" events.
+            // Remove surface collisions that were recorded last update but not this one. Invoke their "exit" events
             SurfaceCollisions.RemoveAll(SurfaceCollisionsRemover);
 
-            // Move this update's surface collision list to the last update's.
+            // Move this update's surface collision list to the last update's
             SurfaceCollisions = _notifiedSurfaceCollisions;
 
-            // Invoke their "stay" events if they still fulfill IsOnSurface.
-            foreach (var collision in new List<TerrainCastHit>(SurfaceCollisions))
-                if(IsOnSurface(collision)) OnSurfaceStay.Invoke(collision);
+            // Invoke their "stay" events if they still fulfill IsOnSurface
+            for (var i = SurfaceCollisions.Count - 1; i >= 0; 
+                i = --i >= SurfaceCollisions.Count ? SurfaceCollisions.Count - 1 : i)
+            {
+                var collision = SurfaceCollisions[i];
+                if (IsOnSurface(collision)) OnSurfaceStay.Invoke(collision);
+            }
 
-            // Make room in the surface collision list for the next update.
+            // Make room in the surface collision list for the next update
             _notifiedSurfaceCollisions = new List<TerrainCastHit>();
+
+            if (Collisions.Count == 0 && SurfaceCollisions.Count == 0) enabled = false;
         }
 
         public override bool HasController(HedgehogController controller)
@@ -180,8 +202,10 @@ namespace Hedgehog.Core.Triggers
         #region Collision List Removers
         private bool CollisionsRemover(TerrainCastHit hit)
         {
-            if (_notifiedCollisions.Any(castHit => castHit.Controller == hit.Controller))
-                return false;
+            for (var i = 0; i < _notifiedCollisions.Count; ++i)
+            {
+                if (_notifiedCollisions[i].Controller == hit.Controller) return false;
+            }
 
             OnPlatformExit.Invoke(hit);
             return true;
@@ -189,59 +213,105 @@ namespace Hedgehog.Core.Triggers
 
         private bool SurfaceCollisionsRemover(TerrainCastHit hit)
         {
-            if (_notifiedSurfaceCollisions.Any(castHit => castHit.Controller == hit.Controller))
-                return false;
-            
+            for (var i = 0; i < _notifiedSurfaceCollisions.Count; ++i)
+            {
+                if (_notifiedSurfaceCollisions[i].Controller == hit.Controller)
+                    return false;
+            }
+
             OnSurfaceExit.Invoke(hit);
             return true;
         }
         #endregion
         #region Notify Functions
+        public void NotifyCollision(TerrainCastHit hit)
+        {
+            NotifyCollision(hit, true);
+        }
+
         /// <summary>
         /// Lets the trigger know about a collision with a controller.
         /// </summary>
         /// <param name="hit">The collision data.</param>
-        public void NotifyCollision(TerrainCastHit hit)
+        /// <param name="bubble"></param>
+        public void NotifyCollision(TerrainCastHit hit, bool bubble)
         {
-            if (!IsSolid(hit))
-                return;
-            
-            if (Collisions.All(castHit => castHit.Controller != hit.Controller))
+            if (!IsSolid(hit)) return;
+
+            for (var i = 0; i < Collisions.Count; ++i)
             {
-                Collisions.Add(hit);
-                _notifiedCollisions.Add(hit);
-                
-                OnPlatformEnter.Invoke(hit);
+                var collision = Collisions[i];
+                if (collision.Controller == hit.Controller)
+                {
+                    for (i = 0; i < _notifiedCollisions.Count; ++i)
+                    {
+                        var notifiedCollision = _notifiedCollisions[i];
+                        if (notifiedCollision.Controller == hit.Controller) goto bubble;
+                    }
+
+                    _notifiedCollisions.Add(hit);
+                    goto bubble;
+                }
             }
-            else if (_notifiedCollisions.All(castHit => castHit.Controller != hit.Controller))
+
+            Collisions.Add(hit);
+            _notifiedCollisions.Add(hit);
+            OnPlatformEnter.Invoke(hit);
+
+            if (Collisions.Count == 1 && !enabled) enabled = true;
+
+            bubble:
+            if (!bubble) return;
+            for (var i = 0; i < Parents.Count; ++i)
             {
-                _notifiedCollisions.Add(hit);
+                var parent = Parents[i];
+                if (!ReceivesEvents(parent, transform)) continue;
+                parent.NotifyCollision(hit, false);
             }
+        }
+
+        public void NotifySurfaceCollision(TerrainCastHit hit)
+        {
+            NotifySurfaceCollision(hit, true);
         }
 
         /// <summary>
         /// Lets the trigger know about a controller standing on its surface.
         /// </summary>
-        /// <param name="controller">The specified controller.</param>
         /// <param name="hit">The collision data.</param>
-        public void NotifySurfaceCollision(TerrainCastHit hit)
+        public void NotifySurfaceCollision(TerrainCastHit hit, bool bubble)
         {
-            if (!IsOnSurface(hit))
-                return;
+            if (!IsOnSurface(hit)) return;
 
-            if (SurfaceCollisions.Any(castHit => castHit.Controller == hit.Controller))
+            for (var i = 0; i < SurfaceCollisions.Count; ++i)
             {
-                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != hit.Controller))
-                    _notifiedSurfaceCollisions.Add(hit);
+                var collision = SurfaceCollisions[i];
+                if (collision.Controller != hit.Controller) continue;
+
+                for (i = 0; i < _notifiedSurfaceCollisions.Count; ++i)
+                {
+                    var notifiedCollision = _notifiedSurfaceCollisions[i];
+                    if (notifiedCollision.Controller == hit.Controller)
+                        goto bubble;
+                }
+
+                _notifiedSurfaceCollisions.Add(hit);
+                goto bubble;
             }
-            else
-            {
-                SurfaceCollisions.Add(hit);
-                
-                if (_notifiedSurfaceCollisions.All(castHit => castHit.Controller != hit.Controller))
-                    _notifiedSurfaceCollisions.Add(hit);
 
-                OnSurfaceEnter.Invoke(hit);
+            SurfaceCollisions.Add(hit);
+            _notifiedSurfaceCollisions.Add(hit);
+            OnSurfaceEnter.Invoke(hit);
+
+            if (SurfaceCollisions.Count == 1 && !enabled) enabled = true;
+
+            bubble:
+            if (!bubble) return;
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (!ReceivesEvents(parent, transform)) return;
+                parent.NotifySurfaceCollision(hit, false);
             }
         }
 
@@ -255,8 +325,20 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool IsOnSurface(TerrainCastHit hit)
         {
-            if (!SurfaceRules.Any()) return DefaultSurfaceRule(hit);
-            return SurfaceRules.All(predicate => predicate(hit));
+            if (SurfaceRules.Count == 0) return DefaultSurfaceRule(hit);
+
+            for(var i = 0; i < SurfaceRules.Count; ++i)
+                if (!SurfaceRules[i](hit)) return false;
+
+            if (Parents.Count == 0) return true;
+
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (!ReceivesEvents(parent, transform)) return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -267,19 +349,29 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool IsSolid(TerrainCastHit hit)
         {
-            if (!CollisionRules.Any()) return DefaultCollisionRule(hit);
-            return CollisionRules.All(predicate => predicate(hit));
+            if (CollisionRules.Count == 0 && Parents.Count == 0) return true;
+
+            for (var i = 0; i < CollisionRules.Count; ++i)
+                if (!CollisionRules[i](hit)) return false;
+
+            if (Parents.Count == 0) return true;
+
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (!ReceivesEvents(parent, transform)) continue;
+
+                for(var j = 0; j < parent.CollisionRules.Count; ++j)
+                    if (!parent.CollisionRules[j](hit)) return false;
+            }
+
+            return true;
         }
 
         public bool DefaultSurfaceRule(TerrainCastHit hit)
         {
             if (!hit.Controller.Grounded) return false;
             return hit.Controller.StandingOn(hit.Transform);
-        }
-
-        public bool DefaultCollisionRule(TerrainCastHit hit)
-        {
-            return AlwaysCollide || TerrainUtility.CollisionModeSelector(hit.Hit.transform, hit.Controller);
         }
         #endregion
     }

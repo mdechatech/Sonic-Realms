@@ -25,18 +25,18 @@ Material:
     m_Floats:
       data:
         first:
-          name: _BandOffset
-        second: 1.29999995
+          name: _ScrollTime
+        second: 28.7999992
       data:
         first:
-          name: _ScrollTime
-        second: 39.5999985
+          name: _BandFrequency
+        second: 21
       data:
         first:
           name: _BandHeight
         second: .5
       data:
         first:
-          name: _BandFrequency
-        second: 47
+          name: _BandOffset
+        second: 2
     m_Colors: {}

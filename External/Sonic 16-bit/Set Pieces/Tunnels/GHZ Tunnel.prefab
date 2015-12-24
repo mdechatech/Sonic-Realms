@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 436366}
   - 212: {fileID: 21229374}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel Entrance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 407426}
   - 61: {fileID: 6143532}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 459208}
   - 212: {fileID: 21269702}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel Mid 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 479624}
   - 60: {fileID: 6020224}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 439848}
   - 61: {fileID: 6148682}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - 114: {fileID: 11448318}
   - 114: {fileID: 11432716}
   - 114: {fileID: 11410326}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   - 114: {fileID: 11461140}
   - 60: {fileID: 6009308}
   - 114: {fileID: 11476634}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 476290}
   - 212: {fileID: 21202616}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel Mid 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 416476}
   - 212: {fileID: 21247536}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel Mid 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 438436}
   - 61: {fileID: 6128122}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 491076}
   - 212: {fileID: 21240562}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel Mid 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 431826}
   - 60: {fileID: 6033978}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 489172}
   - 60: {fileID: 6003568}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 418450}
   - 60: {fileID: 6046630}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,7 +240,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 427786}
   - 60: {fileID: 6048400}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -256,7 +256,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 416774}
   - 61: {fileID: 6125614}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +272,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 495858}
   - 61: {fileID: 6157622}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 473420}
   - 212: {fileID: 21293520}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Tunnel Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +304,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 479318}
   - 61: {fileID: 6187476}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -780,6 +780,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab88ce0edc914c4594c99d9b96bdda4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   Acceleration: .600000024
   TargetVelocity: .600000024
   AccelerateBothWays: 0
@@ -811,7 +818,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 0
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -870,7 +876,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -902,6 +907,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955cdc5093668324c8c2b59276fc814a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   MoveName: Roll
   ForcePerform: 1
 --- !u!114 &11461140
@@ -915,6 +922,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955cdc5093668324c8c2b59276fc814a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   MoveName: Roll
   ForcePerform: 1
 --- !u!114 &11468418
@@ -945,7 +954,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -977,6 +985,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab88ce0edc914c4594c99d9b96bdda4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   Acceleration: .600000024
   TargetVelocity: .600000024
   AccelerateBothWays: 0
@@ -1008,7 +1023,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 0
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -1209,6 +1223,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

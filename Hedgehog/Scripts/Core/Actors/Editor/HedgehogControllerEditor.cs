@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Hedgehog.Core.Utils.Editor;
 using Hedgehog.Core.Utils;
-using Hedgehog.Core.Utils.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -107,7 +105,7 @@ namespace Hedgehog.Core.Actors.Editor
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                 "MoveManager", "RendererObject", "Animator");
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Paths");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "CollisionMask");
             #region Sensors Foldout
             ShowSensors = EditorGUILayout.Foldout(ShowSensors, "Sensors", foldoutStyle);
             if (ShowSensors)
@@ -217,7 +215,7 @@ namespace Hedgehog.Core.Actors.Editor
                 EditorGUILayout.LabelField("Collision", headerStyle);
 
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
-                    "Paths", "Reactives", "Grounded", "LeftWall", "LeftCeiling", "RightWall", "RightCeiling");
+                    "CollisionMask", "Reactives", "Grounded", "LeftWall", "LeftCeiling", "RightWall", "RightCeiling");
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);

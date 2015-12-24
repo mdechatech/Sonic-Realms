@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 414458}
   - 212: {fileID: 21226230}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 429672}
   - 212: {fileID: 21226846}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 404810}
   - 212: {fileID: 21226094}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   - 95: {fileID: 9515296}
   - 212: {fileID: 21246730}
   - 114: {fileID: 11404414}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S1 Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 445464}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 453418}
   - 212: {fileID: 21220842}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 163332}

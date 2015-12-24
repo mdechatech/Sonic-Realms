@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 458042}
   - 212: {fileID: 21217780}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ GameObject:
   - 114: {fileID: 11459304}
   - 95: {fileID: 9524902}
   - 212: {fileID: 21227886}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S1 Empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433282}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 489344}
   - 212: {fileID: 21296076}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 416796}
   - 212: {fileID: 21202386}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 439406}
   - 212: {fileID: 21258214}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 126858}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.3300018, y: -3.43799996, z: 0}
+  m_LocalPosition: {x: 59.3983498, y: 5.65546894, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 433282}
@@ -313,7 +313,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -470,7 +469,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 126858}

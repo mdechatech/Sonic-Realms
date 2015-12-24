@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 424114}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 420404}
   - 212: {fileID: 21273082}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 440410}
   - 212: {fileID: 21223060}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 462922}
   - 212: {fileID: 21221574}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - 95: {fileID: 9520604}
   - 212: {fileID: 21256678}
   - 114: {fileID: 11459498}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S2 Super Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 498684}
   - 212: {fileID: 21216142}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -486,7 +485,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 165342}

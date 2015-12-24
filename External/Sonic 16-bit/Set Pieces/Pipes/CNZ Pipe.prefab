@@ -11,7 +11,7 @@ GameObject:
   - 114: {fileID: 11423316}
   - 114: {fileID: 11476564}
   - 68: {fileID: 6842682}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Example Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 475024}
   - 212: {fileID: 21291636}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 488476}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 442868}
   - 212: {fileID: 21229908}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 486030}
   - 212: {fileID: 21255728}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - 114: {fileID: 11497524}
   - 95: {fileID: 9564168}
   - 114: {fileID: 11446182}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: CNZ Spring Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   - 61: {fileID: 6178876}
   - 114: {fileID: 11451352}
   - 114: {fileID: 11485982}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Entry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 490946}
   - 212: {fileID: 21207398}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe03 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 436210}
   - 212: {fileID: 21298054}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - 4: {fileID: 480290}
   - 114: {fileID: 11432976}
   - 61: {fileID: 6162428}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Spring Cap Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 471210}
   - 212: {fileID: 21251304}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 459856}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: CNZ Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 416678}
   - 114: {fileID: 11453676}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Exit Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 446780}
   - 212: {fileID: 21225828}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe03 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - 114: {fileID: 11450790}
   - 114: {fileID: 11452546}
   - 114: {fileID: 11445042}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: CNZ Pipe Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 479328}
   - 212: {fileID: 21263140}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 488072}
   - 212: {fileID: 21210760}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe05 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 472252}
   - 212: {fileID: 21293524}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: pipe03 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -645,7 +645,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -704,7 +703,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -763,7 +761,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
+  AlwaysCollide: 0
   OnAreaEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -801,6 +799,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2df60a885f433b43b3f8189d102dca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   DebrisObject: {fileID: 133350, guid: 65fbfd4268400ab46b7c7881f7b570f7, type: 2}
   DebrisSize: {x: .159999996, y: .159999996}
   UseSprite: 1
@@ -833,7 +833,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -881,7 +880,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -923,6 +921,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26561961b3a685341867dcba8b569b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   BounceSpeed: 1.79999995
 --- !u!114 &11451352
 MonoBehaviour:
@@ -952,7 +957,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 1
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -1001,7 +1005,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -1050,7 +1053,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -1082,6 +1084,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bde526db041bd644a3e2355200b2ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   TravelSpeed: 4.19999981
   ExitSpeed: 4.19999981
   EntryPoint: {fileID: 11451352}
@@ -1116,7 +1120,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
+  AlwaysCollide: 0
   OnAreaEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -1143,12 +1147,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed7e6807cb9696418d3f22ec696eb4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   BouncySides: 2
   Power: 6.30000019
   AccurateBounce: 1
   LockControl: 0
   LockDuration: .266667008
   KeepOnGround: 0
+  HitTrigger: 
 --- !u!212 &21207398
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1449,6 +1461,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

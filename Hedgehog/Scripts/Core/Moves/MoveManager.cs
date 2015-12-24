@@ -106,8 +106,7 @@ namespace Hedgehog.Core.Moves
             if (Controller.Interrupted)
                 return;
 
-            for (var i = Moves.Count - 1; i >= 0; --i,
-                i = i >= Moves.Count ? Moves.Count - 1 : i)
+            for (var i = Moves.Count - 1; i >= 0; i = --i >= Moves.Count ? Moves.Count - 1 : i)
             {
                 var move = Moves[i];
 

@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace Hedgehog.Level.Platforms
 {
+    
+
     /// <summary>
     /// Moves the player with the transform while the player is on it.
     /// </summary>
@@ -37,8 +39,7 @@ namespace Hedgehog.Level.Platforms
         [HideInInspector]
         public Vector3 Velocity;
 
-        private List<HedgehogController> _linkedControllers;
-        private List<MovingPlatformAnchor> _linkedAnchors;
+        private Dictionary<HedgehogController, MovingPlatformAnchor> _anchors; 
 
         public override void Reset()
         {
@@ -49,9 +50,7 @@ namespace Hedgehog.Level.Platforms
         public override void Awake()
         {
             base.Awake();
-
-            _linkedControllers = new List<HedgehogController>();
-            _linkedAnchors = new List<MovingPlatformAnchor>();
+            _anchors = new Dictionary<HedgehogController, MovingPlatformAnchor>();
         }
 
         private MovingPlatformAnchor CreateAnchor(TerrainCastHit hit)
@@ -69,14 +68,14 @@ namespace Hedgehog.Level.Platforms
         // Attaches the hit.Source to the platform through a MovingPlatformAnchor
         public override void OnSurfaceEnter(TerrainCastHit hit)
         {
-            _linkedControllers.Add(hit.Controller);
-            _linkedAnchors.Add(CreateAnchor(hit));
+            _anchors.Add(hit.Controller, CreateAnchor(hit));
         }
 
         // Updates the anchor associated with the hit.Source
         public override void OnSurfaceStay(TerrainCastHit hit)
         {
-            var anchor = _linkedAnchors[_linkedControllers.IndexOf(hit.Controller)];
+            if (!_anchors.ContainsKey(hit.Controller)) return;
+            var anchor = _anchors[hit.Controller];
             if(anchor.transform.parent != hit.Hit.transform)
                 anchor.transform.SetParent(hit.Hit.transform);
             anchor.TranslateController();
@@ -85,8 +84,11 @@ namespace Hedgehog.Level.Platforms
         // Removes the anchor associated with the hit.Source
         public override void OnSurfaceExit(TerrainCastHit hit)
         {
-            var velocity = (Vector2) _linkedAnchors[_linkedControllers.IndexOf(hit.Controller)].DeltaPosition
-                           /Time.fixedDeltaTime;
+            if (!_anchors.ContainsKey(hit.Controller))
+                return;
+
+            var anchor = _anchors[hit.Controller];
+            var velocity = (Vector2)anchor.DeltaPosition/Time.fixedDeltaTime;
 
             if (hit.Controller.Grounded)
             {
@@ -99,10 +101,8 @@ namespace Hedgehog.Level.Platforms
                     TransferMomentumY ? velocity.y : 0.0f);
             }
 
-            var index = _linkedControllers.IndexOf(hit.Controller);
-            _linkedControllers.RemoveAt(index);
-            Destroy(_linkedAnchors[index].gameObject);
-            _linkedAnchors.RemoveAt(index);
+            _anchors.Remove(hit.Controller);
+            Destroy(anchor.gameObject);
         }
     }
 }

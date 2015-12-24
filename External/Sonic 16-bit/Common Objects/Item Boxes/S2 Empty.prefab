@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 476248}
   - 212: {fileID: 21291596}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Powerup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ GameObject:
   - 114: {fileID: 11418910}
   - 95: {fileID: 9539936}
   - 212: {fileID: 21227364}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S2 Empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 453248}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 438838}
   - 212: {fileID: 21279144}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 488596}
   - 212: {fileID: 21278542}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 417904}
   - 212: {fileID: 21206274}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -483,6 +483,10 @@ Prefab:
       value: 
       objectReference: {fileID: 22100000, guid: 04f9d893540e56c49a65bb77a8279b0e,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 162604}

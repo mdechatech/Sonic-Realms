@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 493788}
   - 212: {fileID: 21265056}
   - 61: {fileID: 6141016}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: block36
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 190448}

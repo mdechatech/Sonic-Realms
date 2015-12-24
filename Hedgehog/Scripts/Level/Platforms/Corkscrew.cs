@@ -36,8 +36,7 @@ namespace Hedgehog.Level.Platforms
             if (hit == null || hit.Controller == null) return false;
 
             // Similar to a ledge - only solid to the controller's bottom sensors
-            return base.IsSolid(hit) &&
-                   hit.Side == ControllerSide.Bottom &&
+            return hit.Side == ControllerSide.Bottom &&
                    hit.Hit.fraction > 0.0f &&
                    hit.Controller.Grounded &&
 

@@ -38,12 +38,10 @@ namespace Hedgehog.Core.Actors
         #endregion
         #region Collision
         /// <summary>
-        /// What paths the controller collides with. An object is on a path if it or one of its parents
-        /// has that path's name.
+        /// Mask representing the layers the controller collides with.
         /// </summary>
-        [Tooltip("What paths the controller is on. An object is on a path if it or one of its parents " +
-                 "has that path's name.")]
-        public List<string> Paths;
+        [Tooltip("Mask representing the layers the controller collides with.")]
+        public LayerMask CollisionMask;
 
         /// <summary>
         /// What reactives the controller is on.
@@ -568,7 +566,7 @@ namespace Hedgehog.Core.Actors
             RendererObject = GetComponentInChildren<Renderer>().gameObject;
             Animator = RendererObject.GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
 
-            Paths = new List<string> {"Always Collide", "Path 1"};
+            CollisionMask = CollisionLayers.DefaultMask;
             Reactives = new List<BaseReactive>();
 
             Sensors = GetComponentInChildren<HedgehogSensors>();
@@ -610,8 +608,11 @@ namespace Hedgehog.Core.Actors
             JustDetached = false;
             QueuedTranslation = default(Vector3);
 
-            AirControl = GetMove<AirControl>();
-            GroundControl = GetMove<GroundControl>();
+            if (MoveManager)
+            {
+                AirControl = GetMove<AirControl>();
+                GroundControl = GetMove<GroundControl>();
+            }
 
             ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             AutoFacingForward = FacingForward = true;
@@ -748,7 +749,7 @@ namespace Hedgehog.Core.Actors
                     HandleCollisions();
                     UpdateGroundVelocity();
 
-                    if (DMath.Equalsf(Velocity.magnitude) || Interrupted || ++steps > CollisionStepLimit)
+                    if (++steps > CollisionStepLimit || DMath.Equalsf(Velocity.magnitude) || Interrupted)
                         break;
 
                     // If the player's speed changes mid-stagger recalculate current velocity and total velocity
@@ -988,7 +989,8 @@ namespace Hedgehog.Core.Actors
         private bool AirCeilingCheck()
         {
             var leftCheck = this.TerrainCast(Sensors.TopLeftStart.position, Sensors.TopLeft.position, ControllerSide.Top);
-            var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position, ControllerSide.Top);
+            var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position,
+                ControllerSide.Top);
 
             if (leftCheck)
             {
@@ -1042,8 +1044,10 @@ namespace Hedgehog.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirGroundCheck()
         {
-            var groundLeftCheck = Groundcast(Footing.Left);
-            var groundRightCheck = Groundcast(Footing.Right);
+            var groundLeftCheck = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position,
+                ControllerSide.Bottom);
+            var groundRightCheck = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
+                ControllerSide.Bottom);
 
             if (groundLeftCheck || groundRightCheck)
             {
@@ -1231,8 +1235,10 @@ namespace Hedgehog.Core.Actors
         private bool GroundSurfaceCheck()
         {
             // Get the surfaces at the left and right sensors
-            var left = GetSurface(Footing.Left);
-            var right = GetSurface(Footing.Right);
+            var left = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
+                ControllerSide.Bottom);
+            var right = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
+                    ControllerSide.Bottom);
 
             // Get the angles of their surfaces in degrees
             var leftAngle = left ? left.SurfaceAngle*Mathf.Rad2Deg : 0.0f;
@@ -1542,17 +1548,21 @@ namespace Hedgehog.Core.Actors
         /// Lets a platform's trigger know about a collision, if it has one.
         /// </summary>
         /// <param name="collision"></param>
-        /// <returns>Whether a platform trigger was notified.</returns>
-        private bool NotifyTriggers(TerrainCastHit collision)
+        private void NotifyTriggers(TerrainCastHit collision)
         {
-            if (!collision || collision.Hit.transform == null)
-                return false;
+            if (!collision || collision.Transform == null) return;
 
-            var result = TriggerUtility.NotifyPlatformCollision(collision.Hit.transform, collision);
-            if (IgnoringThisCollision) return false;
+            var trigger = collision.Transform.GetComponent<PlatformTrigger>();
+            if (trigger == null)
+            {
+                OnCollide.Invoke(collision);
+                return;
+            }
+            
+            trigger.NotifyCollision(collision);
+            if (IgnoringThisCollision) return;
 
             OnCollide.Invoke(collision);
-            return result;
         }
 
         /// <summary>
@@ -1560,19 +1570,21 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         /// <param name="primarySurfaceHit">The new primary surface.</param>
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
-        /// <returns>Whether any platform triggers were notified of the collisions.</returns>
-        public bool SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
+        public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
         {
             PrimarySurfaceHit = primarySurfaceHit;
-            PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Hit.transform : null;
+            PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Transform : null;
 
             SecondarySurfaceHit = secondarySurfaceHit;
-            SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Hit.transform : null;
+            SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Transform : null;
 
-            var result = TriggerUtility.NotifySurfaceCollision(PrimarySurface, primarySurfaceHit);
-            result |= TriggerUtility.NotifySurfaceCollision(SecondarySurface, secondarySurfaceHit);
+            var primaryTrigger = PrimarySurface == null
+                ? null : PrimarySurface.GetComponent<PlatformTrigger>();
+            var secondaryTrigger = SecondarySurface == null
+                ? null : SecondarySurface.GetComponent<PlatformTrigger>();
 
-            return result;
+            if(primaryTrigger != null) primaryTrigger.NotifySurfaceCollision(primarySurfaceHit);
+            if(secondaryTrigger != null) secondaryTrigger.NotifySurfaceCollision(secondarySurfaceHit);
         }
 
         /// <summary>
@@ -1857,42 +1869,6 @@ namespace Hedgehog.Core.Actors
         public float AbsoluteAngle(float relativeAngle)
         {
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
-        }
-        
-        /// <summary>
-        /// Casts from LedgeClimbHeight to the player's geet.
-        /// </summary>
-        /// <param name="side"></param>
-        /// <returns></returns>
-        private TerrainCastHit Groundcast(Footing side)
-        {
-            TerrainCastHit cast;
-            if (side == Footing.Left)
-            {
-                cast = this.TerrainCast(
-                    Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position, ControllerSide.Bottom);
-            }
-            else
-            {
-                cast = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
-                    ControllerSide.Bottom);
-            }
-            
-            return cast;
-        }
-
-        /// <summary>
-        /// Returns the result of a linecast from the ClimbLedgeHeight to Su
-        /// </summary>
-        /// <returns>The result of the linecast.</returns>
-        /// <param name="footing">The side to linecast from.</param>
-        private TerrainCastHit GetSurface(Footing footing)
-        {
-            return footing == Footing.Left
-                ? this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
-                    ControllerSide.Bottom)
-                : this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
-                    ControllerSide.Bottom);
         }
         #endregion
     }

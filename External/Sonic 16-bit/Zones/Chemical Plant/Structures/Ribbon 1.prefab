@@ -23,7 +23,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 490668}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: Path 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   - 4: {fileID: 431908}
   - 212: {fileID: 21278952}
   - 60: {fileID: 6055206}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: path03 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 406288}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Path 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - 4: {fileID: 451918}
   - 212: {fileID: 21288084}
   - 60: {fileID: 6043724}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: path02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - 4: {fileID: 423688}
   - 212: {fileID: 21222104}
   - 60: {fileID: 6050312}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: path02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - 4: {fileID: 464564}
   - 212: {fileID: 21273670}
   - 60: {fileID: 6087922}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: path03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 124258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.1999998, y: -.639999986, z: 0}
+  m_LocalPosition: {x: 30.0599995, y: .379999995, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 406288}

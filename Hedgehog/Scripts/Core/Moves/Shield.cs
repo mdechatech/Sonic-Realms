@@ -62,7 +62,10 @@ namespace Hedgehog.Core.Moves
         public override void OnManagerRemove()
         {
             var health = Controller.GetComponent<HedgehogHealth>();
-            health.OnHurt.RemoveListener(OnHurt);
+            if (health != null)
+            {
+                health.OnHurt.RemoveListener(OnHurt);
+            }
 
             if (!DestroyInWater)
                 return;

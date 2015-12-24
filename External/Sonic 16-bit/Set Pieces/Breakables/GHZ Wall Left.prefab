@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11490380}
   - 114: {fileID: 11494782}
   - 114: {fileID: 11463586}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: GHZ Wall Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,6 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2df60a885f433b43b3f8189d102dca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   DebrisObject: {fileID: 180992, guid: 99c17faea4a3c5a40abc62821d7a0393, type: 2}
   DebrisSize: {x: .159999996, y: .159999996}
   UseSprite: 1
@@ -88,7 +90,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -130,6 +131,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24fae9883e9d56546bd56ca3470a7817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  CollidingTrigger: 
+  CollidingBool: 
+  SurfaceTrigger: 
+  SurfaceBool: 
   MinGroundSpeed: 2.70000005
   FreezeTime: .0333333313
 --- !u!114 &11494782
@@ -160,7 +168,6 @@ MonoBehaviour:
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Collisions: []
-  AutoActivate: 0
   AllowReactivation: 1
   OnActivateEnter:
     m_PersistentCalls:
@@ -221,6 +228,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

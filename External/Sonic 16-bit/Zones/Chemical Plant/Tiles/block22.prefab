@@ -11,7 +11,7 @@ GameObject:
   - 212: {fileID: 21217686}
   - 61: {fileID: 6170584}
   - 61: {fileID: 6164566}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: block22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,6 +92,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

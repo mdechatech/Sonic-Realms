@@ -148,7 +148,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Move Sprites
+    m_Name: Normal Sprites
     m_StateMachine: {fileID: 110788418}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -160,7 +160,7 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
-    m_Name: Interrupt Sprites
+    m_Name: Special Sprites
     m_StateMachine: {fileID: 110739538}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -251,7 +251,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
   OutParameter: Cycle Speed
---- !u!114 &11416510
+--- !u!114 &11409500
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -259,24 +259,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44014b0440734b1429f58dfb63f649a6, type: 3}
+  m_Script: {fileID: 11500000, guid: a64833eeaef0ccf4680664bdce859a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnchangedValue: -1
-  GroundAcceleration: .84375
-  GroundDeceleration: 9
-  GroundFriction: .84375
-  GroundTopSpeed: 1.79999995
-  SlopeGravity: 1.5
-  AirAcceleration: 1.6875
-  AirGravity: 2.25
-  AirTopSpeed: 1.79999995
-  JumpSpeed: 2.0999999
-  JumpReleaseSpeed: 1.20000005
-  RollingFriction: .421875
-  RollingDeceleration: -1
-  RollingUphillGravity: .9375
-  RollingDownhillGravity: 3.75
+  Roll: {fileID: 0}
+  UnchangedValue: 0
+  WidthChange: 0
+  HeightChange: 0
+  UphillGravity: .9375
+  DownhillGravity: 3.75
+  Deceleration: 0
+  Friction: .421875
+--- !u!114 &11411000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3226df353e46bda4898dc61391a0ea78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
+  UnchangedValue: 0
+  GroundFriction: 1.6875
+  GravityDirection: 0
+  AirGravity: 7.85699987
+  AirDrag: 0
+  SlopeGravity: 4.5
 --- !u!114 &11418110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -389,6 +400,38 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
   OutParameter: Cycle Speed
+--- !u!114 &11430818
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9f3758b16e575e428fb4ac6250b6287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GroundControl: {fileID: 0}
+  UnchangedValue: 0
+  Acceleration: 1.6875
+  Deceleration: 18
+  TopSpeed: 3.5999999
+  MinSlopeGravitySpeed: 0
+--- !u!114 &11445542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c330ef3321ecec646acef22273e71f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Jump: {fileID: 0}
+  UnchangedValue: 0
+  ActivateSpeed: 3.9000001
+  ReleaseSpeed: 2.4000001
 --- !u!114 &11452802
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -445,6 +488,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
   OutParameter: Cycle Speed
+--- !u!114 &11457712
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c330ef3321ecec646acef22273e71f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Jump: {fileID: 0}
+  UnchangedValue: 0
+  ActivateSpeed: 2.0999999
+  ReleaseSpeed: 1.20000005
 --- !u!114 &11460208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -473,6 +531,22 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
   OutParameter: Cycle Speed
+--- !u!114 &11463570
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed848169c026c8048a3c3c3f6eb33360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AirControl: {fileID: 0}
+  UnchangedValue: 0
+  Acceleration: 3.375
+  Deceleration: 3.375
+  TopSpeed: 3.5999999
 --- !u!114 &11468146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -485,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parameter: Corkscrew Progress
---- !u!114 &11482682
+--- !u!114 &11483968
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -493,24 +567,51 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44014b0440734b1429f58dfb63f649a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3226df353e46bda4898dc61391a0ea78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnchangedValue: -1
-  GroundAcceleration: 1.6875
-  GroundDeceleration: 18
-  GroundFriction: 1.6875
-  GroundTopSpeed: 3.5999999
-  SlopeGravity: 4.5
-  AirAcceleration: 3.375
-  AirGravity: 7.85699987
-  AirTopSpeed: 3.5999999
-  JumpSpeed: 3.9000001
-  JumpReleaseSpeed: 2.4000001
-  RollingFriction: .845099986
-  RollingDeceleration: 4.5
-  RollingUphillGravity: 2.8125
-  RollingDownhillGravity: 11.25
+  Controller: {fileID: 0}
+  UnchangedValue: 0
+  GroundFriction: .84375
+  GravityDirection: 0
+  AirGravity: 2.25
+  AirDrag: 0
+  SlopeGravity: 1.5
+--- !u!114 &11487074
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64833eeaef0ccf4680664bdce859a7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Roll: {fileID: 0}
+  UnchangedValue: 0
+  WidthChange: 0
+  HeightChange: 0
+  UphillGravity: 2.8125
+  DownhillGravity: 11.25
+  Deceleration: 4.5
+  Friction: .845099986
+--- !u!114 &11488184
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed848169c026c8048a3c3c3f6eb33360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AirControl: {fileID: 0}
+  UnchangedValue: 0
+  Acceleration: 1.6875
+  Deceleration: 1.6875
+  TopSpeed: 1.79999995
 --- !u!114 &11488478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -557,6 +658,23 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
   OutParameter: Cycle Speed
+--- !u!114 &11495940
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9f3758b16e575e428fb4ac6250b6287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GroundControl: {fileID: 0}
+  UnchangedValue: 0
+  Acceleration: .84375
+  Deceleration: 9
+  TopSpeed: 1.79999995
+  MinSlopeGravitySpeed: 0
 --- !u!1101 &110104584
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1940,7 +2058,11 @@ AnimatorState:
   m_Transitions:
   - {fileID: 110118774}
   m_StateMachineBehaviours:
-  - {fileID: 11482682}
+  - {fileID: 11411000}
+  - {fileID: 11430818}
+  - {fileID: 11463570}
+  - {fileID: 11445542}
+  - {fileID: 11487074}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2161,7 +2283,11 @@ AnimatorState:
   m_Transitions:
   - {fileID: 110130508}
   m_StateMachineBehaviours:
-  - {fileID: 11416510}
+  - {fileID: 11483968}
+  - {fileID: 11495940}
+  - {fileID: 11488184}
+  - {fileID: 11457712}
+  - {fileID: 11409500}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2647,7 +2773,7 @@ AnimatorStateMachine:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Interrupt Sprites
+  m_Name: Special Sprites
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 110209810}
@@ -2808,7 +2934,7 @@ AnimatorStateMachine:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Move Sprites
+  m_Name: Normal Sprites
   m_ChildStates: []
   m_ChildStateMachines:
   - serializedVersion: 1

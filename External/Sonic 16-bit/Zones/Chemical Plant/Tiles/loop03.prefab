@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 495702}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Path 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400388}
   - 212: {fileID: 21282550}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: loop03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 499142}
   - 60: {fileID: 6060952}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 427552}
   - 60: {fileID: 6004942}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Loop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 467388}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Path 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,6 +227,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

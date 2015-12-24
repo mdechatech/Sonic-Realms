@@ -29,6 +29,11 @@ namespace Hedgehog.Core.Utils
         public Transform Transform;
 
         /// <summary>
+        /// The collider2D of the object hit, if any.
+        /// </summary>
+        public Collider2D Collider;
+
+        /// <summary>
         /// The angle of incline of the terrain hit in radians, if any.
         /// </summary>
         public float SurfaceAngle;
@@ -64,7 +69,11 @@ namespace Hedgehog.Core.Utils
             Controller = controller;
             NormalAngle = DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi);
             SurfaceAngle = DMath.Modp(NormalAngle - DMath.HalfPi, DMath.DoublePi);
+
+            if (!hit) return this;
+
             Transform = hit.transform;
+            Collider = hit.collider;
 
             return this;
         }

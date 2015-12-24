@@ -83,10 +83,10 @@ namespace Hedgehog.Core.Triggers
         /// <param name="trigger"></param>
         /// <param name="transform"></param>
         /// <returns></returns>
-        public static bool Selector<TTrigger>(TTrigger trigger, Transform transform)
+        public static bool ReceivesEvents<TTrigger>(TTrigger trigger, Transform transform)
             where TTrigger : BaseTrigger
         {
-            return trigger && trigger.enabled && (transform == trigger.transform || trigger.TriggerFromChildren);
+            return trigger && (transform == trigger.transform || trigger.TriggerFromChildren);
         }
     }
 }

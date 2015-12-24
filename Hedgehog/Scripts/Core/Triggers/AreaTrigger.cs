@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Core.Actors;
-using Hedgehog.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -18,6 +17,7 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Hook up to these events to react when a controller enters the area.
     /// </summary>
+    [DisallowMultipleComponent]
     [AddComponentMenu("Hedgehog/Triggers/Area Trigger")]
     public class AreaTrigger : BaseTrigger
     {
@@ -109,7 +109,11 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
-            if (!Collisions.Any()) return;
+            if (Collisions.Count == 0)
+            {
+                enabled = false;
+                return;
+            }
 
             foreach (var controller in new List<HedgehogController>(Collisions.Keys))
             {
@@ -136,12 +140,12 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultCollisionRule(HedgehogController controller)
         {
-            return controller != null && (AlwaysCollide || TerrainUtility.CollisionModeSelector(transform, controller));
+            return true;
         }
 
         public void NotifyCollision(HedgehogController controller, Transform hit, bool isExit = false)
         {
-            if (!enabled || controller == null) return;
+            if (controller == null) return;
 
             List<Transform> hits;
             if (Collisions.TryGetValue(controller, out hits))
@@ -149,11 +153,14 @@ namespace Hedgehog.Core.Triggers
                 if (isExit || !CollidesWith(controller))
                 {
                     hits.Remove(hit);
-                    if (hits.Any()) return;
+                    if (hits.Count > 0) return;
                     
                     Collisions.Remove(controller);
                     OnAreaExit.Invoke(controller);
                     OnExit.Invoke(controller);
+
+                    if (Collisions.Count == 0) enabled = false;
+
                 } else if (!hits.Contains(hit))
                 {
                     hits.Add(hit);
@@ -167,6 +174,8 @@ namespace Hedgehog.Core.Triggers
                 Collisions[controller] = new List<Transform> {hit};
                 OnAreaEnter.Invoke(controller);
                 OnEnter.Invoke(controller);
+
+                if (Collisions.Count == 1) enabled = true;
             }
         }
 

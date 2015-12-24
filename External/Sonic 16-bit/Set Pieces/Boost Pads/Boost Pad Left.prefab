@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 465800}
   - 61: {fileID: 6139802}
   - 114: {fileID: 11499188}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Solid Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 438668}
   - 212: {fileID: 21296782}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - 61: {fileID: 6123168}
   - 114: {fileID: 11489522}
   - 114: {fileID: 11485036}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Boost Pad Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 439596}
   - 95: {fileID: 9551976}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Boost Pad Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,6 +172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5346506b0f0ed674197f36d56e79d473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
   Velocity: -7.19999981
   BoostBothWays: 0
 --- !u!114 &11489522
@@ -201,7 +206,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
+  AlwaysCollide: 1
   OnAreaEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -244,7 +249,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -307,7 +311,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 175988}

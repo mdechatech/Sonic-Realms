@@ -102,11 +102,11 @@ namespace Hedgehog.Core.Triggers
         }
 
         /// <summary>
-        /// Default collision rule. Uses the trigger's default collision rule.
+        /// Default collision rule. Always solid to all collsions by default.
         /// </summary>
         public virtual bool IsSolid(TerrainCastHit hit)
         {
-            return PlatformTrigger.DefaultCollisionRule(hit);
+            return true;
         }
 
         // Override these methods to react when a controller collides with the platform.

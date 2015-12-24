@@ -22,7 +22,7 @@ namespace Hedgehog.Core.Triggers.Editor
         {
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TriggerFromChildren", "AlwaysCollide");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TriggerFromChildren");
 
             ShowPlatformEvents = EditorGUILayout.Foldout(ShowPlatformEvents, "Platform Events");
             if (ShowPlatformEvents)

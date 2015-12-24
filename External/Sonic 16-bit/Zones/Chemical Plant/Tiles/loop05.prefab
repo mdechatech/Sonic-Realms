@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 426390}
   - 212: {fileID: 21290288}
   - 60: {fileID: 6017690}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: loop05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,6 +95,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

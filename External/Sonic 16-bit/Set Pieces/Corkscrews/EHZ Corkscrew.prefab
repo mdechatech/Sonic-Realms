@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 463890}
   - 212: {fileID: 21227074}
   - 60: {fileID: 6026356}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: EHZ Corkscrew Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ GameObject:
   - 114: {fileID: 11468114}
   - 114: {fileID: 11416780}
   - 114: {fileID: 11461650}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: EHZ Corkscrew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - 4: {fileID: 452130}
   - 212: {fileID: 21256576}
   - 60: {fileID: 6083530}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: EHZ Corkscrew Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  IgnoreLayers: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -202,6 +201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3851a408748915419861e43362ab11f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   PlatformTrigger: {fileID: 0}
   CollidingTrigger: 
   CollidingBool: 
@@ -220,6 +221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e923f39865e83644e8ca5b34260e22ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectTrigger: {fileID: 0}
+  Animator: {fileID: 0}
   PlatformTrigger: {fileID: 0}
   CollidingTrigger: 
   CollidingBool: 
@@ -304,6 +307,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
