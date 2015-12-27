@@ -12,22 +12,24 @@ AnimationClip:
   m_UseHighQualityCurve: 1
   m_RotationCurves: []
   m_CompressedRotationCurves: []
+  m_EulerCurves: []
   m_PositionCurves:
   - curve:
       serializedVersion: 2
       m_Curve:
       - time: 0
         value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 0, y: .599999964, z: 0}
-        outSlope: {x: 0, y: .599999964, z: 0}
+        inSlope: {x: 0, y: 0.59999996, z: 0}
+        outSlope: {x: 0, y: 0.59999996, z: 0}
         tangentMode: 0
-      - time: 1.06666672
-        value: {x: 0, y: .639999986, z: 0}
-        inSlope: {x: 0, y: .0298781563, z: 0}
-        outSlope: {x: 0, y: .0298781563, z: 0}
+      - time: 1.0666667
+        value: {x: 0, y: 0.64, z: 0}
+        inSlope: {x: 0, y: 0.029878156, z: 0}
+        outSlope: {x: 0, y: 0.029878156, z: 0}
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     path: Sprite/Powerup
   m_ScaleCurves: []
   m_FloatCurves:
@@ -41,6 +43,7 @@ AnimationClip:
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: 
     classID: 61
@@ -53,13 +56,14 @@ AnimationClip:
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
-      - time: 1.06666672
+      - time: 1.0666667
         value: 0
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: Sprite/Powerup
     classID: 212
@@ -74,6 +78,7 @@ AnimationClip:
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: Sprite/Static
     classID: 212
@@ -86,13 +91,14 @@ AnimationClip:
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
-      - time: 1.06666672
+      - time: 1.0666667
         value: 0
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: Sprite/Explosion
     classID: 212
@@ -101,7 +107,7 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300040, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
-    - time: .0333333351
+    - time: 0.033333335
       value: {fileID: 21300042, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
     attribute: m_Sprite
     path: Sprite/Base
@@ -110,17 +116,17 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 6971e23038d1a5d47b2ef6b4371659f1, type: 3}
-    - time: .0333333351
+    - time: 0.033333335
       value: {fileID: 21300000, guid: 8c7a74ba9ec50294ea45fc78b2bed469, type: 3}
-    - time: .166666672
+    - time: 0.16666667
       value: {fileID: 21300000, guid: 18b336bdcafc6f54a8c81db9cefe8d89, type: 3}
-    - time: .300000012
+    - time: 0.3
       value: {fileID: 21300000, guid: 6e8a250ff4a587c41ac318b5e50498e3, type: 3}
-    - time: .433333337
+    - time: 0.43333334
       value: {fileID: 21300000, guid: 7add93c9141eb3849b1a3b7926e81201, type: 3}
-    - time: .566666663
+    - time: 0.56666666
       value: {fileID: 0}
-    - time: 1.06666672
+    - time: 1.0666667
       value: {fileID: 0}
     attribute: m_Sprite
     path: Sprite/Explosion
@@ -187,11 +193,14 @@ AnimationClip:
     - {fileID: 0}
   m_AnimationClipSettings:
     serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.08333337
+    m_StopTime: 1.0833334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
     m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
@@ -213,6 +222,7 @@ AnimationClip:
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: 
     classID: 61
@@ -225,13 +235,14 @@ AnimationClip:
         inSlope: 0
         outSlope: 0
         tangentMode: 10
-      - time: 1.06666672
+      - time: 1.0666667
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_LocalPosition.x
     path: Sprite/Powerup
     classID: 4
@@ -241,16 +252,17 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 0
-        inSlope: .599999964
-        outSlope: .599999964
+        inSlope: 0.59999996
+        outSlope: 0.59999996
         tangentMode: 10
-      - time: 1.06666672
-        value: .639999986
-        inSlope: .0298781563
-        outSlope: .0298781563
+      - time: 1.0666667
+        value: 0.64
+        inSlope: 0.029878156
+        outSlope: 0.029878156
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_LocalPosition.y
     path: Sprite/Powerup
     classID: 4
@@ -263,13 +275,14 @@ AnimationClip:
         inSlope: 0
         outSlope: 0
         tangentMode: 10
-      - time: 1.06666672
+      - time: 1.0666667
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_LocalPosition.z
     path: Sprite/Powerup
     classID: 4
@@ -282,13 +295,14 @@ AnimationClip:
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
-      - time: 1.06666672
+      - time: 1.0666667
         value: 0
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: Sprite/Powerup
     classID: 212
@@ -303,6 +317,7 @@ AnimationClip:
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: Sprite/Static
     classID: 212
@@ -315,13 +330,14 @@ AnimationClip:
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
-      - time: 1.06666672
+      - time: 1.0666667
         value: 0
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: Sprite/Explosion
     classID: 212
@@ -330,4 +346,12 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: PlayAudioClip
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: ba3cc820fc9d3a54a96e6ed5f44d032f,
+      type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

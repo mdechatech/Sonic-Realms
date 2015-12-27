@@ -1,5 +1,8 @@
 ﻿using System;
 using Hedgehog.Core.Actors;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +17,7 @@ namespace Hedgehog.Core.Triggers
     /// <summary>
     /// Base class for level objects that receive events.
     /// </summary>
+    [ExecuteInEditMode]
     public abstract class BaseTrigger : MonoBehaviour
     {
         /// <summary>
@@ -24,34 +28,21 @@ namespace Hedgehog.Core.Triggers
                  " with groups of colliders/objects.")]
         public bool TriggerFromChildren;
 
-        /// <summary>
-        /// Called when a controller enters the trigger.
-        /// </summary>
-        public TriggerEvent OnEnter;
-
-        /// <summary>
-        /// Called when a controller stays on the trigger.
-        /// </summary>
-        public TriggerEvent OnStay;
-
-        /// <summary>
-        /// Called when a controller exits the trigger.
-        /// </summary>
-        public TriggerEvent OnExit;
-
         public virtual void Reset()
         {
             TriggerFromChildren = true;
-            OnEnter = new TriggerEvent();
-            OnStay = new TriggerEvent();
-            OnExit = new TriggerEvent();
         }
 
         public virtual void Awake()
         {
-            OnEnter = OnEnter ?? new TriggerEvent();
-            OnStay = OnStay ?? new TriggerEvent();
-            OnExit = OnExit ?? new TriggerEvent();
+            // here for consistency
+        }
+
+        public virtual void Update()
+        {
+#if UNITY_EDITOR
+            hideFlags = EditorPrefs.GetBool("ShowTriggers", false) ? HideFlags.None : HideFlags.HideInInspector;
+#endif
         }
 
         public abstract bool HasController(HedgehogController controller);

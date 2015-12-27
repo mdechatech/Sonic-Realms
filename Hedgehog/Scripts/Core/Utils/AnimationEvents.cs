@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using Hedgehog.Level;
 using UnityEngine;
 
 namespace Hedgehog.Core.Utils
 {
     /// <summary>
-    /// Helper component with useful methods that can be called from the Unity UI.
+    /// Helper component with methods that can be called through SendMessage, UnityEvent, and AnimationEvent.
     /// </summary>
     public class AnimationEvents : MonoBehaviour
     {
@@ -84,6 +85,61 @@ namespace Hedgehog.Core.Utils
             var sprite = GetComponentInChildren<SpriteRenderer>();
             if (sprite == null) return;
             sprite.sortingOrder = sortingOrder;
+        }
+
+        /// <summary>
+        /// Plays the specified audio clip at the object's position through the Sound Manager.
+        /// </summary>
+        /// <param name="clip">The specified audio clip.</param>
+        public void PlayAudioClip(AudioClip clip)
+        {
+            SoundManager.PlayClipAtPoint(clip, transform.position);
+        }
+
+        /// <summary>
+        /// Plays the specified audio clip as background music through the Sound Manager.
+        /// </summary>
+        /// <param name="clip">The specified audio clip.</param>
+        public void PlayBGM(AudioClip clip)
+        {
+            SoundManager.PlayBGM(clip);
+        }
+
+        /// <summary>
+        /// Plays the specified audio clip with looping data passed in.
+        /// </summary>
+        /// <param name="data">The looping parameters represented by an object with this LoopBGMData component.</param>
+        public void PlayBGM(LoopBGMData data)
+        {
+            SoundManager.PlayBGM(data);
+        }
+
+        /// <summary>
+        /// Plays the specified audio clip as secondary background music invincibility music, for example) through the Sound Manager.
+        /// </summary>
+        /// <param name="clip">The specified audio clip.</param>
+        public void PlaySecondaryBGM(AudioClip clip)
+        {
+            SoundManager.PlaySecondaryBGM(clip);
+        }
+
+        /// <summary>
+        /// Plays the specified audio clip as secondary background music (invicibility music, for example) with looping
+        /// data passed in.
+        /// </summary>
+        /// <param name="data">The looping parameters represented by an object with this LoopBGMData component.</param>
+        public void PlaySecondaryBGM(LoopBGMData data)
+        {
+            SoundManager.PlaySecondaryBGM(data);
+        }
+
+        /// <summary>
+        /// Plays the specified audio clip as a jingle (extra life music, for example
+        /// </summary>
+        /// <param name="clip"></param>
+        public void PlayJingle(AudioClip clip)
+        {
+            SoundManager.PlayJingle(clip);
         }
     }
 }

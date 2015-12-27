@@ -9,7 +9,6 @@ namespace Hedgehog.Core.Moves.Editor
     {
         protected override void DrawControlProperties()
         {
-            base.DrawControlProperties();
             var useControlInput = serializedObject.FindProperty("UseControlInput");
             HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UseControlInput");
 

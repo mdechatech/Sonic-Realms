@@ -3,6 +3,7 @@ using System.Collections;
 using Hedgehog.Core.Actors;
 using Hedgehog.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Hedgehog.Level
 {
@@ -101,7 +102,7 @@ namespace Hedgehog.Level
 
         public void OnDeathComplete()
         {
-            Application.LoadLevel(Application.loadedLevel);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

@@ -78,6 +78,7 @@ GameObject:
   - 95: {fileID: 9540854}
   - 212: {fileID: 21293364}
   - 114: {fileID: 11458094}
+  - 114: {fileID: 11495684}
   m_Layer: 31
   m_Name: S2 Shield
   m_TagString: Untagged
@@ -108,7 +109,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 170562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.0199999996, z: 0}
+  m_LocalPosition: {x: 0, y: -0.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 411262}
@@ -136,7 +137,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 176984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.8771286, y: -3.57697797, z: 0}
+  m_LocalPosition: {x: 39.87713, y: -3.576978, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 411262}
@@ -185,12 +186,13 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 176984}
   m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: -.0299999993}
+  m_Offset: {x: 0, y: -0.03}
   serializedVersion: 2
-  m_Size: {x: .300000012, y: .300000012}
+  m_Size: {x: 0.3, y: 0.3}
 --- !u!95 &9540854
 Animator:
   serializedVersion: 3
@@ -220,21 +222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerFromChildren: 0
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   Collisions: []
   AllowReactivation: 1
   OnActivateEnter:
@@ -256,6 +243,9 @@ MonoBehaviour:
   Animator: {fileID: 9540854}
   ActivatedTrigger: 
   ActivatedBool: 
+  ActivateSound: {fileID: 0}
+  LoopSound: {fileID: 0}
+  DeactivateSound: {fileID: 0}
 --- !u!114 &11440774
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -268,22 +258,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerFromChildren: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  AlwaysCollide: 1
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -314,6 +288,12 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  PlatformEnterSound: {fileID: 0}
+  PlatformLoopSound: {fileID: 0}
+  PlatformExitSound: {fileID: 0}
+  SurfaceEnterSound: {fileID: 0}
+  SurfaceLoopSound: {fileID: 0}
+  SurfaceExitSound: {fileID: 0}
 --- !u!114 &11458094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -346,8 +326,19 @@ MonoBehaviour:
   CollidingBool: 
   SurfaceTrigger: 
   SurfaceBool: 
-  ActivateDelay: .533333302
+  ActivateDelay: 0.5333333
   BrokenTrigger: Broken
+--- !u!114 &11495684
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 176984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 607595e8911787345b75f6304c57e1c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21217118
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -366,14 +357,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300024, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &21220640
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -392,14 +387,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300038, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &21240874
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -418,14 +417,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300018, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &21266660
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -444,14 +447,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &21293364
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -470,14 +477,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

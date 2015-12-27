@@ -9,14 +9,14 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// The name of the input axis.
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("The name of the input axis.")]
         public string MovementAxis;
 
         /// <summary>
         /// Whether to invert the axis input.
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("Whether to invert the axis input.")]
         public bool InvertAxis;
 
@@ -25,21 +25,21 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Air acceleration in units per second squared.
         /// </summary>
-        [SerializeField]
+        [SerializeField, PhysicsFoldout]
         [Tooltip("Air acceleration in units per second squared.")]
         public float Acceleration;
 
         /// <summary>
         /// Air deceleration in units per second squared.
         /// </summary>
-        [SerializeField]
+        [SerializeField, PhysicsFoldout]
         [Tooltip("Air deceleration in units per second squared.")]
         public float Deceleration;
 
         /// <summary>
         /// Top air speed in units per second.
         /// </summary>
-        [SerializeField]
+        [SerializeField, PhysicsFoldout]
         [Tooltip("Top air speed in units per second.")]
         public float TopSpeed;
         #endregion

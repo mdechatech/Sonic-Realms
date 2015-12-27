@@ -1,5 +1,4 @@
-﻿using Hedgehog.Core.Actors;
-using Hedgehog.Core.Utils;
+﻿using Hedgehog.Core.Utils;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves
@@ -10,6 +9,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator float set to magnitude of ground control input.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator float set to magnitude of ground control input.")]
         public string InputAxisFloat;
         protected int InputAxisFloatHash;
@@ -17,6 +17,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator bool set to whether there is any input.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator bool set to whether there is any input.")]
         public string InputBool;
         protected int InputBoolHash;
@@ -24,6 +25,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator bool set to whether the controller is accelerating.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator bool set to whether the controller is accelerating.")]
         public string AcceleratingBool;
         protected int AcceleratingBoolHash;
@@ -31,6 +33,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator bool set to whether the controller is braking.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
         public string BrakingBool;
         protected int BrakingBoolHash;
@@ -38,6 +41,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator float set to absolute ground speed divided by top speed.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator float set to absolute ground speed divided by top speed.")]
         public string TopSpeedPercentFloat;
         protected int TopSpeedPercentFloatHash;
@@ -46,14 +50,14 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// The name of the input axis.
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("The name of the input axis.")]
         public string MovementAxis;
 
         /// <summary>
         /// Whether to invert the axis input.
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("Whether to invert the axis input.")]
         public bool InvertAxis;
         #endregion
@@ -61,7 +65,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Ground acceleration in units per second squared.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Ground acceleration in units per second squared.")]
         public float Acceleration;
 
@@ -73,7 +77,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Ground deceleration in units per second squared.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Ground deceleration units per second squared.")]
         public float Deceleration;
 
@@ -85,7 +89,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Top running speed in unit per second.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Top running speed in units per second.")]
         public float TopSpeed;
 
@@ -93,6 +97,7 @@ namespace Hedgehog.Core.Moves
         /// Minimum ground speed at which slope gravity is applied, in units per second. Allows Sonic to stand still on
         /// steep slopes.
         /// </summary>
+        [PhysicsFoldout]
         [Tooltip("Minimum ground speed at which slope gravity is applied, in units per second. Allows Sonic to stand still on " +
                  "steep slopes.")]
         public float MinSlopeGravitySpeed;

@@ -67,7 +67,8 @@ namespace Hedgehog.Level.Objects
 
             // Rebound effect
             var jump = hit.Controller.MoveManager.GetMove<Jump>();
-            if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used)
+            if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used ||
+                hit.Controller.IsActive<BubbleSpecial>())
             {
                 hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
                     -hit.Controller.RelativeVelocity.y + hit.Controller.AirGravity*Time.deltaTime);

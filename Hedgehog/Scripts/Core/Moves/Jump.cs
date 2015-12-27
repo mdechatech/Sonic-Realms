@@ -10,7 +10,6 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Input string used for activation.
         /// </summary>
-        [SerializeField]
         [Tooltip("Input string used for activation.")]
         public string ActivateButton;
 
@@ -24,14 +23,14 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Jump speed at the moment of activation.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Jump speed at the moment of activation.")]
         public float ActivateSpeed;
 
         /// <summary>
         /// Jump speed at the moment of release, in units per second.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Jump speed after moment of release, in units per second.")]
         public float ReleaseSpeed;
         #endregion
@@ -39,7 +38,6 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Whether a jump happened. If false, the controller didn't leave the ground by jumping.
         /// </summary>
-        [SerializeField]
         [Tooltip("Whether a jump happened. If false, the controller didn't leave the ground by jumping.")]
         public bool Used;
 
@@ -135,7 +133,7 @@ namespace Hedgehog.Core.Moves
             }
             else
             {
-                Manager.Perform<Roll>(true);
+                Manager.Perform<Roll>(true, true);
             }
         }
 

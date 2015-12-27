@@ -90,11 +90,11 @@ Material:
       data:
         first:
           name: _Cutoff
-        second: .5
+        second: 0.5
       data:
         first:
           name: _Parallax
-        second: .0199999996
+        second: 0.02
       data:
         first:
           name: _ZWrite
@@ -102,7 +102,7 @@ Material:
       data:
         first:
           name: _Glossiness
-        second: .5
+        second: 0.5
       data:
         first:
           name: _BumpScale
@@ -130,7 +130,7 @@ Material:
       data:
         first:
           name: _Threshold
-        second: .133000001
+        second: 0.133
     m_Colors:
       data:
         first:
@@ -143,19 +143,19 @@ Material:
       data:
         first:
           name: _ColorFrom1
-        second: {r: .427451015, g: .572549045, b: .713725507, a: 1}
+        second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
       data:
         first:
           name: _ColorFrom2
-        second: {r: .427451015, g: .572549045, b: 1, a: 1}
+        second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
       data:
         first:
           name: _ColorFrom3
-        second: {r: .572549045, g: .713725507, b: 1, a: 1}
+        second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
       data:
         first:
           name: _ColorFrom4
-        second: {r: .713725507, g: .858823597, b: 1, a: 1}
+        second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
       data:
         first:
           name: _ColorFrom5
@@ -175,19 +175,19 @@ Material:
       data:
         first:
           name: _ColorTo1
-        second: {r: .427451015, g: .572549045, b: 1, a: 1}
+        second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
       data:
         first:
           name: _ColorTo2
-        second: {r: .572549045, g: .713725507, b: 1, a: 1}
+        second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
       data:
         first:
           name: _ColorTo3
-        second: {r: .713725507, g: .858823597, b: 1, a: 1}
+        second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
       data:
         first:
           name: _ColorTo4
-        second: {r: .427451015, g: .572549045, b: .713725507, a: 1}
+        second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
       data:
         first:
           name: _ColorTo5

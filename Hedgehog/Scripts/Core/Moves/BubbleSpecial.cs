@@ -1,6 +1,6 @@
 ﻿using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
-using Hedgehog.Level.Areas;
+using Hedgehog.Level;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves
@@ -13,39 +13,64 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// The velocity at which to dive, in units per second.
         /// </summary>
+        [PhysicsFoldout]
         [Tooltip("The velocity at which to dive, in units per second.")]
         public Vector2 DiveVelocity;
 
         /// <summary>
         /// The velocity at which to bounce off the surface, in units per second.
         /// </summary>
+        [PhysicsFoldout]
         [Tooltip("The speed at which to bounce off the surface, in units per second.")]
         public float BounceSpeed;
 
         /// <summary>
         /// The velocity of the bounce after releasing the jump key, in units per second.
         /// </summary>
+        [PhysicsFoldout]
         [Tooltip("The velocity of the bounce after releasing the jump key, in units per second.")]
         public float BounceReleaseSpeed;
 
         /// <summary>
         /// When underwater, the velocity at which to bounce off the surface, in units per second.
         /// </summary>
+        [PhysicsFoldout]
         [Tooltip("When underwater, the velocity at which to bounce off the surface, in units per second.")]
         public float UnderwaterBounceSpeed;
 
         /// <summary>
         /// When underwater, the velocity of the bounce after releasing the jump key, in units per second.
         /// </summary>
+        [PhysicsFoldout]
         [Tooltip("When underwater, the velocity at which to bounce off the surface, in units per second.")]
         public float UnderwaterBounceReleaseSpeed;
 
         /// <summary>
         /// Name of an Animator trigger to set when the controller bounces.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator trigger to set when the controller bounces.")]
         public string BounceTrigger;
         protected int BounceTriggerHash;
+
+        /// <summary>
+        /// An audio clip to play when the dive occurs.
+        /// </summary>
+        [SoundFoldout]
+        [Tooltip("An audio clip to play when the dive occurs.")]
+        public AudioClip DiveSound;
+
+        /// <summary>
+        /// Audio source to replace with the bounce sound when it occurs.
+        /// </summary>
+        private AudioSource _diveAudioSource;
+
+        /// <summary>
+        /// An audio clip to play when the bounce occurs.
+        /// </summary>
+        [SoundFoldout]
+        [Tooltip("An audio clip to play when the bounce occurs.")]
+        public AudioClip BounceSound;
 
         /// <summary>
         /// Whether the controller is currently bouncing.
@@ -79,6 +104,8 @@ namespace Hedgehog.Core.Moves
         {
             base.OnActiveEnter();
             Controller.RelativeVelocity = DiveVelocity;
+
+            if (DiveSound != null) _diveAudioSource = SoundManager.PlayClipAtPoint(DiveSound, transform.position);
 
             // Listen for collisions - need to bounce back up when we collide with the ground
             Controller.OnCollide.AddListener(OnCollide);
@@ -144,6 +171,13 @@ namespace Hedgehog.Core.Moves
             Controller.IgnoreThisCollision();
 
             Controller.OnCollide.RemoveListener(OnCollide);
+
+            if (BounceSound != null)
+            {
+                // Interrupt the diving sound
+                if(_diveAudioSource.clip == DiveSound) _diveAudioSource.Stop();
+                SoundManager.PlayClipAtPoint(BounceSound, transform.position);
+            }
 
             Bouncing = true;
             if (Animator != null && BounceTriggerHash != 0)

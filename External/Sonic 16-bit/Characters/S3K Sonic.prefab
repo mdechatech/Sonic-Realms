@@ -185,6 +185,7 @@ GameObject:
   - 114: {fileID: 11479486}
   - 114: {fileID: 11417206}
   - 114: {fileID: 11492328}
+  - 114: {fileID: 11474960}
   m_Layer: 0
   m_Name: S3K Sonic
   m_TagString: Untagged
@@ -247,6 +248,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 438320}
   - 61: {fileID: 6118484}
+  - 114: {fileID: 11440860}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -453,7 +455,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 147640}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0999999046, y: .200000048, z: 0}
+  m_LocalPosition: {x: 0.099999905, y: 0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -477,7 +479,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 129130}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .200000048, z: 0}
+  m_LocalPosition: {x: 0, y: 0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -489,7 +491,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 104412}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0999999046, y: -.200000048, z: 0}
+  m_LocalPosition: {x: -0.099999905, y: -0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -501,7 +503,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 147580}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.109999895, y: 0, z: 0}
+  m_LocalPosition: {x: -0.109999895, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -513,7 +515,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.4900017, y: 5.71999979, z: 0}
+  m_LocalPosition: {x: 63.78, y: -0.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
@@ -532,7 +534,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 184302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0999999046, y: 0, z: 0}
+  m_LocalPosition: {x: 0.099999905, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -557,7 +559,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 175438}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0999999046, y: -.360000014, z: 0}
+  m_LocalPosition: {x: 0.099999905, y: -0.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -593,7 +595,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 156920}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.200000048, z: 0}
+  m_LocalPosition: {x: 0, y: -0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -605,7 +607,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .203999996, y: .272000015, z: 0}
+  m_LocalPosition: {x: 0.204, y: 0.272, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 425756}
@@ -629,7 +631,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 104514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .109999895, y: 0, z: 0}
+  m_LocalPosition: {x: 0.109999895, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -641,7 +643,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 174442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0999999046, y: .200000048, z: 0}
+  m_LocalPosition: {x: -0.099999905, y: 0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -665,7 +667,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 176484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0999999046, y: -.0400000811, z: 0}
+  m_LocalPosition: {x: -0.099999905, y: -0.04000008, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -677,7 +679,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 185464}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0999999046, y: -.200000048, z: 0}
+  m_LocalPosition: {x: 0.099999905, y: -0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -689,7 +691,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 160596}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0999999046, y: -.360000014, z: 0}
+  m_LocalPosition: {x: -0.099999905, y: -0.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -701,7 +703,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 176326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0999999046, y: -.0400000811, z: 0}
+  m_LocalPosition: {x: 0.099999905, y: -0.04000008, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -750,7 +752,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 111780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0999999046, y: 0, z: 0}
+  m_LocalPosition: {x: -0.099999905, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404068}
@@ -762,9 +764,10 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
+  m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: .0500000007
+  m_AngularDrag: 0.05
   m_GravityScale: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -778,12 +781,13 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 140262}
   m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: .239999995, y: .239999995}
+  m_Size: {x: 0.24, y: 0.24}
 --- !u!61 &6118484
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -791,6 +795,7 @@ BoxCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166310}
   m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
@@ -862,20 +867,20 @@ MonoBehaviour:
   MoveManager: {fileID: 11461214}
   RendererObject: {fileID: 105384}
   Animator: {fileID: 9582648}
-  Paths:
-  - Always Collide
-  - Path 1
+  CollisionMask:
+    serializedVersion: 2
+    m_Bits: 3221225472
   Reactives: []
   Sensors: {fileID: 11487382}
-  GroundFriction: 1.67850006
-  AirDrag: .148834303
-  AirDragRequiredSpeed: {x: .075000003, y: 2.4000001}
-  AirGravity: 7.85699987
+  GroundFriction: 1.6785
+  AirDrag: 0.1488343
+  AirDragRequiredSpeed: {x: 0.075, y: 2.4}
+  AirGravity: 7.857
   SlopeGravity: 4.5
   GravityDirection: 270
   MaxSpeed: 9001
-  LedgeClimbHeight: .159999996
-  LedgeDropHeight: .159999996
+  LedgeClimbHeight: 0.16
+  LedgeDropHeight: 0.16
   AntiTunnelingSpeed: 3.5
   SlopeGravityBeginAngle: 10
   DetachSpeed: 1.5
@@ -904,6 +909,7 @@ MonoBehaviour:
   InterruptTimer: 0
   GroundControl: {fileID: 0}
   AirControl: {fileID: 0}
+  ApplyVelocity: 0
   ApplySlopeGravity: 1
   ApplyGroundFriction: 1
   DetachWhenSlow: 1
@@ -955,8 +961,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -990,9 +996,12 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Ducking
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   ActivateAxis: Vertical
   RequireNegative: 1
-  MaxActivateSpeed: .618749976
+  MaxActivateSpeed: 0.61875
 --- !u!114 &11417206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1005,16 +1014,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 11405618}
-  Amount: 0
+  OnAmountChange:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   AmountInt: 
   CanCollect: 1
   SpilledRingBase: {fileID: 11460168, guid: 2e2263e18fc063342b7f046e500c1bf9, type: 2}
-  SpillCollectDisableTime: 1.06666696
+  SpillCollectDisableTime: 1.066667
   MaxSpilledRings: 32
   RingsPerCircle: 16
   CircleSpeeds:
-  - 2.4000001
-  - 1.20000005
+  - 2.4
+  - 1.2
 --- !u!114 &11426138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1030,8 +1043,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1065,15 +1078,18 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Rolling
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 8300000, guid: bb2cba8fd62577148972c89bd49ef141, type: 3}
+  ActiveExitSound: {fileID: 0}
   ActivateAxis: Vertical
   RequireNegative: 1
-  MinActivateSpeed: .618749976
-  WidthChange: -.0399999991
-  HeightChange: -.100000001
+  MinActivateSpeed: 0.61875
+  WidthChange: -0.04
+  HeightChange: -0.1
   UphillGravity: 2.8125
   DownhillGravity: 11.25
   Deceleration: 4.5
-  Friction: .845099986
+  Friction: 0.8451
   UphillBool: 
   Uphill: 0
 --- !u!114 &11426680
@@ -1110,8 +1126,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1145,7 +1161,10 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Balancing
   AvailableBool: 
-  MaxDistance: .100000001
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
+  MaxDistance: 0.1
   AllowDuck: 1
   AllowLookUp: 0
   DistanceFloat: Edge Distance
@@ -1165,8 +1184,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1200,10 +1219,25 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Dying
   AvailableBool: 
-  Velocity: 4.19999981
-  RestartDelay: 2.33333302
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
+  Velocity: 4.2
+  RestartDelay: 2.333333
   RestartTimer: 0
   Restarting: 0
+--- !u!114 &11440860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7a77bd4b2888a4bacac1d0c7825615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Source: {fileID: 11405618}
 --- !u!114 &11457154
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1219,8 +1253,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 9551182}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1254,11 +1288,14 @@ MonoBehaviour:
   ActiveTrigger: Insta-Shield
   ActiveBool: 
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   Used: 0
   Health: {fileID: 11479486}
-  SizeChange: {x: .239999995, y: .239999995}
+  SizeChange: {x: 0.24, y: 0.24}
   Target: {fileID: 6108368}
-  InvincibilityTime: .100000001
+  InvincibilityTime: 0.1
   InvincibilityTimer: 0
   HasShield: 0
 --- !u!114 &11461214
@@ -1286,9 +1323,6 @@ MonoBehaviour:
   - {fileID: 11461730}
   - {fileID: 11439158}
   - {fileID: 11457154}
-  ActiveMoves: []
-  AvailableMoves: []
-  UnavailableMoves: []
   OnPerform:
     m_PersistentCalls:
       m_Calls: []
@@ -1339,8 +1373,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 9582648}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1374,8 +1408,11 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Hurt
   AvailableBool: 
-  ReboundSpeed: {x: 1.20000005, y: 2.4000001}
-  UnderwaterReboundSpeed: {x: 1.20000005, y: .800000012}
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
+  ReboundSpeed: {x: 1.2, y: 2.4}
+  UnderwaterReboundSpeed: {x: 1.2, y: 0.8}
 --- !u!114 &11472608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1391,8 +1428,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1426,11 +1463,25 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Jumping
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 8300000, guid: d9c2e238883004e4b9f25586a51abc28, type: 3}
+  ActiveExitSound: {fileID: 0}
   ActivateButton: Jump
-  ClearanceHeight: .25
-  ActivateSpeed: 3.9000001
-  ReleaseSpeed: 2.4000001
+  ClearanceHeight: 0.25
+  ActivateSpeed: 3.9
+  ReleaseSpeed: 2.4
   Used: 0
+--- !u!114 &11474960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 607595e8911787345b75f6304c57e1c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11477054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1446,8 +1497,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1481,6 +1532,9 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Looking Up
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   ActivateAxis: Vertical
 --- !u!114 &11479486
 MonoBehaviour:
@@ -1561,8 +1615,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1596,6 +1650,9 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: 
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   InputAxisFloat: 
   InputBool: 
   AcceleratingBool: Accelerating
@@ -1607,8 +1664,8 @@ MonoBehaviour:
   AccelerationLocked: 0
   Deceleration: 18
   DecelerationLocked: 0
-  TopSpeed: 3.5999999
-  MinSlopeGravitySpeed: .100000001
+  TopSpeed: 3.6
+  MinSlopeGravitySpeed: 0.1
   ControlLocked: 0
   ControlLockTimer: 0
 --- !u!114 &11491536
@@ -1626,8 +1683,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1661,6 +1718,9 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Pushing
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   ActivateAxis: 
   UseControlInput: 1
 --- !u!114 &11492328
@@ -1700,8 +1760,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1735,12 +1795,19 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: Spindashing
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   ChargeButton: Jump
-  BasePower: 4.80000019
-  ChargePower: .600000024
+  BasePower: 4.8
+  ChargePower: 0.6
   ChargePowerDecay: 1.875
-  MaxChargePower: 2.4000001
+  MaxChargePower: 2.4
   CurrentChargePower: 0
+  ChargeSound: {fileID: 8300000, guid: c9d33219f757b72459544d9bce806845, type: 3}
+  ChargePitchSteps: 8
+  ChargePitchMin: 1
+  ChargePitchMax: 1.4
 --- !u!114 &11498508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1756,8 +1823,8 @@ MonoBehaviour:
   Manager: {fileID: 0}
   Animator: {fileID: 0}
   CurrentState: 0
-  InputActivated: 0
-  InputEnabled: 0
+  AllowShouldPerform: 0
+  AllowShouldEnd: 0
   OnActive:
     m_PersistentCalls:
       m_Calls: []
@@ -1791,11 +1858,14 @@ MonoBehaviour:
   ActiveTrigger: 
   ActiveBool: 
   AvailableBool: 
+  Muted: 0
+  ActiveEnterSound: {fileID: 0}
+  ActiveExitSound: {fileID: 0}
   MovementAxis: Horizontal
   InvertAxis: 0
   Acceleration: 3.375
   Deceleration: 3.375
-  TopSpeed: 3.5999999
+  TopSpeed: 3.6
   ControlLock: 0
 --- !u!212 &21216568
 SpriteRenderer:
@@ -1815,14 +1885,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 61f87ae41c879084e9d3883dcc9cbb8f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &21258548
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1841,14 +1915,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!212 &21290172
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -1867,14 +1945,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -5,7 +5,7 @@ namespace Hedgehog.Core.Triggers.Editor
 {
     [CustomEditor(typeof(ObjectTrigger))]
     [CanEditMultipleObjects]
-    public class ObjectTriggerEditor : UnityEditor.Editor
+    public class ObjectTriggerEditor : BaseTriggerEditor
     {
         protected static bool ShowObjectEvents
         {
@@ -19,12 +19,19 @@ namespace Hedgehog.Core.Triggers.Editor
             set { EditorPrefs.SetBool("ObjectTriggerEditor.ShowAnimation", value); }
         }
 
+        protected static bool ShowSound
+        {
+            get { return EditorPrefs.GetBool("ObjectTriggerEditor.ShowSound", false); }
+            set { EditorPrefs.SetBool("ObjectTriggerEditor.ShowSound", value); }
+        }
+
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+
             serializedObject.Update();
 
             HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                "TriggerFromChildren",
                 "AllowReactivation");
 
             ShowObjectEvents = EditorGUILayout.Foldout(ShowObjectEvents, "Object Events");
@@ -43,6 +50,13 @@ namespace Hedgehog.Core.Triggers.Editor
                     "Animator",
                     "ActivatedTrigger",
                     "ActivatedBool");
+            }
+
+            ShowSound = EditorGUILayout.Foldout(ShowSound, "Sound");
+            if (ShowSound)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "ActivateSound", "LoopSound", "DeactivateSound");
             }
 
             serializedObject.ApplyModifiedProperties();

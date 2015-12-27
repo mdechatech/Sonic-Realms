@@ -1,5 +1,6 @@
 ﻿using Hedgehog.Core.Utils;
 using UnityEditor;
+using UnityEngine;
 
 namespace Hedgehog.Core.Editor
 {
@@ -18,6 +19,17 @@ namespace Hedgehog.Core.Editor
             layers.GetArrayElementAtIndex(CollisionLayers.AlwaysCollide).stringValue = CollisionLayers.AlwaysCollideName;
 
             tagManager.ApplyModifiedProperties();
+            /*
+            var editorBuildSettings =
+                new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/EditorBuildSettings.asset")[0]);
+
+            var buildScenes = editorBuildSettings.FindProperty("m_Scenes");
+            var iter = buildScenes.GetArrayElementAtIndex(0);
+            do
+            {
+                Debug.Log(iter.name);
+            } while(iter.Next(true));
+            */
         }
     }
 }

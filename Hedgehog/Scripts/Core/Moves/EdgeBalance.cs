@@ -33,6 +33,9 @@ namespace Hedgehog.Core.Moves
         /// Name of an Animator float set to the distance between the sensor without footing and the edge
         /// of the platform, or 0 if inactive.
         /// </summary>
+        [AnimationFoldout]
+        [Tooltip("Name of an Animator float set to the distance between the sensor without footing and the edge " +
+                 "of the platform, or 0 if inactive.")]
         public string DistanceFloat;
         protected int DistanceFloatHash;
         #endregion

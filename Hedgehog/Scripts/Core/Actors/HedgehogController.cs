@@ -240,6 +240,11 @@ namespace Hedgehog.Core.Actors
         private const float SurfaceAngleTolerance = 0.087222f;
 
         /// <summary>
+        /// Whether to move the controller based on current velocity.
+        /// </summary>
+        public bool ApplyVelocity;
+
+        /// <summary>
         /// Whether to apply slope gravity on the controller when it's on steep ground.
         /// </summary>
         public bool ApplySlopeGravity;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Core.Actors;
 using Hedgehog.Core.Utils;
+using Hedgehog.Level;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -98,7 +99,46 @@ namespace Hedgehog.Core.Triggers
         public List<TerrainCastHit> SurfaceCollisions;
         private List<TerrainCastHit> _notifiedSurfaceCollisions;
 
-        protected List<PlatformTrigger> Parents; 
+        protected List<PlatformTrigger> Parents;
+
+        #region Sounds
+        /// <summary>
+        /// An audio clip to play when a controller starts colliding with the platform.
+        /// </summary>
+        [Tooltip("An audio clip to play when a controller starts colliding with the platform.")]
+        public AudioClip PlatformEnterSound;
+
+        /// <summary>
+        /// An audio clip to loop while the platform is being collided with.
+        /// </summary>
+        [Tooltip("An audio clip to loop while the platform is being collided with.")]
+        // TODO Work this out later
+        public AudioClip PlatformLoopSound;
+
+        /// <summary>
+        /// An audio clip to play when a controller stops colliding with the platform.
+        /// </summary>
+        [Tooltip("An audio clip to play when a controller stops colliding with the platform.")]
+        public AudioClip PlatformExitSound;
+
+        /// <summary>
+        /// An audio clip to play when a controller stands on the platform.
+        /// </summary>
+        [Tooltip("An audio clip to play when a controller stands on the platform.")]
+        public AudioClip SurfaceEnterSound;
+
+        /// <summary>
+        /// An audio clip to loop while a controller is on the platform.
+        /// </summary>
+        [Tooltip("An audio clip to loop while a controller is on the platform.")]
+        public AudioClip SurfaceLoopSound;
+
+        /// <summary>
+        /// An audio clip to play when a controller exits the platform.
+        /// </summary>
+        [Tooltip("An audio clip to play when a controller exits the platform.")]
+        public AudioClip SurfaceExitSound;
+        #endregion
 
         public override void Reset()
         {
@@ -111,10 +151,18 @@ namespace Hedgehog.Core.Triggers
             OnSurfaceEnter = new PlatformSurfaceEvent();
             OnSurfaceStay = new PlatformSurfaceEvent();
             OnSurfaceExit = new PlatformSurfaceEvent();
+
+            PlatformEnterSound = PlatformLoopSound = PlatformExitSound =
+                SurfaceEnterSound = SurfaceLoopSound = SurfaceExitSound = null;
         }
 
         public override void Awake()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             base.Awake();
 
             OnPlatformEnter = OnPlatformEnter ?? new PlatformCollisionEvent();
@@ -139,6 +187,11 @@ namespace Hedgehog.Core.Triggers
 
         public void Start()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             if (!TriggerFromChildren) return;
             foreach (var child in GetComponentsInChildren<Collider2D>())
             {
@@ -152,6 +205,11 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void FixedUpdate()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             if (Collisions.Count == 0 && SurfaceCollisions.Count == 0 &&
                 _notifiedCollisions.Count == 0 && _notifiedSurfaceCollisions.Count == 0)
             {
@@ -207,6 +265,7 @@ namespace Hedgehog.Core.Triggers
                 if (_notifiedCollisions[i].Controller == hit.Controller) return false;
             }
 
+            if(PlatformExitSound != null) SoundManager.PlayClipAtPoint(PlatformExitSound, transform.position);
             OnPlatformExit.Invoke(hit);
             return true;
         }
@@ -219,6 +278,7 @@ namespace Hedgehog.Core.Triggers
                     return false;
             }
 
+            if(SurfaceExitSound != null) SoundManager.PlayClipAtPoint(SurfaceExitSound, transform.position);
             OnSurfaceExit.Invoke(hit);
             return true;
         }
@@ -254,6 +314,7 @@ namespace Hedgehog.Core.Triggers
                 }
             }
 
+            if(PlatformEnterSound != null) SoundManager.PlayClipAtPoint(PlatformEnterSound, transform.position);
             Collisions.Add(hit);
             _notifiedCollisions.Add(hit);
             OnPlatformEnter.Invoke(hit);
@@ -299,6 +360,7 @@ namespace Hedgehog.Core.Triggers
                 goto bubble;
             }
 
+            if(SurfaceEnterSound != null) SoundManager.PlayClipAtPoint(SurfaceEnterSound, transform.position);
             SurfaceCollisions.Add(hit);
             _notifiedSurfaceCollisions.Add(hit);
             OnSurfaceEnter.Invoke(hit);

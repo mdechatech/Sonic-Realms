@@ -12,25 +12,42 @@ namespace Hedgehog.Core.Triggers.Editor
             OnAreaStayProperty,
             OnAreaExitProperty;
 
-        protected static bool ShowAreaEvents
+        protected static bool ShowEvents
         {
-            get { return EditorPrefs.GetBool("AreaTriggerEditor.ShowAreaEvents", false); }
-            set { EditorPrefs.SetBool("AreaTriggerEditor.ShowAreaEvents", value); }
+            get { return EditorPrefs.GetBool("AreaTriggerEditor.ShowEvents", false); }
+            set { EditorPrefs.SetBool("AreaTriggerEditor.ShowEvents", value); }
+        }
+
+        protected static bool ShowSound
+        {
+            get { return EditorPrefs.GetBool("AreaTriggerEditor.ShowSound", false); }
+            set { EditorPrefs.SetBool("AreaTriggerEditor.ShowSound", value); }
         }
 
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TriggerFromChildren", "AlwaysCollide");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "AlwaysCollide");
 
-            ShowAreaEvents = EditorGUILayout.Foldout(ShowAreaEvents, "Area Events");
-            if (ShowAreaEvents)
+            ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events");
+            if (ShowEvents)
             {
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                     "OnAreaEnter",
                     "OnAreaStay",
                     "OnAreaExit");
+            }
+
+            ShowSound = EditorGUILayout.Foldout(ShowSound, "Sound");
+            if (ShowSound)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "AreaEnterSound",
+                    "AreaLoopSound",
+                    "AreaExitSound");
             }
 
             serializedObject.ApplyModifiedProperties();

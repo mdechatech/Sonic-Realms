@@ -1,6 +1,8 @@
 ﻿using Hedgehog.Core.Actors;
+using Hedgehog.Level;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Hedgehog.Core.Moves
 {
@@ -21,11 +23,13 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Reference to the attached animator.
         /// </summary>
+        [AnimationFoldout]
         public Animator Animator;
 
         /// <summary>
         /// The move's current state.
         /// </summary>
+        [DebugFoldout]
         public State CurrentState;
         public enum State   
         {
@@ -59,12 +63,14 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Whether the move can be used through the usual means (ShouldPerform).
         /// </summary>
+        [DebugFoldout]
         [Tooltip("Whether the move can be used through the usual means (ShouldPerform).")]
         public bool AllowShouldPerform;
 
         /// <summary>
         /// Whether the move can be ended through the usual means (ShouldEnd).
         /// </summary>
+        [DebugFoldout]
         [Tooltip("Whether the move can be ended through the usual means (ShouldEnd).")]
         public bool AllowShouldEnd;
 
@@ -72,37 +78,44 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Invoked when the move is performed.
         /// </summary>
+        [EventsFoldout]
         public UnityEvent OnActive;
 
         /// <summary>
         /// Invoked when the move is ended.
         /// </summary>
+        [EventsFoldout]
         public UnityEvent OnEnd;
-
-        /// <summary>
-        /// Invoked when the move is added to a manager.
-        /// </summary>
-        public UnityEvent OnAdd;
-
-        /// <summary>
-        /// Invoked when the move is removed from a manager.
-        /// </summary>
-        public UnityEvent OnRemove;
 
         /// <summary>
         /// Invoked when the move becomes available.
         /// </summary>
+        [EventsFoldout]
         public UnityEvent OnAvailable;
 
         /// <summary>
         /// Invoked when the move becomes unavailable.
         /// </summary>
+        [EventsFoldout]
         public UnityEvent OnUnavailable;
+
+        /// <summary>
+        /// Invoked when the move is added to a manager.
+        /// </summary>
+        [EventsFoldout]
+        public UnityEvent OnAdd;
+
+        /// <summary>
+        /// Invoked when the move is removed from a manager.
+        /// </summary>
+        [EventsFoldout]
+        public UnityEvent OnRemove;
         #endregion
         #region Animation
         /// <summary>
         /// Name of an Animator trigger set when the move is activated.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator trigger set when the move is activated.")]
         public string ActiveTrigger;
         protected int ActiveTriggerHash;
@@ -110,6 +123,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator bool set to whether the move is active.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator bool set to whether the move is active.")]
         public string ActiveBool;
         protected int ActiveBoolHash;
@@ -117,9 +131,34 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator bool set to whether the move is available.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator bool set to whether the move is available.")]
         public string AvailableBool;
         protected int AvailableBoolHash;
+        #endregion
+        #region Sound
+        /// <summary>
+        /// Whether to mute audio clips the move plays.
+        /// </summary>
+        [SoundFoldout]
+        [Tooltip("Whether to mute audio clips the move plays.")]
+        public bool Muted;
+
+        /// <summary>
+        /// An audio clip to play when the move is performed.
+        /// </summary>
+        [SoundFoldout]
+        [FormerlySerializedAs("ActiveEnterSound")]
+        [Tooltip("An audio clip to play when the move is performed.")]
+        public AudioClip PerformSound;
+
+        /// <summary>
+        /// An audio clip to play when the move is ended.
+        /// </summary>
+        [SoundFoldout]
+        [FormerlySerializedAs("ActiveExitSound")]
+        [Tooltip("An audio clip to play when the move is ended.")]
+        public AudioClip EndSound;
         #endregion
 
         public virtual void Reset()
@@ -132,6 +171,8 @@ namespace Hedgehog.Core.Moves
             OnAvailable = new UnityEvent();
             OnAdd = new UnityEvent();
             OnRemove = new UnityEvent();
+
+            PerformSound = EndSound = null;
         }
 
         public virtual void Awake()
@@ -190,10 +231,14 @@ namespace Hedgehog.Core.Moves
         /// Changes the move's state to the one specified.
         /// </summary>
         /// <param name="nextState">The specified state.</param>
+        /// <param name="mute">Whether to mute sounds during the state change.</param>
         /// <returns>Whether the move's state is different from its previous.</returns>
-        public bool ChangeState(State nextState)
+        public bool ChangeState(State nextState, bool mute = false)
         {
             if (nextState == CurrentState) return false;
+
+            var muted = Muted;
+            Muted = mute;
 
             var prevState = CurrentState;
             CurrentState = nextState;
@@ -201,17 +246,24 @@ namespace Hedgehog.Core.Moves
 
             if (prevState == State.Active)
             {
+                if(!Muted && EndSound != null)
+                    SoundManager.PlayClipAtPoint(EndSound, transform.position);
                 OnActiveExit();
                 OnEnd.Invoke();
             }
             else if (CurrentState == State.Active)
             {
+                if(!Muted && PerformSound != null)
+                    SoundManager.PlayClipAtPoint(PerformSound, transform.position);
                 OnActiveEnter();
                 OnActiveEnter(prevState);
                 OnActive.Invoke();
 
                 if (Animator == null)
+                {
+                    Muted = muted;
                     return true;
+                }
 
                 if(ActiveTriggerHash != 0)
                     Animator.SetTrigger(ActiveTriggerHash);
@@ -225,6 +277,7 @@ namespace Hedgehog.Core.Moves
                 OnUnavailable.Invoke();
             }
 
+            Muted = muted;
             return true;
         }
 
@@ -232,10 +285,11 @@ namespace Hedgehog.Core.Moves
         /// Tells the manager to perform this move.
         /// </summary>
         /// <param name="force">Whether to perform the move even if it's unavailable.</param>
+        /// <param name="mute">Whether to mute sounds the move would normally play.</param>
         /// <returns>Whether the move was performed.</returns>
-        public bool Perform(bool force = false)
+        public bool Perform(bool force = false, bool mute = false)
         {
-            return Manager && Manager.Perform(this, force);
+            return Manager && Manager.Perform(this, force, mute);
         }
 
         /// <summary>

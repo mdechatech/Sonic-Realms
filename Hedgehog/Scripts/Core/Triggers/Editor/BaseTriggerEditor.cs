@@ -1,46 +1,33 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using Hedgehog.Core.Utils.Editor;
+using UnityEditor;
 
 namespace Hedgehog.Core.Triggers.Editor
 {
     [CustomEditor(typeof(BaseTrigger)), CanEditMultipleObjects]
     public class BaseTriggerEditor : UnityEditor.Editor
     {
-        protected SerializedProperty
-            TriggerFromChildrenProperty,
-            OnEnterProperty,
-            OnStayProperty,
-            OnExitProperty;
-
-        protected static bool ShowBaseEvents
+        protected static bool ShowTriggers
         {
-            get { return EditorPrefs.GetBool("BaseTriggerEditor.ShowBaseEvents", false); }
-            set { EditorPrefs.SetBool("BaseTriggerEditor.ShowBaseEvents", value); }
+            get { return EditorPrefs.GetBool("ShowTriggers", false); }
+            set { EditorPrefs.SetBool("ShowTriggers", value); }
         }
 
-        public virtual void OnEnable()
+        [MenuItem("Hedgehog/Show Triggers")]
+        public static void ShowTriggersMenuItem()
         {
-            TriggerFromChildrenProperty = serializedObject.FindProperty("TriggerFromChildren");
-            OnEnterProperty = serializedObject.FindProperty("OnEnter");
-            OnStayProperty = serializedObject.FindProperty("OnStay");
-            OnExitProperty = serializedObject.FindProperty("OnExit");
+            ShowTriggers = true;
+        }
+
+        [MenuItem("Hedgehog/Hide Triggers")]
+        public static void HideTriggersMenuItem()
+        {
+            ShowTriggers = false;
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
-            EditorGUILayout.PropertyField(TriggerFromChildrenProperty, 
-                new GUIContent("Trigger From Children", TriggerFromChildrenProperty.tooltip));
-
-            ShowBaseEvents = EditorGUILayout.Foldout(ShowBaseEvents, "Base Events");
-            if (ShowBaseEvents)
-            {
-                EditorGUILayout.PropertyField(OnEnterProperty);
-                EditorGUILayout.PropertyField(OnStayProperty);
-                EditorGUILayout.PropertyField(OnExitProperty);
-            }
-
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TriggerFromChildren");
             serializedObject.ApplyModifiedProperties();
         }
     }

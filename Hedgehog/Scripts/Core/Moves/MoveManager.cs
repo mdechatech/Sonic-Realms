@@ -133,7 +133,7 @@ namespace Hedgehog.Core.Moves
                     }
                     else if (move.AllowShouldPerform && move.ShouldPerform)
                     {
-                        Perform(move);
+                        Perform(move, false, false);
                     }
                 } else if (move.CurrentState == Move.State.Active)
                 {
@@ -177,8 +177,7 @@ namespace Hedgehog.Core.Moves
         public void UpdateList()
         {
             // Remove all destroyed/transferred moves and notify them
-            for(var i = Moves.Count - 1; i >= 0; --i,
-                i = i >= Moves.Count ? Moves.Count - 1 : i)
+            for(var i = Moves.Count - 1; i >= 0; i = i-- >= Moves.Count ? Moves.Count - 1 : i)
             {
                 if (i >= Moves.Count) i = Moves.Count - 1;
                 var move = Moves[i];
@@ -195,15 +194,13 @@ namespace Hedgehog.Core.Moves
 
             // Copy the current list before filling it with new moves
             _moves.Clear();
-            for (var i = Moves.Count - 1; i >= 0; --i,
-                i = i >= Moves.Count ? Moves.Count - 1 : i)
+            for (var i = Moves.Count - 1; i >= 0; i = --i >= Moves.Count ? Moves.Count - 1 : i)
                 _moves.Add(Moves[i]);
 
             GetComponentsInChildren(Moves);
 
             // Compare the copied list with the new, add/notify the ones they don't have in common
-            for (var i = Moves.Count - 1; i >= 0; --i, 
-                i = i >= Moves.Count ? Moves.Count - 1 : i)
+            for (var i = Moves.Count - 1; i >= 0; i = --i >= Moves.Count ? Moves.Count - 1 : i)
             {
                 var move = Moves[i];
                 if(!_moves.Contains(move)) AddMove(move);
@@ -308,8 +305,6 @@ namespace Hedgehog.Core.Moves
             }
 
             return false;
-
-            //return Moves.Any(move => move.CurrentState == Move.State.Active && move is TMove);
         }
 
         /// <summary>
@@ -317,8 +312,9 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <param name="force">Whether to perform the move even if it's unavailable.</param>
+        /// <param name="mute">Whether to mute sounds that would usually play from the move.</param>
         /// <returns>Whether the move was performed.</returns>
-        public bool Perform<TMove>(bool force = false) where TMove : Move
+        public bool Perform<TMove>(bool force = false, bool mute = false) where TMove : Move
         {
             var foundMove = Moves.FirstOrDefault(move => move.CurrentState == Move.State.Available && move is TMove);
 
@@ -328,7 +324,7 @@ namespace Hedgehog.Core.Moves
             if (foundMove == null)
                 return false;
 
-            return Perform(foundMove, force);
+            return Perform(foundMove, force, mute);
         }
 
         /// <summary>
@@ -340,13 +336,29 @@ namespace Hedgehog.Core.Moves
             Perform(Moves.FirstOrDefault(move => move.GetType().Name == moveType));
         }
 
+        public void Perform(Move move)
+        {
+            Perform(move, false);
+        }
+
         /// <summary>
         /// Performs the specified move, if it's available.
         /// </summary>
         /// <param name="move">The specified move.</param>
         /// <param name="force">Whether to perform the move even if it's unavailable.</param>
         /// <returns>Whether the move was performed.</returns>
-        public bool Perform(Move move, bool force = false)
+        public bool Perform(Move move, bool force)
+        {
+            return Perform(move, force, false);
+        }
+
+        /// <summary>
+        /// Performs the specified move, if it's available.
+        /// </summary>
+        /// <param name="move">The specified move.</param>
+        /// <param name="force">Whether to perform the move even if it's unavailable.</param>
+        /// <returns>Whether the move was performed.</returns>
+        public bool Perform(Move move, bool force, bool mute)
         {
             if (move == null || move.CurrentState == Move.State.Active)
                 return false;
@@ -361,13 +373,13 @@ namespace Hedgehog.Core.Moves
             {
                 if (move.CurrentState == Move.State.Unavailable)
                 {
-                    var result = move.ChangeState(Move.State.Active);
+                    var result = move.ChangeState(Move.State.Active, mute);
                     OnPerform.Invoke(move);
                     return result;
                 }
 
                 if (move.CurrentState == Move.State.Available)
-                    return Perform(move, false);
+                    return Perform(move, false, mute);
 
                 return false;
             }
@@ -376,8 +388,7 @@ namespace Hedgehog.Core.Moves
                 if (move.CurrentState != Move.State.Available)
                     return false;
 
-                var result = move.ChangeState(Move.State.Active);
-                OnPerform.Invoke(move);
+                var result = move.ChangeState(Move.State.Active, mute);
                 return result;
             }
         }

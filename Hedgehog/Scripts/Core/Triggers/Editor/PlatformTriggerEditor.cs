@@ -18,11 +18,17 @@ namespace Hedgehog.Core.Triggers.Editor
             set { EditorPrefs.SetBool("PlatformTriggerEditor.ShowSurfaceEvents", value); }
         }
 
+        protected static bool ShowSound
+        {
+            get { return EditorPrefs.GetBool("PlatformTriggerEditor.ShowSound", false); }
+            set { EditorPrefs.SetBool("PlatformTriggerEditor.ShowSound", value); }
+        }
+
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
+            base.OnInspectorGUI();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TriggerFromChildren");
+            serializedObject.Update();
 
             ShowPlatformEvents = EditorGUILayout.Foldout(ShowPlatformEvents, "Platform Events");
             if (ShowPlatformEvents)
@@ -36,6 +42,14 @@ namespace Hedgehog.Core.Triggers.Editor
             {
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                     "OnSurfaceEnter", "OnSurfaceStay", "OnSurfaceExit");
+            }
+
+            ShowSound = EditorGUILayout.Foldout(ShowSound, "Sound");
+            if (ShowSound)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "PlatformEnterSound", "PlatformLoopSound", "PlatformExitSound",
+                    "SurfaceEnterSound", "SurfaceLoopSound", "SurfaceExitSound");
             }
 
             serializedObject.ApplyModifiedProperties();

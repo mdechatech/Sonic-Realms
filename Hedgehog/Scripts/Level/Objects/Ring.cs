@@ -28,17 +28,30 @@ namespace Hedgehog.Level.Objects
         [Tooltip("Whether the ring has been collected.")]
         public bool Collected;
 
+        /// <summary>
+        /// An audio clip to play when the ring is collected.
+        /// </summary>
+        [Tooltip("An audio clip to play when the ring is collected.")]
+        public AudioClip CollectedSound;
+
+        /// <summary>
+        /// Next ring sound will pan right if true, pan left otherwise.
+        /// </summary>
+        protected static bool PanRight;
+
         public override void Reset()
         {
             base.Reset();
             Value = 1;
             CollectedTrigger = "";
+            CollectedSound = null;
         }
 
         public override void Awake()
         {
             base.Awake();
             Collected = false;
+            
             if (Animator != null && !string.IsNullOrEmpty(CollectedTrigger))
                 CollectedTriggerHash = Animator.StringToHash(CollectedTrigger);
         }
@@ -56,6 +69,13 @@ namespace Hedgehog.Level.Objects
                 Animator.SetTrigger(CollectedTriggerHash);
 
             Collected = true;
+
+            if (CollectedSound != null)
+            {
+                var source = SoundManager.PlayClipAtPoint(CollectedSound, transform.position);
+                source.panStereo = (PanRight = !PanRight) ? 1f : -1f;
+            }
+
             TriggerObject(controller);
         }
     }

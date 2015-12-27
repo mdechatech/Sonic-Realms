@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Core.Actors;
+using Hedgehog.Level;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -80,6 +81,26 @@ namespace Hedgehog.Core.Triggers
         protected int ActivatedBoolHash;
         #endregion
 
+        #region Sound
+        /// <summary>
+        /// An audio clip to play when the object trigger is activated.
+        /// </summary>
+        [Tooltip("An audio clip to play when the object trigger is activated.")]
+        public AudioClip ActivateSound;
+
+        /// <summary>
+        /// An audio clip to loop while the object trigger is activated.
+        /// </summary>
+        [Tooltip("An audio clip to loop while the object trigger is activated.")]
+        public AudioClip LoopSound;
+
+        /// <summary>
+        /// An audio clip to play when the object trigger is deactivated.
+        /// </summary>
+        [Tooltip("An audio clip to play when the object trigger is deactivated.")]
+        public AudioClip DeactivateSound;
+        #endregion
+
         public override void Reset()
         {
             base.Reset();
@@ -92,10 +113,16 @@ namespace Hedgehog.Core.Triggers
             Animator = GetComponentInChildren<Animator>();
             ActivatedTrigger = "";
             ActivatedBool = "";
+
+            ActivateSound = LoopSound = DeactivateSound = null;
         }
 
         public override void Awake()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying) return;
+#endif
+
             base.Awake();
 
             Collisions = new List<HedgehogController>();
@@ -113,6 +140,11 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             if (Animator != null && ActivatedBoolHash != 0)
                 Animator.SetBool(ActivatedBoolHash, Activated);
 
@@ -135,6 +167,8 @@ namespace Hedgehog.Core.Triggers
             if (!AllowReactivation && any) return;
             
             Activated = true;
+            if (ActivateSound != null)
+                SoundManager.PlayClipAtPoint(ActivateSound, transform.position);
             OnActivateEnter.Invoke(controller);
             BubbleEvent(controller);
 
@@ -154,6 +188,8 @@ namespace Hedgehog.Core.Triggers
             if (!AllowReactivation && any) return;
 
             if(!any) Activated = false;
+            if (DeactivateSound != null)
+                SoundManager.PlayClipAtPoint(DeactivateSound, transform.position);
             OnActivateExit.Invoke(controller);
             BubbleEvent(controller, true);
         }

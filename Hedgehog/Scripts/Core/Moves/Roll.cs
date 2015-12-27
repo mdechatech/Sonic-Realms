@@ -1,4 +1,5 @@
 ﻿using Hedgehog.Core.Utils;
+using Hedgehog.Level;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves
@@ -12,7 +13,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Input string used for activation.
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("Input string used for activation.")]
         public string ActivateAxis;
 
@@ -20,7 +21,7 @@ namespace Hedgehog.Core.Moves
         /// Whether to activate when the input is in the opposite direction (if ActivateButton is "Vertical" and this
         /// is true, activates when input moves down instead of up).
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("Whether to activate when the input is in the opposite direction (if ActivateButton is \"Vertical\" " +
                  "and this is true, activates when input moves down instead of up.")]
         public bool RequireNegative;
@@ -28,7 +29,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Minimum ground speed required to start rolling, in units per second.
         /// </summary>
-        [SerializeField]
+        [ControlFoldout]
         [Tooltip("Minimum ground speed required to start rolling, in units per second.")]
         public float MinActivateSpeed;
         #endregion
@@ -36,7 +37,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Change in width (usually negative) while rolling, in units.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Change in sensor width (usually negative) while rolling, in units.")]
         public float WidthChange;
 
@@ -44,7 +45,7 @@ namespace Hedgehog.Core.Moves
         /// Change in sensor height (usually negative) while rolling, in units. The script makes sure that
         /// the controller's ground sensors are still on the ground after the height change.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Change in sensor height (usually negative) while rolling, in units. The script makes sure " +
                  "that the controller's ground sensors are still on the ground after the height change.")]
         public float HeightChange;
@@ -52,28 +53,28 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Slope gravity when rolling uphill, in units per second squared.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Slope gravity when rolling uphill, in units per second squared.")]
         public float UphillGravity;
 
         /// <summary>
         /// Slope gravity when rolling downhill, in units per second squared.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Slope gravity when rolling downhill, in units per second squared.")]
         public float DownhillGravity;
 
         /// <summary>
         /// Deceleration while rolling, in units per second squared.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Deceleration while rolling, in units per second squared.")]
         public float Deceleration;
 
         /// <summary>
         /// Friction while rolling, in units per second squared.
         /// </summary>
-        [SerializeField]
+        [PhysicsFoldout]
         [Tooltip("Friction while rolling, in units per second squared.")]
         public float Friction;
         #endregion
@@ -81,6 +82,7 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// Name of an Animator bool set to whether the controller is going uphill.
         /// </summary>
+        [AnimationFoldout]
         [Tooltip("Name of an Animator bool set to whether the controller is going uphill.")]
         public string UphillBool;
         protected int UphillBoolHash;

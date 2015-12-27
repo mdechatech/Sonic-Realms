@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedgehog.Core.Actors;
+using Hedgehog.Level;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -62,7 +63,25 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         protected Dictionary<HedgehogController, List<Transform>> Collisions;
 
-        protected HashSet<Collider2D> MiscCollisions; 
+        protected HashSet<Collider2D> MiscCollisions;
+
+        /// <summary>
+        /// An audio clip to play when a controller enters the area.
+        /// </summary>
+        [Tooltip("An audio clip to play when a controller enters the area.")]
+        public AudioClip AreaEnterSound;
+
+        /// <summary>
+        /// An audio clip to loop while a controller is inside the area.
+        /// </summary>
+        [Tooltip("An audio clip to loop while a controller is inside the area.")]
+        public AudioClip AreaLoopSound;
+
+        /// <summary>
+        /// An audio clip to play when a controller leaves the area.
+        /// </summary>
+        [Tooltip("An audio clip to play when a controller leaves the area.")]
+        public AudioClip AreaExitSound;
 
         public override void Reset()
         {
@@ -72,10 +91,17 @@ namespace Hedgehog.Core.Triggers
             OnAreaEnter = new AreaEvent();
             OnAreaStay = new AreaEvent();
             OnAreaExit = new AreaEvent();
+
+            AreaEnterSound = AreaLoopSound = AreaExitSound = null;
         }
 
         public override void Awake()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             base.Awake();
 
             OnAreaEnter = OnAreaEnter ?? new AreaEvent();
@@ -88,6 +114,11 @@ namespace Hedgehog.Core.Triggers
 
         public virtual void Start()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             var collider2D = GetComponent<Collider2D>();
             collider2D.isTrigger = true;
 
@@ -109,6 +140,11 @@ namespace Hedgehog.Core.Triggers
 
         public void FixedUpdate()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             if (Collisions.Count == 0)
             {
                 enabled = false;
@@ -116,10 +152,7 @@ namespace Hedgehog.Core.Triggers
             }
 
             foreach (var controller in new List<HedgehogController>(Collisions.Keys))
-            {
                 OnAreaStay.Invoke(controller);
-                OnStay.Invoke(controller);
-            }
         }
 
         public override bool HasController(HedgehogController controller)
@@ -154,10 +187,11 @@ namespace Hedgehog.Core.Triggers
                 {
                     hits.Remove(hit);
                     if (hits.Count > 0) return;
-                    
+
+                    if (AreaExitSound != null)
+                        SoundManager.PlayClipAtPoint(AreaExitSound, transform.position);
                     Collisions.Remove(controller);
                     OnAreaExit.Invoke(controller);
-                    OnExit.Invoke(controller);
 
                     if (Collisions.Count == 0) enabled = false;
 
@@ -171,9 +205,10 @@ namespace Hedgehog.Core.Triggers
                 if (isExit) return;
                 if (!CollidesWith(controller)) return;
 
+                if (AreaEnterSound != null)
+                    SoundManager.PlayClipAtPoint(AreaEnterSound, transform.position);
                 Collisions[controller] = new List<Transform> {hit};
                 OnAreaEnter.Invoke(controller);
-                OnEnter.Invoke(controller);
 
                 if (Collisions.Count == 1) enabled = true;
             }
@@ -198,37 +233,51 @@ namespace Hedgehog.Core.Triggers
         {
             if (MiscCollisions.Contains(collider2D)) return;
 
-            var controller = collider2D.GetComponentInParent<HedgehogController>();
-            if (controller == null)
+            var hitbox = collider2D.GetComponent<Hitbox>();
+            if (hitbox == null)
             {
                 MiscCollisions.Add(collider2D);
+                return;
             }
 
-            NotifyCollision(controller, transform);
-            BubbleEvent(controller, transform);
+            if (!hitbox.AllowCollision(this))
+                return;
+
+            NotifyCollision(hitbox.Source, transform);
+            BubbleEvent(hitbox.Source, transform);
         }
 
         public void OnTriggerStay2D(Collider2D collider2D)
         {
             if (MiscCollisions.Contains(collider2D)) return;
 
-            var controller = collider2D.GetComponentInParent<HedgehogController>();
-            if (controller == null) return;
-
-            NotifyCollision(controller, transform);
-            BubbleEvent(controller, transform);
+            var hitbox = collider2D.GetComponent<Hitbox>();
+            if (hitbox.AllowCollision(this))
+            {
+                if (!HasController(hitbox.Source))
+                {
+                    NotifyCollision(hitbox.Source, transform);
+                    BubbleEvent(hitbox.Source, transform);
+                }
+            }
+            else
+            {
+                NotifyCollision(hitbox.Source, transform, true);
+                BubbleEvent(hitbox.Source, transform, true);
+            }
         }
 
         public void OnTriggerExit2D(Collider2D collider2D)
         {
-            var controller = collider2D.GetComponentInParent<HedgehogController>();
-            if (controller == null)
+            var hitbox = collider2D.GetComponent<Hitbox>();
+            if (hitbox == null)
             {
                 MiscCollisions.Remove(collider2D);
+                return;
             }
 
-            NotifyCollision(controller, transform, true);
-            BubbleEvent(controller, transform, true);
+            NotifyCollision(hitbox.Source, transform, true);
+            BubbleEvent(hitbox.Source, transform, true);
         }
     }
 }

@@ -11,11 +11,13 @@ namespace Hedgehog.Core.Moves
         /// <summary>
         /// How quickly the controller bounces off the map.
         /// </summary>
+        [PhysicsFoldout]
         public float Velocity;
 
         /// <summary>
         /// How long to wait before ending the move, causing the zone manager to restart the game.
         /// </summary>
+        [ControlFoldout]
         public float RestartDelay;
 
         [HideInInspector]
