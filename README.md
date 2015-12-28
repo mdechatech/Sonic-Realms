@@ -8,3 +8,5 @@ It's a work in progress and doesn't have many examples, though it is documented 
 
 ## How to Use
 Releases are severely outdated right now as SAGE inches closer. Cloning or downloading the repo at master is recommended.
+
+...Looks like SAGE is delayed! I'll put in a few more weeks of effort 'till release.
