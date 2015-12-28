@@ -101,7 +101,7 @@ namespace Hedgehog.Core.Actors
             {
                 var rotateToSensors = true;
                 rotateToSensors &= RotateDuringStand || !DMath.Equalsf(Controller.GroundVelocity);
-                rotateToSensors &= RotateDuringRoll || !Roll.Active;
+                rotateToSensors &= Roll == null || RotateDuringRoll || !Roll.Active;
                 rotateToSensors &=
                     Mathf.Abs(DMath.ShortestArc_d(Controller.SensorsRotation, Controller.GravityRight)) >
                     MinimumAngle;
@@ -111,7 +111,7 @@ namespace Hedgehog.Core.Actors
             else
             {
                 if ((RotateDuringStand || !DMath.Equalsf(Controller.GroundVelocity)) &&
-                    (RotateDuringRoll || !Roll.Active))
+                    (Roll == null || RotateDuringRoll || !Roll.Active))
                 {
                     var difference = DMath.ShortestArc_d(Rotation, Controller.GravityRight);
                     difference = difference > 0.0f

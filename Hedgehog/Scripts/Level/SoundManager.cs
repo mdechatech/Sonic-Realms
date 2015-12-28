@@ -96,19 +96,6 @@ namespace Hedgehog.Level
             JingleSource.spatialBlend = 0.0f;
         }
 
-        public void Start()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                if (MainBGM != null) PlayBGM(MainBGM);
-                return;
-            }
-
-            Debug.LogError("Can only have one SoundManager per scene!");
-            Destroy(gameObject);
-        }
-
         public void Update()
         {
             if (CurrentBGMState == BGMState.BGM) return;

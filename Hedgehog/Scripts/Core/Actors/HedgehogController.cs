@@ -395,7 +395,8 @@ namespace Hedgehog.Core.Actors
         public bool ForceSurfaceAngle;
 
         /// <summary>
-        /// If grounded, the angle of incline the controller is walking on
+        /// If grounded, the angle's surface relative to the direction of gravity. If gravity points down, this is
+        /// the same as SurfaceAngle.
         /// </summary>
         public float RelativeSurfaceAngle
         {

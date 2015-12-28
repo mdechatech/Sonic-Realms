@@ -40,6 +40,11 @@ namespace Hedgehog.Core.Moves
             RequireNegative = true;
         }
 
+        public override void OnManagerAdd()
+        {
+            GroundControl = Manager.GetMove<GroundControl>();
+        }
+
         public override bool Available
         {
             get
@@ -64,6 +69,16 @@ namespace Hedgehog.Core.Moves
         public override bool ShouldEnd
         {
             get { return !Input.GetButton(ActivateAxis) || !Available; }
+        }
+
+        public override void OnActiveEnter()
+        {
+            GroundControl.ControlLocked = true;
+        }
+
+        public override void OnActiveExit()
+        {
+            GroundControl.ControlLocked = false;
         }
     }
 }

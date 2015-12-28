@@ -119,9 +119,6 @@ namespace Hedgehog.Core.Triggers
                 return;
 #endif
 
-            var collider2D = GetComponent<Collider2D>();
-            collider2D.isTrigger = true;
-
             if (!TriggerFromChildren)
                 return;
 
@@ -254,11 +251,8 @@ namespace Hedgehog.Core.Triggers
             var hitbox = collider2D.GetComponent<Hitbox>();
             if (hitbox.AllowCollision(this))
             {
-                if (!HasController(hitbox.Source))
-                {
-                    NotifyCollision(hitbox.Source, transform);
-                    BubbleEvent(hitbox.Source, transform);
-                }
+                NotifyCollision(hitbox.Source, transform);
+                BubbleEvent(hitbox.Source, transform);
             }
             else
             {

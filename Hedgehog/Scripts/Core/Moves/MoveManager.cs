@@ -87,7 +87,7 @@ namespace Hedgehog.Core.Moves
             OnUnavailable = OnUnavailable ?? new MoveEvent();
             OnAdd = OnAdd ?? new MoveEvent();
             OnRemove = OnRemove ?? new MoveEvent();
-            Moves = Moves ?? new List<Move>();
+            Moves = GetComponentsInChildren<Move>().ToList();
             _moves = new List<Move>();
         }
 
