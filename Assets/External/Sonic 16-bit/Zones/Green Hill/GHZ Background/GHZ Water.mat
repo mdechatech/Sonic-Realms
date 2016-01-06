@@ -93,6 +93,10 @@ Material:
         second: 0.5
       data:
         first:
+          name: _Threshold
+        second: 0.133
+      data:
+        first:
           name: _Parallax
         second: 0.02
       data:
@@ -127,10 +131,6 @@ Material:
         first:
           name: _Metallic
         second: 0
-      data:
-        first:
-          name: _Threshold
-        second: 0.133
     m_Colors:
       data:
         first:

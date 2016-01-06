@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Motobug Turn Left
+  - Motobug Turn Right
+  - Main Hitbox
+  - Attack Hitbox
+  - Hurt Player
+  - Kill Player
+  - Buzz Bomber Turn Left
+  - Buzz Bomber Turn Right
+  - Buzz Bomber Shoot
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Terrain Layer 3
+  - Terrain Layer 2
+  - Terrain Layer 1
+  - Terrain
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 4047293301
+    locked: 0
+  - name: Terrain
+    uniqueID: 182623717
+    locked: 0
+  - name: Special
+    uniqueID: 2727405173
+    locked: 0
