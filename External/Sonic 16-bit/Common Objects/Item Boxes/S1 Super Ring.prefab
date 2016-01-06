@@ -121,7 +121,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 102812}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.079475, y: -3.5924888, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 447248}
@@ -228,6 +228,9 @@ MonoBehaviour:
   CollidingBool: 
   SurfaceTrigger: 
   SurfaceBool: 
+  AreaTrigger: {fileID: 0}
+  InsideTrigger: 
+  InsideBool: 
   ActivateDelay: 0.5333333
   BrokenTrigger: Broken
 --- !u!114 &11415404
@@ -505,6 +508,14 @@ Prefab:
       propertyPath: ActivateSound
       value: 
       objectReference: {fileID: 8300000, guid: be6e80618227838408fc30693ee0acd3, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 102812}

@@ -1,4 +1,5 @@
-﻿using Hedgehog.Core.Utils;
+﻿using Hedgehog.Core.Actors;
+using Hedgehog.Core.Utils;
 using Hedgehog.Level;
 using UnityEngine;
 
@@ -34,6 +35,13 @@ namespace Hedgehog.Core.Moves
         public float MinActivateSpeed;
         #endregion
         #region Physics
+        /// <summary>
+        /// This hitbox becomes harmful while rolling, allowing the player to kill while rolling.
+        /// </summary>
+        [PhysicsFoldout]
+        [Tooltip("This hitbox becomes harmful while rolling, allowing the player to kill while rolling.")]
+        public SonicHitbox Hitbox;
+
         /// <summary>
         /// Change in width (usually negative) while rolling, in units.
         /// </summary>
@@ -105,6 +113,7 @@ namespace Hedgehog.Core.Moves
             RequireNegative = true;
             MinActivateSpeed = 0.61875f;
 
+            Hitbox = Controller.GetComponentInChildren<SonicHitbox>();
             HeightChange = -0.10f;
             WidthChange = -0.04f;
             UphillGravity = 2.8125f;
@@ -185,6 +194,8 @@ namespace Hedgehog.Core.Moves
             Controller.Sensors.LedgeWidth += WidthChange;
             Controller.Sensors.BottomWidth += WidthChange;
             Controller.Sensors.TopWidth += WidthChange;
+
+            Hitbox.Harmful = true;
         }
 
         public override void OnActiveFixedUpdate()
@@ -218,6 +229,8 @@ namespace Hedgehog.Core.Moves
             Controller.Sensors.LedgeWidth -= WidthChange;
             Controller.Sensors.BottomWidth -= WidthChange;
             Controller.Sensors.TopWidth -= WidthChange;
+
+            Hitbox.Harmful = false;
         }
     }
 }

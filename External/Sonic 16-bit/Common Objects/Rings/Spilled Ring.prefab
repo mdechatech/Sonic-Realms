@@ -70,9 +70,10 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155200}
+  m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: .0500000007
+  m_AngularDrag: 0.05
   m_GravityScale: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -86,12 +87,13 @@ CircleCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155200}
   m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: .0799999982
+  m_Radius: 0.08
 --- !u!95 &9595804
 Animator:
   serializedVersion: 3
@@ -131,14 +133,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c369568ddbb4fa14c806b5ed9b6cca1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Life: 4.26666689
+  Life: 4.266667
   LifePercentFloat: Life
   Gravity: 3.375
   Rigidbody2D: {fileID: 5018966}
-  Radius: .0799999982
-  BounceLoss: {x: .75, y: .75}
+  Radius: 0.08
+  BounceLoss: {x: 0.75, y: 0.75}
   AccurateBounce: 1
-  AccurateBounceLoss: .75
+  AccurateBounceLoss: 0.75
 --- !u!114 &11481304
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -151,22 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerFromChildren: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  AlwaysCollide: 1
+  AllowMultiple: 0
   OnAreaEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -182,6 +169,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  AreaEnterSound: {fileID: 0}
+  AreaLoopSound: {fileID: 0}
+  AreaExitSound: {fileID: 0}
 --- !u!114 &11493060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -201,6 +191,7 @@ MonoBehaviour:
   Value: 1
   CollectedTrigger: Get
   Collected: 0
+  CollectedSound: {fileID: 0}
 --- !u!212 &21201748
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -219,14 +210,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 7d5b28db05aafe74883519accb692293, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

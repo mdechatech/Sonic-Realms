@@ -56,8 +56,9 @@ namespace Hedgehog.Level.Objects
                 CollectedTriggerHash = Animator.StringToHash(CollectedTrigger);
         }
 
-        public override void OnAreaStay(HedgehogController controller)
+        public override void OnAreaStay(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
             if (Collected) return;
 
             var collector = controller.GetComponent<RingCollector>();

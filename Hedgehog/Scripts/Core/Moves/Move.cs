@@ -163,7 +163,8 @@ namespace Hedgehog.Core.Moves
 
         public virtual void Reset()
         {
-            Animator = GetComponentInParent<Animator>();
+            Controller = GetComponentInParent<HedgehogController>();
+            Animator = Controller.Animator;
             ActiveTrigger = ActiveBool = AvailableBool = "";
 
             OnActive = new UnityEvent();

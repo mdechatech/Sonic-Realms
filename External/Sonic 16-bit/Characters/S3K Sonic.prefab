@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &102736
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -64,7 +64,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &109380
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -88,6 +88,21 @@ GameObject:
   - 4: {fileID: 496620}
   m_Layer: 0
   m_Name: Top Left Start
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &116984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 490294}
+  m_Layer: 0
+  m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,16 +140,17 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &140262
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 470254}
   - 61: {fileID: 6108368}
+  - 114: {fileID: 11475340}
   m_Layer: 0
-  m_Name: Hitbox
-  m_TagString: Untagged
+  m_Name: Main Hitbox
+  m_TagString: Main Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -234,23 +250,6 @@ GameObject:
   - 4: {fileID: 474326}
   m_Layer: 0
   m_Name: Ledge Drop Left
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &166310
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 438320}
-  - 61: {fileID: 6118484}
-  - 114: {fileID: 11440860}
-  m_Layer: 0
-  m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -389,6 +388,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &192094
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 409726}
+  - 61: {fileID: 6115630}
+  - 114: {fileID: 11486784}
+  m_Layer: 0
+  m_Name: Insta-Shield Hitbox
+  m_TagString: Attack Hitbox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &193328
 GameObject:
   m_ObjectHideFlags: 1
@@ -415,6 +431,21 @@ GameObject:
   - 114: {fileID: 11487382}
   m_Layer: 0
   m_Name: Sensors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &197922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 425010}
+  m_Layer: 0
+  m_Name: Hitboxes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -448,6 +479,18 @@ Transform:
   - {fileID: 479926}
   m_Father: {fileID: 424606}
   m_RootOrder: 2
+--- !u!4 &409726
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 425010}
+  m_RootOrder: 1
 --- !u!4 &410208
 Transform:
   m_ObjectHideFlags: 1
@@ -471,7 +514,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424606}
-  m_RootOrder: 1
+  m_RootOrder: 3
 --- !u!4 &414772
 Transform:
   m_ObjectHideFlags: 1
@@ -515,18 +558,30 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 151248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.8, y: 6.76, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481582}
-  - {fileID: 411496}
+  - {fileID: 425010}
   - {fileID: 404068}
-  - {fileID: 438320}
-  - {fileID: 425756}
-  - {fileID: 470254}
-  - {fileID: 493910}
+  - {fileID: 411496}
+  - {fileID: 490294}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &425010
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 197922}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 470254}
+  - {fileID: 409726}
+  m_Father: {fileID: 424606}
+  m_RootOrder: 1
 --- !u!4 &425550
 Transform:
   m_ObjectHideFlags: 1
@@ -550,8 +605,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 443556}
-  m_Father: {fileID: 424606}
-  m_RootOrder: 4
+  m_Father: {fileID: 490294}
+  m_RootOrder: 0
 --- !u!4 &430194
 Transform:
   m_ObjectHideFlags: 1
@@ -576,18 +631,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 493910}
   m_RootOrder: 0
---- !u!4 &438320
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 166310}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 424606}
-  m_RootOrder: 3
 --- !u!4 &440814
 Transform:
   m_ObjectHideFlags: 1
@@ -658,8 +701,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 424606}
-  m_RootOrder: 5
+  m_Father: {fileID: 425010}
+  m_RootOrder: 0
 --- !u!4 &470720
 Transform:
   m_ObjectHideFlags: 1
@@ -732,6 +775,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 404068}
   m_RootOrder: 3
+--- !u!4 &490294
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 116984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 425756}
+  - {fileID: 493910}
+  m_Father: {fileID: 424606}
+  m_RootOrder: 4
 --- !u!4 &493910
 Transform:
   m_ObjectHideFlags: 1
@@ -743,8 +800,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 434592}
-  m_Father: {fileID: 424606}
-  m_RootOrder: 6
+  m_Father: {fileID: 490294}
+  m_RootOrder: 1
 --- !u!4 &496620
 Transform:
   m_ObjectHideFlags: 1
@@ -772,7 +829,7 @@ Rigidbody2D:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &6108368
 BoxCollider2D:
@@ -788,12 +845,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.24, y: 0.24}
---- !u!61 &6118484
+--- !u!61 &6115630
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 166310}
+  m_GameObject: {fileID: 192094}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -801,7 +858,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.24, y: 0.24}
 --- !u!95 &9541218
 Animator:
   serializedVersion: 3
@@ -885,6 +942,11 @@ MonoBehaviour:
   SlopeGravityBeginAngle: 10
   DetachSpeed: 1.5
   MaxClimbAngle: 70
+  DisableNotifyPlatforms: 0
+  DisableEvents: 0
+  DisableCeilingCheck: 0
+  DisableGroundCheck: 0
+  DisableSideCheck: 0
   OnAttach:
     m_PersistentCalls:
       m_Calls: []
@@ -1084,6 +1146,7 @@ MonoBehaviour:
   ActivateAxis: Vertical
   RequireNegative: 1
   MinActivateSpeed: 0.61875
+  Hitbox: {fileID: 11475340}
   WidthChange: -0.04
   HeightChange: -0.1
   UphillGravity: 2.8125
@@ -1109,7 +1172,7 @@ MonoBehaviour:
   RotateDuringRoll: 0
   RotateDuringStand: 0
   AirRecoveryRate: 180
-  MinimumAngle: 22.5
+  MinimumAngle: 44.5
   Precision: 8
 --- !u!114 &11436076
 MonoBehaviour:
@@ -1226,18 +1289,6 @@ MonoBehaviour:
   RestartDelay: 2.333333
   RestartTimer: 0
   Restarting: 0
---- !u!114 &11440860
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 166310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a7a77bd4b2888a4bacac1d0c7825615, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Source: {fileID: 11405618}
 --- !u!114 &11457154
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1294,8 +1345,8 @@ MonoBehaviour:
   Used: 0
   Health: {fileID: 11479486}
   SizeChange: {x: 0.24, y: 0.24}
-  Target: {fileID: 6108368}
-  InvincibilityTime: 0.1
+  Target: {fileID: 6115630}
+  InvincibilityTime: 0.2
   InvincibilityTimer: 0
   HasShield: 0
 --- !u!114 &11461214
@@ -1482,6 +1533,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607595e8911787345b75f6304c57e1c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11475340
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 140262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 932201bd4da916e46a5540881d762c23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 11405618}
+  TriggerTags: []
+  CollisionsPerFrame: 1
+  TimeBetweenCollisions: 0
+  OnTriggerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HitboxEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HitboxEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HitboxEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Health: {fileID: 11479486}
+  Vulnerable: 1
+  Harmful: 0
+  HarmfulTag: Hurt Player
+  LethalTag: Kill Player
+  OnKillEnemy:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.EnemyEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &11477054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1547,31 +1638,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd45fbedbc4d2b4a801466d01d6ae32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InvincibleTimer: 0
+  OnHurt:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HealthEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HealthEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Animator: {fileID: 0}
+  HurtTrigger: 
+  HurtDamageFloat: 
+  DeathTrigger: 
   Controller: {fileID: 11405618}
   HurtReboundMove: {fileID: 11461730}
   DeathMove: {fileID: 11439158}
   RingCollector: {fileID: 11417206}
-  OnHurt:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  OnDeath:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  RingsLost: 9001
+  HurtInvinciblilityTime: 2
   OnDeathComplete:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  RingsLost: 9001
-  HurtInvinciblilityTime: 2
   HurtInvincibleBool: Hurt Invincible
-  Invincible: 0
   HurtInvincible: 0
   HurtInvincibilityTimer: 0
+--- !u!114 &11486784
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 932201bd4da916e46a5540881d762c23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 11405618}
+  TriggerTags: []
+  CollisionsPerFrame: 1
+  TimeBetweenCollisions: 0.2
+  OnTriggerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HitboxEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HitboxEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.HitboxEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Health: {fileID: 11479486}
+  Vulnerable: 0
+  Harmful: 1
+  HarmfulTag: Untagged
+  LethalTag: Untagged
+  OnKillEnemy:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Core.Actors.EnemyEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &11487382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1583,7 +1718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7406431d84d33e44b62e26a55c3d66c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoxCollider: {fileID: 6118484}
+  BoxCollider: {fileID: 6108368}
   TopLeft: {fileID: 463510}
   TopLeftStart: {fileID: 496620}
   TopCenter: {fileID: 414772}

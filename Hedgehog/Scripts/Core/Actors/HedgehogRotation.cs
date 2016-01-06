@@ -92,7 +92,7 @@ namespace Hedgehog.Core.Actors
         public void Start()
         {
             RendererTransform = RendererTransform ?? Controller.RendererObject.transform;
-            Roll = Controller.GetMove<Roll>();
+            Roll = Controller.MoveManager ? Controller.GetMove<Roll>() : null;
         }
 
         public void Update()

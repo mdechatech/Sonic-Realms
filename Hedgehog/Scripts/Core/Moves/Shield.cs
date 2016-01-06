@@ -26,7 +26,7 @@ namespace Hedgehog.Core.Moves
             DestroyInWater = false;
         }
 
-        public void OnHurt()
+        public void OnHurt(HealthEventArgs e)
         {
             Destroy(gameObject);
         }

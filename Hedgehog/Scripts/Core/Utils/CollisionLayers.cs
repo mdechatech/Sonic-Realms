@@ -13,10 +13,10 @@ namespace Hedgehog.Core.Utils
         public const int Layer1 = 30;
         public const int AlwaysCollide = 31;
 
-        public const string Layer3Name = "Collision Layer 3";
-        public const string Layer2Name = "Collision Layer 2";
-        public const string Layer1Name = "Collision Layer 1";
-        public const string AlwaysCollideName = "Always Collide";
+        public const string Layer3Name = "Terrain Layer 3";
+        public const string Layer2Name = "Terrain Layer 2";
+        public const string Layer1Name = "Terrain Layer 1";
+        public const string AlwaysCollideName = "Terrain";
 
         public const int Layer3Mask = 1 << Layer3;
         public const int Layer2Mask = 1 << Layer2;

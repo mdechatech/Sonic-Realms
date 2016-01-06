@@ -70,10 +70,10 @@ namespace Hedgehog.Level.Areas
             if(Animator && ElectrocutedTriggerHash != 0) Animator.SetTrigger(ElectrocutedTriggerHash);
         }
 
-        public override bool IsInside(HedgehogController controller)
+        public override bool IsInside(Hitbox hitbox)
         {
-            return base.IsInside(controller) && !PlatformTrigger.HasController(controller) &&
-                   _colliders.Any(collider => collider.OverlapPoint(controller.Sensors.Center.position));
+            return base.IsInside(hitbox) && !PlatformTrigger.HasController(hitbox.Controller) &&
+                   _colliders.Any(collider => collider.OverlapPoint(hitbox.Controller.Sensors.Center.position));
         }
 
         // The water is a surface if the player is upright, on top of it, grounded, not already submerged,
@@ -89,21 +89,24 @@ namespace Hedgehog.Level.Areas
         }
         
         // Apply new physics values based on viscosity
-        public override void OnAreaEnter(HedgehogController controller)
+        public override void OnAreaEnter(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
             controller.Vx /= Viscosity;
             controller.Vy /= Viscosity*2.0f;
         }
         
         // Constantly apply buoyancy.
-        public override void OnAreaStay(HedgehogController controller)
+        public override void OnAreaStay(Hitbox hitbox)
         {
-            if(!controller.Grounded) controller.Vy += Buoyancy*Time.fixedDeltaTime;
+            var controller = hitbox.Controller;
+            if (!controller.Grounded) controller.Vy += Buoyancy*Time.fixedDeltaTime;
         }
 
         // Restore old physics values.
-        public override void OnAreaExit(HedgehogController controller)
+        public override void OnAreaExit(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
             controller.Vy *= Viscosity;
         }
     }

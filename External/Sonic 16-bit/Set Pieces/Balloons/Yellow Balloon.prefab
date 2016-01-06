@@ -85,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 103522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.159999967, z: 0}
+  m_LocalPosition: {x: 0, y: -0.15999997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 409836}
@@ -97,12 +97,13 @@ CircleCollider2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 136684}
   m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: .0199999996}
+  m_Offset: {x: 0, y: 0.02}
   serializedVersion: 2
-  m_Radius: .140000001
+  m_Radius: 0.14
 --- !u!95 &9583040
 Animator:
   serializedVersion: 3
@@ -138,7 +139,7 @@ MonoBehaviour:
   CollidingBool: 
   SurfaceTrigger: 
   SurfaceBool: 
-  Velocity: 3.5999999
+  Velocity: 3.6
 --- !u!114 &11476904
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -151,21 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerFromChildren: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   OnSurfaceEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -196,6 +182,12 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Hedgehog.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  PlatformEnterSound: {fileID: 0}
+  PlatformLoopSound: {fileID: 0}
+  PlatformExitSound: {fileID: 0}
+  SurfaceEnterSound: {fileID: 0}
+  SurfaceLoopSound: {fileID: 0}
+  SurfaceExitSound: {fileID: 0}
 --- !u!114 &11479206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -219,21 +211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TriggerFromChildren: 1
-  OnEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.TriggerEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   Collisions: []
   AllowReactivation: 1
   OnActivateEnter:
@@ -255,6 +232,9 @@ MonoBehaviour:
   Animator: {fileID: 9583040}
   ActivatedTrigger: Popped
   ActivatedBool: 
+  ActivateSound: {fileID: 0}
+  LoopSound: {fileID: 0}
+  DeactivateSound: {fileID: 0}
 --- !u!212 &21246702
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -273,14 +253,18 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e740824e5b2f94541a5cfb465930f56c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

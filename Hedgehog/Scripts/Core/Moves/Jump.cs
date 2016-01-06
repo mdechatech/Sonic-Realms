@@ -44,6 +44,11 @@ namespace Hedgehog.Core.Moves
         private Transform ClearanceSensorLeft;
         private Transform ClearanceSensorRight;
 
+        public bool HeldDown
+        {
+            get { return Input.GetButton(ActivateButton); }
+        }
+
         public override void Reset()
         {
             base.Reset();

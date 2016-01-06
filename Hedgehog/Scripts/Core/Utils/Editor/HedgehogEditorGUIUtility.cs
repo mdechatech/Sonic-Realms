@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -13,6 +15,14 @@ namespace Hedgehog.Core.Utils.Editor
         /// The name of the Script property that shows up on all unmodified component editors.
         /// </summary>
         public const string ScriptPropertyName = "m_Script";
+
+        public static TAttribute GetAttribute<TAttribute>(SerializedProperty property) where TAttribute : Attribute
+        {
+            var field = property.serializedObject.targetObject.GetType().GetField(property.name);
+            if (field == null)
+                return null;
+            return field.GetCustomAttributes(true).FirstOrDefault(o => o is TAttribute) as TAttribute;
+        }
 
         /// <summary>
         /// Just a quick way to draw property fields.
@@ -40,6 +50,14 @@ namespace Hedgehog.Core.Utils.Editor
                 }
 
                 EditorGUILayout.PropertyField(found, true);
+            }
+        }
+
+        public static void DrawProperties(params SerializedProperty[] properties)
+        {
+            foreach (var property in properties)
+            {
+                EditorGUILayout.PropertyField(property, true);
             }
         }
 

@@ -29,13 +29,16 @@ namespace Hedgehog.Level.Objects
             BoostBothWays = false;
         }
 
-        public override bool IsInside(HedgehogController controller)
+        public override bool IsInside(Hitbox hitbox)
         {
-            return base.IsInside(controller) && controller.Grounded;
+            var controller = hitbox.Controller;
+            return controller.Grounded;
         }
 
-        public override void OnAreaEnter(HedgehogController controller)
+        public override void OnAreaEnter(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
+
             controller.GroundVelocity = Velocity * (BoostBothWays
                 ? Mathf.Sign(controller.GroundVelocity)
                 : 1.0f);

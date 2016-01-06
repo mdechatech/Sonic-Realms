@@ -34,15 +34,17 @@ namespace Hedgehog.Core.Triggers
         public override void Awake()
         {
             base.Awake();
-
-            AreaTrigger = GetComponent<AreaTrigger>();
+            if ((AreaTrigger = GetComponent<AreaTrigger>()) == null)
+            {
+                AreaTrigger = gameObject.AddComponent<AreaTrigger>();
+                AreaTrigger.Reset();
+            }
         }
 
         public override void OnEnable()
         {
-            base.OnEnable();
-
-            if (AreaTrigger.InsideRules != null) Start();
+            if (AreaTrigger != null && AreaTrigger.InsideRules != null && 
+                PlatformTrigger != null && PlatformTrigger.CollisionRules != null) Start();
         }
 
         public override void Start()
@@ -70,30 +72,31 @@ namespace Hedgehog.Core.Triggers
             base.OnDisable();
         }
 
-        public virtual bool IsInside(HedgehogController controller)
+        public virtual bool IsInside(Hitbox hitbox)
         {
-            return AreaTrigger.DefaultCollisionRule(controller);
+            return AreaTrigger.DefaultInsideRule(hitbox);
         }
 
-        public virtual void OnAreaEnter(HedgehogController controller)
-        {
-
-        }
-
-        public virtual void OnAreaStay(HedgehogController controller)
+        public virtual void OnAreaEnter(Hitbox hitbox)
         {
 
         }
 
-        public virtual void OnAreaExit(HedgehogController controller)
+        public virtual void OnAreaStay(Hitbox hitbox)
+        {
+
+        }
+
+        public virtual void OnAreaExit(Hitbox hitbox)
         {
 
         }
         #region Notify Methods
-        protected void NotifyAreaEnter(HedgehogController controller)
+        protected void NotifyAreaEnter(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
             controller.NotifyReactiveEnter(this);
-            OnAreaEnter(controller);
+            OnAreaEnter(hitbox);
 
             if (controller.Animator == null)
                 return;
@@ -115,16 +118,17 @@ namespace Hedgehog.Core.Triggers
                 controller.Animator.SetBool(InsideBool, true);
         }
 
-        public void NotifyAreaStay(HedgehogController controller)
+        public void NotifyAreaStay(Hitbox hitbox)
         {
             // here for consistency, may add something later
-            OnAreaStay(controller);
+            OnAreaStay(hitbox);
         }
 
-        public void NotifyAreaExit(HedgehogController controller)
+        public void NotifyAreaExit(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
             controller.NotifyReactiveExit(this);
-            OnAreaExit(controller);
+            OnAreaExit(hitbox);
 
             if (controller.Animator == null)
                 return;

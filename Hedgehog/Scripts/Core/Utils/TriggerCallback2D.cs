@@ -31,17 +31,17 @@ namespace Hedgehog.Core.Utils
             TriggerExit2D = TriggerExit2D ?? new TriggerEvent2D();
         }
 
-        public void OnTriggerEnter2D(Collider2D other)
+        protected void OnTriggerEnter2D(Collider2D other)
         {
             TriggerEnter2D.Invoke(other);
         }
 
-        public void OnTriggerStay2D(Collider2D other)
+        protected void OnTriggerStay2D(Collider2D other)
         {
             TriggerStay2D.Invoke(other);
         }
 
-        public void OnTriggerExit2D(Collider2D other)
+        protected void OnTriggerExit2D(Collider2D other)
         {
             TriggerExit2D.Invoke(other);
         }

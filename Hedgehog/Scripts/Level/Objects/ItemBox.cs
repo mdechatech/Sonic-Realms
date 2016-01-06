@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Hedgehog.Level.Objects
 {
-    public class ItemBox : ReactivePlatform
+    public class ItemBox : ReactivePlatformArea
     {
         /// <summary>
         /// How long to wait after being broken to activate, in seconds.
@@ -56,6 +56,11 @@ namespace Hedgehog.Level.Objects
             enabled = false;
         }
 
+        public override bool IsInside(Hitbox hitbox)
+        {
+            return hitbox.CompareTag(Hitbox.AttackHitboxTag);
+        }
+
         public override void OnPlatformEnter(TerrainCastHit hit)
         {
             // Must be rolling; if in the air, must be traveling down; 
@@ -66,26 +71,50 @@ namespace Hedgehog.Level.Objects
                 (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top)) return;
 
             // Rebound effect
-            var jump = hit.Controller.MoveManager.GetMove<Jump>();
-            if (jump == null || jump.CurrentState == Move.State.Active || !jump.Used ||
-                hit.Controller.IsActive<BubbleSpecial>())
+            Bounce(hit.Controller);
+            Break(hit.Controller);
+        }
+
+        public override void OnAreaEnter(Hitbox hitbox)
+        {
+            var sonicHitbox = hitbox as SonicHitbox;
+            if (sonicHitbox != null && sonicHitbox.Harmful && !sonicHitbox.Vulnerable)
             {
-                hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
-                    -hit.Controller.RelativeVelocity.y + hit.Controller.AirGravity*Time.deltaTime);
+                Bounce(hitbox.Controller);
+                Break(hitbox.Controller);
+            }
+        }
+
+        public void Bounce(HedgehogController controller)
+        {
+            controller.ApplyGravityOnce();
+
+            if(controller.RelativeVelocity.y > 0f) return;
+
+            var jump = controller.MoveManager.GetMove<Jump>();
+            if (jump == null || jump.Active || !jump.Used || controller.IsActive<BubbleSpecial>())
+            {
+                controller.RelativeVelocity = new Vector2(controller.RelativeVelocity.x,
+                    -controller.RelativeVelocity.y);
             }
             else
             {
-                hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x,
-                    Mathf.Min(jump.ReleaseSpeed, -hit.Controller.RelativeVelocity.y + 
-                    hit.Controller.AirGravity*Time.deltaTime));
+                controller.RelativeVelocity = new Vector2(controller.RelativeVelocity.x,
+                    Mathf.Min(jump.ReleaseSpeed, -controller.RelativeVelocity.y +
+                    controller.AirGravity * Time.deltaTime));
             }
 
             // Ignore collision with this since it's destroyed now
-            hit.Controller.IgnoreThisCollision();
-            GetComponent<Collider2D>().enabled = false;
-            Controller = hit.Controller;
+            controller.IgnoreThisCollision();
+        }
 
-            if (Animator == null || BrokenTrigger.Length <= 0) return;
+        public void Break(HedgehogController controller)
+        {
+            GetComponent<Collider2D>().enabled = false;
+            Controller = controller;
+
+            if (Animator == null || BrokenTrigger.Length <= 0)
+                return;
             Animator.SetTrigger(BrokenTrigger);
         }
     }

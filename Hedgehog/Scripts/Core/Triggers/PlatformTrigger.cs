@@ -432,8 +432,7 @@ namespace Hedgehog.Core.Triggers
 
         public bool DefaultSurfaceRule(TerrainCastHit hit)
         {
-            if (!hit.Controller.Grounded) return false;
-            return hit.Controller.StandingOn(hit.Transform);
+            return hit.Controller.Grounded;
         }
         #endregion
     }

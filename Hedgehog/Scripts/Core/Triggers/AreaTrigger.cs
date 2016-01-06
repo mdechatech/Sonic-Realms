@@ -5,7 +5,6 @@ using Hedgehog.Core.Actors;
 using Hedgehog.Level;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Hedgehog.Core.Triggers
 {
@@ -13,7 +12,7 @@ namespace Hedgehog.Core.Triggers
     /// UnityEvents that pass in a controller. Used by OnAreaEnter, OnAreaStay, and OnAreaExit.
     /// </summary>
     [Serializable]
-    public class AreaEvent : UnityEvent<HedgehogController> { }
+    public class AreaEvent : UnityEvent<Hitbox> { }
 
     /// <summary>
     /// Hook up to these events to react when a controller enters the area.
@@ -23,11 +22,10 @@ namespace Hedgehog.Core.Triggers
     public class AreaTrigger : BaseTrigger
     {
         /// <summary>
-        /// Whether to always collide regardless of a controller's path.
+        /// If true, a player can trigger the area multiple times from multiple hitboxes.
         /// </summary>
-        [FormerlySerializedAs("IgnoreLayers")]
-        [Tooltip("Whether to always collide regardless of a controller's path.")]
-        public bool AlwaysCollide;
+        [Tooltip("If true, a player can trigger the area multiple times from multiple hitboxes.")]
+        public bool AllowMultiple;
 
         /// <summary>
         /// Invoked when a controller enters the area.
@@ -50,7 +48,7 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="controller"></param>
         /// <returns></returns>
-        public delegate bool InsidePredicate(HedgehogController controller);
+        public delegate bool InsidePredicate(Hitbox hitbox);
 
         /// <summary>
         /// A list of predicates which, if empty or all return true, allow the controller to collide
@@ -61,7 +59,7 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Maps a controller to the areas it is colliding with (can collide with multiple child areas).
         /// </summary>
-        protected Dictionary<HedgehogController, List<Transform>> Collisions;
+        protected List<Hitbox> Collisions;
 
         protected HashSet<Collider2D> MiscCollisions;
 
@@ -87,7 +85,8 @@ namespace Hedgehog.Core.Triggers
         {
             base.Reset();
 
-            AlwaysCollide = true;
+            AllowMultiple = false;
+
             OnAreaEnter = new AreaEvent();
             OnAreaStay = new AreaEvent();
             OnAreaExit = new AreaEvent();
@@ -107,7 +106,7 @@ namespace Hedgehog.Core.Triggers
             OnAreaEnter = OnAreaEnter ?? new AreaEvent();
             OnAreaStay = OnAreaStay ?? new AreaEvent();
             OnAreaExit = OnAreaExit ?? new AreaEvent();
-            Collisions = new Dictionary<HedgehogController, List<Transform>>();
+            Collisions = new List<Hitbox>();
             MiscCollisions = new HashSet<Collider2D>();
             InsideRules = new List<InsidePredicate>();
         }
@@ -129,9 +128,8 @@ namespace Hedgehog.Core.Triggers
                     childCollider.GetComponent<ObjectTrigger>() != null)
                     continue;
 
-                var childTrigger = childCollider.gameObject.GetComponent<AreaTrigger>() ??
-                                   childCollider.gameObject.AddComponent<AreaTrigger>();
-                childTrigger.AlwaysCollide |= AlwaysCollide;
+                if(!childCollider.gameObject.GetComponent<AreaTrigger>())
+                    childCollider.gameObject.AddComponent<AreaTrigger>();
             }
         }
 
@@ -148,13 +146,22 @@ namespace Hedgehog.Core.Triggers
                 return;
             }
 
-            foreach (var controller in new List<HedgehogController>(Collisions.Keys))
-                OnAreaStay.Invoke(controller);
+            foreach (var hitbox in Collisions)
+            {
+                OnAreaStay.Invoke(hitbox);
+                hitbox.NotifyCollisionStay(this);
+            }
         }
 
         public override bool HasController(HedgehogController controller)
         {
-            return Collisions.ContainsKey(controller);
+            return controller != null && Collisions.Any(hitbox => hitbox.Controller == controller);
+        }
+
+        protected bool HasController(HedgehogController controller, Hitbox excludeHitbox)
+        {
+            return controller != null &&
+                   Collisions.Any(hitbox => hitbox != excludeHitbox && hitbox.Controller == controller);
         }
 
         /// <summary>
@@ -162,50 +169,44 @@ namespace Hedgehog.Core.Triggers
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <returns></returns>
-        public bool CollidesWith(HedgehogController controller)
+        public bool CollidesWith(Hitbox hitbox)
         {
-            if (!InsideRules.Any()) DefaultCollisionRule(controller);
-            return InsideRules.All(predicate => predicate(controller));
+            if (!InsideRules.Any()) return DefaultInsideRule(hitbox);
+            return InsideRules.All(predicate => predicate(hitbox));
         }
 
-        public bool DefaultCollisionRule(HedgehogController controller)
+        public bool DefaultInsideRule(Hitbox hitbox)
         {
-            return true;
+            return hitbox.CompareTag("Untagged") || hitbox.CompareTag(Hitbox.MainHitboxTag);
         }
 
-        public void NotifyCollision(HedgehogController controller, Transform hit, bool isExit = false)
+        public void NotifyCollision(Hitbox hitbox, bool isExit = false)
         {
-            if (controller == null) return;
-
-            List<Transform> hits;
-            if (Collisions.TryGetValue(controller, out hits))
+            if (Collisions.Contains(hitbox))
             {
-                if (isExit || !CollidesWith(controller))
+                if (isExit || !CollidesWith(hitbox))
                 {
-                    hits.Remove(hit);
-                    if (hits.Count > 0) return;
+                    Collisions.Remove(hitbox);
 
                     if (AreaExitSound != null)
                         SoundManager.PlayClipAtPoint(AreaExitSound, transform.position);
-                    Collisions.Remove(controller);
-                    OnAreaExit.Invoke(controller);
+                    Collisions.Remove(hitbox);
+                    OnAreaExit.Invoke(hitbox);
+                    hitbox.NotifyCollisionExit(this);
 
                     if (Collisions.Count == 0) enabled = false;
-
-                } else if (!hits.Contains(hit))
-                {
-                    hits.Add(hit);
                 }
             }
             else
             {
                 if (isExit) return;
-                if (!CollidesWith(controller)) return;
+                if (!CollidesWith(hitbox)) return;
 
                 if (AreaEnterSound != null)
                     SoundManager.PlayClipAtPoint(AreaEnterSound, transform.position);
-                Collisions[controller] = new List<Transform> {hit};
-                OnAreaEnter.Invoke(controller);
+                Collisions.Add(hitbox);
+                OnAreaEnter.Invoke(hitbox);
+                hitbox.NotifyCollisionEnter(this);
 
                 if (Collisions.Count == 1) enabled = true;
             }
@@ -214,15 +215,15 @@ namespace Hedgehog.Core.Triggers
         /// <summary>
         /// Used by children triggers to bubble their events up to parent triggers.
         /// </summary>
-        /// <param name="controller"></param>
+        /// <param name="hitbox"></param>
         /// <param name="area"></param>
         /// <param name="isExit"></param>
-        public void BubbleEvent(HedgehogController controller, Transform area, bool isExit = false)
+        public void BubbleEvent(Hitbox hitbox, bool isExit = false)
         {
             foreach (var trigger in GetComponentsInParent<AreaTrigger>().Where(
                 trigger => trigger != this && trigger.TriggerFromChildren))
             {
-                trigger.NotifyCollision(controller, area, isExit);
+                trigger.NotifyCollision(hitbox, isExit);
             }
         }
 
@@ -237,11 +238,12 @@ namespace Hedgehog.Core.Triggers
                 return;
             }
 
-            if (!hitbox.AllowCollision(this))
+            if ((!AllowMultiple && HasController(hitbox.Controller, hitbox)) || 
+                !hitbox.AllowCollision(this) || !CollidesWith(hitbox))
                 return;
 
-            NotifyCollision(hitbox.Source, transform);
-            BubbleEvent(hitbox.Source, transform);
+            NotifyCollision(hitbox);
+            BubbleEvent(hitbox);
         }
 
         public void OnTriggerStay2D(Collider2D collider2D)
@@ -249,15 +251,18 @@ namespace Hedgehog.Core.Triggers
             if (MiscCollisions.Contains(collider2D)) return;
 
             var hitbox = collider2D.GetComponent<Hitbox>();
-            if (hitbox.AllowCollision(this))
+            if (hitbox == null) return;
+
+            if ((AllowMultiple || !HasController(hitbox.Controller, hitbox)) &&
+                hitbox.AllowCollision(this) && CollidesWith(hitbox))
             {
-                NotifyCollision(hitbox.Source, transform);
-                BubbleEvent(hitbox.Source, transform);
+                NotifyCollision(hitbox);
+                BubbleEvent(hitbox);
             }
             else
             {
-                NotifyCollision(hitbox.Source, transform, true);
-                BubbleEvent(hitbox.Source, transform, true);
+                NotifyCollision(hitbox, true);
+                BubbleEvent(hitbox, true);
             }
         }
 
@@ -270,8 +275,8 @@ namespace Hedgehog.Core.Triggers
                 return;
             }
 
-            NotifyCollision(hitbox.Source, transform, true);
-            BubbleEvent(hitbox.Source, transform, true);
+            NotifyCollision(hitbox, true);
+            BubbleEvent(hitbox, true);
         }
     }
 }

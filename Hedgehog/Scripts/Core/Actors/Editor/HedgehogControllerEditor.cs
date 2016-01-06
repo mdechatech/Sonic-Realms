@@ -31,6 +31,12 @@ namespace Hedgehog.Core.Actors.Editor
             set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPhysics", value); }
         }
 
+        protected static bool ShowPerformance
+        {
+            get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowPerformance", false); }
+            set { EditorPrefs.SetBool("HedgehogControllerEditor.ShowPerformance", value); }
+        }
+
         protected static bool ShowAdvancedPhysics
         {
             get { return EditorPrefs.GetBool("HedgehogControllerEditor.ShowAdvancedPhysics", false); }
@@ -181,6 +187,16 @@ namespace Hedgehog.Core.Actors.Editor
                 #endregion
             }
             #endregion
+            ShowPerformance = EditorGUILayout.Foldout(ShowPerformance, "Performance");
+            if (ShowPerformance)
+            {
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "DisableNotifyPlatforms",
+                    "DisableEvents",
+                    "DisableCeilingCheck",
+                    "DisableGroundCheck",
+                    "DisableSideCheck");
+            }
             #region Animation Foldout
 
             ShowAnimation = EditorGUILayout.Foldout(ShowAnimation, "Animation", foldoutStyle);

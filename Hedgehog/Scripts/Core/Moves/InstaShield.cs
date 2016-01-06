@@ -69,6 +69,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Start();
             Health = Health ? Health : Controller.GetComponent<HedgehogHealth>();
+            Target.enabled = false;
         }
 
         public override void OnManagerAdd()
@@ -101,6 +102,7 @@ namespace Hedgehog.Core.Moves
         {
             base.OnActiveEnter();
             InvincibilityTimer = InvincibilityTime;
+            Target.enabled = true;
             Target.size += SizeChange;
             Health.Invincible = true;
         }
@@ -120,6 +122,7 @@ namespace Hedgehog.Core.Moves
         {
             base.OnActiveExit();
             InvincibilityTimer = 0.0f;
+            Target.enabled = false;
             Target.size -= SizeChange;
             Health.Invincible = false;
         }

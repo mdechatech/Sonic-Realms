@@ -45,14 +45,13 @@ namespace Hedgehog.Core.Triggers
         public override void Awake()
         {
             base.Awake();
-
-            PlatformTrigger = GetComponent<PlatformTrigger>();
+            PlatformTrigger = GetComponent<PlatformTrigger>() ?? gameObject.AddComponent<PlatformTrigger>();
             RegisteredEvents = false;
         }
 
         public virtual void OnEnable()
         {
-            if (PlatformTrigger.SurfaceRules != null) Start();
+            if (PlatformTrigger != null && PlatformTrigger.SurfaceRules != null) Start();
         }
 
         public override void Start()

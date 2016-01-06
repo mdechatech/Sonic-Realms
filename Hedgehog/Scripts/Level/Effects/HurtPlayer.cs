@@ -13,7 +13,7 @@ namespace Hedgehog.Level.Effects
             var health = controller.GetComponent<HedgehogHealth>();
             if (health == null) return;
 
-            health.Hurt(transform.position);
+            health.TakeDamage(transform);
         }
 
         public override void OnActivateStay(HedgehogController controller)

@@ -29,18 +29,20 @@ namespace Hedgehog.Core.Triggers
         public override void Reset()
         {
             base.Reset();
+
+            AreaTrigger = GetComponent<AreaTrigger>();
             InsideTrigger = InsideBool = "";
         }
 
         public override void Awake()
         {
             base.Awake();
-            AreaTrigger = GetComponent<AreaTrigger>();
+            AreaTrigger = GetComponent<AreaTrigger>() ?? gameObject.AddComponent<AreaTrigger>();
         }
 
         public virtual void OnEnable()
         {
-            if (AreaTrigger.InsideRules != null) Start();
+            if (AreaTrigger != null && AreaTrigger.InsideRules != null) Start();
         }
 
         public override void Start()
@@ -69,39 +71,39 @@ namespace Hedgehog.Core.Triggers
             RegisteredEvents = false;
         }
 
-        public virtual bool IsInside(HedgehogController controller)
+        public virtual bool IsInside(Hitbox hitbox)
         {
-            return AreaTrigger.DefaultCollisionRule(controller);
+            return AreaTrigger.DefaultInsideRule(hitbox);
         }
         
-        public virtual void OnAreaEnter(HedgehogController controller)
+        public virtual void OnAreaEnter(Hitbox hitbox)
         {
             
         }
 
-        public virtual void OnAreaStay(HedgehogController controller)
+        public virtual void OnAreaStay(Hitbox hitbox)
         {
             
         }
 
-        public virtual void OnAreaExit(HedgehogController controller)
+        public virtual void OnAreaExit(Hitbox hitbox)
         {
             
         }
         #region Notify Methods
-        public void NotifyAreaEnter(HedgehogController controller)
+        public void NotifyAreaEnter(Hitbox hitbox)
         {
-            OnAreaEnter(controller);
-            controller.NotifyReactiveEnter(this);
+            OnAreaEnter(hitbox);
+            hitbox.Controller.NotifyReactiveEnter(this);
 
-            if (controller.Animator == null) return;
+            if (hitbox.Controller.Animator == null) return;
 
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
+            var logWarnings = hitbox.Controller.Animator.logWarnings;
+            hitbox.Controller.Animator.logWarnings = false;
 
-            SetAreaEnterParameters(controller);
+            SetAreaEnterParameters(hitbox.Controller);
 
-            controller.Animator.logWarnings = logWarnings;
+            hitbox.Controller.Animator.logWarnings = logWarnings;
         }
 
         protected virtual void SetAreaEnterParameters(HedgehogController controller)
@@ -113,25 +115,25 @@ namespace Hedgehog.Core.Triggers
                 controller.Animator.SetBool(InsideBool, true);
         }
 
-        public void NotifyAreaStay(HedgehogController controller)
+        public void NotifyAreaStay(Hitbox hitbox)
         {
             // here for consistency, may add something later
-            OnAreaStay(controller);
+            OnAreaStay(hitbox);
         }
 
-        public void NotifyAreaExit(HedgehogController controller)
+        public void NotifyAreaExit(Hitbox hitbox)
         {
-            controller.NotifyReactiveExit(this);
-            OnAreaExit(controller);
+            hitbox.Controller.NotifyReactiveExit(this);
+            OnAreaExit(hitbox);
 
-            if (controller.Animator == null) return;
+            if (hitbox.Controller.Animator == null) return;
 
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
+            var logWarnings = hitbox.Controller.Animator.logWarnings;
+            hitbox.Controller.Animator.logWarnings = false;
 
-            SetAreaExitParameters(controller);
+            SetAreaExitParameters(hitbox.Controller);
 
-            controller.Animator.logWarnings = logWarnings;
+            hitbox.Controller.Animator.logWarnings = logWarnings;
         }
 
         protected virtual void SetAreaExitParameters(HedgehogController controller)

@@ -67,6 +67,12 @@ namespace Hedgehog.Level
             MaxConcurrentAudioClips = DefaultMaxConcurrentAudioClips;
         }
 
+        public void Start()
+        {
+            Instance = this;
+            PlayBGM(MainBGM);
+        }
+
         public void Awake()
         {
             _currentAudioSourceIndex = 0;

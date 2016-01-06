@@ -13,6 +13,7 @@ namespace Hedgehog.Core.Actors
     /// <summary>
     /// Implements Sonic-style physics and lets platform triggers know when they're touched.
     /// </summary>
+    [RequireComponent(typeof(Rigidbody2D))]
     [AddComponentMenu("Hedgehog/Actors/Hedgehog")]
     public class HedgehogController : MonoBehaviour
     {
@@ -150,6 +151,37 @@ namespace Hedgehog.Core.Actors
         /// </summary>
         [Tooltip("The controller can't latch onto walls if they're this much steeper than the floor it's on, in degrees.")]
         public float MaxClimbAngle;
+        #endregion
+        #region Performance
+        /// <summary>
+        /// If true, platform triggers are not notified when touched.
+        /// </summary>
+        [Tooltip("If true, platform triggers are not notified when touched.")]
+        public bool DisableNotifyPlatforms;
+
+        /// <summary>
+        /// If true, events are not invoked.
+        /// </summary>
+        [Tooltip("If true, events are not invoked.")]
+        public bool DisableEvents;
+
+        /// <summary>
+        /// If true, no ceiling checks are made.
+        /// </summary>
+        [Tooltip("If checked, ceiling collisions do not occur.")]
+        public bool DisableCeilingCheck;
+
+        /// <summary>
+        /// If true, no ground checks are made.
+        /// </summary>
+        [Tooltip("If checked, ground collisions do not occur.")]
+        public bool DisableGroundCheck;
+
+        /// <summary>
+        /// If true, no side checks are made.
+        /// </summary>
+        [Tooltip("If checked, side collisions do not occur.")]
+        public bool DisableSideCheck;
         #endregion
         #region Events
         /// <summary>
@@ -599,6 +631,12 @@ namespace Hedgehog.Core.Actors
             DetachLock = true;
             DetachWhenSlow = true;
 
+            DisableEvents = false;
+            DisableNotifyPlatforms = false;
+            DisableGroundCheck = false;
+            DisableCeilingCheck = false;
+            DisableSideCheck = false;
+
             AutoFacingForward = true;
 
             DetachTrigger = AttachTrigger = FacingForwardBool = AirSpeedXFloat =
@@ -875,7 +913,7 @@ namespace Hedgehog.Core.Actors
                     Mathf.Abs(GroundVelocity) < DetachSpeed &&
                     DMath.AngleInRange_d(RelativeSurfaceAngle, 85.0f, 275.0f))
                 {
-                    if (Detach())
+                    if (!DisableEvents && Detach())
                         OnSteepDetach.Invoke();
                 }
             }
@@ -890,7 +928,7 @@ namespace Hedgehog.Core.Actors
 
                 // Air drag
                 if (ApplyAirDrag && 
-                    Vy > AirDragRequiredSpeed.y && Mathf.Abs(Vx) > AirDragRequiredSpeed.x)
+                    Vy > 0f && Vy < AirDragRequiredSpeed.y && Mathf.Abs(Vx) > AirDragRequiredSpeed.x)
                 {
                     Vx *= Mathf.Pow(AirDrag, timestep);
                 }
@@ -905,19 +943,19 @@ namespace Hedgehog.Core.Actors
         {
             if (!Grounded)
             {
-                AirSideCheck();
-                AirCeilingCheck();
-                AirGroundCheck();
+                if(!DisableSideCheck) AirSideCheck();
+                if(!DisableCeilingCheck) AirCeilingCheck();
+                if(!DisableGroundCheck) AirGroundCheck();
                 SensorsRotation = GravityDirection + 90.0f;
             }
 
             if (Grounded)
             {
-                GroundSideCheck();
-                GroundCeilingCheck();
+                if(!DisableSideCheck) GroundSideCheck();
+                if(!DisableCeilingCheck) GroundCeilingCheck();
                 UpdateGroundVelocity();
 
-                GroundSurfaceCheck();
+                if(!DisableGroundCheck) GroundSurfaceCheck();
                 UpdateGroundVelocity();
             }
         }
@@ -959,9 +997,10 @@ namespace Hedgehog.Core.Actors
 
                     if(RelativeVelocity.x < 0.0f)
                         RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+
+                    IgnoringThisCollision = false;
                 }
 
-                IgnoringThisCollision = false;
                 return true;
             }
 
@@ -979,9 +1018,10 @@ namespace Hedgehog.Core.Actors
 
                     if(RelativeVelocity.x > 0.0f)
                         RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+
+                    IgnoringThisCollision = false;
                 }
 
-                IgnoringThisCollision = false;
                 return true;
             }
 
@@ -1486,6 +1526,15 @@ namespace Hedgehog.Core.Actors
             QueuedTranslation += amount;
         }
 
+        /// <summary>
+        /// Applies one step of gravity. Often used to increase bounce speed.
+        /// </summary>
+        public void ApplyGravityOnce()
+        {
+            if (Grounded) return;
+            Velocity += GravityDownVector.normalized*AirGravity*(1f/60f);
+        }
+
         #region Move Manager Helpers
         // Aliases that call the same function in the controller's move manager. They do not perform null-checks.
 
@@ -1558,17 +1607,21 @@ namespace Hedgehog.Core.Actors
         {
             if (!collision || collision.Transform == null) return;
 
-            var trigger = collision.Transform.GetComponent<PlatformTrigger>();
-            if (trigger == null)
+            if (!DisableNotifyPlatforms)
             {
-                OnCollide.Invoke(collision);
-                return;
-            }
-            
-            trigger.NotifyCollision(collision);
-            if (IgnoringThisCollision) return;
+                var trigger = collision.Transform.GetComponent<PlatformTrigger>();
+                if (trigger == null)
+                {
+                    if(!DisableEvents) OnCollide.Invoke(collision);
+                    return;
+                }
 
-            OnCollide.Invoke(collision);
+                trigger.NotifyCollision(collision);
+                if (IgnoringThisCollision)
+                    return;
+            }
+
+            if(!DisableEvents) OnCollide.Invoke(collision);
         }
 
         /// <summary>
@@ -1583,6 +1636,8 @@ namespace Hedgehog.Core.Actors
 
             SecondarySurfaceHit = secondarySurfaceHit;
             SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Transform : null;
+
+            if (DisableNotifyPlatforms) return;
 
             var primaryTrigger = PrimarySurface == null
                 ? null : PrimarySurface.GetComponent<PlatformTrigger>();
@@ -1600,7 +1655,7 @@ namespace Hedgehog.Core.Actors
         public void NotifyReactiveEnter(BaseReactive reactive)
         {
             Reactives.Add(reactive);
-            OnReactiveEnter.Invoke(reactive);
+            if(!DisableEvents) OnReactiveEnter.Invoke(reactive);
         }
 
         /// <summary>
@@ -1610,7 +1665,7 @@ namespace Hedgehog.Core.Actors
         public void NotifyReactiveExit(BaseReactive reactive)
         {
             Reactives.Remove(reactive);
-            OnReactiveExit.Invoke(reactive);
+            if(!DisableEvents) OnReactiveExit.Invoke(reactive);
         }
 
         /// <summary>
@@ -1741,7 +1796,7 @@ namespace Hedgehog.Core.Actors
             // Don't invoke the event if the controller was already off the ground
             if (wasGrounded)
             {
-                OnDetach.Invoke();
+                if(!DisableEvents) OnDetach.Invoke();
                 if (Animator != null && DetachTriggerHash != 0)
                     Animator.SetTrigger(DetachTriggerHash);
             }
@@ -1772,7 +1827,7 @@ namespace Hedgehog.Core.Actors
             // Don't invoke the event if the controller was already on the ground
             if (!wasGrounded)
             {
-                OnAttach.Invoke();
+                if(!DisableEvents) OnAttach.Invoke();
                 if (Animator != null && AttachTriggerHash != 0)
                     Animator.SetTrigger(AttachTriggerHash);
             }

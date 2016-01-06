@@ -58,8 +58,10 @@ namespace Hedgehog.Level.Areas
             AccountForFriction = true;
         }
 
-        public override void OnAreaStay(HedgehogController controller)
+        public override void OnAreaStay(Hitbox hitbox)
         {
+            var controller = hitbox.Controller;
+
             if(PullOffGround && controller.Grounded)
                 controller.Detach();
 

@@ -30,7 +30,7 @@ namespace Hedgehog.Core.Triggers.Editor
 
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "AlwaysCollide");
+            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "AllowMultiple");
 
             ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events");
             if (ShowEvents)

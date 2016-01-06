@@ -14,14 +14,14 @@ namespace Hedgehog.Core.Triggers
             if (!GetComponent<ObjectTrigger>()) gameObject.AddComponent<ObjectTrigger>();
         }
 
-        public override void OnAreaEnter(HedgehogController controller)
+        public override void OnAreaEnter(Hitbox hitbox)
         {
-            ActivateObject(controller);
+            ActivateObject(hitbox.Controller);
         }
 
-        public override void OnAreaExit(HedgehogController controller)
+        public override void OnAreaExit(Hitbox hitbox)
         {
-            DeactivateObject(controller);
+            DeactivateObject(hitbox.Controller);
         }
     }
 }

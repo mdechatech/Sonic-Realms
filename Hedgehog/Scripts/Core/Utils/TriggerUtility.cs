@@ -129,15 +129,16 @@ namespace Hedgehog.Core.Utils
         /// <param name="controller">The controller to send data about.</param>
         /// <param name="isExit">Whether to notify the triggers of an exit event instead of an enter event.</param>
         /// <returns></returns>
-        public static bool NotifyAreaCollision(Transform transform, HedgehogController controller, bool isExit = false)
+        public static bool NotifyAreaCollision(Transform transform, Hitbox hitbox, bool isExit = false)
         {
-            if (transform == null || controller == null)
+            var controller = hitbox.Controller;
+            if (controller == null || transform == null)
                 return false;
 
             var any = false;
             foreach (var areaTrigger in GetTriggers<AreaTrigger>(transform))
             {
-                areaTrigger.NotifyCollision(controller, transform, isExit);
+                areaTrigger.NotifyCollision(hitbox, isExit);
                 any = true;
             }
 
