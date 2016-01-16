@@ -1,4 +1,5 @@
-﻿using Hedgehog.Core.Utils;
+﻿using Hedgehog.Core.Actors;
+using Hedgehog.Core.Utils;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves
@@ -151,6 +152,8 @@ namespace Hedgehog.Core.Moves
         /// </summary>
         public float ControlLockTimer;
 
+        protected ScoreCounter Score;
+
         public override void Reset()
         {
             base.Reset();
@@ -189,11 +192,13 @@ namespace Hedgehog.Core.Moves
             base.Start();
             if (Controller.Grounded) Perform(true);
             Controller.OnAttach.AddListener(OnAttach);
+            Score = Controller.GetComponent<ScoreCounter>();
         }
 
         public void OnAttach()
         {
             Perform();
+            if(Score) Score.EndCombo();
         }
 
         public override void OnActiveEnter(State previousState)

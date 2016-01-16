@@ -61,6 +61,12 @@ namespace Hedgehog.Core.Actors
         public UnityEvent OnDeathComplete;
 
         /// <summary>
+        /// Called when the controller kills a badnik.
+        /// </summary>
+        [Foldout("Events")]
+        public EnemyEvent OnEnemyKilled;
+
+        /// <summary>
         /// Animator bool set to whether invicibility after getting hurt is on
         /// </summary>
         [Foldout("Animation")]
@@ -84,7 +90,8 @@ namespace Hedgehog.Core.Actors
         {
             base.Reset();
 
-            OnDeathComplete = new UnityEvent();;
+            OnDeathComplete = new UnityEvent();
+            OnEnemyKilled = new EnemyEvent();
 
             Controller = GetComponentInParent<HedgehogController>();
             HurtReboundMove = Controller.GetMove<HurtRebound>();
@@ -100,6 +107,7 @@ namespace Hedgehog.Core.Actors
             base.Awake();
 
             OnDeathComplete = OnDeathComplete ?? new UnityEvent();
+            OnEnemyKilled = OnEnemyKilled ?? new EnemyEvent();
 
             Controller = Controller ?? GetComponentInParent<HedgehogController>();
             HurtReboundMove = HurtReboundMove ?? Controller.GetMove<HurtRebound>();
@@ -152,7 +160,7 @@ namespace Hedgehog.Core.Actors
             var shield = Controller.MoveManager.GetMove<Shield>();
             if (shield == null)
             {
-                if (RingCollector.Amount <= 0)
+                if (RingCollector.Rings <= 0)
                 {
                     Kill();
                     return;
@@ -163,6 +171,11 @@ namespace Hedgehog.Core.Actors
 
             Controller.EndMove<Roll>();
             OnHurt.Invoke(null);
+        }
+
+        public void NotifyEnemyKilled(HealthSystem enemy)
+        {
+            OnEnemyKilled.Invoke(enemy);
         }
 
         public void OnHurtReboundEnd()

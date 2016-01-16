@@ -42,7 +42,7 @@ namespace Hedgehog.Level.Effects
             if (counter == null || !counter.CanCollect)
                 return;
 
-            counter.Amount += Amount;
+            counter.Rings += Amount;
 
             if (GivenTriggerHash != 0)
                 Animator.SetTrigger(GivenTriggerHash);

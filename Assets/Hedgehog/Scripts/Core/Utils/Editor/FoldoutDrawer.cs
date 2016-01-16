@@ -35,6 +35,7 @@ namespace Hedgehog.Core.Utils.Editor
 
         public static void DoFoldoutsLayout(SerializedObject serializedObject, string noFoldoutName = "Misc")
         {
+            serializedObject.Update();
             var data = GatherProperties(serializedObject, noFoldoutName);
 
             List<SerializedProperty> noFoldout;
@@ -42,6 +43,7 @@ namespace Hedgehog.Core.Utils.Editor
             {
                 data.Remove(noFoldoutName);
                 HedgehogEditorGUIUtility.DrawProperties(noFoldout.ToArray());
+                serializedObject.ApplyModifiedProperties();
             }
 
             DoFoldoutsLayout(data);

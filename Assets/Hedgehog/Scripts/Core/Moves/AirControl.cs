@@ -1,4 +1,5 @@
-﻿using Hedgehog.Core.Utils;
+﻿using Hedgehog.Core.Actors;
+using Hedgehog.Core.Utils;
 using UnityEngine;
 
 namespace Hedgehog.Core.Moves

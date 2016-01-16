@@ -1,8 +1,11 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Hedgehog.Core.Utils
 {
+    [ExecuteInEditMode]
     public class Parallax : MonoBehaviour
     {
         public bool PixelSnap;
@@ -32,30 +35,52 @@ namespace Hedgehog.Core.Utils
             Target = Target ? Target : Camera.main;
         }
 
+#if UNITY_EDITOR
+        public void OnEnable()
+        {
+            if (Application.isPlaying) return;
+            EditorApplication.update += Update;
+        }
+
+        public void OnDisable()
+        {
+            if (Application.isPlaying) return;
+            EditorApplication.update -= Update;
+        }
+#endif
+
         public void FixedUpdate()
         {
             if (!Target) return;
-
-            var pos = new Vector2();
-
+            MoveTo(Target.transform.position);
+        }
+#if UNITY_EDITOR
+        public void Update()
+        {
+            if (Application.isPlaying) return;
+            if (SceneView.lastActiveSceneView != null && SceneView.lastActiveSceneView.camera != null)
+                MoveTo(SceneView.lastActiveSceneView.camera.transform.position);
+        }
+#endif
+        public void MoveTo(Vector3 target)
+        {
             var worldSize = new Vector2(TopRightWorld.x - BottomLeftWorld.x, TopRightWorld.y - BottomLeftWorld.y);
             var ratioX = worldSize.x == 0.0f
                 ? 0.0f
-                : (Target.transform.position.x - BottomLeftWorld.x)/
+                : (target.x - BottomLeftWorld.x) /
                   (TopRightWorld.x - BottomLeftWorld.x);
             var ratioY = worldSize.y == 0.0f
                 ? 0.0f
-                : (Target.transform.position.y - BottomLeftWorld.y)/
+                : (target.y - BottomLeftWorld.y) /
                   (TopRightWorld.y - BottomLeftWorld.y);
 
-            var offsetX = ratioX*(TopRightParallax.x - BottomLeftParallax.x) + BottomLeftParallax.x;
-            var offsetY = ratioY*(TopRightParallax.y - BottomLeftParallax.y) + BottomLeftParallax.y;
+            var offsetX = ratioX * (TopRightParallax.x - BottomLeftParallax.x) + BottomLeftParallax.x;
+            var offsetY = ratioY * (TopRightParallax.y - BottomLeftParallax.y) + BottomLeftParallax.y;
 
-            pos = new Vector2(
-                DMath.Flip(Target.transform.position.x + offsetX, Target.transform.position.x),
-                DMath.Flip(Target.transform.position.y + offsetY, Target.transform.position.y));
-            
-            transform.position = pos;
+            transform.position = new Vector2(
+                DMath.Flip(target.x + offsetX, target.x),
+                DMath.Flip(target.y + offsetY, target.y));
+
             if (PixelSnap)
                 transform.position = new Vector3(
                     DMath.Round(transform.position.x, 0.01f),

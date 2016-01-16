@@ -211,17 +211,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11406746
 MonoBehaviour:
@@ -239,17 +240,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: -.071762383
-      outSlope: -.071762383
+      value: 0.99899775
+      inSlope: -0.07176238
+      outSlope: -0.07176238
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11409500
 MonoBehaviour:
@@ -266,10 +268,10 @@ MonoBehaviour:
   UnchangedValue: 0
   WidthChange: 0
   HeightChange: 0
-  UphillGravity: .9375
+  UphillGravity: 0.9375
   DownhillGravity: 3.75
   Deceleration: 0
-  Friction: .421875
+  Friction: 0.421875
 --- !u!114 &11411000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -285,7 +287,7 @@ MonoBehaviour:
   UnchangedValue: 0
   GroundFriction: 1.6875
   GravityDirection: 0
-  AirGravity: 7.85699987
+  AirGravity: 7.857
   AirDrag: 0
   SlopeGravity: 4.5
 --- !u!114 &11418110
@@ -304,17 +306,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11421096
 MonoBehaviour:
@@ -332,17 +335,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: -.071762383
-      outSlope: -.071762383
+      value: 0.99899775
+      inSlope: -0.07176238
+      outSlope: -0.07176238
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11421220
 MonoBehaviour:
@@ -360,17 +364,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11424168
 MonoBehaviour:
@@ -388,17 +393,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: -.071762383
-      outSlope: -.071762383
+      value: 0.99899775
+      inSlope: -0.07176238
+      outSlope: -0.07176238
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11430818
 MonoBehaviour:
@@ -415,7 +421,7 @@ MonoBehaviour:
   UnchangedValue: 0
   Acceleration: 1.6875
   Deceleration: 18
-  TopSpeed: 3.5999999
+  TopSpeed: 3.6
   MinSlopeGravitySpeed: 0
 --- !u!114 &11445542
 MonoBehaviour:
@@ -430,8 +436,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Jump: {fileID: 0}
   UnchangedValue: 0
-  ActivateSpeed: 3.9000001
-  ReleaseSpeed: 2.4000001
+  ActivateSpeed: 3.9
+  ReleaseSpeed: 2.4
 --- !u!114 &11452802
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,17 +454,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11453714
 MonoBehaviour:
@@ -476,17 +483,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11457712
 MonoBehaviour:
@@ -501,8 +509,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Jump: {fileID: 0}
   UnchangedValue: 0
-  ActivateSpeed: 2.0999999
-  ReleaseSpeed: 1.20000005
+  ActivateSpeed: 2.1
+  ReleaseSpeed: 1.2
 --- !u!114 &11460208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,17 +527,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11463570
 MonoBehaviour:
@@ -546,7 +555,7 @@ MonoBehaviour:
   UnchangedValue: 0
   Acceleration: 3.375
   Deceleration: 3.375
-  TopSpeed: 3.5999999
+  TopSpeed: 3.6
 --- !u!114 &11468146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -572,7 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 0}
   UnchangedValue: 0
-  GroundFriction: .84375
+  GroundFriction: 0.84375
   GravityDirection: 0
   AirGravity: 2.25
   AirDrag: 0
@@ -595,7 +604,7 @@ MonoBehaviour:
   UphillGravity: 2.8125
   DownhillGravity: 11.25
   Deceleration: 4.5
-  Friction: .845099986
+  Friction: 0.8451
 --- !u!114 &11488184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -611,7 +620,7 @@ MonoBehaviour:
   UnchangedValue: 0
   Acceleration: 1.6875
   Deceleration: 1.6875
-  TopSpeed: 1.79999995
+  TopSpeed: 1.8
 --- !u!114 &11488478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -629,6 +638,7 @@ MonoBehaviour:
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: 
 --- !u!114 &11492516
 MonoBehaviour:
@@ -646,17 +656,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: .998997748
-      inSlope: .0527101271
-      outSlope: .0527101271
+      value: 0.99899775
+      inSlope: 0.052710127
+      outSlope: 0.052710127
       tangentMode: 0
-    - time: 1.94793034
-      value: 8.00636578
-      inSlope: 10.5216322
-      outSlope: 10.5216322
+    - time: 1.9479303
+      value: 8.006366
+      inSlope: 10.521632
+      outSlope: 10.521632
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
+    m_RotationOrder: 4
   OutParameter: Cycle Speed
 --- !u!114 &11495940
 MonoBehaviour:
@@ -671,9 +682,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GroundControl: {fileID: 0}
   UnchangedValue: 0
-  Acceleration: .84375
+  Acceleration: 0.84375
   Deceleration: 9
-  TopSpeed: 1.79999995
+  TopSpeed: 1.8
   MinSlopeGravitySpeed: 0
 --- !u!1101 &110104584
 AnimatorStateTransition:
@@ -688,9 +699,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: .100000001
+  m_TransitionDuration: 0.1
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -717,7 +728,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -736,9 +747,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: .25
+  m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: .955357134
+  m_ExitTime: 0.95535713
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -762,7 +773,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .880952358
+  m_ExitTime: 0.88095236
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -786,7 +797,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -813,7 +824,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -832,9 +843,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: .25
+  m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -849,7 +860,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .899999976
+    m_EventTreshold: 0.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110248962}
   m_Solo: 0
@@ -858,7 +869,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .53125
+  m_ExitTime: 0.53125
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -882,7 +893,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .955357134
+  m_ExitTime: 0.95535713
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -909,7 +920,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .765625
+  m_ExitTime: 0.765625
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -924,7 +935,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Ground Moving
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
   m_Solo: 0
@@ -933,7 +944,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -948,7 +959,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: Ground Moving
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
@@ -960,7 +971,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .53125
+  m_ExitTime: 0.53125
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -985,9 +996,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 1
   serializedVersion: 3
-  m_TransitionDuration: .25
+  m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: .0625000596
+  m_ExitTime: 0.06250006
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1011,7 +1022,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .53125
+  m_ExitTime: 0.53125
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1035,7 +1046,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1059,7 +1070,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1078,9 +1089,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: .25
+  m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1123,9 +1134,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: .25
+  m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: .375
+  m_ExitTime: 0.375
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1169,7 +1180,7 @@ AnimatorStateTransition:
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0
-  m_TransitionOffset: .0535714291
+  m_TransitionOffset: 0.05357143
   m_ExitTime: 1
   m_HasExitTime: 1
   m_HasFixedDuration: 1
@@ -1194,7 +1205,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .955357134
+  m_ExitTime: 0.95535713
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1218,7 +1229,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1242,7 +1253,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1266,7 +1277,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .765625
+  m_ExitTime: 0.765625
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1314,7 +1325,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .791666627
+  m_ExitTime: 0.7916666
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1338,7 +1349,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .791666627
+  m_ExitTime: 0.7916666
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1356,7 +1367,7 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .75
+    m_EventTreshold: 0.75
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
@@ -1368,7 +1379,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .765625
+  m_ExitTime: 0.765625
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1392,7 +1403,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .0625000596
+  m_ExitTime: 0.06250006
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1416,7 +1427,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .791666627
+  m_ExitTime: 0.7916666
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1440,7 +1451,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .166666687
+  m_ExitTime: 0.16666669
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1485,7 +1496,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1500,7 +1511,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Edge Distance
-    m_EventTreshold: .0399999991
+    m_EventTreshold: 0.04
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110226712}
   m_Solo: 0
@@ -1509,7 +1520,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .375
+  m_ExitTime: 0.375
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1548,7 +1559,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Ground Moving
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
   m_Solo: 0
@@ -1557,7 +1568,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .955357134
+  m_ExitTime: 0.95535713
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1576,9 +1587,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: .25
+  m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: .166666687
+  m_ExitTime: 0.16666669
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1593,7 +1604,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Edge Distance
-    m_EventTreshold: .0399999991
+    m_EventTreshold: 0.04
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110212674}
   m_Solo: 0
@@ -1602,7 +1613,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .166666687
+  m_ExitTime: 0.16666669
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1626,7 +1637,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .166666687
+  m_ExitTime: 0.16666669
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1671,7 +1682,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .375
+  m_ExitTime: 0.375
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1695,7 +1706,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1719,7 +1730,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1743,7 +1754,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .375
+  m_ExitTime: 0.375
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1767,7 +1778,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .765625
+  m_ExitTime: 0.765625
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1785,7 +1796,7 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 3
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .75
+    m_EventTreshold: 0.75
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
@@ -1797,7 +1808,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .53125
+  m_ExitTime: 0.53125
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1836,7 +1847,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: Ground Moving
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
@@ -1848,7 +1859,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .765625
+  m_ExitTime: 0.765625
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1872,7 +1883,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .955357134
+  m_ExitTime: 0.95535713
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1920,7 +1931,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .949999988
+  m_ExitTime: 0.95
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1944,7 +1955,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1968,7 +1979,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .899999976
+  m_ExitTime: 0.9
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -2007,7 +2018,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .899999976
+    m_EventTreshold: 0.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110263398}
   m_Solo: 0
@@ -2016,7 +2027,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .765625
+  m_ExitTime: 0.765625
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -2040,7 +2051,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: .955357134
+  m_ExitTime: 0.95535713
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -2997,7 +3008,7 @@ AnimatorTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .899999976
+    m_EventTreshold: 0.9
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110263398}
   m_Solo: 0
@@ -3013,7 +3024,7 @@ AnimatorTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
   m_Solo: 0
@@ -3119,7 +3130,7 @@ AnimatorTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Edge Distance
-    m_EventTreshold: .0399999991
+    m_EventTreshold: 0.04
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110226712}
   m_Solo: 0
@@ -3151,7 +3162,7 @@ AnimatorTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 110782912}
   m_DstState: {fileID: 0}
   m_Solo: 0
@@ -3167,7 +3178,7 @@ AnimatorTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Top Speed %
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 110768016}
   m_DstState: {fileID: 0}
   m_Solo: 0
@@ -3196,7 +3207,7 @@ AnimatorTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Absolute Ground Speed
-    m_EventTreshold: .00999999978
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 110768016}
   m_DstState: {fileID: 0}
   m_Solo: 0

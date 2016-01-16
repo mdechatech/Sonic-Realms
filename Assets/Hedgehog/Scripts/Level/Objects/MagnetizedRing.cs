@@ -33,7 +33,7 @@ namespace Hedgehog.Level.Objects
 
         public void Awake()
         {
-            if(Acceleration == default(float)) Acceleration = 6.75f;
+            if(Acceleration == 0f) Acceleration = 6.75f;
         }
 
         public void Start()

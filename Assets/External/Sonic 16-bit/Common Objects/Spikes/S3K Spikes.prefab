@@ -12,7 +12,7 @@ GameObject:
   - 114: {fileID: 11464368}
   - 114: {fileID: 11422226}
   - 114: {fileID: 11499900}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S3K Spikes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 467618}
   - 61: {fileID: 6192342}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 438508}
   - 212: {fileID: 21260962}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,6 +268,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

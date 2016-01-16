@@ -175,19 +175,19 @@ Material:
       data:
         first:
           name: _ColorTo1
-        second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
-      data:
-        first:
-          name: _ColorTo2
-        second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
-      data:
-        first:
-          name: _ColorTo3
         second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
       data:
         first:
-          name: _ColorTo4
+          name: _ColorTo2
         second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorTo3
+        second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorTo4
+        second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
       data:
         first:
           name: _ColorTo5

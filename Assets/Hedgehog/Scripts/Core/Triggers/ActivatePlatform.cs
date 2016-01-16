@@ -96,7 +96,8 @@ namespace Hedgehog.Core.Triggers
         /// <returns></returns>
         public bool CheckAngle(float angle)
         {
-            return DMath.AngleInRange_d(angle - transform.eulerAngles.z, SurfaceAngleMin, SurfaceAngleMax);
+            return DMath.AngleInRange_d(angle - (RelativeToRotation ? transform.eulerAngles.z : 0f)
+                , SurfaceAngleMin, SurfaceAngleMax);
         }
 
         public bool Check(TerrainCastHit hit)

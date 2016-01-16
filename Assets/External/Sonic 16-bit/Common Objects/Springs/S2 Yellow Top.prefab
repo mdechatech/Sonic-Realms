@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11498006}
   - 114: {fileID: 11425252}
   - 95: {fileID: 9598710}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S2 Yellow Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,6 +230,10 @@ Prefab:
       propertyPath: ActivateSound
       value: 
       objectReference: {fileID: 8300000, guid: d2629e160604bbf4692c498e0d403d64, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 156190}

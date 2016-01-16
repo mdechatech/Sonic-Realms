@@ -609,12 +609,13 @@ namespace Hedgehog.Core.Actors
 
             Sensors = GetComponentInChildren<HedgehogSensors>();
 
+            // Set default physics values to those of Sonic's
             MaxSpeed = 9001.0f;
             GroundFriction = 1.6785f;
             GravityDirection = 270.0f;
             SlopeGravity = 4.5f;
             AirGravity = 7.857f;
-            AirDrag = 0.1488343f;
+            AirDrag = 0.1488343f;   // Air drag is 0.96875 per frame @ 60fps, 0.96875^60 converts it to seconds
             AirDragRequiredSpeed = new Vector2(0.075f, 2.4f);
             AntiTunnelingSpeed = 4.0f;
             DetachSpeed = 1.5f;
@@ -705,7 +706,6 @@ namespace Hedgehog.Core.Actors
             if (Interrupted)
                 return;
 
-            // Forces, then translations, then movement and collision, updating velocity each time ground velocity changes
             UpdateGroundVelocity();
 
             HandleForces();

@@ -8,7 +8,7 @@ namespace Hedgehog.UI
     /// Ring counter.
     /// </summary>
     [RequireComponent(typeof(Text))]
-    public class RingDisplay : MonoBehaviour
+    public class TextRingsDisplay : BaseRingsDisplay
     {
         /// <summary>
         /// The text on which to show the ring amount.
@@ -54,19 +54,19 @@ namespace Hedgehog.UI
 
         public void OnAmountChange()
         {
-            Display(Target.Amount);
+            Display(Target.Rings);
         }
 
-        public void Display(int value)
+        public override void Display(int rings)
         {
-            Text.text = value.ToString();
+            Text.text = rings.ToString();
         }
 
         public void Update()
         {
             if (Target == null) return;
             if (!Animator) return;
-            if(AmountIntHash != 0) Animator.SetInteger(AmountIntHash, Target.Amount);
+            if(AmountIntHash != 0) Animator.SetInteger(AmountIntHash, Target.Rings);
         }
     }
 }

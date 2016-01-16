@@ -103,6 +103,8 @@ namespace Hedgehog.Core.Moves
 
         public bool Uphill;
 
+        protected ScoreCounter Score;
+
         public override void Reset()
         {
             base.Reset();
@@ -135,6 +137,7 @@ namespace Hedgehog.Core.Moves
         {
             base.Start();
             Controller.OnAttach.AddListener(OnAttach);
+            Score = Controller.GetComponent<ScoreCounter>();
         }
 
         protected void OnAttach()
@@ -231,6 +234,8 @@ namespace Hedgehog.Core.Moves
             Controller.Sensors.TopWidth -= WidthChange;
 
             Hitbox.Harmful = false;
+
+            if(Score) Score.EndCombo();
         }
     }
 }

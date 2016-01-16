@@ -64,7 +64,7 @@ namespace Hedgehog.Level.Objects
             var collector = controller.GetComponent<RingCollector>();
             if (collector == null || !collector.CanCollect) return;
 
-            collector.Amount += Value;
+            collector.Rings += Value;
 
             if(Animator != null && CollectedTriggerHash != 0)
                 Animator.SetTrigger(CollectedTriggerHash);

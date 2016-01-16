@@ -61,14 +61,10 @@ namespace Hedgehog.Core.Actors
             CheckLethalTag = LethalTag != "Untagged";
         }
 
-        public override bool AllowCollision(AreaTrigger trigger)
-        {
-            return true;
-        }
-
         public void NotifyEnemyKilled(HealthSystem enemy)
         {
             OnKillEnemy.Invoke(enemy);
+            if(Health) Health.NotifyEnemyKilled(enemy);
         }
 
         public void CheckTags(Component component)

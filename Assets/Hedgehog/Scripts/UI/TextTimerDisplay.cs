@@ -7,13 +7,15 @@ namespace Hedgehog.UI
     /// <summary>
     /// Formatted timer display.
     /// </summary>
-    public class TimerDisplay : MonoBehaviour
+    public class TextTimerDisplay : BaseTimerDisplay
     {
         /// <summary>
         /// The text on which to show the timer.
         /// </summary>
         [Tooltip("The text on which to show the timer.")]
         public Text Text;
+
+        private float _lastValue;
 
         /// <summary>
         /// How to format the current time. Formatting guide is here:
@@ -56,13 +58,19 @@ namespace Hedgehog.UI
             SecondsFloat = "";
         }
 
+        public void Awake()
+        {
+            _alwaysUpdate = Format.Contains("f");
+            _lastValue = 0f;
+        }
+
         public void Start()
         {
             Animator = Animator ? Animator : GetComponent<Animator>();
             SecondsFloatHash = Animator == null ? 0 : Animator.StringToHash(SecondsFloat);
         }
 
-        public void Display(TimeSpan time)
+        public override void Display(TimeSpan time)
         {
             Display(time, Format);
         }
@@ -79,11 +87,13 @@ namespace Hedgehog.UI
 
         public void Display(TimeSpan time, string format)
         {
-            Text.text = new DateTime().Add(time).ToString(format);
-
-            if (Animator == null) return;
-            if (SecondsFloatHash != 0)
+            if (Animator != null && SecondsFloatHash != 0)
                 Animator.SetFloat(SecondsFloatHash, (float)time.TotalSeconds);
+
+            if (!_alwaysUpdate && (int)time.TotalSeconds == (int)_lastValue) return;
+
+            _lastValue = (int)time.TotalSeconds;
+            Text.text = new DateTime().Add(time).ToString(format);
         }
     }
 }

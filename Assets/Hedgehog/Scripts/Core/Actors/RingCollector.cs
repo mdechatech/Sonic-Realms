@@ -12,17 +12,17 @@ namespace Hedgehog.Core.Actors
     public class RingCollector : MonoBehaviour
     {
         public HedgehogController Controller;
-        public int Amount
+        public int Rings
         {
-            get { return _amount; }
+            get { return _rings; }
             set
             {
-                if (_amount == value) return;
-                _amount = value;
+                if (_rings == value) return;
+                _rings = value;
                 OnAmountChange.Invoke();
             }
         }
-        private int _amount;
+        private int _rings;
 
         /// <summary>
         /// Invoked when the ring total changes.
@@ -84,7 +84,7 @@ namespace Hedgehog.Core.Actors
         public void Reset()
         {
             Controller = GetComponentInParent<HedgehogController>();
-            Amount = 0;
+            Rings = 0;
             AmountInt = "";
 
             CanCollect = true;
@@ -153,8 +153,8 @@ namespace Hedgehog.Core.Actors
             DisableCollection();
 
             // Calculate the rings to spill and the amount to deduct from the total
-            var toSpill = Mathf.Min(Mathf.Min(amount, Amount), MaxSpilledRings);
-            Amount = Mathf.Max(Amount - amount, 0);
+            var toSpill = Mathf.Min(Mathf.Min(amount, Rings), MaxSpilledRings);
+            Rings = Mathf.Max(Rings - amount, 0);
 
             // Ring spilling algorithm from https://info.sonicretro.org/SPG:Ring_Loss
             var angle = 101.25f;
@@ -191,7 +191,7 @@ namespace Hedgehog.Core.Actors
         /// <param name="ringCollector">The ring collector to cast.</param>
         public static implicit operator int (RingCollector ringCollector)
         {
-            return ringCollector ? ringCollector.Amount : 0;
+            return ringCollector ? ringCollector.Rings : 0;
         }
     }
 }

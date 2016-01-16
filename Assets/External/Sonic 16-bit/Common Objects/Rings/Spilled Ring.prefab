@@ -191,7 +191,7 @@ MonoBehaviour:
   Value: 1
   CollectedTrigger: Get
   Collected: 0
-  CollectedSound: {fileID: 0}
+  CollectedSound: {fileID: 8300000, guid: be6e80618227838408fc30693ee0acd3, type: 3}
 --- !u!212 &21201748
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -285,6 +285,10 @@ Prefab:
       propertyPath: Rigidbody2D
       value: 
       objectReference: {fileID: 5018966}
+    - target: {fileID: 0}
+      propertyPath: CollectedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: be6e80618227838408fc30693ee0acd3, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 155200}

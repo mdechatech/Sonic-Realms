@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 449738}
   - 212: {fileID: 21209668}
   - 95: {fileID: 9575964}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ GameObject:
   - 114: {fileID: 11448976}
   - 114: {fileID: 11485488}
   - 114: {fileID: 11430094}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: S2 Red Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,6 +266,10 @@ Prefab:
       propertyPath: ActivateSound
       value: 
       objectReference: {fileID: 8300000, guid: d2629e160604bbf4692c498e0d403d64, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 192390}

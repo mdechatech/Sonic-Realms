@@ -70,7 +70,7 @@ namespace Hedgehog.Level
         public void Start()
         {
             Instance = this;
-            PlayBGM(MainBGM);
+            if(MainBGM) PlayBGM(MainBGM);
         }
 
         public void Awake()

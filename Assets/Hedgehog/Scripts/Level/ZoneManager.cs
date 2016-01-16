@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using Hedgehog.Core.Actors;
 using Hedgehog.UI;
 using UnityEngine;
@@ -25,34 +24,10 @@ namespace Hedgehog.Level
         public HedgehogHealth Health;
 
         /// <summary>
-        /// The display on which to show the player's rings.
+        /// The level timer.
         /// </summary>
-        [Tooltip("The display on which to show the player's rings.")]
-        public RingDisplay RingDisplay;
-
-        /// <summary>
-        /// The current level time.
-        /// </summary>
-        public TimeSpan LevelTime;
-
-        /// <summary>
-        /// The display on which to show the level time.
-        /// </summary>
-        [Header("Timer")]
-        [Tooltip("The display on which to show the level time.")]
-        public TimerDisplay Timer;
-        private bool _alwaysUpdateTimer;
-
-        /// <summary>
-        /// The current level time in seconds.
-        /// </summary>
-        [Tooltip("The current level time in seconds.")]
-        public float LevelTimeSeconds;
-
-        /// <summary>
-        /// Used to check if LevelTimeSeconds is changed manually.
-        /// </summary>
-        private float _previousSeconds;
+        [Tooltip("The level timer.")]
+        public ZoneTimer Timer;
 
         /// <summary>
         /// Number of seconds after which the player dies due to a time over.
@@ -64,39 +39,17 @@ namespace Hedgehog.Level
         {
             Player = FindObjectOfType<HedgehogController>();
             Health = Player ? Player.GetComponent<HedgehogHealth>() : null;
-            RingDisplay = GetComponentInChildren<RingDisplay>();
-
-            Timer = GetComponentInChildren<TimerDisplay>();
-            LevelTimeSeconds = 0.0f;
             TimeOverSeconds = 599.9f;
-        }
-
-        public void Awake()
-        {
-            LevelTime = TimeSpan.FromSeconds(LevelTimeSeconds);
-            _previousSeconds = LevelTimeSeconds;
         }
 
         public void Start()
         {
-            RingDisplay.Target = Player.GetComponentInChildren<RingCollector>();
             Health.OnDeathComplete.AddListener(OnDeathComplete);
-            _alwaysUpdateTimer = Timer.Format.Contains("f");
         }
 
         public void Update()
         {
-            if (_previousSeconds != LevelTimeSeconds)
-                LevelTime = TimeSpan.FromSeconds(LevelTimeSeconds);
-
-            float previousMillis = LevelTime.Milliseconds;
-            LevelTime = LevelTime.Add(TimeSpan.FromSeconds(Time.deltaTime));
-            LevelTimeSeconds = _previousSeconds = (float)LevelTime.TotalSeconds;
-
-            if (_alwaysUpdateTimer || LevelTime.Milliseconds < previousMillis)
-                Timer.Display(LevelTime);
-
-            if (LevelTimeSeconds > TimeOverSeconds)
+            if (Timer.Time.TotalSeconds > TimeOverSeconds)
                 Health.Kill();
         }
 

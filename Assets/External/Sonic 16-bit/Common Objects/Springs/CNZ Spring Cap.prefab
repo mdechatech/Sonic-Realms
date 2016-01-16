@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 409444}
   - 114: {fileID: 11479020}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Exit Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ GameObject:
   - 114: {fileID: 11412418}
   - 95: {fileID: 9567768}
   - 114: {fileID: 11443376}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: CNZ Spring Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 418202}
   - 212: {fileID: 21211546}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -323,6 +323,10 @@ Prefab:
       propertyPath: ActivateSound
       value: 
       objectReference: {fileID: 8300000, guid: d2629e160604bbf4692c498e0d403d64, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 166524}

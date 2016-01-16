@@ -21,6 +21,13 @@ namespace Hedgehog.Core.Actors
         public const string AttackHitboxTag = "Attack Hitbox";
 
         /// <summary>
+        /// The hitbox's collider.
+        /// </summary>
+        [HideInInspector]
+        [Tooltip("The hitbox's collider.")]
+        public Collider2D Collider2D;
+
+        /// <summary>
         /// The controller the hitbox belongs to.
         /// </summary>
         [Tooltip("The controller the hitbox belongs to.")]
@@ -69,6 +76,7 @@ namespace Hedgehog.Core.Actors
 
         public virtual void Awake()
         {
+            Collider2D = GetComponent<Collider2D>();
             Controller = Controller ?? GetComponentInParent<HedgehogController>();
             CollisionsThisFrame = 0;
             CollisionTimer = 0f;

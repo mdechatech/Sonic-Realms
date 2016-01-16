@@ -389,6 +389,7 @@ namespace Hedgehog.Core.Moves
                     return false;
 
                 var result = move.ChangeState(Move.State.Active, mute);
+                OnPerform.Invoke(move);
                 return result;
             }
         }

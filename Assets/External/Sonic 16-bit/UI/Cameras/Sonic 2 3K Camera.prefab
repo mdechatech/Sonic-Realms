@@ -20,6 +20,34 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &151918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 437004}
+  - 61: {fileID: 6149898}
+  m_Layer: 0
+  m_Name: Follow Bounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &437004
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151918}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 494344}
+  m_RootOrder: 0
 --- !u!4 &494344
 Transform:
   m_ObjectHideFlags: 1
@@ -29,7 +57,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 437004}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!20 &2082414
@@ -52,7 +81,7 @@ Camera:
   far clip plane: 1000
   field of view: 13.69
   orthographic: 1
-  orthographic size: 1.22
+  orthographic size: 1.12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -66,6 +95,20 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!61 &6149898
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 151918}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.08, y: 0.32}
 --- !u!81 &8117002
 AudioListener:
   m_ObjectHideFlags: 1
@@ -92,26 +135,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
+  FollowPlayer: 0
+  FollowSpeed: 9.6
+  Camera: {fileID: 0}
+  LevelBoundsMin: {fileID: 0}
+  LevelBoundsMax: {fileID: 0}
+  FollowBoundsMin: {fileID: 0}
+  FollowBoundsMax: {fileID: 0}
+  BasePosition: {x: 0, y: 0}
+  OffsetPosition: {x: 0, y: 0}
+  PanStart: {x: 0, y: 0}
+  PanEnd: {x: 0, y: 0}
+  PanTimer: 0
+  PanTime: 0
+  PanDelayTimer: 0
+  WaitTimer: 0
   RotateToGravity: 1
   RotationSmoothness: 0.2
   PixelPerfect: 1
   SnapOnInit: 1
+  OnChangeTarget:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Hedgehog.Level.ChangeTargetEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   CurrentState: 0
-  FollowSpeed: 9.6
-  FollowCenter: {x: 0, y: 0}
-  FollowRadius: {x: 0.08, y: 0.32}
-  LookUpLag: 2
-  LookUpPanAmount: 1.04
-  LookUpPanSpeed: 1.2
-  LookDownLag: 2
-  LookDownPanAmount: 0.88
-  LookDownPanSpeed: 1.2
-  LagTimer: 0
-  SpindashLag: 0.266667
-  DoForwardShift: 0
-  ForwardShiftMinSpeed: 3.59
-  ForwardShiftPanAmount: 0.64
-  ForwardShiftPanSpeed: 1.2
 --- !u!124 &12458648
 Behaviour:
   m_ObjectHideFlags: 1

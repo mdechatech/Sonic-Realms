@@ -40,6 +40,11 @@ namespace Hedgehog.Core.Actors
             Collider2D = GetComponent<Collider2D>();
         }
 
+        public override bool IsInside(Hitbox hitbox)
+        {
+            return base.IsInside(hitbox) || hitbox.CompareTag(Hitbox.AttackHitboxTag);
+        }
+
         public override void OnAreaStay(Hitbox hitbox)
         {
             var sonicHitbox = hitbox as SonicHitbox;
@@ -60,12 +65,12 @@ namespace Hedgehog.Core.Actors
 
                     // If the controller is traveling upwards or is "lower" than the badnik relative to the direction of
                     // gravity, don't bounce and instead just apply speed reduction
-                    if (vy > 0f || DMath.Highest(hitbox.Controller.transform.position, transform.position,
+                    if (vy > 0f && DMath.Highest(hitbox.Controller.transform.position, transform.position,
                         hitbox.Controller.GravityDirection * Mathf.Deg2Rad) > 0f)
                     {
                         vy -= BottomSpeedReduction * Mathf.Sign(vy);
                     }
-                    else
+                    else if(vy < 0f)
                     {
                         // Otherwise perform the bounce
                         var jump = hitbox.Controller.GetMove<Jump>();
