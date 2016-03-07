@@ -315,13 +315,11 @@ namespace SonicRealms.Core.Actors
 
         /// <summary>
         /// Whether the controller is facing forward or backward. This doesn't actually affect graphics, but it's
-        /// used for making dashes go in the right direction. Doing something such as flipping the sprite can be
-        /// handled using FacingForwardBool with animtion.
+        /// used for making dashes go in the right direction.
         /// </summary>
         [SerializeField]
         [Tooltip("Whether the controller is facing forward or backward. This doesn't actually affect graphics, but it's " +
-                 "used for making dashes go in the right direction. Doing something such as flipping the sprite can be " +
-                 "handled using FacingForwardBool with animtion.")]
+                 "used for making dashes go in the right direction..")]
         private bool _facingForward;
         public bool FacingForward
         {
@@ -1165,10 +1163,6 @@ namespace SonicRealms.Core.Actors
                                 Attach(impact);
                             }
                         }
-                        else
-                        {
-                            transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                        }
                     }
                     else
                     {
@@ -1182,10 +1176,6 @@ namespace SonicRealms.Core.Actors
                                 transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
                                 Attach(impact);
                             }
-                        }
-                        else
-                        {
-                            transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
                         }
                     }
                 }
@@ -1201,10 +1191,6 @@ namespace SonicRealms.Core.Actors
                             Attach(impact);
                         }
                     }
-                    else
-                    {
-                        transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                    }
                 }
                 else
                 {
@@ -1218,10 +1204,6 @@ namespace SonicRealms.Core.Actors
                             transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
                             Attach(impact);
                         }
-                    }
-                    else
-                    {
-                        transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
                     }
                 }
 
@@ -1697,7 +1679,8 @@ namespace SonicRealms.Core.Actors
 
             // The player can't possibly land on something if he's traveling 90 degrees within the normal
             var playerAngle = DMath.Angle(Velocity)*Mathf.Rad2Deg;
-            if (DMath.AngleInRange_d(playerAngle, surfaceDegrees, surfaceDegrees + 180f))
+            const float NormalTolerance = 45f;
+            if (DMath.AngleInRange_d(playerAngle - 90f, surfaceDegrees - NormalTolerance, surfaceDegrees + NormalTolerance))
             {
                 return default(ImpactResult);
             }

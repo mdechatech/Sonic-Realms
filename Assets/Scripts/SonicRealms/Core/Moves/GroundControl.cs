@@ -251,6 +251,7 @@ namespace SonicRealms.Core.Moves
 
             Controller.ApplySlopeGravity = Accelerating || ControlLockTimerOn ||
                                            Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed;
+            Controller.ApplyGroundFriction = !Accelerating && !Braking;
 
             if (!ControlLockTimerOn && !DMath.Equalsf(_axis))
                 Controller.FacingForward = Controller.GroundVelocity >= 0.0f;
@@ -260,6 +261,7 @@ namespace SonicRealms.Core.Moves
         {
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.ApplySlopeGravity = true;
+            Controller.ApplyGroundFriction = true;
 
             if (Animator == null)
                 return;
