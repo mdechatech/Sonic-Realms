@@ -13,6 +13,7 @@ TagManager:
   - Buzz Bomber Turn Left
   - Buzz Bomber Turn Right
   - Buzz Bomber Shoot
+  - Spikes
   layers:
   - Default
   - TransparentFX
@@ -38,10 +39,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Terrain Layer 7
+  - Terrain Layer 6
+  - Terrain Layer 5
+  - Terrain Layer 4
   - Terrain Layer 3
   - Terrain Layer 2
   - Terrain Layer 1
@@ -56,6 +57,15 @@ TagManager:
   - name: Terrain
     uniqueID: 182623717
     locked: 0
-  - name: Special
-    uniqueID: 2727405173
+  - name: Foreground
+    uniqueID: 2218882549
+    locked: 0
+  - name: Paletted UI
+    uniqueID: 3595124367
+    locked: 0
+  - name: Pallette Switchers
+    uniqueID: 1817570899
+    locked: 0
+  - name: UI
+    uniqueID: 2279212375
     locked: 0

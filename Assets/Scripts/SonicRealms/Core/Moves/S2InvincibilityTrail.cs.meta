@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: d9e4097483974494293e9e00a1b68bde
+timeCreated: 1456802457
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - Sparkle: {fileID: 188264, guid: 61da00828aefa27458b93b1226edd210, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

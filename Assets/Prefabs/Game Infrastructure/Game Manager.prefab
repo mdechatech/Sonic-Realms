@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &136642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 472774}
+  - 114: {fileID: 11407338}
+  - 114: {fileID: 11431978}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &472774
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 136642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11407338
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 136642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675281bd8b2ec5042af0688bf529789a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelTransition: {fileID: 11431978}
+  MenuSceneName: Scenes/Menu
+  Levels:
+  - {fileID: 11400000, guid: 4861631379e5fc54db57c19bd8daf3c1, type: 2}
+  Characters:
+  - {fileID: 11400000, guid: 819344311bcc8a049bac258c77bd1211, type: 2}
+  CurrentSaveData:
+    Name: 
+    Character: 
+    Lives: 0
+    Level: 
+    Checkpoint: 
+    Score: 0
+    Rings: 0
+    Time: 0
+  CurrentCharacter: {fileID: 0}
+  CurrentLevel: {fileID: 0}
+  LevelManager: {fileID: 0}
+  Lives: 0
+  Score: 0
+  Rings: 0
+  Time: 0
+  Checkpoint: 
+--- !u!114 &11431978
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 136642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d84ed568b371f544a76d430951b5dd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExitAfterEnter: 0
+  Playing: 0
+  State: 0
+  Animator: {fileID: 0}
+  PlayingBool: 
+  PlayTrigger: 
+  PauseTrigger: 
+  StopTrigger: 
+  EnteringBool: 
+  EnterBeginTrigger: 
+  EnterCompleteTrigger: 
+  ExitingBool: 
+  ExitBeginTrigger: 
+  ExitCompleteTrigger: 
+  OnEnterBegin:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnEnterComplete:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnExitBegin:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnExitComplete:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnPlay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnPause:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnStop:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  EnterWaitForAnimation: 
+  EnterWaitForSound: {fileID: 0}
+  EnterWaitForSeconds: 0
+  ExitWaitForAnimation: 
+  ExitWaitForSound: {fileID: 0}
+  ExitWaitForSeconds: 0
+  TargetIndex: 0
+  TargetName: 
+  OnNextScene:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  Material: {fileID: 2100000, guid: 025d66904b7ec654984fad06e38536f5, type: 2}
+  FadeInTime: 0.5
+  FadeOutTime: 0.5
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: Levels.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4861631379e5fc54db57c19bd8daf3c1,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: Characters.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 819344311bcc8a049bac258c77bd1211,
+        type: 2}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 136642}
+  m_IsPrefabParent: 1

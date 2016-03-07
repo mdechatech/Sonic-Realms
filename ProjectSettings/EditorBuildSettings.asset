@@ -6,4 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Chemical_Hill_Sonic_2.unity
+    path: Assets/Scenes/Menu.unity
+  - enabled: 1
+    path: Assets/Scenes/Test Zone.unity

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 31397037b659ac042ae61a3f350afa47
+timeCreated: 1456719497
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - Controller: {instanceID: 0}
+  - SpilledRingBase: {fileID: 11460168, guid: 2e2263e18fc063342b7f046e500c1bf9, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

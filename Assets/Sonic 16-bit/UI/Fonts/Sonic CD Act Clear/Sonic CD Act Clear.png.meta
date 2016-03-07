@@ -1,0 +1,417 @@
+fileFormatVersion: 2
+guid: a8667a3bf32dbbf4d870d840cbe857a7
+timeCreated: 1449016265
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sonic CD Act Clear_65
+    21300002: Sonic CD Act Clear_66
+    21300004: Sonic CD Act Clear_67
+    21300006: Sonic CD Act Clear_68
+    21300008: Sonic CD Act Clear_69
+    21300010: Sonic CD Act Clear_70
+    21300012: Sonic CD Act Clear_71
+    21300014: Sonic CD Act Clear_72
+    21300016: Sonic CD Act Clear_73
+    21300018: Sonic CD Act Clear_74
+    21300020: Sonic CD Act Clear_75
+    21300022: Sonic CD Act Clear_76
+    21300024: Sonic CD Act Clear_77
+    21300026: Sonic CD Act Clear_78
+    21300028: Sonic CD Act Clear_80
+    21300030: Sonic CD Act Clear_81
+    21300032: Sonic CD Act Clear_82
+    21300034: Sonic CD Act Clear_83
+    21300036: Sonic CD Act Clear_84
+    21300038: Sonic CD Act Clear_85
+    21300040: Sonic CD Act Clear_86
+    21300042: Sonic CD Act Clear_87
+    21300044: Sonic CD Act Clear_88
+    21300046: Sonic CD Act Clear_89
+    21300048: Sonic CD Act Clear_90
+    21300050: Sonic CD Act Clear_111
+    21300052: Sonic CD Act Clear_110
+    21300054: Sonic CD Act Clear_101
+    21300056: Sonic CD Act Clear_79
+    21300058: Sonic CD Act Clear_32
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Sonic CD Act Clear_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_66
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_67
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_68
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_69
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_70
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_71
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 51
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_72
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_73
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 37
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_74
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_75
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_76
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_77
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_78
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_80
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_81
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_82
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_83
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_84
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_85
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_86
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 23
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_87
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_88
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_89
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_90
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 9
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_111
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 9
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_110
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 9
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_101
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 9
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_79
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 37
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Sonic CD Act Clear_32
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 51
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: Fonts
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

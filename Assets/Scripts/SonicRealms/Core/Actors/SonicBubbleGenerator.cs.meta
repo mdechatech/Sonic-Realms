@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 60e8d000f549e374c879e5383b99155e
+timeCreated: 1457059112
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - BreathMeter: {instanceID: 0}
+  - Bubble: {fileID: 181746, guid: 4b283249ce406a643b1a6d4e96ec92fa, type: 2}
+  - MediumBubble: {fileID: 196504, guid: 790a67c7085d2dc429b01809340585b0, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

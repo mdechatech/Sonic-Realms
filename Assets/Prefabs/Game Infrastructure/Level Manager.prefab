@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &113204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 473120}
+  - 114: {fileID: 11475606}
+  - 114: {fileID: 11443804}
+  m_Layer: 0
+  m_Name: Level Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &473120
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113204}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11443804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a674b2d62b659404cb1303b6f6986e0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11475606
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec7c984f227de148bea935dbb7ceed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnLevelComplete:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  BGM: {fileID: 0}
+  HudManager: {fileID: 0}
+  Camera: {fileID: 0}
+  TitleCard: {fileID: 0}
+  GameOverScreen: {fileID: 0}
+  TimeOverScreen: {fileID: 0}
+  ActClearScreen: {fileID: 0}
+  LevelBoundsMin: {fileID: 0}
+  LevelBoundsMax: {fileID: 0}
+  Spawn: {fileID: 0}
+  Timer: {fileID: 11443804}
+  TimeOverSeconds: 599
+  NextLevel:
+    DefaultLevel: {fileID: 0}
+    SpecialCharacters: []
+  Player: {fileID: 0}
+  Health: {fileID: 0}
+  Checkpoint: {fileID: 0}
+  ScoreCounter: {fileID: 0}
+  RingCounter: {fileID: 0}
+  LifeCounter: {fileID: 0}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 113204}
+  m_IsPrefabParent: 1

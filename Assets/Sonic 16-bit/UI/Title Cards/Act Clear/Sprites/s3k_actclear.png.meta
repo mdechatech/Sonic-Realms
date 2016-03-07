@@ -1,0 +1,156 @@
+fileFormatVersion: 2
+guid: 6ee231847b28c9242b2853cafe391ffe
+timeCreated: 1457202855
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: s3k_actclear_sonic
+    21300002: s3k_actclear_tails
+    21300004: s3k_actclear_knuckles
+    21300006: s3k_actclear_super
+    21300008: s3k_actclear_hyper
+    21300010: s3k_actclear_act1
+    21300012: s3k_actclear_act2
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: s3k_actclear_sonic
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 69
+        width: 72
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: s3k_actclear_tails
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 52
+        width: 64
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: s3k_actclear_knuckles
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 35
+        width: 116
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: s3k_actclear_super
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 18
+        width: 74
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: s3k_actclear_hyper
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 74
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: s3k_actclear_act1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 53
+        width: 48
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 16}
+        - {x: -9, y: -1}
+        - {x: -7, y: -2}
+        - {x: -5, y: -2}
+        - {x: -11, y: -2}
+        - {x: -22, y: -1}
+        - {x: -24, y: -5}
+        - {x: -24, y: -16}
+        - {x: 24, y: -16}
+        - {x: 24, y: 16}
+    - name: s3k_actclear_act2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 48
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -4, y: 17}
+        - {x: -23, y: -6}
+        - {x: -23, y: -17}
+        - {x: 24, y: -17}
+        - {x: 24, y: 17}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
