@@ -193,7 +193,7 @@ namespace SonicRealms.Core.Moves
             _originalDeceleration = GroundControl.Deceleration;
 
             Controller.GroundFriction = Friction;
-            GroundControl.AccelerationLocked = true;
+            GroundControl.DisableAcceleration = true;
             GroundControl.Deceleration = Deceleration;
 
             Controller.Sensors.TopOffset += HeightChange/2.0f;
@@ -228,7 +228,7 @@ namespace SonicRealms.Core.Moves
         {
             Controller.SlopeGravity = _originalSlopeGravity;
             Controller.GroundFriction = _originalFriction;
-            GroundControl.AccelerationLocked = false;
+            GroundControl.DisableAcceleration = false;
             GroundControl.Deceleration = _originalDeceleration;
 
             Controller.Sensors.TopOffset -= HeightChange/2.0f;

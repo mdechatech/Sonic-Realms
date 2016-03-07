@@ -811,7 +811,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.204, y: 0.272, z: 0}
+  m_LocalPosition: {x: 0.20000076, y: 0.26999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 425756}
@@ -823,7 +823,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.08000183, y: -0, z: 0}
+  m_LocalPosition: {x: -0.07999802, y: 0.00000023841858, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 473634}
@@ -1329,14 +1329,15 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   Interrupted: 0
   InterruptTimer: 0
-  ApplyVelocity: 0
-  ApplySlopeGravity: 1
-  ApplyGroundFriction: 1
-  DetachWhenSlow: 1
-  DetachLock: 1
+  DisableMovement: 0
+  DisableForces: 0
+  DisableSlopeGravity: 0
+  DisableGroundFriction: 0
+  DisableWallDetach: 0
+  DisableDetach: 0
   DisableAttach: 0
-  ApplyAirGravity: 1
-  ApplyAirDrag: 1
+  DisableAirGravity: 0
+  DisableAirDrag: 0
   _facingForward: 0
   IgnoreCollision: 0
   IgnoringThisCollision: 0
@@ -2466,9 +2467,9 @@ MonoBehaviour:
   MovementAxis: Horizontal
   InvertAxis: 0
   Acceleration: 1.6875
-  AccelerationLocked: 0
+  DisableAcceleration: 0
   Deceleration: 18
-  DecelerationLocked: 0
+  DisableDeceleration: 0
   TopSpeed: 3.6
   MinSlopeGravitySpeed: 0.1
   DisableControl: 0

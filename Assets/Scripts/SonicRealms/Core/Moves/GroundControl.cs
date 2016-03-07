@@ -73,7 +73,8 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Whether acceleration is allowed.
         /// </summary>
-        public bool AccelerationLocked;
+        [DebugFoldout]
+        public bool DisableAcceleration;
 
         /// <summary>
         /// Ground deceleration in units per second squared.
@@ -85,7 +86,8 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Whether deceleration is allowed.
         /// </summary>
-        public bool DecelerationLocked;
+        [DebugFoldout]
+        public bool DisableDeceleration;
 
         /// <summary>
         /// Top running speed in unit per second.
@@ -183,9 +185,9 @@ namespace SonicRealms.Core.Moves
                 BrakingBool = TopSpeedPercentFloat = "";
 
             Acceleration = 1.6875f;
-            AccelerationLocked = false;
+            DisableAcceleration = false;
             Deceleration = 18.0f;
-            DecelerationLocked = false;
+            DisableDeceleration = false;
             TopSpeed = 3.6f;
             MinSlopeGravitySpeed = 0.1f;
         }
@@ -372,12 +374,12 @@ namespace SonicRealms.Core.Moves
 
             if (magnitude < 0.0f)
             {
-                if (!DecelerationLocked && Controller.GroundVelocity > 0.0f)
+                if (!DisableDeceleration && Controller.GroundVelocity > 0.0f)
                 {
                     Controller.GroundVelocity += Deceleration*magnitude*timestep;
                     return true;
                 }
-                else if (!AccelerationLocked && Controller.GroundVelocity > -TopSpeed)
+                else if (!DisableAcceleration && Controller.GroundVelocity > -TopSpeed)
                 {
                     Controller.GroundVelocity += Acceleration*magnitude*timestep;
                     return true;
@@ -385,12 +387,12 @@ namespace SonicRealms.Core.Moves
             }
             else if (magnitude > 0.0f)
             {
-                if (!DecelerationLocked && Controller.GroundVelocity < 0.0f)
+                if (!DisableDeceleration && Controller.GroundVelocity < 0.0f)
                 {
                     Controller.GroundVelocity += Deceleration*magnitude*timestep;
                     return true;
                 }
-                else if (!AccelerationLocked && Controller.GroundVelocity < TopSpeed)
+                else if (!DisableAcceleration && Controller.GroundVelocity < TopSpeed)
                 {
                     Controller.GroundVelocity += Acceleration*magnitude*timestep;
                     return true;

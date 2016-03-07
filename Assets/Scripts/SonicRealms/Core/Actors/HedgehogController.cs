@@ -276,7 +276,12 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether to move the controller based on current velocity.
         /// </summary>
-        public bool ApplyVelocity;
+        public bool DisableMovement;
+
+        /// <summary>
+        /// Whether to disable forces acting on the controller.
+        /// </summary>
+        public bool DisableForces;
 
         /// <summary>
         /// Whether to apply slope gravity on the controller when it's on steep ground.
@@ -687,14 +692,18 @@ namespace SonicRealms.Core.Actors
 
             UpdateGroundVelocity();
 
-            HandleForces();
+            if (!DisableForces)
+            {
+                HandleForces();
+                UpdateGroundVelocity();
+            }
 
-            UpdateGroundVelocity();
-
-            HandleQueuedTranslation();
-            HandleMovement();
-
-            UpdateGroundVelocity();
+            if (!DisableMovement)
+            {
+                HandleQueuedTranslation();
+                HandleMovement();
+                UpdateGroundVelocity();
+            }
         }
         #endregion
 
@@ -859,9 +868,7 @@ namespace SonicRealms.Core.Actors
                 // Slope gravity
                 if (!DisableSlopeGravity &&
                     !DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
-                {
                     GroundVelocity -= SlopeGravity * Mathf.Sin(RelativeSurfaceAngle * Mathf.Deg2Rad) * timestep;
-                }
 
                 // Ground friction
                 if (!DisableGroundFriction)
@@ -1654,17 +1661,22 @@ namespace SonicRealms.Core.Actors
         /// <param name="hit">The impact data as th result of a terrain cast.</param>
         public ImpactResult CheckImpact(TerrainCastHit hit)
         {
-            if (hit == null || hit.Hit.fraction == 0f) return default(ImpactResult);
+            if (hit == null) return default(ImpactResult);
+
+            // Special case - if the collision found is inside a platform instead of on its surface,
+            // we have no collision information but the player should still push out of it
+            if (hit.Hit.fraction == 0f)
+                return new ImpactResult {ShouldAttach = true, GroundSpeed = 0f, SurfaceAngle = 0f};
 
             var surfaceDegrees = DMath.PositiveAngle_d(hit.SurfaceAngle * Mathf.Rad2Deg);
 
             // The player can't possibly land on something if he's traveling 90 degrees within the normal
             var playerAngle = DMath.Angle(Velocity)*Mathf.Rad2Deg;
-            const float NormalTolerance = 45f;
-            if (DMath.AngleInRange_d(playerAngle - 90f, surfaceDegrees - NormalTolerance, surfaceDegrees + NormalTolerance))
-            {
+            const float NormalTolerance = 90f;
+
+            if (!DMath.AngleInRange_d(playerAngle + 180f, 
+                surfaceDegrees + 90f - NormalTolerance, surfaceDegrees + 90f + NormalTolerance))
                 return default(ImpactResult);
-            }
 
             var result = 0f;
             var shouldAttach = true;
