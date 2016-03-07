@@ -3,7 +3,7 @@
 namespace SonicRealms.Core.Actors
 {
     /// <summary>
-    /// Health system for badniks... which is a one hit kill.
+    /// Health system for badniks... which is just set to die in one hit.
     /// </summary>
     public class BadnikHealth : HealthSystem
     {

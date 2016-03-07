@@ -99,6 +99,7 @@ namespace SonicRealms.Core.Actors
         {
             if (Controller.Grounded)
             {
+                // A whole bunch of conditions to see if we should or shouldn't rotate
                 var rotateToSensors = true;
                 rotateToSensors &= RotateDuringStand || !DMath.Equalsf(Controller.GroundVelocity);
                 rotateToSensors &= Roll == null || RotateDuringRoll || !Roll.Active;

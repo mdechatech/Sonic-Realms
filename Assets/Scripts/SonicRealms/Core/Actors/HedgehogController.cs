@@ -281,22 +281,22 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether to apply slope gravity on the controller when it's on steep ground.
         /// </summary>
-        public bool ApplySlopeGravity;
+        public bool DisableSlopeGravity;
 
         /// <summary>
         /// Whether to apply ground friction on the controller when it's on the ground.
         /// </summary>
-        public bool ApplyGroundFriction;
+        public bool DisableGroundFriction;
 
         /// <summary>
         /// Whether to fall off walls and loops if ground speed is below DetachSpeed.
         /// </summary>
-        public bool DetachWhenSlow;
+        public bool DisableWallDetach;
 
         /// <summary>
         /// When true, prevents the controller from falling off surfaces.
         /// </summary>
-        public bool DetachLock;
+        public bool DisableDetach;
 
         /// <summary>
         /// When true, prevents the controller from attaching to surfaces.
@@ -306,12 +306,12 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether to apply air gravity on the controller when it's in the air.
         /// </summary>
-        public bool ApplyAirGravity;
+        public bool DisableAirGravity;
 
         /// <summary>
         /// Whether to apply air drag on the controller when it's in the air.
         /// </summary>
-        public bool ApplyAirDrag;
+        public bool DisableAirDrag;
 
         /// <summary>
         /// Whether the controller is facing forward or backward. This doesn't actually affect graphics, but it's
@@ -353,10 +353,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public Vector2 Velocity
         {
-            get
-            {
-                return new Vector2(Vx, Vy);
-            }
+            get { return new Vector2(Vx, Vy); }
             set
             {
                 if (Grounded)
@@ -377,29 +374,17 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public Vector2 RelativeVelocity
         {
-            get
-            {
-                return DMath.RotateBy(Velocity, (DefaultGravityDirection - GravityDirection) * Mathf.Deg2Rad);
-            }
-            set
-            {
-                Velocity = DMath.RotateBy(value, (GravityDirection - DefaultGravityDirection) * Mathf.Deg2Rad);
-            }
+            get { return DMath.RotateBy(Velocity, (DefaultGravityDirection - GravityDirection) * Mathf.Deg2Rad); }
+            set { Velocity = DMath.RotateBy(value, (GravityDirection - DefaultGravityDirection) * Mathf.Deg2Rad); }
         }
 
         /// <summary>
-        /// Direction of "right" given the current direction of gravity.
+        /// Direction of "right" given the current direction of gravity, in degrees.
         /// </summary>
         public float GravityRight
         {
-            get
-            {
-                return GravityDirection + 90.0f;
-            }
-            set
-            {
-                GravityDirection = value - 90.0f;
-            }
+            get { return GravityDirection + 90.0f; }
+            set { GravityDirection = value - 90.0f; }
         }
 
         /// <summary>
@@ -407,14 +392,8 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public Vector2 GravityDownVector
         {
-            get
-            {
-                return DMath.AngleToVector(GravityDirection * Mathf.Deg2Rad);
-            }
-            set
-            {
-                GravityDirection = DMath.Modp(DMath.Angle(value) * Mathf.Rad2Deg, 360.0f);
-            }
+            get { return DMath.AngleToVector(GravityDirection * Mathf.Deg2Rad); }
+            set { GravityDirection = DMath.Modp(DMath.Angle(value) * Mathf.Rad2Deg, 360.0f); }
         }
 
         /// <summary>
@@ -460,14 +439,8 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public float RelativeSurfaceAngle
         {
-            get
-            {
-                return RelativeAngle(SurfaceAngle);
-            }
-            set
-            {
-                SurfaceAngle = AbsoluteAngle(value);
-            }
+            get { return RelativeAngle(SurfaceAngle); }
+            set { SurfaceAngle = AbsoluteAngle(value); }
         }
 
         /// <summary>
@@ -656,39 +629,16 @@ namespace SonicRealms.Core.Actors
             SlopeGravityBeginAngle = 10.0f;
             LedgeClimbHeight = 0.16f;
             LedgeDropHeight = 0.16f;
-            MaxClimbAngle = 70.0f;
-
-            ApplyAirDrag = true;
-            ApplyAirGravity = true;
-            ApplyGroundFriction = true;
-            ApplySlopeGravity = true;
-            DisableAttach = true;
-            DetachLock = true;
-            DetachWhenSlow = true;
-
-            DisableEvents = false;
-            DisableNotifyPlatforms = false;
-            DisableGroundCheck = false;
-            DisableCeilingCheck = false;
-            DisableSideCheck = false;
-
-            DetachTrigger = AttachTrigger = FacingForwardBool = AirSpeedXFloat =
-                AirSpeedYFloat = GroundedBool = GroundSpeedFloat = AbsGroundSpeedFloat =
-                SurfaceAngleFloat = GroundSpeedBool = "";
+            MaxClimbAngle = 70.0f; // This might be a bit too high, we'll see
         }
 
         public void Awake()
         {
             Footing = Footing.None;
-            Grounded = false;
             Vx = Vy = GroundVelocity = 0.0f;
-            JustDetached = false;
             QueuedTranslation = default(Vector3);
 
-            ApplyAirDrag = ApplyAirGravity = ApplyGroundFriction = ApplySlopeGravity = DetachWhenSlow = true;
             FacingForward = true;
-            DisableAttach = DetachLock = false;
-            IgnoreCollision = IgnoringThisCollision = false;
 
             OnAttach = OnAttach ?? new UnityEvent();
             OnCollide = OnCollide ?? new PlatformCollisionEvent();
@@ -704,9 +654,7 @@ namespace SonicRealms.Core.Actors
             OnObjectActivate = OnObjectActivate ?? new ReactiveObjectEvent();
             OnObjectDeactivate = OnObjectDeactivate ?? new ReactiveObjectEvent();
 
-            if (Animator == null)
-                return;
-
+            if (Animator == null) return;
             DetachTriggerHash = string.IsNullOrEmpty(DetachTrigger) ? 0 : Animator.StringToHash(DetachTrigger);
             AttachTriggerHash = string.IsNullOrEmpty(AttachTrigger) ? 0 : Animator.StringToHash(AttachTrigger);
             FacingForwardBoolHash = string.IsNullOrEmpty(FacingForwardBool) ? 0 : Animator.StringToHash(FacingForwardBool);
@@ -721,8 +669,7 @@ namespace SonicRealms.Core.Actors
 
         public void Update()
         {
-            if (Animator != null)
-                SetAnimatorParameters();
+            if (Animator != null) SetAnimatorParameters();
 
             if (Interrupted)
             {
@@ -736,8 +683,7 @@ namespace SonicRealms.Core.Actors
             LeftWall = RightWall = LeftCeiling = RightCeiling = null;
             LeftWallHit = RightWallHit = LeftCeilingHit = RightCeilingHit = null;
 
-            if (Interrupted)
-                return;
+            if (Interrupted) return;
 
             UpdateGroundVelocity();
 
@@ -767,8 +713,7 @@ namespace SonicRealms.Core.Actors
         /// <param name="timestep"></param>
         public void HandleInterrupt(float timestep)
         {
-            if (!Interrupted || InterruptTimer <= 0.0f)
-                return;
+            if (!Interrupted || InterruptTimer <= 0.0f) return;
             if ((InterruptTimer -= timestep) <= 0.0f)
             {
                 Interrupted = false;
@@ -785,7 +730,7 @@ namespace SonicRealms.Core.Actors
         }
 
         /// <summary>
-        /// Handles movement caused by velocity.
+        /// Handles movement caused by velocity, including anti-tunneling routines.
         /// </summary>
         public void HandleMovement(float timestep)
         {
@@ -795,11 +740,14 @@ namespace SonicRealms.Core.Actors
 
             if (IgnoreCollision)
             {
+                // If there's no collision, we don't have to care about tunneling through walls - 
+                // so just add velocity to position
                 transform.position += new Vector3(Vx * timestep, Vy * timestep);
                 UpdateGroundVelocity();
             }
             else if (vt < AntiTunnelingSpeed)
             {
+                // If we're below the anti-tunneling speed, again just add velocity and check collisions once
                 transform.position += new Vector3(Vx * timestep, Vy * timestep);
                 HandleCollisions();
                 UpdateGroundVelocity();
@@ -808,36 +756,41 @@ namespace SonicRealms.Core.Actors
             {
                 // If the controller's gotta go fast, split up collision into steps so we don't glitch through walls.
                 // The speed limit becomes however many steps your computer can handle!
+
+                // vc = current velocity - we will subtract from this for each iteration of movement
                 var vc = vt;
                 var steps = 0;
                 while (vc > 0.0f)
                 {
                     if (vc > AntiTunnelingSpeed)
                     {
-                        transform.position +=
-                            (new Vector3(Vx * timestep, Vy * timestep)) * (AntiTunnelingSpeed / vt);
+                        // One movement iteration - the movement is limited by AntiTunnelingSpeed
+                        transform.position += (new Vector3(Vx*timestep, Vy*timestep))*(AntiTunnelingSpeed/vt);
                         vc -= AntiTunnelingSpeed;
                     }
                     else
                     {
-                        transform.position +=
-                            (new Vector3(Vx * timestep, Vy * timestep)) * (vc / vt);
+                        // If we're less than AntiTunnelingSpeed, just apply the remaining velocity
+                        transform.position += (new Vector3(Vx*timestep, Vy*timestep))*(vc/vt);
                         vc = 0.0f;
                     }
 
                     HandleCollisions();
                     UpdateGroundVelocity();
 
+                    // Leave early if we've hit the hard limit, come to a complete stop, or gotten interrupted
                     if (++steps > CollisionStepLimit || DMath.Equalsf(Velocity.magnitude) || Interrupted)
                         break;
 
-                    // If the player's speed changes mid-stagger recalculate current velocity and total velocity
+                    // If the player's speed changes while we're doing this (ex: the player hits a spring),
+                    // recalculate the current 
                     var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
                     vc *= vn / vt;
                     vt *= vn / vt;
                 }
             }
 
+            // TODO used for future feature
             if (ForceSurfaceAngle)
             {
                 SurfaceAngle = surfaceAngle;
@@ -850,8 +803,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void HandleQueuedTranslation()
         {
-            if (QueuedTranslation == Vector3.zero)
-                return;
+            if (QueuedTranslation == Vector3.zero) return;
 
             transform.position += QueuedTranslation;
             QueuedTranslation = Vector3.zero;
@@ -905,29 +857,24 @@ namespace SonicRealms.Core.Actors
             if (Grounded)
             {
                 // Slope gravity
-                if (ApplySlopeGravity &&
+                if (!DisableSlopeGravity &&
                     !DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
                 {
                     GroundVelocity -= SlopeGravity * Mathf.Sin(RelativeSurfaceAngle * Mathf.Deg2Rad) * timestep;
                 }
 
                 // Ground friction
-                if (ApplyGroundFriction)
+                if (!DisableGroundFriction)
                     GroundVelocity -= Mathf.Min(Mathf.Abs(GroundVelocity), GroundFriction * timestep) * Mathf.Sign(GroundVelocity);
 
                 // Speed limit
-                if (GroundVelocity > MaxSpeed)
-                    GroundVelocity = MaxSpeed;
-                else if (GroundVelocity < -MaxSpeed)
-                    GroundVelocity = -MaxSpeed;
+                GroundVelocity = Mathf.Clamp(GroundVelocity, -MaxSpeed, MaxSpeed);
 
-                // Detachment from walls if speed is too low
-                if (DetachWhenSlow &&
-                    Mathf.Abs(GroundVelocity) < DetachSpeed &&
+                // Detachment if we're running on a wall and speed is too low
+                if (!DisableWallDetach && Mathf.Abs(GroundVelocity) < DetachSpeed &&
                     DMath.AngleInRange_d(RelativeSurfaceAngle, 85.0f, 275.0f))
                 {
-                    if (!DisableEvents && Detach())
-                        OnSteepDetach.Invoke();
+                    if (!DisableEvents && Detach()) OnSteepDetach.Invoke();
                 }
             }
             else
@@ -936,11 +883,11 @@ namespace SonicRealms.Core.Actors
                 SensorsRotation = GravityDirection + 90.0f;
 
                 // Air gravity
-                if (ApplyAirGravity)
+                if (!DisableAirGravity)
                     Velocity += DMath.AngleToVector(GravityDirection * Mathf.Deg2Rad) * AirGravity * timestep;
 
                 // Air drag
-                if (ApplyAirDrag &&
+                if (!DisableAirDrag &&
                     Vy > 0f && Vy < AirDragRequiredSpeed.y && Mathf.Abs(Vx) > AirDragRequiredSpeed.x)
                 {
                     Vx *= Mathf.Pow(AirDrag, timestep);
@@ -992,6 +939,7 @@ namespace SonicRealms.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirSideCheck()
         {
+            // Get our collision results
             var leftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position,
                 ControllerSide.Left);
             var rightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
@@ -1002,15 +950,19 @@ namespace SonicRealms.Core.Actors
                 LeftWallHit = leftCheck;
                 LeftWall = leftCheck.Transform;
 
+                // First - let any special platforms know we want to collide with them
                 NotifyTriggers(leftCheck);
 
+                // If they don't want to be ignored, proceed as normal
                 if (!IgnoringThisCollision)
                 {
+                    // Push out by the difference between the sensor location and hit location,
+                    // And also plus a tiny amount to prevent sticky collisions
                     var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
-                    if (RelativeVelocity.x < 0.0f)
-                        RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                    // Stop the player
+                    if (RelativeVelocity.x < 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
 
                     IgnoringThisCollision = false;
                 }
@@ -1023,15 +975,19 @@ namespace SonicRealms.Core.Actors
                 RightWallHit = rightCheck;
                 RightWall = rightCheck.Transform;
 
+                // First - let any special platforms know we want to collide with them
                 NotifyTriggers(rightCheck);
 
+                // If they don't want to be ignored, proceed as normal
                 if (!IgnoringThisCollision)
                 {
+                    // Push out by the difference between the sensor location and hit location,
+                    // And also plus a tiny amount to prevent sticky collisions
                     var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
-                    if (RelativeVelocity.x > 0.0f)
-                        RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                    // Stop the player
+                    if (RelativeVelocity.x > 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
 
                     IgnoringThisCollision = false;
                 }
@@ -1048,6 +1004,7 @@ namespace SonicRealms.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirCeilingCheck()
         {
+            // Get our collision results
             var leftCheck = this.TerrainCast(Sensors.TopLeftStart.position, Sensors.TopLeft.position, ControllerSide.Top);
             var rightCheck = this.TerrainCast(Sensors.TopRightStart.position, Sensors.TopRight.position,
                 ControllerSide.Top);
@@ -1056,21 +1013,28 @@ namespace SonicRealms.Core.Actors
             {
                 if (leftCheck && rightCheck)
                 {
+                    // First - let any special platforms know we want to collide with them
                     NotifyTriggers(leftCheck);
                     NotifyTriggers(rightCheck);
+
+                    // If they don't want to be ignored, proceed as normal
                     if (!IgnoringThisCollision)
                     {
-                        if (DMath.Highest(leftCheck.Hit.point, rightCheck.Hit.point,
-                            GravityDirection * Mathf.Deg2Rad) >= 0f)
+                        // The sensor that found the lowest point of collision (relative to gravity) will be the
+                        // one to check attachment with
+                        if (DMath.Highest(leftCheck.Hit.point, rightCheck.Hit.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
                         {
+                            // Find out how we should impact the ceiling using our collision result
                             var impact = CheckImpact(leftCheck);
                             if (impact.ShouldAttach)
                             {
+                                // If we should attach, push out by the difference between the hit location and sensor
                                 transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
                                 Attach(impact);
                             }
                             else
                             {
+                                // Preetty much doing the same thing all the way down
                                 impact = CheckImpact(rightCheck);
                                 if (impact.ShouldAttach)
                                 {
@@ -1140,6 +1104,7 @@ namespace SonicRealms.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool AirGroundCheck()
         {
+            // Get our collision results
             var groundLeftCheck = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position,
                 ControllerSide.Bottom);
             var groundRightCheck = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
@@ -1149,9 +1114,18 @@ namespace SonicRealms.Core.Actors
             {
                 if (groundLeftCheck && groundRightCheck)
                 {
+                    // The sensor that found the highest point of collision (relative to gravity) will be the
+                    // one to check attachment with
                     if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
                             GravityDirection*Mathf.Deg2Rad) >= 0.0f)
                     {
+                        // This is a bit different from ceilings - first we check the impact, and if
+                        // we should attach, THEN we check if special platforms want us to ignore them
+                        // instead of the other way around.
+
+                        // Otherwise we would have some very sticky collisions, such as spikes that
+                        // damage you even if you graze them slightly.
+
                         var impact = CheckImpact(groundLeftCheck);
 
                         if (impact.ShouldAttach)
@@ -1159,6 +1133,7 @@ namespace SonicRealms.Core.Actors
                             NotifyTriggers(groundLeftCheck);
                             if (!IgnoringThisCollision)
                             {
+                                // If we should attach, push out by the difference between the hit location and sensor
                                 transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
                                 Attach(impact);
                             }
@@ -1166,6 +1141,7 @@ namespace SonicRealms.Core.Actors
                     }
                     else
                     {
+                        // Again, same thing all the way down
                         var impact = CheckImpact(groundRightCheck);
 
                         if (impact.ShouldAttach)
@@ -1221,6 +1197,7 @@ namespace SonicRealms.Core.Actors
         /// <returns><c>true</c>, if a collision was found, <c>false</c> otherwise.</returns>
         private bool GroundSideCheck()
         {
+            // Get collision results
             var leftCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterLeft.position, ControllerSide.Left);
             var rightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                 ControllerSide.Right);
@@ -1232,23 +1209,25 @@ namespace SonicRealms.Core.Actors
 
             if (leftCheck)
             {
+                // Let special platforms know we want to collide with them
                 NotifyTriggers(leftCheck);
 
+                // If they do, continue as normal
                 if (!IgnoringThisCollision)
                 {
-                    if (GroundVelocity < 0.0f)
-                        GroundVelocity = 0.0f;
+                    // Stop the player
+                    if (GroundVelocity < 0.0f) GroundVelocity = 0.0f;
 
+                    // Push out by the difference between the sensor location and hit location,
+                    // And also plus a tiny amount to prevent sticky collisions
                     var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
-                    // If running down a wall and hits the floor, orient the player onto the floor
-                    if (DMath.AngleInRange_d(RelativeSurfaceAngle,
-                        MaxClimbAngle, 180.0f - MaxClimbAngle))
-                    {
+                    // If we were running down a wall and hit the floor, orient the player onto the floor
+                    if (DMath.AngleInRange_d(RelativeSurfaceAngle, MaxClimbAngle, 180.0f - MaxClimbAngle))
                         SurfaceAngle -= 90.0f;
-                    }
 
+                    // Make sure the sensors get reoriented immediately
                     SensorsRotation = SurfaceAngle;
                 }
 
@@ -1258,12 +1237,12 @@ namespace SonicRealms.Core.Actors
 
             if (rightCheck)
             {
+                // Same thing, but with the right sensors
                 NotifyTriggers(rightCheck);
 
                 if (!IgnoringThisCollision)
                 {
-                    if (GroundVelocity > 0.0f)
-                        GroundVelocity = 0.0f;
+                    if (GroundVelocity > 0.0f) GroundVelocity = 0.0f;
 
                     var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
@@ -1282,8 +1261,8 @@ namespace SonicRealms.Core.Actors
                 return true;
             }
 
-            IgnoringThisCollision = false;
             SensorsRotation = SurfaceAngle;
+            IgnoringThisCollision = false;
             return false;
         }
 
@@ -1297,6 +1276,7 @@ namespace SonicRealms.Core.Actors
             var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position,
                 ControllerSide.Right);
 
+            // Sonic doesn't actually react to ceilings while on the ground!
             // There is nothing to do here but set variables. This information is used for crushers.
             if (leftCheck)
             {
@@ -1316,6 +1296,7 @@ namespace SonicRealms.Core.Actors
                 IgnoringThisCollision = false;
                 return true;
             }
+
             if (rightCheck)
             {
                 NotifyTriggers(rightCheck);
@@ -1602,7 +1583,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public bool Detach()
         {
-            if (DetachLock) return false;
+            if (DisableDetach) return false;
             var wasGrounded = Grounded;
 
             Grounded = false;
@@ -1687,32 +1668,32 @@ namespace SonicRealms.Core.Actors
 
             var result = 0f;
             var shouldAttach = true;
-            var fixedAngled = RelativeAngle(surfaceDegrees);
+            var relativeSurfaceAngle = RelativeAngle(surfaceDegrees);
             if (RelativeVelocity.y <= 0.0f)
             {
-                if (fixedAngled < 22.5f || fixedAngled > 337.5f)
+                if (relativeSurfaceAngle < 22.5f || relativeSurfaceAngle > 337.5f)
                 {
                     result = RelativeVelocity.x;
                 }
-                else if (fixedAngled < 45.0f)
+                else if (relativeSurfaceAngle < 45.0f)
                 {
                     result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
                         ? RelativeVelocity.x
                         : 0.5f * RelativeVelocity.y;
                 }
-                else if (fixedAngled > 315.0f)
+                else if (relativeSurfaceAngle > 315.0f)
                 {
                     result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
                         ? RelativeVelocity.x
                         : -0.5f * RelativeVelocity.y;
                 }
-                else if (fixedAngled < 90.0f)
+                else if (relativeSurfaceAngle < 90.0f)
                 {
                     result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
                         ? RelativeVelocity.x
                         : RelativeVelocity.y;
                 }
-                else if (fixedAngled > 270.0f)
+                else if (relativeSurfaceAngle > 270.0f)
                 {
                     result = Mathf.Abs(RelativeVelocity.x) > -RelativeVelocity.y
                         ? RelativeVelocity.x
@@ -1725,15 +1706,15 @@ namespace SonicRealms.Core.Actors
             }
             else
             {
-                if (fixedAngled > 90.0f && fixedAngled < 135.0f)
+                if (relativeSurfaceAngle > 90.0f && relativeSurfaceAngle < 135.0f)
                 {
                     result = RelativeVelocity.y;
                 }
-                else if (fixedAngled > 225.0f && fixedAngled < 270.0f)
+                else if (relativeSurfaceAngle > 225.0f && relativeSurfaceAngle < 270.0f)
                 {
                     result = -RelativeVelocity.y;
                 }
-                else if (fixedAngled > 135.0f && fixedAngled < 225.0f)
+                else if (relativeSurfaceAngle > 135.0f && relativeSurfaceAngle < 225.0f)
                 {
                     RelativeVelocity = new Vector2(RelativeVelocity.x, 0.0f);
                 }
@@ -1743,8 +1724,9 @@ namespace SonicRealms.Core.Actors
                 }
             }
 
-            // If we're gonna fall off because we're too slow, don't attach at all
-            if (DetachWhenSlow && (Mathf.Abs(result) < DetachSpeed && fixedAngled > 90.0f && fixedAngled < 270.0f))
+            // If we're on a wall and the proposed impact speed is too low to stay on it, don't attach at all
+            if (!DisableWallDetach &&
+                (Mathf.Abs(result) < DetachSpeed && relativeSurfaceAngle > 90.0f && relativeSurfaceAngle < 270.0f))
                 return default(ImpactResult);
 
             return new ImpactResult {GroundSpeed = result, ShouldAttach = shouldAttach, SurfaceAngle = hit.SurfaceAngle};
@@ -1782,13 +1764,20 @@ namespace SonicRealms.Core.Actors
         /// For example, 0 (flat surface angle) returns 180 (upside-down surface) when gravity
         /// points upward and 0 when gravity points downward.
         /// </summary>
-        /// <param name="absoluteAngle"></param>
+        /// <param name="absoluteAngle">The absolute angle, in degrees.</param>
         /// <returns></returns>
         public float RelativeAngle(float absoluteAngle)
         {
             return DMath.PositiveAngle_d(absoluteAngle - GravityDirection + 270.0f);
         }
 
+        /// <summary>
+        /// Returns the given relative angle (relative to gravity) as an absolute angle.
+        /// For example, 0 (flat) while gravity is 90 (upside-down) will return 180, an
+        /// upside-down surface.
+        /// </summary>
+        /// <param name="relativeAngle">The relative angle, in degrees.</param>
+        /// <returns></returns>
         public float AbsoluteAngle(float relativeAngle)
         {
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
@@ -1868,6 +1857,8 @@ namespace SonicRealms.Core.Actors
             if (!DisableEvents) OnObjectDeactivate.Invoke(obj);
         }
         #endregion
+
+        // TODO this stuff should prolly go into extension methods
 
         /// <summary>
         /// Finds the first reactive of the specified type the controller is interacting with, if any.

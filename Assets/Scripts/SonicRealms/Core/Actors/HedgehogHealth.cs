@@ -198,24 +198,30 @@ namespace SonicRealms.Core.Actors
         {
             if (Invincible) return;
 
+            // Check if the damage source is a spike (to play different sounds in response)
             var spikes = source.CompareTag(SpikeTag);
 
+            // Perform the rebound
             HurtReboundMove.ThreatPosition = source ? (Vector2)source.position : default(Vector2);
             HurtReboundMove.OnEnd.AddListener(OnHurtReboundEnd);
             HurtReboundMove.Perform();
-
+            
+            // Start our invincibility frames
             HurtInvincibilityTimer = HurtInvinciblilityTime;
             HurtInvincible = Invincible = true;
 
+            // See if the player had a shield
             var shield = Controller.GetPowerup<Shield>();
             if (shield == null)
             {
+                // If not, and we're out of rings, we're dead
                 if (RingCounter.Rings <= 0)
                 {
                     Kill();
                     return;
                 }
 
+                // Otherwise just spill the beans
                 RingCounter.Spill(RingsLost);
 
                 if (RingLossSound != null)
@@ -223,6 +229,7 @@ namespace SonicRealms.Core.Actors
             }
             else
             {
+                // Special spike sound
                 if (spikes)
                 {
                     if (SpikeSound != null)
@@ -235,10 +242,13 @@ namespace SonicRealms.Core.Actors
                 }
             }
 
-            Controller.EndMove<Roll>();
             OnHurt.Invoke(null);
         }
 
+        /// <summary>
+        /// Lets the player know that he killed an enemy
+        /// </summary>
+        /// <param name="enemy"></param>
         public void NotifyEnemyKilled(HealthSystem enemy)
         {
             OnEnemyKilled.Invoke(enemy);

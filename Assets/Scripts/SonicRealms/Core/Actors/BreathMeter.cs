@@ -36,6 +36,9 @@ namespace SonicRealms.Core.Actors
         [Tooltip("How quickly the controller gets air back, in seconds per second (lol).")]
         public float ReplenishRate;
 
+        /// <summary>
+        /// Gravity after drowning.
+        /// </summary>
         [Space]
         [Tooltip("Gravity after drowning.")]
         public float DrownGravity;
@@ -237,6 +240,7 @@ namespace SonicRealms.Core.Actors
                 if (AirPercentFloatHash != 0) MeterAnimator.SetFloat(AirPercentFloatHash, RemainingAir/TotalAir);
             }
 
+            // Replenish air when the player can breathe
             if (CanBreathe)
             {
                 RemainingAir += ReplenishRate*Time.deltaTime;
@@ -246,6 +250,7 @@ namespace SonicRealms.Core.Actors
                 return;
             }
 
+            // Otherwise deplete air - if it's below zero, then drown
             RemainingAir -= Time.deltaTime;
             if (RemainingAir < 0.0f)
             {

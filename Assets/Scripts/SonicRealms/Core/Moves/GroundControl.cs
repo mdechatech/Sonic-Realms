@@ -236,40 +236,38 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveFixedUpdate()
         {
             UpdateControlLockTimer();
-            if (!ControlLockTimerOn)
-            {
-                Controller.ApplyGroundFriction = !Accelerate(_axis);
-            }
 
-            if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed)
-            {
-                if (DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 50.0f, 310.0f))
-                {
-                    Lock();
-                }
-            }
+            // Accelerate as long as the control lock isn't on
+            if (!ControlLockTimerOn) Accelerate(_axis);
+            
+            // If we're on a wall and aren't going quickly enough, start the control lock
+            if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed &&
+                DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 50.0f, 310.0f))
+                Lock();
 
-            Controller.ApplySlopeGravity = Accelerating || ControlLockTimerOn ||
-                                           Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed;
-            Controller.ApplyGroundFriction = !Accelerating && !Braking;
+            // Disable slope gravity when we're not moving, so that Sonic can stand on slopes
+            Controller.DisableSlopeGravity = !(Accelerating || ControlLockTimerOn ||
+                                           Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed);
 
+            // Disable ground friction while we have player input
+            Controller.DisableGroundFriction = Accelerating || Braking;
+
+            // Orient the player in the direction we're moving (not graphics-wise, just internally!)
             if (!ControlLockTimerOn && !DMath.Equalsf(_axis))
                 Controller.FacingForward = Controller.GroundVelocity >= 0.0f;
         }
 
         public override void OnActiveExit()
         {
+            // Set everything back to normal
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
-            Controller.ApplySlopeGravity = true;
-            Controller.ApplyGroundFriction = true;
+            Controller.DisableSlopeGravity = false;
+            Controller.DisableGroundFriction = false;
 
-            if (Animator == null)
-                return;
-            if (!string.IsNullOrEmpty(AcceleratingBool))
-                Animator.SetBool(AcceleratingBool, false);
+            if (Animator == null) return;
 
-            if (!string.IsNullOrEmpty(BrakingBool))
-                Animator.SetBool(BrakingBool, false);
+            if (AcceleratingBoolHash != 0) Animator.SetBool(AcceleratingBoolHash, false);
+            if (BrakingBoolHash != 0) Animator.SetBool(BrakingBoolHash, false);
         }
 
         public override void SetAnimatorParameters()

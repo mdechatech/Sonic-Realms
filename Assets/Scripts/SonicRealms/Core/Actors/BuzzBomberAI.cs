@@ -355,6 +355,7 @@ namespace SonicRealms.Core.Actors
             Rigidbody2D = GetComponent<Rigidbody2D>();
             Rigidbody2D.velocity = MoveSpeed;
 
+            // Add callbacks so we know when our child colliders (like line of sight) find something
             if (PlayerSearchArea)
             {
                 var fov = PlayerSearchArea.gameObject.AddComponent<TriggerCallback2D>();
@@ -374,6 +375,7 @@ namespace SonicRealms.Core.Actors
         {
             if (!CanShoot)
             {
+                // Update the shot cooldown timer
                 TimeBetweenShotsTimer -= Time.deltaTime;
                 if (TimeBetweenShotsTimer < 0f)
                 {
@@ -385,9 +387,10 @@ namespace SonicRealms.Core.Actors
             {
                 if(EnemySighted) Shoot(false);
             }
-
+            
             if (CurrentState == State.Shooting)
             {
+                // Stay in the shooting state for the duration of the shot timer
                 ShotTimer -= Time.deltaTime;
                 if (ShotTimer < 0f)
                 {
@@ -397,6 +400,7 @@ namespace SonicRealms.Core.Actors
             }
             else if (CurrentState == State.Turning)
             {
+                // Stay in the turning state for the duration of the turn timer
                 TurnTimer -= Time.deltaTime;
                 if (TurnTimer < 0f)
                 {
@@ -408,6 +412,7 @@ namespace SonicRealms.Core.Actors
 
         public void OnPlayerEnter(Collider2D other)
         {
+            // Keeps track of players currently in the line of sight
             if (!other.CompareTag(PlayerTag)) return;
 
             EnemySighted = true;
@@ -416,6 +421,7 @@ namespace SonicRealms.Core.Actors
 
         public void OnPlayerExit(Collider2D other)
         {
+            // Removes players from its internal list once they have left the line of sight
             if (!other.CompareTag(PlayerTag)) return;
 
             EnemiesSighted.Remove(other);
@@ -424,6 +430,7 @@ namespace SonicRealms.Core.Actors
 
         public void OnSignalEnter(Collider2D other)
         {
+            // Interpret the signal based on the collider's tag
             if (other.CompareTag(TurnLeftTag)) Turn(false);
             else if (other.CompareTag(TurnRightTag)) Turn(true);
             else if (other.CompareTag(ShootTag)) Shoot(false);

@@ -117,21 +117,37 @@ namespace SonicRealms.Core.Actors
             }
         }
 
+        /// <summary>
+        /// Take one damage from an unspecified source.
+        /// </summary>
         public void TakeDamage()
         {
             TakeDamage(1f, null);
         }
 
+        /// <summary>
+        /// Takes the given amount of damage from an unspecified source.
+        /// </summary>
+        /// <param name="damage">The amount of damage to take.</param>
         public void TakeDamage(float damage)
         {
             TakeDamage(damage, null);
         }
 
+        /// <summary>
+        /// Takes one damage from the given source.
+        /// </summary>
+        /// <param name="source">The source that caused the damage.</param>
         public void TakeDamage(Transform source)
         {
             TakeDamage(1f, source);
         }
 
+        /// <summary>
+        /// Takes the given amount of damage from the specified source.
+        /// </summary>
+        /// <param name="damage">The amount of damage to take.</param>
+        /// <param name="source">The source that caused the damage.</param>
         public virtual void TakeDamage(float damage, Transform source)
         {
             if (Invincible || IsDead) return;

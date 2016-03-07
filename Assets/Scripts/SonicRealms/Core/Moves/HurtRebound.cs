@@ -60,6 +60,8 @@ namespace SonicRealms.Core.Moves
 
         public override void OnActiveEnter(State previousState)
         {
+            Manager.End<Roll>();
+
             Controller.OnAttach.AddListener(OnAttach);
 
             // Set speed based on underwater and position of the threat

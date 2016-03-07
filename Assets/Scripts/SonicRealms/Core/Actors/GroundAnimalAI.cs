@@ -87,6 +87,7 @@ namespace SonicRealms.Core.Actors
                 if (HitGroundTriggerHash != 0) Animator.SetTrigger(HitGroundTriggerHash);
             }
 
+            // When we hit the ground, ignore it and jump right back up
             Controller.IgnoreThisCollision();
             Controller.FacingForward = FacingRight;
             Controller.RelativeVelocity = new Vector2(RunSpeed * (FacingRight ? 1f : -1f), JumpSpeed);

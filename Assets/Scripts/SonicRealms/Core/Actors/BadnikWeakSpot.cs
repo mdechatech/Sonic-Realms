@@ -5,9 +5,16 @@ using UnityEngine;
 
 namespace SonicRealms.Core.Actors
 {
+    /// <summary>
+    /// The part of the badnik that makes it go 'poof' and bounces up the player when hit.
+    /// </summary>
     [RequireComponent(typeof(Collider2D))]
     public class BadnikWeakSpot : ReactiveArea
     {
+        /// <summary>
+        /// The badnik's health system. It will sustain damage under the appropriate conditions.
+        /// </summary>
+        [Tooltip("The badnik's health system. It will sustain damage under the appropriate conditions.")]
         public HealthSystem Badnik;
 
         [HideInInspector]
@@ -50,6 +57,7 @@ namespace SonicRealms.Core.Actors
             var sonicHitbox = hitbox as SonicHitbox;
             if (sonicHitbox == null) return;
 
+            // The weak spot can hurt the player back, too!
             if (sonicHitbox.Vulnerable && !sonicHitbox.Harmful)
             {
                 sonicHitbox.Health.TakeDamage(transform);

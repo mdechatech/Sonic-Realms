@@ -89,12 +89,17 @@ namespace SonicRealms.Core.Actors
             _waterChecker = StartCoroutine(CheckWater());
         }
 
+        /// <summary>
+        /// Coroutine that runs while the bubble is underwater.
+        /// </summary>
+        /// <returns></returns>
         protected IEnumerator CheckWater()
         {
             yield return new WaitForSeconds(WaterCheckInterval);
 
             while (true)
             {
+                // If we left water, pop
                 if (!Physics2D.OverlapPoint(transform.position, WaterLayer)) Pop();
                 yield return new WaitForSeconds(WaterCheckInterval);
             }
@@ -130,11 +135,13 @@ namespace SonicRealms.Core.Actors
         {
             float x = transform.position.x, y = transform.position.y;
 
+            // A little horizontal wiggle
             WiggleTimer += Time.deltaTime;
             WiggleTimer %= WiggleTime;
 
             x += (WiggleTimer/WiggleTime < 0.5f ? WiggleLength : -WiggleLength)*Time.deltaTime/WiggleTime;
 
+            // Float upwards
             y += Buoyancy*Time.deltaTime;
 
             transform.position = new Vector3(x, y);
