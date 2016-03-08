@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -609,6 +610,20 @@ namespace SonicRealms.Core.Actors
         public string SurfaceAngleFloat;
         protected int SurfaceAngleFloatHash;
         #endregion
+        #region Command Buffers
+        public enum BufferEvent
+        {
+            BeforeForces,
+            AfterForces,
+            BeforeMovement,
+            AfterMovement,
+            BeforeCollisions,
+            AfterCollisions
+        }
+
+        public delegate void CommandBuffer(HedgehogController controller);
+        protected Dictionary<BufferEvent, List<CommandBuffer>> CommandBuffers;
+        #endregion
 
         #region Lifecycle Functions
         public virtual void Reset()
@@ -659,6 +674,8 @@ namespace SonicRealms.Core.Actors
             OnObjectActivate = OnObjectActivate ?? new ReactiveObjectEvent();
             OnObjectDeactivate = OnObjectDeactivate ?? new ReactiveObjectEvent();
 
+            CommandBuffers = new Dictionary<BufferEvent, List<CommandBuffer>>();
+
             if (Animator == null) return;
             DetachTriggerHash = string.IsNullOrEmpty(DetachTrigger) ? 0 : Animator.StringToHash(DetachTrigger);
             AttachTriggerHash = string.IsNullOrEmpty(AttachTrigger) ? 0 : Animator.StringToHash(AttachTrigger);
@@ -700,12 +717,49 @@ namespace SonicRealms.Core.Actors
 
             if (!DisableMovement)
             {
-                HandleQueuedTranslation();
                 HandleMovement();
                 UpdateGroundVelocity();
             }
         }
         #endregion
+        /// <summary>
+        /// Adds a command buffer at the given buffer event. Command buffers can be used to insert code
+        /// at certain points in the player's physics routines.
+        /// 
+        /// For example, one may add a function to be called right after the player has applied forces to 
+        /// itself by calling:
+        /// 
+        /// AddCommandBuffer(theFunction, HedgehogController.BufferEvent.AfterForces);
+        /// 
+        /// The function must take in a HedgehogController and have no return value.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="evt"></param>
+        public void AddCommandBuffer(CommandBuffer buffer, BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (!CommandBuffers.TryGetValue(evt, out buffers))
+                CommandBuffers[evt] = buffers = new List<CommandBuffer>();
+            buffers.Add(buffer);
+        }
+
+        /// <summary>
+        /// Removes the command buffer at the given buffer event.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="evt"></param>
+        public void RemoveCommandBuffer(CommandBuffer buffer, BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (CommandBuffers.TryGetValue(evt, out buffers)) buffers.Remove(buffer);
+        }
+
+        protected void HandleBuffers(BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (CommandBuffers.TryGetValue(evt, out buffers))
+                foreach (var buffer in buffers) buffer(this);
+        }
 
         #region Lifecycle Subroutines
         /// <summary>
@@ -743,10 +797,9 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void HandleMovement(float timestep)
         {
+            HandleBuffers(BufferEvent.BeforeMovement);
+
             var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
-
-            var surfaceAngle = SurfaceAngle;
-
             if (IgnoreCollision)
             {
                 // If there's no collision, we don't have to care about tunneling through walls - 
@@ -800,22 +853,15 @@ namespace SonicRealms.Core.Actors
             }
 
             // TODO used for future feature
+            /*
             if (ForceSurfaceAngle)
             {
                 SurfaceAngle = surfaceAngle;
                 ForceSurfaceAngle = false;
             }
-        }
+            */
 
-        /// <summary>
-        /// Handles translations requested from outside sources.
-        /// </summary>
-        public void HandleQueuedTranslation()
-        {
-            if (QueuedTranslation == Vector3.zero) return;
-
-            transform.position += QueuedTranslation;
-            QueuedTranslation = Vector3.zero;
+            HandleBuffers(BufferEvent.AfterMovement);
         }
 
         /// <summary>
@@ -863,12 +909,21 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         private void HandleForces(float timestep)
         {
+            HandleBuffers(BufferEvent.BeforeForces);
+
             if (Grounded)
             {
                 // Slope gravity
                 if (!DisableSlopeGravity &&
                     !DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
-                    GroundVelocity -= SlopeGravity * Mathf.Sin(RelativeSurfaceAngle * Mathf.Deg2Rad) * timestep;
+                {
+                    var previous = GroundVelocity;
+                    GroundVelocity -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
+                    if ((previous < 0f && GroundVelocity > 0f) ||
+                        (previous > 0f && GroundVelocity < 0f))
+                        GroundVelocity = 0f;
+                }
+                    
 
                 // Ground friction
                 if (!DisableGroundFriction)
@@ -900,6 +955,8 @@ namespace SonicRealms.Core.Actors
                     Vx *= Mathf.Pow(AirDrag, timestep);
                 }
             }
+
+            HandleBuffers(BufferEvent.AfterForces);
         }
 
         /// <summary>
@@ -908,6 +965,8 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void HandleCollisions()
         {
+            HandleBuffers(BufferEvent.BeforeCollisions);
+
             if (!Grounded)
             {
                 if (!DisableSideCheck) AirSideCheck();
@@ -925,6 +984,8 @@ namespace SonicRealms.Core.Actors
                 if (!DisableGroundCheck) GroundSurfaceCheck();
                 UpdateGroundVelocity();
             }
+
+            HandleBuffers(BufferEvent.AfterCollisions);
         }
 
         /// <summary>
