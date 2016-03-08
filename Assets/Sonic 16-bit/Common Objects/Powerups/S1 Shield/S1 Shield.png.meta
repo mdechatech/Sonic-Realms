@@ -10,7 +10,7 @@ TextureImporter:
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -20,7 +20,7 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
@@ -45,7 +45,7 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
@@ -61,8 +61,16 @@ TextureImporter:
         width: 46
         height: 42
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21, y: 21}
+        - {x: -23, y: 15}
+        - {x: -23, y: -16}
+        - {x: -16, y: -21}
+        - {x: 18, y: -21}
+        - {x: 23, y: -19}
+        - {x: 23, y: 21}
     - name: s1_shield_02
       rect:
         serializedVersion: 2
@@ -71,8 +79,17 @@ TextureImporter:
         width: 46
         height: 42
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 21}
+        - {x: -23, y: 13}
+        - {x: -23, y: -11}
+        - {x: -18, y: -21}
+        - {x: 20, y: -21}
+        - {x: 23, y: -15}
+        - {x: 23, y: 18}
+        - {x: 19, y: 21}
     - name: s1_shield_03
       rect:
         serializedVersion: 2
@@ -81,8 +98,17 @@ TextureImporter:
         width: 46
         height: 42
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21, y: 21}
+        - {x: -23, y: 14}
+        - {x: -23, y: -20}
+        - {x: -22, y: -21}
+        - {x: 17, y: -21}
+        - {x: 23, y: -19}
+        - {x: 23, y: 21}
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 

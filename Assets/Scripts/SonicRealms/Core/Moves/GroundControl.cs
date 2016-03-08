@@ -252,7 +252,9 @@ namespace SonicRealms.Core.Moves
                                            Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed);
 
             // Disable ground friction while we have player input
-            Controller.DisableGroundFriction = Accelerating || Braking;
+            Controller.DisableGroundFriction = 
+                (!DisableAcceleration && Accelerating) ||
+                (!DisableDeceleration && Braking);
 
             // Orient the player in the direction we're moving (not graphics-wise, just internally!)
             if (!ControlLockTimerOn && !DMath.Equalsf(_axis))

@@ -1261,7 +1261,7 @@ MonoBehaviour:
   AntiTunnelingSpeed: 3.5
   SlopeGravityBeginAngle: 10
   DetachSpeed: 1.5
-  MaxClimbAngle: 70
+  MaxClimbAngle: 50
   DisableNotifyPlatforms: 0
   DisableEvents: 0
   DisableCeilingCheck: 0
