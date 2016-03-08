@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Actors;
+﻿using System.Security.Cryptography.X509Certificates;
+using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -104,6 +105,14 @@ namespace SonicRealms.Core.Moves
         [Tooltip("Minimum ground speed at which slope gravity is applied, in units per second. Allows Sonic to stand still on " +
                  "steep slopes.")]
         public float MinSlopeGravitySpeed;
+
+        [Space, PhysicsFoldout]
+        public float ControlLockDuration;
+
+        [PhysicsFoldout]
+        public float ControlLockAngle;
+
+        protected bool ControlLockEndedThisFrame;
         #endregion
         
         #region Properties
@@ -190,6 +199,8 @@ namespace SonicRealms.Core.Moves
             DisableDeceleration = false;
             TopSpeed = 3.6f;
             MinSlopeGravitySpeed = 0.1f;
+            ControlLockDuration = 0.5f;
+            ControlLockAngle = 45f;
         }
 
         public override void Awake()
@@ -225,8 +236,39 @@ namespace SonicRealms.Core.Moves
         {
             Manager.End<AirControl>();
             Controller.OnSteepDetach.AddListener(OnSteepDetach);
+            Controller.AddCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
             _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+        }
+
+        protected void ApplyForces(HedgehogController controller)
+        {
+            UpdateControlLockTimer();
+
+            // If we're too steep and not moving quickly enough, start the control lock
+            if (!ControlLockTimerOn && 
+                Mathf.Abs(controller.GroundVelocity) < controller.DetachSpeed &&
+                DMath.AngleInRange_d(controller.RelativeSurfaceAngle, ControlLockAngle, 360f - ControlLockAngle))
+                Lock();
+
+            if (!ControlLockTimerOn) Accelerate(_axis);
+
+            // Disable slope gravity when we're not moving, so that Sonic can stand on slopes
+            controller.DisableSlopeGravity = !(Accelerating || ControlLockTimerOn ||
+                                           Mathf.Abs(controller.GroundVelocity) > MinSlopeGravitySpeed);
+
+            // Disable ground friction while we have player input
+            controller.DisableGroundFriction =
+                ControlLockTimerOn || 
+                (!DisableAcceleration && Accelerating) ||
+                (!DisableDeceleration && Braking);
+
+            // Orient the player in the direction we're moving (not graphics-wise, just internally!)
+            if (!ControlLockEndedThisFrame && !ControlLockTimerOn && !DMath.Equalsf(_axis))
+                controller.FacingForward = controller.GroundVelocity >= 0.0f;
+
+            if (ControlLockEndedThisFrame)
+                ControlLockEndedThisFrame = false;
         }
 
         public override void OnActiveUpdate()
@@ -235,38 +277,13 @@ namespace SonicRealms.Core.Moves
             _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
         }
 
-        public override void OnActiveFixedUpdate()
-        {
-            UpdateControlLockTimer();
-
-            // Accelerate as long as the control lock isn't on
-            if (!ControlLockTimerOn) Accelerate(_axis);
-            
-            // If we're on a wall and aren't going quickly enough, start the control lock
-            if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed &&
-                DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 50.0f, 310.0f))
-                Lock();
-
-            // Disable slope gravity when we're not moving, so that Sonic can stand on slopes
-            Controller.DisableSlopeGravity = !(Accelerating || ControlLockTimerOn ||
-                                           Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed);
-
-            // Disable ground friction while we have player input
-            Controller.DisableGroundFriction = 
-                (!DisableAcceleration && Accelerating) ||
-                (!DisableDeceleration && Braking);
-
-            // Orient the player in the direction we're moving (not graphics-wise, just internally!)
-            if (!ControlLockTimerOn && !DMath.Equalsf(_axis))
-                Controller.FacingForward = Controller.GroundVelocity >= 0.0f;
-        }
-
         public override void OnActiveExit()
         {
             // Set everything back to normal
             Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.DisableSlopeGravity = false;
             Controller.DisableGroundFriction = false;
+            Controller.RemoveCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
             if (Animator == null) return;
 
@@ -311,13 +328,22 @@ namespace SonicRealms.Core.Moves
         }
 
         /// <summary>
+        /// Locks ground control.
+        /// </summary>
+        public void Lock()
+        {
+            Lock(ControlLockDuration);
+        }
+
+        /// <summary>
         /// Locks ground control for the specified duration.
         /// </summary>
         /// <param name="time"></param>
-        public void Lock(float time = 0.5f)
+        public void Lock(float time)
         {
             ControlLockTimer = time;
             ControlLockTimerOn = true;
+            Controller.FacingForward = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0f, 90f);
         }
 
         /// <summary>
@@ -327,6 +353,7 @@ namespace SonicRealms.Core.Moves
         {
             ControlLockTimer = 0.0f;
             ControlLockTimerOn = false;
+            ControlLockEndedThisFrame = true;
         }
 
         /// <summary>
@@ -378,7 +405,13 @@ namespace SonicRealms.Core.Moves
             {
                 if (!DisableDeceleration && Controller.GroundVelocity > 0.0f)
                 {
-                    Controller.GroundVelocity += Deceleration*magnitude*timestep;
+                    var delta = Deceleration*magnitude*timestep;
+                    Controller.GroundVelocity += delta;
+                    if (Controller.GroundVelocity < 0f)
+                    {
+                        Controller.GroundVelocity = delta;
+                    }
+
                     return true;
                 }
                 else if (!DisableAcceleration && Controller.GroundVelocity > -TopSpeed)
@@ -391,7 +424,10 @@ namespace SonicRealms.Core.Moves
             {
                 if (!DisableDeceleration && Controller.GroundVelocity < 0.0f)
                 {
+                    var delta = Deceleration*magnitude*timestep;
                     Controller.GroundVelocity += Deceleration*magnitude*timestep;
+                    if (Controller.GroundVelocity > 0f) Controller.GroundVelocity = delta;
+
                     return true;
                 }
                 else if (!DisableAcceleration && Controller.GroundVelocity < TopSpeed)

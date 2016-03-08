@@ -1671,6 +1671,7 @@ MonoBehaviour:
   PerformSound: {fileID: 0}
   EndSound: {fileID: 0}
   MinimumSpeed: 2.4
+  MaximumAngle: 45
   SkidSound: {fileID: 8300000, guid: bdceffe79c913be46bdd89c6b77607cf, type: 3}
   SkidSoundRepeatTime: 0.0667
 --- !u!114 &11431504
@@ -2472,6 +2473,8 @@ MonoBehaviour:
   DisableDeceleration: 0
   TopSpeed: 3.6
   MinSlopeGravitySpeed: 0.1
+  ControlLockDuration: 0.5
+  ControlLockAngle: 45
   DisableControl: 0
   ControlLockTimerOn: 0
   ControlLockTimer: 0
