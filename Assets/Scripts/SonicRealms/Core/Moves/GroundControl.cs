@@ -147,7 +147,7 @@ namespace SonicRealms.Core.Moves
         /// </summary>
         public bool Standing
         {
-            get { return DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating; }
+            get { return !ControlLockTimerOn && DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating; }
         }
 
         /// <summary>
@@ -258,17 +258,11 @@ namespace SonicRealms.Core.Moves
                                            Mathf.Abs(controller.GroundVelocity) > MinSlopeGravitySpeed);
 
             // Disable ground friction while we have player input
-            controller.DisableGroundFriction =
-                ControlLockTimerOn || 
+            controller.DisableGroundFriction = ControlLockTimerOn || 
                 (!DisableAcceleration && Accelerating) ||
                 (!DisableDeceleration && Braking);
 
-            // Orient the player in the direction we're moving (not graphics-wise, just internally!)
-            if (!ControlLockEndedThisFrame && !ControlLockTimerOn && !DMath.Equalsf(_axis))
-                controller.FacingForward = controller.GroundVelocity >= 0.0f;
-
-            if (ControlLockEndedThisFrame)
-                ControlLockEndedThisFrame = false;
+            if (ControlLockEndedThisFrame) ControlLockEndedThisFrame = false;
         }
 
         public override void OnActiveUpdate()
@@ -343,7 +337,6 @@ namespace SonicRealms.Core.Moves
         {
             ControlLockTimer = time;
             ControlLockTimerOn = true;
-            Controller.FacingForward = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0f, 90f);
         }
 
         /// <summary>
@@ -407,34 +400,39 @@ namespace SonicRealms.Core.Moves
                 {
                     var delta = Deceleration*magnitude*timestep;
                     Controller.GroundVelocity += delta;
-                    if (Controller.GroundVelocity < 0f)
-                    {
-                        Controller.GroundVelocity = delta;
-                    }
 
-                    return true;
+                    if (Controller.GroundVelocity < 0f)
+                        Controller.GroundVelocity = delta;
                 }
-                else if (!DisableAcceleration && Controller.GroundVelocity > -TopSpeed)
+                else if (!DisableAcceleration)
                 {
-                    Controller.GroundVelocity += Acceleration*magnitude*timestep;
-                    return true;
+                    Controller.FacingForward = false;
+
+                    if(Controller.GroundVelocity > -TopSpeed)
+                        Controller.GroundVelocity += Acceleration*magnitude*timestep;
                 }
+
+                return true;
             }
             else if (magnitude > 0.0f)
             {
-                if (!DisableDeceleration && Controller.GroundVelocity < 0.0f)
+                if (!DisableDeceleration && Controller.GroundVelocity < 0f)
                 {
-                    var delta = Deceleration*magnitude*timestep;
-                    Controller.GroundVelocity += Deceleration*magnitude*timestep;
-                    if (Controller.GroundVelocity > 0f) Controller.GroundVelocity = delta;
+                    var delta = Deceleration * magnitude * timestep;
+                    Controller.GroundVelocity += delta;
 
-                    return true;
+                    if (Controller.GroundVelocity > 0f)
+                        Controller.GroundVelocity = delta;
                 }
-                else if (!DisableAcceleration && Controller.GroundVelocity < TopSpeed)
+                else if (!DisableAcceleration)
                 {
-                    Controller.GroundVelocity += Acceleration*magnitude*timestep;
-                    return true;
+                    Controller.FacingForward = true;
+
+                    if (Controller.GroundVelocity < TopSpeed)
+                        Controller.GroundVelocity += Acceleration*magnitude*timestep;
                 }
+
+                return true;
             }
 
             return false;

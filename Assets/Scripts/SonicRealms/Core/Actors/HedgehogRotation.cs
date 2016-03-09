@@ -13,8 +13,8 @@ namespace SonicRealms.Core.Actors
         public HedgehogController Controller;
         public Transform RendererTransform;
 
-        [NonSerialized]
-        public float TrueRotation;
+        [NonSerialized] public float TrueRotation;
+        [NonSerialized] public float IntervalRotation;
         public float Rotation
         {
             get { return RendererTransform.eulerAngles.z; }
@@ -61,14 +61,24 @@ namespace SonicRealms.Core.Actors
         public float MinimumAngle;
 
         /// <summary>
-        /// How many orientations the sprite has. For example, if precision is 8, the sprite will rotate in
-        /// 360/8 = 45 degree intervals.
+        /// Intervals between the different orientations of the player, in degrees. For example:
+        /// if this is 45, the player will rotate its sprite every 45 degrees.
         /// </summary>
-        [Tooltip("How many orientations the sprite has. For example, if precision is 8, the sprite will rotate " +
-                 "in 360/8 = 45 degree intervals.")]
-        public float Precision;
+        [Tooltip("Intervals between the different orientations of the player, in degrees. For example: " +
+                 "if this is 45, the player will rotate its sprite every 45 degrees.")]
+        public float IntervalAngle;
+
+        [Range(0f, 1f)]
+        [Tooltip("Prevents twitching between different orientations. The player must overcome this much of the " +
+                 "rotation interval to change its sprite rotation.")]
+        public float IntervalThreshold;
+
+        protected float IntervalMin;
+        protected float Interval;
+        protected float IntervalMax;
 
         protected Roll Roll;
+        protected GroundControl GroundControl;
 
         public void Reset()
         {
@@ -77,7 +87,9 @@ namespace SonicRealms.Core.Actors
             RotateDuringStand = false;
             MinimumAngle = 22.5f;
             AirRecoveryRate = 360.0f;
-            Precision = 45.0f;
+
+            IntervalAngle = 45f;
+            IntervalThreshold = 0.1f;
 
             Controller = GetComponentInParent<HedgehogController>();
             if (Controller == null) return;
@@ -92,7 +104,9 @@ namespace SonicRealms.Core.Actors
         public void Start()
         {
             RendererTransform = RendererTransform ?? Controller.RendererObject.transform;
-            Roll = Controller.GetComponent<MoveManager>() ? Controller.GetComponent<MoveManager>().Get<Roll>() : null;
+            Roll = Controller.GetMove<Roll>();
+            GroundControl = Controller.GetMove<GroundControl>();
+            UpdateInterval();
         }
 
         public void Update()
@@ -101,7 +115,10 @@ namespace SonicRealms.Core.Actors
             {
                 // A whole bunch of conditions to see if we should or shouldn't rotate
                 var rotateToSensors = true;
-                rotateToSensors &= RotateDuringStand || !DMath.Equalsf(Controller.GroundVelocity);
+                rotateToSensors &= RotateDuringStand ||
+                                   (GroundControl == null
+                                       ? !DMath.Equalsf(Controller.GroundVelocity)
+                                       : !GroundControl.Standing);
                 rotateToSensors &= Roll == null || RotateDuringRoll || !Roll.Active;
                 rotateToSensors &=
                     Mathf.Abs(DMath.ShortestArc_d(Controller.SensorsRotation, Controller.GravityRight)) >
@@ -135,7 +152,40 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void FixRotation()
         {
-            Rotation = DMath.Round(TrueRotation, 360.0f/Precision, Controller.GravityRight);
+            if (!DMath.AngleInRange_d(TrueRotation, IntervalMin, IntervalMax))
+            {
+                UpdateInterval();
+            }
+            
+            Rotation = Interval;
+        }
+
+        public void UpdateInterval()
+        {
+            Interval = DMath.Round(TrueRotation, IntervalAngle, Controller.GravityRight);
+
+            if (DMath.AngleInRange_d(Interval, -MinimumAngle, MinimumAngle))
+            {
+                IntervalMin = 360f - MinimumAngle;
+                IntervalMax = MinimumAngle;
+            }
+            else if (DMath.AngleInRange_d(Interval, -MinimumAngle - IntervalAngle, -MinimumAngle))
+            {
+                // When one interval below 0
+                IntervalMin = DMath.PositiveAngle_d(Interval - IntervalAngle*(0.5f + IntervalThreshold));
+                IntervalMax = 360f - MinimumAngle + IntervalAngle*IntervalThreshold;
+            }
+            else if (DMath.AngleInRange_d(Interval, MinimumAngle, MinimumAngle + IntervalAngle))
+            {
+                // When one interval above 0
+                IntervalMin = MinimumAngle - IntervalAngle*IntervalThreshold;
+                IntervalMax = DMath.PositiveAngle_d(Interval + IntervalAngle * (0.5f + IntervalThreshold));
+            }
+            else
+            {
+                IntervalMin = DMath.PositiveAngle_d(Interval - IntervalAngle*(0.5f + IntervalThreshold));
+                IntervalMax = DMath.PositiveAngle_d(Interval + IntervalAngle*(0.5f + IntervalThreshold));
+            }
         }
     }
 }
