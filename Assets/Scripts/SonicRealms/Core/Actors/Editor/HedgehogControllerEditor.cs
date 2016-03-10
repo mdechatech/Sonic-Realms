@@ -238,13 +238,21 @@ namespace SonicRealms.Core.Actors.Editor
                 EditorGUILayout.LabelField("Collision", headerStyle);
 
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
-                    "CollisionMask", "Reactives", "Grounded", "LeftWall", "LeftCeiling", "RightWall", "RightCeiling");
+                    "CollisionMask",
+                    "Reactives",
+                    "Grounded",
+                    "LeftWall",
+                    "LeftCeiling",
+                    "RightWall",
+                    "RightCeiling");
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
-                EditorGUILayout.FloatField("Surface Angle", _instance.SurfaceAngle);
-                EditorGUILayout.EnumPopup("Footing", _instance.Footing);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("PrimarySurface"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("SecondarySurface"));
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
+                    "SurfaceAngle",
+                    "RoughSurfaceAngle",
+                    "Footing",
+                    "PrimarySurface",
+                    "SecondarySurface");
                 GUI.enabled = Application.isPlaying;
 
                 EditorGUILayout.Space();

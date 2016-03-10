@@ -39,6 +39,14 @@ namespace SonicRealms.Core.Moves
         [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
         public string BrakingBool;
         protected int BrakingBoolHash;
+        
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller is standing.
+        /// </summary>
+        [AnimationFoldout]
+        [Tooltip("Name of an Animator bool set to whether the controller is standing.")]
+        public string StandingBool;
+        protected int StandingBoolHash;
 
         /// <summary>
         /// Name of an Animator float set to absolute ground speed divided by top speed.
@@ -106,10 +114,10 @@ namespace SonicRealms.Core.Moves
                  "steep slopes.")]
         public float MinSlopeGravitySpeed;
 
-        [Space, PhysicsFoldout]
+        [Space, ControlFoldout]
         public float ControlLockDuration;
 
-        [PhysicsFoldout]
+        [ControlFoldout]
         public float ControlLockAngle;
 
         protected bool ControlLockEndedThisFrame;
@@ -147,7 +155,11 @@ namespace SonicRealms.Core.Moves
         /// </summary>
         public bool Standing
         {
-            get { return !ControlLockTimerOn && DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating; }
+            get
+            {
+                return DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating &&
+                       Mathf.Abs(DMath.ShortestArc_d(Controller.RelativeSurfaceAngle, 0f)) < ControlLockAngle;
+            }
         }
 
         /// <summary>
@@ -164,16 +176,19 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Whether control is disabled.
         /// </summary>
+        [DebugFoldout]
         public bool DisableControl;
 
         /// <summary>
         /// Whether the control lock is on.
         /// </summary>
+        [DebugFoldout]
         public bool ControlLockTimerOn;
-        
+
         /// <summary>
         /// Time until the control lock is switched off, in seconds. Set to zero if the control is not locked.
         /// </summary>
+        [DebugFoldout]
         public float ControlLockTimer;
 
         protected ScoreCounter Score;
@@ -212,11 +227,12 @@ namespace SonicRealms.Core.Moves
             ControlLockTimerOn = false;
             ControlLockTimer = 0.0f;
 
-            InputAxisFloatHash = string.IsNullOrEmpty(InputAxisFloat) ? 0 : Animator.StringToHash(InputAxisFloat);
-            InputBoolHash = string.IsNullOrEmpty(InputBool) ? 0 : Animator.StringToHash(InputBool);
-            AcceleratingBoolHash = string.IsNullOrEmpty(AcceleratingBool) ? 0 : Animator.StringToHash(AcceleratingBool);
-            BrakingBoolHash = string.IsNullOrEmpty(BrakingBool) ? 0 : Animator.StringToHash(BrakingBool);
-            TopSpeedPercentFloatHash = string.IsNullOrEmpty(TopSpeedPercentFloat) ? 0 : Animator.StringToHash(TopSpeedPercentFloat);
+            InputAxisFloatHash = Animator.StringToHash(InputAxisFloat);
+            InputBoolHash = Animator.StringToHash(InputBool);
+            AcceleratingBoolHash = Animator.StringToHash(AcceleratingBool);
+            BrakingBoolHash = Animator.StringToHash(BrakingBool);
+            StandingBoolHash = Animator.StringToHash(StandingBool);
+            TopSpeedPercentFloatHash = Animator.StringToHash(TopSpeedPercentFloat);
         }
 
         public override void OnManagerAdd()
@@ -298,6 +314,9 @@ namespace SonicRealms.Core.Moves
 
             if(BrakingBoolHash != 0)
                 Animator.SetBool(BrakingBoolHash, Braking);
+
+            if(StandingBoolHash != 0)
+                Animator.SetBool(StandingBoolHash, Standing);
 
             if(TopSpeedPercentFloatHash != 0)
                 Animator.SetFloat(TopSpeedPercentFloatHash, Mathf.Abs(Controller.GroundVelocity)/TopSpeed);

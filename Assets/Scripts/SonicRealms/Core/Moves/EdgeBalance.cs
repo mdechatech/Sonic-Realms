@@ -73,8 +73,8 @@ namespace SonicRealms.Core.Moves
 
         public void OnDestroy()
         {
-            Destroy(EdgeSensorLeft.gameObject);
-            Destroy(EdgeSensorRight.gameObject);
+            if(EdgeSensorLeft != null) Destroy(EdgeSensorLeft.gameObject);
+            if(EdgeSensorRight != null) Destroy(EdgeSensorRight.gameObject);
         }
 
         protected virtual void CreateEdgeSensors()

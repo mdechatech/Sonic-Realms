@@ -329,10 +329,7 @@ namespace SonicRealms.Core.Actors
         private bool _facingForward;
         public bool FacingForward
         {
-            get
-            {
-                return _facingForward;
-            }
+            get { return _facingForward; }
             set
             {
                 _facingForward = value;
@@ -427,10 +424,10 @@ namespace SonicRealms.Core.Actors
         public bool Grounded;
 
         /// <summary>
-        /// If grounded, the angle of incline the controller is walking on in degrees. Goes hand-in-hand
-        /// with rotation.
+        /// If grounded, angle of the surface the controller is on. It is smoothed between both sensors -
+        /// true surface angles can be found from PrimarySurfaceHit and SecondarySurfaceHit.
         /// </summary>
-        [Tooltip("If grounded, the angle of incline the controller is walking on in degrees.")]
+        [Tooltip("If grounded, angle of the surface the controller is on.")]
         public float SurfaceAngle;
 
         /// <summary>
@@ -807,10 +804,8 @@ namespace SonicRealms.Core.Actors
                 transform.position += new Vector3(Vx * timestep, Vy * timestep);
                 UpdateGroundVelocity();
             }
-            else if (vt < AntiTunnelingSpeed)
+            else if (DMath.Equalsf(vt))
             {
-                // If we're below the anti-tunneling speed, again just add velocity and check collisions once
-                transform.position += new Vector3(Vx * timestep, Vy * timestep);
                 HandleCollisions();
                 UpdateGroundVelocity();
             }
@@ -821,20 +816,61 @@ namespace SonicRealms.Core.Actors
 
                 // vc = current velocity - we will subtract from this for each iteration of movement
                 var vc = vt;
+
+                // Accumulated velocity increases and decreases when the player runs over sharp edges, and it is added
+                // once current velocity has been processed. It is an attempt to fix the freezing/popping when on
+                // sharp edges.
+                var accumulatedVelocity = 0f;
+                var usingAccumulated = false;
+
                 var steps = 0;
                 while (vc > 0.0f)
                 {
+                    var distanceMultiplier = 1f;
+                    if (!usingAccumulated && Grounded && SecondarySurface != null)
+                    {
+                        // Find accumulated velocity based on the difference in angle between both surfaces
+                        if (PrimarySurfaceHit.Hit.fraction < LedgeClimbHeight / LedgeDropHeight)
+                        {
+                            distanceMultiplier =
+                                Vector2.Distance(PrimarySurfaceHit.Hit.point, SecondarySurfaceHit.Hit.point)/
+                                Vector2.Distance(
+                                    PrimarySurfaceHit.Hit.point + PrimarySurfaceHit.Hit.normal*LedgeClimbHeight,
+                                    SecondarySurfaceHit.Hit.point + SecondarySurfaceHit.Hit.normal*LedgeClimbHeight);
+                        }
+                        else
+                        {
+                            distanceMultiplier =
+                                Vector2.Distance(PrimarySurfaceHit.Hit.point, SecondarySurfaceHit.Hit.point)/
+                                Vector2.Distance(
+                                    PrimarySurfaceHit.Hit.point + PrimarySurfaceHit.Hit.normal*LedgeDropHeight,
+                                    SecondarySurfaceHit.Hit.point + SecondarySurfaceHit.Hit.normal*LedgeDropHeight);
+                        }
+                    }
+
                     if (vc > AntiTunnelingSpeed)
                     {
+                        var delta = new Vector3(Vx * timestep, Vy * timestep) * (AntiTunnelingSpeed / vt);
+
+                        // Store accumulated velocity if it's positive...
+                        if (!usingAccumulated && distanceMultiplier > 1f)
+                            accumulatedVelocity += delta.magnitude * (distanceMultiplier - 1f) / timestep;
+
+                        // Or just subtract from the current translation if it's negative
                         // One movement iteration - the movement is limited by AntiTunnelingSpeed
-                        transform.position += (new Vector3(Vx*timestep, Vy*timestep))*(AntiTunnelingSpeed/vt);
+                        transform.position += delta * Mathf.Min(1f, distanceMultiplier);
                         vc -= AntiTunnelingSpeed;
                     }
                     else
                     {
+                        var delta = new Vector3(Vx * timestep, Vy * timestep) * (vc / vt);
+
+                        if (!usingAccumulated && distanceMultiplier > 1f)
+                            accumulatedVelocity += delta.magnitude*(distanceMultiplier - 1f)/timestep;
+
                         // If we're less than AntiTunnelingSpeed, just apply the remaining velocity
-                        transform.position += (new Vector3(Vx*timestep, Vy*timestep))*(vc/vt);
-                        vc = 0.0f;
+                        transform.position += delta * Mathf.Min(1f, distanceMultiplier);
+                        vc = 0f;
                     }
 
                     HandleCollisions();
@@ -849,6 +885,13 @@ namespace SonicRealms.Core.Actors
                     var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
                     vc *= vn / vt;
                     vt *= vn / vt;
+
+                    // Once we're out of current velocity, get through the accumulated velocity
+                    if (!usingAccumulated && vc <= 0f && accumulatedVelocity > DMath.Epsilon)
+                    {
+                        usingAccumulated = true;
+                        vc = accumulatedVelocity;
+                    }
                 }
             }
 
@@ -996,8 +1039,8 @@ namespace SonicRealms.Core.Actors
             if (!Grounded)
                 return;
 
-            Vx = GroundVelocity * Mathf.Cos(SurfaceAngle * Mathf.Deg2Rad);
-            Vy = GroundVelocity * Mathf.Sin(SurfaceAngle * Mathf.Deg2Rad);
+            Vx = GroundVelocity*Mathf.Cos(SurfaceAngle*Mathf.Deg2Rad);
+            Vy = GroundVelocity*Mathf.Sin(SurfaceAngle*Mathf.Deg2Rad);
         }
         #endregion
         #region Collision Subroutines
@@ -1093,7 +1136,7 @@ namespace SonicRealms.Core.Actors
                         if (DMath.Highest(leftCheck.Hit.point, rightCheck.Hit.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
                         {
                             // Find out how we should impact the ceiling using our collision result
-                            var impact = CheckImpact(leftCheck);
+                            var impact = GetImpactResult(leftCheck);
                             if (impact.ShouldAttach)
                             {
                                 // If we should attach, push out by the difference between the hit location and sensor
@@ -1103,7 +1146,7 @@ namespace SonicRealms.Core.Actors
                             else
                             {
                                 // Preetty much doing the same thing all the way down
-                                impact = CheckImpact(rightCheck);
+                                impact = GetImpactResult(rightCheck);
                                 if (impact.ShouldAttach)
                                 {
                                     transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
@@ -1113,7 +1156,7 @@ namespace SonicRealms.Core.Actors
                         }
                         else
                         {
-                            var impact = CheckImpact(rightCheck);
+                            var impact = GetImpactResult(rightCheck);
                             if (impact.ShouldAttach)
                             {
                                 transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
@@ -1121,7 +1164,7 @@ namespace SonicRealms.Core.Actors
                             }
                             else
                             {
-                                impact = CheckImpact(leftCheck);
+                                impact = GetImpactResult(leftCheck);
                                 if (impact.ShouldAttach)
                                 {
                                     transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
@@ -1136,7 +1179,7 @@ namespace SonicRealms.Core.Actors
                     NotifyTriggers(leftCheck);
                     if (!IgnoringThisCollision)
                     {
-                        var impact = CheckImpact(leftCheck);
+                        var impact = GetImpactResult(leftCheck);
                         if (impact.ShouldAttach)
                         {
                             transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
@@ -1149,7 +1192,7 @@ namespace SonicRealms.Core.Actors
                     NotifyTriggers(rightCheck);
                     if (!IgnoringThisCollision)
                     {
-                        var impact = CheckImpact(rightCheck);
+                        var impact = GetImpactResult(rightCheck);
                         if (impact.ShouldAttach)
                         {
                             transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
@@ -1194,7 +1237,7 @@ namespace SonicRealms.Core.Actors
                         // Otherwise we would have some very sticky collisions, such as spikes that
                         // damage you even if you graze them slightly.
 
-                        var impact = CheckImpact(groundLeftCheck);
+                        var impact = GetImpactResult(groundLeftCheck);
 
                         if (impact.ShouldAttach)
                         {
@@ -1210,7 +1253,7 @@ namespace SonicRealms.Core.Actors
                     else
                     {
                         // Again, same thing all the way down
-                        var impact = CheckImpact(groundRightCheck);
+                        var impact = GetImpactResult(groundRightCheck);
 
                         if (impact.ShouldAttach)
                         {
@@ -1225,7 +1268,7 @@ namespace SonicRealms.Core.Actors
                 }
                 else if (groundLeftCheck)
                 {
-                    var impact = CheckImpact(groundLeftCheck);
+                    var impact = GetImpactResult(groundLeftCheck);
                     if (impact.ShouldAttach)
                     {
                         NotifyTriggers(groundLeftCheck);
@@ -1238,7 +1281,7 @@ namespace SonicRealms.Core.Actors
                 }
                 else
                 {
-                    var impact = CheckImpact(groundRightCheck);
+                    var impact = GetImpactResult(groundRightCheck);
 
                     if (impact.ShouldAttach)
                     {
@@ -1316,11 +1359,8 @@ namespace SonicRealms.Core.Actors
                     transform.position += push + push.normalized * DMath.Epsilon;
 
                     // If running down a wall and hits the floor, orient the player onto the floor
-                    if (DMath.AngleInRange_d(RelativeSurfaceAngle,
-                        180.0f + MaxClimbAngle, 360.0f - MaxClimbAngle))
-                    {
+                    if (DMath.AngleInRange_d(RelativeSurfaceAngle, 180.0f + MaxClimbAngle, 360.0f - MaxClimbAngle))
                         SurfaceAngle += 90.0f;
-                    }
 
                     SensorsRotation = SurfaceAngle;
                 }
@@ -1414,7 +1454,7 @@ namespace SonicRealms.Core.Actors
                 goto orientLeft;
 
             // Both feet have surfaces beneath them, things get complicated
-
+            
             // If one surface is too steep, use the other (as long as that surface isn't too different from the current)
             const float SteepnessTolerance = 0.25f;
             if (diff > MaxClimbAngle || diff < -MaxClimbAngle)
@@ -1425,7 +1465,7 @@ namespace SonicRealms.Core.Actors
                 if (rightDiff < MaxClimbAngle*SteepnessTolerance)
                     goto orientRight;
             }
-
+            
             // Propose an angle that would rotate the controller between both surfaces
             var overlap = DMath.Angle(right.Hit.point - left.Hit.point);
 
@@ -1459,7 +1499,7 @@ namespace SonicRealms.Core.Actors
 
             // Usually shouldn't reach this point, but detaching from the ground is a good catch-all solution
             goto detach;
-
+            
             #region Orientation Goto's
             orientLeft:
             // Use the left sensor as the ground
@@ -1720,23 +1760,18 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         /// <returns>The value the controller's ground velocity should be set to, or null if it should not attach.</returns>
         /// <param name="hit">The impact data as th result of a terrain cast.</param>
-        public ImpactResult CheckImpact(TerrainCastHit hit)
+        public ImpactResult GetImpactResult(TerrainCastHit hit)
         {
             if (hit == null) return default(ImpactResult);
 
-            // Special case - if the collision found is inside a platform instead of on its surface,
-            // we have no collision information but the player should still push out of it
-            if (hit.Hit.fraction == 0f)
-                return new ImpactResult {ShouldAttach = true, GroundSpeed = 0f, SurfaceAngle = 0f};
-
             var surfaceDegrees = DMath.PositiveAngle_d(hit.SurfaceAngle * Mathf.Rad2Deg);
 
-            // The player can't possibly land on something if he's traveling 90 degrees within the normal
+            // The player can't land on (static) platforms if he's traveling 90 degrees within their normal
             var playerAngle = DMath.Angle(Velocity)*Mathf.Rad2Deg;
-            const float NormalTolerance = 90f;
 
+            const float normalTolerance = 90f;
             if (!DMath.AngleInRange_d(playerAngle + 180f, 
-                surfaceDegrees + 90f - NormalTolerance, surfaceDegrees + 90f + NormalTolerance))
+                surfaceDegrees + 90f - normalTolerance, surfaceDegrees + 90f + normalTolerance))
                 return default(ImpactResult);
 
             var result = 0f;

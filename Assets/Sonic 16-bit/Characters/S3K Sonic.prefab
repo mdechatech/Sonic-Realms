@@ -1346,6 +1346,7 @@ MonoBehaviour:
   GroundVelocity: 0
   Grounded: 0
   SurfaceAngle: 0
+  RoughSurfaceAngle: 0
   ForceSurfaceAngle: 0
   Footing: 0
   JustDetached: 0
@@ -1580,7 +1581,7 @@ MonoBehaviour:
   RotateDuringRoll: 0
   RotateDuringStand: 0
   AirRecoveryRate: 360
-  MinimumAngle: 30
+  MinimumAngle: 40
   IntervalAngle: 45
   IntervalThreshold: 0.1
 --- !u!114 &11427876
@@ -2465,6 +2466,7 @@ MonoBehaviour:
   InputBool: 
   AcceleratingBool: Accelerating
   BrakingBool: Braking
+  StandingBool: Standing
   TopSpeedPercentFloat: Top Speed %
   MovementAxis: Horizontal
   InvertAxis: 0
