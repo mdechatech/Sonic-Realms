@@ -751,6 +751,10 @@ namespace SonicRealms.Core.Actors
             if (CommandBuffers.TryGetValue(evt, out buffers)) buffers.Remove(buffer);
         }
 
+        /// <summary>
+        /// Goes through the command buffers for the given buffer event.
+        /// </summary>
+        /// <param name="evt"></param>
         protected void HandleBuffers(BufferEvent evt)
         {
             List<CommandBuffer> buffers;
@@ -852,28 +856,32 @@ namespace SonicRealms.Core.Actors
                     {
                         var delta = new Vector3(Vx * timestep, Vy * timestep) * (AntiTunnelingSpeed / vt);
 
-                        // Store accumulated velocity if it's positive...
-                        if (!usingAccumulated && distanceMultiplier > 1f)
-                            accumulatedVelocity += delta.magnitude * (distanceMultiplier - 1f) / timestep;
-
-                        // Or just subtract from the current translation if it's negative
+                        // Subtract from the current translation the multiplier is negative
                         // One movement iteration - the movement is limited by AntiTunnelingSpeed
                         transform.position += delta * Mathf.Min(1f, distanceMultiplier);
                         vc -= AntiTunnelingSpeed;
                     }
                     else
                     {
-                        var delta = new Vector3(Vx * timestep, Vy * timestep) * (vc / vt);
-
-                        if (!usingAccumulated && distanceMultiplier > 1f)
-                            accumulatedVelocity += delta.magnitude*(distanceMultiplier - 1f)/timestep;
+                        var delta = new Vector3(Vx*timestep, Vy*timestep)*(vc/vt);
 
                         // If we're less than AntiTunnelingSpeed, just apply the remaining velocity
                         transform.position += delta * Mathf.Min(1f, distanceMultiplier);
                         vc = 0f;
                     }
 
+                    // To prevent freezing - account for pushout caused by HandleCollisions
+                    var pos = transform.position;
+                    var vel = GroundVelocity;
+                    var handleRoughEdges = Grounded && distanceMultiplier > 1f;
+
                     HandleCollisions();
+
+                    handleRoughEdges &= Grounded && Mathf.Abs(GroundVelocity - vel) < 0.01f;
+
+                    // Make up for pushout after main velocity has been applied
+                    if (handleRoughEdges) accumulatedVelocity += (transform.position - pos).magnitude/timestep;
+
                     UpdateGroundVelocity();
 
                     // Leave early if we've hit the hard limit, come to a complete stop, or gotten interrupted
