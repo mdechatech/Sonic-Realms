@@ -32,6 +32,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [Tooltip("Whether to rotate to the direction of gravity when not rotating to surface angle.")]
         public bool RotateToGravity;
+        private float _previousGravity;
 
         /// <summary>
         /// Whether to rotate to surface angle during a roll.
@@ -106,6 +107,7 @@ namespace SonicRealms.Core.Actors
             RendererTransform = RendererTransform ?? Controller.RendererObject.transform;
             Roll = Controller.GetMove<Roll>();
             GroundControl = Controller.GetMove<GroundControl>();
+            _previousGravity = Controller.GravityDirection;
             UpdateInterval();
         }
 
@@ -152,7 +154,8 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void FixRotation()
         {
-            if (!DMath.AngleInRange_d(TrueRotation, IntervalMin, IntervalMax))
+            if (_previousGravity != Controller.GravityDirection || 
+                !DMath.AngleInRange_d(TrueRotation, IntervalMin, IntervalMax))
             {
                 UpdateInterval();
             }
@@ -163,6 +166,7 @@ namespace SonicRealms.Core.Actors
         public void UpdateInterval()
         {
             Interval = DMath.Round(TrueRotation, IntervalAngle, Controller.GravityRight);
+            _previousGravity = Controller.GravityDirection;
 
             if (DMath.AngleInRange_d(Interval, -MinimumAngle, MinimumAngle))
             {

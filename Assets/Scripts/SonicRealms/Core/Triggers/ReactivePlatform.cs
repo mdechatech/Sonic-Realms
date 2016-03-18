@@ -109,7 +109,7 @@ namespace SonicRealms.Core.Triggers
         }
 
         /// <summary>
-        /// Default collision rule. Always solid to all collsions by default.
+        /// Default collision rule. Always solid to all collisions by default.
         /// </summary>
         public virtual bool IsSolid(TerrainCastHit hit)
         {

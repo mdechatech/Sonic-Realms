@@ -6,8 +6,6 @@ using UnityEngine;
 
 namespace SonicRealms.Level.Platforms
 {
-    
-
     /// <summary>
     /// Moves the player with the transform while the player is on it.
     /// </summary>
@@ -63,6 +61,16 @@ namespace SonicRealms.Level.Platforms
             anchor.enabled = false;
 
             return anchor;
+        }
+
+        public override bool IsSolid(TerrainCastHit hit)
+        {
+            // Prevent the player from sinking down onto moving platforms
+            if (hit.Side != ControllerSide.Bottom) return true;
+            if (!hit.Controller.Grounded) return true;
+            if (hit.Controller.StandingOn(transform, true)) return true;
+            return hit.Hit.fraction <
+                   hit.Controller.LedgeClimbHeight/(hit.Controller.LedgeClimbHeight + hit.Controller.LedgeDropHeight);
         }
 
         // Attaches the hit.Source to the platform through a MovingPlatformAnchor

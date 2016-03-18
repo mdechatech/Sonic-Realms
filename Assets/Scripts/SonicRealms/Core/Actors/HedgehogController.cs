@@ -1254,6 +1254,7 @@ namespace SonicRealms.Core.Actors
                             {
                                 // If we should attach, push out by the difference between the hit location and sensor
                                 transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
+                                SetSurface(groundLeftCheck);
                                 Attach(impact);
                             }
                         }
@@ -1269,6 +1270,7 @@ namespace SonicRealms.Core.Actors
                             if (!IgnoringThisCollision)
                             {
                                 transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
+                                SetSurface(groundRightCheck);
                                 Attach(impact);
                             }
                         }
@@ -1283,6 +1285,7 @@ namespace SonicRealms.Core.Actors
                         if (!IgnoringThisCollision)
                         {
                             transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
+                            SetSurface(groundLeftCheck);
                             Attach(impact);
                         }
                     }
@@ -1297,6 +1300,7 @@ namespace SonicRealms.Core.Actors
                         if (!IgnoringThisCollision)
                         {
                             transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
+                            SetSurface(groundRightCheck);
                             Attach(impact);
                         }
                     }

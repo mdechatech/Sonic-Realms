@@ -249,7 +249,6 @@ namespace SonicRealms.Core.Actors.Editor
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
                     "SurfaceAngle",
-                    "RoughSurfaceAngle",
                     "Footing",
                     "PrimarySurface",
                     "SecondarySurface");
