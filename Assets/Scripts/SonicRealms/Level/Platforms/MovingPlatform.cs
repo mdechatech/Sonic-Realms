@@ -37,30 +37,12 @@ namespace SonicRealms.Level.Platforms
         [HideInInspector]
         public Vector3 Velocity;
 
-        private Dictionary<HedgehogController, MovingPlatformAnchor> _anchors; 
-
-        public override void Reset()
-        {
-            base.Reset();
-            TransferMomentumX = TransferMomentumY = TransferMomentumGround = false;
-        }
+        public Dictionary<HedgehogController, Anchor> Anchors;
 
         public override void Awake()
         {
             base.Awake();
-            _anchors = new Dictionary<HedgehogController, MovingPlatformAnchor>();
-        }
-
-        private MovingPlatformAnchor CreateAnchor(TerrainCastHit hit)
-        {
-            var anchor = new GameObject().AddComponent<MovingPlatformAnchor>();
-            anchor.LinkController(hit.Controller);
-            anchor.name = hit.Controller.name + "'s Moving Platform Anchor";
-            anchor.transform.SetParent(hit.Hit.transform);
-            // We will update the anchor manually and lazily
-            anchor.enabled = false;
-
-            return anchor;
+            Anchors = new Dictionary<HedgehogController, Anchor>();
         }
 
         public override bool IsSolid(TerrainCastHit hit)
@@ -73,44 +55,108 @@ namespace SonicRealms.Level.Platforms
                    hit.Controller.LedgeClimbHeight/(hit.Controller.LedgeClimbHeight + hit.Controller.LedgeDropHeight);
         }
 
-        // Attaches the hit.Source to the platform through a MovingPlatformAnchor
+        // Links the player to an object .
         public override void OnSurfaceEnter(TerrainCastHit hit)
         {
-            _anchors.Add(hit.Controller, CreateAnchor(hit));
+            if (hit.Controller == null) return;
+            CreateAnchor(hit);
         }
 
         // Updates the anchor associated with the hit.Source
         public override void OnSurfaceStay(TerrainCastHit hit)
         {
-            if (!_anchors.ContainsKey(hit.Controller)) return;
-            var anchor = _anchors[hit.Controller];
-            if(anchor.transform.parent != hit.Hit.transform)
-                anchor.transform.SetParent(hit.Hit.transform);
-            anchor.TranslateController();
+            var anchor = GetAnchor(hit.Controller);
+            if (anchor == null) return;
+
+            var delta = anchor.Transform.position - anchor.PreviousPosition;
+            anchor.PreviousPosition = anchor.Transform.position;
+
+            if (!anchor.CalculatingPlayerDelta && anchor.PlayerDelta != Vector2.zero)
+                delta -= (Vector3)anchor.PlayerDelta;
+            if (delta == Vector3.zero) return;
+            
+            hit.Controller.transform.position += delta;
         }
 
         // Removes the anchor associated with the hit.Source
         public override void OnSurfaceExit(TerrainCastHit hit)
         {
-            if (!_anchors.ContainsKey(hit.Controller))
+            DestroyAnchor(hit);
+        }
+
+        protected Anchor CreateAnchor(TerrainCastHit hit)
+        {
+            DestroyAnchor(hit);
+
+            var anchor = new Anchor {Transform = new GameObject().transform};
+            anchor.Transform.position = hit.Hit.point;
+            anchor.PreviousPosition = anchor.Transform.position;
+            anchor.Transform.SetParent(transform);
+
+            Anchors.Add(hit.Controller, anchor);
+
+            hit.Controller.AddCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
+            hit.Controller.AddCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
+
+            return anchor;
+        }
+
+        protected void StoreDelta(HedgehogController player)
+        {
+            var anchor = GetAnchor(player);
+            if (anchor == null)
+            {
+                player.RemoveCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
                 return;
-
-            var anchor = _anchors[hit.Controller];
-            var velocity = (Vector2)anchor.DeltaPosition/Time.fixedDeltaTime;
-
-            if (hit.Controller.Grounded)
-            {
-                if(TransferMomentumGround) hit.Controller.PushOnGround(velocity);
-            }
-            else
-            {
-                hit.Controller.Velocity += new Vector2(
-                    TransferMomentumX ? velocity.x : 0.0f,
-                    TransferMomentumY ? velocity.y : 0.0f);
             }
 
-            _anchors.Remove(hit.Controller);
-            Destroy(anchor.gameObject);
+            anchor.PlayerDelta = player.transform.position;
+            anchor.CalculatingPlayerDelta = true;
+        }
+
+        protected void ApplyDelta(HedgehogController player)
+        {
+            var anchor = GetAnchor(player);
+            if (anchor == null)
+            {
+                player.RemoveCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
+                return;
+            }
+
+            if (!anchor.CalculatingPlayerDelta)
+            {
+                anchor.PlayerDelta = Vector2.zero;
+                return;
+            }
+
+            anchor.PlayerDelta = (Vector2)player.transform.position - anchor.PlayerDelta;
+            anchor.Transform.position += (Vector3) anchor.PlayerDelta;
+            anchor.CalculatingPlayerDelta = false;
+        }
+
+        protected Anchor GetAnchor(HedgehogController player)
+        {
+            return Anchors.ContainsKey(player) ? Anchors[player] : null;
+        }
+
+        protected void DestroyAnchor(TerrainCastHit hit)
+        {
+            Anchor anchor;
+            if (!Anchors.TryGetValue(hit.Controller, out anchor)) return;
+
+            Anchors.Remove(hit.Controller);
+            Destroy(anchor.Transform.gameObject);
+
+            hit.Controller.RemoveCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
+            hit.Controller.RemoveCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
+        }
+
+        public class Anchor
+        {
+            public Transform Transform;
+            public Vector3 PreviousPosition;
+            public Vector2 PlayerDelta;
+            public bool CalculatingPlayerDelta;
         }
     }
 }
