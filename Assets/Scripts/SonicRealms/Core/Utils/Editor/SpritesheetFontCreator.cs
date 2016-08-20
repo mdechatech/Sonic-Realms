@@ -12,7 +12,7 @@ namespace SonicRealms.Core.Utils.Editor
     /// </summary>
     public class SpritesheetFontCreator : EditorWindow
     {
-        [MenuItem("Hedgehog/Create Font/From Spritesheet")]
+        [MenuItem("Realms/Create Font/From Spritesheet", false, 200)]
         public static void ShowWindow()
         {
             GetWindow(typeof(SpritesheetFontCreator), false, "Create Font", true);
