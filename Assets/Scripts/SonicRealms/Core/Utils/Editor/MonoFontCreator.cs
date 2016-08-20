@@ -12,7 +12,7 @@ namespace SonicRealms.Core.Utils.Editor
     /// </summary>
     public class MonoFontCreator : EditorWindow
     {
-        [MenuItem("Hedgehog/Create Font/Monospaced")]
+        [MenuItem("Realms/Create Font/Monospaced", false, 201)]
         public static void ShowWindow()
         {
             GetWindow(typeof(MonoFontCreator), false, "Create Font", true);
