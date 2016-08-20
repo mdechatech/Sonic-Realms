@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
+    // A super old, super ugly custom grid in the editor
     public class SceneViewGrid : EditorWindow
     {
+        /*
         public static Color DivisionColor = Color.white;
         public static float DivisionWidth = 1.28f;
         public static float DivisionHeight = 1.28f;
@@ -103,5 +105,6 @@ namespace SonicRealms.Core.Utils.Editor
             SubdivisionColor = EditorGUILayout.ColorField("Color", SubdivisionColor);
             
         }
+        */
     }
 }

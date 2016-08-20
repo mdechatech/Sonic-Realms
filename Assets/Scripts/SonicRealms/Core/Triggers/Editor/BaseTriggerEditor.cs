@@ -6,22 +6,27 @@ namespace SonicRealms.Core.Triggers.Editor
     [CustomEditor(typeof(BaseTrigger), true), CanEditMultipleObjects]
     public class BaseTriggerEditor : BaseFoldoutEditor
     {
+        private const string ShowTriggersMenu = "Realms/Show Triggers";
+
         protected static bool ShowTriggers
         {
             get { return EditorPrefs.GetBool("ShowTriggers", false); }
             set { EditorPrefs.SetBool("ShowTriggers", value); }
         }
 
-        [MenuItem("Hedgehog/Show Triggers")]
-        public static void ShowTriggersMenuItem()
+        static BaseTriggerEditor()
         {
-            ShowTriggers = true;
+            EditorApplication.delayCall += () =>
+            {
+                Menu.SetChecked(ShowTriggersMenu, ShowTriggers);
+            };
         }
 
-        [MenuItem("Hedgehog/Hide Triggers")]
-        public static void HideTriggersMenuItem()
+        [MenuItem("Realms/Show Triggers", false, 50)]
+        public static void ShowTriggersMenuItem()
         {
-            ShowTriggers = false;
+            ShowTriggers = !ShowTriggers;
+            Menu.SetChecked(ShowTriggersMenu, ShowTriggers);
         }
     }
 }
