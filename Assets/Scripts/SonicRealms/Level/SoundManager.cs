@@ -130,16 +130,25 @@ namespace SonicRealms.Level
 
         public void ResetAudio()
         {
-            BGMSource.Stop();
-            BGMSource.clip = null;
-            BGMLooper.ResetLoopPoints();
+            if (BGMSource != null)
+            {
+                BGMSource.Stop();
+                BGMSource.clip = null;
+                if (BGMLooper != null) BGMLooper.ResetLoopPoints();
+            }
 
-            PowerupSource.Stop();
-            PowerupSource.clip = null;
-            PowerupLooper.ResetLoopPoints();
+            if (PowerupSource != null)
+            {
+                PowerupSource.Stop();
+                PowerupSource.clip = null;
+                if(PowerupLooper != null) PowerupLooper.ResetLoopPoints();
+            }
 
-            JingleSource.Stop();
-            JingleSource.clip = null;
+            if (JingleSource != null)
+            {
+                JingleSource.Stop();
+                JingleSource.clip = null;
+            }
         }
 
         public AudioSource GetAudioSource()

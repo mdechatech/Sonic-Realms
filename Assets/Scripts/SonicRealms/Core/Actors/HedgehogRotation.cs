@@ -123,10 +123,10 @@ namespace SonicRealms.Core.Actors
                                        : !GroundControl.Standing);
                 rotateToSensors &= Roll == null || RotateDuringRoll || !Roll.Active;
                 rotateToSensors &=
-                    Mathf.Abs(DMath.ShortestArc_d(Controller.SensorsRotation, Controller.GravityRight)) >
+                    Mathf.Abs(DMath.ShortestArc_d(Controller.SurfaceAngle, Controller.GravityRight)) >
                     MinimumAngle;
 
-                TrueRotation = rotateToSensors ? Controller.SensorsRotation : Controller.GravityRight;
+                TrueRotation = rotateToSensors ? Controller.SurfaceAngle : Controller.GravityRight;
             }
             else
             {

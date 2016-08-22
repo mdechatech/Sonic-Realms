@@ -30,7 +30,11 @@ namespace SonicRealms.Core.Moves
 
         public override bool ShouldPerform
         {
-            get { return Input.GetButton(ActivateAxis); }
+            get
+            {
+                return (Input.GetAxisRaw(ActivateAxis) < 0f && Controller.LeftWall != null) ||
+                       (Input.GetAxisRaw(ActivateAxis) > 0f && Controller.RightWall != null);
+            }
         }
 
         public override bool ShouldEnd

@@ -162,7 +162,9 @@ namespace SonicRealms.Core.Utils
             if (Equalsf(direction, OneThreeFourthsPi)) return b.y - a.y;
 
             Vector2 diff = Project(a, direction) - Project(b, direction);
-            return (Mathf.Abs(Angle(diff) - direction) < HalfPi) ? diff.magnitude : -diff.magnitude;
+            return AngleInRange(Angle(diff), direction - HalfPi, direction + HalfPi)
+                ? diff.magnitude
+                : -diff.magnitude;
         }
 
         /// <summary>

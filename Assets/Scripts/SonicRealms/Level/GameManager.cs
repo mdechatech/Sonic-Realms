@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SonicRealms.Core.Utils;
 using SonicRealms.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SonicRealms.Level
 {
@@ -227,7 +229,7 @@ namespace SonicRealms.Level
             LevelTransition.OnNextScene.RemoveListener(InitCurrentLevel);
 
             // Find the level manager
-            var levelManager = GameObject.Find(LevelData.LevelManager);
+            var levelManager = GameObjectUtility.Find(LevelData.LevelManager, true);
             if (levelManager == null)
             {
                 Debug.LogWarning(string.Format("Level manager '{0}' could not be found in the scene.",

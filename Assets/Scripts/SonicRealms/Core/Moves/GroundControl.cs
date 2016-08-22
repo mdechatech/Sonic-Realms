@@ -239,6 +239,7 @@ namespace SonicRealms.Core.Moves
         {
             if (Controller.Grounded) Perform();
             Controller.OnAttach.AddListener(OnAttach);
+            Controller.OnSteepDetach.AddListener(OnSteepDetach);
             Score = Controller.GetComponent<ScoreCounter>();
         }
 
@@ -251,7 +252,6 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveEnter(State previousState)
         {
             Manager.End<AirControl>();
-            Controller.OnSteepDetach.AddListener(OnSteepDetach);
             Controller.AddCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
             _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
@@ -290,7 +290,6 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveExit()
         {
             // Set everything back to normal
-            Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.DisableSlopeGravity = false;
             Controller.DisableGroundFriction = false;
             Controller.RemoveCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);

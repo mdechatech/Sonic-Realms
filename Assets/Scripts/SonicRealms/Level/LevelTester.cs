@@ -12,10 +12,11 @@ namespace SonicRealms.Level
         public CharacterData Character;
 
         [Header("Infrastructure")]
+        public LevelManager LevelManager;
         public GameManager BaseGameManager;
         public SoundManager BaseSoundManager;
 
-        public GameManager GameManager;
+        protected GameManager GameManager;
 
         public void Awake()
         {
@@ -29,7 +30,7 @@ namespace SonicRealms.Level
             var gameManager = Instantiate(BaseGameManager);
             gameManager.name = BaseGameManager.name;
             gameManager.CharacterData = Character;
-            gameManager.LoadLevel(Level);
+            LevelManager.InitLevel();
         }
     }
 }

@@ -403,14 +403,16 @@ namespace SonicRealms.Level
                 // Wait for the scene to load
                 var scene = SceneManager.GetActiveScene();
                 yield return new WaitUntil(() => scene.isLoaded);
-
                 // Let the title card play
                 TitleCard.Enter();
                 yield return new WaitWhile(() => TitleCard.State == TransitionState.Enter);
 
                 // Fade in the level
-                levelTransition.Play();
-                yield return new WaitWhile(() => levelTransition.IsPlaying);
+                if (levelTransition != null)
+                {
+                    levelTransition.Play();
+                    yield return new WaitWhile(() => levelTransition.IsPlaying);
+                }
 
                 // Level starts while the title card is leaving
                 TitleCard.Exit();

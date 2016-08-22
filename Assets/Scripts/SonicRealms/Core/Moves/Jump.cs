@@ -175,8 +175,8 @@ namespace SonicRealms.Core.Moves
 
         public void OnDestroy()
         {
-            Destroy(ClearanceSensorRight.gameObject);
-            Destroy(ClearanceSensorLeft.gameObject);
+            if (ClearanceSensorRight) Destroy(ClearanceSensorRight.gameObject);
+            if (ClearanceSensorLeft) Destroy(ClearanceSensorLeft.gameObject);
         }
     }
 }

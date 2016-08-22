@@ -179,7 +179,9 @@ namespace SonicRealms.Core.Actors.Editor
                     HedgehogEditorGUIUtility.DrawProperties(serializedObject,
                         "AirDragRequiredSpeed",
                         "AntiTunnelingSpeed",
-                        "SlopeGravityBeginAngle"
+                        "SlopeGravityBeginAngle",
+                        "WallModeRevertBufferTime",
+                        "RevertBufferMaxSpeed"
                         );
                     --EditorGUI.indentLevel;
                 }
@@ -247,12 +249,20 @@ namespace SonicRealms.Core.Actors.Editor
                     "RightCeiling");
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
+
                 HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
-                    "SurfaceAngle",
                     "Footing",
+                    "_surfaceAngle",
                     "PrimarySurface",
                     "SecondarySurface");
                 GUI.enabled = Application.isPlaying;
+
+                EditorGUILayout.Space();
+
+                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    "WallMode",
+                    "WallModeRevertBufferTimer",
+                    "WallModeRevertBuffer");
 
                 EditorGUILayout.Space();
 
