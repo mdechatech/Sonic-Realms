@@ -28,7 +28,7 @@ namespace SonicRealms.Level.Platforms
             base.Reset();
             MinEntrySpeed = 2.4f;
             MinStaySpeed = 2.4f;
-            SurfaceBool = "On Corkscrew";
+            PlayerSurfaceBool = "On Corkscrew";
         }
 
         public override bool IsSolid(TerrainCastHit hit)

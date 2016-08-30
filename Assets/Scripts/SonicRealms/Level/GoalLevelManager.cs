@@ -159,9 +159,7 @@ namespace SonicRealms.Level
         /// </summary>
         public int Lives
         {
-            get { return LifeCounter ? LifeCounter.Lives : 0; }
-            set { if (LifeCounter) LifeCounter.Lives = value; }
-        }
+            get { return LifeCounter ? LifeCounter.Lives : 0; } set { if (LifeCounter) LifeCounter.Lives = value; } }
 
         /// <summary>
         /// The current level time.
@@ -184,7 +182,7 @@ namespace SonicRealms.Level
         protected Coroutine ScreenCoroutine;
         protected bool IsTimeOver;
         #region Level Lifecycle
-        public override void InitLevel()
+        protected override void OnInitLevel()
         {
             SoundManager.Instance.ResetAudio();
 
@@ -231,7 +229,7 @@ namespace SonicRealms.Level
 
             // Link with the HUD
             HudManager.Level = this;
-
+            
             // Start the background music
             if (BGM) SoundManager.Instance.PlayBGM(BGM);
             
@@ -240,12 +238,12 @@ namespace SonicRealms.Level
             ShowTitleCard(StartLevel);
         }
 
-        public override void StartLevel()
+        protected override void OnStartLevel()
         {
             StartTimer();
         }
 
-        public override void FinishLevel()
+        protected override void OnFinishLevel()
         {
             StopTimer();
 

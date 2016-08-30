@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SonicRealms.Level
 {
@@ -18,19 +20,36 @@ namespace SonicRealms.Level
 
         protected GameManager GameManager;
 
-        public void Awake()
+        protected void Start()
         {
             if (GameManager.Instance != null)
             {
                 return;
             }
 
+            SceneManager.sceneLoaded += (a, b) => SetConditions();
+
             Instantiate(BaseSoundManager).name = BaseSoundManager.name;
-            
+
             var gameManager = Instantiate(BaseGameManager);
             gameManager.name = BaseGameManager.name;
             gameManager.CharacterData = Character;
-            LevelManager.InitLevel();
+            gameManager.LoadLevel(Level);
+        }
+
+        private static void SetConditions()
+        {
+
+            var tester = FindObjectOfType<LevelTester>();
+            if (!tester)
+                return;
+
+            if (tester.LevelManager is GoalLevelManager)
+            {
+                var goal = (GoalLevelManager) tester.LevelManager;
+                goal.Lives = 99;
+                goal.StartLevelCalled.AddListener(() => goal.Lives = 99);
+            }
         }
     }
 }

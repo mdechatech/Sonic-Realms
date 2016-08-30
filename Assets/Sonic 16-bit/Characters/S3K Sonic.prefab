@@ -1298,7 +1298,7 @@ MonoBehaviour:
   DetachSpeed: 1.5
   MaxClimbAngle: 70
   WallModeRevertBufferTime: 0.5
-  RevertBufferMaxSpeed: 1.5
+  RevertBufferMaxSpeed: 3
   DisableNotifyPlatforms: 0
   DisableEvents: 0
   DisableCeilingCheck: 0
@@ -4560,7 +4560,7 @@ ParticleSystemRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
-  m_LightProbeUsage: 1
+  m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 2100000, guid: 522e858704ca5954daf69ab3e1fb5cf4, type: 2}
@@ -4572,12 +4572,12 @@ ParticleSystemRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedWireframeHidden: 1
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1117821533
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -4654,7 +4654,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1117821533
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d9a0ab150f56b77458d1d3ff7ff82226, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4687,8 +4687,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: -1117821533
+  m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4720,7 +4720,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1117821533
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 87415d517e1fb95499b20f6f64aebed1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4753,7 +4753,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1117821533
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

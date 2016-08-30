@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SonicRealms.Core.Actors;
+using UnityEngine;
 
 namespace SonicRealms.Core.Moves
 {
@@ -84,6 +85,7 @@ namespace SonicRealms.Core.Moves
 
         protected GroundControl GroundControl;
         protected Duck Duck;
+        protected Roll Roll;
         protected AudioSource ChargeAudioSource;
 
         public override MoveLayer Layer
@@ -117,6 +119,7 @@ namespace SonicRealms.Core.Moves
             base.Start();
 
             Duck = Manager.Get<Duck>();
+            Roll = Manager.Get<Roll>();
             GroundControl = Manager.Get<GroundControl>();
 
             if (ChargeSound == null) return;
@@ -136,12 +139,23 @@ namespace SonicRealms.Core.Moves
             get { return Input.GetButtonDown(ChargeButton); }
         }
 
+        public override bool ShouldEnd
+        {
+            get
+            {
+                return Controller.WallMode != WallMode.Floor ||
+                       (Duck && Mathf.Abs(Controller.GroundVelocity) > Mathf.Abs(Duck.MaxActivateSpeed));
+            }
+        }
+
         public override void OnActiveEnter(State previousState)
         {
             CurrentChargePower = 0.0f;
 
             if (GroundControl != null)
                 GroundControl.DisableControl = true;
+
+            Controller.GroundVelocity = 0;
 
             if (ChargeAudioSource == null) return;
             ChargeAudioSource.pitch = ChargePitchMin;

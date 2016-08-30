@@ -125,8 +125,9 @@ namespace SonicRealms.Level
 
             LevelData = levelData;
             SaveData.Level = levelData.name;
-            LevelTransition.Go(levelData.Scene);
+
             LevelTransition.OnNextScene.AddListener(InitCurrentLevel);
+            LevelTransition.Go(levelData.Scene);
         }
 
         public void UnloadLevel()
@@ -244,7 +245,9 @@ namespace SonicRealms.Level
                 return;
             }
 
-            if(SaveData != null) LoadGame(SaveData);
+            if(SaveData != null && !string.IsNullOrEmpty(SaveData.Name))
+                LoadGame(SaveData);
+
             Level.InitLevel();
         }
     }

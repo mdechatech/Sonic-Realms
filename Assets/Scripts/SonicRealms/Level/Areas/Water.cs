@@ -9,7 +9,6 @@ namespace SonicRealms.Level.Areas
     /// <summary>
     /// Liquid that makes the controller slower or faster. Physics are configured in the player's animator.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Areas/Water")]
     public class Water : ReactiveArea
     {
         /// <summary>

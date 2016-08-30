@@ -1,6 +1,8 @@
-﻿using SonicRealms.Core.Actors;
+﻿using System;
+using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SonicRealms.Core.Triggers
 {
@@ -16,31 +18,55 @@ namespace SonicRealms.Core.Triggers
         protected bool RegisteredEvents;
 
         /// <summary>
-        /// Name of an Animator trigger on the controller to set when it enters the area.
+        /// Name of an Animator trigger to set when a player enters the area.
+        /// </summary>
+        [Foldout("Animation")]
+        [Tooltip("Name of an Animator trigger to set when a player enters the area.")]
+        public string InsideTrigger;
+        protected int InsideTriggerHash;
+
+        /// <summary>
+        /// Name of an Animator bool to set to true while a player is inside the area.
+        /// </summary>
+        [Foldout("Animation")]
+        [Tooltip("Name of an Animator bool to set to true while a player is inside the area.")]
+        public string InsideBool;
+        protected int InsideBoolHash;
+
+        /// <summary>
+        /// Name of an Animator trigger on a player to set when it enters the area.
         /// </summary>
         [Foldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on the controller to set when it enters the area.")]
-        public string InsideTrigger;
+        public string PlayerInsideTrigger;
+        protected int PlayerInsideTriggerHash;
 
         /// <summary>
-        /// Name of an Animator bool on the controller to set to true while it's inside the area.
+        /// Name of an Animator bool on a player to set to true while it's inside the area.
         /// </summary>
         [Foldout("Player Animation")]
         [Tooltip("Name of an Animator bool on the controller to set to true while it's inside the area.")]
-        public string InsideBool;
+        public string PlayerInsideBool;
+        protected int PlayerInsideBoolHash;
 
         public override void Reset()
         {
             base.Reset();
 
             AreaTrigger = GetComponent<AreaTrigger>();
-            InsideTrigger = InsideBool = "";
+            PlayerInsideTrigger = PlayerInsideBool = "";
         }
 
         public override void Awake()
         {
             base.Awake();
             AreaTrigger = GetComponent<AreaTrigger>() ?? gameObject.AddComponent<AreaTrigger>();
+
+            InsideTriggerHash = Animator.StringToHash(InsideTrigger);
+            InsideBoolHash = Animator.StringToHash(InsideBool);
+
+            PlayerInsideTriggerHash = Animator.StringToHash(PlayerInsideTrigger);
+            PlayerInsideBoolHash = Animator.StringToHash(PlayerInsideBool);
         }
 
         public virtual void OnEnable()
@@ -98,24 +124,25 @@ namespace SonicRealms.Core.Triggers
         {
             OnAreaEnter(hitbox);
             hitbox.Controller.NotifyAreaEnter(this);
-
-            if (hitbox.Controller.Animator == null) return;
-
-            var logWarnings = hitbox.Controller.Animator.logWarnings;
-            hitbox.Controller.Animator.logWarnings = false;
-
-            SetAreaEnterParameters(hitbox.Controller);
-
-            hitbox.Controller.Animator.logWarnings = logWarnings;
+            SetAnimatorParameters(hitbox, SetAreaEnterParameters, SetPlayerAreaEnterParameters);
         }
 
-        protected virtual void SetAreaEnterParameters(HedgehogController controller)
+        protected virtual void SetAreaEnterParameters(Hitbox hitbox)
         {
-            if (!string.IsNullOrEmpty(InsideTrigger))
-                controller.Animator.SetTrigger(InsideTrigger);
+            if (InsideTriggerHash != 0)
+                Animator.SetTrigger(InsideTriggerHash);
 
-            if (!string.IsNullOrEmpty(InsideBool))
-                controller.Animator.SetBool(InsideBool, true);
+            if (InsideBoolHash != 0)
+                Animator.SetBool(InsideBoolHash, true);
+        }
+
+        protected virtual void SetPlayerAreaEnterParameters(Hitbox hitbox)
+        {
+            if (PlayerInsideTriggerHash != 0)
+                hitbox.Controller.Animator.SetTrigger(PlayerInsideTriggerHash);
+
+            if (PlayerInsideBoolHash != 0)
+                hitbox.Controller.Animator.SetBool(PlayerInsideBoolHash, true);
         }
 
         public void NotifyAreaStay(Hitbox hitbox)
@@ -128,21 +155,38 @@ namespace SonicRealms.Core.Triggers
         {
             hitbox.Controller.NotifyAreaExit(this);
             OnAreaExit(hitbox);
-
-            if (hitbox.Controller.Animator == null) return;
-
-            var logWarnings = hitbox.Controller.Animator.logWarnings;
-            hitbox.Controller.Animator.logWarnings = false;
-
-            SetAreaExitParameters(hitbox.Controller);
-
-            hitbox.Controller.Animator.logWarnings = logWarnings;
+            SetAnimatorParameters(hitbox, SetAreaExitParameters, SetPlayerAreaExitParameters);
         }
 
-        protected virtual void SetAreaExitParameters(HedgehogController controller)
+        protected virtual void SetAreaExitParameters(Hitbox hitbox)
         {
-            if (!string.IsNullOrEmpty(InsideBool))
-                controller.Animator.SetBool(InsideBool, false);
+            if (InsideBoolHash != 0)
+                Animator.SetBool(InsideBoolHash, false);
+        }
+
+        protected virtual void SetPlayerAreaExitParameters(Hitbox hitbox)
+        {
+            if (PlayerInsideBoolHash != 0)
+                hitbox.Controller.Animator.SetBool(PlayerInsideBoolHash, false);
+        }
+
+        private void SetAnimatorParameters(Hitbox hitbox,
+            Action<Hitbox> setter, Action<Hitbox> playerSetter)
+        {
+            if (Animator != null)
+                setter(hitbox);
+
+            var controller = hitbox.Controller;
+
+            if (controller.Animator == null)
+                return;
+
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            playerSetter(hitbox);
+
+            controller.Animator.logWarnings = logWarnings;
         }
         #endregion
 

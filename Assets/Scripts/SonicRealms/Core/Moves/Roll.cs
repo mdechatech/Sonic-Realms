@@ -218,8 +218,24 @@ namespace SonicRealms.Core.Moves
                 Uphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 180.0f, 360.0f);
             }
 
+            // If physics was set by something else, we should store those values to restore later
+            // and then set the them back to the values we wanted
             if (Controller.SlopeGravity != (previousUphill ? UphillGravity : DownhillGravity))
+            {
                 _originalSlopeGravity = Controller.SlopeGravity;
+            }
+
+            if (Controller.GroundFriction != Friction)
+            {
+                _originalFriction = Controller.GroundFriction;
+                Controller.GroundFriction = Friction;
+            }
+
+            if (GroundControl.Deceleration != Deceleration)
+            {
+                _originalDeceleration = GroundControl.Deceleration;
+                GroundControl.Deceleration = Deceleration;
+            }
 
             Controller.SlopeGravity = Uphill ? UphillGravity : DownhillGravity;
         }

@@ -54,11 +54,20 @@ TagManager:
   - name: Terrain Background
     uniqueID: 1130038921
     locked: 0
+  - name: Player Background
+    uniqueID: 1016894233
+    locked: 0
   - name: Player
     uniqueID: 4047293301
     locked: 0
   - name: Terrain
     uniqueID: 182623717
+    locked: 0
+  - name: Player Foreground
+    uniqueID: 3177145763
+    locked: 0
+  - name: Terrain Foreground
+    uniqueID: 2331391407
     locked: 0
   - name: Foreground
     uniqueID: 2218882549

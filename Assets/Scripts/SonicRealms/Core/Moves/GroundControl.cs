@@ -254,7 +254,7 @@ namespace SonicRealms.Core.Moves
             Manager.End<AirControl>();
             Controller.AddCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
-            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+            _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
         }
 
         protected void ApplyForces(HedgehogController controller)
@@ -284,7 +284,7 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveUpdate()
         {
             if (ControlLockTimerOn || DisableControl) return;
-            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+            _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
         }
 
         public override void OnActiveExit()

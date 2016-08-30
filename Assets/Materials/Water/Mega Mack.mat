@@ -15,24 +15,20 @@ Material:
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
-      data:
-        first:
-          name: _Curve
-        second:
-          m_Texture: {fileID: 2800000, guid: 82b32264a6a8c8343b180f2b08451e99, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
+    - first:
+        name: _Curve
+      second:
+        m_Texture: {fileID: 2800000, guid: 4670b18168024bc4bab139ffcf7f735b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-      data:
-        first:
-          name: _Wavelength
-        second: 0.3
-      data:
-        first:
-          name: _Amplitude
-        second: 0.002
-      data:
-        first:
-          name: _ScrollRate
-        second: 0.08
-    m_Colors: {}
+    - first:
+        name: _Amplitude
+      second: 0.002
+    - first:
+        name: _ScrollRate
+      second: 0.08
+    - first:
+        name: _Wavelength
+      second: 0.3
+    m_Colors: []

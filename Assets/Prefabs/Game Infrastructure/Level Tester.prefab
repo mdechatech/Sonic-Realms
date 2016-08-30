@@ -25,6 +25,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -41,9 +42,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: {fileID: 11400000, guid: 4861631379e5fc54db57c19bd8daf3c1, type: 2}
   Character: {fileID: 11400000, guid: 819344311bcc8a049bac258c77bd1211, type: 2}
+  LevelManager: {fileID: 0}
   BaseGameManager: {fileID: 11407338, guid: 2408b886ba162e84eb4eafdc49295c5e, type: 2}
   BaseSoundManager: {fileID: 11413506, guid: 80b94990b2cf5a0499eeadc4a0031409, type: 2}
-  GameManager: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

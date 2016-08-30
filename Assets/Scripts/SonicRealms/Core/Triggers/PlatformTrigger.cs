@@ -11,7 +11,6 @@ namespace SonicRealms.Core.Triggers
     /// Hook up to these events to react when a controller lands on the object.
     /// </summary>
     [DisallowMultipleComponent]
-    [AddComponentMenu("Hedgehog/Triggers/Platform Trigger")]
     public class PlatformTrigger : BaseTrigger
     {
         #region Events

@@ -8,6 +8,12 @@ namespace SonicRealms.Level
         [HideInInspector]
         public UnityEvent OnLevelComplete;
 
+        public UnityEvent InitLevelCalled;
+
+        public UnityEvent StartLevelCalled;
+
+        public UnityEvent FinishLevelCalled;
+
         public virtual void Reset()
         {
             OnLevelComplete = new UnityEvent();
@@ -18,13 +24,31 @@ namespace SonicRealms.Level
             OnLevelComplete = OnLevelComplete ?? new UnityEvent();
         }
 
-        public abstract void InitLevel();
-        public abstract void StartLevel();
-        public abstract void FinishLevel();
-
         public virtual void UpdateSave(SaveData data)
         {
 
         }
+
+        public void InitLevel()
+        {
+            OnInitLevel();
+            InitLevelCalled.Invoke();
+        }
+
+        public void StartLevel()
+        {
+            OnStartLevel();
+            StartLevelCalled.Invoke();
+        }
+
+        public void FinishLevel()
+        {
+            OnFinishLevel();
+            FinishLevelCalled.Invoke();
+        }
+
+        protected abstract void OnInitLevel();
+        protected abstract void OnStartLevel();
+        protected abstract void OnFinishLevel();
     }
 }

@@ -83,6 +83,9 @@ namespace SonicRealms.Level.Objects
 
         public void Bounce(HedgehogController controller)
         {
+            // Ignore collision with this since it's destroyed now
+            controller.IgnoreThisCollision();
+
             controller.ApplyGravityOnce();
 
             if(controller.RelativeVelocity.y > 0f) return;
@@ -99,9 +102,6 @@ namespace SonicRealms.Level.Objects
                     Mathf.Min(jump.ReleaseSpeed, -controller.RelativeVelocity.y +
                     controller.AirGravity * Time.deltaTime));
             }
-
-            // Ignore collision with this since it's destroyed now
-            controller.IgnoreThisCollision();
         }
 
         public void Break(HedgehogController controller)

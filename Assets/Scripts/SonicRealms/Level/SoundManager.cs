@@ -89,6 +89,13 @@ namespace SonicRealms.Level
 
             _currentAudioSourceIndex = 0;
             CreateAudioClipSources();
+
+            DontDestroyOnLoad(gameObject);
+
+            BGMLooper = BGMSource.GetComponent<LoopAudioSource>() ??
+                        BGMSource.gameObject.AddComponent<LoopAudioSource>();
+            PowerupLooper = PowerupSource.GetComponent<LoopAudioSource>() ??
+                            PowerupSource.gameObject.AddComponent<LoopAudioSource>();
         }
 
         protected void CreateAudioClipSources()
@@ -103,16 +110,6 @@ namespace SonicRealms.Level
                 audioSource.transform.SetParent(transform);
                 _audioSources.Add(audioSource);
             }
-        }
-
-        public void Start()
-        {
-            DontDestroyOnLoad(gameObject);
-
-            BGMLooper = BGMSource.GetComponent<LoopAudioSource>() ??
-                        BGMSource.gameObject.AddComponent<LoopAudioSource>();
-            PowerupLooper = PowerupSource.GetComponent<LoopAudioSource>() ??
-                            PowerupSource.gameObject.AddComponent<LoopAudioSource>();
         }
 
         public void Update()

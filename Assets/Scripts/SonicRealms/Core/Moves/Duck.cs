@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SonicRealms.Core.Actors;
+using UnityEngine;
 
 namespace SonicRealms.Core.Moves
 {
@@ -55,7 +56,8 @@ namespace SonicRealms.Core.Moves
             get
             {
                 return Controller.Grounded && Mathf.Abs(Controller.GroundVelocity) < MaxActivateSpeed &&
-                       (GroundControl == null || !GroundControl.Accelerating) && 
+                       Controller.WallMode == WallMode.Floor &&
+                       (GroundControl == null || !GroundControl.Accelerating) &&
                        Manager[MoveLayer.Action] == null && Manager[MoveLayer.Roll] == null;
             }
         }

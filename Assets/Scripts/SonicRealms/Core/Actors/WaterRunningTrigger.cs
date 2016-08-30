@@ -44,6 +44,7 @@ namespace SonicRealms.Core.Actors
         protected void OnSurface(ReactivePlatform platform)
         {
             var running = Player.StandingOn<WaterSurface>();
+
             if (running && !_wasRunning)
             {
                 _wasRunning = true;

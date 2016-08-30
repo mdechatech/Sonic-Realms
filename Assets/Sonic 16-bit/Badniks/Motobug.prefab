@@ -204,6 +204,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 416068}
   m_RootOrder: 1
@@ -216,6 +217,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.15599823, y: -0.015999794, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 428802}
   m_RootOrder: 0
@@ -226,8 +228,9 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171974}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6.5699997, y: 1.4499999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 428802}
   - {fileID: 404246}
@@ -243,6 +246,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1, y: -0.13999987, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 2
@@ -255,6 +259,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 408638}
   m_Father: {fileID: 416068}
@@ -268,6 +273,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.13999987, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 1
@@ -280,6 +286,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.1, y: -0.2999997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 3
@@ -292,6 +299,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.010002136, y: -0.01999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 447400}
   - {fileID: 430854}
@@ -311,6 +319,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.1, y: -0.13999987, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 0
@@ -323,6 +332,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1, y: 0.01999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 6
@@ -335,6 +345,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1, y: -0.2999997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 4
@@ -347,6 +358,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.1, y: 0.01999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 441332}
   m_RootOrder: 5
@@ -501,6 +513,7 @@ MonoBehaviour:
   HurtTrigger: 
   HurtDamageFloat: 
   DeathTrigger: Death
+  IsDead: 0
   AddsToCombo: 1
 --- !u!114 &11449160
 MonoBehaviour:
@@ -566,6 +579,7 @@ MonoBehaviour:
   AreaEnterSound: {fileID: 0}
   AreaLoopSound: {fileID: 0}
   AreaExitSound: {fileID: 0}
+  Collisions: []
 --- !u!114 &11485718
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -632,6 +646,8 @@ MonoBehaviour:
   SlopeGravityBeginAngle: 10
   DetachSpeed: 9001
   MaxClimbAngle: 180
+  WallModeRevertBufferTime: 0
+  RevertBufferMaxSpeed: 0
   DisableNotifyPlatforms: 1
   DisableEvents: 1
   DisableCeilingCheck: 1
@@ -657,16 +673,57 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  OnAreaEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactiveAreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnAreaExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactiveAreaEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPlatformCollisionEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactivePlatformEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformCollisionExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactivePlatformEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactivePlatformEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactivePlatformEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnObjectActivate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactiveObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnObjectDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.ReactiveObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Interrupted: 0
   InterruptTimer: 0
-  ApplyVelocity: 0
-  ApplySlopeGravity: 1
-  ApplyGroundFriction: 1
-  DetachWhenSlow: 1
-  DetachLock: 1
-  AttachLock: 1
-  ApplyAirGravity: 1
-  ApplyAirDrag: 1
+  DisableMovement: 0
+  DisableForces: 0
+  DisableSlopeGravity: 0
+  DisableGroundFriction: 0
+  DisableWallDetach: 0
+  DisableDetach: 0
+  DisableAttach: 0
+  DisableAirGravity: 0
+  DisableAirDrag: 0
   _facingForward: 0
   IgnoreCollision: 0
   IgnoringThisCollision: 0
@@ -674,9 +731,12 @@ MonoBehaviour:
   Vy: 0
   GroundVelocity: 0
   Grounded: 0
-  SurfaceAngle: 0
+  _surfaceAngle: 0
   ForceSurfaceAngle: 0
   Footing: 0
+  WallMode: 0
+  WallModeRevertBufferTimer: 0
+  WallModeRevertBuffer: 0
   JustDetached: 0
   PrimarySurface: {fileID: 0}
   SecondarySurface: {fileID: 0}
@@ -704,22 +764,25 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_ReflectionProbeUsage: 0
   m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedWireframeHidden: 1
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: 182623717
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 03f665935e3b28143a947cf17abbb2e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
