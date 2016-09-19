@@ -116,13 +116,11 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether to let the specified trigger know it's been collided with.
         /// </summary>
-        /// <param name="trigger">The specified trigger.</param>
-        /// <returns></returns>
-        public virtual bool AllowCollision(AreaTrigger trigger)
+        public virtual bool CanTouch(AreaCollision.Contact contact)
         {
             return CollisionsThisFrame < CollisionsPerFrame &&
                    CollisionTimer == 0f &&
-                   (TriggerTags.Count == 0 || TriggerTags.Any(s => trigger.CompareTag(s)));
+                   (TriggerTags.Count == 0 || TriggerTags.Any(s => contact.AreaTrigger.CompareTag(s)));
         }
 
         public void NotifyCollisionEnter(AreaTrigger trigger)

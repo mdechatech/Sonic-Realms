@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level;
 using SonicRealms.Level.Areas;
@@ -109,7 +110,7 @@ namespace SonicRealms.Core.Moves
             if (DiveSound != null) _diveAudioSource = SoundManager.Instance.PlayClipAtPoint(DiveSound, transform.position);
 
             // Listen for collisions - need to bounce back up when we collide with the ground
-            Controller.OnCollide.AddListener(OnCollide);
+            Controller.OnPreCollide.AddListener(OnPreCollide);
         }
 
         public override void OnActiveUpdate()
@@ -123,7 +124,7 @@ namespace SonicRealms.Core.Moves
                 End();
 
                 // Set vertical speed to release speed based on whether underwater
-                if (Controller.Inside<Water>())
+                if (Controller.IsInside<Water>())
                 {
                     if (Controller.RelativeVelocity.y > UnderwaterBounceReleaseSpeed)
                         Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x,
@@ -144,34 +145,42 @@ namespace SonicRealms.Core.Moves
             Bouncing = false;
         }
 
-        public void OnCollide(TerrainCastHit hit)
+        public void OnPreCollide(PlatformCollision.Contact contact)
         {
             // Bounce only if it's the controller's bottom colliding with the floor
-            if ((hit.Side & ControllerSide.Bottom) == 0) return;
+            if ((contact.HitData.Side & ControllerSide.Bottom) == 0)
+                return;
+
+            // Don't bounce if we were somehow moving upwards already (caused by a spring or something)
+            if (contact.RelativeVelocity.y > 0)
+                return;
 
             // Normally we can't use a double jump again until we attach to the floor, so make
             // it available manually
             Used = false;
 
+            var hit = contact.HitData;
+
             // Set bounce velocity based on surface normal and jump input
             if (Input.GetButton(InputName))
             {
-                Controller.Velocity = Vector2.Reflect(Controller.Velocity, hit.Hit.normal).normalized*
-                                      (Controller.Inside<Water>() ? UnderwaterBounceSpeed : BounceSpeed);
+                Controller.Velocity = Vector2.Reflect(contact.Velocity, hit.Raycast.normal).normalized*
+                                      (Controller.IsInside<Water>() ? UnderwaterBounceSpeed : BounceSpeed);
             }
             else
             {
-                Controller.Velocity = Vector2.Reflect(Controller.Velocity, hit.Hit.normal).normalized *
-                                      (Controller.Inside<Water>() ? UnderwaterBounceReleaseSpeed : BounceReleaseSpeed);
+                Controller.Velocity = Vector2.Reflect(contact.Velocity, hit.Raycast.normal).normalized *
+                                      (Controller.IsInside<Water>() ? UnderwaterBounceReleaseSpeed : BounceReleaseSpeed);
 
                 // If the jump input is no longer held down end the move immediately
                 End();
             }
 
             // Prevent controller from landing on the surface it just hit
+            Controller.Detach();
             Controller.IgnoreThisCollision();
 
-            Controller.OnCollide.RemoveListener(OnCollide);
+            Controller.OnPreCollide.RemoveListener(OnPreCollide);
 
             if (BounceSound != null)
             {

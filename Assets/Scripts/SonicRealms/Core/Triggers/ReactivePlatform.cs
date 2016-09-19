@@ -1,8 +1,6 @@
 ﻿using System;
-using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SonicRealms.Core.Triggers
 {
@@ -116,7 +114,8 @@ namespace SonicRealms.Core.Triggers
             if (RegisteredEvents) return;
 
             // Add listeners to the platform trigger
-            PlatformTrigger.CollisionRules.Add(IsSolid);
+            PlatformTrigger.SolidityRules.Add(IsSolid);
+            PlatformTrigger.OnPreCollide.AddListener(OnPreCollide);
             PlatformTrigger.OnPlatformEnter.AddListener(NotifyPlatformEnter);
             PlatformTrigger.OnPlatformStay.AddListener(NotifyPlatformStay);
             PlatformTrigger.OnPlatformExit.AddListener(NotifyPlatformExit);
@@ -134,7 +133,8 @@ namespace SonicRealms.Core.Triggers
             if (!RegisteredEvents) return;
 
             // Remove listeners from the platform trigger
-            PlatformTrigger.CollisionRules.Remove(IsSolid);
+            PlatformTrigger.SolidityRules.Remove(IsSolid);
+            PlatformTrigger.OnPreCollide.RemoveListener(OnPreCollide);
             PlatformTrigger.OnPlatformEnter.RemoveListener(NotifyPlatformEnter);
             PlatformTrigger.OnPlatformStay.RemoveListener(NotifyPlatformStay);
             PlatformTrigger.OnPlatformExit.RemoveListener(NotifyPlatformExit);
@@ -150,55 +150,61 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Default surface rule. Uses the trigger's default surface rule.
         /// </summary>
-        public virtual bool IsOnSurface(TerrainCastHit hit)
-        {
-            return PlatformTrigger.DefaultSurfaceRule(hit);
-        }
-
-        /// <summary>
-        /// Default collision rule. Always solid to all collisions by default.
-        /// </summary>
-        public virtual bool IsSolid(TerrainCastHit hit)
+        public virtual bool IsOnSurface(SurfaceCollision.Contact contact)
         {
             return true;
         }
 
-        // Override these methods to react when a controller collides with the platform.
-        public virtual void OnPlatformEnter(TerrainCastHit hit)
+        // Override this to change when a terrain cast should register with the platform
+        // Return false if terrain casts should ignore this platform
+        public virtual bool IsSolid(TerrainCastHit data)
+        {
+            return true;
+        }
+
+        // Override this to react when a controller is about to collide with the platform
+        public virtual void OnPreCollide(PlatformCollision.Contact contact)
+        {
+            // Call contact.Controller.IgnoreThisCollision() here to prevent the collision from happening
+        }
+
+        // Override these methods to react when a controller collides with the platform
+        public virtual void OnPlatformEnter(PlatformCollision contact)
         {
 
         }
 
-        public virtual void OnPlatformStay(TerrainCastHit hit)
+        public virtual void OnPlatformStay(PlatformCollision collision)
         {
 
         }
 
-        public virtual void OnPlatformExit(TerrainCastHit hit)
+        public virtual void OnPlatformExit(PlatformCollision collision)
         {
 
         }
-        // Override these methods to react when a controller stands on the platform.
-        public virtual void OnSurfaceEnter(TerrainCastHit hit)
+
+        // Override these methods to react when a controller stands on the platform
+        public virtual void OnSurfaceEnter(SurfaceCollision collision)
         {
             
         }
 
-        public virtual void OnSurfaceStay(TerrainCastHit hit)
+        public virtual void OnSurfaceStay(SurfaceCollision collision)
         {
             
         }
 
-        public virtual void OnSurfaceExit(TerrainCastHit hit)
+        public virtual void OnSurfaceExit(SurfaceCollision collision)
         {
             
         }
         #region Notify Methods
-        public void NotifyPlatformEnter(TerrainCastHit hit)
+        public void NotifyPlatformEnter(PlatformCollision collision)
         {
-            OnPlatformEnter(hit);
-            hit.Controller.NotifyPlatformEnter(this);
-            SetAnimatorParameters(hit, SetPlatformEnterParameters, SetPlayerPlatformEnterParameters);
+            OnPlatformEnter(collision);
+            collision.Controller.NotifyPlatformEnter(this);
+            SetAnimatorParameters(collision.Latest.HitData, SetPlatformEnterParameters, SetPlayerPlatformEnterParameters);
         }
 
         protected virtual void SetPlatformEnterParameters(TerrainCastHit hit)
@@ -219,16 +225,16 @@ namespace SonicRealms.Core.Triggers
                 hit.Controller.Animator.SetBool(PlayerCollidingBoolHash, true);
         }
 
-        public void NotifyPlatformStay(TerrainCastHit hit)
+        public void NotifyPlatformStay(PlatformCollision collision)
         {
-            OnPlatformStay(hit);
+            OnPlatformStay(collision);
         }
 
-        public void NotifyPlatformExit(TerrainCastHit hit)
+        public void NotifyPlatformExit(PlatformCollision collision)
         {
-            OnPlatformExit(hit);
-            hit.Controller.NotifyPlatformExit(this);
-            SetAnimatorParameters(hit, SetPlatformExitParameters, SetPlayerPlatformExitParameters);
+            OnPlatformExit(collision);
+            collision.Controller.NotifyPlatformExit(this);
+            SetAnimatorParameters(collision.Latest.HitData, SetPlatformExitParameters, SetPlayerPlatformExitParameters);
         }
 
         protected virtual void SetPlatformExitParameters(TerrainCastHit hit)
@@ -243,11 +249,11 @@ namespace SonicRealms.Core.Triggers
                 hit.Controller.Animator.SetBool(PlayerCollidingBoolHash, false);
         }
 
-        public void NotifySurfaceEnter(TerrainCastHit hit)
+        public void NotifySurfaceEnter(SurfaceCollision info)
         {
-            OnSurfaceEnter(hit);
-            hit.Controller.NotifySurfaceEnter(this);
-            SetAnimatorParameters(hit, SetSurfaceEnterParameters, SetPlayerSurfaceEnterParameters);
+            OnSurfaceEnter(info);
+            info.Controller.NotifySurfaceEnter(this);
+            SetAnimatorParameters(info.Latest.HitData, SetSurfaceEnterParameters, SetPlayerSurfaceEnterParameters);
         }
 
         protected virtual void SetSurfaceEnterParameters(TerrainCastHit hit)
@@ -268,15 +274,16 @@ namespace SonicRealms.Core.Triggers
                 hit.Controller.Animator.SetBool(PlayerSurfaceBoolHash, true);
         }
 
-        public void NotifySurfaceStay(TerrainCastHit hit)
+        public void NotifySurfaceStay(SurfaceCollision info)
         {
-            OnSurfaceStay(hit);
+            OnSurfaceStay(info);
         }
 
-        public void NotifySurfaceExit(TerrainCastHit hit)
+        public void NotifySurfaceExit(SurfaceCollision info)
         {
-            OnSurfaceExit(hit);
-            hit.Controller.NotifySurfaceExit(this);
+            OnSurfaceExit(info);
+            info.Controller.NotifySurfaceExit(this);
+            SetAnimatorParameters(info.Latest.HitData, SetSurfaceExitParameters, SetPlayerSurfaceExitParameters);
         }
 
         protected virtual void SetSurfaceExitParameters(TerrainCastHit hit)
@@ -312,11 +319,11 @@ namespace SonicRealms.Core.Triggers
 
         public virtual void OnDestroy()
         {
-            foreach (var hit in PlatformTrigger.SurfaceCollisions)
-                NotifySurfaceExit(hit);
+            foreach (var contacts in PlatformTrigger.CurrentSurfaceContacts)
+                NotifySurfaceExit(new SurfaceCollision(contacts.Value));
 
-            foreach (var hit in PlatformTrigger.Collisions)
-                NotifyPlatformExit(hit);
+            foreach (var contacts in PlatformTrigger.CurrentPlatformContacts)
+                NotifyPlatformExit(new PlatformCollision(contacts.Value));
         }
     }
 }

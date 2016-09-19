@@ -101,7 +101,7 @@ namespace SonicRealms.Core.Moves
             get
             {
                 return Controller.Grounded &&
-                       Controller.SecondarySurface == null;
+                       Controller.SecondarySurfaceHit == null;
             }
         }
 
@@ -122,7 +122,7 @@ namespace SonicRealms.Core.Moves
             TerrainCastHit hit;
             float distance = EdgeDistance = float.MaxValue;
 
-            if (Controller.Footing == Footing.Left)
+            if (Controller.Side == GroundSensorType.Left)
             {
                 hit = Controller.TerrainCast(EdgeSensorRight.position, EdgeSensorLeft.position, ControllerSide.Bottom);
                 if (hit == null)
@@ -132,9 +132,9 @@ namespace SonicRealms.Core.Moves
                     return distance;
                 }
 
-                distance = Vector2.Distance(hit.Hit.point, EdgeSensorRight.position);
+                distance = Vector2.Distance(hit.Raycast.point, EdgeSensorRight.position);
             }
-            else if (Controller.Footing == Footing.Right)
+            else if (Controller.Side == GroundSensorType.Right)
             {
                 hit = Controller.TerrainCast(EdgeSensorLeft.position, EdgeSensorRight.position, ControllerSide.Bottom);
                 if (hit == null)
@@ -144,7 +144,7 @@ namespace SonicRealms.Core.Moves
                     return distance;
                 }
 
-                distance = Vector2.Distance(hit.Hit.point, EdgeSensorLeft.position);
+                distance = Vector2.Distance(hit.Raycast.point, EdgeSensorLeft.position);
             }
 
             distance = Vector2.Distance(EdgeSensorLeft.position, EdgeSensorRight.position) - distance;
@@ -164,7 +164,7 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveEnter(State previousState)
         {
             if (DMath.Equalsf(Controller.GroundVelocity))
-                Controller.FacingForward = Controller.Footing == Footing.Left;
+                Controller.FacingForward = Controller.Side == GroundSensorType.Left;
 
             if (!AllowDuck)
             {
@@ -184,7 +184,7 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveUpdate()
         {
             if(DMath.Equalsf(Controller.GroundVelocity))
-                Controller.FacingForward = Controller.Footing == Footing.Left;
+                Controller.FacingForward = Controller.Side == GroundSensorType.Left;
         }
 
         public override void OnActiveExit()

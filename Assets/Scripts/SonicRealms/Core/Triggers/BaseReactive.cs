@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Actors;
+﻿using System;
+using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -7,11 +8,12 @@ namespace SonicRealms.Core.Triggers
     /// <summary>
     /// Base class for creating things that react to controllers.
     /// </summary>
-    public abstract class BaseReactive : MonoBehaviour
+    public abstract class BaseReactive : MonoBehaviour, IComparable<Component>
     {
         /// <summary>
         /// The object trigger, if any. This defaults to the the first trigger on this object.
         /// </summary>
+        [HideInInspector]
         [Tooltip("The object trigger, if any. This defaults to the the first trigger on this object.")]
         public ObjectTrigger ObjectTrigger;
 
@@ -50,6 +52,11 @@ namespace SonicRealms.Core.Triggers
         public virtual void Start()
         {
             
+        }
+
+        public virtual int CompareTo(Component component)
+        {
+            return 1;
         }
 
         /// <summary>

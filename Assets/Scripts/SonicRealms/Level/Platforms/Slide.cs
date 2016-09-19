@@ -46,39 +46,39 @@ namespace SonicRealms.Level.Platforms
             _originalSlopeGravities = new Dictionary<int, float>();
         }
 
-        public override bool IsSolid(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit data)
         {
-            if (hit.Controller == null) return true;
-            return base.IsSolid(hit) && (!RequireGroundEntry ||
-                                              (RequireGroundEntry && hit.Controller.Grounded &&
-                                               !DMath.Equalsf(hit.Hit.fraction)));
+            if (data.Controller == null) return true;
+            return base.IsSolid(data) && (!RequireGroundEntry ||
+                                              (RequireGroundEntry && data.Controller.Grounded &&
+                                               !DMath.Equalsf(data.Raycast.fraction)));
         }
 
-        public override void OnSurfaceEnter(TerrainCastHit hit)
+        public override void OnSurfaceEnter(SurfaceCollision collision)
         {
-            _originalSlopeGravities[hit.Controller.GetInstanceID()] = hit.Controller.SlopeGravity;
+            _originalSlopeGravities[collision.Controller.GetInstanceID()] = collision.Controller.SlopeGravity;
         }
 
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            var instanceID = hit.Controller.GetInstanceID();
+            var instanceID = collision.Controller.GetInstanceID();
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;
 
             var result = _originalSlopeGravities[instanceID];
-            if (-DMath.ScalarProjectionAbs(hit.Controller.Velocity, hit.Controller.GravityDirection*Mathf.Deg2Rad) < 0.0f)
+            if (-DMath.ScalarProjectionAbs(collision.Controller.Velocity, collision.Controller.GravityDirection*Mathf.Deg2Rad) < 0.0f)
                 result += DownhillSlopeGravity;
             else
                 result += UphillSlopeGravity;
 
-            hit.Controller.SlopeGravity = result;
+            collision.Controller.SlopeGravity = result;
         }
 
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceExit(SurfaceCollision collision)
         {
-            var instanceID = hit.Controller.GetInstanceID();
+            var instanceID = collision.Controller.GetInstanceID();
             if (!_originalSlopeGravities.ContainsKey(instanceID)) return;
 
-            hit.Controller.SlopeGravity = _originalSlopeGravities[instanceID];
+            collision.Controller.SlopeGravity = _originalSlopeGravities[instanceID];
             _originalSlopeGravities.Remove(instanceID);
         }
     }

@@ -57,9 +57,9 @@ namespace SonicRealms.Core.Moves
             get { return Input.GetButton(ActivateButton); }
         }
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override bool Available

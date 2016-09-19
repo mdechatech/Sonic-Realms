@@ -5,9 +5,9 @@ namespace SonicRealms.Level.Platforms
 {
     public class GroundOnlyCollision : ReactivePlatform
     {
-        public override bool IsSolid(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit data)
         {
-            return hit.Controller.Grounded;
+            return data.Controller.Grounded;
         }
     }
 }

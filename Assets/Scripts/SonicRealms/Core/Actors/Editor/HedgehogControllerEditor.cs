@@ -108,11 +108,11 @@ namespace SonicRealms.Core.Actors.Editor
             GUILayout.Label("<color=\"#0000ff\">Hedgehog Controller</color>", titleStyle);
             #endregion
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+            RealmsEditorUtility.DrawProperties(serializedObject,
                 "RendererObject",
                 "Animator");
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "CollisionMask");
+            RealmsEditorUtility.DrawProperties(serializedObject, "CollisionMask");
             #region Sensors Foldout
             ShowSensors = EditorGUILayout.Foldout(ShowSensors, "Sensors", foldoutStyle);
             if (ShowSensors)
@@ -156,7 +156,7 @@ namespace SonicRealms.Core.Actors.Editor
             ShowPhysics = EditorGUILayout.Foldout(ShowPhysics, "Physics", foldoutStyle);
             if (ShowPhysics)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "MaxSpeed",
                     "GroundFriction",
                     "GravityDirection",
@@ -176,7 +176,7 @@ namespace SonicRealms.Core.Actors.Editor
                 if (ShowAdvancedPhysics)
                 {
                     ++EditorGUI.indentLevel;
-                    HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                    RealmsEditorUtility.DrawProperties(serializedObject,
                         "AirDragRequiredSpeed",
                         "AntiTunnelingSpeed",
                         "SlopeGravityBeginAngle",
@@ -193,11 +193,12 @@ namespace SonicRealms.Core.Actors.Editor
             ShowPerformance = EditorGUILayout.Foldout(ShowPerformance, "Performance");
             if (ShowPerformance)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "DisableNotifyPlatforms",
                     "DisableEvents",
                     "DisableCeilingCheck",
                     "DisableGroundCheck",
+                    "DisableSolidObjectCheck",
                     "DisableSideCheck");
             }
             #region Animation Foldout
@@ -205,7 +206,7 @@ namespace SonicRealms.Core.Actors.Editor
             ShowAnimation = EditorGUILayout.Foldout(ShowAnimation, "Animation", foldoutStyle);
             if (ShowAnimation)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "AttachTrigger",
                     "DetachTrigger",
                     "AirSpeedXFloat",
@@ -222,7 +223,7 @@ namespace SonicRealms.Core.Actors.Editor
             ShowEvents = EditorGUILayout.Foldout(ShowEvents, "Events", foldoutStyle);
             if (ShowEvents)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "OnAttach", "OnDetach", "OnSteepDetach");
             }
             #endregion
@@ -230,6 +231,8 @@ namespace SonicRealms.Core.Actors.Editor
             ShowDebugInfo = EditorGUILayout.Foldout(ShowDebugInfo, "Debug", foldoutStyle);
             if (ShowDebugInfo)
             {
+                RealmsEditorUtility.DrawProperties(serializedObject, "ShowDebugGraphics");
+
                 if (!Application.isPlaying)
                 {
                     EditorGUILayout.HelpBox("This section becomes active in Play Mode.", MessageType.Info);
@@ -239,7 +242,7 @@ namespace SonicRealms.Core.Actors.Editor
 
                 EditorGUILayout.LabelField("Collision", headerStyle);
 
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
+                RealmsEditorUtility.DrawProperties(serializedObject, 
                     "CollisionMask",
                     "Reactives",
                     "Grounded",
@@ -250,8 +253,8 @@ namespace SonicRealms.Core.Actors.Editor
                 EditorGUILayout.LabelField("Surface", headerStyle);
                 GUI.enabled = Application.isPlaying && _instance.Grounded;
 
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, 
-                    "Footing",
+                RealmsEditorUtility.DrawProperties(serializedObject, 
+                    "Side",
                     "_surfaceAngle",
                     "PrimarySurface",
                     "SecondarySurface");
@@ -259,7 +262,7 @@ namespace SonicRealms.Core.Actors.Editor
 
                 EditorGUILayout.Space();
 
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "WallMode",
                     "WallModeRevertBufferTimer",
                     "WallModeRevertBuffer");

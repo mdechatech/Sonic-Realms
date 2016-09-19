@@ -153,10 +153,10 @@ namespace SonicRealms.Core.Utils.Editor
             if (((1 << gameObject.layer) & CollisionLayers.AllMask) != 0)
                 return true;
 
-            if (gameObject.GetComponent<BaseTrigger>())
+            if (gameObject.GetComponentInChildren<BaseTrigger>())
                 return true;
 
-            if (gameObject.GetComponent<HedgehogController>())
+            if (gameObject.GetComponentInChildren<HedgehogController>())
                 return true;
 
             return false;
@@ -210,7 +210,7 @@ namespace SonicRealms.Core.Utils.Editor
             var result = new Vector2[points.Length];
             for (var i = 0; i < points.Length; ++i)
             {
-                result[i] = RoundPoint(points[i]);
+                result[i] = RoundPoint(points[i], interval);
             }
 
             return result;

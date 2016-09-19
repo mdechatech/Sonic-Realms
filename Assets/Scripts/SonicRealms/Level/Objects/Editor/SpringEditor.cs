@@ -20,23 +20,23 @@ namespace SonicRealms.Level.Objects.Editor
         {
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "HitTrigger");
+            RealmsEditorUtility.DrawProperties(serializedObject, "HitTrigger");
 
             if(targets.Count() <= 1)
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "BouncySides");
+                RealmsEditorUtility.DrawProperties(serializedObject, "BouncySides");
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Power", "AccurateBounce", "LockControl");
+            RealmsEditorUtility.DrawProperties(serializedObject, "Power", "AccurateBounce", "LockControl");
 
             if (targets.Count() == 1)
             {
                 var lockControlProp = serializedObject.FindProperty("LockControl");
                 if (lockControlProp.boolValue)
                 {
-                    HedgehogEditorGUIUtility.DrawProperties(serializedObject, "LockDuration");
+                    RealmsEditorUtility.DrawProperties(serializedObject, "LockDuration");
                 }
             }
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "KeepOnGround");
+            RealmsEditorUtility.DrawProperties(serializedObject, "KeepOnGround");
 
             serializedObject.ApplyModifiedProperties();
         }

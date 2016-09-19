@@ -14,19 +14,19 @@ namespace SonicRealms.Level.Effects.Editor
 
             ReactiveObjectEditor.DrawActivatorCheck(targets);
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+            RealmsEditorUtility.DrawProperties(serializedObject,
                 "RestoreOnExit",
                 "ModifyDirection");
 
             if (serializedObject.FindProperty("ModifyDirection").boolValue)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "Direction");
+                RealmsEditorUtility.DrawProperties(serializedObject, "Direction");
             }
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ModifyStrength");
+            RealmsEditorUtility.DrawProperties(serializedObject, "ModifyStrength");
             if (serializedObject.FindProperty("ModifyStrength").boolValue)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "AirStrength",
                     "GroundStrength");
             }

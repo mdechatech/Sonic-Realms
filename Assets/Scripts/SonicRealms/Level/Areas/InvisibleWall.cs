@@ -37,44 +37,47 @@ namespace SonicRealms.Level.Areas
             Collider2D = GetComponent<BoxCollider2D>();
         }
 
-        public override bool IsInside(Hitbox hitbox)
+        public override bool CanTouch(AreaCollision.Contact contact)
         {
-            return base.IsInside(hitbox) && Collider2D.bounds.Intersects(hitbox.Collider2D.bounds);
+            return base.CanTouch(contact) && Collider2D.bounds.Intersects(contact.Hitbox.Collider2D.bounds);
         }
 
-        public override void OnAreaEnter(Hitbox hitbox)
+        public override void OnAreaEnter(AreaCollision collision)
         {
-            float x = hitbox.Controller.transform.position.x,
-                y = hitbox.Controller.transform.position.y;
+            var controller = collision.Controller;
+            var collider2D = collision.Latest.Hitbox.Collider2D;
+
+            float x = controller.transform.position.x,
+                y = controller.transform.position.y;
             switch (PushDirection)
             {
                 case Direction.Left:
-                    x = Collider2D.bounds.min.x - hitbox.Collider2D.bounds.extents.x - DMath.Epsilon;
-                    if (hitbox.Controller.Vx > 0f) hitbox.Controller.Vx = hitbox.Controller.GroundVelocity = 0f;
+                    x = Collider2D.bounds.min.x - collider2D.bounds.extents.x - DMath.Epsilon;
+                    if (collision.Controller.Vx > 0f) collision.Controller.Vx = collision.Controller.GroundVelocity = 0f;
                     break;
 
                 case Direction.Right:
-                    x = Collider2D.bounds.max.x + hitbox.Collider2D.bounds.extents.x + DMath.Epsilon;
-                    if (hitbox.Controller.Vx < 0f) hitbox.Controller.Vx = hitbox.Controller.GroundVelocity = 0f;
+                    x = Collider2D.bounds.max.x + collider2D.bounds.extents.x + DMath.Epsilon;
+                    if (collision.Controller.Vx < 0f) collision.Controller.Vx = collision.Controller.GroundVelocity = 0f;
                     break;
 
                 case Direction.Up:
-                    y = Collider2D.bounds.max.y + hitbox.Collider2D.bounds.extents.y + DMath.Epsilon;
-                    if (hitbox.Controller.Vy < 0f) hitbox.Controller.Vy = hitbox.Controller.GroundVelocity = 0f;
+                    y = Collider2D.bounds.max.y + collider2D.bounds.extents.y + DMath.Epsilon;
+                    if (collision.Controller.Vy < 0f) collision.Controller.Vy = collision.Controller.GroundVelocity = 0f;
                     break;
 
                 case Direction.Down:
-                    y = Collider2D.bounds.min.y - hitbox.Collider2D.bounds.extents.y - DMath.Epsilon;
-                    if (hitbox.Controller.Vy > 0f) hitbox.Controller.Vy = hitbox.Controller.GroundVelocity = 0f;
+                    y = Collider2D.bounds.min.y - collider2D.bounds.extents.y - DMath.Epsilon;
+                    if (collision.Controller.Vy > 0f) collision.Controller.Vy = collision.Controller.GroundVelocity = 0f;
                     break;
             }
 
-            hitbox.Controller.transform.position = new Vector3(x, y);
+            collision.Controller.transform.position = new Vector3(x, y);
         }
 
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            OnAreaEnter(hitbox);
+            OnAreaEnter(collision);
         }
     }
 }

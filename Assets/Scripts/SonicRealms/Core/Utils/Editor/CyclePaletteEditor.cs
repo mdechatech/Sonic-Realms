@@ -39,13 +39,13 @@ namespace SonicRealms.Core.Utils.Editor
         {
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+            RealmsEditorUtility.DrawProperties(serializedObject,
                 "PaletteMaterial", "IgnoreTransparent");
 
             Instance.SetColorFrom = EditorGUILayout.Toggle("Set Color From", Instance.SetColorFrom);
             if (Instance.SetColorFrom)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ColorFromIndex");
+                RealmsEditorUtility.DrawProperties(serializedObject, "ColorFromIndex");
             }
 
             ShowPalettes = EditorGUILayout.Foldout(ShowPalettes, "Palettes");

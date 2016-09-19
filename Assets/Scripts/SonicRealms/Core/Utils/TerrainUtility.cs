@@ -30,7 +30,7 @@ namespace SonicRealms.Core.Utils
             return result;
         }
 
-        private const int MaxTerrainCastResults = 128;
+        private const int MaxTerrainCastResults = 256;
         private static readonly RaycastHit2D[] LinecastResults =
             new RaycastHit2D[MaxTerrainCastResults];
 
@@ -68,7 +68,8 @@ namespace SonicRealms.Core.Utils
         private static bool TransformSelector(TerrainCastHit hit)
         {
             var platformTrigger = hit.Collider.GetComponent<PlatformTrigger>();
-            if (platformTrigger != null) return platformTrigger.IsSolid(hit);
+            if (platformTrigger)
+                return platformTrigger.IsSolid(hit);
 
             // Otherwise if there are any area triggers, the object is not solid
             if (hit.Collider.GetComponent<AreaTrigger>() != null) return false;

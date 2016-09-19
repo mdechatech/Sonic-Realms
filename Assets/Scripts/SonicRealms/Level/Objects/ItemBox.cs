@@ -56,19 +56,26 @@ namespace SonicRealms.Level.Objects
             enabled = false;
         }
 
-        public override void OnPlatformEnter(TerrainCastHit hit)
+        public override void OnPreCollide(PlatformCollision.Contact contact)
         {
             // Must be rolling; if in the air, must be traveling down; 
             // if on the ground, must be hitting from the side
-            var moveManager = hit.Controller.GetComponent<MoveManager>();
-            if (moveManager == null || !moveManager.IsActive<Roll>()) return;
-            if (!hit.Controller.Grounded && (hit.Controller.RelativeVelocity.y > 0.0f)) return;
-            if (hit.Controller.Grounded && 
-                (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top)) return;
+
+            if (!contact.Controller.IsPerforming<Roll>())
+                return;
+
+            if (!contact.Controller.Grounded && (contact.Controller.RelativeVelocity.y > 0.0f))
+                return;
+
+            if (contact.Controller.Grounded &&
+                (contact.HitData.Side == ControllerSide.Bottom || contact.HitData.Side == ControllerSide.Top))
+                return;
 
             // Rebound effect
-            Bounce(hit.Controller);
-            Break(hit.Controller);
+            contact.Controller.IgnoreThisCollision();
+
+            Bounce(contact.Controller, contact.RelativeVelocity);
+            Break(contact.Controller);
         }
 
         public void NotifyHit(Hitbox hitbox)
@@ -76,30 +83,28 @@ namespace SonicRealms.Level.Objects
             var sonicHitbox = hitbox as SonicHitbox;
             if (sonicHitbox != null && sonicHitbox.Harmful && !sonicHitbox.Vulnerable)
             {
-                Bounce(hitbox.Controller);
+                Bounce(hitbox.Controller, hitbox.Controller.RelativeVelocity);
                 Break(hitbox.Controller);
             }
         }
 
-        public void Bounce(HedgehogController controller)
+        public void Bounce(HedgehogController controller, Vector2 relativeVelocity)
         {
             // Ignore collision with this since it's destroyed now
-            controller.IgnoreThisCollision();
-
             controller.ApplyGravityOnce();
 
-            if(controller.RelativeVelocity.y > 0f) return;
+            if(relativeVelocity.y > 0f) return;
 
             var jump = controller.GetMove<Jump>();
             if (jump == null || jump.Active || !jump.Used || controller.IsPerforming<BubbleSpecial>())
             {
-                controller.RelativeVelocity = new Vector2(controller.RelativeVelocity.x,
-                    -controller.RelativeVelocity.y);
+                controller.RelativeVelocity = new Vector2(relativeVelocity.x,
+                    -relativeVelocity.y);
             }
             else
             {
-                controller.RelativeVelocity = new Vector2(controller.RelativeVelocity.x,
-                    Mathf.Min(jump.ReleaseSpeed, -controller.RelativeVelocity.y +
+                controller.RelativeVelocity = new Vector2(relativeVelocity.x,
+                    Mathf.Min(jump.ReleaseSpeed, -relativeVelocity.y +
                     controller.AirGravity * Time.deltaTime));
             }
         }

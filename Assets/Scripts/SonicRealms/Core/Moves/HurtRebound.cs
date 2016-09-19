@@ -30,9 +30,9 @@ namespace SonicRealms.Core.Moves
 
         protected AirControl AirControl;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override void Reset()
@@ -65,13 +65,12 @@ namespace SonicRealms.Core.Moves
             Controller.OnAttach.AddListener(OnAttach);
 
             // Set speed based on underwater and position of the threat
-            var speed = Controller.Inside<Water>() ? UnderwaterReboundSpeed : ReboundSpeed;
+            var speed = Controller.IsInside<Water>() ? UnderwaterReboundSpeed : ReboundSpeed;
             if(Controller.transform.position.x < ThreatPosition.x)
                 speed = new Vector2(-speed.x, speed.y);
 
             // Detach from ground and prevent landing back on it this frame
             Controller.Detach();
-            Controller.IgnoreThisCollision();
             Controller.RelativeVelocity = speed;
 
             // Restrict control

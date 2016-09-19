@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 1195aee29968b234d978e44cfa53b4f2
+timeCreated: 1473801826
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ObjectTrigger: {instanceID: 0}
+  - Animator: {instanceID: 0}
+  - PlatformTrigger: {instanceID: 0}
+  - _baseSegment: {fileID: 114000012590978434, guid: b58faa29528e59d41a249e572cc4234e,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

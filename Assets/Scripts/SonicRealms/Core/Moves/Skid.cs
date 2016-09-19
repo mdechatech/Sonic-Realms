@@ -41,9 +41,9 @@ namespace SonicRealms.Core.Moves
         protected AudioSource SkidSoundSource;
         protected GroundControl GroundControl;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override bool Available

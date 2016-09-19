@@ -1,5 +1,4 @@
 ﻿using System;
-using SonicRealms.Core.Utils;
 using UnityEngine.Events;
 
 namespace SonicRealms.Core.Triggers
@@ -9,7 +8,7 @@ namespace SonicRealms.Core.Triggers
     /// the offending platform.
     /// </summary>
     [Serializable]
-    public class PlatformSurfaceEvent : UnityEvent<TerrainCastHit>
+    public class PlatformTriggerSurfaceEvent : UnityEvent<SurfaceCollision>
     {
     }
 }

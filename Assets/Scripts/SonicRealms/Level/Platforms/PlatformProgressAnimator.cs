@@ -69,18 +69,18 @@ namespace SonicRealms.Level.Platforms
             }
         }
 
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            if (hit.Controller == null) return;
+            if (collision.Controller == null) return;
 
-            var progress = GetProgress(hit.Controller.transform.position);
+            var progress = GetProgress(collision.Controller.transform.position);
 
             // Set progress on the controller's animator
-            if (hit.Controller.Animator == null) return;
-            var logWarnings = hit.Controller.Animator.logWarnings;
-            hit.Controller.Animator.logWarnings = false;
-            hit.Controller.Animator.SetFloat(ProgressFloat, progress);
-            hit.Controller.Animator.logWarnings = logWarnings;
+            if (collision.Controller.Animator == null) return;
+            var logWarnings = collision.Controller.Animator.logWarnings;
+            collision.Controller.Animator.logWarnings = false;
+            collision.Controller.Animator.SetFloat(ProgressFloat, progress);
+            collision.Controller.Animator.logWarnings = logWarnings;
         }
 
         /// <summary>

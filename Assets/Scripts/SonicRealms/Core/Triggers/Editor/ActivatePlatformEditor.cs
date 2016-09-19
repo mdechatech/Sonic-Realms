@@ -1,41 +1,65 @@
 ﻿using System.Linq;
 using SonicRealms.Core.Utils.Editor;
 using UnityEditor;
+using UnityEngine;
 
 namespace SonicRealms.Core.Triggers.Editor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(ActivatePlatform))]
     public class ActivatePlatformEditor : UnityEditor.Editor
     {
+        private static readonly string[] LimiterNames =
+        {
+            "SurfaceAngle",
+            "Velocity",
+            "GroundSpeed",
+            "AirSpeed",
+            "Moves",
+            "Powerups"
+        };
+
+        private static Limiter[] Limiters;
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+            RealmsEditorUtility.DrawProperties(serializedObject,
                 "WhenColliding",
-                "WhenOnSurface",
-                "LimitAngle");
+                "WhenOnSurface");
 
-            if (targets.Count() == 1)
+            for (var i = 0; i < Limiters.Length; ++i)
             {
-                var limitAngle = serializedObject.FindProperty("LimitAngle").boolValue;
-                if (limitAngle)
+                var limiter = Limiters[i];
+
+                EditorGUILayout.PropertyField(limiter.Boolean);
+                if (targets.Length > 1 || limiter.Boolean.boolValue)
                 {
-                    HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                        "RelativeToRotation",
-                        "SurfaceAngleMin",
-                        "SurfaceAngleMax");
+                    EditorGUILayout.PropertyField(limiter.Details, new GUIContent("Details"), true);
                 }
             }
-            else
-            {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
-                        "RelativeToRotation",
-                        "SurfaceAngleMin",
-                        "SurfaceAngleMax");
-            }
-
+            
             serializedObject.ApplyModifiedProperties();
+        }
+
+        protected void OnEnable()
+        {
+            Limiters = new Limiter[LimiterNames.Length];
+            for (var i = 0; i < LimiterNames.Length; ++i)
+            {
+                Limiters[i] = new Limiter
+                {
+                    Boolean = serializedObject.FindProperty("Limit" + LimiterNames[i]),
+                    Details = serializedObject.FindProperty("Limit" + LimiterNames[i] + "Details")
+                };
+            }
+        }
+
+        class Limiter
+        {
+            public SerializedProperty Boolean;
+            public SerializedProperty Details;
         }
     }
 }

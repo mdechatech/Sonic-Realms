@@ -271,7 +271,7 @@ namespace SonicRealms.Core.Actors
 
         private void OnAreaEnter(ReactiveArea area)
         {
-            if (!Underwater && Controller.Inside<Water>())
+            if (!Underwater && Controller.IsInside<Water>())
             {
                 Underwater = true;
                 OnEnterWater.Invoke();
@@ -284,7 +284,7 @@ namespace SonicRealms.Core.Actors
 
         private void OnAreaExit(ReactiveArea area)
         {
-            if (Underwater && !Controller.Inside<Water>())
+            if (Underwater && !Controller.IsInside<Water>())
             {
                 Underwater = false;
                 OnExitWater.Invoke();

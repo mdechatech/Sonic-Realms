@@ -11,7 +11,7 @@ namespace SonicRealms.Core.Utils
         /// <summary>
         /// The resulting raycast hit data.
         /// </summary>
-        public RaycastHit2D Hit;
+        public RaycastHit2D Raycast;
 
         /// <summary>
         /// The side from which the linecast originated.
@@ -53,6 +53,14 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         public Vector2 End;
 
+        /// <summary>
+        /// The point in world space where the terrain cast hit.
+        /// </summary>
+        public Vector2 Point
+        {
+            get { return Raycast.point; }
+        }
+
         public TerrainCastHit(RaycastHit2D hit, ControllerSide fromSide = ControllerSide.All,
             HedgehogController controller = null, Vector2 start = default(Vector2), Vector2 end = default(Vector2))
         {
@@ -64,7 +72,7 @@ namespace SonicRealms.Core.Utils
         {
             Start = start;
             End = end;
-            Hit = hit;
+            Raycast = hit;
             Side = fromSide;
             Controller = controller;
             NormalAngle = DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi);
@@ -80,7 +88,17 @@ namespace SonicRealms.Core.Utils
 
         public static implicit operator bool(TerrainCastHit terrainInfo)
         {
-            return terrainInfo == null ? false : terrainInfo.Hit;
+            return terrainInfo != null && terrainInfo.Raycast;
+        }
+
+        public override string ToString()
+        {
+            return
+                string.Format(
+                    "[TerrainCastHit Side: {0}, Controller: {1}, Transform: {2}, SurfaceAngle: {3}, NormalAngle: {4}," +
+                    "Start: {5}, Point: {6}, End: {7}]",
+                    Side,
+                    Controller, Transform, SurfaceAngle, NormalAngle, Start, Raycast.point, End);
         }
     }
 }

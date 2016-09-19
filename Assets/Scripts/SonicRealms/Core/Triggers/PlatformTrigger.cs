@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
@@ -15,141 +16,88 @@ namespace SonicRealms.Core.Triggers
     {
         #region Events
         /// <summary>
-        /// Called when a controller lands on the surface of the platform.
+        /// Called right before a controller is going to collide with the platform. Listeners of this event
+        /// may call IgnoreThisCollision() on the controller to prevent the collision from occurring.
         /// </summary>
-        [Foldout("Surface Events")]
-        public PlatformSurfaceEvent OnSurfaceEnter;
-
-        /// <summary>
-        /// Called while a controller is on the surface of the platform.
-        /// </summary>
-        [Foldout("Surface Events")]
-        public PlatformSurfaceEvent OnSurfaceStay;
-
-        /// <summary>
-        /// Called when a controller exits the surface of the platform.
-        /// </summary>
-        [Foldout("Surface Events")]
-        public PlatformSurfaceEvent OnSurfaceExit;
+        [Foldout("Platform Events")]
+        public PlatformTriggerPreCollisionEvent OnPreCollide;
 
         /// <summary>
         /// Called when a controller begins colliding with the platform.
         /// </summary>
         [Foldout("Platform Events")]
-        public PlatformCollisionEvent OnPlatformEnter;
+        public PlatformTriggerCollisionEvent OnPlatformEnter;
 
         /// <summary>
         /// Called while a controller is colliding with the platform.
         /// </summary>
         [Foldout("Platform Events")]
-        public PlatformCollisionEvent OnPlatformStay;
+        public PlatformTriggerCollisionEvent OnPlatformStay;
 
         /// <summary>
         /// Called when a controller stops colliding with the platform.
         /// </summary>
         [Foldout("Platform Events")]
-        public PlatformCollisionEvent OnPlatformExit;
+        public PlatformTriggerCollisionEvent OnPlatformExit;
+
+        /// <summary>
+        /// Called when a controller lands on the surface of the platform.
+        /// </summary>
+        [Foldout("Surface Events")]
+        public PlatformTriggerSurfaceEvent OnSurfaceEnter;
+
+        /// <summary>
+        /// Called while a controller is on the surface of the platform.
+        /// </summary>
+        [Foldout("Surface Events")]
+        public PlatformTriggerSurfaceEvent OnSurfaceStay;
+
+        /// <summary>
+        /// Called when a controller exits the surface of the platform.
+        /// </summary>
+        [Foldout("Surface Events")]
+        public PlatformTriggerSurfaceEvent OnSurfaceExit;
         #endregion
-        #region Sounds
         /// <summary>
-        /// An audio clip to play when a controller starts colliding with the platform.
+        /// A list of controllers currently colliding with the platform.
         /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to play when a controller starts colliding with the platform.")]
-        public AudioClip PlatformEnterSound;
+        [Foldout("Debug")]
+        public List<HedgehogController> ControllersOnPlatform;
 
         /// <summary>
-        /// An audio clip to loop while the platform is being collided with.
+        /// A list of controllers currently on the surface of the platform.
         /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to loop while the platform is being collided with.")]
-        // TODO Work this out later
-        public AudioClip PlatformLoopSound;
+        [Foldout("Debug")]
+        public List<HedgehogController> ControllersOnSurface;
 
         /// <summary>
-        /// An audio clip to play when a controller stops colliding with the platform.
+        /// Returns whether the platform should be solid based on the given terrain cast.
         /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to play when a controller stops colliding with the platform.")]
-        public AudioClip PlatformExitSound;
+        public delegate bool SolidityPredicate(TerrainCastHit data);
 
         /// <summary>
-        /// An audio clip to play when a controller stands on the platform.
+        /// A list of predicates which, if empty or all return true, allows terrain casts to hit the platform.
         /// </summary>
-        [Space, Foldout("Sound")]
-        [Tooltip("An audio clip to play when a controller stands on the platform.")]
-        public AudioClip SurfaceEnterSound;
+        public List<SolidityPredicate> SolidityRules;
 
         /// <summary>
-        /// An audio clip to loop while a controller is on the platform.
-        /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to loop while a controller is on the platform.")]
-        public AudioClip SurfaceLoopSound;
-
-        /// <summary>
-        /// An audio clip to play when a controller exits the platform.
-        /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to play when a controller exits the platform.")]
-        public AudioClip SurfaceExitSound;
-        #endregion
-
-        /// <summary>
-        /// Returns whether the platform should be collided with based on the result of the specified
-        /// terrain cast.
-        /// </summary>
-        /// <param name="hit">The specified terrain cast.</param>
-        /// <returns></returns>
-        public delegate bool CollisionPredicate(TerrainCastHit hit);
-
-        /// <summary>
-        /// A list of predicates which, if empty or all return true, allow collision with the
-        /// platform.
-        /// </summary>
-        public List<CollisionPredicate> CollisionRules;
-
-        /// <summary>
-        /// Returns whether the controller is considered to be on the surface.
+        /// Returns whether the controller is considered to be on the surface based on the given contact data.
         /// </summary>
         /// <returns></returns>
-        public delegate bool SurfacePredicate(TerrainCastHit hit);
+        public delegate bool SurfacePredicate(SurfaceCollision.Contact hit);
 
         /// <summary>
-        /// A list of predicates which invokes surface events based on whether it is empty or all
-        /// return true.
+        /// A list of predicates which, if empty or all return true, allows the trigger to invoke surface events.
         /// </summary>
         public List<SurfacePredicate> SurfaceRules;
-
-        /// <summary>
-        /// A list of current collisions;
-        /// </summary>
-        public List<TerrainCastHit> Collisions;
-        private List<TerrainCastHit> _notifiedCollisions;
-
-        /// <summary>
-        /// A list of current surface collisions.
-        /// </summary>
-        public List<TerrainCastHit> SurfaceCollisions;
-        private List<TerrainCastHit> _notifiedSurfaceCollisions;
-
+        
         protected List<PlatformTrigger> Parents;
 
-        public override void Reset()
-        {
-            base.Reset();
+        public Dictionary<HedgehogController, List<PlatformCollision.Contact>> CurrentPlatformContacts;
+        private Dictionary<HedgehogController, List<PlatformCollision.Contact>> _pendingPlatformContacts;
 
-            OnPlatformEnter = new PlatformCollisionEvent();
-            OnPlatformStay = new PlatformCollisionEvent();
-            OnPlatformExit = new PlatformCollisionEvent();
-
-            OnSurfaceEnter = new PlatformSurfaceEvent();
-            OnSurfaceStay = new PlatformSurfaceEvent();
-            OnSurfaceExit = new PlatformSurfaceEvent();
-
-            PlatformEnterSound = PlatformLoopSound = PlatformExitSound =
-                SurfaceEnterSound = SurfaceLoopSound = SurfaceExitSound = null;
-        }
+        public Dictionary<HedgehogController, List<SurfaceCollision.Contact>> CurrentSurfaceContacts;
+        private Dictionary<HedgehogController, List<SurfaceCollision.Contact>> _pendingSurfaceContacts;
 
         public override void Awake()
         {
@@ -157,27 +105,29 @@ namespace SonicRealms.Core.Triggers
             if (!Application.isPlaying)
                 return;
 #endif
-
             base.Awake();
 
-            OnPlatformEnter = OnPlatformEnter ?? new PlatformCollisionEvent();
-            OnPlatformStay = OnPlatformStay ?? new PlatformCollisionEvent();
-            OnPlatformExit = OnPlatformExit ?? new PlatformCollisionEvent();
+            OnPreCollide = OnPreCollide ?? new PlatformTriggerPreCollisionEvent();
 
-            OnSurfaceEnter = OnSurfaceEnter ?? new PlatformSurfaceEvent();
-            OnSurfaceStay = OnSurfaceStay ?? new PlatformSurfaceEvent();
-            OnSurfaceExit = OnSurfaceExit ?? new PlatformSurfaceEvent();
+            OnPlatformEnter = OnPlatformEnter ?? new PlatformTriggerCollisionEvent();
+            OnPlatformStay = OnPlatformStay ?? new PlatformTriggerCollisionEvent();
+            OnPlatformExit = OnPlatformExit ?? new PlatformTriggerCollisionEvent();
 
-            CollisionRules = new List<CollisionPredicate>();
-            Collisions = new List<TerrainCastHit>();
-            _notifiedCollisions = new List<TerrainCastHit>();
+            OnSurfaceEnter = OnSurfaceEnter ?? new PlatformTriggerSurfaceEvent();
+            OnSurfaceStay = OnSurfaceStay ?? new PlatformTriggerSurfaceEvent();
+            OnSurfaceExit = OnSurfaceExit ?? new PlatformTriggerSurfaceEvent();
 
+            SolidityRules = new List<SolidityPredicate>();
             SurfaceRules = new List<SurfacePredicate>();
-            SurfaceCollisions = new List<TerrainCastHit>();
-            _notifiedSurfaceCollisions = new List<TerrainCastHit>();
 
-            Parents = new List<PlatformTrigger>();
-            GetComponentsInParent(true, Parents);
+            ControllersOnSurface = new List<HedgehogController>();
+            ControllersOnPlatform = new List<HedgehogController>();
+
+            CurrentPlatformContacts = new Dictionary<HedgehogController, List<PlatformCollision.Contact>>();
+            _pendingPlatformContacts = new Dictionary<HedgehogController, List<PlatformCollision.Contact>>();
+
+            CurrentSurfaceContacts = new Dictionary<HedgehogController, List<SurfaceCollision.Contact>>();
+            _pendingSurfaceContacts = new Dictionary<HedgehogController, List<SurfaceCollision.Contact>>();
         }
 
         public void Start()
@@ -187,255 +137,315 @@ namespace SonicRealms.Core.Triggers
                 return;
 #endif
 
-            if (!TriggerFromChildren) return;
+            Parents = new List<PlatformTrigger>();
+            GetComponentsInParent(true, Parents);
+
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                if (Parents[i] == this)
+                {
+                    Parents.RemoveAt(i);
+                    break;
+                }
+            }
+
+            if (!TriggerFromChildren)
+                return;
+
             foreach (var child in GetComponentsInChildren<Collider2D>())
             {
-                if (((1 << child.gameObject.layer) & CollisionLayers.AllMask) == 0) continue;
-                if (child.GetComponent<PlatformTrigger>() || child.GetComponent<AreaTrigger>()) continue;
+                if (((1 << child.gameObject.layer) & CollisionLayers.AllMask) == 0)
+                    continue;
 
-                var trigger = child.gameObject.AddComponent<PlatformTrigger>();
-                trigger.TriggerFromChildren = true;
+                if (child.GetComponent<PlatformTrigger>() || child.GetComponent<AreaTrigger>())
+                    continue;
+
+                child.gameObject.AddComponent<PlatformTrigger>().TriggerFromChildren = true;
             }
-        }
-
-        public virtual void FixedUpdate()
-        {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                return;
-#endif
-
-            if (Collisions.Count == 0 && SurfaceCollisions.Count == 0 &&
-                _notifiedCollisions.Count == 0 && _notifiedSurfaceCollisions.Count == 0)
-            {
-                enabled = false;
-                return;
-            }
-
-            // Remove collisions that were recorded last update but not this one and invoke their "exit" events
-            Collisions.RemoveAll(CollisionsRemover);
-
-            // Move this update's collision list to the last update's
-            Collisions = _notifiedCollisions;
-
-            // Invoke their "stay" events if they still fulfill IsSolid
-            for (var i = Collisions.Count - 1; i >= 0; i = --i >= Collisions.Count ? Collisions.Count - 1 : i)
-            {
-                var collision = Collisions[i];
-                if (IsSolid(collision)) OnPlatformStay.Invoke(collision);
-            }
-
-            // Make room in the collision list for the next update
-            _notifiedCollisions = new List<TerrainCastHit>();
-
-            // Remove surface collisions that were recorded last update but not this one. Invoke their "exit" events
-            SurfaceCollisions.RemoveAll(SurfaceCollisionsRemover);
-
-            // Move this update's surface collision list to the last update's
-            SurfaceCollisions = _notifiedSurfaceCollisions;
-
-            // Invoke their "stay" events if they still fulfill IsOnSurface
-            for (var i = SurfaceCollisions.Count - 1; i >= 0; 
-                i = --i >= SurfaceCollisions.Count ? SurfaceCollisions.Count - 1 : i)
-            {
-                var collision = SurfaceCollisions[i];
-                if (IsOnSurface(collision)) OnSurfaceStay.Invoke(collision);
-            }
-
-            // Make room in the surface collision list for the next update
-            _notifiedSurfaceCollisions = new List<TerrainCastHit>();
-
-            if (Collisions.Count == 0 && SurfaceCollisions.Count == 0) enabled = false;
         }
 
         public override bool HasController(HedgehogController controller)
         {
-            return Collisions.Any(hit => hit.Controller == controller);
+            return HasControllerOnPlatform(controller) ||
+                   HasControllerOnSurface(controller);
+        }
+
+        public bool HasControllerOnPlatform(HedgehogController controller)
+        {
+            return CurrentPlatformContacts.ContainsKey(controller);
         }
 
         public bool HasControllerOnSurface(HedgehogController controller)
         {
-            return SurfaceCollisions.Any(hit => hit.Controller == controller);
-        }
-        #region Collision List Removers
-        private bool CollisionsRemover(TerrainCastHit hit)
-        {
-            for (var i = 0; i < _notifiedCollisions.Count; ++i)
-            {
-                if (_notifiedCollisions[i].Controller == hit.Controller) return false;
-            }
-
-            if(PlatformExitSound != null) SoundManager.Instance.PlayClipAtPoint(PlatformExitSound, transform.position);
-            OnPlatformExit.Invoke(hit);
-            return true;
+            return CurrentSurfaceContacts.ContainsKey(controller);
         }
 
-        private bool SurfaceCollisionsRemover(TerrainCastHit hit)
+        #region Collision Rules
+        /// <summary>
+        /// Whether the controller is on the surface with the given terrain cast. This will not affect
+        /// the controller's physics, but rather will not invoke surface events if false.
+        /// </summary>
+        public bool IsOnSurface(SurfaceCollision.Contact contact)
         {
-            for (var i = 0; i < _notifiedSurfaceCollisions.Count; ++i)
+            for (var i = 0; i < SurfaceRules.Count; ++i)
             {
-                if (_notifiedSurfaceCollisions[i].Controller == hit.Controller)
+                if (!SurfaceRules[i](contact))
                     return false;
             }
 
-            if(SurfaceExitSound != null) SoundManager.Instance.PlayClipAtPoint(SurfaceExitSound, transform.position);
-            OnSurfaceExit.Invoke(hit);
-            return true;
-        }
-        #endregion
-        #region Notify Functions
-        public void NotifyCollision(TerrainCastHit hit)
-        {
-            NotifyCollision(hit, true);
-        }
-
-        /// <summary>
-        /// Lets the trigger know about a collision with a controller.
-        /// </summary>
-        /// <param name="hit">The collision data.</param>
-        /// <param name="bubble"></param>
-        public void NotifyCollision(TerrainCastHit hit, bool bubble)
-        {
-            if (!IsSolid(hit)) return;
-
-            for (var i = 0; i < Collisions.Count; ++i)
+            for (var i = 0; i < Parents.Count; ++i)
             {
-                var collision = Collisions[i];
-                if (collision.Controller == hit.Controller)
+                var parent = Parents[i];
+                if (!parent.TriggerFromChildren)
+                    continue;
+
+                for (var j = 0; j < parent.SurfaceRules.Count; ++j)
                 {
-                    for (i = 0; i < _notifiedCollisions.Count; ++i)
-                    {
-                        var notifiedCollision = _notifiedCollisions[i];
-                        if (notifiedCollision.Controller == hit.Controller) goto bubble;
-                    }
-
-                    _notifiedCollisions.Add(hit);
-                    goto bubble;
+                    if (!parent.SurfaceRules[j](contact))
+                        return false;
                 }
-            }
-
-            if(PlatformEnterSound != null)
-                SoundManager.Instance.PlayClipAtPoint(PlatformEnterSound, transform.position);
-
-            Collisions.Add(hit);
-            _notifiedCollisions.Add(hit);
-            OnPlatformEnter.Invoke(hit);
-
-            if (Collisions.Count == 1 && !enabled) enabled = true;
-
-            bubble:
-            if (!bubble) return;
-            for (var i = 0; i < Parents.Count; ++i)
-            {
-                var parent = Parents[i];
-                if (!ReceivesEvents(parent, transform)) continue;
-                parent.NotifyCollision(hit, false);
-            }
-        }
-
-        public void NotifySurfaceCollision(TerrainCastHit hit)
-        {
-            NotifySurfaceCollision(hit, true);
-        }
-
-        /// <summary>
-        /// Lets the trigger know about a controller standing on its surface.
-        /// </summary>
-        /// <param name="hit">The collision data.</param>
-        public void NotifySurfaceCollision(TerrainCastHit hit, bool bubble)
-        {
-            if (!IsOnSurface(hit)) return;
-
-            for (var i = 0; i < SurfaceCollisions.Count; ++i)
-            {
-                var collision = SurfaceCollisions[i];
-                if (collision.Controller != hit.Controller) continue;
-
-                for (i = 0; i < _notifiedSurfaceCollisions.Count; ++i)
-                {
-                    var notifiedCollision = _notifiedSurfaceCollisions[i];
-                    if (notifiedCollision.Controller == hit.Controller)
-                        goto bubble;
-                }
-
-                _notifiedSurfaceCollisions.Add(hit);
-                goto bubble;
-            }
-
-            if(SurfaceEnterSound != null) SoundManager.Instance.PlayClipAtPoint(SurfaceEnterSound, transform.position);
-            SurfaceCollisions.Add(hit);
-            _notifiedSurfaceCollisions.Add(hit);
-            OnSurfaceEnter.Invoke(hit);
-
-            if (SurfaceCollisions.Count == 1 && !enabled) enabled = true;
-
-            bubble:
-            if (!bubble) return;
-            for (var i = 0; i < Parents.Count; ++i)
-            {
-                var parent = Parents[i];
-                if (!ReceivesEvents(parent, transform)) return;
-                parent.NotifySurfaceCollision(hit, false);
-            }
-        }
-
-        #endregion
-        #region Collision Rules
-        /// <summary>
-        /// Whether the controller is on the surface given the terrain cast results. This doesn't affect
-        /// the controller's physics, but rather will not invoke surface events if false.
-        /// </summary>
-        /// <param name="hit">The terrain cast results.</param>
-        /// <returns></returns>
-        public bool IsOnSurface(TerrainCastHit hit)
-        {
-            if (SurfaceRules.Count == 0) return DefaultSurfaceRule(hit);
-
-            for(var i = 0; i < SurfaceRules.Count; ++i)
-                if (!SurfaceRules[i](hit)) return false;
-
-            if (Parents.Count == 0) return true;
-
-            for (var i = 0; i < Parents.Count; ++i)
-            {
-                var parent = Parents[i];
-                if (!ReceivesEvents(parent, transform)) return false;
             }
 
             return true;
         }
 
         /// <summary>
-        /// Returns whether the platform can be collided with based on its list of collision predicates
-        /// and the specified results of a terrain cast.
+        /// Returns whether the platform should be solid against the given terrain cast. This check
+        /// shouldn't have any side effects on the platform.
         /// </summary>
-        /// <param name="hit">The specified results of a terrain cast.</param>
-        /// <returns></returns>
         public bool IsSolid(TerrainCastHit hit)
         {
-            if (CollisionRules.Count == 0 && Parents.Count == 0) return true;
-
-            for (var i = 0; i < CollisionRules.Count; ++i)
-                if (!CollisionRules[i](hit)) return false;
-
-            if (Parents.Count == 0) return true;
+            for (var i = 0; i < SolidityRules.Count; ++i)
+            {
+                if (!SolidityRules[i](hit))
+                    return false;
+            }
 
             for (var i = 0; i < Parents.Count; ++i)
             {
                 var parent = Parents[i];
-                if (!ReceivesEvents(parent, transform)) continue;
+                if (!parent.TriggerFromChildren)
+                    continue;
 
-                for(var j = 0; j < parent.CollisionRules.Count; ++j)
-                    if (!parent.CollisionRules[j](hit)) return false;
+                for (var j = 0; j < parent.SolidityRules.Count; ++j)
+                {
+                    if (!parent.SolidityRules[j](hit))
+                        return false;
+                }
             }
 
             return true;
         }
+        #endregion  
 
-        public bool DefaultSurfaceRule(TerrainCastHit hit)
+        #region Notify Platform Methods
+        public void NotifyPreCollision(PlatformCollision.Contact contact, bool bubble = true)
         {
-            return hit.Controller.Grounded;
+            OnPreCollide.Invoke(contact);
+
+            if (bubble)
+                BubblePreCollision(contact);
+        }
+
+        private void BubblePreCollision(PlatformCollision.Contact contact)
+        {
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (parent.TriggerFromChildren)
+                {
+                    parent.NotifyPreCollision(contact, false);
+                }
+            }
+        }
+
+        public void NotifyPlatformCollision(PlatformCollision.Contact contact, bool bubble = true)
+        {
+            var controller = contact.Controller;
+
+            var pending = _pendingPlatformContacts.ContainsKey(controller)
+                ? _pendingPlatformContacts[controller]
+                : _pendingPlatformContacts[controller] = new List<PlatformCollision.Contact>();
+
+            if (pending.Count == 0 && !CurrentPlatformContacts.ContainsKey(controller) &&
+                !ControllersOnSurface.Contains(controller))
+            {
+                controller.AddCommandBuffer(HandlePlatformCollisions,
+                    HedgehogController.BufferEvent.AfterMovement);
+
+                ControllersOnPlatform.Add(controller);
+            }
+
+            pending.Add(contact);
+
+            if (bubble)
+                BubblePlatformCollision(contact);
+        }
+
+        private void BubblePlatformCollision(PlatformCollision.Contact contact)
+        {
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (parent.TriggerFromChildren)
+                {
+                    parent.NotifyPlatformCollision(contact, false);
+                }
+            }
+        }
+
+        private void HandlePlatformCollisions(HedgehogController controller)
+        {
+            // Get current and pending contacts for the controller
+            List<PlatformCollision.Contact> current;
+            List<PlatformCollision.Contact> pending;
+
+            CurrentPlatformContacts.TryGetValue(controller, out current);
+            _pendingPlatformContacts.TryGetValue(controller, out pending);
+
+            // If there's a pending contact and no current, the controller has just entered the surface
+            if (current == null && pending != null)
+            {
+                _pendingPlatformContacts.Remove(controller);
+                CurrentPlatformContacts.Add(controller, pending);
+
+                OnPlatformEnter.Invoke(new PlatformCollision(pending));
+
+                return;
+            }
+
+            // If there's a pending and current contact, the controller has stayed on the surface
+            if (current != null && pending != null)
+            {
+                _pendingPlatformContacts.Remove(controller);
+                CurrentPlatformContacts[controller] = pending;
+
+                OnPlatformStay.Invoke(new PlatformCollision(pending));
+
+                return;
+            }
+
+            // If there's no pending contact but there is a current, the controller has just exited the surface
+            if (current != null)
+            {
+                CurrentPlatformContacts.Remove(controller);
+
+                ControllersOnPlatform.Remove(controller);
+
+                controller.RemoveCommandBuffer(HandlePlatformCollisions,
+                    HedgehogController.BufferEvent.AfterMovement);
+
+                OnPlatformExit.Invoke(new PlatformCollision(current));
+
+                return;
+            }
+
+            // If there's no pending or current contact, we shouldn't be here
+            controller.RemoveCommandBuffer(HandlePlatformCollisions, HedgehogController.BufferEvent.AfterMovement);
         }
         #endregion
+        #region Notify Surface Methods
+        public void NotifySurfaceCollision(SurfaceCollision.Contact contact, bool bubble = true)
+        {
+            var controller = contact.Controller;
+
+            var pending = _pendingSurfaceContacts.ContainsKey(controller)
+                ? _pendingSurfaceContacts[controller]
+                : _pendingSurfaceContacts[controller] = new List<SurfaceCollision.Contact>();
+
+            if (pending.Count == 0 && !CurrentSurfaceContacts.ContainsKey(controller) &&
+                !ControllersOnSurface.Contains(controller))
+            {
+                controller.AddCommandBuffer(HandleSurfaceCollisions,
+                    HedgehogController.BufferEvent.AfterMovement);
+
+                ControllersOnSurface.Add(controller);
+            }
+
+            pending.Add(contact);
+            
+            if(bubble)
+                BubbleSurfaceCollision(contact);
+        }
+
+        private void BubbleSurfaceCollision(SurfaceCollision.Contact contact)
+        {
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (parent.TriggerFromChildren)
+                {
+                    parent.NotifySurfaceCollision(contact, false);
+                }
+            }
+        }
+
+        private void HandleSurfaceCollisions(HedgehogController controller)
+        {
+            // Get current and pending contacts for the controller
+            List<SurfaceCollision.Contact> current;
+            List<SurfaceCollision.Contact> pending;
+
+            CurrentSurfaceContacts.TryGetValue(controller, out current);
+            _pendingSurfaceContacts.TryGetValue(controller, out pending);
+
+            if (pending != null)
+            {
+                // Remove pending contacts that don't fulfill surface rules
+                for (var j = pending.Count - 1; j >= 0; --j)
+                {
+                    if (!IsOnSurface(pending[j]))
+                        pending.RemoveAt(j);
+                }
+
+                if (pending.Count == 0)
+                {
+                    _pendingSurfaceContacts.Remove(controller);
+                    pending = null;
+                }
+            }
+
+            // If there's a pending contact and no current, the controller has just entered the surface
+            if (current == null && pending != null)
+            {
+                _pendingSurfaceContacts.Remove(controller);
+                CurrentSurfaceContacts.Add(controller, pending);
+
+                OnSurfaceEnter.Invoke(new SurfaceCollision(pending));
+
+                return;
+            }
+
+            // If there's a pending and current contact, the controller has stayed on the surface
+            if (current != null && pending != null)
+            {
+                _pendingSurfaceContacts.Remove(controller);
+                CurrentSurfaceContacts[controller] = pending;
+
+                OnSurfaceStay.Invoke(new SurfaceCollision(pending));
+
+                return;
+            }
+
+            // If there's no pending contact but there is a current, the controller has just exited the surface
+            if (current != null)
+            {
+                CurrentSurfaceContacts.Remove(controller);
+
+                ControllersOnSurface.Remove(controller);
+
+                controller.RemoveCommandBuffer(HandleSurfaceCollisions,
+                    HedgehogController.BufferEvent.AfterMovement);
+
+                OnSurfaceExit.Invoke(new SurfaceCollision(current));
+
+                return;
+            }
+
+            // If there's no pending or current contact, we shouldn't be here
+            controller.RemoveCommandBuffer(HandleSurfaceCollisions, HedgehogController.BufferEvent.AfterMovement);
+        }
+        #endregion
+
     }
 }

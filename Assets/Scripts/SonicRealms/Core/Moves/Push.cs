@@ -18,9 +18,9 @@ namespace SonicRealms.Core.Moves
         public bool UseControlInput;
         #endregion
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override bool Available

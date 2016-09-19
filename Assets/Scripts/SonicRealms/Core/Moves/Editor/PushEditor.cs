@@ -10,13 +10,13 @@ namespace SonicRealms.Core.Moves.Editor
         protected override void DrawControlProperties()
         {
             var useControlInput = serializedObject.FindProperty("UseControlInput");
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "UseControlInput");
+            RealmsEditorUtility.DrawProperties(serializedObject, "UseControlInput");
 
             serializedObject.ApplyModifiedProperties();
 
             var enabled = GUI.enabled;
             GUI.enabled = !useControlInput.boolValue;
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject, "ActivateAxis");
+            RealmsEditorUtility.DrawProperties(serializedObject, "ActivateAxis");
             GUI.enabled = enabled;
         }
     }

@@ -29,15 +29,15 @@ namespace SonicRealms.Level.Objects
             BoostBothWays = false;
         }
 
-        public override bool IsInside(Hitbox hitbox)
+        public override bool CanTouch(AreaCollision.Contact contact)
         {
-            var controller = hitbox.Controller;
+            var controller = contact.Controller;
             return controller.Grounded;
         }
 
-        public override void OnAreaEnter(Hitbox hitbox)
+        public override void OnAreaEnter(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
 
             controller.GroundVelocity = Velocity * (BoostBothWays
                 ? Mathf.Sign(controller.GroundVelocity)

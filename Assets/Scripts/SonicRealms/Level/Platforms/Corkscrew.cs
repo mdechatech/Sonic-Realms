@@ -31,19 +31,19 @@ namespace SonicRealms.Level.Platforms
             PlayerSurfaceBool = "On Corkscrew";
         }
 
-        public override bool IsSolid(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit data)
         {
-            if (hit == null || hit.Controller == null) return false;
+            if (data == null || data.Controller == null) return false;
 
             // Similar to a ledge - only solid to the controller's bottom sensors
-            return hit.Side == ControllerSide.Bottom &&
-                   hit.Hit.fraction > 0.0f &&
-                   hit.Controller.Grounded &&
+            return data.Side == ControllerSide.Bottom &&
+                   data.Raycast.fraction > 0.0f &&
+                   data.Controller.Grounded &&
 
                    // Use stay speed if controller is already standing on it, entry speed otherwise
-                   (hit.Controller.StandingOn(transform)
-                       ? Mathf.Abs(hit.Controller.GroundVelocity) > MinStaySpeed
-                       : Mathf.Abs(hit.Controller.GroundVelocity) > MinEntrySpeed);
+                   (data.Controller.IsStandingOn(transform)
+                       ? Mathf.Abs(data.Controller.GroundVelocity) > MinStaySpeed
+                       : Mathf.Abs(data.Controller.GroundVelocity) > MinEntrySpeed);
         }
     }
 }

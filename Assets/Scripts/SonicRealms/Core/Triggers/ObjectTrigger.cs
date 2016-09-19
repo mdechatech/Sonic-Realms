@@ -184,16 +184,23 @@ namespace SonicRealms.Core.Triggers
 #if UNITY_EDITOR
             if (!Application.isPlaying) return;
 #endif
-
             if (Animator != null && ActivatedBoolHash != 0)
                 Animator.SetBool(ActivatedBoolHash, Activated);
 
             if (Activators.Count <= 0) return;
-
-            OnActivateStay.Invoke(Activator);
+            
+            if(!AllowMultiple)
+                OnActivateStay.Invoke(Activator);
 
             foreach (var activator in new List<HedgehogController>(Activators))
+            {
+                if (AllowMultiple)
+                {
+                    OnActivateStay.Invoke(activator);
+                }
+
                 OnActivatorStay.Invoke(activator);
+            }
         }
 
         /// <summary>
@@ -202,24 +209,28 @@ namespace SonicRealms.Core.Triggers
         /// <param name="controller"></param>
         public void Activate(HedgehogController controller = null)
         {
+            // Do nothing if disabled
             if (!enabled || !gameObject.activeInHierarchy) return;
-            if (Activators.Count > 0 && !AllowMultiple) return;
 
-            if (controller != null && !Activators.Contains(controller))
+            // Do nothing if AllowMultiple isn't checked and we aren't the first activator
+            if (!AllowMultiple && Activators.Count > 0) return;
+
+            if (!Activators.Contains(controller))
             {
+                if (AllowMultiple || Activators.Count == 0)
+                {
+                    OnActivate.Invoke(controller);
+
+                    if (ActivateSound != null)
+                        SoundManager.Instance.PlayClipAtPoint(ActivateSound, transform.position);
+
+                    Activated = Activators.Count > 0;
+                }
+
                 Activators.Add(controller);
                 OnActivatorEnter.Invoke(controller);
             }
 
-            var any = Activators.Any();
-            if (!AllowMultiple && any) return;
-            
-            Activated = true;
-
-            if (ActivateSound != null)
-                SoundManager.Instance.PlayClipAtPoint(ActivateSound, transform.position);
-
-            OnActivate.Invoke(controller);
             BubbleEvent(controller);
 
             if (Animator != null && ActivatedTriggerHash != 0)
@@ -232,21 +243,24 @@ namespace SonicRealms.Core.Triggers
         /// <param name="controller"></param>
         public void Deactivate(HedgehogController controller = null)
         {
-            if (controller != null)
+            // Do nothing if disabled
+            if (!enabled || !gameObject.activeInHierarchy) return;
+
+            if (controller != null && Activators.Remove(controller))
             {
-                Activators.Remove(controller);
                 OnActivatorExit.Invoke(controller);
+                
+                if (AllowMultiple || Activators.Count == 0)
+                {
+                    OnDeactivate.Invoke(controller);
+
+                    if (DeactivateSound != null)
+                        SoundManager.Instance.PlayClipAtPoint(DeactivateSound, transform.position);
+
+                    Activated = Activators.Count == 0;
+                }
             }
 
-            var any = Activators.Any();
-            if (!AllowMultiple && any) return;
-
-            if(!any) Activated = false;
-
-            if (DeactivateSound != null)
-                SoundManager.Instance.PlayClipAtPoint(DeactivateSound, transform.position);
-
-            OnDeactivate.Invoke(controller);
             BubbleEvent(controller, true);
         }
 

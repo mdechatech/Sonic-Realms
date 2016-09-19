@@ -13,29 +13,65 @@ namespace SonicRealms.Core.Actors
         [Tooltip("This box collider will be modified based on the shape of the sensors.")]
         public BoxCollider2D BoxCollider;
 
-        // These sensors are used for hit detection with ceilings.
+        // For collisions with ceilings
+        [Header("Ceiling Collision")]
         public Transform TopLeft;
         public Transform TopLeftStart;
         public Transform TopCenter;
-        public Transform TopCenterStart;
         public Transform TopRight;
         public Transform TopRightStart;
 
-        // These sensors are used for hit detection with walls.
+        // For collisions with walls
+        [Header("Wall Collision")]
         public Transform CenterLeft;
         public Transform Center;
         public Transform CenterRight;
 
-        /// These sensors are used for hit detection with the floor when in the air.
+        // For collisions with the floor when in the air
+        [Header("Airborne Floor Collision")]
         public Transform BottomLeft;
         public Transform BottomCenter;
         public Transform BottomRight;
 
-        // These sensors are used for hit detection with the floor when on the ground.
+        // For collisions with the floor when on the ground
+        [Header("Grounded Floor Collision")]
         public Transform LedgeClimbLeft;
         public Transform LedgeClimbRight;
         public Transform LedgeDropLeft;
         public Transform LedgeDropRight;
+
+        // For collisions with objects that have the special Solid Object component
+        [Header("Solid Box Collision")]
+        public Transform SolidLeft;
+        public Transform SolidCenter;
+        public Transform SolidRight;
+
+        #region Sensor Existence Utilites
+        public bool HasCeilingSensors
+        {
+            get { return TopLeft && TopLeftStart && TopCenter && TopRight && TopRightStart; }
+        }
+
+        public bool HasSideSensors
+        {
+            get { return CenterLeft && Center && CenterRight; }
+        }
+
+        public bool HasBottomSensors
+        {
+            get { return BottomLeft && BottomCenter && BottomRight; }
+        }
+
+        public bool HasLedgeSensors
+        {
+            get { return LedgeClimbLeft && LedgeClimbRight && LedgeDropLeft && LedgeDropRight; }
+        }
+
+        public bool HasSolidSensors
+        {
+            get { return SolidLeft && SolidCenter && SolidRight; }
+        }
+        #endregion
         #region Sensor Line Utilities
         /// <summary>
         /// Width of the line formed by the top sensors.
@@ -123,6 +159,38 @@ namespace SonicRealms.Core.Actors
         }
 
         /// <summary>
+        /// Y offset of the solid box sensors from the center sensors, always negative.
+        /// </summary>
+        public float SolidOffset
+        {
+            get { return SolidCenter.localPosition.y - Center.localPosition.y; }
+            set
+            {
+                SolidLeft.localPosition = new Vector3(SolidLeft.localPosition.x, Center.localPosition.y + value,
+                    SolidLeft.localPosition.z);
+                SolidCenter.localPosition = new Vector3(SolidCenter.localPosition.x, Center.localPosition.y + value,
+                    SolidCenter.localPosition.z);
+                SolidRight.localPosition = new Vector3(SolidRight.localPosition.x, Center.localPosition.y + value,
+                    SolidRight.localPosition.z);
+            }
+        }
+
+        /// <summary>
+        /// Width of the line formed by the solid box sensors.
+        /// </summary>
+        public float SolidWidth
+        {
+            get { return SolidRight.localPosition.x - SolidLeft.localPosition.x; }
+            set
+            {
+                SolidLeft.localPosition = new Vector3(SolidCenter.localPosition.x - value/2.0f,
+                    SolidLeft.localPosition.y, SolidLeft.localPosition.z);
+                SolidRight.localPosition = new Vector3(SolidCenter.localPosition.x + value/2.0f,
+                    SolidRight.localPosition.y, SolidRight.localPosition.z);
+            }
+        }
+
+        /// <summary>
         /// Width of the line formed by ledge climb and drop sensors.
         /// </summary>
         public float LedgeWidth
@@ -135,6 +203,55 @@ namespace SonicRealms.Core.Actors
                 LedgeClimbRight.localPosition += Vector3.right*change;
                 LedgeDropLeft.localPosition -= Vector3.right*change;
                 LedgeDropRight.localPosition += Vector3.right*change;
+            }
+        }
+        #endregion
+        #region Sensor Type Utilites
+        public Transform Get(SensorType sensor)
+        {
+            switch (sensor)
+            {
+                case SensorType.BottomLeft:
+                    return BottomLeft;
+
+                case SensorType.BottomRight:
+                    return BottomRight;
+
+                case SensorType.CenterLeft:
+                    return CenterLeft;
+
+                case SensorType.CenterRight:
+                    return CenterRight;
+
+                case SensorType.SolidLeft:
+                    return SolidLeft;
+
+                case SensorType.SolidRight:
+                    return SolidRight;
+
+                case SensorType.TopLeft:
+                    return TopLeft;
+
+                case SensorType.TopRight:
+                    return TopRight;
+
+                default:
+                    return null;
+            }
+        }
+
+        public Transform Get(GroundSensorType sensor)
+        {
+            switch (sensor)
+            {
+                case GroundSensorType.Left:
+                    return BottomLeft;
+
+                case GroundSensorType.Right:
+                    return BottomRight;
+
+                default:
+                    return null;
             }
         }
         #endregion

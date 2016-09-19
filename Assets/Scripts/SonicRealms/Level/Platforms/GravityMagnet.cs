@@ -33,22 +33,26 @@ namespace SonicRealms.Level.Platforms
             _oldGravities = new Dictionary<int, float>();
         }
 
-        public override void OnSurfaceEnter(TerrainCastHit hit)
+        public override void OnSurfaceEnter(SurfaceCollision collision)
         {
-            if (!RestoreOnExit) return;
-            _oldGravities[hit.Controller.GetInstanceID()] = hit.Controller.GravityDirection;
+            if (!RestoreOnExit)
+                return;
+
+            _oldGravities[collision.Controller.GetInstanceID()] = collision.Controller.GravityDirection;
         }
 
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            hit.Controller.GravityDirection = DMath.PositiveAngle_d(hit.Controller.SurfaceAngle - 90.0f);
+            collision.Controller.GravityDirection = DMath.PositiveAngle_d(collision.Controller.SurfaceAngle - 90.0f);
         }
 
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceExit(SurfaceCollision collision)
         {
-            if (!RestoreOnExit) return;
-            var instanceID = hit.Controller.GetInstanceID();
-            hit.Controller.GravityDirection = _oldGravities[instanceID];
+            if (!RestoreOnExit)
+                return;
+
+            var instanceID = collision.Controller.GetInstanceID();
+            collision.Controller.GravityDirection = _oldGravities[instanceID];
             _oldGravities.Remove(instanceID);
         }
     }

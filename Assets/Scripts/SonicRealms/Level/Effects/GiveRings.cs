@@ -47,11 +47,5 @@ namespace SonicRealms.Level.Effects
             if (GivenTriggerHash != 0)
                 Animator.SetTrigger(GivenTriggerHash);
         }
-
-        public override void OnActivateStay(HedgehogController controller)
-        {
-            if (Activated) return;
-            OnActivate(controller);
-        }
     }
 }

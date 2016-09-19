@@ -87,18 +87,18 @@ namespace SonicRealms.Level.Platforms
                 return false;
             }
 
-            var averageFraction = (controller.LeftCeilingHit.Hit.fraction + controller.RightCeilingHit.Hit.fraction)/
+            var averageFraction = (controller.LeftCeilingHit.Raycast.fraction + controller.RightCeilingHit.Raycast.fraction)/
                                   2.0f;
 
             // If fraction is 1, the controller only started hitting the ceiling this frame, so excuse fraction checks
             if (_previousVerticalFraction == 1.0f) _previousVerticalFraction = averageFraction;
 
             // Check for fractions vs tolerances
-            var result = controller.LeftCeilingHit.Hit.fraction <= 1.0f - VerticalTolerance &&
-                         controller.RightCeilingHit.Hit.fraction <= 1.0f - VerticalTolerance;
+            var result = controller.LeftCeilingHit.Raycast.fraction <= 1.0f - VerticalTolerance &&
+                         controller.RightCeilingHit.Raycast.fraction <= 1.0f - VerticalTolerance;
 
             // The average fraction must also be less than the one last frame - this makes the check false
-            // if the object away or stood still
+            // if the object moved away from the player or stood still
             result &= (DMath.Equalsf(averageFraction) || averageFraction < _previousVerticalFraction - DMath.Epsilon);
 
             _previousVerticalFraction = averageFraction;
@@ -117,18 +117,18 @@ namespace SonicRealms.Level.Platforms
             return controller.LeftWall != controller.RightWall && 
 
                     (controller.LeftWall != null &&
-                    controller.LeftWallHit.Hit.fraction <= 1.0f - HorizontalTolerance) &&
+                    controller.LeftWallHit.Raycast.fraction <= 1.0f - HorizontalTolerance) &&
 
                    (controller.RightWall != null &&
-                    controller.RightWallHit.Hit.fraction <= 1.0f - HorizontalTolerance);
+                    controller.RightWallHit.Raycast.fraction <= 1.0f - HorizontalTolerance);
         }
 
-        public override void OnPlatformStay(TerrainCastHit hit)
+        public override void OnPlatformStay(PlatformCollision collision)
         {
-            if (hit.Controller == null) return;
+            if (collision.Controller == null) return;
 
-            if (CheckCrush(hit.Controller))
-               TriggerObject(hit.Controller);
+            if (CheckCrush(collision.Controller))
+               TriggerObject(collision.Controller);
         }
     }
 }

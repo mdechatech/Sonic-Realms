@@ -27,13 +27,13 @@ namespace SonicRealms.Core.Moves.Editor
 
             var moveManager = target as MoveManager;
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+            RealmsEditorUtility.DrawProperties(serializedObject,
                 "Controller", "Moves");
             
             ShowEventsFoldout = EditorGUILayout.Foldout(ShowEventsFoldout, "Events");
             if (ShowEventsFoldout)
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+                RealmsEditorUtility.DrawProperties(serializedObject,
                     "OnPerform", "OnEnd", "OnAvailable", "OnUnavailable", "OnInterrupted");
             }
 

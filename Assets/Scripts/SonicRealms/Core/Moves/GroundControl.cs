@@ -193,9 +193,9 @@ namespace SonicRealms.Core.Moves
 
         protected ScoreCounter Score;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Control; }
+            get { return (int)MoveLayer.Control; }
         }
 
         public override void Reset()

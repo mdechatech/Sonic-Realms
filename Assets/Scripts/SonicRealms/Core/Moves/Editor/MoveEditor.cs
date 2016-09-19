@@ -99,7 +99,7 @@ namespace SonicRealms.Core.Moves.Editor
             while(iterator.NextVisible(true))
             {
                 var field = type.GetField(iterator.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                if (field == null || field.Name == HedgehogEditorGUIUtility.ScriptPropertyName) continue;
+                if (field == null || field.Name == RealmsEditorUtility.ScriptPropertyName) continue;
 
                 var found = false;
                 foreach (var attribute in field.GetCustomAttributes(true))

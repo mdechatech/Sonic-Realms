@@ -40,14 +40,14 @@ GameObject:
   m_Component:
   - 4: {fileID: 450884}
   - 61: {fileID: 6140372}
-  - 114: {fileID: 11481884}
-  - 114: {fileID: 11405278}
-  - 114: {fileID: 11401308}
-  - 114: {fileID: 11406014}
-  - 114: {fileID: 11425522}
   - 95: {fileID: 9561212}
-  - 114: {fileID: 11434064}
   - 114: {fileID: 11405296}
+  - 114: {fileID: 11481884}
+  - 114: {fileID: 11401308}
+  - 114: {fileID: 11425522}
+  - 114: {fileID: 11405278}
+  - 114: {fileID: 11406014}
+  - 114: {fileID: 11434064}
   m_Layer: 31
   m_Name: S3K Electric Shield
   m_TagString: Untagged
@@ -122,8 +122,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 169274}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.16, y: 0.51, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.25, y: 0.22999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -267,6 +267,10 @@ MonoBehaviour:
   CollidingBool: 
   SurfaceTrigger: 
   SurfaceBool: 
+  PlayerCollidingTrigger: 
+  PlayerCollidingBool: 
+  PlayerSurfaceTrigger: 
+  PlayerSurfaceBool: 
   ActivateDelay: 0.5333333
   BrokenTrigger: Broken
 --- !u!114 &11405296
@@ -296,6 +300,8 @@ MonoBehaviour:
   AreaTrigger: {fileID: 11401308}
   InsideTrigger: 
   InsideBool: 
+  PlayerInsideTrigger: 
+  PlayerInsideBool: 
   OnAttack:
     m_PersistentCalls:
       m_Calls:
@@ -376,6 +382,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectTrigger: {fileID: 11425522}
   Animator: {fileID: 9561212}
+  ActivateTrigger: 
+  ActivateBool: 
+  ActivatorTrigger: 
+  PlayerActivateTrigger: 
+  PlayerActivateBool: 
+  PlayerActivatorTrigger: 
+  PlayerActivatorBool: 
   PowerupContainer: {fileID: 131022, guid: ddbcc8090d033c846a7e7b0d251407dc, type: 2}
 --- !u!114 &11481884
 MonoBehaviour:
@@ -518,7 +531,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2076084747
   m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

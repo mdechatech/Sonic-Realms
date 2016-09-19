@@ -2,6 +2,7 @@
 using System.Linq;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
+using SonicRealms.Level.Areas;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,7 @@ namespace SonicRealms.Core.Actors
     /// <summary>
     /// Implements Sonic-style physics and lets platform triggers know when they're touched.
     /// </summary>
+    [SelectionBase]
     [RequireComponent(typeof(Rigidbody2D))]
     public class HedgehogController : MonoBehaviour
     {
@@ -191,12 +193,24 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [Tooltip("If checked, side collisions do not occur.")]
         public bool DisableSideCheck;
+
+        /// <summary>
+        /// If true, no solid object checks are made.
+        /// </summary>
+        [Tooltip("If checked, solid object collisions do not occur.")]
+        public bool DisableSolidObjectCheck;
         #endregion
         #region Events
         /// <summary>
         /// Invoked when the controller lands on something.
         /// </summary>
         public UnityEvent OnAttach;
+
+        /// <summary>
+        /// Invoked right before the controller will collide with a platform. Listeners of this event
+        /// may call IgnoreThisCollision() on the controller to prevent the collision from occurring.
+        /// </summary>
+        public PlatformPreCollisionEvent OnPreCollide;
 
         /// <summary>
         /// Invoked when the controller collides with a platform.
@@ -255,6 +269,7 @@ namespace SonicRealms.Core.Actors
         public ReactiveObjectEvent OnObjectDeactivate;
         #endregion
         #endregion
+
         #region Control Variables
         /// <summary>
         /// Whether the controller has collisions and physics turned off. Often used for set pieces.
@@ -347,12 +362,6 @@ namespace SonicRealms.Core.Actors
         /// Whether to ignore collisions with EVERYTHING.
         /// </summary>
         public bool IgnoreCollision;
-
-        /// <summary>
-        /// Whether the controller is ignoring the result of its current collision check. Set by triggers during
-        /// HandleCollisions.
-        /// </summary>
-        public bool IgnoringThisCollision;
 
         /// <summary>
         /// The controller's velocity as a Vector2. If set while on the ground, the controller will not
@@ -460,7 +469,7 @@ namespace SonicRealms.Core.Actors
         /// If grounded, which sensor on the player defines the primary surface.
         /// </summary>
         [HideInInspector]
-        public Footing Footing;
+        public GroundSensorType Side;
 
         /// <summary>
         /// If grounded, the current wall mode (determines which way sensors are oriented).
@@ -479,9 +488,15 @@ namespace SonicRealms.Core.Actors
         /// The controller's previous wall mode as stored by the revert buffer.
         /// </summary>
         public WallMode WallModeRevertBuffer;
-        
+
         /// <summary>
-        /// Whether the player has just detached. Is used to avoid reattachments right after.
+        /// Whether the player attached to the gorund in the previous FixedUpdate.
+        /// </summary>
+        [HideInInspector]
+        public bool JustAttached;
+
+        /// <summary>
+        /// Whether the player detached from the ground in the previous FixedUpdate.
         /// </summary>
         [HideInInspector]
         public bool JustDetached;
@@ -499,15 +514,76 @@ namespace SonicRealms.Core.Actors
         public TerrainCastHit PrimarySurfaceHit;
 
         /// <summary>
-        /// The surface which is currently partially defining the controller's rotation, if any.
+        /// The surface that the controller's secondary sensor is on, if any. This is set only if on a
+        /// flat surface, where both ground sensors would be planted firmly on the ground.
         /// </summary>
         [HideInInspector]
         public Transform SecondarySurface;
 
         /// <summary>
-        /// The results from the terrain cast which found the secondary surface, if any.
+        /// The results from the terrain cast which found the secondary surface, if any. This is set even if
+        /// the secondary sensor isn't planted firmly on the ground.
+        /// 
+        /// SecondarySurface could be null and this value not if the secondary sensors find a surface but had to
+        /// dip below PrimarySurfaceHit to find it.
         /// </summary>
         public TerrainCastHit SecondarySurfaceHit;
+
+        public Transform LeftSurface
+        {
+            get
+            {
+                if (Side == GroundSensorType.Left)
+                    return PrimarySurface;
+
+                if (Side == GroundSensorType.Right)
+                    return SecondarySurface;
+
+                return null;
+            }
+        }
+
+        public TerrainCastHit LeftSurfaceHit
+        {
+            get
+            {
+                if (Side == GroundSensorType.Left)
+                    return PrimarySurfaceHit;
+
+                if (Side == GroundSensorType.Right)
+                    return SecondarySurfaceHit;
+
+                return null;
+            }
+        }
+
+        public Transform RightSurface
+        {
+            get
+            {
+                if (Side == GroundSensorType.Right)
+                    return PrimarySurface;
+
+                if (Side == GroundSensorType.Left)
+                    return SecondarySurface;
+
+                return null;
+            }
+        }
+
+        public TerrainCastHit RightSurfaceHit
+        {
+            get
+            {
+                if (Side == GroundSensorType.Right)
+                    return PrimarySurfaceHit;
+
+                if (Side == GroundSensorType.Left)
+                    return SecondarySurfaceHit;
+
+                return null;
+            }
+        }
 
         /// <summary>
         /// The surface to the left of the player, if any.
@@ -635,7 +711,10 @@ namespace SonicRealms.Core.Actors
         public string SurfaceAngleFloat;
         protected int SurfaceAngleFloatHash;
         #endregion
-        #region Command Buffers
+        #region Debug Variables
+        public bool ShowDebugGraphics;
+        #endregion
+        #region Command Buffer Variables
         public enum BufferEvent
         {
             BeforeForces,
@@ -667,7 +746,7 @@ namespace SonicRealms.Core.Actors
             GravityDirection = 270.0f;
             SlopeGravity = 4.5f;
             AirGravity = 7.857f;
-            AirDrag = 0.1488343f;   // Air drag is 0.96875 per frame @ 60fps, 0.96875^60 converts it to seconds
+            AirDrag = 0.1488343f;   // Air drag is 0.96875 per frame @ 60fps, 0.96875^60 ~= 0.1488343 per second
             AirDragRequiredSpeed = new Vector2(0.075f, 2.4f);
             AntiTunnelingSpeed = 4.0f;
             DetachSpeed = 1.5f;
@@ -681,14 +760,10 @@ namespace SonicRealms.Core.Actors
 
         public void Awake()
         {
-            Footing = Footing.None;
-            WallMode = WallMode.None;
-            Vx = Vy = GroundVelocity = 0.0f;
-            QueuedTranslation = default(Vector3);
-
             FacingForward = true;
 
             OnAttach = OnAttach ?? new UnityEvent();
+            OnPreCollide = OnPreCollide ?? new PlatformPreCollisionEvent();
             OnCollide = OnCollide ?? new PlatformCollisionEvent();
             OnDetach = OnDetach ?? new UnityEvent();
             OnSteepDetach = OnSteepDetach ?? new UnityEvent();
@@ -705,16 +780,55 @@ namespace SonicRealms.Core.Actors
             CommandBuffers = new Dictionary<BufferEvent, List<CommandBuffer>>();
 
             if (Animator == null) return;
-            DetachTriggerHash = string.IsNullOrEmpty(DetachTrigger) ? 0 : Animator.StringToHash(DetachTrigger);
-            AttachTriggerHash = string.IsNullOrEmpty(AttachTrigger) ? 0 : Animator.StringToHash(AttachTrigger);
-            FacingForwardBoolHash = string.IsNullOrEmpty(FacingForwardBool) ? 0 : Animator.StringToHash(FacingForwardBool);
-            AirSpeedXFloatHash = string.IsNullOrEmpty(AirSpeedXFloat) ? 0 : Animator.StringToHash(AirSpeedXFloat);
-            AirSpeedYFloatHash = string.IsNullOrEmpty(AirSpeedYFloat) ? 0 : Animator.StringToHash(AirSpeedYFloat);
-            GroundedBoolHash = string.IsNullOrEmpty(GroundedBool) ? 0 : Animator.StringToHash(GroundedBool);
-            GroundSpeedFloatHash = string.IsNullOrEmpty(GroundSpeedFloat) ? 0 : Animator.StringToHash(GroundSpeedFloat);
-            GroundSpeedBoolHash = string.IsNullOrEmpty(GroundSpeedBool) ? 0 : Animator.StringToHash(GroundSpeedBool);
-            AbsGroundSpeedFloatHash = string.IsNullOrEmpty(AbsGroundSpeedFloat) ? 0 : Animator.StringToHash(AbsGroundSpeedFloat);
-            SurfaceAngleFloatHash = string.IsNullOrEmpty(SurfaceAngleFloat) ? 0 : Animator.StringToHash(SurfaceAngleFloat);
+            DetachTriggerHash = Animator.StringToHash(DetachTrigger);
+            AttachTriggerHash = Animator.StringToHash(AttachTrigger);
+            FacingForwardBoolHash = Animator.StringToHash(FacingForwardBool);
+            AirSpeedXFloatHash = Animator.StringToHash(AirSpeedXFloat);
+            AirSpeedYFloatHash = Animator.StringToHash(AirSpeedYFloat);
+            GroundedBoolHash = Animator.StringToHash(GroundedBool);
+            GroundSpeedFloatHash = Animator.StringToHash(GroundSpeedFloat);
+            GroundSpeedBoolHash = Animator.StringToHash(GroundSpeedBool);
+            AbsGroundSpeedFloatHash = Animator.StringToHash(AbsGroundSpeedFloat);
+            SurfaceAngleFloatHash = Animator.StringToHash(SurfaceAngleFloat);
+        }
+
+        public void Start()
+        {
+            if (!Sensors.HasBottomSensors && !DisableGroundCheck)
+            {
+                Debug.LogWarning(string.Format("HedgehogController {0} has no bottom sensors, so Disable Ground Check has been set.",
+                    this));
+                DisableGroundCheck = true;
+            }
+
+            if (!Sensors.HasLedgeSensors && !DisableGroundCheck)
+            {
+                Debug.LogWarning(string.Format("HedgehogController {0} has no ledge sensors, so Disable Ground Check has been set.",
+                    this));
+                DisableGroundCheck = true;
+            }
+
+            if (!Sensors.HasCeilingSensors && !DisableCeilingCheck)
+            {
+                Debug.LogWarning(string.Format("HedgehogController {0} has no ceiling sensors, so Disable Ceiling Check has been set.",
+                    this));
+                DisableCeilingCheck = true;
+            }
+
+            if (!Sensors.HasSideSensors && !DisableSideCheck)
+            {
+                Debug.LogWarning(string.Format("HedgehogController {0} has no side sensors, so Disable Side Check has been set.",
+                    this));
+                DisableSideCheck = true;
+            }
+
+            if (!Sensors.HasSolidSensors && !DisableSolidObjectCheck)
+            {
+                Debug.LogWarning(string.Format("HedgehogController {0} has no solid object sensors, so Disable Solid Object Check " +
+                                               "has been set.",
+                                               this));
+                DisableSolidObjectCheck = true;
+            }
         }
 
         public void Update()
@@ -748,50 +862,13 @@ namespace SonicRealms.Core.Actors
                 HandleMovement();
                 UpdateGroundVelocity();
             }
+
+            if (ShowDebugGraphics)
+            {
+                HandleDebugGraphics();
+            }
         }
         #endregion
-        /// <summary>
-        /// Adds a command buffer at the given buffer event. Command buffers can be used to insert code
-        /// at certain points in the player's physics routines.
-        /// 
-        /// For example, one may add a function to be called right after the player has applied forces to 
-        /// itself by calling:
-        /// 
-        /// AddCommandBuffer(theFunction, HedgehogController.BufferEvent.AfterForces);
-        /// 
-        /// The function must take in a HedgehogController and have no return value.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="evt"></param>
-        public void AddCommandBuffer(CommandBuffer buffer, BufferEvent evt)
-        {
-            List<CommandBuffer> buffers;
-            if (!CommandBuffers.TryGetValue(evt, out buffers))
-                CommandBuffers[evt] = buffers = new List<CommandBuffer>();
-            buffers.Add(buffer);
-        }
-
-        /// <summary>
-        /// Removes the command buffer at the given buffer event.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="evt"></param>
-        public void RemoveCommandBuffer(CommandBuffer buffer, BufferEvent evt)
-        {
-            List<CommandBuffer> buffers;
-            if (CommandBuffers.TryGetValue(evt, out buffers)) buffers.Remove(buffer);
-        }
-
-        /// <summary>
-        /// Goes through the command buffers for the given buffer event.
-        /// </summary>
-        /// <param name="evt"></param>
-        protected void HandleBuffers(BufferEvent evt)
-        {
-            List<CommandBuffer> buffers;
-            if (CommandBuffers.TryGetValue(evt, out buffers))
-                foreach (var buffer in buffers) buffer(this);
-        }
 
         #region Lifecycle Subroutines
         /// <summary>
@@ -889,7 +966,7 @@ namespace SonicRealms.Core.Actors
                 }
             }
 
-            // TODO used for future feature
+            // TODO Allow terrain with custom surface angle
             /*
             if (ForceSurfaceAngle)
             {
@@ -1020,16 +1097,21 @@ namespace SonicRealms.Core.Actors
                 if (!DisableCeilingCheck) AirCeilingCheck();
                 if (!DisableGroundCheck) AirGroundCheck();
                 UpdateSensorRotation();
+
+                JustDetached = false;
             }
 
             if (Grounded)
             {
                 if (!DisableSideCheck) GroundSideCheck();
+                if (!DisableSolidObjectCheck && !JustAttached) GroundSolidCheck();
                 if (!DisableCeilingCheck) GroundCeilingCheck();
                 UpdateGroundVelocity();
 
                 if (!DisableGroundCheck) GroundSurfaceCheck();
                 UpdateGroundVelocity();
+
+                JustAttached = false;
             }
 
             HandleBuffers(BufferEvent.AfterCollisions);
@@ -1130,24 +1212,22 @@ namespace SonicRealms.Core.Actors
                 LeftWallHit = leftCheck;
                 LeftWall = leftCheck.Transform;
 
-                // First - let any special platforms know we want to collide with them
-                NotifyTriggers(leftCheck);
-
-                // If they don't want to be ignored, proceed as normal
-                if (!IgnoringThisCollision)
+                if (CheckPreCollision(SensorType.CenterLeft, leftCheck))
                 {
                     // Push out by the difference between the sensor location and hit location,
                     // And also plus a tiny amount to prevent sticky collisions
-                    var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
+                    var push = (Vector3)(leftCheck.Raycast.point - (Vector2)Sensors.CenterLeft.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
                     // Stop the player
-                    if (RelativeVelocity.x < 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                    if (RelativeVelocity.x < 0.0f)
+                        RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
 
-                    IgnoringThisCollision = false;
+                    // Invoke events and let platform triggers know we collided
+                    NotifyPlatformCollision(SensorType.CenterLeft, leftCheck);
+
+                    return true;
                 }
-
-                return true;
             }
 
             if (rightCheck)
@@ -1155,24 +1235,22 @@ namespace SonicRealms.Core.Actors
                 RightWallHit = rightCheck;
                 RightWall = rightCheck.Transform;
 
-                // First - let any special platforms know we want to collide with them
-                NotifyTriggers(rightCheck);
-
-                // If they don't want to be ignored, proceed as normal
-                if (!IgnoringThisCollision)
+                if (CheckPreCollision(SensorType.CenterRight, rightCheck))
                 {
                     // Push out by the difference between the sensor location and hit location,
                     // And also plus a tiny amount to prevent sticky collisions
-                    var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
+                    var push = (Vector3)(rightCheck.Raycast.point - (Vector2)Sensors.CenterRight.position);
                     transform.position += push + push.normalized * DMath.Epsilon;
 
                     // Stop the player
-                    if (RelativeVelocity.x > 0.0f) RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
+                    if (RelativeVelocity.x > 0.0f)
+                        RelativeVelocity = new Vector2(0.0f, RelativeVelocity.y);
 
-                    IgnoringThisCollision = false;
+                    // Invoke events and let platform triggers know we collided
+                    NotifyPlatformCollision(SensorType.CenterRight, rightCheck);
+
+                    return true;
                 }
-
-                return true;
             }
 
             return false;
@@ -1190,100 +1268,85 @@ namespace SonicRealms.Core.Actors
                 ControllerSide.Top);
 
             if (!leftCheck && !rightCheck)
-            {
-                IgnoringThisCollision = false;
                 return false;
-            }
 
-            bool checkLeftFirst;
-            bool checkOther;
-            
+            var firstCheck = default(TerrainCastHit);
+            var firstSensor = SensorType.None;
+
+            var secondCheck = default(TerrainCastHit);
+            var secondSensor = SensorType.None;
+
             if (leftCheck && rightCheck)
             {
-                NotifyTriggers(leftCheck);
-                NotifyTriggers(rightCheck);
-
-                if (IgnoringThisCollision)
+                if (DMath.Highest(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
                 {
-                    IgnoringThisCollision = false;
-                    return false;
-                }
+                    firstCheck = leftCheck;
+                    firstSensor = SensorType.TopLeft;
 
-                checkLeftFirst = DMath.Highest(
-                    leftCheck.Hit.point, rightCheck.Hit.point, GravityDirection * Mathf.Deg2Rad) >= 0f;
-                checkOther = true;
+                    secondCheck = rightCheck;
+                    secondSensor = SensorType.TopRight;
+                }
+                else
+                {
+                    firstCheck = rightCheck;
+                    firstSensor = SensorType.TopRight;
+
+                    secondCheck = leftCheck;
+                    secondSensor = SensorType.TopLeft;
+                }
             }
             else if (leftCheck)
             {
-                NotifyTriggers(leftCheck);
+                firstCheck = leftCheck;
+                firstSensor = SensorType.TopLeft;
+            }
+            else // rightCheck must exist here
+            {
+                firstCheck = rightCheck;
+                firstSensor = SensorType.TopRight;
+            }
 
-                if (IgnoringThisCollision)
+            if (CheckPreCollision(firstSensor, firstCheck))
+            {
+                transform.position += (Vector3)(firstCheck.Raycast.point - (Vector2)Sensors.Get(firstSensor).position);
+
+                NotifyPlatformCollision(firstSensor, firstCheck);
+
+                var impact = GetImpactResult(firstCheck);
+                if (impact.ShouldAttach)
                 {
-                    IgnoringThisCollision = false;
-                    return false;
+                    Attach(impact);
                 }
-
-                checkLeftFirst = true;
-                checkOther = false;
-            }
-            else
-            {
-                NotifyTriggers(rightCheck);
-
-                if (IgnoringThisCollision)
+                else
                 {
-                    IgnoringThisCollision = false;
-                    return false;
+                    if (RelativeVelocity.y > 0)
+                        RelativeVelocity = new Vector2(RelativeVelocity.x, 0);
                 }
-
-                checkLeftFirst = false;
-                checkOther = false;
             }
-
-            var check = checkLeftFirst ? leftCheck : rightCheck;
-            var impact = GetImpactResult(check);
-
-            // Push out by the difference between the hit location and sensor
-            if (checkLeftFirst)
-                transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
             else
-                transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
-
-            if(RelativeVelocity.y > 0)
-                RelativeVelocity = new Vector2(RelativeVelocity.x, 0);
-
-            if (impact.ShouldAttach)
             {
-                Attach(impact);
-                IgnoringThisCollision = false;
-                return true;
+                if (!secondCheck || !CheckPreCollision(secondSensor, secondCheck))
+                    return false;
+
+                transform.position += (Vector3) (secondCheck.Raycast.point - (Vector2) Sensors.Get(secondSensor).position);
+
+                if (RelativeVelocity.y > 0)
+                    RelativeVelocity = new Vector2(RelativeVelocity.x, 0);
+
+                NotifyPlatformCollision(secondSensor, secondCheck);
+
+                var impact = GetImpactResult(secondCheck);
+                if (impact.ShouldAttach)
+                {
+                    Attach(impact);
+                }
+                else
+                {
+                    if (RelativeVelocity.y > 0)
+                        RelativeVelocity = new Vector2(RelativeVelocity.x, 0);
+                }
             }
 
-            if (!checkOther)
-            {
-                IgnoringThisCollision = false;
-                return true;
-            }
-
-            check = checkLeftFirst ? rightCheck : leftCheck;
-            impact = GetImpactResult(check);
-
-            if (!checkLeftFirst)
-                transform.position += (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.TopLeft.position);
-            else
-                transform.position += (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.TopRight.position);
-
-            if (RelativeVelocity.y > 0)
-                RelativeVelocity = new Vector2(RelativeVelocity.x, 0);
-
-            if (impact.ShouldAttach)
-            {
-                Attach(impact);
-                IgnoringThisCollision = false;
-                return true;
-            }
-
-            IgnoringThisCollision = false;
             return true;
         }
 
@@ -1294,110 +1357,91 @@ namespace SonicRealms.Core.Actors
         private bool AirGroundCheck()
         {
             // Get our collision results
-            var groundLeftCheck = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position,
+            var leftCheck = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.BottomLeft.position,
                 ControllerSide.Bottom);
-            var groundRightCheck = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
+            var rightCheck = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.BottomRight.position,
                 ControllerSide.Bottom);
-            
-            if (groundLeftCheck || groundRightCheck)
+
+            if (!leftCheck && !rightCheck)
+                return false;
+
+            var firstCheck = default(TerrainCastHit);
+            var firstSensor = SensorType.None;
+
+            var secondCheck = default(TerrainCastHit);
+            var secondSensor = SensorType.None;
+
+            if (leftCheck && rightCheck)
             {
-                if (groundLeftCheck && groundRightCheck)
+                if (DMath.Highest(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) <= 0)
                 {
-                    // The sensor that found the highest point of collision (relative to gravity) will be the
-                    // one to check attachment with
-                    if (DMath.Highest(groundLeftCheck.Hit.point, groundRightCheck.Hit.point,
-                            GravityDirection*Mathf.Deg2Rad) <= 0)
-                    {
-                        // This is a bit different from ceilings - first we check the impact, and if
-                        // we should attach, THEN we check if special platforms want us to ignore them
-                        // instead of the other way around.
+                    firstCheck = leftCheck;
+                    firstSensor = SensorType.BottomLeft;
 
-                        // Otherwise we would have some very sticky collisions, such as spikes that
-                        // damage you even if you graze them slightly.
-
-                        var impact = GetImpactResult(groundLeftCheck);
-
-                        if (impact.ShouldAttach)
-                        {
-                            NotifyTriggers(groundLeftCheck);
-                            if (!IgnoringThisCollision)
-                            {
-                                // If we should attach, push out by the difference between the hit location and sensor
-                                transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                                SetSurface(groundLeftCheck);
-                                Attach(impact);
-                            }
-                        }
-                        else if (RelativeVelocity.y < 0)
-                        {
-                            transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                        }
-                    }
-                    else
-                    {
-                        // Again, same thing all the way down
-                        var impact = GetImpactResult(groundRightCheck);
-
-                        if (impact.ShouldAttach)
-                        {
-                            NotifyTriggers(groundRightCheck);
-                            if (!IgnoringThisCollision)
-                            {
-                                transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
-                                SetSurface(groundRightCheck);
-                                Attach(impact);
-                            }
-                        }
-                        else if (RelativeVelocity.y < 0)
-                        {
-                            transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
-                        }
-                    }
-                }
-                else if (groundLeftCheck)
-                {
-                    var impact = GetImpactResult(groundLeftCheck);
-                    if (impact.ShouldAttach)
-                    {
-                        NotifyTriggers(groundLeftCheck);
-                        if (!IgnoringThisCollision)
-                        {
-                            transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                            SetSurface(groundLeftCheck);
-                            Attach(impact);
-                        }
-                    }
-                    else if (RelativeVelocity.y < 0)
-                    {
-                        transform.position += (Vector3)groundLeftCheck.Hit.point - Sensors.BottomLeft.position;
-                    }
+                    secondCheck = rightCheck;
+                    secondSensor = SensorType.BottomRight;
                 }
                 else
                 {
-                    var impact = GetImpactResult(groundRightCheck);
+                    firstCheck = rightCheck;
+                    firstSensor = SensorType.BottomRight;
 
-                    if (impact.ShouldAttach)
-                    {
-                        NotifyTriggers(groundRightCheck);
-                        if (!IgnoringThisCollision)
-                        {
-                            transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
-                            SetSurface(groundRightCheck);
-                            Attach(impact);
-                        }
-                    }
-                    else if (RelativeVelocity.y < 0)
-                    {
-                        transform.position += (Vector3)groundRightCheck.Hit.point - Sensors.BottomRight.position;
-                    }
+                    secondCheck = leftCheck;
+                    secondSensor = SensorType.BottomLeft;
                 }
-
-                IgnoringThisCollision = false;
-                return true;
+            }
+            else if (leftCheck)
+            {
+                firstCheck = leftCheck;
+                firstSensor = SensorType.BottomLeft;
+            }
+            else // rightCheck must exist here
+            {
+                firstCheck = rightCheck;
+                firstSensor = SensorType.BottomRight;
             }
 
-            IgnoringThisCollision = false;
-            return false;
+            if (CheckPreCollision(firstSensor, firstCheck))
+            {
+                var impact = GetImpactResult(firstCheck);
+
+                if (impact.ShouldAttach)
+                {
+                    NotifyPlatformCollision(firstSensor, firstCheck);
+
+                    transform.position += (Vector3)firstCheck.Raycast.point - Sensors.Get(firstSensor).position;
+
+                    SetSurface(firstSensor.ToGroundSensor(), firstCheck);
+                    Attach(impact);
+                }
+                else if (RelativeVelocity.y < 0)
+                {
+                    transform.position += (Vector3)firstCheck.Raycast.point - Sensors.Get(firstSensor).position;
+                }
+            }
+            else
+            {
+                if (!secondCheck || !CheckPreCollision(secondSensor, secondCheck))
+                    return false;
+
+                var impact = GetImpactResult(secondCheck);
+
+                if (impact.ShouldAttach)
+                {
+                    NotifyPlatformCollision(secondSensor, secondCheck);
+
+                    transform.position += (Vector3)secondCheck.Raycast.point - Sensors.Get(secondSensor).position;
+
+                    SetSurface(secondSensor.ToGroundSensor(), secondCheck);
+                    Attach(impact);
+                }
+                else if (RelativeVelocity.y < 0)
+                {
+                    transform.position += (Vector3)secondCheck.Raycast.point - Sensors.Get(secondSensor).position;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -1411,90 +1455,79 @@ namespace SonicRealms.Core.Actors
             var rightCheck = this.TerrainCast(Sensors.Center.position, Sensors.CenterRight.position,
                 ControllerSide.Right);
 
-            LeftWallHit = leftCheck;
-            LeftWall = LeftWallHit ? leftCheck.Transform : null;
-            RightWallHit = rightCheck;
-            RightWall = RightWallHit ? rightCheck.Transform : null;
-
-            if (leftCheck)
+            if (leftCheck && CheckPreCollision(SensorType.CenterLeft, leftCheck))
             {
-                // Let special platforms know we want to collide with them
-                NotifyTriggers(leftCheck);
+                LeftWallHit = leftCheck;
+                LeftWall = LeftWallHit ? leftCheck.Transform : null;
 
-                // If they do, continue as normal
-                if (!IgnoringThisCollision)
+                // Push out by the difference between the sensor location and hit location,
+                // And also plus a tiny amount to prevent sticky collisions
+                var push = (Vector3)(leftCheck.Raycast.point - (Vector2)Sensors.CenterLeft.position);
+                transform.position += push + push.normalized * DMath.Epsilon;
+
+                var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle*Mathf.Rad2Deg);
+                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+
+                if (diff < MaxClimbAngle)
                 {
-                    // Push out by the difference between the sensor location and hit location,
-                    // And also plus a tiny amount to prevent sticky collisions
-                    var push = (Vector3)(leftCheck.Hit.point - (Vector2)Sensors.CenterLeft.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
-
-                    var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle*Mathf.Rad2Deg);
-                    var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
-
-                    if (diff < MaxClimbAngle)
+                    SurfaceAngle = leftCheck.SurfaceAngle * Mathf.Rad2Deg;
+                }
+                else
+                {
+                    if (diff < 95 && (fixedAngle > 315 || fixedAngle < 45))
                     {
                         SurfaceAngle = leftCheck.SurfaceAngle * Mathf.Rad2Deg;
                     }
-                    else
-                    {
-                        if (diff < 95 && (fixedAngle > 315 || fixedAngle < 45))
-                        {
-                            SurfaceAngle = leftCheck.SurfaceAngle * Mathf.Rad2Deg;
-                        }
 
-                        // Stop the player
-                        if (GroundVelocity < 0.0f)
-                            GroundVelocity = 0.0f;
-                    }
-
-                    UpdateGroundVelocity();
-                    UpdateSensorRotation();
+                    // Stop the player
+                    if (GroundVelocity < 0.0f)
+                        GroundVelocity = 0.0f;
                 }
 
-                IgnoringThisCollision = false;
+                UpdateGroundVelocity();
+                UpdateSensorRotation();
+
+                NotifyPlatformCollision(SensorType.CenterLeft, leftCheck);
+
                 return true;
             }
 
-            if (rightCheck)
+            if (rightCheck && CheckPreCollision(SensorType.CenterRight, rightCheck))
             {
-                // Same thing, but with the right sensors
-                NotifyTriggers(rightCheck);
+                RightWallHit = rightCheck;
+                RightWall = RightWallHit ? rightCheck.Transform : null;
+                
+                var push = (Vector3)(rightCheck.Raycast.point - (Vector2)Sensors.CenterRight.position);
+                transform.position += push + push.normalized * DMath.Epsilon;
 
-                if (!IgnoringThisCollision)
+                var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
+                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+
+                if (diff < MaxClimbAngle)
                 {
-                    var push = (Vector3)(rightCheck.Hit.point - (Vector2)Sensors.CenterRight.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
-
-                    var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
-                    var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
-
-                    if (diff < MaxClimbAngle)
+                    SurfaceAngle = rightCheck.SurfaceAngle * Mathf.Rad2Deg;
+                }
+                else
+                {
+                    if (diff < 95 && (fixedAngle > 315 || fixedAngle < 45))
                     {
                         SurfaceAngle = rightCheck.SurfaceAngle * Mathf.Rad2Deg;
                     }
-                    else
-                    {
-                        if (diff < 95 && (fixedAngle > 315 || fixedAngle < 45))
-                        {
-                            SurfaceAngle = rightCheck.SurfaceAngle * Mathf.Rad2Deg;
-                        }
 
-                        // Stop the player
-                        if (GroundVelocity > 0.0f)
-                            GroundVelocity = 0.0f;
-                    }
-
-                    UpdateGroundVelocity();
-                    UpdateSensorRotation();
+                    // Stop the player
+                    if (GroundVelocity > 0.0f)
+                        GroundVelocity = 0.0f;
                 }
 
-                IgnoringThisCollision = false;
+                UpdateGroundVelocity();
+                UpdateSensorRotation();
+                    
+                NotifyPlatformCollision(SensorType.CenterRight, rightCheck);
+
                 return true;
             }
 
             UpdateSensorRotation();
-            IgnoringThisCollision = false;
             return false;
         }
 
@@ -1508,35 +1541,22 @@ namespace SonicRealms.Core.Actors
             var rightCheck = this.TerrainCast(Sensors.CenterRight.position, Sensors.TopRight.position,
                 ControllerSide.Right);
 
+            // TODO invoke ceiling events?
+
             // Sonic doesn't actually react to ceilings while on the ground!
             // There is nothing to do here but set variables. This information is used for crushers.
-            if (leftCheck)
+            if (leftCheck && CheckPreCollision(SensorType.TopLeft, leftCheck))
             {
                 LeftCeilingHit = leftCheck;
                 LeftCeiling = leftCheck.Transform;
             }
 
-            if (rightCheck)
+            if (rightCheck && CheckPreCollision(SensorType.TopRight, rightCheck))
             {
                 RightCeilingHit = rightCheck;
                 RightCeiling = rightCheck.Transform;
             }
 
-            if (leftCheck)
-            {
-                NotifyTriggers(leftCheck);
-                IgnoringThisCollision = false;
-                return true;
-            }
-
-            if (rightCheck)
-            {
-                NotifyTriggers(rightCheck);
-                IgnoringThisCollision = false;
-                return true;
-            }
-
-            IgnoringThisCollision = false;
             return false;
         }
 
@@ -1550,13 +1570,16 @@ namespace SonicRealms.Core.Actors
             // Get the surfaces at the left and right sensors
             var left = this.TerrainCast(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position,
                 ControllerSide.Bottom);
+
             var right = this.TerrainCast(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position,
                     ControllerSide.Bottom);
-            
-            if (left != null && left.Hit.fraction == 0)
+
+            var ledgeClimbRatio = LedgeClimbHeight / (LedgeClimbHeight + LedgeDropHeight);
+
+            if (left != null && left.Raycast.fraction == 0)
                 left = null;
 
-            if (right != null && right.Hit.fraction == 0)
+            if (right != null && right.Raycast.fraction == 0)
                 right = null;
                 
             // Get the angles of their surfaces in degrees
@@ -1599,11 +1622,12 @@ namespace SonicRealms.Core.Actors
 
             // Both sensors have possible surfaces at this point
 
-            // This is checked later to see if the player's secondary sensor should be taken into account
-            var ledgeClimbRatio = LedgeClimbHeight/(LedgeClimbHeight + LedgeDropHeight);
+            // The controller may have both ground sensors register a surface if the secondary sensor's surface is
+            // at ground-level plus this much leeway as a fraction of the ledge sensors' total height.
+            const float FlatSurfaceTolerance = 0.01f;
 
             // Choose the sensor to use based on which one found the "higher" floor (based on the wall mode)
-            if (DMath.Highest(left.Hit.point, right.Hit.point, AbsoluteAngle(WallMode.ToNormal())*Mathf.Deg2Rad) >= 0f)
+            if (DMath.Highest(left.Raycast.point, right.Raycast.point, AbsoluteAngle(WallMode.ToNormal())*Mathf.Deg2Rad) >= 0f)
             {
                 goto orientLeftRight;
             }
@@ -1613,83 +1637,285 @@ namespace SonicRealms.Core.Actors
             #region Orientation Goto's
             orientLeft:
             // Use the left sensor as the ground
-            NotifyTriggers(left);
-
-            if (!IgnoringThisCollision)
+            if (CheckPreCollision(SensorType.BottomLeft, left))
             {
-                Footing = Footing.Left;
+                Side = GroundSensorType.Left;
                 SurfaceAngle = left.SurfaceAngle*Mathf.Rad2Deg;
-                transform.position += (Vector3)(left.Hit.point - (Vector2)Sensors.BottomLeft.position);
+                transform.position += (Vector3)(left.Raycast.point - (Vector2)Sensors.BottomLeft.position);
 
-                SetSurface(left);
+                NotifyPlatformCollision(SensorType.BottomLeft, left);
+
+                SetSurface(GroundSensorType.Left, left);
             }
 
             goto finish;
 
             orientRight:
             // Use the right sensor as the ground
-            NotifyTriggers(right);
-
-            if (!IgnoringThisCollision)
+            if (CheckPreCollision(SensorType.BottomRight, right))
             {
-                Footing = Footing.Right;
+                Side = GroundSensorType.Right;
                 SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
-                transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
+                transform.position += (Vector3)(right.Raycast.point - (Vector2)Sensors.BottomRight.position);
 
-                SetSurface(right);
+                NotifyPlatformCollision(SensorType.BottomRight, right);
+
+                SetSurface(GroundSensorType.Right, right);
             }
 
             goto finish;
 
             orientLeftRight:
-            // Use the left sensor as the ground, then rotate between the left and right sensors
-            NotifyTriggers(left);
-
-            if(right.Hit.fraction < ledgeClimbRatio)
-                NotifyTriggers(right);
-
-            if (!IgnoringThisCollision)
+            // Use the left sensor as the ground, then see if the right sensor surface should be notified of a collision
+            if (CheckPreCollision(SensorType.BottomLeft, left))
             {
-                Footing = Footing.Left;
+                Side = GroundSensorType.Left;
                 SurfaceAngle = left.SurfaceAngle * Mathf.Rad2Deg;
-                transform.position += (Vector3)(left.Hit.point - (Vector2)Sensors.BottomLeft.position);
+                transform.position += (Vector3)(left.Raycast.point - (Vector2)Sensors.BottomLeft.position);
 
-                SetSurface(left, right);
+                NotifyPlatformCollision(SensorType.BottomLeft, left);
+
+                if (right.Raycast.fraction < ledgeClimbRatio + FlatSurfaceTolerance &&
+                    CheckPreCollision(SensorType.BottomRight, right))
+                    NotifyPlatformCollision(SensorType.BottomRight, right);
+
+                SetSurface(GroundSensorType.Left, left, right, right.Raycast.fraction < ledgeClimbRatio + FlatSurfaceTolerance);
             }
 
             goto finish;
 
             orientRightLeft:
-            // Use the right sensor as the ground, then rotate between the right and left sensors
-            NotifyTriggers(right);
-
-            if(left.Hit.fraction < ledgeClimbRatio)
-                NotifyTriggers(left);
-
-            if (!IgnoringThisCollision)
+            // Use the right sensor as the ground, then see if the left sensor surface should be notified of a collision
+            if (CheckPreCollision(SensorType.BottomRight, right))
             {
-                Footing = Footing.Right;
+                Side = GroundSensorType.Right;
                 SurfaceAngle = right.SurfaceAngle * Mathf.Rad2Deg;
-                transform.position += (Vector3)(right.Hit.point - (Vector2)Sensors.BottomRight.position);
+                transform.position += (Vector3)(right.Raycast.point - (Vector2)Sensors.BottomRight.position);
 
-                SetSurface(right, left);
+                NotifyPlatformCollision(SensorType.BottomRight, right);
+
+                if (left.Raycast.fraction < ledgeClimbRatio + FlatSurfaceTolerance &&
+                    CheckPreCollision(SensorType.BottomLeft, left))
+                    NotifyPlatformCollision(SensorType.BottomLeft, left);
+
+                SetSurface(GroundSensorType.Right, right, left, left.Raycast.fraction < ledgeClimbRatio + FlatSurfaceTolerance);
             }
 
             goto finish;
 
             detach:
-            IgnoringThisCollision = false;
+
             Detach();
             return false;
+
             #endregion
 
             finish:
-            IgnoringThisCollision = false;
+
             UpdateSensorRotation();
+
             return true;
+        }
+
+        /// <summary>
+        /// Collision check with solid sensors against objects with the special Solid Object component for when the player is on
+        /// the ground.
+        /// </summary>
+        /// <returns></returns>
+        private bool GroundSolidCheck()
+        {
+            // Get collision results
+            var leftCheck = this.TerrainCast(Sensors.SolidCenter.position, Sensors.SolidLeft.position, ControllerSide.Left);
+            var rightCheck = this.TerrainCast(Sensors.SolidCenter.position, Sensors.SolidRight.position,
+                ControllerSide.Right);
+
+            // TODO This method is a copy of GroundSideCheck other than this part, find some way to merge the parts in common
+            if (!leftCheck || !leftCheck.Transform.GetComponent<SolidObject>())
+            {
+                leftCheck = null;
+            }
+
+            if (!rightCheck || !rightCheck.Transform.GetComponent<SolidObject>())
+            {
+                rightCheck = null;
+            }
+
+            if (leftCheck && CheckPreCollision(SensorType.SolidLeft, leftCheck))
+            {
+                LeftWallHit = leftCheck;
+                LeftWall = LeftWallHit ? leftCheck.Transform : null;
+
+                // Push out by the difference between the sensor location and hit location,
+                // And also plus a tiny amount to prevent sticky collisions
+                var push = (Vector3)(leftCheck.Raycast.point - (Vector2)Sensors.SolidLeft.position);
+                transform.position += push + push.normalized * DMath.Epsilon;
+
+                var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle * Mathf.Rad2Deg);
+                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+
+                if (diff < MaxClimbAngle)
+                {
+                    SurfaceAngle = leftCheck.SurfaceAngle * Mathf.Rad2Deg;
+                }
+                else
+                {
+                    if (diff < 95 && (fixedAngle > 315 || fixedAngle < 45))
+                    {
+                        SurfaceAngle = leftCheck.SurfaceAngle * Mathf.Rad2Deg;
+                    }
+
+                    // Stop the player
+                    if (GroundVelocity < 0.0f)
+                        GroundVelocity = 0.0f;
+                }
+
+                UpdateGroundVelocity();
+                UpdateSensorRotation();
+
+                NotifyPlatformCollision(SensorType.SolidLeft, leftCheck);
+
+                return true;
+            }
+
+            if (rightCheck && CheckPreCollision(SensorType.SolidRight, rightCheck))
+            {
+                RightWallHit = rightCheck;
+                RightWall = RightWallHit ? rightCheck.Transform : null;
+
+                var push = (Vector3)(rightCheck.Raycast.point - (Vector2)Sensors.SolidRight.position);
+                transform.position += push + push.normalized * DMath.Epsilon;
+
+                var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
+                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+
+                if (diff < MaxClimbAngle)
+                {
+                    SurfaceAngle = rightCheck.SurfaceAngle * Mathf.Rad2Deg;
+                }
+                else
+                {
+                    if (diff < 95 && (fixedAngle > 315 || fixedAngle < 45))
+                    {
+                        SurfaceAngle = rightCheck.SurfaceAngle * Mathf.Rad2Deg;
+                    }
+
+                    // Stop the player
+                    if (GroundVelocity > 0.0f)
+                        GroundVelocity = 0.0f;
+                }
+
+                UpdateGroundVelocity();
+                UpdateSensorRotation();
+
+                NotifyPlatformCollision(SensorType.SolidRight, rightCheck);
+
+                return true;
+            }
+
+            UpdateSensorRotation();
+            return false;
+        }
+        #endregion
+        #region Debug Subroutines
+        protected void HandleDebugGraphics()
+        {
+            if (Grounded)
+            {
+                if (PrimarySurfaceHit)
+                {
+                    Debug.DrawLine(PrimarySurfaceHit.Start, PrimarySurfaceHit.Raycast.point);
+                    Debug.DrawLine(PrimarySurfaceHit.Raycast.point, PrimarySurfaceHit.End, Color.gray);
+                    DebugUtility.DrawCircle(PrimarySurfaceHit.Raycast.point, 0.03f);
+
+                    Debug.DrawLine(
+                        PrimarySurfaceHit.Raycast.point - DMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f,
+                        PrimarySurfaceHit.Raycast.point + DMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f);
+                }
+
+                if (SecondarySurfaceHit)
+                {
+                    if (SecondarySurface)
+                    {
+                        Debug.DrawLine(SecondarySurfaceHit.Start, SecondarySurfaceHit.Raycast.point);
+                        Debug.DrawLine(SecondarySurfaceHit.Raycast.point, SecondarySurfaceHit.End, Color.gray);
+                    }
+                    else
+                    {
+                        Debug.DrawLine(SecondarySurfaceHit.Start, SecondarySurfaceHit.End, Color.gray);
+                    }
+
+                    DebugUtility.DrawCircle(SecondarySurfaceHit.Raycast.point, 0.03f,
+                        SecondarySurface ? Color.white : Color.gray);
+                }
+                else
+                {
+                    if(Side == GroundSensorType.Left)
+                        Debug.DrawLine(Sensors.LedgeClimbRight.position, Sensors.LedgeDropRight.position, Color.gray);
+
+                    if (Side == GroundSensorType.Right)
+                        Debug.DrawLine(Sensors.LedgeClimbLeft.position, Sensors.LedgeDropLeft.position, Color.gray);
+                }
+            }
         }
         #endregion
 
+        #region Command Buffer Functions
+        /// <summary>
+        /// Adds a command buffer at the given buffer event. Command buffers can be used to insert code
+        /// at certain points in the player's physics routines.
+        /// 
+        /// For example, one may add a function to be called right after the player has applied forces to 
+        /// itself by calling:
+        /// 
+        /// AddCommandBuffer(theFunction, HedgehogController.BufferEvent.AfterForces);
+        /// 
+        /// The function must take in a HedgehogController and have no return value.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="evt"></param>
+        public void AddCommandBuffer(CommandBuffer buffer, BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (!CommandBuffers.TryGetValue(evt, out buffers))
+                CommandBuffers[evt] = buffers = new List<CommandBuffer>();
+            buffers.Add(buffer);
+        }
+
+        public bool HasCommandBuffer(CommandBuffer buffer, BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (CommandBuffers.TryGetValue(evt, out buffers))
+                return buffers.Contains(buffer);
+
+            return false;
+        }
+
+        /// <summary>
+        /// Removes the command buffer at the given buffer event.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="evt"></param>
+        public void RemoveCommandBuffer(CommandBuffer buffer, BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (CommandBuffers.TryGetValue(evt, out buffers))
+                buffers.Remove(buffer);
+        }
+
+        /// <summary>
+        /// Goes through the command buffers for the given buffer event.
+        /// </summary>
+        /// <param name="evt"></param>
+        protected void HandleBuffers(BufferEvent evt)
+        {
+            List<CommandBuffer> buffers;
+            if (CommandBuffers.TryGetValue(evt, out buffers))
+            {
+                for (var i = buffers.Count - 1; i >= 0; --i)
+                    buffers[i](this);
+            }
+        }
+        #endregion
         #region Move and Control Functions
         /// <summary>
         /// Turns off the controller's physics, usually so it can be modified by set pieces.
@@ -1719,19 +1945,6 @@ namespace SonicRealms.Core.Actors
         {
             Interrupted = false;
             InterruptTimer = 0.0f;
-        }
-
-        /// <summary>
-        /// When called during a collision check, tells the controller to not respond to the collision.
-        /// This can be called by platform triggers to prevent their effects being overwritten by
-        /// the controller.
-        /// 
-        /// For example, the controller will normally land on any flat ground. However, when it hits a spring,
-        /// IgnoreThisCollision is called, preventing this and allowing the controller to stay in the air.
-        /// </summary>
-        public void IgnoreThisCollision()
-        {
-            IgnoringThisCollision = true;
         }
 
         /// <summary>
@@ -1837,8 +2050,7 @@ namespace SonicRealms.Core.Actors
         #endregion
         #region Surface Acquisition Functions
         /// <summary>
-        /// Detach the player from whatever surface it is on. If the player is not grounded this has no effect
-        /// other than setting lockUponLanding.
+        /// Detach the player from whatever surface it is on.
         /// <returns>Whether the controller detached successfully.</returns>
         /// </summary>
         public bool Detach()
@@ -1850,10 +2062,10 @@ namespace SonicRealms.Core.Actors
 
             Grounded = false;
             JustDetached = true;
-            Footing = Footing.None;
+            Side = GroundSensorType.None;
             WallMode = WallMode.None;
 
-            SetSurface(null);
+            SetSurface(GroundSensorType.None, null);
             UpdateSensorRotation();
 
             // Don't invoke the event if the controller was already off the ground
@@ -1863,7 +2075,7 @@ namespace SonicRealms.Core.Actors
                 if (Animator != null && DetachTriggerHash != 0)
                     Animator.SetTrigger(DetachTriggerHash);
             }
-
+            
             return true;
         }
 
@@ -1888,6 +2100,7 @@ namespace SonicRealms.Core.Actors
             var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
             GroundVelocity = groundSpeed;
             SurfaceAngle = angleDegrees;
+            JustAttached = true;
             Grounded = true;
 
             WallMode = WallModeUtility.FromSurface(angleRadians * Mathf.Rad2Deg);
@@ -1895,14 +2108,7 @@ namespace SonicRealms.Core.Actors
 
             // If we already were on the ground, that's all we needed to do
             if (wasGrounded) return true;
-            /*
-            // Otherwise - quick check to make sure we belong on the surface
-            GroundSurfaceCheck();
 
-            // If it turns out we don't, we're outta here
-            if (!Grounded) return false;
-            */
-            // If it turns out we definitely do, invoke events and animations
             if (!DisableEvents) OnAttach.Invoke();
             if (Animator != null && AttachTriggerHash != 0)
                 Animator.SetTrigger(AttachTriggerHash);
@@ -1920,7 +2126,7 @@ namespace SonicRealms.Core.Actors
         /// <param name="hit">The impact data as th result of a terrain cast.</param>
         public ImpactResult GetImpactResult(TerrainCastHit hit)
         {
-            if (hit == null || hit.Hit.fraction == 0) return default(ImpactResult);
+            if (hit == null || hit.Raycast.fraction == 0) return default(ImpactResult);
 
             var surfaceDegrees = DMath.PositiveAngle_d(hit.SurfaceAngle * Mathf.Rad2Deg);
 
@@ -1928,6 +2134,7 @@ namespace SonicRealms.Core.Actors
             var playerAngle = DMath.Angle(Velocity)*Mathf.Rad2Deg;
 
             const float normalTolerance = 90f;
+
             if (!DMath.AngleInRange_d(playerAngle + 180f, 
                 surfaceDegrees + 90f - normalTolerance, surfaceDegrees + 90f + normalTolerance))
                 return default(ImpactResult);
@@ -2003,30 +2210,47 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         /// <param name="primarySurfaceHit">The new primary surface.</param>
         /// <param name="secondarySurfaceHit">The new secondary surface.</param>
-        public void SetSurface(TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null)
+        /// <param name="notifySecondary">If true, secondary surface will be stored and notified of collisions.</param>
+        public void SetSurface(GroundSensorType primarySide, TerrainCastHit primarySurfaceHit, TerrainCastHit secondarySurfaceHit = null,
+            bool notifySecondary = false)
         {
             PrimarySurfaceHit = primarySurfaceHit;
-            PrimarySurface = PrimarySurfaceHit ? PrimarySurfaceHit.Transform : null;
+
+            PrimarySurface = PrimarySurfaceHit
+                ? PrimarySurfaceHit.Transform
+                : null;
 
             SecondarySurfaceHit = secondarySurfaceHit;
-            SecondarySurface = SecondarySurfaceHit ? SecondarySurfaceHit.Transform : null;
+
+            SecondarySurface = notifySecondary && SecondarySurfaceHit
+                ? SecondarySurfaceHit.Transform
+                : null;
 
             if (DisableNotifyPlatforms)
                 return;
 
             var primaryTrigger = PrimarySurface == null
-                ? null : PrimarySurface.GetComponent<PlatformTrigger>();
-            var secondaryTrigger = SecondarySurface == null
-                ? null : SecondarySurface.GetComponent<PlatformTrigger>();
+                ? null
+                : PrimarySurface.GetComponent<PlatformTrigger>();
 
             if (primaryTrigger != null)
-                primaryTrigger.NotifySurfaceCollision(primarySurfaceHit);
-            if (secondaryTrigger != null)
-                secondaryTrigger.NotifySurfaceCollision(secondarySurfaceHit);
+                primaryTrigger.NotifySurfaceCollision(
+                    new SurfaceCollision.Contact(primarySide, primarySurfaceHit, primaryTrigger));
+
+            if (notifySecondary)
+            {
+                var secondaryTrigger = SecondarySurface == null
+                    ? null
+                    : SecondarySurface.GetComponent<PlatformTrigger>();
+
+                if (secondaryTrigger != null)
+                    secondaryTrigger.NotifySurfaceCollision(
+                        new SurfaceCollision.Contact(primarySide.Flip(), secondarySurfaceHit, secondaryTrigger));
+            }
         }
 
         /// <summary>
-        /// Returns the specified absolute angle in degrees relative to the direction of gravity.
+        /// Returns the 
         /// For example, 0 (flat surface angle) returns 180 (upside-down surface) when gravity
         /// points upward and 0 when gravity points downward.
         /// </summary>
@@ -2038,7 +2262,7 @@ namespace SonicRealms.Core.Actors
         }
 
         /// <summary>
-        /// Returns the given relative angle (relative to gravity) as an absolute angle.
+        /// Returns the given relative angle corrected for physics where gravity points straight down.
         /// For example, 0 (flat) while gravity is 90 (upside-down) will return 180, an
         /// upside-down surface.
         /// </summary>
@@ -2049,80 +2273,143 @@ namespace SonicRealms.Core.Actors
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
         #endregion
+
         #region Trigger Helpers
         /// <summary>
         /// Lets a platform's trigger know about a collision, if it has one.
         /// </summary>
-        /// <param name="collision"></param>
-        private void NotifyTriggers(TerrainCastHit collision)
+        private void NotifyPlatformCollision(SensorType sensor, TerrainCastHit data)
         {
-            if (!collision || collision.Transform == null)
+            if (!data || !data.Transform || (DisableNotifyPlatforms && DisableEvents))
                 return;
 
-            if (!DisableNotifyPlatforms)
-            {
-                var trigger = collision.Transform.GetComponent<PlatformTrigger>();
-                if (trigger == null)
-                {
-                    if (!DisableEvents) OnCollide.Invoke(collision);
-                    return;
-                }
+            var contact = new PlatformCollision.Contact(sensor, data, data.Transform.GetComponent<PlatformTrigger>());
 
-                trigger.NotifyCollision(collision);
-                if (IgnoringThisCollision) return;
+            if (!DisableNotifyPlatforms && contact.PlatformTrigger)
+            {
+                contact.PlatformTrigger.NotifyPlatformCollision(contact);
             }
 
             if (!DisableEvents)
-                OnCollide.Invoke(collision);
+                OnCollide.Invoke(contact);
+        }
+
+        private bool _isCheckingPreCollision;
+        private bool _willIgnoreThisCollision;
+        private bool CheckPreCollision(SensorType sensor, TerrainCastHit data)
+        {
+            if (!data || !data.Transform || (DisableEvents && DisableNotifyPlatforms))
+                return true;
+
+            _isCheckingPreCollision = true;
+
+            var contact = new PlatformCollision.Contact(sensor, data, data.Transform.GetComponent<PlatformTrigger>());
+
+            if (!DisableNotifyPlatforms)
+            {
+                var trigger = data.Transform.GetComponent<PlatformTrigger>();
+                if (trigger)
+                    trigger.NotifyPreCollision(contact);
+            }
+
+            if (!DisableEvents)
+                OnPreCollide.Invoke(contact);
+
+            var allowCollision = !_willIgnoreThisCollision;
+            _willIgnoreThisCollision = false;
+
+            _isCheckingPreCollision = false;
+
+            return allowCollision;
+        }
+
+        /// <summary>
+        /// <para>
+        /// Call this inside an OnPreCollide event to prevent the controller from reacting to the upcoming
+        /// collision. This is useful for breakable and disappearing objects.
+        /// </para>
+        /// <para>
+        /// You can call this by subscribing to  the controller's OnPreCollide event, a PlatformTrigger's OnPreCollide event,
+        /// or you can override ReactivePlatform's OnPreCollide method.
+        /// </para>
+        /// </summary>
+        public void IgnoreThisCollision()
+        {
+            if (!_isCheckingPreCollision)
+            {
+                Debug.LogError("IgnoreThisCollision() may only be called inside an OnPreCollide event. " +
+                               "Either subscribe to the OnPreCollide event on the controller, or " +
+                               "inherit from ReactivePlatform and override OnPreCollide().");
+
+                return;
+            }
+
+            _willIgnoreThisCollision = true;
         }
 
         #region Notify Reactive Methods
         public void NotifyAreaEnter(ReactiveArea area)
         {
             Reactives.Add(area);
-            if (!DisableEvents) OnAreaEnter.Invoke(area);
+
+            if (!DisableEvents)
+                OnAreaEnter.Invoke(area);
         }
 
         public void NotifyAreaExit(ReactiveArea area)
         {
             Reactives.Remove(area);
-            if (!DisableEvents) OnAreaExit.Invoke(area);
+
+            if (!DisableEvents)
+                OnAreaExit.Invoke(area);
         }
 
         public void NotifyPlatformEnter(ReactivePlatform platform)
         {
             Reactives.Add(platform);
-            if (!DisableEvents) OnPlatformCollisionEnter.Invoke(platform);
+
+            if (!DisableEvents)
+                OnPlatformCollisionEnter.Invoke(platform);
         }
 
         public void NotifyPlatformExit(ReactivePlatform platform)
         {
             Reactives.Remove(platform);
-            if (!DisableEvents) OnPlatformCollisionExit.Invoke(platform);
+
+            if (!DisableEvents)
+                OnPlatformCollisionExit.Invoke(platform);
         }
 
         public void NotifySurfaceEnter(ReactivePlatform platform)
         {
             Reactives.Add(platform);
-            if (!DisableEvents) OnPlatformSurfaceEnter.Invoke(platform);
+
+            if (!DisableEvents)
+                OnPlatformSurfaceEnter.Invoke(platform);
         }
 
         public void NotifySurfaceExit(ReactivePlatform platform)
         {
             Reactives.Remove(platform);
-            if (!DisableEvents) OnPlatformSurfaceExit.Invoke(platform);
+
+            if (!DisableEvents)
+                OnPlatformSurfaceExit.Invoke(platform);
         }
 
         public void NotifyActivateObject(ReactiveObject obj)
         {
             Reactives.Add(obj);
-            if (!DisableEvents) OnObjectActivate.Invoke(obj);
+
+            if (!DisableEvents)
+                OnObjectActivate.Invoke(obj);
         }
 
         public void NotifyDeactivateObject(ReactiveObject obj)
         {
             Reactives.Remove(obj);
-            if (!DisableEvents) OnObjectDeactivate.Invoke(obj);
+
+            if (!DisableEvents)
+                OnObjectDeactivate.Invoke(obj);
         }
         #endregion
 
@@ -2131,21 +2418,21 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Finds the first reactive of the specified type the controller is interacting with, if any.
         /// </summary>
-        /// <typeparam name="TReactive">The specified type.</typeparam>
+        /// <typeparam name="T">The specified type.</typeparam>
         /// <returns></returns>
-        public TReactive GetReactive<TReactive>() where TReactive : BaseReactive
+        public T GetReactive<T>() where T : BaseReactive
         {
-            return Reactives.FirstOrDefault(reactive => reactive is TReactive) as TReactive;
+            return Reactives.FirstOrDefault(reactive => reactive is T) as T;
         }
 
         /// <summary>
         /// Returns whether the controller is interacting with a reactive of the specified type.
         /// </summary>
-        /// <typeparam name="TReactive">The specified type.</typeparam>
+        /// <typeparam name="T">The specified type.</typeparam>
         /// <returns></returns>
-        public bool InteractingWith<TReactive>() where TReactive : BaseReactive
+        public bool IsInteractingWith<T>() where T : BaseReactive
         {
-            return Reactives.Any(reactive => reactive is TReactive);
+            return Reactives.Any(reactive => reactive is T);
         }
 
         /// <summary>
@@ -2153,7 +2440,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         /// <param name="reactive">The specified reactive.</param>
         /// <returns></returns>
-        public bool InteractingWith(BaseReactive reactive)
+        public bool IsInteractingWith(BaseReactive reactive)
         {
             return Reactives.Contains(reactive);
         }
@@ -2161,11 +2448,11 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Returns whether the controller is inside a reactive area of the specified type.
         /// </summary>
-        /// <typeparam name="TReactiveArea">The specified type.</typeparam>
+        /// <typeparam name="T">The specified type.</typeparam>
         /// <returns></returns>
-        public bool Inside<TReactiveArea>() where TReactiveArea : ReactiveArea
+        public bool IsInside<T>() where T : ReactiveArea
         {
-            return Reactives.Any(reactive => reactive is TReactiveArea);
+            return Reactives.Any(reactive => reactive is T);
         }
 
         /// <summary>
@@ -2173,23 +2460,28 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         /// <param name="area">The specified reactive area.</param>
         /// <returns></returns>
-        public bool Inside(ReactiveArea area)
+        public bool IsInside(ReactiveArea area)
         {
             return area.AreaTrigger.HasController(this);
         }
 
         /// <summary>
-        /// Returns whether the controller is inside the specified
+        /// Returns whether the controller is standing on the specified reactive platform.
         /// </summary>
-        /// <typeparam name="TReactivePlatform"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public bool StandingOn<TReactivePlatform>() where TReactivePlatform : ReactivePlatform
+        public bool IsStandingOn<T>() where T : ReactivePlatform
         {
             return Reactives.Any(reactive =>
             {
-                var platform = reactive as TReactivePlatform;
-                if (platform == null) return false;
-                if (!platform.PlatformTrigger.HasControllerOnSurface(this))return false;
+                var platform = reactive as T;
+
+                if (platform == null)
+                    return false;
+
+                if (!platform.PlatformTrigger.HasControllerOnSurface(this))
+                    return false;
+
                 return true;
             });
         }
@@ -2201,12 +2493,20 @@ namespace SonicRealms.Core.Actors
         /// <param name="checkParents">Whether to also check if the object is a parent of what the controller
         /// is standing on.</param>
         /// <returns></returns>
-        public bool StandingOn(Transform platform, bool checkParents = false)
+        public bool IsStandingOn(Transform platform, bool checkParents = false)
         {
-            return Grounded && (checkParents
-                ? (PrimarySurface && PrimarySurface.IsChildOf(platform) ||
-                   (SecondarySurface && SecondarySurface.IsChildOf(platform)))
-                : platform == PrimarySurface || platform == SecondarySurface);
+            if (!Grounded)
+                return false;
+
+            if (checkParents)
+            {
+                return (PrimarySurface && PrimarySurface.IsChildOf(platform)) ||
+                       (SecondarySurface && SecondarySurface.IsChildOf(platform));
+            }
+            else
+            {
+                return platform == PrimarySurface || platform == SecondarySurface;
+            }
         }
 
         /// <summary>
@@ -2214,9 +2514,9 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         /// <param name="platform">The specified platform.</param>
         /// <returns></returns>
-        public bool StandingOn(ReactivePlatform platform)
+        public bool IsStandingOn(ReactivePlatform platform)
         {
-            return StandingOn(platform.transform) || platform.PlatformTrigger.HasControllerOnSurface(this);
+            return IsStandingOn(platform.transform) || platform.PlatformTrigger.HasControllerOnSurface(this);
         }
         #endregion
     }

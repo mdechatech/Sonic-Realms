@@ -8,12 +8,28 @@ namespace SonicRealms.Core.Moves
     /// </summary>
     public static class MoveExtensions
     {
+        public static MoveManager GetMoveManager(this HedgehogController controller)
+        {
+            return controller.GetComponent<MoveManager>();
+        }
+
         public static List<Move> GetMoves(this HedgehogController controller)
         {
             var moveManager = controller.GetComponent<MoveManager>();
-            if (moveManager == null) return null;
+            if (moveManager == null)
+                return null;
+
             return moveManager.Moves;
-        } 
+        }
+
+        public static bool HasMove(this HedgehogController controller, string typeName)
+        {
+            var moveManager = controller.GetComponent<MoveManager>();
+            if (moveManager == null)
+                return false;
+
+            return moveManager.Get(typeName);
+        }
 
         public static bool Perform<TMove>(this HedgehogController controller, bool force = false, bool mute = false)
             where TMove : Move
@@ -80,8 +96,23 @@ namespace SonicRealms.Core.Moves
             where TMove : Move
         {
             var moveManager = controller.GetComponent<MoveManager>();
-            if (moveManager == null) return false;
+            if (moveManager == null)
+                return false;
+
             return moveManager.IsActive<TMove>();
+        }
+
+        public static bool IsPerforming(this HedgehogController controller, string typeName)
+        {
+            var moveManager = controller.GetComponent<MoveManager>();
+            if (moveManager == null)
+                return false;
+
+            var move = moveManager.Get(typeName);
+            if (move == null)
+                return false;
+
+            return move.Active;
         }
 
         public static bool IsAvailable<TMove>(this HedgehogController controller) where TMove : Move

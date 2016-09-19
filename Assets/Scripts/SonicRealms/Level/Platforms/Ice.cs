@@ -31,21 +31,21 @@ namespace SonicRealms.Level.Platforms
         }
 
         // Applies new physics values based on friction.
-        public override void OnSurfaceEnter(TerrainCastHit hit)
+        public override void OnSurfaceEnter(SurfaceCollision collision)
         {
-            var groundControl = hit.Controller.GetComponent<MoveManager>().Get<GroundControl>();
+            var groundControl = collision.Controller.GetComponent<MoveManager>().Get<GroundControl>();
             groundControl.Acceleration *= Friction;
             groundControl.Deceleration *= Friction;
-            hit.Controller.GroundFriction *= Friction;
+            collision.Controller.GroundFriction *= Friction;
         }
 
         // Restores old physics values.
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceExit(SurfaceCollision collision)
         {
-            var groundControl = hit.Controller.GetComponent<MoveManager>().Get<GroundControl>();
+            var groundControl = collision.Controller.GetComponent<MoveManager>().Get<GroundControl>();
             groundControl.Acceleration /= Friction;
             groundControl.Deceleration /= Friction;
-            hit.Controller.GroundFriction /= Friction;
+            collision.Controller.GroundFriction /= Friction;
         }
     }
 }

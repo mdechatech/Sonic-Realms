@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -10,7 +11,6 @@ namespace SonicRealms.Level.Platforms
     /// Moves the player with the transform while the player is on it.
     /// </summary>
     [RequireComponent(typeof(PlatformTrigger))]
-    [AddComponentMenu("Hedgehog/Platforms/Moving Platform Tracker")]
     public class MovingPlatform : ReactivePlatform
     {
         /// <summary>
@@ -44,7 +44,7 @@ namespace SonicRealms.Level.Platforms
             base.Awake();
             Anchors = new Dictionary<HedgehogController, Anchor>();
         }
-
+        /*
         public override bool IsSolid(TerrainCastHit hit)
         {
             // Prevent the player from sinking down onto moving platforms
@@ -54,49 +54,84 @@ namespace SonicRealms.Level.Platforms
             return hit.Hit.fraction <
                    hit.Controller.LedgeClimbHeight/(hit.Controller.LedgeClimbHeight + hit.Controller.LedgeDropHeight);
         }
+        */
+
+        public override bool IsOnSurface(SurfaceCollision.Contact contact)
+        {
+            if (!base.IsOnSurface(contact))
+                return false;
+
+            // Make sure a player can only be on one moving platform at a time
+            for (var i = 0; i < contact.Controller.Reactives.Count; ++i)
+            {
+                var reactive = contact.Controller.Reactives[i];
+
+                if (reactive is MovingPlatform)
+                    return reactive == this;
+            }
+
+            return true;
+        }
 
         // Links the player to an object .
-        public override void OnSurfaceEnter(TerrainCastHit hit)
+        public override void OnSurfaceEnter(SurfaceCollision collision)
         {
-            if (hit.Controller == null) return;
-            CreateAnchor(hit);
+            if (collision.Controller == null) return;
+            CreateAnchor(collision);
         }
 
-        // Updates the anchor associated with the hit.Source
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        protected void FixedUpdate()
         {
-            var anchor = GetAnchor(hit.Controller);
-            if (anchor == null) return;
+            foreach (var pair in Anchors)
+            {
+                var anchor = pair.Value;
+                var controller = pair.Key;
 
-            var delta = anchor.Transform.position - anchor.PreviousPosition;
-            anchor.PreviousPosition = anchor.Transform.position;
+                var delta = anchor.Transform.position - anchor.PreviousPosition;
+                anchor.PreviousPosition = anchor.Transform.position;
 
-            if (!anchor.CalculatingPlayerDelta && anchor.PlayerDelta != Vector2.zero)
-                delta -= (Vector3)anchor.PlayerDelta;
-            if (delta == Vector3.zero) return;
-            
-            hit.Controller.transform.position += delta;
+                if (!anchor.CalculatingPlayerDelta && anchor.PlayerDelta != Vector2.zero)
+                {
+                    delta -= (Vector3)anchor.PlayerDelta;
+                }
+
+                if (delta == Vector3.zero)
+                    return;
+
+                controller.transform.position += delta;
+            }
         }
-
+        
         // Removes the anchor associated with the hit.Source
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceExit(SurfaceCollision collision)
         {
-            DestroyAnchor(hit);
+            var anchor = GetAnchor(collision.Controller);
+            if (anchor == null)
+                return;
+
+            if (collision.Controller.Grounded && TransferMomentumGround)
+            {
+                collision.Controller.GroundVelocity += DMath.ScalarProjectionAbs(
+                    (anchor.Transform.position - anchor.PreviousPosition)/Time.fixedDeltaTime,
+                    collision.Latest.HitData.SurfaceAngle);
+            }
+            
+            DestroyAnchor(collision);
         }
 
-        protected Anchor CreateAnchor(TerrainCastHit hit)
+        protected Anchor CreateAnchor(SurfaceCollision info)
         {
-            DestroyAnchor(hit);
+            DestroyAnchor(info);
 
             var anchor = new Anchor {Transform = new GameObject().transform};
-            anchor.Transform.position = hit.Hit.point;
+            anchor.Transform.position = info.Latest.HitData.Raycast.point;
             anchor.PreviousPosition = anchor.Transform.position;
-            anchor.Transform.SetParent(transform);
+            anchor.Transform.SetParent(info.Latest.HitData.Transform);
 
-            Anchors.Add(hit.Controller, anchor);
+            Anchors.Add(info.Controller, anchor);
 
-            hit.Controller.AddCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
-            hit.Controller.AddCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
+            info.Controller.AddCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
+            info.Controller.AddCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
 
             return anchor;
         }
@@ -139,16 +174,16 @@ namespace SonicRealms.Level.Platforms
             return Anchors.ContainsKey(player) ? Anchors[player] : null;
         }
 
-        protected void DestroyAnchor(TerrainCastHit hit)
+        protected void DestroyAnchor(SurfaceCollision info)
         {
             Anchor anchor;
-            if (!Anchors.TryGetValue(hit.Controller, out anchor)) return;
+            if (!Anchors.TryGetValue(info.Controller, out anchor)) return;
 
-            Anchors.Remove(hit.Controller);
+            Anchors.Remove(info.Controller);
             Destroy(anchor.Transform.gameObject);
 
-            hit.Controller.RemoveCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
-            hit.Controller.RemoveCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
+            info.Controller.RemoveCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
+            info.Controller.RemoveCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
         }
 
         public class Anchor

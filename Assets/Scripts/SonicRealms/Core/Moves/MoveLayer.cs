@@ -17,16 +17,16 @@
         /// Controls the player in some way - these tend to stay active for awhile.
         /// For example: GroundControl and AirControl.
         /// </summary>
-        Control,
+        Control = 1,
 
         /// <summary>
         /// Thanks to the ubiquity of rolling, it's on its own layer.
         /// </summary>
-        Roll,
+        Roll = 2,
 
         /// <summary>
         /// The main action being performed. For example: duck, spindash, instashield
         /// </summary>
-        Action,
+        Action = 3,
     }
 }

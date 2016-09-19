@@ -52,9 +52,9 @@ namespace SonicRealms.Core.Moves
 
         private float _axis;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Control; }
+            get { return (int)MoveLayer.Control; }
         }
 
         public override void Reset()

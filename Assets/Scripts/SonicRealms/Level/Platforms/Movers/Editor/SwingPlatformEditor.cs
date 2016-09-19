@@ -20,7 +20,7 @@ namespace SonicRealms.Level.Platforms.Movers.Editor
 
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawProperties(serializedObject,
+            RealmsEditorUtility.DrawProperties(serializedObject,
                 "Duration",
                 "CurrentTime",
                 "PositionCurve",

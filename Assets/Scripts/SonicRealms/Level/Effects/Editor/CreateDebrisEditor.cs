@@ -21,12 +21,12 @@ namespace SonicRealms.Level.Effects.Editor
             }
             else
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "DebrisObject", "DebrisSize", "UseSprite");
+                RealmsEditorUtility.DrawProperties(serializedObject, "DebrisObject", "DebrisSize", "UseSprite");
                 var useSpriteProp = serializedObject.FindProperty("UseSprite");
 
                 if (useSpriteProp.boolValue)
                 {
-                    HedgehogEditorGUIUtility.DrawProperties(serializedObject, "SpriteRenderer");
+                    RealmsEditorUtility.DrawProperties(serializedObject, "SpriteRenderer");
                 }
             }
 

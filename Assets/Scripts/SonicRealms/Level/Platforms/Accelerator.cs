@@ -43,10 +43,10 @@ namespace SonicRealms.Level.Platforms
             AccountForFriction = true;
         }
 
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            var controller = hit.Controller;
-            if (hit.Controller == null) return;
+            var controller = collision.Controller;
+            if (collision.Controller == null) return;
 
             var oldVelocity = controller.GroundVelocity;
             

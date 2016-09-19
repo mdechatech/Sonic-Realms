@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 namespace SonicRealms.Core.Utils.Editor
 {
-    public class HedgehogEditorGUIUtility
+    public class RealmsEditorUtility
     {
         /// <summary>
         /// The name of the Script property that shows up on all unmodified component editors.

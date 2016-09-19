@@ -18,7 +18,7 @@ namespace SonicRealms.Core.Triggers
     /// Base class for level objects that receive events.
     /// </summary>
     [ExecuteInEditMode]
-    public abstract class BaseTrigger : MonoBehaviour
+    public abstract class BaseTrigger : MonoBehaviour, IComparable<Component>
     {
         /// <summary>
         /// Whether children of the trigger can set off events. Turning this on makes
@@ -67,6 +67,11 @@ namespace SonicRealms.Core.Triggers
             return false;
         }
 
+        public virtual int CompareTo(Component component)
+        {
+            return component is BaseReactive ? -1 : 1;
+        }
+        /*
         /// <summary>
         /// Returns whether the specified trigger would receive events from the specified transform.
         /// </summary>
@@ -79,5 +84,6 @@ namespace SonicRealms.Core.Triggers
         {
             return trigger && (transform == trigger.transform || trigger.TriggerFromChildren);
         }
+        */
     }
 }

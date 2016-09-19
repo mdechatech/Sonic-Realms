@@ -1,5 +1,4 @@
 ﻿using System;
-using SonicRealms.Core.Actors;
 using UnityEngine.Events;
 
 namespace SonicRealms.Core.Triggers
@@ -8,7 +7,7 @@ namespace SonicRealms.Core.Triggers
     /// UnityEvents that pass in a controller. Used by OnAreaEnter, OnAreaStay, and OnAreaExit.
     /// </summary>
     [Serializable]
-    public class AreaEvent : UnityEvent<Hitbox>
+    public class AreaTriggerEvent : UnityEvent<AreaCollision>
     {
     }
 }

@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Triggers;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Level.Platforms.Movers
@@ -96,19 +97,19 @@ namespace SonicRealms.Level.Platforms.Movers
         }
 
         // Check if a controller is on the platform
-        public override void OnSurfaceEnter(TerrainCastHit hit)
+        public override void OnSurfaceEnter(SurfaceCollision collision)
         {
             _colliding = true;
         }
 
         // Check if a controller is on the platform
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
             _colliding = true;
         }
             
         // Check if a controller leaves the platform
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceExit(SurfaceCollision collision)
         {
             if (!_colliding) return;
             _colliding = false;

@@ -445,7 +445,7 @@ namespace SonicRealms.Level
             }
             else if (move is Roll)
             {
-                var dy = Vector2.up * -((Roll)move).HeightChange * 0.5f;
+                var dy = ((Roll) move).GetPositionOffset();
                 Camera.ExtraOffset = Vector2.zero;
                 Camera.BasePosition += dy;
             }

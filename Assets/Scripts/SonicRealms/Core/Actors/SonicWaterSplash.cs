@@ -47,7 +47,7 @@ namespace SonicRealms.Core.Actors
 
         protected void OnAreaEnter(ReactiveArea area)
         {
-            if (!(area is Water) || !Player.Inside<Water>()) return;
+            if (!(area is Water) || !Player.IsInside<Water>()) return;
 
             var entry = FindWaterEntry();
             if (!entry) return;
@@ -64,7 +64,7 @@ namespace SonicRealms.Core.Actors
 
         protected void OnAreaExit(ReactiveArea area)
         {
-            if (!(area is Water) || Player.Inside<Water>()) return;
+            if (!(area is Water) || Player.IsInside<Water>()) return;
 
             var exit = FindWaterExit();
             if (!exit) return;

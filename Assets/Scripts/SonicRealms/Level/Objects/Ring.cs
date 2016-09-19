@@ -56,9 +56,9 @@ namespace SonicRealms.Level.Objects
                 CollectedTriggerHash = Animator.StringToHash(CollectedTrigger);
         }
 
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             if (Collected) return;
 
             var collector = controller.GetComponent<RingCounter>();

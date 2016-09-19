@@ -13,14 +13,14 @@ namespace SonicRealms.Core.Triggers
             if (!GetComponent<ObjectTrigger>()) gameObject.AddComponent<ObjectTrigger>();
         }
 
-        public override void OnAreaEnter(Hitbox hitbox)
+        public override void OnAreaEnter(AreaCollision collision)
         {
-            ActivateObject(hitbox.Controller);
+            ActivateObject(collision.Controller);
         }
 
-        public override void OnAreaExit(Hitbox hitbox)
+        public override void OnAreaExit(AreaCollision collision)
         {
-            DeactivateObject(hitbox.Controller);
+            DeactivateObject(collision.Controller);
         }
     }
 }

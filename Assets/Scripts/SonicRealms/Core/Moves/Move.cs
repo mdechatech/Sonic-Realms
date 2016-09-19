@@ -57,9 +57,9 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// The move's layer. A layer only has one active move at any time.
         /// </summary>
-        public virtual MoveLayer Layer
+        public virtual int Layer
         {
-            get { return MoveLayer.None; }
+            get { return (int)MoveLayer.None; }
         }
 
         /// <summary>

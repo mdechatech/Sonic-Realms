@@ -30,26 +30,26 @@ namespace SonicRealms.Level.Objects
             FreezeTime = 0.03333333f;
         }
 
-        public override void OnPlatformEnter(TerrainCastHit hit)
+        public override void OnPreCollide(PlatformCollision.Contact contact)
         {
-            if (hit.Controller == null || !hit.Controller.Grounded) return;
-            if (hit.Side == ControllerSide.Bottom || hit.Side == ControllerSide.Top) return;
+            if (contact.Controller == null || !contact.Controller.Grounded)
+                return;
 
-            var moveManager = hit.Controller.GetComponent<MoveManager>();
-            if (moveManager == null || moveManager.IsActive<Roll>() || 
-                Mathf.Abs(hit.Controller.GroundVelocity) < MinGroundSpeed) return;
+            if (contact.HitData.Side == ControllerSide.Bottom || contact.HitData.Side == ControllerSide.Top)
+                return;
 
-            hit.Controller.IgnoreThisCollision();
-            ActivateObject(hit.Controller);
+            if (contact.Controller.IsPerforming<Roll>() ||
+                Mathf.Abs(contact.Controller.GroundVelocity) < MinGroundSpeed)
+                return;
+            
+            ActivateObject(contact.Controller);
             Destroy(gameObject);
 
-            if (FreezeTime <= 0.0f) return;
-            hit.Controller.Interrupt(FreezeTime);
-        }
+            if (FreezeTime <= 0.0f)
+                return;
 
-        public override void OnPlatformStay(TerrainCastHit hit)
-        {
-            OnPlatformEnter(hit);
+            contact.Controller.Interrupt(FreezeTime);
+            contact.Controller.IgnoreThisCollision();
         }
     }
 }

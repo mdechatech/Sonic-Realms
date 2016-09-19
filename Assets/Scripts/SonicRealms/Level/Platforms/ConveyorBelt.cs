@@ -26,10 +26,10 @@ namespace SonicRealms.Level.Platforms
 
         // Translate the controller by the amount defined in Velocity and the direction defined by its
         // surface angle.
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            var controller = hit.Controller;
-            if (hit.Controller == null) return;
+            var controller = collision.Controller;
+            if (collision.Controller == null) return;
 
             controller.transform.Translate(DMath.AngleToVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
                                  Time.fixedDeltaTime);
@@ -38,10 +38,10 @@ namespace SonicRealms.Level.Platforms
         }
 
         // Transfer momentum to the controller when it leaves the conveyor belt.
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceExit(SurfaceCollision collision)
         {
-            var controller = hit.Controller;
-            if (hit.Controller == null)
+            var controller = collision.Controller;
+            if (collision.Controller == null)
                 return;
 
             if (controller.Grounded)

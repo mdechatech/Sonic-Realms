@@ -88,9 +88,9 @@ namespace SonicRealms.Core.Moves
         protected Roll Roll;
         protected AudioSource ChargeAudioSource;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override void Reset()

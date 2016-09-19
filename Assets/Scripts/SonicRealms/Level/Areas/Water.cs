@@ -62,31 +62,31 @@ namespace SonicRealms.Level.Areas
             if(Animator && ElectrocutedTriggerHash != 0) Animator.SetTrigger(ElectrocutedTriggerHash);
         }
 
-        public override bool IsInside(Hitbox hitbox)
+        public override bool CanTouch(AreaCollision.Contact contact)
         {
-            return base.IsInside(hitbox) &&
-                   _colliders.Any(collider => collider.OverlapPoint(hitbox.Controller.Sensors.Center.position));
+            return base.CanTouch(contact) &&
+                   _colliders.Any(collider => collider.OverlapPoint(contact.Controller.Sensors.Center.position));
         }
         
         // Apply new physics values based on viscosity
-        public override void OnAreaEnter(Hitbox hitbox)
+        public override void OnAreaEnter(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             controller.Vx /= Viscosity;
             controller.Vy /= Viscosity*2.0f;
         }
         
         // Constantly apply buoyancy.
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             if (!controller.Grounded) controller.Vy += Buoyancy*Time.fixedDeltaTime;
         }
 
         // Restore old physics values.
-        public override void OnAreaExit(Hitbox hitbox)
+        public override void OnAreaExit(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             controller.Vy *= Viscosity;
         }
     }

@@ -42,26 +42,31 @@ namespace SonicRealms.Level.Objects
             LockControl = false;
         }
 
-        public override void OnPlatformEnter(TerrainCastHit hit)
+        public override void OnPlatformEnter(PlatformCollision contact)
         {
-            hit.Controller.Detach();
+            // TODO proper bumperes
+            /*
+            collision.Controller.Detach();
 
-            if(LockControl) hit.Controller.GetComponent<MoveManager>().Get<GroundControl>().Lock();
+            if(LockControl)
+                collision.Controller.GetComponent<MoveManager>().Get<GroundControl>().Lock();
            
-            var normal = hit.NormalAngle;
+            var normal = collision.Latest.Data.NormalAngle;
 
             if (AccurateBounce)
             {
-                hit.Controller.Velocity = new Vector2(hit.Controller.Velocity.x * Mathf.Abs(Mathf.Sin(normal)),
-                    hit.Controller.Velocity.y * Mathf.Abs(Mathf.Cos(normal)));
-                hit.Controller.Velocity += DMath.AngleToVector(normal) * Velocity;
+                collision.Controller.Velocity = new Vector2(collision.Controller.Velocity.x * Mathf.Abs(Mathf.Sin(normal)),
+                    collision.Controller.Velocity.y * Mathf.Abs(Mathf.Cos(normal)));
+
+                collision.Controller.Velocity += DMath.AngleToVector(normal) * Velocity;
             }
             else
             {
-                hit.Controller.Velocity = DMath.AngleToVector(normal) * Velocity;
+                collision.Controller.Velocity = DMath.AngleToVector(normal) * Velocity;
             }
 
             TriggerObject();
+            */
         }
     }
 }
