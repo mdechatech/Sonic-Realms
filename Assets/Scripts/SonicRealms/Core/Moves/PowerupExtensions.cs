@@ -11,15 +11,28 @@ namespace SonicRealms.Core.Moves
         public static void AddPowerup(this HedgehogController controller, Powerup powerup)
         {
             var powerupManager = controller.GetComponent<PowerupManager>();
-            if (powerupManager == null) return;
+            if (powerupManager == null)
+                return;
+
             powerupManager.Add(powerup);
         }
 
-        public static TPowerup HasPowerup<TPowerup>(this HedgehogController controller)
+        public static bool HasPowerup(this HedgehogController controller, string typeName)
+        {
+            var powerupManager = controller.GetComponent<PowerupManager>();
+            if (powerupManager == null)
+                return false;
+
+            return powerupManager.Get(typeName);
+        }
+
+        public static bool HasPowerup<TPowerup>(this HedgehogController controller)
             where TPowerup : Powerup
         {
             var powerupManager = controller.GetComponent<PowerupManager>();
-            if (powerupManager == null) return null;
+            if (powerupManager == null)
+                return false;
+
             return powerupManager.Get<TPowerup>();
         }
 

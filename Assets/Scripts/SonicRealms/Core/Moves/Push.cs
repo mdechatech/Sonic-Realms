@@ -18,9 +18,9 @@ namespace SonicRealms.Core.Moves
         public bool UseControlInput;
         #endregion
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override bool Available
@@ -30,7 +30,11 @@ namespace SonicRealms.Core.Moves
 
         public override bool ShouldPerform
         {
-            get { return Input.GetButton(ActivateAxis); }
+            get
+            {
+                return (Input.GetAxisRaw(ActivateAxis) < 0f && Controller.LeftWall != null) ||
+                       (Input.GetAxisRaw(ActivateAxis) > 0f && Controller.RightWall != null);
+            }
         }
 
         public override bool ShouldEnd

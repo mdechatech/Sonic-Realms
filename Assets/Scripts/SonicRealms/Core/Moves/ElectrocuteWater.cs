@@ -29,7 +29,7 @@ namespace SonicRealms.Core.Moves
             Controller.OnAreaEnter.AddListener(OnAreaEnter);
 
             // Electrocute immediately if already underwater
-            if (Controller.Inside<Water>())
+            if (Controller.IsInside<Water>())
             {
                 _water = Controller.GetReactive<Water>();
                 Electrocute();

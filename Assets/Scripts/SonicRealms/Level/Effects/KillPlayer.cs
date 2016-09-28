@@ -6,7 +6,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// Kills the player when activated.
     /// </summary>
-    public class KillPlayer : ReactiveObject
+    public class KillPlayer : ReactiveEffect
     {
         public override void OnActivate(HedgehogController controller)
         {

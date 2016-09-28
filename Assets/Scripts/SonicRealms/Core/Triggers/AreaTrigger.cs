@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 
 namespace SonicRealms.Core.Triggers
@@ -15,86 +13,45 @@ namespace SonicRealms.Core.Triggers
     public class AreaTrigger : BaseTrigger
     {
         /// <summary>
-        /// If true, a player can trigger the area multiple times from multiple hitboxes.
-        /// </summary>
-        [Tooltip("If true, a player can trigger the area multiple times from multiple hitboxes.")]
-        public bool AllowMultiple;
-
-        /// <summary>
         /// Invoked when a controller enters the area.
         /// </summary>
         [Foldout("Events")]
-        public AreaEvent OnAreaEnter;
+        public AreaTriggerEvent OnAreaEnter;
 
         /// <summary>
         /// Invoked when a controller stays in the area.
         /// </summary>
         [Foldout("Events")]
-        public AreaEvent OnAreaStay;
+        public AreaTriggerEvent OnAreaStay;
 
         /// <summary>
         /// Invoked when a controller exits the area.
         /// </summary>
         [Foldout("Events")]
-        public AreaEvent OnAreaExit;
+        public AreaTriggerEvent OnAreaExit;
 
         /// <summary>
-        /// An audio clip to play when a controller enters the area.
-        /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to play when a controller enters the area.")]
-        public AudioClip AreaEnterSound;
-
-        /// <summary>
-        /// An audio clip to loop while a controller is inside the area.
-        /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to loop while a controller is inside the area.")]
-        public AudioClip AreaLoopSound;
-
-        /// <summary>
-        /// An audio clip to play when a controller leaves the area.
-        /// </summary>
-        [Foldout("Sound")]
-        [Tooltip("An audio clip to play when a controller leaves the area.")]
-        public AudioClip AreaExitSound;
-
-        /// <summary>
-        /// Defines whether the controller should collide with the area. The trigger ONLY checks
-        /// if the controller is touching it!
-        /// </summary>
-        /// <param name="controller"></param>
-        /// <returns></returns>
-        public delegate bool InsidePredicate(Hitbox hitbox);
-
-        /// <summary>
-        /// A list of predicates which, if empty or all return true, allow the controller to collide
-        /// with the area. The trigger ONLY checks if the controller is touching it!
-        /// </summary>
-        ///
-        public List<InsidePredicate> InsideRules;
-
-        /// <summary>
-        /// Maps a controller to the areas it is colliding with (can collide with multiple child areas).
+        /// A list of controllers currently in the area trigger.
         /// </summary>
         [Foldout("Debug")]
-        [Tooltip("Maps a controller to the areas it is colliding with (can collide with multiple child areas).")]
-        public List<Hitbox> Collisions;
+        [Tooltip("A list of controllers currently in the area trigger.")]
+        public List<HedgehogController> ControllersInArea;
 
-        protected HashSet<Collider2D> MiscCollisions;
+        /// <summary>
+        /// Defines whether the trigger should consider the given contact as inside the area.
+        /// </summary>
+        public delegate bool TouchPredicate(AreaCollision.Contact contact);
 
-        public override void Reset()
-        {
-            base.Reset();
+        /// <summary>
+        /// A list of predicates which, if empty or all return true, allow the area trigger to touch the given
+        /// hitbox and invoke events for it.
+        /// </summary>
+        public List<TouchPredicate> TouchRules;
 
-            AllowMultiple = false;
+        protected List<AreaTrigger> Parents;
 
-            OnAreaEnter = new AreaEvent();
-            OnAreaStay = new AreaEvent();
-            OnAreaExit = new AreaEvent();
-
-            AreaEnterSound = AreaLoopSound = AreaExitSound = null;
-        }
+        public Dictionary<HedgehogController, List<AreaCollision.Contact>> CurrentContacts;
+        private List<AreaCollision.Contact> _possibleContacts;
 
         public override void Awake()
         {
@@ -102,15 +59,29 @@ namespace SonicRealms.Core.Triggers
             if (!Application.isPlaying)
                 return;
 #endif
-
             base.Awake();
 
-            OnAreaEnter = OnAreaEnter ?? new AreaEvent();
-            OnAreaStay = OnAreaStay ?? new AreaEvent();
-            OnAreaExit = OnAreaExit ?? new AreaEvent();
-            Collisions = new List<Hitbox>();
-            MiscCollisions = new HashSet<Collider2D>();
-            InsideRules = new List<InsidePredicate>();
+            OnAreaEnter = OnAreaEnter ?? new AreaTriggerEvent();
+            OnAreaStay = OnAreaStay ?? new AreaTriggerEvent();
+            OnAreaExit = OnAreaExit ?? new AreaTriggerEvent();
+            
+            ControllersInArea = new List<HedgehogController>();
+            TouchRules = new List<TouchPredicate>();
+
+            Parents = new List<AreaTrigger>();
+            GetComponentsInParent(true, Parents);
+
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                if (Parents[i] == this)
+                {
+                    Parents.RemoveAt(i);
+                    break;
+                }
+            }
+
+            CurrentContacts = new Dictionary<HedgehogController, List<AreaCollision.Contact>>();
+            _possibleContacts = new List<AreaCollision.Contact>();
         }
 
         public virtual void Start()
@@ -119,24 +90,17 @@ namespace SonicRealms.Core.Triggers
             if (!Application.isPlaying)
                 return;
 #endif
-
             if (!TriggerFromChildren)
                 return;
 
-            foreach (var childCollider in transform.GetComponentsInChildren<Collider2D>())
+            foreach (var child in GetComponentsInChildren<Collider2D>())
             {
-                if (childCollider.transform == transform ||
-                    childCollider.GetComponent<PlatformTrigger>() != null ||
-                    childCollider.GetComponent<ObjectTrigger>() != null)
+                if (child.transform == transform ||
+                    child.GetComponent<PlatformTrigger>() ||
+                    child.GetComponent<AreaTrigger>())
                     continue;
 
-                var callback = childCollider.GetComponent<TriggerCallback2D>() ??
-                               childCollider.gameObject.AddComponent<TriggerCallback2D>();
-
-
-                callback.TriggerEnter2D.AddListener(OnTriggerEnter2D);
-                callback.TriggerStay2D.AddListener(OnTriggerStay2D);
-                callback.TriggerExit2D.AddListener(OnTriggerExit2D);
+                child.gameObject.AddComponent<AreaTrigger>().TriggerFromChildren = true;
             }
         }
 
@@ -146,29 +110,13 @@ namespace SonicRealms.Core.Triggers
             if (!Application.isPlaying)
                 return;
 #endif
-
-            if (Collisions.Count == 0)
-            {
-                enabled = false;
-                return;
-            }
-
-            foreach (var hitbox in Collisions)
-            {
-                OnAreaStay.Invoke(hitbox);
-                hitbox.NotifyCollisionStay(this);
-            }
+            HandleCurrentContacts();
+            HandlePossibleContacts();
         }
 
         public override bool HasController(HedgehogController controller)
         {
-            return controller != null && Collisions.Any(hitbox => hitbox.Controller == controller);
-        }
-
-        protected bool HasController(HedgehogController controller, Hitbox excludeHitbox)
-        {
-            return controller != null &&
-                   Collisions.Any(hitbox => hitbox != excludeHitbox && hitbox.Controller == controller);
+            return ControllersInArea.Contains(controller);
         }
 
         /// <summary>
@@ -176,114 +124,232 @@ namespace SonicRealms.Core.Triggers
         /// </summary>
         /// <param name="controller">The specified controller.</param>
         /// <returns></returns>
-        public virtual bool CollidesWith(Hitbox hitbox)
+        public virtual bool CanTouch(AreaCollision.Contact contact)
         {
-            if (!InsideRules.Any()) return DefaultInsideRule(hitbox);
-            return InsideRules.All(predicate => predicate(hitbox));
-        }
-
-        public bool DefaultInsideRule(Hitbox hitbox)
-        {
-            return hitbox.CompareTag("Untagged") || hitbox.CompareTag(Hitbox.MainHitboxTag);
-        }
-
-        public void NotifyCollision(Hitbox hitbox, bool isExit = false)
-        {
-            if (Collisions.Contains(hitbox))
+            for (var i = 0; i < TouchRules.Count; ++i)
             {
-                if (isExit || !CollidesWith(hitbox))
+                if (!TouchRules[i](contact))
+                    return false;
+            }
+
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (!parent.TriggerFromChildren)
+                    continue;
+
+                for (var j = 0; j < parent.TouchRules.Count; ++j)
                 {
-                    Collisions.Remove(hitbox);
-
-                    if (AreaExitSound != null)
-                        SoundManager.Instance.PlayClipAtPoint(AreaExitSound, transform.position);
-                    Collisions.Remove(hitbox);
-                    OnAreaExit.Invoke(hitbox);
-                    hitbox.NotifyCollisionExit(this);
-
-                    if (Collisions.Count == 0) enabled = false;
+                    if (!parent.TouchRules[j](contact))
+                        return false;
                 }
             }
+
+            return true;
+        }
+
+        public bool DefaultInsideRule(AreaCollision.Contact contact)
+        {
+            return contact.Hitbox.CompareTag(Hitbox.MainHitboxTag);
+        }
+
+        protected void NotifyContactEnter(AreaCollision.Contact contact, bool bubble = true)
+        {
+            bool isFirst;
+            AddCurrentContact(contact, out isFirst);
+
+            if (isFirst)
+            {
+                ControllersInArea.Add(contact.Controller);
+                OnAreaEnter.Invoke(new AreaCollision(new[] {contact}));
+            }
+
+            if(bubble)
+                BubbleContactEnter(contact);
+        }
+
+        protected void BubbleContactEnter(AreaCollision.Contact contact)
+        {
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (parent.TriggerFromChildren)
+                {
+                    parent.NotifyContactEnter(contact, false);
+                }
+            }
+        }
+
+        protected void NotifyContactExit(AreaCollision.Contact contact, bool bubble = true)
+        {
+            bool wasLast;
+            if (RemoveCurrentContact(contact, out wasLast) && wasLast)
+            {
+                ControllersInArea.Remove(contact.Controller);
+                OnAreaExit.Invoke(new AreaCollision(new[] {contact}));
+            }
+
+            if (bubble)
+                BubbleContactExit(contact);
+        }
+
+        protected void BubbleContactExit(AreaCollision.Contact contact)
+        {
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                var parent = Parents[i];
+                if (parent.TriggerFromChildren)
+                {
+                    parent.NotifyContactExit(contact, false);
+                }
+            }
+        }
+
+        protected void AddCurrentContact(AreaCollision.Contact contact, out bool isFirst)
+        {
+            List<AreaCollision.Contact> contactList;
+            if (CurrentContacts.TryGetValue(contact.Controller, out contactList))
+            {   
+                for (var i = contactList.Count - 1; i >= 0; --i)
+                {
+                    if (contactList[i].Hitbox == contact.Hitbox)
+                    {
+                        contactList.RemoveAt(i);
+                    }
+                }
+
+                contactList.Add(contact);
+            }
             else
             {
-                if (isExit) return;
-                if (!CollidesWith(hitbox)) return;
-
-                if (AreaEnterSound != null)
-                    SoundManager.Instance.PlayClipAtPoint(AreaEnterSound, transform.position);
-                Collisions.Add(hitbox);
-                OnAreaEnter.Invoke(hitbox);
-                hitbox.NotifyCollisionEnter(this);
-
-                if (Collisions.Count == 1) enabled = true;
+                CurrentContacts.Add(contact.Controller, contactList = new List<AreaCollision.Contact> {contact});
             }
+
+            isFirst = contactList.Count == 1;
         }
 
-        /// <summary>
-        /// Used by children triggers to bubble their events up to parent triggers.
-        /// </summary>
-        /// <param name="hitbox"></param>
-        /// <param name="area"></param>
-        /// <param name="isExit"></param>
-        public void BubbleEvent(Hitbox hitbox, bool isExit = false)
+        protected bool RemoveCurrentContact(AreaCollision.Contact contact, out bool wasLast)
         {
-            foreach (var trigger in GetComponentsInParent<AreaTrigger>().Where(
-                trigger => trigger != this && trigger.TriggerFromChildren))
+            List<AreaCollision.Contact> contactList;
+
+            if (!CurrentContacts.TryGetValue(contact.Controller, out contactList))
             {
-                trigger.NotifyCollision(hitbox, isExit);
+                wasLast = false;
+                return false;
             }
+
+            for (var i = 0; i < contactList.Count; ++i)
+            {
+                var item = contactList[i];
+                if (item.Hitbox == contact.Hitbox)
+                {
+                    contactList.RemoveAt(i);
+                    wasLast = contactList.Count == 0;
+                    return true;
+                }
+            }
+
+            wasLast = false;
+            return false;
         }
 
-        public void OnTriggerEnter2D(Collider2D collider2D)
+        protected void AddPossibleContact(AreaCollision.Contact contact)
         {
-            if (MiscCollisions.Contains(collider2D)) return;
+            _possibleContacts.Add(contact);
+        }
 
+        protected bool RemovePossibleContact(AreaCollision.Contact contact)
+        {
+            for (var i = 0; i < _possibleContacts.Count; ++i)
+            {
+                var possibleContact = _possibleContacts[i];
+                if (possibleContact.Hitbox == contact.Hitbox)
+                {
+                    _possibleContacts.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        protected void OnTriggerEnter2D(Collider2D collider2D)
+        {
             var hitbox = collider2D.GetComponent<Hitbox>();
-            if (hitbox == null)
-            {
-                MiscCollisions.Add(collider2D);
-                return;
-            }
-
-            if ((!AllowMultiple && HasController(hitbox.Controller, hitbox)) || 
-                !hitbox.AllowCollision(this) || !CollidesWith(hitbox))
+            if (!hitbox)
                 return;
 
-            NotifyCollision(hitbox);
-            BubbleEvent(hitbox);
-        }
+            var contact = new AreaCollision.Contact(this, hitbox);
 
-        public void OnTriggerStay2D(Collider2D collider2D)
-        {
-            if (MiscCollisions.Contains(collider2D)) return;
-
-            var hitbox = collider2D.GetComponent<Hitbox>();
-            if (hitbox == null) return;
-
-            if ((AllowMultiple || !HasController(hitbox.Controller, hitbox)) &&
-                hitbox.AllowCollision(this) && CollidesWith(hitbox))
+            if (hitbox.CanTouch(contact) && CanTouch(contact))
             {
-                NotifyCollision(hitbox);
-                BubbleEvent(hitbox);
+                NotifyContactEnter(contact);
             }
             else
             {
-                NotifyCollision(hitbox, true);
-                BubbleEvent(hitbox, true);
+                AddPossibleContact(contact);
             }
         }
 
-        public void OnTriggerExit2D(Collider2D collider2D)
+        protected void OnTriggerExit2D(Collider2D collider2D)
         {
             var hitbox = collider2D.GetComponent<Hitbox>();
-            if (hitbox == null)
-            {
-                MiscCollisions.Remove(collider2D);
+            if (!hitbox)
                 return;
-            }
+            
+            var contact = new AreaCollision.Contact(this, hitbox);
 
-            NotifyCollision(hitbox, true);
-            BubbleEvent(hitbox, true);
+            // Remove from current and possible
+            if (!RemovePossibleContact(contact))
+            {
+                NotifyContactExit(contact);
+            }
+        }
+
+        private void HandlePossibleContacts()
+        {
+            for (var i = _possibleContacts.Count - 1; i >= 0; --i)
+            {
+                var possibleContact = _possibleContacts[i];
+
+                var updatedContact = new AreaCollision.Contact(possibleContact.AreaTrigger, possibleContact.Hitbox);
+                _possibleContacts[i] = updatedContact;
+
+                if (CanTouch(updatedContact) && possibleContact.Hitbox.CanTouch(updatedContact))
+                {
+                    _possibleContacts.RemoveAt(i);
+                    NotifyContactEnter(updatedContact);
+                }
+            }
+        }
+
+        private void HandleCurrentContacts()
+        {
+            for (var i = ControllersInArea.Count - 1; i >= 0; --i)
+            {
+                var contacts = CurrentContacts[ControllersInArea[i]];
+
+                for (var j = contacts.Count - 1; j >= 0; --j)
+                {
+                    var contact = contacts[j];
+                    var updatedContact = new AreaCollision.Contact(contact.AreaTrigger, contact.Hitbox);
+
+                    if (CanTouch(updatedContact) && contact.Hitbox.CanTouch(updatedContact))
+                    {
+                        contacts[j] = updatedContact;
+                    }
+                    else if(contact.AreaTrigger == this)
+                    {
+                        AddPossibleContact(updatedContact);
+                        NotifyContactExit(contact);
+                    }
+                }
+
+                if (contacts.Count > 0)
+                {
+                    OnAreaStay.Invoke(new AreaCollision(contacts));
+                }
+            }
         }
     }
 }

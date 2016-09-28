@@ -10,7 +10,7 @@ namespace SonicRealms.Level.Platforms.Movers.Editor
         {
             serializedObject.Update();
 
-            HedgehogEditorGUIUtility.DrawExcluding(serializedObject,
+            RealmsEditorUtility.DrawExcluding(serializedObject,
                 "ReverseDirection",
                 "PingPong");
 

@@ -1,5 +1,6 @@
 ﻿using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Level.Objects
@@ -16,13 +17,6 @@ namespace SonicRealms.Level.Objects
         public int Value;
 
         /// <summary>
-        /// Name of an Animator trigger set when collected.
-        /// </summary>
-        [Tooltip("Name of an Animator trigger set when collected.")]
-        public string CollectedTrigger;
-        protected int CollectedTriggerHash;
-
-        /// <summary>
         /// Whether the ring has been collected.
         /// </summary>
         [Tooltip("Whether the ring has been collected.")]
@@ -34,6 +28,17 @@ namespace SonicRealms.Level.Objects
         [Tooltip("An audio clip to play when the ring is collected.")]
         public AudioClip CollectedSound;
 
+        [Foldout("Animation")]
+        public Animator Animator;
+
+        /// <summary>
+        /// Name of an Animator trigger set when collected.
+        /// </summary>
+        [Foldout("Animation")]
+        [Tooltip("Name of an Animator trigger set when collected.")]
+        public string CollectedTrigger;
+        protected int CollectedTriggerHash;
+
         /// <summary>
         /// Next ring sound will pan right if true, pan left otherwise.
         /// </summary>
@@ -42,31 +47,34 @@ namespace SonicRealms.Level.Objects
         public override void Reset()
         {
             base.Reset();
+
             Value = 1;
-            CollectedTrigger = "";
-            CollectedSound = null;
+
+            Animator = Animator.GetComponent<Animator>();
         }
 
         public override void Awake()
         {
             base.Awake();
-            Collected = false;
-            
-            if (Animator != null && !string.IsNullOrEmpty(CollectedTrigger))
-                CollectedTriggerHash = Animator.StringToHash(CollectedTrigger);
+
+            Animator = Animator ? Animator : Animator.GetComponent<Animator>();
+            CollectedTriggerHash = Animator.StringToHash(CollectedTrigger);
         }
 
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
-            if (Collected) return;
+            if (Collected)
+                return;
+
+            var controller = collision.Controller;
 
             var collector = controller.GetComponent<RingCounter>();
-            if (collector == null || !collector.CanCollect) return;
+            if (collector == null || !collector.CanCollect)
+                return;
 
             collector.Rings += Value;
 
-            if(Animator != null && CollectedTriggerHash != 0)
+            if(Animator && CollectedTriggerHash != 0)
                 Animator.SetTrigger(CollectedTriggerHash);
 
             Collected = true;
@@ -77,7 +85,7 @@ namespace SonicRealms.Level.Objects
                 source.panStereo = (PanRight = !PanRight) ? 1f : -1f;
             }
 
-            TriggerObject(controller);
+            BlinkEffectTrigger(controller);
         }
     }
 }

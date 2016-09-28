@@ -26,7 +26,7 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// The active move on each layer, or null if the layer has no active move.
         /// </summary>
-        public Dictionary<MoveLayer, Move> Layers;
+        public Dictionary<int, Move> Layers;
 
         #region Events
         /// <summary>
@@ -91,10 +91,10 @@ namespace SonicRealms.Core.Moves
 
         private void InitializeLayers()
         {
-            Layers = new Dictionary<MoveLayer, Move>();
+            Layers = new Dictionary<int, Move>();
             foreach (var layer in Enum.GetValues(typeof(MoveLayer)).Cast<MoveLayer>())
             {
-                Layers.Add(layer, null);
+                Layers.Add((int)layer, null);
             }
         }
 
@@ -240,6 +240,24 @@ namespace SonicRealms.Core.Moves
         }
 
         /// <summary>
+        /// Returns whether the manager has a move of the specified type.
+        /// </summary>
+        /// <typeparam name="TMove">The specified type.</typeparam>
+        /// <returns></returns>
+        public bool Has(string typeName)
+        {
+            return Moves.Any(move => move.GetType().Name == typeName);
+        }
+
+        /// <summary>
+        /// Returns the first move of the specified type.
+        /// </summary>
+        public Move Get(string typeName)
+        {
+            return Moves.FirstOrDefault(move => move.GetType().Name == typeName);
+        }
+
+        /// <summary>
         /// Returns the first move of the specified type.
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
@@ -256,6 +274,16 @@ namespace SonicRealms.Core.Moves
         /// <returns></returns>
         public Move Get(MoveLayer layer)
         {
+            return Get((int) layer);
+        }
+
+        /// <summary>
+        /// Returns the active move on the specified layer, if any.
+        /// </summary>
+        /// <param name="layer">The specified layer.</param>
+        /// <returns></returns>
+        public Move Get(int layer)
+        {
             return Layers[layer];
         }
 
@@ -266,6 +294,18 @@ namespace SonicRealms.Core.Moves
         /// <param name="layer"></param>
         /// <returns></returns>
         public Move this[MoveLayer layer]
+        {
+            get { return Get(layer); }
+            set { this[(int) layer] = value; }
+        }
+
+        /// <summary>
+        /// The layer's active move, if any. If setting, the given move will be performed as long as it's on
+        /// the given layer.
+        /// </summary>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public Move this[int layer]
         {
             get { return Get(layer); }
             set { if (value.Layer == layer) Perform(value); }
@@ -378,7 +418,7 @@ namespace SonicRealms.Core.Moves
             {
                 if (move.CurrentState == Move.State.Unavailable)
                 {
-                    if (move.Layer != MoveLayer.None)
+                    if (move.Layer != (int)MoveLayer.None)
                     {
                         End(Layers[move.Layer]);
                         Layers[move.Layer] = move;
@@ -399,7 +439,7 @@ namespace SonicRealms.Core.Moves
                 if (move.CurrentState != Move.State.Available)
                     return false;
 
-                if (move.Layer != MoveLayer.None)
+                if (move.Layer != (int)MoveLayer.None)
                 {
                     End(Layers[move.Layer]);
                     Layers[move.Layer] = move;
@@ -430,7 +470,8 @@ namespace SonicRealms.Core.Moves
         {
             if (move == null || move.CurrentState != Move.State.Active) return false;
 
-            if(move.Layer != MoveLayer.None) Layers[move.Layer] = null;
+            if(move.Layer != (int)MoveLayer.None)
+                Layers[move.Layer] = null;
 
             move.ChangeState(move.Available ? Move.State.Available : Move.State.Unavailable);
             OnEnd.Invoke(move);
@@ -444,6 +485,16 @@ namespace SonicRealms.Core.Moves
         /// <param name="layer"></param>
         /// <returns></returns>
         public bool End(MoveLayer layer)
+        {
+            return End((int)layer);
+        }
+
+        /// <summary>
+        /// Ends the move on the specified layer, if any.
+        /// </summary>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public bool End(int layer)
         {
             return End(Layers[layer]);
         }

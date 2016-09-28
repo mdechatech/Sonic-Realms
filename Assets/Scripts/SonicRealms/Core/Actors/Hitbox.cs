@@ -45,7 +45,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [HideInInspector]
         [Tooltip("The hitbox's collider.")]
-        public Collider2D Collider2D;
+        public Collider2D Collider;
 
         /// <summary>
         /// The controller the hitbox belongs to.
@@ -96,7 +96,7 @@ namespace SonicRealms.Core.Actors
 
         public virtual void Awake()
         {
-            Collider2D = GetComponent<Collider2D>();
+            Collider = GetComponent<Collider2D>();
             Controller = Controller ?? GetComponentInParent<HedgehogController>();
             CollisionsThisFrame = 0;
             CollisionTimer = 0f;
@@ -116,13 +116,11 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether to let the specified trigger know it's been collided with.
         /// </summary>
-        /// <param name="trigger">The specified trigger.</param>
-        /// <returns></returns>
-        public virtual bool AllowCollision(AreaTrigger trigger)
+        public virtual bool CanTouch(AreaCollision.Contact contact)
         {
             return CollisionsThisFrame < CollisionsPerFrame &&
                    CollisionTimer == 0f &&
-                   (TriggerTags.Count == 0 || TriggerTags.Any(s => trigger.CompareTag(s)));
+                   (TriggerTags.Count == 0 || TriggerTags.Any(s => contact.AreaTrigger.CompareTag(s)));
         }
 
         public void NotifyCollisionEnter(AreaTrigger trigger)

@@ -1,4 +1,5 @@
-﻿using SonicRealms.Level;
+﻿using SonicRealms.Core.Utils;
+using SonicRealms.Level;
 using UnityEngine;
 
 namespace SonicRealms.Core.Moves
@@ -17,6 +18,13 @@ namespace SonicRealms.Core.Moves
         public float MinimumSpeed;
 
         /// <summary>
+        /// Maximum angle at which the player can skid, in degrees.
+        /// </summary>
+        [ControlFoldout]
+        [Tooltip("Maximum angle at which the player can skid, in degrees.")]
+        public float MaximumAngle;
+
+        /// <summary>
         /// Sound that gets repeated while Sonic is skidding.
         /// </summary>
         [SoundFoldout]
@@ -33,9 +41,9 @@ namespace SonicRealms.Core.Moves
         protected AudioSource SkidSoundSource;
         protected GroundControl GroundControl;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override bool Available
@@ -45,7 +53,9 @@ namespace SonicRealms.Core.Moves
 
         public override bool ShouldPerform
         {
-            get { return GroundControl.Braking && Manager[MoveLayer.Action] == null && Manager[MoveLayer.Roll] == null; }
+            get { return GroundControl.Braking && 
+                    Mathf.Abs(DMath.ShortestArc_d(0f, Controller.RelativeSurfaceAngle)) < MaximumAngle && 
+                    Manager[MoveLayer.Action] == null && Manager[MoveLayer.Roll] == null; }
         }
 
         public override bool ShouldEnd

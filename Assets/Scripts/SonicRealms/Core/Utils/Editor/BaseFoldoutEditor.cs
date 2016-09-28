@@ -7,7 +7,11 @@ namespace SonicRealms.Core.Utils.Editor
     {
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+
             FoldoutDrawer.DoFoldoutsLayout(serializedObject);
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

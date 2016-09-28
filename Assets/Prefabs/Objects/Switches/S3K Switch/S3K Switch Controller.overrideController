@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: S3K Switch Controller
+  m_Controller: {fileID: 9100000, guid: b46faed9cb2933440b33f287fb40698e, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a9ec4b6c5b540084294a8a0f143c1dff, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b60a46f1cf7d5d545bfd5ede58aefc7d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 92e1baa6c4dd54a4eb83062df160a197, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5855ba6a41042ec479adcf0a9a3d8b74, type: 2}

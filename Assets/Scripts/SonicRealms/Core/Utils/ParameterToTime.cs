@@ -12,16 +12,31 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         [Tooltip("Sets the motion's normalized time to this parameter.")]
         public string Parameter;
-        protected int Hash;
+        protected int ParameterHash;
+
+        protected int StateHash;
+
+        private float _originalSpeed;
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            Hash = stateInfo.shortNameHash;
+            StateHash = stateInfo.shortNameHash;
+
+            if (ParameterHash == 0)
+                ParameterHash = Animator.StringToHash(Parameter);
+
+            _originalSpeed = animator.speed;
+            animator.speed = 0;
         }
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            animator.Play(Hash, layerIndex, animator.GetFloat(Parameter));
+            animator.Play(StateHash, layerIndex, animator.GetFloat(ParameterHash));
+        }
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {   
+            animator.speed = _originalSpeed;
         }
     }
 }

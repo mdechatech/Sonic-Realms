@@ -9,7 +9,6 @@ namespace SonicRealms.Level.Areas
     /// <summary>
     /// Liquid that makes the controller slower or faster. Physics are configured in the player's animator.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Areas/Water")]
     public class Water : ReactiveArea
     {
         /// <summary>
@@ -25,6 +24,9 @@ namespace SonicRealms.Level.Areas
         [SerializeField]
         public float Buoyancy;
 
+        [Foldout("Animation")]
+        public Animator Animator;
+
         /// <summary>
         /// Name of an Animator trigger set when the water is electrocuted.
         /// </summary>
@@ -38,20 +40,20 @@ namespace SonicRealms.Level.Areas
         public override void Reset()
         {
             base.Reset();
+
             Viscosity = 2.0f;
-            Buoyancy = 0.0f;
-            ElectrocutedTrigger = "";
+
+            Animator = GetComponent<Animator>();
         }
 
         public override void Start()
         {
             base.Start();
+
             _colliders = GetComponentsInChildren<Collider2D>(false);
 
-            if (!Animator) return;
-            ElectrocutedTriggerHash = string.IsNullOrEmpty(ElectrocutedTrigger)
-                ? 0
-                : Animator.StringToHash(ElectrocutedTrigger);
+            Animator = Animator ?? GetComponent<Animator>();
+            ElectrocutedTriggerHash = Animator.StringToHash(ElectrocutedTrigger);
         }
 
         /// <summary>
@@ -60,34 +62,35 @@ namespace SonicRealms.Level.Areas
         public virtual void Electrocute()
         {
             // TODO destroy badniks?
-            if(Animator && ElectrocutedTriggerHash != 0) Animator.SetTrigger(ElectrocutedTriggerHash);
+            if(Animator && ElectrocutedTriggerHash != 0)
+                Animator.SetTrigger(ElectrocutedTriggerHash);
         }
 
-        public override bool IsInside(Hitbox hitbox)
+        public override bool CanTouch(AreaCollision.Contact contact)
         {
-            return base.IsInside(hitbox) &&
-                   _colliders.Any(collider => collider.OverlapPoint(hitbox.Controller.Sensors.Center.position));
+            return base.CanTouch(contact) &&
+                   _colliders.Any(collider => collider.OverlapPoint(contact.Controller.Sensors.Center.position));
         }
         
         // Apply new physics values based on viscosity
-        public override void OnAreaEnter(Hitbox hitbox)
+        public override void OnAreaEnter(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             controller.Vx /= Viscosity;
             controller.Vy /= Viscosity*2.0f;
         }
         
         // Constantly apply buoyancy.
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             if (!controller.Grounded) controller.Vy += Buoyancy*Time.fixedDeltaTime;
         }
 
         // Restore old physics values.
-        public override void OnAreaExit(Hitbox hitbox)
+        public override void OnAreaExit(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
             controller.Vy *= Viscosity;
         }
     }

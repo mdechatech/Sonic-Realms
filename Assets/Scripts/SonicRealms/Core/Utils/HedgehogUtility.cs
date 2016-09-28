@@ -91,9 +91,6 @@ namespace SonicRealms.Core.Utils
             topCenter.transform.SetParent(sensorsObject.transform);
             controller.Sensors.TopCenter = topCenter.transform;
 
-            topCenterStart.transform.SetParent(sensorsObject.transform);
-            controller.Sensors.TopCenterStart = topCenterStart.transform;
-
             topRight.transform.SetParent(sensorsObject.transform);
             controller.Sensors.TopRight = topRight.transform;
 

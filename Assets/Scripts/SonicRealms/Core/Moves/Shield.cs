@@ -48,7 +48,7 @@ namespace SonicRealms.Core.Moves
             var shield = Manager.GetAll<Shield>().FirstOrDefault(move => move != this);
             if (shield != null) shield.Remove();
 
-            if (DestroyInWater && Controller.Inside<Water>())
+            if (DestroyInWater && Controller.IsInside<Water>())
             {
                 Remove();
             }
@@ -74,7 +74,7 @@ namespace SonicRealms.Core.Moves
 
         public void OnAreaEnter(ReactiveArea area)
         {
-            if (DestroyInWater && Controller.Inside<Water>())
+            if (DestroyInWater && Controller.IsInside<Water>())
                 Remove();
         }
 

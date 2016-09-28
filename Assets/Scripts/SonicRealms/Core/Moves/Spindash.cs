@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SonicRealms.Core.Actors;
+using UnityEngine;
 
 namespace SonicRealms.Core.Moves
 {
@@ -17,6 +18,13 @@ namespace SonicRealms.Core.Moves
         [ControlFoldout]
         [Tooltip("Input that must be released to execute the spindash.")]
         public string ReleaseAxis;
+
+        /// <summary>
+        /// This hitbox becomes harmful while rolling, allowing the player to kill while rolling.
+        /// </summary>
+        [PhysicsFoldout]
+        [Tooltip("This hitbox becomes harmful while spindashing, allowing the player to kill while spindashing.")]
+        public SonicHitbox Hitbox;
 
         /// <summary>
         /// The lowest speed possible after releasing, in units per second.
@@ -84,11 +92,12 @@ namespace SonicRealms.Core.Moves
 
         protected GroundControl GroundControl;
         protected Duck Duck;
+        protected Roll Roll;
         protected AudioSource ChargeAudioSource;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override void Reset()
@@ -98,6 +107,7 @@ namespace SonicRealms.Core.Moves
             ChargeButton = "Jump";
             ReleaseAxis = "Vertical";
 
+            Hitbox = Controller.GetComponentInChildren<SonicHitbox>();
             ChargePower = 0.6f;
             MaxChargePower = 2.4f;
             BasePower = 4.8f;
@@ -117,6 +127,7 @@ namespace SonicRealms.Core.Moves
             base.Start();
 
             Duck = Manager.Get<Duck>();
+            Roll = Manager.Get<Roll>();
             GroundControl = Manager.Get<GroundControl>();
 
             if (ChargeSound == null) return;
@@ -136,6 +147,15 @@ namespace SonicRealms.Core.Moves
             get { return Input.GetButtonDown(ChargeButton); }
         }
 
+        public override bool ShouldEnd
+        {
+            get
+            {
+                return Controller.WallMode != WallMode.Floor ||
+                       (Duck && Mathf.Abs(Controller.GroundVelocity) > Mathf.Abs(Duck.MaxActivateSpeed));
+            }
+        }
+
         public override void OnActiveEnter(State previousState)
         {
             CurrentChargePower = 0.0f;
@@ -143,9 +163,16 @@ namespace SonicRealms.Core.Moves
             if (GroundControl != null)
                 GroundControl.DisableControl = true;
 
-            if (ChargeAudioSource == null) return;
+            Controller.GroundVelocity = 0;
+
+            if (ChargeAudioSource == null)
+                return;
+
             ChargeAudioSource.pitch = ChargePitchMin;
             ChargeAudioSource.Play();
+
+            if (Hitbox != null)
+                Hitbox.Harmful = true;
         }
 
         public override void OnActiveUpdate()
@@ -168,6 +195,9 @@ namespace SonicRealms.Core.Moves
 
             if (ChargeAudioSource != null)
                 ChargeAudioSource.Stop();
+
+            if (Hitbox != null && !Controller.IsPerforming<Roll>())
+                Hitbox.Harmful = false;
         }
 
         public void Charge()
@@ -186,12 +216,13 @@ namespace SonicRealms.Core.Moves
 
         public void Finish()
         {
-            if (Controller.FacingForward)
+            if (Controller.IsFacingForward)
                 Controller.GroundVelocity += BasePower + CurrentChargePower;
             else
                 Controller.GroundVelocity -= BasePower + CurrentChargePower;
 
             Manager.Perform<Roll>(true, true);
+
             End();
         }
     }

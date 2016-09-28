@@ -47,14 +47,14 @@ namespace SonicRealms.Core.Actors
             Collider2D = GetComponent<Collider2D>();
         }
 
-        public override bool IsInside(Hitbox hitbox)
+        public override bool CanTouch(AreaCollision.Contact contact)
         {
-            return base.IsInside(hitbox) || hitbox.CompareTag(Hitbox.AttackHitboxTag);
+            return base.CanTouch(contact) || contact.Hitbox.CompareTag(Hitbox.AttackHitboxTag);
         }
 
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            var sonicHitbox = hitbox as SonicHitbox;
+            var sonicHitbox = collision.Latest.Hitbox as SonicHitbox;
             if (sonicHitbox == null) return;
 
             // The weak spot can hurt the player back, too!
@@ -67,21 +67,21 @@ namespace SonicRealms.Core.Actors
             {
                 Badnik.TakeDamage(sonicHitbox.transform);
 
-                if (!hitbox.Controller.Grounded)
+                if (!collision.Controller.Grounded)
                 {
-                    var vy = hitbox.Controller.RelativeVelocity.y;
+                    var vy = collision.Controller.RelativeVelocity.y;
 
                     // If the controller is traveling upwards or is "lower" than the badnik relative to the direction of
                     // gravity, don't bounce and instead just apply speed reduction
-                    if (vy > 0f && DMath.Highest(hitbox.Controller.transform.position, transform.position,
-                        hitbox.Controller.GravityDirection * Mathf.Deg2Rad) > 0f)
+                    if (vy > 0f && DMath.HeightDifference(collision.Controller.transform.position, transform.position,
+                        collision.Controller.GravityDirection * Mathf.Deg2Rad) > 0f)
                     {
                         vy -= BottomSpeedReduction * Mathf.Sign(vy);
                     }
                     else if(vy < 0f)
                     {
                         // Otherwise perform the bounce
-                        var jump = hitbox.Controller.GetComponent<MoveManager>().Get<Jump>();
+                        var jump = collision.Controller.GetComponent<MoveManager>().Get<Jump>();
 
                         if (jump == null)
                         {
@@ -89,7 +89,7 @@ namespace SonicRealms.Core.Actors
                         }
                         else if (jump.HeldDown)
                         {
-                            hitbox.Controller.ApplyGravityOnce();
+                            collision.Controller.ApplyGravityOnce();
                             vy *= -TopBounceMultiplier;
                         }
                         else
@@ -98,7 +98,7 @@ namespace SonicRealms.Core.Actors
                         }
                     }
 
-                    hitbox.Controller.RelativeVelocity = new Vector2(hitbox.Controller.RelativeVelocity.x, vy);
+                    collision.Controller.RelativeVelocity = new Vector2(collision.Controller.RelativeVelocity.x, vy);
                 }
             }
         }

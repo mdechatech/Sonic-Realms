@@ -47,7 +47,7 @@ namespace SonicRealms.Core.Actors
 
         protected void OnAreaEnter(ReactiveArea area)
         {
-            if (!(area is Water) || !Player.Inside<Water>()) return;
+            if (!(area is Water) || !Player.IsInside<Water>()) return;
 
             var entry = FindWaterEntry();
             if (!entry) return;
@@ -64,7 +64,7 @@ namespace SonicRealms.Core.Actors
 
         protected void OnAreaExit(ReactiveArea area)
         {
-            if (!(area is Water) || Player.Inside<Water>()) return;
+            if (!(area is Water) || Player.IsInside<Water>()) return;
 
             var exit = FindWaterExit();
             if (!exit) return;
@@ -92,7 +92,7 @@ namespace SonicRealms.Core.Actors
             if (!hit || hit.fraction == 0f)
             {
                 hit = Physics2D.Linecast((Vector2) Player.transform.position -
-                                         DMath.AngleToVector(Player.GravityDirection*Mathf.Rad2Deg),
+                                         DMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg),
                     Player.transform.position, WaterLayer);
             }
 
@@ -112,7 +112,7 @@ namespace SonicRealms.Core.Actors
             {
                 hit = Physics2D.Linecast(Player.transform.position,
                     (Vector2) Player.transform.position +
-                    DMath.AngleToVector(Player.GravityDirection*Mathf.Rad2Deg)
+                    DMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg)
                     , WaterLayer);
             }
 

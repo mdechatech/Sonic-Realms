@@ -23,14 +23,14 @@ namespace SonicRealms.Level.Platforms
 
         // The water is a surface if the player is upright, on top of it, grounded, not already submerged,
         // and running quickly enough.
-        public override bool IsSolid(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit data)
         {
-            if (hit.Controller == null) return false;
-            return base.IsSolid(hit) &&
-                   (hit.Side & ControllerSide.Bottom) > 0 &&
-                   hit.Hit.fraction > 0.0f &&
-                   hit.Controller.Grounded &&
-                   Mathf.Abs(hit.Controller.GroundVelocity) >= MinFloatSpeed;
+            if (data.Controller == null) return false;
+            return base.IsSolid(data) &&
+                   (data.Side & ControllerSide.Bottom) > 0 &&
+                   data.Raycast.fraction > 0.0f &&
+                   data.Controller.Grounded &&
+                   Mathf.Abs(data.Controller.GroundVelocity) >= MinFloatSpeed;
         }
     }
 }

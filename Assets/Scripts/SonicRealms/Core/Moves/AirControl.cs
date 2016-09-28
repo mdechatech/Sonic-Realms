@@ -52,9 +52,9 @@ namespace SonicRealms.Core.Moves
 
         private float _axis;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Control; }
+            get { return (int)MoveLayer.Control; }
         }
 
         public override void Reset()
@@ -94,10 +94,10 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveUpdate()
         {
             if (ControlLock) _axis = 0.0f;
-            else _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+            else _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
 
             if (DMath.Equalsf(_axis)) return;
-            Controller.FacingForward = _axis > 0.0f;
+            Controller.IsFacingForward = _axis > 0.0f;
         }
 
         public override void OnActiveFixedUpdate()

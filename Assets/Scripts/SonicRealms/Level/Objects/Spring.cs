@@ -75,49 +75,55 @@ namespace SonicRealms.Level.Objects
             HitTrigger = "";
         }
 
-        public override void OnPlatformEnter(TerrainCastHit hit)
+        public override void OnPreCollide(PlatformCollision.Contact contact)
         {
-            var hitSide = TerrainUtility.NormalToControllerSide(hit.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);
-            if ((BouncySides & hitSide) == 0) return;
+            var data = contact.HitData;
+            var controller = contact.Controller;
 
-            if (LockControl) hit.Controller.GetComponent<MoveManager>().Get<GroundControl>().Lock(LockDuration);
+            var hitSide = TerrainUtility.NormalToControllerSide(data.NormalAngle*Mathf.Rad2Deg - transform.eulerAngles.z);
+            if ((BouncySides & hitSide) == 0)
+                return;
+
+            if (LockControl)
+            {
+                var groundControl = controller.GetMove<GroundControl>();
+
+                if (groundControl)
+                    groundControl.Lock(LockDuration);
+            }
+
             if (!KeepOnGround)
             {
-                hit.Controller.Detach();
+                controller.Detach();
 
-                var moveManager = hit.Controller.GetComponent<MoveManager>();
-                if (moveManager != null)
-                {
-                    moveManager.End<Roll>();
-                    moveManager.Perform<AirControl>(true);
-                }
-                
-                hit.Controller.IgnoreThisCollision();
+                controller.EndMove<Roll>();
+
+                contact.Controller.IgnoreThisCollision();
             }
 
             if (AccurateBounce)
             {
-                hit.Controller.Velocity = new Vector2(hit.Controller.Velocity.x*Mathf.Abs(Mathf.Sin(hit.NormalAngle)),
-                    hit.Controller.Velocity.y*Mathf.Abs(Mathf.Cos(hit.NormalAngle)));
-                hit.Controller.Velocity += DMath.AngleToVector(hit.NormalAngle) * Power;
+                controller.Velocity = new Vector2(controller.Velocity.x*Mathf.Abs(Mathf.Sin(data.NormalAngle)),
+                    controller.Velocity.y*Mathf.Abs(Mathf.Cos(data.NormalAngle)));
+                controller.Velocity += DMath.UnitVector(data.NormalAngle) * Power;
             }
             else
             {
-                hit.Controller.Velocity = DMath.AngleToVector(hit.NormalAngle) * Power;
+                controller.Velocity = DMath.UnitVector(data.NormalAngle) * Power;
             }
 
-            if (hit.Controller.Animator != null)
+            if (controller.Animator != null)
             {
-                var logWarnings = hit.Controller.Animator.logWarnings;
-                hit.Controller.Animator.logWarnings = false;
+                var logWarnings = controller.Animator.logWarnings;
+                controller.Animator.logWarnings = false;
 
                 if (!string.IsNullOrEmpty(HitTrigger))
-                    hit.Controller.Animator.SetTrigger(HitTrigger);
+                    controller.Animator.SetTrigger(HitTrigger);
 
-                hit.Controller.Animator.logWarnings = logWarnings;
+                controller.Animator.logWarnings = logWarnings;
             }
 
-            TriggerObject(hit.Controller);
+            BlinkEffectTrigger(data.Controller);
         }
     }
 }

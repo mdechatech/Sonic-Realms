@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Actors;
+﻿using System.Security.Cryptography.X509Certificates;
+using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -38,6 +39,14 @@ namespace SonicRealms.Core.Moves
         [Tooltip("Name of an Animator bool set to whether the controller is braking.")]
         public string BrakingBool;
         protected int BrakingBoolHash;
+        
+        /// <summary>
+        /// Name of an Animator bool set to whether the controller is standing.
+        /// </summary>
+        [AnimationFoldout]
+        [Tooltip("Name of an Animator bool set to whether the controller is standing.")]
+        public string StandingBool;
+        protected int StandingBoolHash;
 
         /// <summary>
         /// Name of an Animator float set to absolute ground speed divided by top speed.
@@ -104,6 +113,14 @@ namespace SonicRealms.Core.Moves
         [Tooltip("Minimum ground speed at which slope gravity is applied, in units per second. Allows Sonic to stand still on " +
                  "steep slopes.")]
         public float MinSlopeGravitySpeed;
+
+        [Space, ControlFoldout]
+        public float ControlLockDuration;
+
+        [ControlFoldout]
+        public float ControlLockAngle;
+
+        protected bool ControlLockEndedThisFrame;
         #endregion
         
         #region Properties
@@ -138,7 +155,11 @@ namespace SonicRealms.Core.Moves
         /// </summary>
         public bool Standing
         {
-            get { return DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating; }
+            get
+            {
+                return DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating &&
+                       Mathf.Abs(DMath.ShortestArc_d(Controller.RelativeSurfaceAngle, 0f)) < ControlLockAngle;
+            }
         }
 
         /// <summary>
@@ -155,23 +176,26 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Whether control is disabled.
         /// </summary>
+        [DebugFoldout]
         public bool DisableControl;
 
         /// <summary>
         /// Whether the control lock is on.
         /// </summary>
+        [DebugFoldout]
         public bool ControlLockTimerOn;
-        
+
         /// <summary>
         /// Time until the control lock is switched off, in seconds. Set to zero if the control is not locked.
         /// </summary>
+        [DebugFoldout]
         public float ControlLockTimer;
 
         protected ScoreCounter Score;
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Control; }
+            get { return (int)MoveLayer.Control; }
         }
 
         public override void Reset()
@@ -190,6 +214,8 @@ namespace SonicRealms.Core.Moves
             DisableDeceleration = false;
             TopSpeed = 3.6f;
             MinSlopeGravitySpeed = 0.1f;
+            ControlLockDuration = 0.5f;
+            ControlLockAngle = 45f;
         }
 
         public override void Awake()
@@ -201,17 +227,19 @@ namespace SonicRealms.Core.Moves
             ControlLockTimerOn = false;
             ControlLockTimer = 0.0f;
 
-            InputAxisFloatHash = string.IsNullOrEmpty(InputAxisFloat) ? 0 : Animator.StringToHash(InputAxisFloat);
-            InputBoolHash = string.IsNullOrEmpty(InputBool) ? 0 : Animator.StringToHash(InputBool);
-            AcceleratingBoolHash = string.IsNullOrEmpty(AcceleratingBool) ? 0 : Animator.StringToHash(AcceleratingBool);
-            BrakingBoolHash = string.IsNullOrEmpty(BrakingBool) ? 0 : Animator.StringToHash(BrakingBool);
-            TopSpeedPercentFloatHash = string.IsNullOrEmpty(TopSpeedPercentFloat) ? 0 : Animator.StringToHash(TopSpeedPercentFloat);
+            InputAxisFloatHash = Animator.StringToHash(InputAxisFloat);
+            InputBoolHash = Animator.StringToHash(InputBool);
+            AcceleratingBoolHash = Animator.StringToHash(AcceleratingBool);
+            BrakingBoolHash = Animator.StringToHash(BrakingBool);
+            StandingBoolHash = Animator.StringToHash(StandingBool);
+            TopSpeedPercentFloatHash = Animator.StringToHash(TopSpeedPercentFloat);
         }
 
         public override void OnManagerAdd()
         {
             if (Controller.Grounded) Perform();
             Controller.OnAttach.AddListener(OnAttach);
+            Controller.OnSteepDetach.AddListener(OnSteepDetach);
             Score = Controller.GetComponent<ScoreCounter>();
         }
 
@@ -224,49 +252,47 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveEnter(State previousState)
         {
             Manager.End<AirControl>();
-            Controller.OnSteepDetach.AddListener(OnSteepDetach);
+            Controller.AddCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
-            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+            _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
+        }
+
+        protected void ApplyForces(HedgehogController controller)
+        {
+            UpdateControlLockTimer();
+
+            // If we're too steep and not moving quickly enough, start the control lock
+            if (!ControlLockTimerOn && 
+                Mathf.Abs(controller.GroundVelocity) < controller.DetachSpeed &&
+                DMath.AngleInRange_d(controller.RelativeSurfaceAngle, ControlLockAngle, 360f - ControlLockAngle))
+                Lock();
+
+            if (!ControlLockTimerOn) Accelerate(_axis);
+
+            // Disable slope gravity when we're not moving, so that Sonic can stand on slopes
+            controller.DisableSlopeGravity = !(Accelerating || ControlLockTimerOn ||
+                                           Mathf.Abs(controller.GroundVelocity) > MinSlopeGravitySpeed);
+
+            // Disable ground friction while we have player input
+            controller.DisableGroundFriction = ControlLockTimerOn || 
+                (!DisableAcceleration && Accelerating) ||
+                (!DisableDeceleration && Braking);
+
+            if (ControlLockEndedThisFrame) ControlLockEndedThisFrame = false;
         }
 
         public override void OnActiveUpdate()
         {
             if (ControlLockTimerOn || DisableControl) return;
-            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
-        }
-
-        public override void OnActiveFixedUpdate()
-        {
-            UpdateControlLockTimer();
-
-            // Accelerate as long as the control lock isn't on
-            if (!ControlLockTimerOn) Accelerate(_axis);
-            
-            // If we're on a wall and aren't going quickly enough, start the control lock
-            if (Mathf.Abs(Controller.GroundVelocity) < Controller.DetachSpeed &&
-                DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 50.0f, 310.0f))
-                Lock();
-
-            // Disable slope gravity when we're not moving, so that Sonic can stand on slopes
-            Controller.DisableSlopeGravity = !(Accelerating || ControlLockTimerOn ||
-                                           Mathf.Abs(Controller.GroundVelocity) > MinSlopeGravitySpeed);
-
-            // Disable ground friction while we have player input
-            Controller.DisableGroundFriction = 
-                (!DisableAcceleration && Accelerating) ||
-                (!DisableDeceleration && Braking);
-
-            // Orient the player in the direction we're moving (not graphics-wise, just internally!)
-            if (!ControlLockTimerOn && !DMath.Equalsf(_axis))
-                Controller.FacingForward = Controller.GroundVelocity >= 0.0f;
+            _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
         }
 
         public override void OnActiveExit()
         {
             // Set everything back to normal
-            Controller.OnSteepDetach.RemoveListener(OnSteepDetach);
             Controller.DisableSlopeGravity = false;
             Controller.DisableGroundFriction = false;
+            Controller.RemoveCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
             if (Animator == null) return;
 
@@ -287,6 +313,9 @@ namespace SonicRealms.Core.Moves
 
             if(BrakingBoolHash != 0)
                 Animator.SetBool(BrakingBoolHash, Braking);
+
+            if(StandingBoolHash != 0)
+                Animator.SetBool(StandingBoolHash, Standing);
 
             if(TopSpeedPercentFloatHash != 0)
                 Animator.SetFloat(TopSpeedPercentFloatHash, Mathf.Abs(Controller.GroundVelocity)/TopSpeed);
@@ -311,10 +340,18 @@ namespace SonicRealms.Core.Moves
         }
 
         /// <summary>
+        /// Locks ground control.
+        /// </summary>
+        public void Lock()
+        {
+            Lock(ControlLockDuration);
+        }
+
+        /// <summary>
         /// Locks ground control for the specified duration.
         /// </summary>
         /// <param name="time"></param>
-        public void Lock(float time = 0.5f)
+        public void Lock(float time)
         {
             ControlLockTimer = time;
             ControlLockTimerOn = true;
@@ -327,6 +364,7 @@ namespace SonicRealms.Core.Moves
         {
             ControlLockTimer = 0.0f;
             ControlLockTimerOn = false;
+            ControlLockEndedThisFrame = true;
         }
 
         /// <summary>
@@ -378,27 +416,41 @@ namespace SonicRealms.Core.Moves
             {
                 if (!DisableDeceleration && Controller.GroundVelocity > 0.0f)
                 {
-                    Controller.GroundVelocity += Deceleration*magnitude*timestep;
-                    return true;
+                    var delta = Deceleration*magnitude*timestep;
+                    Controller.GroundVelocity += delta;
+
+                    if (Controller.GroundVelocity < 0f)
+                        Controller.GroundVelocity = delta;
                 }
-                else if (!DisableAcceleration && Controller.GroundVelocity > -TopSpeed)
+                else if (!DisableAcceleration)
                 {
-                    Controller.GroundVelocity += Acceleration*magnitude*timestep;
-                    return true;
+                    Controller.IsFacingForward = false;
+
+                    if(Controller.GroundVelocity > -TopSpeed)
+                        Controller.GroundVelocity += Acceleration*magnitude*timestep;
                 }
+
+                return true;
             }
             else if (magnitude > 0.0f)
             {
-                if (!DisableDeceleration && Controller.GroundVelocity < 0.0f)
+                if (!DisableDeceleration && Controller.GroundVelocity < 0f)
                 {
-                    Controller.GroundVelocity += Deceleration*magnitude*timestep;
-                    return true;
+                    var delta = Deceleration * magnitude * timestep;
+                    Controller.GroundVelocity += delta;
+
+                    if (Controller.GroundVelocity > 0f)
+                        Controller.GroundVelocity = delta;
                 }
-                else if (!DisableAcceleration && Controller.GroundVelocity < TopSpeed)
+                else if (!DisableAcceleration)
                 {
-                    Controller.GroundVelocity += Acceleration*magnitude*timestep;
-                    return true;
+                    Controller.IsFacingForward = true;
+
+                    if (Controller.GroundVelocity < TopSpeed)
+                        Controller.GroundVelocity += Acceleration*magnitude*timestep;
                 }
+
+                return true;
             }
 
             return false;

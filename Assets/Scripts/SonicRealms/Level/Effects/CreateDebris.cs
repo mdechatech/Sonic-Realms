@@ -8,7 +8,7 @@ namespace SonicRealms.Level.Effects
     /// Cuts up the sprite into a grid of game objects. You can specify your own game object for the debris
     /// or even tell it to use bits of its own sprite, like in the classic games.
     /// </summary>
-    public class CreateDebris : ReactiveObject
+    public class CreateDebris : ReactiveEffect
     {
         /// <summary>
         /// Hard limit on debris created, because we don't want to crash.

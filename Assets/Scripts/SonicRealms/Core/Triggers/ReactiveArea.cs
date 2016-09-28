@@ -1,6 +1,4 @@
-﻿using SonicRealms.Core.Actors;
-using SonicRealms.Core.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SonicRealms.Core.Triggers
 {
@@ -8,44 +6,30 @@ namespace SonicRealms.Core.Triggers
     /// Helper class for creating areas that react to player events.
     /// </summary>
     [RequireComponent(typeof(AreaTrigger))]
-    public class ReactiveArea : BaseReactive
+    public abstract class ReactiveArea : BaseReactive
     {
         [HideInInspector]
         public AreaTrigger AreaTrigger;
 
         protected bool RegisteredEvents;
 
-        /// <summary>
-        /// Name of an Animator trigger on the controller to set when it enters the area.
-        /// </summary>
-        [Foldout("Player Animation")]
-        [Tooltip("Name of an Animator trigger on the controller to set when it enters the area.")]
-        public string InsideTrigger;
-
-        /// <summary>
-        /// Name of an Animator bool on the controller to set to true while it's inside the area.
-        /// </summary>
-        [Foldout("Player Animation")]
-        [Tooltip("Name of an Animator bool on the controller to set to true while it's inside the area.")]
-        public string InsideBool;
-
         public override void Reset()
         {
             base.Reset();
 
             AreaTrigger = GetComponent<AreaTrigger>();
-            InsideTrigger = InsideBool = "";
+        }
+
+        public virtual void OnEnable()
+        {
+            if (AreaTrigger != null && AreaTrigger.TouchRules != null) Start();
         }
 
         public override void Awake()
         {
             base.Awake();
-            AreaTrigger = GetComponent<AreaTrigger>() ?? gameObject.AddComponent<AreaTrigger>();
-        }
 
-        public virtual void OnEnable()
-        {
-            if (AreaTrigger != null && AreaTrigger.InsideRules != null) Start();
+            AreaTrigger = AreaTrigger ?? GetComponent<AreaTrigger>();
         }
 
         public override void Start()
@@ -54,7 +38,7 @@ namespace SonicRealms.Core.Triggers
 
             if (RegisteredEvents) return;
             
-            AreaTrigger.InsideRules.Add(IsInside);
+            AreaTrigger.TouchRules.Add(CanTouch);
             AreaTrigger.OnAreaEnter.AddListener(NotifyAreaEnter);
             AreaTrigger.OnAreaStay.AddListener(NotifyAreaStay);
             AreaTrigger.OnAreaExit.AddListener(NotifyAreaExit);
@@ -66,7 +50,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (!RegisteredEvents) return;
 
-            AreaTrigger.InsideRules.Remove(IsInside);
+            AreaTrigger.TouchRules.Remove(CanTouch);
             AreaTrigger.OnAreaEnter.RemoveListener(NotifyAreaEnter);
             AreaTrigger.OnAreaStay.RemoveListener(NotifyAreaStay);
             AreaTrigger.OnAreaExit.RemoveListener(NotifyAreaExit);
@@ -74,82 +58,61 @@ namespace SonicRealms.Core.Triggers
             RegisteredEvents = false;
         }
 
-        public virtual bool IsInside(Hitbox hitbox)
+        public virtual bool CanTouch(AreaCollision.Contact contact)
         {
-            return AreaTrigger.DefaultInsideRule(hitbox);
+            return AreaTrigger.DefaultInsideRule(contact);
         }
         
-        public virtual void OnAreaEnter(Hitbox hitbox)
+        public virtual void OnAreaEnter(AreaCollision collision)
         {
             
         }
 
-        public virtual void OnAreaStay(Hitbox hitbox)
+        public virtual void OnAreaStay(AreaCollision collision)
         {
             
         }
 
-        public virtual void OnAreaExit(Hitbox hitbox)
+        public virtual void OnAreaExit(AreaCollision collision)
         {
             
         }
         #region Notify Methods
-        public void NotifyAreaEnter(Hitbox hitbox)
+        public void NotifyAreaEnter(AreaCollision collision)
         {
-            OnAreaEnter(hitbox);
-            hitbox.Controller.NotifyAreaEnter(this);
-
-            if (hitbox.Controller.Animator == null) return;
-
-            var logWarnings = hitbox.Controller.Animator.logWarnings;
-            hitbox.Controller.Animator.logWarnings = false;
-
-            SetAreaEnterParameters(hitbox.Controller);
-
-            hitbox.Controller.Animator.logWarnings = logWarnings;
+            OnAreaEnter(collision);
+            collision.Controller.NotifyAreaEnter(this);
         }
 
-        protected virtual void SetAreaEnterParameters(HedgehogController controller)
-        {
-            if (!string.IsNullOrEmpty(InsideTrigger))
-                controller.Animator.SetTrigger(InsideTrigger);
-
-            if (!string.IsNullOrEmpty(InsideBool))
-                controller.Animator.SetBool(InsideBool, true);
-        }
-
-        public void NotifyAreaStay(Hitbox hitbox)
+        public void NotifyAreaStay(AreaCollision collision)
         {
             // here for consistency, may add something later
-            OnAreaStay(hitbox);
+            OnAreaStay(collision);
         }
 
-        public void NotifyAreaExit(Hitbox hitbox)
+        public void NotifyAreaExit(AreaCollision collision)
         {
-            hitbox.Controller.NotifyAreaExit(this);
-            OnAreaExit(hitbox);
-
-            if (hitbox.Controller.Animator == null) return;
-
-            var logWarnings = hitbox.Controller.Animator.logWarnings;
-            hitbox.Controller.Animator.logWarnings = false;
-
-            SetAreaExitParameters(hitbox.Controller);
-
-            hitbox.Controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetAreaExitParameters(HedgehogController controller)
-        {
-            if (!string.IsNullOrEmpty(InsideBool))
-                controller.Animator.SetBool(InsideBool, false);
+            collision.Controller.NotifyAreaExit(this);
+            OnAreaExit(collision);
         }
         #endregion
 
-        public virtual void OnDestroy()
+        private bool _isQuitting;
+        protected virtual void OnApplicationQuit()
         {
-            foreach (var hitbox in AreaTrigger.Collisions)
-                NotifyAreaExit(hitbox);
+            _isQuitting = true;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (_isQuitting)
+                return;
+
+            foreach (var pair in AreaTrigger.CurrentContacts)
+            {
+                if(pair.Value.Count > 0)
+                    NotifyAreaExit(new AreaCollision(pair.Value));
+            }
         }
     }
 }

@@ -48,16 +48,16 @@ namespace SonicRealms.Level.Platforms
 
         // The platform can be collided with if the player is checking its bottom side and
         // the result of the check did not stop where it started.
-        public override bool IsSolid(TerrainCastHit hit)
+        public override bool IsSolid(TerrainCastHit data)
         {
             // Check must be coming from player's bottom side and be close to the top
             // of the platform
-            return base.IsSolid(hit) && 
-                hit.Hit.fraction > 0.0f &&
-                   (TopSolid && (hit.Side & ControllerSide.Bottom) > 0) ||
-                   (BottomSolid && (hit.Side & ControllerSide.Top) > 0) ||
-                   (LeftSolid && (hit.Side & ControllerSide.Right) > 0) ||
-                   (RightSolid && (hit.Side & ControllerSide.Left) > 0);
+            return base.IsSolid(data) && 
+                data.Raycast.fraction > 0.0f &&
+                   (TopSolid && (data.Side & ControllerSide.Bottom) > 0) ||
+                   (BottomSolid && (data.Side & ControllerSide.Top) > 0) ||
+                   (LeftSolid && (data.Side & ControllerSide.Right) > 0) ||
+                   (RightSolid && (data.Side & ControllerSide.Left) > 0);
         }
     }
 }

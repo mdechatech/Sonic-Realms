@@ -8,7 +8,7 @@ namespace SonicRealms.Core.Utils.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var tooltip = HedgehogEditorGUIUtility.GetAttribute<TooltipAttribute>(property);
+            var tooltip = RealmsEditorUtility.GetAttribute<TooltipAttribute>(property);
             if (tooltip != null)
             {
                 property.stringValue = EditorGUI.TagField(position, 

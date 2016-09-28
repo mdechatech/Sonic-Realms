@@ -7,7 +7,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// Sets camera boundaries.
     /// </summary>
-    public class SetCameraBounds : ReactiveObject
+    public class SetCameraBounds : ReactiveEffect
     {
         /// <summary>
         /// The minimum (bottom-left corner) position of the boundaries.

@@ -71,7 +71,7 @@ namespace SonicRealms.UI
 
         public virtual void Play()
         {
-            if (!this) return;
+            if (!this || State == TransitionState.Idle) return;
             gameObject.SetActive(true);
             IsPlaying = true;
         }

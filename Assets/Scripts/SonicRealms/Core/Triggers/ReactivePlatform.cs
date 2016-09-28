@@ -1,4 +1,4 @@
-﻿using SonicRealms.Core.Actors;
+﻿using System;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -7,69 +7,55 @@ namespace SonicRealms.Core.Triggers
     /// <summary>
     /// Helper class for creating platforms that react to controller events.
     /// </summary>
-    [AddComponentMenu("")]
     [RequireComponent(typeof(PlatformTrigger))]
-    public class ReactivePlatform : BaseReactive
+    public abstract class ReactivePlatform : BaseReactive
     {
         [HideInInspector]
         public PlatformTrigger PlatformTrigger;
 
         protected bool RegisteredEvents;
 
-        /// <summary>
-        /// Name of an Animator trigger on the player to set when it collides with the platform.
-        /// </summary>
-        [Foldout("Player Animation")]
-        [Tooltip("Name of an Animator trigger on the player to set when it collides with the platform.")]
-        public string CollidingTrigger;
-
-        /// <summary>
-        /// Name of an Animator bool on the player to set to true while it's colliding with the platform.
-        /// </summary>
-        [Foldout("Player Animation")]
-        [Tooltip("Name of an Animator bool on the player to set to true while it's colliding with the platform.")]
-        public string CollidingBool;
-
-        /// <summary>
-        /// Name of an Animator trigger on the player to set when it stands on the platform.
-        /// </summary>
-        [Foldout("Player Animation")]
-        [Tooltip("Name of an Animator trigger on the player to set when it stands on the platform.")]
-        public string SurfaceTrigger;
-
-        /// <summary>
-        /// Name of an Animator bool on the player to set to true while it's on the platform.
-        /// </summary>
-        [Foldout("Player Animation")]
-        [Tooltip("Name of an Animator bool on the player to set to true while it's on the platform.")]
-        public string SurfaceBool;
-
-        public override void Reset()
+        #region Helper Functions
+        protected void SetPlayerAnimatorParameters(TerrainCastHit hit, Action<TerrainCastHit> setter)
         {
-            base.Reset();
-            CollidingTrigger = CollidingBool = SurfaceTrigger = SurfaceBool = "";
-        }
+            var controller = hit.Controller;
+            if (controller.Animator == null || setter == null)
+                return;
 
+            var logWarnings = controller.Animator.logWarnings;
+            controller.Animator.logWarnings = false;
+
+            setter(hit);
+
+            controller.Animator.logWarnings = logWarnings;
+        }
+        #endregion
+
+        #region Lifecycle Functions
         public override void Awake()
         {
             base.Awake();
+
             PlatformTrigger = GetComponent<PlatformTrigger>() ?? gameObject.AddComponent<PlatformTrigger>();
             RegisteredEvents = false;
         }
 
         public virtual void OnEnable()
         {
-            if (PlatformTrigger != null && PlatformTrigger.SurfaceRules != null) Start();
+            if (PlatformTrigger != null && PlatformTrigger.SurfaceRules != null)
+                Start();
         }
 
         public override void Start()
         {
             base.Start();
 
-            if (RegisteredEvents) return;
+            if (RegisteredEvents)
+                return;
 
             // Add listeners to the platform trigger
-            PlatformTrigger.CollisionRules.Add(IsSolid);
+            PlatformTrigger.SolidityRules.Add(IsSolid);
+            PlatformTrigger.OnPreCollide.AddListener(OnPreCollide);
             PlatformTrigger.OnPlatformEnter.AddListener(NotifyPlatformEnter);
             PlatformTrigger.OnPlatformStay.AddListener(NotifyPlatformStay);
             PlatformTrigger.OnPlatformExit.AddListener(NotifyPlatformExit);
@@ -87,7 +73,8 @@ namespace SonicRealms.Core.Triggers
             if (!RegisteredEvents) return;
 
             // Remove listeners from the platform trigger
-            PlatformTrigger.CollisionRules.Remove(IsSolid);
+            PlatformTrigger.SolidityRules.Remove(IsSolid);
+            PlatformTrigger.OnPreCollide.RemoveListener(OnPreCollide);
             PlatformTrigger.OnPlatformEnter.RemoveListener(NotifyPlatformEnter);
             PlatformTrigger.OnPlatformStay.RemoveListener(NotifyPlatformStay);
             PlatformTrigger.OnPlatformExit.RemoveListener(NotifyPlatformExit);
@@ -100,201 +87,129 @@ namespace SonicRealms.Core.Triggers
             RegisteredEvents = false;
         }
 
+        public virtual void OnDestroy()
+        {
+            foreach (var contacts in PlatformTrigger.CurrentSurfaceContacts)
+                NotifySurfaceExit(new SurfaceCollision(contacts.Value));
+
+            foreach (var contacts in PlatformTrigger.CurrentPlatformContacts)
+                NotifyPlatformExit(new PlatformCollision(contacts.Value));
+        }
+        #endregion
+
+        #region Modifier Functions
         /// <summary>
         /// Default surface rule. Uses the trigger's default surface rule.
         /// </summary>
-        public virtual bool IsOnSurface(TerrainCastHit hit)
-        {
-            return PlatformTrigger.DefaultSurfaceRule(hit);
-        }
-
-        /// <summary>
-        /// Default collision rule. Always solid to all collsions by default.
-        /// </summary>
-        public virtual bool IsSolid(TerrainCastHit hit)
+        public virtual bool IsOnSurface(SurfaceCollision.Contact contact)
         {
             return true;
         }
 
-        // Override these methods to react when a controller collides with the platform.
-        public virtual void OnPlatformEnter(TerrainCastHit hit)
+        // Override this to change when a terrain cast should register with the platform
+        // Return false if terrain casts should ignore this platform
+        public virtual bool IsSolid(TerrainCastHit data)
         {
-
+            return true;
         }
 
-        public virtual void OnPlatformStay(TerrainCastHit hit)
+        // Override this to react when a controller is about to collide with the platform
+        public virtual void OnPreCollide(PlatformCollision.Contact contact)
         {
-
-        }
-
-        public virtual void OnPlatformExit(TerrainCastHit hit)
-        {
-
-        }
-        // Override these methods to react when a controller stands on the platform.
-        public virtual void OnSurfaceEnter(TerrainCastHit hit)
-        {
-            
-        }
-
-        public virtual void OnSurfaceStay(TerrainCastHit hit)
-        {
-            
-        }
-
-        public virtual void OnSurfaceExit(TerrainCastHit hit)
-        {
-            
-        }
-        #region Notify Methods
-        public void NotifyPlatformEnter(TerrainCastHit hit)
-        {
-            OnPlatformEnter(hit);
-            hit.Controller.NotifyPlatformEnter(this);
-
-            var controller = hit.Controller;
-            if (controller.Animator == null)
-                return;
-
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
-
-            SetPlatformEnterParameters(controller);
-
-            controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetPlatformEnterParameters(HedgehogController controller)
-        {
-            if (!string.IsNullOrEmpty(CollidingTrigger))
-                controller.Animator.SetTrigger(CollidingTrigger);
-
-            if (!string.IsNullOrEmpty(CollidingBool))
-                controller.Animator.SetBool(CollidingBool, true);
-        }
-
-        public void NotifyPlatformStay(TerrainCastHit hit)
-        {
-            OnPlatformStay(hit);
-            var controller = hit.Controller;
-            if (controller.Animator == null)
-                return;
-
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
-
-            SetPlatformStayParameters(controller);
-
-            controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetPlatformStayParameters(HedgehogController controller)
-        {
-            if(!string.IsNullOrEmpty(CollidingBool))
-                controller.Animator.SetBool(CollidingBool, true);
-        }
-
-        public void NotifyPlatformExit(TerrainCastHit hit)
-        {
-            OnPlatformExit(hit);
-            hit.Controller.NotifyPlatformExit(this);
-
-            var controller = hit.Controller;
-            if (controller.Animator == null) return;
-
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
-
-            SetPlatformExitParameters(controller);
-
-            controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetPlatformExitParameters(HedgehogController controller)
-        {
-            if (!string.IsNullOrEmpty(CollidingBool))
-                controller.Animator.SetBool(CollidingBool, false);
-        }
-
-        public void NotifySurfaceEnter(TerrainCastHit hit)
-        {
-            OnSurfaceEnter(hit);
-            hit.Controller.NotifySurfaceEnter(this);
-
-            var controller = hit.Controller;
-            if (controller.Animator == null)
-                return;
-
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
-
-            SetSurfaceEnterParameters(controller);
-
-            controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetSurfaceEnterParameters(HedgehogController controller)
-        {
-            if (!string.IsNullOrEmpty(SurfaceTrigger))
-                controller.Animator.SetTrigger(SurfaceTrigger);
-
-            if (!string.IsNullOrEmpty(SurfaceBool))
-                controller.Animator.SetBool(SurfaceBool, true);
-        }
-
-        public void NotifySurfaceStay(TerrainCastHit hit)
-        {
-            OnSurfaceStay(hit);
-
-            var controller = hit.Controller;
-            if (controller.Animator == null)
-                return;
-
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
-
-            SetSurfaceStayParameters(controller);
-
-            controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetSurfaceStayParameters(HedgehogController controller)
-        {
-            if(!string.IsNullOrEmpty(SurfaceBool))
-                controller.Animator.SetBool(SurfaceBool, true);
-        }
-
-        public void NotifySurfaceExit(TerrainCastHit hit)
-        {
-            OnSurfaceExit(hit);
-            hit.Controller.NotifySurfaceExit(this);
-
-            var controller = hit.Controller;
-            if (controller.Animator == null)
-                return;
-
-            var logWarnings = controller.Animator.logWarnings;
-            controller.Animator.logWarnings = false;
-
-            SetSurfaceExitParameters(controller);
-
-            controller.Animator.logWarnings = logWarnings;
-        }
-
-        protected virtual void SetSurfaceExitParameters(HedgehogController controller)
-        {
-            if (!string.IsNullOrEmpty(SurfaceBool))
-                controller.Animator.SetBool(SurfaceBool, false);
+            // Call contact.Controller.IgnoreThisCollision() here to prevent the collision from happening
         }
         #endregion
 
-        public virtual void OnDestroy()
-        {
-            foreach (var hit in PlatformTrigger.SurfaceCollisions)
-                NotifySurfaceExit(hit);
+        #region Platform Collision Functions
+        // Override these methods to react when a controller collides with the platform
 
-            foreach (var hit in PlatformTrigger.Collisions)
-                NotifyPlatformExit(hit);
+        /// <summary>
+        /// Override this to react when a player starts colliding with the platform.
+        /// </summary>
+        public virtual void OnPlatformEnter(PlatformCollision collision)
+        {
+
         }
+
+        /// <summary>
+        /// Override this to react on every FixedUpdate for each player colliding with the player.
+        /// </summary>
+        public virtual void OnPlatformStay(PlatformCollision collision)
+        {
+
+        }
+
+        /// <summary>
+        /// Override this to react when a player stops colliding with the platform.
+        /// </summary>
+        public virtual void OnPlatformExit(PlatformCollision collision)
+        {
+
+        }
+        #endregion
+        #region Platform Surface Functions
+        // Override these methods to react when a controller stands on the platform
+
+        /// <summary>
+        /// Override this to react when a player starts standing on the platform.
+        /// </summary>
+        public virtual void OnSurfaceEnter(SurfaceCollision collision)
+        {
+            
+        }
+
+        /// <summary>
+        /// Override this to react on every FixedUpdate for each player on the platform.
+        /// </summary>
+        public virtual void OnSurfaceStay(SurfaceCollision collision)
+        {
+            
+        }
+
+        /// <summary>
+        /// Override this to react when a player stops standing on the platform.
+        /// </summary>
+        public virtual void OnSurfaceExit(SurfaceCollision collision)
+        {
+            
+        }
+        #endregion
+
+        #region Notify Functions
+        public void NotifyPlatformEnter(PlatformCollision collision)
+        {
+            OnPlatformEnter(collision);
+            collision.Controller.NotifyPlatformEnter(this);
+        }
+
+        public void NotifyPlatformStay(PlatformCollision collision)
+        {
+            OnPlatformStay(collision);
+        }
+
+        public void NotifyPlatformExit(PlatformCollision collision)
+        {
+            OnPlatformExit(collision);
+            collision.Controller.NotifyPlatformExit(this);
+        }
+
+
+        public void NotifySurfaceEnter(SurfaceCollision info)
+        {
+            OnSurfaceEnter(info);
+            info.Controller.NotifySurfaceEnter(this);
+        }
+
+        public void NotifySurfaceStay(SurfaceCollision info)
+        {
+            OnSurfaceStay(info);
+        }
+
+        public void NotifySurfaceExit(SurfaceCollision info)
+        {
+            OnSurfaceExit(info);
+            info.Controller.NotifySurfaceExit(this);
+        }
+        #endregion
     }
 }

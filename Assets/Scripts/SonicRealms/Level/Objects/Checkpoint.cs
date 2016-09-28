@@ -5,8 +5,11 @@ using SonicRealms.Core.Utils;
 
 namespace SonicRealms.Level.Objects
 {
-    public class Checkpoint : ReactiveObject
+    public class Checkpoint : ReactiveEffect
     {
+        [Foldout("Animation")]
+        public Animator Animator;
+
         /// <summary>
         /// Name of an Animator trigger set when the checkpoint is immediately activated.
         /// </summary>
@@ -17,9 +20,18 @@ namespace SonicRealms.Level.Objects
         [Foldout("Debug")]
         public bool ActivatedImmediately;
 
+        public override void Reset()
+        {
+            base.Reset();
+
+            Animator = GetComponent<Animator>();
+        }
+
         public override void Awake()
         {
             base.Awake();
+
+            Animator = Animator ?? GetComponent<Animator>();
             ActivateImmediateTriggerHash = Animator.StringToHash(ActivateImmediateTrigger);
         }
 
@@ -37,7 +49,7 @@ namespace SonicRealms.Level.Objects
                 }
             }
 
-            ObjectTrigger.enabled = false;
+            EffectTrigger.enabled = false;
         }
 
         /// <summary>
@@ -46,8 +58,9 @@ namespace SonicRealms.Level.Objects
         public virtual void ActivateImmediate()
         {
             ActivatedImmediately = true;
-            ObjectTrigger.enabled = false;
-            if (Animator != null && ActivateImmediateTriggerHash != 0)
+            EffectTrigger.enabled = false;
+
+            if (Animator && ActivateImmediateTriggerHash != 0)
                 Animator.SetTrigger(ActivateImmediateTriggerHash);
         }
     }

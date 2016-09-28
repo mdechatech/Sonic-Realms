@@ -10,7 +10,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// Gets the controller to perform a move when activated.
     /// </summary>
-    public class PerformMove : ReactiveObject
+    public class PerformMove : ReactiveEffect
     {
         /// <summary>
         /// The name of the the move, case-insensitive, NO SPACES.

@@ -196,7 +196,12 @@ namespace SonicRealms.Core.Actors
 
         public override void TakeDamage(float damage, Transform source)
         {
-            if (Invincible) return;
+            if (Invincible)
+                return;
+
+            // Start our invincibility frames
+            HurtInvincibilityTimer = HurtInvinciblilityTime;
+            HurtInvincible = Invincible = true;
 
             // Check if the damage source is a spike (to play different sounds in response)
             var spikes = source.CompareTag(SpikeTag);
@@ -205,10 +210,6 @@ namespace SonicRealms.Core.Actors
             HurtReboundMove.ThreatPosition = source ? (Vector2)source.position : default(Vector2);
             HurtReboundMove.OnEnd.AddListener(OnHurtReboundEnd);
             HurtReboundMove.Perform();
-            
-            // Start our invincibility frames
-            HurtInvincibilityTimer = HurtInvinciblilityTime;
-            HurtInvincible = Invincible = true;
 
             // See if the player had a shield
             var shield = Controller.GetPowerup<Shield>();

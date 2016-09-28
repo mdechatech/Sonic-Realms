@@ -30,20 +30,20 @@ namespace SonicRealms.Core.Triggers
             return Attacks.Contains(hitbox);
         }
 
-        public override bool IsInside(Hitbox hitbox)
+        public override bool CanTouch(AreaCollision.Contact contact)
         {
-            return hitbox.IsAttackHitbox;
+            return contact.Hitbox.IsAttackHitbox;
         }
 
-        public override void OnAreaEnter(Hitbox hitbox)
+        public override void OnAreaEnter(AreaCollision collision)
         {
-            Attacks.Add(hitbox);
-            OnAttack.Invoke(hitbox);
+            Attacks.Add(collision.Latest.Hitbox);
+            OnAttack.Invoke(collision.Latest.Hitbox);
         }
 
-        public override void OnAreaExit(Hitbox hitbox)
+        public override void OnAreaExit(AreaCollision collision)
         {
-            Attacks.Remove(hitbox);
+            Attacks.Remove(collision.Latest.Hitbox);
         }
     }
 }

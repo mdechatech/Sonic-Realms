@@ -105,6 +105,11 @@ namespace SonicRealms.Core.Moves
             return Remove(Powerups.FirstOrDefault(powerup => powerup is TPowerup));
         }
 
+        public Powerup Get(string typeName)
+        {
+            return Powerups.FirstOrDefault(powerup => powerup.GetType().Name == typeName);
+        }
+
         public TPowerup Get<TPowerup>() where TPowerup : Powerup
         {
             return Powerups.FirstOrDefault(powerup => powerup is TPowerup) as TPowerup;

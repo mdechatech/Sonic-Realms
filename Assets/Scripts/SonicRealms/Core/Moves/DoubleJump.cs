@@ -27,14 +27,24 @@ namespace SonicRealms.Core.Moves
             InputName = Jump.ActivateButton;
 
             Roll = Manager.Get<Roll>();
-            if (Roll == null) return;
-            Roll.OnEnd.AddListener(OnRollEnd);
+
+            if (Roll != null)
+                Roll.OnEnd.AddListener(OnRollEnd);
+        }
+
+        public override void OnManagerRemove()
+        {
+            Jump.OnActive.RemoveListener(OnJump);
+
+            if (Roll != null)
+                Roll.OnEnd.RemoveListener(OnRollEnd);
         }
 
         protected void OnRollEnd()
         {
             // Becomes unusable if our roll ends, caused by some outside force such as springs
-            if (!Controller.Grounded) Used = true;
+            if (!Controller.Grounded)
+                Used = true;
         }
 
         protected void OnJump()

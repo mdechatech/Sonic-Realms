@@ -10,5 +10,10 @@
         {
             return impactResult.ShouldAttach;
         }
+
+        public override string ToString()
+        {
+            return string.Format("GroundSpeed: {0}, ShouldAttach: {1}, SurfaceAngle: {2}", GroundSpeed, ShouldAttach, SurfaceAngle);
+        }
     }
 }

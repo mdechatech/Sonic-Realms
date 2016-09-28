@@ -15,144 +15,110 @@ Material:
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-      data:
-        first:
-          name: _Threshold
-        second: 4.99999999e-07
+    - first:
+        name: _Threshold
+      second: 0.1
     m_Colors:
-      data:
-        first:
-          name: _ColorFrom1
-        second: {r: .933333397, g: .933333397, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom2
-        second: {r: .533333361, g: .533333361, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom3
-        second: {r: .266666681, g: .266666681, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom4
-        second: {r: .533333361, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom5
-        second: {r: .933333397, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom6
-        second: {r: 0, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom7
-        second: {r: .266666681, g: .266666681, b: .266666681, a: 1}
-      data:
-        first:
-          name: _ColorFrom8
-        second: {r: .533333361, g: .533333361, b: .533333361, a: 1}
-      data:
-        first:
-          name: _ColorFrom9
-        second: {r: .933333397, g: .933333397, b: .933333397, a: 1}
-      data:
-        first:
-          name: _ColorFrom10
-        second: {r: .266666681, g: .266666681, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom11
-        second: {r: .533333361, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom12
-        second: {r: .933333397, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom13
-        second: {r: 0, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorFrom14
-        second: {r: .266666681, g: .266666681, b: .266666681, a: 1}
-      data:
-        first:
-          name: _ColorFrom15
-        second: {r: .533333361, g: .533333361, b: .533333361, a: 1}
-      data:
-        first:
-          name: _ColorFrom16
-        second: {r: .933333397, g: .933333397, b: .933333397, a: 1}
-      data:
-        first:
-          name: _ColorTo1
-        second: {r: .533333361, g: .533333361, b: .533333361, a: 1}
-      data:
-        first:
-          name: _ColorTo2
-        second: {r: .933333397, g: .933333397, b: .933333397, a: 1}
-      data:
-        first:
-          name: _ColorTo3
-        second: {r: .933333397, g: .933333397, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorTo4
-        second: {r: .533333361, g: .533333361, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorTo5
-        second: {r: .266666681, g: .266666681, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorTo6
-        second: {r: .533333361, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorTo7
-        second: {r: .933333397, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorTo8
-        second: {r: 0, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _ColorTo9
-        second: {r: .266666681, g: .266666681, b: .266666681, a: 1}
-      data:
-        first:
-          name: _ColorTo10
-        second: {r: .933333397, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorTo11
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorTo12
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorTo13
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorTo14
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorTo15
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _ColorTo16
-        second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorFrom1
+      second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
+    - first:
+        name: _ColorFrom10
+      second: {r: 0.26666668, g: 0.26666668, b: 0, a: 1}
+    - first:
+        name: _ColorFrom11
+      second: {r: 0.53333336, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorFrom12
+      second: {r: 0.9333334, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorFrom13
+      second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorFrom14
+      second: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
+    - first:
+        name: _ColorFrom15
+      second: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+    - first:
+        name: _ColorFrom16
+      second: {r: 0.9333334, g: 0.9333334, b: 0.9333334, a: 1}
+    - first:
+        name: _ColorFrom2
+      second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
+    - first:
+        name: _ColorFrom3
+      second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
+    - first:
+        name: _ColorFrom4
+      second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
+    - first:
+        name: _ColorFrom5
+      second: {r: 0.9333334, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorFrom6
+      second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorFrom7
+      second: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
+    - first:
+        name: _ColorFrom8
+      second: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+    - first:
+        name: _ColorFrom9
+      second: {r: 0.9333334, g: 0.9333334, b: 0.9333334, a: 1}
+    - first:
+        name: _ColorTo1
+      second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
+    - first:
+        name: _ColorTo10
+      second: {r: 0.9333334, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo11
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo12
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo13
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo14
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo15
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo16
+      second: {r: 0, g: 0, b: 0, a: 0}
+    - first:
+        name: _ColorTo2
+      second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
+    - first:
+        name: _ColorTo3
+      second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
+    - first:
+        name: _ColorTo4
+      second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
+    - first:
+        name: _ColorTo5
+      second: {r: 0.26666668, g: 0.26666668, b: 0, a: 1}
+    - first:
+        name: _ColorTo6
+      second: {r: 0.53333336, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorTo7
+      second: {r: 0.9333334, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorTo8
+      second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _ColorTo9
+      second: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}

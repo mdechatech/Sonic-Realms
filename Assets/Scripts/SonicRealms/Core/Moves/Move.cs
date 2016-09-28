@@ -57,9 +57,9 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// The move's layer. A layer only has one active move at any time.
         /// </summary>
-        public virtual MoveLayer Layer
+        public virtual int Layer
         {
-            get { return MoveLayer.None; }
+            get { return (int)MoveLayer.None; }
         }
 
         /// <summary>
@@ -339,8 +339,11 @@ namespace SonicRealms.Core.Moves
 
             Manager = manager;
             PowerupManager = manager.GetComponent<PowerupManager>();
+
             Controller = manager.Controller;
-            if (!Animator && Controller) Animator = Controller.Animator;
+
+            if (!Animator && Controller)
+                Animator = Controller.Animator;
 
             // Pretend the move is available to see if it wants to be performed on init
             CurrentState = State.Available;

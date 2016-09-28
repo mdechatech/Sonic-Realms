@@ -38,8 +38,16 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Whether a jump happened. If false, the controller didn't leave the ground by jumping.
         /// </summary>
+        [DebugFoldout]
         [Tooltip("Whether a jump happened. If false, the controller didn't leave the ground by jumping.")]
         public bool Used;
+
+        /// <summary>
+        /// Whether the player has nothing blocking its head. The player cannot jump otherwise.
+        /// </summary>
+        [DebugFoldout]
+        [Tooltip("Whether the player has nothing blocking its head. The player cannot jump otherwise.")]
+        public bool HasClearance;
 
         private Transform ClearanceSensorLeft;
         private Transform ClearanceSensorRight;
@@ -49,9 +57,9 @@ namespace SonicRealms.Core.Moves
             get { return Input.GetButton(ActivateButton); }
         }
 
-        public override MoveLayer Layer
+        public override int Layer
         {
-            get { return MoveLayer.Action; }
+            get { return (int)MoveLayer.Action; }
         }
 
         public override bool Available
@@ -62,8 +70,7 @@ namespace SonicRealms.Core.Moves
 
                 return Controller.Grounded &&
                        (currentAction == null || currentAction is LookUp || currentAction is Push ||
-                        currentAction is Skid) &&
-                       HasClearance();
+                        currentAction is Skid) && HasClearance;
             }
         }
 
@@ -88,17 +95,27 @@ namespace SonicRealms.Core.Moves
             ReleaseSpeed = 2.4f;
         }
 
-        public override void Awake()
+        public override void OnManagerAdd()
         {
-            base.Awake();
-            Used = false;
-        }
-
-        public override void Start()
-        {
-            base.Start();
             CreateClearanceSensors();
             Controller.OnAttach.AddListener(OnAttach);
+            Controller.AddCommandBuffer(UpdateClearance, HedgehogController.BufferEvent.AfterCollisions);
+        }
+
+        protected void UpdateClearance(HedgehogController controller)
+        {
+            HasClearance = CheckClearance();
+        }
+
+        public bool CheckClearance()
+        {
+            return !Controller.TerrainCast(ClearanceSensorLeft.position, ClearanceSensorRight.position, ControllerSide.Top);
+        }
+
+        public void OnAttach()
+        {
+            Used = false;
+            End();
         }
 
         protected void CreateClearanceSensors()
@@ -117,42 +134,21 @@ namespace SonicRealms.Core.Moves
             ClearanceSensorRight.transform.position = Controller.Sensors.TopRightStart.position + offset;
         }
 
-        public bool HasClearance()
-        {
-            return !Controller.TerrainCast(ClearanceSensorLeft.position, ClearanceSensorRight.position, ControllerSide.Top);
-        }
-
-        public void OnDestroy()
-        {
-            Destroy(ClearanceSensorRight.gameObject);
-            Destroy(ClearanceSensorLeft.gameObject);
-        }
-
-        public void OnAttach()
-        {
-            Used = false;
-            End();
-        }
-
         public override void OnActiveEnter(State previousState)
         {
             Used = true;
 
             Controller.Detach();
-            Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
+            Controller.Velocity += DMath.UnitVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
 
             var roll = Manager.Get<Roll>();
             if (roll == null) return;
 
             if (roll.Active)
-            {
                 // Disable air control if jumping while rolling
                 Manager.End<AirControl>();
-            }
             else
-            {
                 Manager.Perform<Roll>(true, true);
-            }
         }
 
         public override void OnActiveExit()
@@ -169,6 +165,18 @@ namespace SonicRealms.Core.Moves
             {
                 Controller.RelativeVelocity = new Vector2(Controller.RelativeVelocity.x, ReleaseSpeed);
             }
+        }
+
+        public override void OnManagerRemove()
+        {
+            Controller.OnAttach.RemoveListener(OnAttach);
+            Controller.RemoveCommandBuffer(UpdateClearance, HedgehogController.BufferEvent.AfterCollisions);
+        }
+
+        public void OnDestroy()
+        {
+            if (ClearanceSensorRight) Destroy(ClearanceSensorRight.gameObject);
+            if (ClearanceSensorLeft) Destroy(ClearanceSensorLeft.gameObject);
         }
     }
 }

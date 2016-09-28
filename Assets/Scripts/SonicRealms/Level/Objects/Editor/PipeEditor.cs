@@ -17,13 +17,13 @@ namespace SonicRealms.Level.Objects.Editor
             }
             else
             {
-                HedgehogEditorGUIUtility.DrawProperties(serializedObject, "TravelSpeed", "ExitSpeed",
+                RealmsEditorUtility.DrawProperties(serializedObject, "TravelSpeed", "ExitSpeed",
                     "EntryPoint", "Path", "DisablePathCollider", "NeverUpdate");
 
                 var neverUpdate = serializedObject.FindProperty("NeverUpdate");
                 if (!neverUpdate.boolValue)
                 {
-                    HedgehogEditorGUIUtility.DrawProperties(serializedObject, "AlwaysUpdate");
+                    RealmsEditorUtility.DrawProperties(serializedObject, "AlwaysUpdate");
                 }
             }
 

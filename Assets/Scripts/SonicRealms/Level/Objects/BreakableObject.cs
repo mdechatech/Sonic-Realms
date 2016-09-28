@@ -24,21 +24,25 @@ namespace SonicRealms.Level.Objects
             BounceSpeed = 1.8f;
         }
 
-        public override void OnPlatformEnter(TerrainCastHit hit)
+        public override void OnPreCollide(PlatformCollision.Contact contact)
         {
             // Must be hit from the air
-            if (hit.Controller == null || hit.Controller.Grounded) return;
+            if (contact.Controller == null || contact.Controller.Grounded)
+                return;
 
             // Must be hit from the player's bottom side
-            if (hit.Side != ControllerSide.Bottom || hit.Controller.RelativeVelocity.y > 0.0f) return;
+            if (contact.HitData.Side != ControllerSide.Bottom || contact.Controller.RelativeVelocity.y > 0.0f)
+                return;
 
             // Player must be in a roll
-            if (!hit.Controller.IsPerforming<Roll>()) return;
+            if (!contact.Controller.IsPerforming<Roll>())
+                return;
 
-            hit.Controller.IgnoreThisCollision();
-            hit.Controller.RelativeVelocity = new Vector2(hit.Controller.RelativeVelocity.x, BounceSpeed);
-            ActivateObject(hit.Controller);
+            contact.Controller.RelativeVelocity = new Vector2(contact.Controller.RelativeVelocity.x, BounceSpeed);
+            ActivateEffectTrigger(contact.Controller);
             Destroy(gameObject);
+            
+            contact.Controller.IgnoreThisCollision();
         }
     }
 }

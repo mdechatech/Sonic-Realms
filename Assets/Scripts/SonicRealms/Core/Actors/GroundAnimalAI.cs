@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Triggers;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Actors
@@ -71,15 +72,15 @@ namespace SonicRealms.Core.Actors
         {
             Controller.OnCollide.AddListener(OnCollide);
             Controller.RelativeVelocity = InitialSpeed;
-            Controller.FacingForward = FacingRight;
+            Controller.IsFacingForward = FacingRight;
 
             if (Animator != null && !string.IsNullOrEmpty(HitGroundTrigger))
                 HitGroundTriggerHash = Animator.StringToHash(HitGroundTrigger);
         }
 
-        public void OnCollide(TerrainCastHit hit)
+        public void OnCollide(PlatformCollision.Contact contact)
         {
-            if (hit.Side != ControllerSide.Bottom) return;
+            if (contact.HitData.Side != ControllerSide.Bottom) return;
 
             if (!HitGround)
             {
@@ -88,8 +89,8 @@ namespace SonicRealms.Core.Actors
             }
 
             // When we hit the ground, ignore it and jump right back up
-            Controller.IgnoreThisCollision();
-            Controller.FacingForward = FacingRight;
+            Controller.IsFacingForward = FacingRight;
+            Controller.Detach();
             Controller.RelativeVelocity = new Vector2(RunSpeed * (FacingRight ? 1f : -1f), JumpSpeed);
         }
     }

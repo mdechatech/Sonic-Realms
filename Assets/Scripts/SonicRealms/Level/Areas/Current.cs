@@ -58,9 +58,9 @@ namespace SonicRealms.Level.Areas
             AccountForFriction = true;
         }
 
-        public override void OnAreaStay(Hitbox hitbox)
+        public override void OnAreaStay(AreaCollision collision)
         {
-            var controller = hitbox.Controller;
+            var controller = collision.Controller;
 
             if(PullOffGround && controller.Grounded)
                 controller.Detach();

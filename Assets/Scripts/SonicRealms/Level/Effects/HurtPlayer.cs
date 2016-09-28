@@ -6,7 +6,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// Hurts the player when activated.
     /// </summary>
-    public class HurtPlayer : ReactiveObject
+    public class HurtPlayer : ReactiveEffect
     {
         public override void OnActivatorEnter(HedgehogController controller)
         {

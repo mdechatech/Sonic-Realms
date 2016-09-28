@@ -1,13 +1,18 @@
-﻿using SonicRealms.Core.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SonicRealms.Core.Triggers
 {
     /// <summary>
-    /// Generic platform that activates the object trigger when a controller collides with it.
+    /// Generic platform that activates the effect trigger when a controller collides with it.
     /// </summary>
     public class ActivatePlatform : ReactivePlatform
     {
+        /// <summary>
+        /// Whether to activate the platform right before it's collided with.
+        /// </summary>
+        [Tooltip("Whether to activate the platform right before it's collided with.")]
+        public bool WhenPreColliding;
+
         /// <summary>
         /// Whether to activate the platform when collided with.
         /// </summary>
@@ -20,117 +25,150 @@ namespace SonicRealms.Core.Triggers
         [Tooltip("Whether to activate the platform when a controller stands on it.")]
         public bool WhenOnSurface;
 
-        /// <summary>
-        /// Whether to activate only when the controller hits the surface at a certain angle. If
-        /// true, activation happens only from SurfaceAngleMin to SurfaceAngleMax, traveling
-        /// counter-clockwise.
-        /// </summary>
-        [Tooltip("Whether to activate only when the controller hits the surface at a certain angle. " +
-                 "If true, activation happens only from SurfaceAngleMin to SurfaceAngleMax, traveling " +
-                 "counter-clockwise.")]
-        public bool LimitAngle;
+        public bool LimitGrounded;
+        public GroundedLimiter GroundedLimiter;
 
-        /// <summary>
-        /// Whether to add the object's rotation when checking angle.
-        /// </summary>
-        [Tooltip("Whether to add the object's rotation when checking angle.")]
-        public bool RelativeToRotation;
+        public bool LimitVelocity;
+        public VelocityLimiter VelocityLimiter;
 
-        /// <summary>
-        /// The minimum surface angle at which the platform activates when it is hit, in degrees.
-        /// </summary>
-        [Tooltip("The minimum surface angle at which the platform activates when hit, in degrees.")]
-        public float SurfaceAngleMin;
+        public bool LimitAirSpeed;
+        public AirSpeedLimiter AirSpeedLimiter;
 
-        /// <summary>
-        /// The maximum surface angle at which the platform activates when it is hit, in degrees.
-        /// </summary>
-        [Tooltip("The maximum surface angle at which the platform activates when it is hit, in degrees.")]
-        public float SurfaceAngleMax;
+        public bool LimitGroundSpeed;
+        public GroundSpeedLimiter GroundSpeedLimiter;
+
+        public bool LimitSurfaceAngle;
+        public SurfaceAngleLimiter SurfaceAngleLimiter;
+
+        public bool LimitMoves;
+        public MovesLimiter MovesLimiter;
+
+        public bool LimitPowerups;
+        public PowerupsLimiter PowerupsLimiter;
 
         public override void Reset()
         {
             base.Reset();
-            if (!GetComponent<ObjectTrigger>()) gameObject.AddComponent<ObjectTrigger>();
+
+            if (!GetComponent<EffectTrigger>())
+                gameObject.AddComponent<EffectTrigger>();
 
             WhenColliding = false;
             WhenOnSurface = true;
-
-            LimitAngle = false;
-            RelativeToRotation = true;
-            SurfaceAngleMin = -45.0f;
-            SurfaceAngleMax = 45.0f;
         }
 
-        public override void OnPlatformEnter(TerrainCastHit hit)
+        public override void OnPreCollide(PlatformCollision.Contact contact)
         {
-            if (!WhenColliding) return;
-            if (!Check(hit)) return;
-
-            ActivateObject(hit.Controller);
+            if (WhenPreColliding && Check(new PlatformCollision(new[] {contact})))
+                BlinkEffectTrigger(contact.Controller);
         }
 
-        public override void OnPlatformStay(TerrainCastHit hit)
+        public override void OnPlatformEnter(PlatformCollision collision)
         {
-            if (!WhenColliding) return;
-
-            if (Check(hit))
-            {
-                ActivateObject(hit.Controller);
+            if (!WhenColliding)
                 return;
-            }
 
-            DeactivateObject(hit.Controller);
+            if (Check(collision))
+                ActivateEffectTrigger(collision.Controller);
         }
 
-        public override void OnPlatformExit(TerrainCastHit hit)
+        public override void OnPlatformStay(PlatformCollision collision)
         {
-            if (!WhenColliding) return;
-            DeactivateObject(hit.Controller);
+            if (!WhenColliding)
+                return;
+
+            if (Check(collision))
+                ActivateEffectTrigger(collision.Controller);
+            else
+                DeactivateEffectTrigger(collision.Controller);
         }
 
-        /// <summary>
-        /// The test used when LimitAngle is true to see if the platform should be activated.
-        /// </summary>
-        /// <param name="angle">The angle, in degrees.</param>
-        /// <returns></returns>
-        public bool CheckAngle(float angle)
+        public override void OnPlatformExit(PlatformCollision collision)
         {
-            return DMath.AngleInRange_d(angle - (RelativeToRotation ? transform.eulerAngles.z : 0f)
-                , SurfaceAngleMin, SurfaceAngleMax);
+            if (!WhenColliding)
+                return;
+
+            DeactivateEffectTrigger(collision.Controller);
         }
 
-        public bool Check(TerrainCastHit hit)
+        public bool Check(PlatformCollision collision)
         {
-            return !LimitAngle || CheckAngle(hit.SurfaceAngle*Mathf.Rad2Deg);
+            if (LimitGrounded && !GroundedLimiter.Allows(collision.Controller))
+                return false;
+
+            if (LimitVelocity && !VelocityLimiter.Allows(collision))
+                return false;
+
+            if (LimitAirSpeed && !AirSpeedLimiter.Allows(collision))
+                return false;
+
+            if (LimitGroundSpeed && !GroundSpeedLimiter.Allows(collision))
+                return false;
+
+            if (LimitSurfaceAngle && !SurfaceAngleLimiter.Allows(collision.Latest.HitData))
+                return false;
+
+            if (LimitMoves && !MovesLimiter.Allows(collision.Controller))
+                return false;
+
+            if (LimitPowerups && !PowerupsLimiter.Allows(collision.Controller))
+                return false;
+
+            return true;
         }
 
-        public override void OnSurfaceEnter(TerrainCastHit hit)
-        {
-            if (!WhenOnSurface) return;
-            if (!Check(hit)) return;
-
-            ActivateObject(hit.Controller);
-        }
-
-        public override void OnSurfaceStay(TerrainCastHit hit)
+        public override void OnSurfaceEnter(SurfaceCollision collision)
         {
             if (!WhenOnSurface)
                 return;
 
-            if (Check(hit))
-            {
-                ActivateObject(hit.Controller);
-                return;
-            }
-
-            DeactivateObject(hit.Controller);
+            if(Check(collision))
+                ActivateEffectTrigger(collision.Controller);
         }
 
-        public override void OnSurfaceExit(TerrainCastHit hit)
+        public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            if (!WhenOnSurface) return;
-            DeactivateObject(hit.Controller);
+            if (!WhenOnSurface)
+                return;
+
+            if (Check(collision))
+                ActivateEffectTrigger(collision.Controller);
+            else
+                DeactivateEffectTrigger(collision.Controller);
+        }
+
+        public override void OnSurfaceExit(SurfaceCollision collision)
+        {
+            if (!WhenOnSurface)
+                return;
+
+            DeactivateEffectTrigger(collision.Controller);
+        }
+
+        public bool Check(SurfaceCollision collision)
+        {
+            if (LimitGrounded && !GroundedLimiter.Allows(collision.Controller))
+                return false;
+
+            if (LimitVelocity && !VelocityLimiter.Allows(collision))
+                return false;
+
+            if (LimitAirSpeed && !AirSpeedLimiter.Allows(collision))
+                return false;
+
+            if (LimitGroundSpeed && !GroundSpeedLimiter.Allows(collision))
+                return false;
+
+            if (LimitSurfaceAngle && !SurfaceAngleLimiter.Allows(collision.Latest.HitData))
+                return false;
+
+            if (LimitMoves && !MovesLimiter.Allows(collision.Controller))
+                return false;
+
+            if (LimitPowerups && !PowerupsLimiter.Allows(collision.Controller))
+                return false;
+
+            return true;
         }
     }
 }
