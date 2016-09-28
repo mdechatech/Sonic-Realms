@@ -48,7 +48,7 @@ namespace SonicRealms.Core.Moves
             // End all moves (except for this one)
             Manager.EndAll(move => move != this);
 
-            Controller.IgnoreCollision = true;
+            Controller.DisablePlatformCollisions = true;
             Controller.RelativeVelocity = new Vector2(0.0f, Velocity);
 
             // Become invincible to further damage

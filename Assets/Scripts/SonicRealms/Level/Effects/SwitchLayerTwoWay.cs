@@ -8,7 +8,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// Sets the player's collision layer to one thing if ground speed is negative and another thing if positive.
     /// </summary>
-    public class SwitchLayerTwoWay : ReactiveObject
+    public class SwitchLayerTwoWay : ReactiveEffect
     {
         /// <summary>
         /// What to set the player's collision mask to if its ground speed is negative.

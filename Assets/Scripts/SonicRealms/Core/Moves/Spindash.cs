@@ -20,6 +20,13 @@ namespace SonicRealms.Core.Moves
         public string ReleaseAxis;
 
         /// <summary>
+        /// This hitbox becomes harmful while rolling, allowing the player to kill while rolling.
+        /// </summary>
+        [PhysicsFoldout]
+        [Tooltip("This hitbox becomes harmful while spindashing, allowing the player to kill while spindashing.")]
+        public SonicHitbox Hitbox;
+
+        /// <summary>
         /// The lowest speed possible after releasing, in units per second.
         /// </summary>
         [PhysicsFoldout]
@@ -100,6 +107,7 @@ namespace SonicRealms.Core.Moves
             ChargeButton = "Jump";
             ReleaseAxis = "Vertical";
 
+            Hitbox = Controller.GetComponentInChildren<SonicHitbox>();
             ChargePower = 0.6f;
             MaxChargePower = 2.4f;
             BasePower = 4.8f;
@@ -157,9 +165,14 @@ namespace SonicRealms.Core.Moves
 
             Controller.GroundVelocity = 0;
 
-            if (ChargeAudioSource == null) return;
+            if (ChargeAudioSource == null)
+                return;
+
             ChargeAudioSource.pitch = ChargePitchMin;
             ChargeAudioSource.Play();
+
+            if (Hitbox != null)
+                Hitbox.Harmful = true;
         }
 
         public override void OnActiveUpdate()
@@ -182,6 +195,9 @@ namespace SonicRealms.Core.Moves
 
             if (ChargeAudioSource != null)
                 ChargeAudioSource.Stop();
+
+            if (Hitbox != null && !Controller.IsPerforming<Roll>())
+                Hitbox.Harmful = false;
         }
 
         public void Charge()
@@ -200,12 +216,13 @@ namespace SonicRealms.Core.Moves
 
         public void Finish()
         {
-            if (Controller.FacingForward)
+            if (Controller.IsFacingForward)
                 Controller.GroundVelocity += BasePower + CurrentChargePower;
             else
                 Controller.GroundVelocity -= BasePower + CurrentChargePower;
 
             Manager.Perform<Roll>(true, true);
+
             End();
         }
     }

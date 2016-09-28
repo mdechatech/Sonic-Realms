@@ -24,6 +24,9 @@ namespace SonicRealms.Level.Areas
         [SerializeField]
         public float Buoyancy;
 
+        [Foldout("Animation")]
+        public Animator Animator;
+
         /// <summary>
         /// Name of an Animator trigger set when the water is electrocuted.
         /// </summary>
@@ -37,20 +40,20 @@ namespace SonicRealms.Level.Areas
         public override void Reset()
         {
             base.Reset();
+
             Viscosity = 2.0f;
-            Buoyancy = 0.0f;
-            ElectrocutedTrigger = "";
+
+            Animator = GetComponent<Animator>();
         }
 
         public override void Start()
         {
             base.Start();
+
             _colliders = GetComponentsInChildren<Collider2D>(false);
 
-            if (!Animator) return;
-            ElectrocutedTriggerHash = string.IsNullOrEmpty(ElectrocutedTrigger)
-                ? 0
-                : Animator.StringToHash(ElectrocutedTrigger);
+            Animator = Animator ?? GetComponent<Animator>();
+            ElectrocutedTriggerHash = Animator.StringToHash(ElectrocutedTrigger);
         }
 
         /// <summary>
@@ -59,7 +62,8 @@ namespace SonicRealms.Level.Areas
         public virtual void Electrocute()
         {
             // TODO destroy badniks?
-            if(Animator && ElectrocutedTriggerHash != 0) Animator.SetTrigger(ElectrocutedTriggerHash);
+            if(Animator && ElectrocutedTriggerHash != 0)
+                Animator.SetTrigger(ElectrocutedTriggerHash);
         }
 
         public override bool CanTouch(AreaCollision.Contact contact)

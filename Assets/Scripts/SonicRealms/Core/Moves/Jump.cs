@@ -139,7 +139,7 @@ namespace SonicRealms.Core.Moves
             Used = true;
 
             Controller.Detach();
-            Controller.Velocity += DMath.AngleToVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
+            Controller.Velocity += DMath.UnitVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
 
             var roll = Manager.Get<Roll>();
             if (roll == null) return;

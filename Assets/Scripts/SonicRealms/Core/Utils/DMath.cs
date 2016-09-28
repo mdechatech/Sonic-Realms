@@ -126,7 +126,7 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         /// <param name="angle">The specified angle, in radians.</param>
         /// <returns></returns>
-        public static Vector2 AngleToVector(float angle)
+        public static Vector2 UnitVector(float angle)
         {
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
@@ -137,9 +137,9 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         /// <param name="a">The point a.</param>
         /// <param name="b">The point b.</param>
-        public static float Highest(Vector2 a, Vector2 b)
+        public static float HeightDifference(Vector2 a, Vector2 b)
         {
-            return Highest(a, b, HalfPi);
+            return HeightDifference(a, b, HalfPi);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace SonicRealms.Core.Utils
         /// than point b, a positive distance will be returned.</param>
         /// <returns>The positive distance between a and b if a is higher than b in the specified
         /// direction or the negative distance if the opposite is true.</returns>
-        public static float Highest(Vector2 a, Vector2 b, float direction)
+        public static float HeightDifference(Vector2 a, Vector2 b, float direction)
         {
             // Get easy angles out of the way
             if (Equalsf(direction, 0)) return a.x - b.x;
@@ -161,7 +161,7 @@ namespace SonicRealms.Core.Utils
             if (Equalsf(direction, Mathf.PI)) return b.x - a.x;
             if (Equalsf(direction, OneThreeFourthsPi)) return b.y - a.y;
 
-            Vector2 diff = Project(a, direction) - Project(b, direction);
+            Vector2 diff = Projection(a, direction) - Projection(b, direction);
             return AngleInRange(Angle(diff), direction - HalfPi, direction + HalfPi)
                 ? diff.magnitude
                 : -diff.magnitude;
@@ -198,9 +198,9 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         /// <param name="q">The point q.</param>
         /// <param name="angle">The angle of the line.</param>
-        public static Vector2 Project(Vector2 q, float angle)
+        public static Vector2 Projection(Vector2 q, float angle)
         {
-            return Project(q, new Vector2(), angle);
+            return Projection(q, new Vector2(), angle);
         }
 
         /// <summary>
@@ -209,9 +209,9 @@ namespace SonicRealms.Core.Utils
         /// <param name="q">The point q.</param>
         /// <param name="p">The point p.</param>
         /// <param name="angle">The angle of the line.</param>
-        public static Vector2 Project(Vector2 q, Vector2 p, float angle)
+        public static Vector2 Projection(Vector2 q, Vector2 p, float angle)
         {
-            return Project(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
+            return Projection(q, p, p + (new Vector2(Mathf.Cos(angle), Mathf.Sin(angle))));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="q">The point q.</param>
         /// <param name="lineA">The point lineA which defines a line with lineB.</param>
         /// <param name="lineB">The point lineB which defines a line with lineA.</param>
-        public static Vector2 Project(Vector2 q, Vector2 lineA, Vector2 lineB)
+        public static Vector2 Projection(Vector2 q, Vector2 lineA, Vector2 lineB)
         {
             Vector2 ab = lineB - lineA;
             return lineA + Vector2.Dot(q - lineA, ab)/Vector2.Dot(ab, ab)*ab;

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 
 namespace SonicRealms.Core.Triggers
@@ -71,6 +69,16 @@ namespace SonicRealms.Core.Triggers
             TouchRules = new List<TouchPredicate>();
 
             Parents = new List<AreaTrigger>();
+            GetComponentsInParent(true, Parents);
+
+            for (var i = 0; i < Parents.Count; ++i)
+            {
+                if (Parents[i] == this)
+                {
+                    Parents.RemoveAt(i);
+                    break;
+                }
+            }
 
             CurrentContacts = new Dictionary<HedgehogController, List<AreaCollision.Contact>>();
             _possibleContacts = new List<AreaCollision.Contact>();
@@ -82,20 +90,8 @@ namespace SonicRealms.Core.Triggers
             if (!Application.isPlaying)
                 return;
 #endif
-
             if (!TriggerFromChildren)
                 return;
-
-            Parents = new List<AreaTrigger>();
-            GetComponentsInParent(true, Parents);
-            for (var i = 0; i < Parents.Count; ++i)
-            {
-                if (Parents[i] == this)
-                {
-                    Parents.RemoveAt(i);
-                    break;
-                }
-            }
 
             foreach (var child in GetComponentsInChildren<Collider2D>())
             {
@@ -212,10 +208,22 @@ namespace SonicRealms.Core.Triggers
         protected void AddCurrentContact(AreaCollision.Contact contact, out bool isFirst)
         {
             List<AreaCollision.Contact> contactList;
-            if (!CurrentContacts.TryGetValue(contact.Controller, out contactList))
-                CurrentContacts.Add(contact.Controller, contactList = new List<AreaCollision.Contact>());
+            if (CurrentContacts.TryGetValue(contact.Controller, out contactList))
+            {   
+                for (var i = contactList.Count - 1; i >= 0; --i)
+                {
+                    if (contactList[i].Hitbox == contact.Hitbox)
+                    {
+                        contactList.RemoveAt(i);
+                    }
+                }
 
-            contactList.Add(contact);
+                contactList.Add(contact);
+            }
+            else
+            {
+                CurrentContacts.Add(contact.Controller, contactList = new List<AreaCollision.Contact> {contact});
+            }
 
             isFirst = contactList.Count == 1;
         }
@@ -223,6 +231,7 @@ namespace SonicRealms.Core.Triggers
         protected bool RemoveCurrentContact(AreaCollision.Contact contact, out bool wasLast)
         {
             List<AreaCollision.Contact> contactList;
+
             if (!CurrentContacts.TryGetValue(contact.Controller, out contactList))
             {
                 wasLast = false;
@@ -236,7 +245,6 @@ namespace SonicRealms.Core.Triggers
                 {
                     contactList.RemoveAt(i);
                     wasLast = contactList.Count == 0;
-
                     return true;
                 }
             }
@@ -288,7 +296,7 @@ namespace SonicRealms.Core.Triggers
             var hitbox = collider2D.GetComponent<Hitbox>();
             if (!hitbox)
                 return;
-
+            
             var contact = new AreaCollision.Contact(this, hitbox);
 
             // Remove from current and possible

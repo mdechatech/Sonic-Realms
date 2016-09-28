@@ -105,11 +105,11 @@ namespace SonicRealms.Level.Objects
             {
                 controller.Velocity = new Vector2(controller.Velocity.x*Mathf.Abs(Mathf.Sin(data.NormalAngle)),
                     controller.Velocity.y*Mathf.Abs(Mathf.Cos(data.NormalAngle)));
-                controller.Velocity += DMath.AngleToVector(data.NormalAngle) * Power;
+                controller.Velocity += DMath.UnitVector(data.NormalAngle) * Power;
             }
             else
             {
-                controller.Velocity = DMath.AngleToVector(data.NormalAngle) * Power;
+                controller.Velocity = DMath.UnitVector(data.NormalAngle) * Power;
             }
 
             if (controller.Animator != null)
@@ -123,7 +123,7 @@ namespace SonicRealms.Level.Objects
                 controller.Animator.logWarnings = logWarnings;
             }
 
-            TriggerObject(data.Controller);
+            BlinkEffectTrigger(data.Controller);
         }
     }
 }

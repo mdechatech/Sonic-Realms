@@ -39,7 +39,7 @@ namespace SonicRealms.Level.Objects
                 return;
 
             contact.Controller.RelativeVelocity = new Vector2(contact.Controller.RelativeVelocity.x, BounceSpeed);
-            ActivateObject(contact.Controller);
+            ActivateEffectTrigger(contact.Controller);
             Destroy(gameObject);
             
             contact.Controller.IgnoreThisCollision();

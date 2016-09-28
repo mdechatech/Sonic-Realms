@@ -52,7 +52,7 @@ namespace SonicRealms.Level.Platforms.Movers
         public override void To(float t)
         {
             var angle = Mathf.Lerp(MidAngle - Range/2.0f, MidAngle + Range/2.0f, t)*Mathf.Deg2Rad;
-            transform.position = Pivot + DMath.AngleToVector(angle)*Radius;
+            transform.position = Pivot + DMath.UnitVector(angle)*Radius;
         }
     }
 }

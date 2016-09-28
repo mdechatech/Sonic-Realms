@@ -43,7 +43,7 @@ namespace SonicRealms.Level.Objects
                 ? Mathf.Sign(controller.GroundVelocity)
                 : 1.0f);
 
-            TriggerObject();
+            BlinkEffectTrigger();
         }
     }
 }

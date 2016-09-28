@@ -14,39 +14,35 @@ namespace SonicRealms.Core.Triggers
         /// The object trigger, if any. This defaults to the the first trigger on this object.
         /// </summary>
         [HideInInspector]
-        [Tooltip("The object trigger, if any. This defaults to the the first trigger on this object.")]
-        public ObjectTrigger ObjectTrigger;
+        [Tooltip("The effect trigger, if any. This defaults to the the first trigger on this object.")]
+        public EffectTrigger EffectTrigger;
 
         /// <summary>
-        /// The object's animator, if any.
+        /// Whether the object's effect trigger is activated, or false if there isn't one.
         /// </summary>
-        [Foldout("Animation")]
-        public Animator Animator;
-
-        /// <summary>
-        /// Whether the object trigger is activated, or false if there isn't one.
-        /// </summary>
-        public bool Activated
+        public bool IsActivated
         {
-            get { return ObjectTrigger == null ? false : ObjectTrigger.Activated; }
+            get { return EffectTrigger != null && EffectTrigger.Activated; }
             set
             {
-                if (ObjectTrigger == null) return;
-                if (value) ObjectTrigger.Activate();
-                else ObjectTrigger.Deactivate();
+                if (EffectTrigger == null)
+                    return;
+
+                if (value)
+                    EffectTrigger.Activate();
+
+                else EffectTrigger.Deactivate();
             }
         }
 
         public virtual void Reset()
         {
-            ObjectTrigger = GetComponent<ObjectTrigger>();
-            Animator = GetComponent<Animator>();
+            EffectTrigger = GetComponent<EffectTrigger>();
         }
 
         public virtual void Awake()
         {
-            ObjectTrigger = ObjectTrigger ? ObjectTrigger : GetComponent<ObjectTrigger>();
-            Animator = Animator ? Animator : GetComponent<Animator>();
+            EffectTrigger = EffectTrigger ? EffectTrigger : GetComponent<EffectTrigger>();
         }
 
         public virtual void Start()
@@ -60,38 +56,44 @@ namespace SonicRealms.Core.Triggers
         }
 
         /// <summary>
-        /// Activates the object's ObjectTrigger, if any.
+        /// Activates the object's EffectTrigger, if any.
         /// </summary>
         /// <param name="controller"></param>
         /// <returns>True if there is an object trigger.</returns>
-        protected bool ActivateObject(HedgehogController controller = null)
+        protected bool ActivateEffectTrigger(HedgehogController controller = null)
         {
-            if (ObjectTrigger == null) return false;
-            ObjectTrigger.Activate(controller);
+            if (EffectTrigger == null)
+                return false;
+
+            EffectTrigger.Activate(controller);
             return true;
         }
 
         /// <summary>
-        /// Deactivates the object's ObjectTrigger, if any.
+        /// Deactivates the object's EffectTrigger, if any.
         /// </summary>
         /// <param name="controller"></param>
         /// <returns>True if there is an object trigger.</returns>
-        protected bool DeactivateObject(HedgehogController controller = null)
+        protected bool DeactivateEffectTrigger(HedgehogController controller = null)
         {
-            if (ObjectTrigger == null) return false;
-            ObjectTrigger.Deactivate(controller);
+            if (EffectTrigger == null)
+                return false;
+
+            EffectTrigger.Deactivate(controller);
             return true;
         }
 
         /// <summary>
-        /// Triggers the object's ObjectTrigger, if any.
+        /// Triggers the object's EffectTrigger, if any.
         /// </summary>
         /// <param name="controller"></param>
         /// <returns>True if there is an object trigger.</returns>
-        protected bool TriggerObject(HedgehogController controller = null)
+        protected bool BlinkEffectTrigger(HedgehogController controller = null)
         {
-            if (ObjectTrigger == null) return false;
-            ObjectTrigger.Trigger(controller);
+            if (EffectTrigger == null)
+                return false;
+
+            EffectTrigger.Blink(controller);
             return true;
         }
     }

@@ -72,7 +72,7 @@ namespace SonicRealms.Core.Actors
         {
             Controller.OnCollide.AddListener(OnCollide);
             Controller.RelativeVelocity = InitialSpeed;
-            Controller.FacingForward = FacingRight;
+            Controller.IsFacingForward = FacingRight;
 
             if (Animator != null && !string.IsNullOrEmpty(HitGroundTrigger))
                 HitGroundTriggerHash = Animator.StringToHash(HitGroundTrigger);
@@ -89,7 +89,7 @@ namespace SonicRealms.Core.Actors
             }
 
             // When we hit the ground, ignore it and jump right back up
-            Controller.FacingForward = FacingRight;
+            Controller.IsFacingForward = FacingRight;
             Controller.Detach();
             Controller.RelativeVelocity = new Vector2(RunSpeed * (FacingRight ? 1f : -1f), JumpSpeed);
         }

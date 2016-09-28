@@ -18,7 +18,7 @@ namespace SonicRealms.Core.Utils
 
         public void Start()
         {
-            _lastFacingForward = Player.FacingForward;
+            _lastFacingForward = Player.IsFacingForward;
             Flip();
         }
 
@@ -29,7 +29,7 @@ namespace SonicRealms.Core.Utils
 
         public void FixedUpdate()
         {
-            if (_lastFacingForward == Player.FacingForward)
+            if (_lastFacingForward == Player.IsFacingForward)
                 return;
 
             Flip();
@@ -39,10 +39,10 @@ namespace SonicRealms.Core.Utils
         {
             var t = transform;
 
-            if(Mathf.Sign(t.localScale.x) != (Player.FacingForward ? 1f : -1f))
+            if(Mathf.Sign(t.localScale.x) != (Player.IsFacingForward ? 1f : -1f))
                 transform.localScale = new Vector3(-t.localScale.x, t.localScale.y, t.localScale.z);
 
-            _lastFacingForward = Player.FacingForward;
+            _lastFacingForward = Player.IsFacingForward;
         }
     }
 }

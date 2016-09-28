@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SonicRealms.Core.Triggers.Editor
 {
-    [CustomEditor(typeof(ReactiveObject), true)]
+    [CustomEditor(typeof(ReactiveEffect), true)]
     [CanEditMultipleObjects]
     public class ReactiveObjectEditor : BaseReactiveEditor
     {
@@ -18,7 +18,7 @@ namespace SonicRealms.Core.Triggers.Editor
             if (targets.Length != 1)
                 return;
 
-            var instance = targets[0] as ReactiveObject;
+            var instance = targets[0] as ReactiveEffect;
             if (instance.GetComponent<ReactiveArea>() == null &&
                 instance.GetComponent<ReactivePlatform>() == null)
             {

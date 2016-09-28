@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Moves;
@@ -230,7 +232,9 @@ namespace SonicRealms.Level
         {
             Camera = GetComponent<CameraController>();
             Camera.OnChangeTarget.AddListener(OnChangeTarget);
-            if (Player) Camera.Target = Player.transform;
+
+            if (Player)
+                Camera.Target = Player.transform;
         }
 
         protected virtual void OnChangeTarget(Transform previousTarget)
@@ -247,6 +251,8 @@ namespace SonicRealms.Level
                 {
                     Health.OnDeath.RemoveListener(OnDeath);
                 }
+
+                Player.Sensors.PropertyChanged -= Sensors_PropertyChanged;
 
                 List<SonicCameraController> previousCameras;
                 if (Cameras.TryGetValue(Player, out previousCameras))
@@ -271,6 +277,8 @@ namespace SonicRealms.Level
             {
                 Health.OnDeath.AddListener(OnDeath);
             }
+
+            Player.Sensors.PropertyChanged += Sensors_PropertyChanged;
 
             List<SonicCameraController> cameras;
             if (!Cameras.TryGetValue(Player, out cameras))
@@ -316,7 +324,7 @@ namespace SonicRealms.Level
         {
             _forwardShifting = true;
             Camera.PanAtSpeed(
-                DMath.AngleToVector(Player.RelativeAngle(forward ? 0 : 180)*Mathf.Deg2Rad)*ForwardShiftPanAmount,
+                DMath.UnitVector(Player.RelativeAngle(forward ? 0 : 180)*Mathf.Deg2Rad)*ForwardShiftPanAmount,
                 ForwardShiftPanSpeed);
         }
 
@@ -399,14 +407,14 @@ namespace SonicRealms.Level
             else if (move is LookUp)
             {
                 _looking = true;
-                Camera.PanAtSpeed(DMath.AngleToVector(Player.RelativeAngle(90f) * Mathf.Deg2Rad) * LookUpPanAmount,
+                Camera.PanAtSpeed(DMath.UnitVector(Player.RelativeAngle(90f) * Mathf.Deg2Rad) * LookUpPanAmount,
                     LookUpPanSpeed,
                     LookUpLag);
             }
             else if (move is Duck)
             {
                 _looking = true;
-                Camera.PanAtSpeed(DMath.AngleToVector(Player.RelativeAngle(-90f) * Mathf.Deg2Rad) * LookDownPanAmount,
+                Camera.PanAtSpeed(DMath.UnitVector(Player.RelativeAngle(-90f) * Mathf.Deg2Rad) * LookDownPanAmount,
                     LookDownPanSpeed, LookDownLag);
             }
             else if (move is Spindash)
@@ -414,13 +422,7 @@ namespace SonicRealms.Level
                 if (!EnableForwardShift)
                     Camera.Pan(Vector2.zero, Camera.PanTime);
                 else
-                    DoForwardShift(Player.FacingForward);
-            }
-            else if (move is Roll)
-            {
-                var dy = Vector2.up*-((Roll)move).HeightChange*0.5f;
-                Camera.ExtraOffset = dy;
-                Camera.BasePosition -= dy;
+                    DoForwardShift(Player.IsFacingForward);
             }
         }
 
@@ -443,17 +445,22 @@ namespace SonicRealms.Level
                 _looking = false;
                 Camera.PanAtSpeed(Vector2.zero, LookDownPanSpeed);
             }
-            else if (move is Roll)
-            {
-                var dy = ((Roll) move).GetPositionOffset();
-                Camera.ExtraOffset = Vector2.zero;
-                Camera.BasePosition += dy;
-            }
         }
 
         protected void OnDeath(HealthEventArgs e)
         {
             Camera.Wait(999f);
+        }
+
+        private void Sensors_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "TrueCenterOffset")
+            {
+                var ext = (PropertyChangedExtendedEventArgs<Vector2>) e;
+
+                Camera.BasePosition -= ext.NewValue - ext.OldValue;
+                Camera.ExtraOffset += ext.NewValue - ext.OldValue;
+            }
         }
     }
 

@@ -201,9 +201,10 @@ namespace SonicRealms.Core.Moves
             Controller.Sensors.BottomOffset -= HeightChange/2;
             Controller.Sensors.SolidOffset -= HeightChange/2;
 
+            Controller.Sensors.TrueCenterOffset = Vector2.down*HeightChange*0.5f;
+
             Controller.Sensors.LedgeWidth += WidthChange;
             Controller.Sensors.BottomWidth += WidthChange;
-            Controller.Sensors.SolidWidth += WidthChange;
             Controller.Sensors.TopWidth += WidthChange;
 
             // Correct the player's position based on how much its height changed to keep it on the ground
@@ -262,10 +263,11 @@ namespace SonicRealms.Core.Moves
             Controller.Sensors.BottomOffset += HeightChange/2;
             Controller.Sensors.SolidOffset += HeightChange/2;
 
+            Controller.Sensors.TrueCenterOffset = Vector2.zero;
+
             Controller.Sensors.LedgeWidth -= WidthChange;
             Controller.Sensors.BottomWidth -= WidthChange;
             Controller.Sensors.TopWidth -= WidthChange;
-            Controller.Sensors.SolidWidth -= WidthChange;
 
             // Correct the player's position based on how much its height changed to keep it on the ground
             Controller.transform.position -= (Vector3)GetPositionOffset();
@@ -285,11 +287,11 @@ namespace SonicRealms.Core.Moves
         {
             if (Controller.WallMode != WallMode.None)
             {
-                return -DMath.AngleToVector(Controller.RelativeAngle(Controller.WallMode.ToNormal())*Mathf.Deg2Rad)*
+                return DMath.UnitVector(Controller.RelativeAngle(Controller.WallMode.ToNormal())*Mathf.Deg2Rad)*
                        HeightChange/2;
             }
 
-            return -DMath.AngleToVector((Controller.GravityDirection + 180)*Mathf.Deg2Rad)*HeightChange/2;
+            return DMath.UnitVector((Controller.GravityDirection + 180)*Mathf.Deg2Rad)*HeightChange/2;
         }
     }
 }

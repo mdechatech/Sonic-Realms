@@ -39,13 +39,13 @@ namespace SonicRealms.Level.Areas
 
         public override bool CanTouch(AreaCollision.Contact contact)
         {
-            return base.CanTouch(contact) && Collider2D.bounds.Intersects(contact.Hitbox.Collider2D.bounds);
+            return base.CanTouch(contact) && Collider2D.bounds.Intersects(contact.Hitbox.Collider.bounds);
         }
 
         public override void OnAreaEnter(AreaCollision collision)
         {
             var controller = collision.Controller;
-            var collider2D = collision.Latest.Hitbox.Collider2D;
+            var collider2D = collision.Latest.Hitbox.Collider;
 
             float x = controller.transform.position.x,
                 y = controller.transform.position.y;

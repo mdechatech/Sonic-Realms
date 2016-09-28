@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,24 +26,7 @@ namespace SonicRealms.Core.Utils.Editor
                 (results.ContainsKey(type) ? results[type] : (results[type] = new List<SerializedProperty>()))
                     .Add(it.Copy());
             }
-            /*
-            foreach (var field in serializedObject.targetObject.GetType().GetFields(
-                BindingFlags.NonPublic | BindingFlags.Instance))
-            {
-                var property = serializedObject.FindProperty(field.Name);
-                if (property == null) continue;
-                if (RealmsEditorUtility.GetAttribute<HideInInspector>(field) != null) continue;
 
-                foreach(var propertyLists in results.Values)
-                    if (propertyLists.Contains(property)) continue;
-
-                var attr = RealmsEditorUtility.GetAttribute<FoldoutAttribute>(field);
-                var type = attr == null ? defaultFoldoutName : attr.Name;
-
-                (results.ContainsKey(type) ? results[type] : (results[type] = new List<SerializedProperty>()))
-                    .Add(property);
-            }
-            */
             return results;
         }
 

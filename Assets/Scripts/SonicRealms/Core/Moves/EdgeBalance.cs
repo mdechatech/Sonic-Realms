@@ -164,7 +164,7 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveEnter(State previousState)
         {
             if (DMath.Equalsf(Controller.GroundVelocity))
-                Controller.FacingForward = Controller.Side == GroundSensorType.Left;
+                Controller.IsFacingForward = Controller.Side == GroundSensorType.Left;
 
             if (!AllowDuck)
             {
@@ -184,7 +184,7 @@ namespace SonicRealms.Core.Moves
         public override void OnActiveUpdate()
         {
             if(DMath.Equalsf(Controller.GroundVelocity))
-                Controller.FacingForward = Controller.Side == GroundSensorType.Left;
+                Controller.IsFacingForward = Controller.Side == GroundSensorType.Left;
         }
 
         public override void OnActiveExit()

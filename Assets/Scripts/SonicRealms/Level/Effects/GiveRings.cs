@@ -1,5 +1,6 @@
 ﻿using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Level.Effects
@@ -7,7 +8,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// When activated, gives the controller rings.
     /// </summary>
-    public class GiveRings : ReactiveObject
+    public class GiveRings : ReactiveEffect
     {
         /// <summary>
         /// Number of rings to give.
@@ -15,9 +16,13 @@ namespace SonicRealms.Level.Effects
         [Tooltip("Number of rings to give.")]
         public int Amount;
 
+        [Foldout("Animation")]
+        public Animator Animator;
+
         /// <summary>
         /// Animator trigger set when the rings are successfully given.
         /// </summary>
+        [Foldout("Animation")]
         [Tooltip("Animator trigger set when the rings are successfully given.")]
         public string GivenTrigger;
         protected int GivenTriggerHash;
@@ -25,15 +30,17 @@ namespace SonicRealms.Level.Effects
         public override void Reset()
         {
             base.Reset();
+
             Amount = 1;
-            GivenTrigger = "";
+
+            Animator = GetComponent<Animator>();
         }
 
         public override void Awake()
         {
             base.Awake();
-            if (Animator != null && !string.IsNullOrEmpty(GivenTrigger))
-                GivenTriggerHash = Animator.StringToHash(GivenTrigger);
+
+            GivenTriggerHash = Animator.StringToHash(GivenTrigger);
         }
 
         public override void OnActivate(HedgehogController controller)
@@ -44,7 +51,7 @@ namespace SonicRealms.Level.Effects
 
             counter.Rings += Amount;
 
-            if (GivenTriggerHash != 0)
+            if (Animator && GivenTriggerHash != 0)
                 Animator.SetTrigger(GivenTriggerHash);
         }
     }

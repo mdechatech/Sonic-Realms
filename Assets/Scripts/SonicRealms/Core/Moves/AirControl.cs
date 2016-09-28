@@ -97,7 +97,7 @@ namespace SonicRealms.Core.Moves
             else _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
 
             if (DMath.Equalsf(_axis)) return;
-            Controller.FacingForward = _axis > 0.0f;
+            Controller.IsFacingForward = _axis > 0.0f;
         }
 
         public override void OnActiveFixedUpdate()

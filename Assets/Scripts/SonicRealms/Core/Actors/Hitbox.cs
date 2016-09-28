@@ -45,7 +45,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [HideInInspector]
         [Tooltip("The hitbox's collider.")]
-        public Collider2D Collider2D;
+        public Collider2D Collider;
 
         /// <summary>
         /// The controller the hitbox belongs to.
@@ -96,7 +96,7 @@ namespace SonicRealms.Core.Actors
 
         public virtual void Awake()
         {
-            Collider2D = GetComponent<Collider2D>();
+            Collider = GetComponent<Collider2D>();
             Controller = Controller ?? GetComponentInParent<HedgehogController>();
             CollisionsThisFrame = 0;
             CollisionTimer = 0f;

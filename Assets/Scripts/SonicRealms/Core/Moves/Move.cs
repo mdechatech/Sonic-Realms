@@ -339,8 +339,11 @@ namespace SonicRealms.Core.Moves
 
             Manager = manager;
             PowerupManager = manager.GetComponent<PowerupManager>();
+
             Controller = manager.Controller;
-            if (!Animator && Controller) Animator = Controller.Animator;
+
+            if (!Animator && Controller)
+                Animator = Controller.Animator;
 
             // Pretend the move is available to see if it wants to be performed on init
             CurrentState = State.Available;

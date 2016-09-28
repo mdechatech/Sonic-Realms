@@ -8,7 +8,7 @@ namespace SonicRealms.Level.Effects
     /// <summary>
     /// Switches the player's collision layer when activated.
     /// </summary>
-    public class SwitchLayer : ReactiveObject
+    public class SwitchLayer : ReactiveEffect
     {
         /// <summary>
         /// Whether the controller must be on the ground to activate.

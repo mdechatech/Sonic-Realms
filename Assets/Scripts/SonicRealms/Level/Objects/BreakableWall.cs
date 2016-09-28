@@ -42,7 +42,7 @@ namespace SonicRealms.Level.Objects
                 Mathf.Abs(contact.Controller.GroundVelocity) < MinGroundSpeed)
                 return;
             
-            ActivateObject(contact.Controller);
+            ActivateEffectTrigger(contact.Controller);
             Destroy(gameObject);
 
             if (FreezeTime <= 0.0f)

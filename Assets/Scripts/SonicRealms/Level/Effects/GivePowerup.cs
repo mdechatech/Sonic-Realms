@@ -11,7 +11,7 @@ namespace SonicRealms.Level.Effects
     /// The object is placed under the move manager's transform, causing the controller to
     /// recieve the moves.
     /// </summary>
-    public class GivePowerup : ReactiveObject
+    public class GivePowerup : ReactiveEffect
     {
         /// <summary>
         /// All powerups on this object will be given to the player.

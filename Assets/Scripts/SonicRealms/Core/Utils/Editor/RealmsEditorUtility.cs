@@ -18,8 +18,12 @@ namespace SonicRealms.Core.Utils.Editor
 
         public static TAttribute GetAttribute<TAttribute>(SerializedProperty property) where TAttribute : Attribute
         {
-            var field = property.serializedObject.targetObject.GetType().GetField(property.name);
-            if (field == null) return null;
+            var field = property.serializedObject.targetObject.GetType().GetField(property.name,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (field == null)
+                return null;
+
             return GetAttribute<TAttribute>(field);
         }
 

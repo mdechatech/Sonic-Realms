@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level.Areas;
@@ -15,7 +16,6 @@ namespace SonicRealms.Core.Actors
     [RequireComponent(typeof(Rigidbody2D))]
     public class HedgehogController : MonoBehaviour
     {
-        #region Inspector Fields
         #region Components
         /// <summary>
         /// Game object that contains the renderer.
@@ -28,46 +28,99 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [Tooltip("The controller's animator, if any.")]
         public Animator Animator;
-        #endregion
-        #region Collision
-        /// <summary>
-        /// Mask representing the layers the controller collides with.
-        /// </summary>
-        [Tooltip("Mask representing the layers the controller collides with.")]
-        public LayerMask CollisionMask;
 
+        /// <summary>
+        /// Contains sensor data for hit detection.
+        /// </summary>
+        [Tooltip("Contains sensor data for hit detection.")]
+        public HedgehogSensors Sensors;
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Invoked when the controller lands on something.
+        /// </summary>
+        public UnityEvent OnAttach;
+
+        /// <summary>
+        /// Invoked right before the controller will collide with a platform. Listeners of this event
+        /// may call IgnoreThisCollision() on the controller to prevent the collision from occurring.
+        /// </summary>
+        public PlatformPreCollisionEvent OnPreCollide;
+
+        /// <summary>
+        /// Invoked when the controller collides with a platform.
+        /// </summary>
+        public PlatformCollisionEvent OnCollide;
+
+        /// <summary>
+        /// Invoked when the controller detaches from the ground for any reason.
+        /// </summary>
+        public UnityEvent OnDetach;
+
+        /// <summary>
+        /// Invoked when the controller detaches from the ground because it was moving too slowly on a steep
+        /// surface.
+        /// </summary>
+        public UnityEvent OnSteepDetach;
+
+        /// <summary>
+        /// Invoked when the controller enters a reactive area.
+        /// </summary>
+        public ReactiveAreaEvent OnAreaEnter;
+
+        /// <summary>
+        /// Invoked when the controller exits a reactive area.
+        /// </summary>
+        public ReactiveAreaEvent OnAreaExit;
+
+        /// <summary>
+        /// Invoked when the controller begins colliding with a reactive platform.
+        /// </summary>
+        public ReactivePlatformEvent OnPlatformCollisionEnter;
+
+        /// <summary>
+        /// Invoked when the controller stops colliding with a reactive platform.
+        /// </summary>
+        public ReactivePlatformEvent OnPlatformCollisionExit;
+
+        /// <summary>
+        /// Invoked when the controller lands on the surface of a reactive platform.
+        /// </summary>
+        public ReactivePlatformEvent OnPlatformSurfaceEnter;
+
+        /// <summary>
+        /// Invoked when the controller leaves on the surface of a reactive platform.
+        /// </summary>
+        public ReactivePlatformEvent OnPlatformSurfaceExit;
+
+        /// <summary>
+        /// Invoked when the controller activates a reactive object.
+        /// </summary>
+        public ReactiveEffectEvent OnEffectActivate;
+
+        /// <summary>
+        /// Invoked when the controller deactivates a reactive object.
+        /// </summary>
+        public ReactiveEffectEvent OnEffectDeactivate;
+        #endregion
+
+        #region Trigger Stuff
         /// <summary>
         /// What reactives the controller is on.
         /// </summary>
         [Tooltip("What reactives the controller is on.")]
         public List<BaseReactive> Reactives;
         #endregion
-        #region Sensors
+
+        #region Physics Stuff
+
+        #region Physics Values
         /// <summary>
-        /// Contains sensor data for hit detection.
+        /// The default direction of gravity, in degrees.
         /// </summary>
-        [Tooltip("Contains sensor data for hit detection.")]
-        public HedgehogSensors Sensors;
+        private const float DefaultGravityDirection = 270.0f;
 
-        /// <summary>
-        /// The rotation angle of the sensors in degrees.
-        /// </summary>
-        public float SensorsRotation
-        {
-            get { return Sensors.transform.eulerAngles.z; }
-            set
-            {
-                if (value == Sensors.transform.eulerAngles.z) return;
-
-                Sensors.transform.eulerAngles = new Vector3(
-                    Sensors.transform.eulerAngles.x,
-                    Sensors.transform.eulerAngles.y,
-                    value);
-            }
-        }
-
-        #endregion
-        #region Physics
         /// <summary>
         /// The player's friction on the ground in units per second per second.
         /// </summary>
@@ -163,7 +216,20 @@ namespace SonicRealms.Core.Actors
         [Tooltip("The maximum ground speed at which the wall mode revert buffer activates, in units per second.")]
         public float RevertBufferMaxSpeed;
         #endregion
-        #region Performance
+
+        #region Physics Flags/Performance
+        /// <summary>
+        /// Whether the controller has collisions and physics turned off. Often used for set pieces.
+        /// </summary>
+        [Tooltip("Whether the controller has collisions and physics turned off. Often used for set pieces.")]
+        public bool Interrupted;
+
+        /// <summary>
+        /// Time left on the current interruption, if any.
+        /// </summary>
+        [Tooltip("Time left on the current interruption, if any.")]
+        public float InterruptTimer;
+
         /// <summary>
         /// If true, platform triggers are not notified when touched.
         /// </summary>
@@ -199,100 +265,6 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [Tooltip("If checked, solid object collisions do not occur.")]
         public bool DisableSolidObjectCheck;
-        #endregion
-        #region Events
-        /// <summary>
-        /// Invoked when the controller lands on something.
-        /// </summary>
-        public UnityEvent OnAttach;
-
-        /// <summary>
-        /// Invoked right before the controller will collide with a platform. Listeners of this event
-        /// may call IgnoreThisCollision() on the controller to prevent the collision from occurring.
-        /// </summary>
-        public PlatformPreCollisionEvent OnPreCollide;
-
-        /// <summary>
-        /// Invoked when the controller collides with a platform.
-        /// </summary>
-        public PlatformCollisionEvent OnCollide;
-
-        /// <summary>
-        /// Invoked when the controller detaches from the ground for any reason.
-        /// </summary>
-        public UnityEvent OnDetach;
-
-        /// <summary>
-        /// Invoked when the controller detaches from the ground because it was moving too slowly on a steep
-        /// surface.
-        /// </summary>
-        public UnityEvent OnSteepDetach;
-
-        /// <summary>
-        /// Invoked when the controller enters a reactive area.
-        /// </summary>
-        public ReactiveAreaEvent OnAreaEnter;
-
-        /// <summary>
-        /// Invoked when the controller exits a reactive area.
-        /// </summary>
-        public ReactiveAreaEvent OnAreaExit;
-
-        /// <summary>
-        /// Invoked when the controller begins colliding with a reactive platform.
-        /// </summary>
-        public ReactivePlatformEvent OnPlatformCollisionEnter;
-
-        /// <summary>
-        /// Invoked when the controller stops colliding with a reactive platform.
-        /// </summary>
-        public ReactivePlatformEvent OnPlatformCollisionExit;
-
-        /// <summary>
-        /// Invoked when the controller lands on the surface of a reactive platform.
-        /// </summary>
-        public ReactivePlatformEvent OnPlatformSurfaceEnter;
-
-        /// <summary>
-        /// Invoked when the controller leaves on the surface of a reactive platform.
-        /// </summary>
-        public ReactivePlatformEvent OnPlatformSurfaceExit;
-
-        /// <summary>
-        /// Invoked when the controller activates a reactive object.
-        /// </summary>
-        public ReactiveObjectEvent OnObjectActivate;
-
-        /// <summary>
-        /// Invoked when the controller deactivates a reactive object.
-        /// </summary>
-        public ReactiveObjectEvent OnObjectDeactivate;
-        #endregion
-        #endregion
-
-        #region Control Variables
-        /// <summary>
-        /// Whether the controller has collisions and physics turned off. Often used for set pieces.
-        /// </summary>
-        [Tooltip("Whether the controller has collisions and physics turned off. Often used for set pieces.")]
-        public bool Interrupted;
-
-        /// <summary>
-        /// Time left on the current interruption, if any.
-        /// </summary>
-        [Tooltip("Time left on the current interruption, if any.")]
-        public float InterruptTimer;
-        #endregion
-        #region Physics Variables
-        /// <summary>
-        /// The default direction of gravity, in degrees.
-        /// </summary>
-        private const float DefaultGravityDirection = 270.0f;
-
-        /// <summary>
-        /// Angle difference used when rotating between two surfaces, in radians.
-        /// </summary>
-        private const float SurfaceAngleTolerance = 0.087222f;
 
         /// <summary>
         /// Whether to move the controller based on current velocity.
@@ -340,28 +312,49 @@ namespace SonicRealms.Core.Actors
         public bool DisableAirDrag;
 
         /// <summary>
+        /// Whether to ignore collisions with EVERYTHING.
+        /// </summary>
+        public bool DisablePlatformCollisions;
+        #endregion
+
+        #region Physics State Variables
+        #region Sensor State Variables
+        /// <summary>
+        /// The rotation angle of the sensors in degrees.
+        /// </summary>
+        public float SensorsRotation
+        {
+            get { return Sensors.transform.eulerAngles.z; }
+            set
+            {
+                if (value == Sensors.transform.eulerAngles.z) return;
+
+                Sensors.transform.eulerAngles = new Vector3(
+                    Sensors.transform.eulerAngles.x,
+                    Sensors.transform.eulerAngles.y,
+                    value);
+            }
+        }
+        #endregion
+        #region Movement State Variables
+        /// <summary>
         /// Whether the controller is facing forward or backward. This doesn't actually affect graphics, but it's
         /// used for making dashes go in the right direction.
         /// </summary>
         [SerializeField]
         [Tooltip("Whether the controller is facing forward or backward. This doesn't actually affect graphics, but it's " +
                  "used for making dashes go in the right direction..")]
-        private bool _facingForward;
-        public bool FacingForward
+        private bool _isFacingForward;
+        public bool IsFacingForward
         {
-            get { return _facingForward; }
+            get { return _isFacingForward; }
             set
             {
-                _facingForward = value;
+                _isFacingForward = value;
                 if (Animator != null && FacingForwardBoolHash != 0)
                     Animator.SetBool(FacingForwardBoolHash, value);
             }
         }
-        
-        /// <summary>
-        /// Whether to ignore collisions with EVERYTHING.
-        /// </summary>
-        public bool IgnoreCollision;
 
         /// <summary>
         /// The controller's velocity as a Vector2. If set while on the ground, the controller will not
@@ -408,7 +401,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public Vector2 GravityDownVector
         {
-            get { return DMath.AngleToVector(GravityDirection * Mathf.Deg2Rad); }
+            get { return DMath.UnitVector(GravityDirection * Mathf.Deg2Rad); }
             set { GravityDirection = DMath.Modp(DMath.Angle(value) * Mathf.Rad2Deg, 360.0f); }
         }
 
@@ -429,77 +422,13 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [Tooltip("The controller's velocity on the ground in units per second. Positive if forward, negative if backward.")]
         public float GroundVelocity;
-
+        #endregion
+        #region Collision State Variables
         /// <summary>
-        /// Whether the player is touching the ground.
+        /// Mask representing the layers the controller collides with.
         /// </summary>
-        [Tooltip("Whether the player is touching the ground.")]
-        public bool Grounded;
-
-        /// <summary>
-        /// If grounded, angle of the surface the controller is on. It is smoothed between both sensors -
-        /// true surface angles can be found from PrimarySurfaceHit and SecondarySurfaceHit.
-        /// </summary>
-        public float SurfaceAngle
-        {
-            get { return _surfaceAngle; }
-            set { _surfaceAngle = DMath.PositiveAngle_d(value); }
-        }
-
-        [SerializeField, Tooltip("If grounded, angle of the surface the controller is on.")]
-        private float _surfaceAngle;
-
-        /// <summary>
-        /// Whether to bypass surface angle calculations the next FixedUpdate. Allows you to set your own.
-        /// </summary>
-        [Tooltip("Whether to bypass surface angle calculations the next FixedUpdate. Allows you to set your own.")]
-        public bool ForceSurfaceAngle;
-
-        /// <summary>
-        /// If grounded, the angle's surface relative to the direction of gravity. If gravity points down, this is
-        /// the same as SurfaceAngle.
-        /// </summary>
-        public float RelativeSurfaceAngle
-        {
-            get { return RelativeAngle(SurfaceAngle); }
-            set { SurfaceAngle = AbsoluteAngle(value); }
-        }
-
-        /// <summary>
-        /// If grounded, which sensor on the player defines the primary surface.
-        /// </summary>
-        [HideInInspector]
-        public GroundSensorType Side;
-
-        /// <summary>
-        /// If grounded, the current wall mode (determines which way sensors are oriented).
-        /// </summary>
-        [HideInInspector]
-        public WallMode WallMode;
-
-        /// <summary>
-        /// <see cref="WallModeRevertBufferTime"/>
-        /// If active, the time remaining on the wall mode revert buffer in seconds.
-        /// </summary>
-        public float WallModeRevertBufferTimer;
-
-        /// <summary>
-        /// <see cref="WallModeRevertBufferTime"/>
-        /// The controller's previous wall mode as stored by the revert buffer.
-        /// </summary>
-        public WallMode WallModeRevertBuffer;
-
-        /// <summary>
-        /// Whether the player attached to the gorund in the previous FixedUpdate.
-        /// </summary>
-        [HideInInspector]
-        public bool JustAttached;
-
-        /// <summary>
-        /// Whether the player detached from the ground in the previous FixedUpdate.
-        /// </summary>
-        [HideInInspector]
-        public bool JustDetached;
+        [Tooltip("Mask representing the layers the controller collides with.")]
+        public LayerMask CollisionMask;
 
         /// <summary>
         /// If grounded, the surface which is currently defining the controller's position
@@ -632,14 +561,83 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         [Tooltip("The results from the terrain cast which found the surface at the right ceiling of the player, if any.")]
         public TerrainCastHit RightCeilingHit;
+        #endregion
+        #region Surface State Variables
+        /// <summary>
+        /// Whether the player is touching the ground.
+        /// </summary>
+        [Tooltip("Whether the player is touching the ground.")]
+        public bool Grounded;
 
         /// <summary>
-        /// The controller will move this much in its next FixedUpdate. It is set using the Translate function,
-        /// which guarantees that movement from outside sources is applied before collision checks.
+        /// If grounded, angle of the surface the controller is on. It is smoothed between both sensors -
+        /// true surface angles can be found from PrimarySurfaceHit and SecondarySurfaceHit.
         /// </summary>
-        public Vector3 QueuedTranslation;
+        public float SurfaceAngle
+        {
+            get { return _surfaceAngle; }
+            set { _surfaceAngle = DMath.PositiveAngle_d(value); }
+        }
+
+        [SerializeField]
+        [Tooltip("If grounded, angle of the surface the controller is on.")]
+        private float _surfaceAngle;
+
+        /// <summary>
+        /// If grounded, the angle's surface relative to the direction of gravity. If gravity points down, this is
+        /// the same as SurfaceAngle.
+        /// </summary>
+        public float RelativeSurfaceAngle
+        {
+            get { return RelativeAngle(SurfaceAngle); }
+            set { SurfaceAngle = AbsoluteAngle(value); }
+        }
+
+        /// <summary>
+        /// If grounded, which sensor on the player defines the primary surface.
+        /// </summary>
+        [HideInInspector]
+        public GroundSensorType Side;
+
+        /// <summary>
+        /// If grounded, the current wall mode (determines which way sensors are oriented).
+        /// </summary>
+        [HideInInspector]
+        public WallMode WallMode;
+
+        /// <summary>
+        /// <see cref="WallModeRevertBufferTime"/>
+        /// If active, the time remaining on the wall mode revert buffer in seconds.
+        /// </summary>
+        public float WallModeRevertBufferTimer;
+
+        /// <summary>
+        /// <see cref="WallModeRevertBufferTime"/>
+        /// The controller's previous wall mode as stored by the revert buffer.
+        /// </summary>
+        public WallMode WallModeRevertBuffer;
+
+        /// <summary>
+        /// Whether the player attached to the gorund in the previous FixedUpdate.
+        /// </summary>
+        [HideInInspector]
+        public bool JustAttached;
+
+        /// <summary>
+        /// Whether the player detached from the ground in the previous FixedUpdate.
+        /// </summary>
+        [HideInInspector]
+        public bool JustDetached;
+
+        private ISurfaceSolver _surfaceSolver;
+
+        private SurfaceSolverMediator _surfaceSolverMediator;
         #endregion
-        #region Animation Variables
+        #endregion
+
+        #endregion
+
+        #region Animation Stuff
         /// <summary>
         /// Name of an Animator trigger set when the controller falls off a surface.
         /// </summary>
@@ -711,10 +709,8 @@ namespace SonicRealms.Core.Actors
         public string SurfaceAngleFloat;
         protected int SurfaceAngleFloatHash;
         #endregion
-        #region Debug Variables
-        public bool ShowDebugGraphics;
-        #endregion
-        #region Command Buffer Variables
+
+        #region Command Buffer Stuff
         public enum BufferEvent
         {
             BeforeForces,
@@ -728,6 +724,11 @@ namespace SonicRealms.Core.Actors
         public delegate void CommandBuffer(HedgehogController controller);
         protected Dictionary<BufferEvent, List<CommandBuffer>> CommandBuffers;
         #endregion
+
+        #region Debug Stuff
+        public bool ShowDebugGraphics;
+        #endregion
+
 
         #region Lifecycle Functions
         public virtual void Reset()
@@ -760,7 +761,9 @@ namespace SonicRealms.Core.Actors
 
         public void Awake()
         {
-            FacingForward = true;
+            IsFacingForward = true;
+
+            _surfaceSolverMediator = new SurfaceSolverMediator(this);
 
             OnAttach = OnAttach ?? new UnityEvent();
             OnPreCollide = OnPreCollide ?? new PlatformPreCollisionEvent();
@@ -774,8 +777,8 @@ namespace SonicRealms.Core.Actors
             OnPlatformCollisionExit = OnPlatformCollisionExit ?? new ReactivePlatformEvent();
             OnPlatformSurfaceEnter = OnPlatformSurfaceEnter ?? new ReactivePlatformEvent();
             OnPlatformSurfaceExit = OnPlatformSurfaceExit ?? new ReactivePlatformEvent();
-            OnObjectActivate = OnObjectActivate ?? new ReactiveObjectEvent();
-            OnObjectDeactivate = OnObjectDeactivate ?? new ReactiveObjectEvent();
+            OnEffectActivate = OnEffectActivate ?? new ReactiveEffectEvent();
+            OnEffectDeactivate = OnEffectDeactivate ?? new ReactiveEffectEvent();
 
             CommandBuffers = new Dictionary<BufferEvent, List<CommandBuffer>>();
 
@@ -870,6 +873,7 @@ namespace SonicRealms.Core.Actors
         }
         #endregion
 
+
         #region Lifecycle Subroutines
         /// <summary>
         /// Handles the interruption timer, if any.
@@ -909,103 +913,79 @@ namespace SonicRealms.Core.Actors
             HandleBuffers(BufferEvent.BeforeMovement);
             UpdateWallModeRevertBuffer(Time.fixedDeltaTime);
 
-            var vt = Mathf.Sqrt(Vx * Vx + Vy * Vy);
-            if (IgnoreCollision)
+            bool usedSurfaceSolver = false;
+
+            if (_surfaceSolver != null)
             {
-                // If there's no collision, we don't have to care about tunneling through walls - 
-                // so just add velocity to position
-                transform.position += new Vector3(Vx * timestep, Vy * timestep);
-                UpdateGroundVelocity();
+                usedSurfaceSolver = HandleSurfaceSolver(timestep);
             }
-            else if (DMath.Equalsf(vt))
+
+            if (usedSurfaceSolver)
             {
                 HandleCollisions();
                 UpdateGroundVelocity();
             }
             else
             {
-                // If the controller's gotta go fast, split up collision into steps so we don't glitch through walls.
-                // The speed limit becomes however many steps your computer can handle!
-
-                // vc = current velocity - we will subtract from this for each iteration of movement
-                var vc = vt;
-
-                const int CollisionStepLimit = 100;
-                var steps = 0;
-                while (vc > 0.0f)
+                var vt = Velocity.magnitude;
+                if (DisablePlatformCollisions)
                 {
-                    if (vc > AntiTunnelingSpeed)
-                    {
-                        var delta = new Vector3(Vx * timestep, Vy * timestep) * (AntiTunnelingSpeed / vt);
-                        
-                        // One movement iteration - the movement is limited by AntiTunnelingSpeed
-                        transform.position += delta;
-                        vc -= AntiTunnelingSpeed;
-                    }
-                    else
-                    {
-                        var delta = new Vector3(Vx*timestep, Vy*timestep)*(vc/vt);
-
-                        // If we're less than AntiTunnelingSpeed, just apply the remaining velocity
-                        transform.position += delta;// * Mathf.Min(1f, distanceMultiplier);
-                        vc = 0f;
-                    }
-
+                    // If there's no collision, we don't have to care about tunneling through walls - 
+                    // so just add velocity to position
+                    transform.position += new Vector3(Vx * timestep, Vy * timestep);
+                    UpdateGroundVelocity();
+                }
+                else if (DMath.Equalsf(vt))
+                {
                     HandleCollisions();
                     UpdateGroundVelocity();
+                }
+                else
+                {
+                    // If the controller's gotta go fast, split up collision into steps so we don't glitch through walls.
+                    // The speed limit becomes however many steps your computer can handle!
 
-                    // Leave early if we've hit the hard limit, come to a complete stop, or gotten interrupted
-                    if (++steps > CollisionStepLimit || DMath.Equalsf(Velocity.magnitude) || Interrupted)
-                        break;
+                    // vc = current velocity - we will subtract from this for each iteration of movement
+                    var vc = vt;
 
-                    // If the player's speed changes while we're doing this (ex: the player hits a spring),
-                    // recalculate the current 
-                    var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
-                    vc *= vn / vt;
-                    vt *= vn / vt;
+                    const int CollisionStepLimit = 100;
+                    var steps = 0;
+                    while (vc > 0.0f)
+                    {
+                        if (vc > AntiTunnelingSpeed)
+                        {
+                            var delta = new Vector3(Vx * timestep, Vy * timestep) * (AntiTunnelingSpeed / vt);
+
+                            // One movement iteration - the movement is limited by AntiTunnelingSpeed
+                            transform.position += delta;
+                            vc -= AntiTunnelingSpeed;
+                        }
+                        else
+                        {
+                            var delta = new Vector3(Vx * timestep, Vy * timestep) * (vc / vt);
+
+                            // If we're less than AntiTunnelingSpeed, just apply the remaining velocity
+                            transform.position += delta;// * Mathf.Min(1f, distanceMultiplier);
+                            vc = 0f;
+                        }
+
+                        HandleCollisions();
+                        UpdateGroundVelocity();
+
+                        // Leave early if we've hit the hard limit, come to a complete stop, or gotten interrupted
+                        if (++steps > CollisionStepLimit || DMath.Equalsf(Velocity.magnitude) || Interrupted)
+                            break;
+
+                        // If the player's speed changes while we're doing this (ex: the player hits a spring),
+                        // recalculate the current 
+                        var vn = Mathf.Sqrt(Vx * Vx + Vy * Vy);
+                        vc *= vn / vt;
+                        vt *= vn / vt;
+                    }
                 }
             }
 
-            // TODO Allow terrain with custom surface angle
-            /*
-            if (ForceSurfaceAngle)
-            {
-                SurfaceAngle = surfaceAngle;
-                ForceSurfaceAngle = false;
-            }
-            */
-
             HandleBuffers(BufferEvent.AfterMovement);
-        }
-
-        /// <summary>
-        /// Sets the controller's animator parameters.
-        /// </summary>
-        public void SetAnimatorParameters()
-        {
-            if (FacingForwardBoolHash != 0)
-                Animator.SetBool(FacingForwardBoolHash, FacingForward);
-
-            if (AirSpeedXFloatHash != 0)
-                Animator.SetFloat(AirSpeedXFloatHash, Velocity.x);
-
-            if (AirSpeedYFloatHash != 0)
-                Animator.SetFloat(AirSpeedYFloatHash, Velocity.y);
-
-            if (GroundedBoolHash != 0)
-                Animator.SetBool(GroundedBoolHash, Grounded);
-
-            if (GroundSpeedFloatHash != 0)
-                Animator.SetFloat(GroundSpeedFloatHash, GroundVelocity);
-
-            if (GroundSpeedBoolHash != 0)
-                Animator.SetBool(GroundSpeedBool, GroundVelocity != 0.0f);
-
-            if (AbsGroundSpeedFloatHash != 0)
-                Animator.SetFloat(AbsGroundSpeedFloatHash, Mathf.Abs(GroundVelocity));
-
-            if (SurfaceAngleFloatHash != 0)
-                Animator.SetFloat(SurfaceAngleFloatHash, SurfaceAngle);
         }
 
         /// <summary>
@@ -1067,7 +1047,7 @@ namespace SonicRealms.Core.Actors
             {
                 // Air gravity
                 if (!DisableAirGravity)
-                    Velocity += DMath.AngleToVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
+                    Velocity += DMath.UnitVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
 
                 // Air drag
                 if (!DisableAirDrag &&
@@ -1089,13 +1069,22 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void HandleCollisions()
         {
+            if (DisablePlatformCollisions)
+                return;
+
             HandleBuffers(BufferEvent.BeforeCollisions);
 
             if (!Grounded)
             {
-                if (!DisableSideCheck) AirSideCheck();
-                if (!DisableCeilingCheck) AirCeilingCheck();
-                if (!DisableGroundCheck) AirGroundCheck();
+                if (!DisableSideCheck)
+                    AirSideCheck();
+
+                if (!DisableCeilingCheck)
+                    AirCeilingCheck();
+
+                if (!DisableGroundCheck)
+                    AirGroundCheck();
+
                 UpdateSensorRotation();
 
                 JustDetached = false;
@@ -1103,18 +1092,106 @@ namespace SonicRealms.Core.Actors
 
             if (Grounded)
             {
-                if (!DisableSideCheck) GroundSideCheck();
-                if (!DisableSolidObjectCheck && !JustAttached) GroundSolidCheck();
-                if (!DisableCeilingCheck) GroundCeilingCheck();
+                if (!DisableSideCheck)
+                    GroundSideCheck();
+
+                if (!DisableSolidObjectCheck && !JustAttached)
+                    GroundSolidCheck();
+
+                if (!DisableCeilingCheck)
+                    GroundCeilingCheck();
+
                 UpdateGroundVelocity();
 
-                if (!DisableGroundCheck) GroundSurfaceCheck();
+                if (!DisableGroundCheck && _surfaceSolver == null)
+                    GroundSurfaceCheck();
+
                 UpdateGroundVelocity();
 
                 JustAttached = false;
             }
 
             HandleBuffers(BufferEvent.AfterCollisions);
+        }
+
+        public bool HandleSurfaceSolver()
+        {
+            return HandleSurfaceSolver(Time.fixedDeltaTime);
+        }
+
+        public bool HandleSurfaceSolver(float timestep)
+        {
+            var solver = _surfaceSolver;
+            var mediator = _surfaceSolverMediator;
+
+            if (solver == null)
+                return false;
+
+            var translation = DMath.UnitVector(SurfaceAngle*Mathf.Deg2Rad)*GroundVelocity*timestep;
+            mediator.Reset(translation);
+
+            solver.Solve(mediator);
+
+            var error = mediator.Validate();
+            if (error != SurfaceSolverMediator.ValidationError.None)
+            {
+                var errorString = new StringBuilder("Surface solver did not return a valid solution: ");
+
+                if ((error & SurfaceSolverMediator.ValidationError.Position) > 0)
+                    errorString.Append("No position specified. ");
+
+                if ((error & SurfaceSolverMediator.ValidationError.Surface) > 0)
+                    errorString.Append("No surface specified. ");
+
+                if ((error & SurfaceSolverMediator.ValidationError.SurfaceAngle) > 0)
+                    errorString.Append("No surface angle specified. ");
+
+                Debug.LogError(errorString);
+                return false;
+            }
+
+            if (mediator.CalledDetach)
+            {
+                _surfaceSolver = null;
+                solver.OnSolverRemoved(this);
+                return false;
+            }
+
+            transform.position = mediator.Position;
+            SurfaceAngle = mediator.SurfaceAngle;
+            PrimarySurface = mediator.Surface;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Sets the controller's animator parameters.
+        /// </summary>
+        public void SetAnimatorParameters()
+        {
+            if (FacingForwardBoolHash != 0)
+                Animator.SetBool(FacingForwardBoolHash, IsFacingForward);
+
+            if (AirSpeedXFloatHash != 0)
+                Animator.SetFloat(AirSpeedXFloatHash, Velocity.x);
+
+            if (AirSpeedYFloatHash != 0)
+                Animator.SetFloat(AirSpeedYFloatHash, Velocity.y);
+
+            if (GroundedBoolHash != 0)
+                Animator.SetBool(GroundedBoolHash, Grounded);
+
+            if (GroundSpeedFloatHash != 0)
+                Animator.SetFloat(GroundSpeedFloatHash, GroundVelocity);
+
+            if (GroundSpeedBoolHash != 0)
+                Animator.SetBool(GroundSpeedBool, GroundVelocity != 0.0f);
+
+            if (AbsGroundSpeedFloatHash != 0)
+                Animator.SetFloat(AbsGroundSpeedFloatHash, Mathf.Abs(GroundVelocity));
+
+            if (SurfaceAngleFloatHash != 0)
+                Animator.SetFloat(SurfaceAngleFloatHash, SurfaceAngle);
         }
 
         /// <summary>
@@ -1194,6 +1271,7 @@ namespace SonicRealms.Core.Actors
                 ClearWallModeRevertBuffer();
         }
         #endregion
+
         #region Collision Subroutines
         /// <summary>
         /// Collision check with side sensors for when player is in the air.
@@ -1217,7 +1295,7 @@ namespace SonicRealms.Core.Actors
                     // Push out by the difference between the sensor location and hit location,
                     // And also plus a tiny amount to prevent sticky collisions
                     var push = (Vector3)(leftCheck.Raycast.point - (Vector2)Sensors.CenterLeft.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
+                    transform.position += push + push.normalized * 0.0002f;
 
                     // Stop the player
                     if (RelativeVelocity.x < 0.0f)
@@ -1240,7 +1318,7 @@ namespace SonicRealms.Core.Actors
                     // Push out by the difference between the sensor location and hit location,
                     // And also plus a tiny amount to prevent sticky collisions
                     var push = (Vector3)(rightCheck.Raycast.point - (Vector2)Sensors.CenterRight.position);
-                    transform.position += push + push.normalized * DMath.Epsilon;
+                    transform.position += push + push.normalized * 0.0002f;
 
                     // Stop the player
                     if (RelativeVelocity.x > 0.0f)
@@ -1278,7 +1356,7 @@ namespace SonicRealms.Core.Actors
 
             if (leftCheck && rightCheck)
             {
-                if (DMath.Highest(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
+                if (DMath.HeightDifference(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
                 {
                     firstCheck = leftCheck;
                     firstSensor = SensorType.TopLeft;
@@ -1373,7 +1451,7 @@ namespace SonicRealms.Core.Actors
 
             if (leftCheck && rightCheck)
             {
-                if (DMath.Highest(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) <= 0)
+                if (DMath.HeightDifference(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) <= 0)
                 {
                     firstCheck = leftCheck;
                     firstSensor = SensorType.BottomLeft;
@@ -1463,7 +1541,7 @@ namespace SonicRealms.Core.Actors
                 // Push out by the difference between the sensor location and hit location,
                 // And also plus a tiny amount to prevent sticky collisions
                 var push = (Vector3)(leftCheck.Raycast.point - (Vector2)Sensors.CenterLeft.position);
-                transform.position += push + push.normalized * DMath.Epsilon;
+                transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle*Mathf.Rad2Deg);
                 var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
@@ -1498,7 +1576,7 @@ namespace SonicRealms.Core.Actors
                 RightWall = RightWallHit ? rightCheck.Transform : null;
                 
                 var push = (Vector3)(rightCheck.Raycast.point - (Vector2)Sensors.CenterRight.position);
-                transform.position += push + push.normalized * DMath.Epsilon;
+                transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
                 var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
@@ -1627,7 +1705,7 @@ namespace SonicRealms.Core.Actors
             const float FlatSurfaceTolerance = 0.01f;
 
             // Choose the sensor to use based on which one found the "higher" floor (based on the wall mode)
-            if (DMath.Highest(left.Raycast.point, right.Raycast.point, AbsoluteAngle(WallMode.ToNormal())*Mathf.Deg2Rad) >= 0f)
+            if (DMath.HeightDifference(left.Raycast.point, right.Raycast.point, AbsoluteAngle(WallMode.ToNormal())*Mathf.Deg2Rad) >= 0f)
             {
                 goto orientLeftRight;
             }
@@ -1730,12 +1808,12 @@ namespace SonicRealms.Core.Actors
                 ControllerSide.Right);
 
             // TODO This method is a copy of GroundSideCheck other than this part, find some way to merge the parts in common
-            if (!leftCheck || !leftCheck.Transform.GetComponent<SolidObject>())
+            if (!leftCheck || !leftCheck.Transform.GetComponent<PreventLedgeClimb>())
             {
                 leftCheck = null;
             }
 
-            if (!rightCheck || !rightCheck.Transform.GetComponent<SolidObject>())
+            if (!rightCheck || !rightCheck.Transform.GetComponent<PreventLedgeClimb>())
             {
                 rightCheck = null;
             }
@@ -1748,7 +1826,7 @@ namespace SonicRealms.Core.Actors
                 // Push out by the difference between the sensor location and hit location,
                 // And also plus a tiny amount to prevent sticky collisions
                 var push = (Vector3)(leftCheck.Raycast.point - (Vector2)Sensors.SolidLeft.position);
-                transform.position += push + push.normalized * DMath.Epsilon;
+                transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle * Mathf.Rad2Deg);
                 var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
@@ -1783,7 +1861,7 @@ namespace SonicRealms.Core.Actors
                 RightWall = RightWallHit ? rightCheck.Transform : null;
 
                 var push = (Vector3)(rightCheck.Raycast.point - (Vector2)Sensors.SolidRight.position);
-                transform.position += push + push.normalized * DMath.Epsilon;
+                transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
                 var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
@@ -1816,6 +1894,7 @@ namespace SonicRealms.Core.Actors
             return false;
         }
         #endregion
+
         #region Debug Subroutines
         protected void HandleDebugGraphics()
         {
@@ -1858,6 +1937,7 @@ namespace SonicRealms.Core.Actors
             }
         }
         #endregion
+
 
         #region Command Buffer Functions
         /// <summary>
@@ -1916,6 +1996,7 @@ namespace SonicRealms.Core.Actors
             }
         }
         #endregion
+
         #region Move and Control Functions
         /// <summary>
         /// Turns off the controller's physics, usually so it can be modified by set pieces.
@@ -1935,7 +2016,7 @@ namespace SonicRealms.Core.Actors
         public void Interrupt(float time, bool endMoves = false)
         {
             Interrupt(endMoves);
-            InterruptTimer = Mathf.Max(DMath.Epsilon, time);
+            InterruptTimer = Mathf.Max(0.0002f, time);
         }
 
         /// <summary>
@@ -1960,9 +2041,10 @@ namespace SonicRealms.Core.Actors
         {
             if (!Grounded)
                 return 0.0f;
+
             GroundVelocity = DMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
 
-            var v = DMath.AngleToVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
+            var v = DMath.UnitVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
             Vx = v.x;
             Vy = v.y;
 
@@ -1982,23 +2064,14 @@ namespace SonicRealms.Core.Actors
         {
             if (!Grounded)
                 return 0.0f;
+
             GroundVelocity += DMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
 
-            var v = DMath.AngleToVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
+            var v = DMath.UnitVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
             Vx = v.x;
             Vy = v.y;
 
             return GroundVelocity;
-        }
-
-        /// <summary>
-        /// Translates the controller by the specified amount. This function doesn't immediately move the controller
-        /// and instead sets it to move in its next FixedUpdate, right before collision checks.
-        /// </summary>
-        /// <param name="amount"></param>
-        public void Translate(Vector3 amount)
-        {
-            QueuedTranslation += amount;
         }
 
         /// <summary>
@@ -2048,6 +2121,7 @@ namespace SonicRealms.Core.Actors
             }
         }
         #endregion
+
         #region Surface Acquisition Functions
         /// <summary>
         /// Detach the player from whatever surface it is on.
@@ -2064,6 +2138,8 @@ namespace SonicRealms.Core.Actors
             JustDetached = true;
             Side = GroundSensorType.None;
             WallMode = WallMode.None;
+
+            UseCustomSurface(null);
 
             SetSurface(GroundSensorType.None, null);
             UpdateSensorRotation();
@@ -2250,7 +2326,7 @@ namespace SonicRealms.Core.Actors
         }
 
         /// <summary>
-        /// Returns the 
+        /// Returns the given absolute angle as an angle relative to the controller's gravity.
         /// For example, 0 (flat surface angle) returns 180 (upside-down surface) when gravity
         /// points upward and 0 when gravity points downward.
         /// </summary>
@@ -2259,6 +2335,19 @@ namespace SonicRealms.Core.Actors
         public float RelativeAngle(float absoluteAngle)
         {
             return DMath.PositiveAngle_d(absoluteAngle - GravityDirection + 270.0f);
+        }
+
+        /// <summary>
+        /// Returns the given absolute angle as an angle relative to the controller's gravity.
+        /// For example, 0 (flat surface angle) returns 180 (upside-down surface) when gravity
+        /// points upward and 0 when gravity points downward.
+        /// </summary>
+        /// <param name="absoluteAngle">The absolute angle, in degrees.</param>
+        /// <param name="gravityDirection">The controller's direction of gravity, in degrees.</param>
+        /// <returns></returns>
+        public static float RelativeAngle(float absoluteAngle, float gravityDirection)
+        {
+            return DMath.PositiveAngle_d(absoluteAngle - gravityDirection + 270.0f);
         }
 
         /// <summary>
@@ -2272,9 +2361,40 @@ namespace SonicRealms.Core.Actors
         {
             return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
+
+        /// <summary>
+        /// Returns the given relative angle corrected for physics where gravity points straight down.
+        /// For example, 0 (flat) while gravity is 90 (upside-down) will return 180, an
+        /// upside-down surface.
+        /// </summary>
+        /// <param name="relativeAngle">The relative angle, in degrees.</param>
+        /// <param name="gravityDirection">The controller's direction of gravity, in degrees.</param>
+        /// <returns></returns>
+        public static float AbsoluteAngle(float relativeAngle, float gravityDirection)
+        {
+            return DMath.PositiveAngle_d(relativeAngle + gravityDirection - 270.0f);
+        }
         #endregion
 
-        #region Trigger Helpers
+        #region Surface Solver Functions
+        public void UseCustomSurface(ISurfaceSolver surfaceSolver)
+        {
+            if (_surfaceSolver != null)
+            {
+                var solver = _surfaceSolver;
+                _surfaceSolver = null;
+
+                solver.OnSolverRemoved(this);
+            }
+
+            _surfaceSolver = surfaceSolver;
+
+            if (_surfaceSolver != null)
+                _surfaceSolver.OnSolverAdded(this);
+        }
+        #endregion
+
+        #region Trigger Functions
         /// <summary>
         /// Lets a platform's trigger know about a collision, if it has one.
         /// </summary>
@@ -2294,33 +2414,42 @@ namespace SonicRealms.Core.Actors
                 OnCollide.Invoke(contact);
         }
 
-        private bool _isCheckingPreCollision;
+        // We're using a semaphore in case recursive calls to CheckPreCollision occur
+        // IgnoreThisCollision() can't be called unless the current call stack has entered CheckPreCollision at least once
+        private int _preCollisionSemaphore;
+
         private bool _willIgnoreThisCollision;
+
+        public bool IsPreColliding { get { return _preCollisionSemaphore > 0; } }
+
         private bool CheckPreCollision(SensorType sensor, TerrainCastHit data)
         {
             if (!data || !data.Transform || (DisableEvents && DisableNotifyPlatforms))
                 return true;
 
-            _isCheckingPreCollision = true;
+            ++_preCollisionSemaphore;
 
-            var contact = new PlatformCollision.Contact(sensor, data, data.Transform.GetComponent<PlatformTrigger>());
-
-            if (!DisableNotifyPlatforms)
+            try
             {
-                var trigger = data.Transform.GetComponent<PlatformTrigger>();
-                if (trigger)
-                    trigger.NotifyPreCollision(contact);
+                var contact = new PlatformCollision.Contact(sensor, data, data.Transform.GetComponent<PlatformTrigger>());
+
+                if (!DisableNotifyPlatforms)
+                {
+                    var trigger = data.Transform.GetComponent<PlatformTrigger>();
+                    if (trigger)
+                        trigger.NotifyPreCollision(contact);
+                }
+
+                if (!DisableEvents)
+                    OnPreCollide.Invoke(contact);
+
+                return !_willIgnoreThisCollision;
             }
-
-            if (!DisableEvents)
-                OnPreCollide.Invoke(contact);
-
-            var allowCollision = !_willIgnoreThisCollision;
-            _willIgnoreThisCollision = false;
-
-            _isCheckingPreCollision = false;
-
-            return allowCollision;
+            finally
+            {
+                _willIgnoreThisCollision = false;
+                --_preCollisionSemaphore;
+            }
         }
 
         /// <summary>
@@ -2335,7 +2464,7 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public void IgnoreThisCollision()
         {
-            if (!_isCheckingPreCollision)
+            if (!IsPreColliding)
             {
                 Debug.LogError("IgnoreThisCollision() may only be called inside an OnPreCollide event. " +
                                "Either subscribe to the OnPreCollide event on the controller, or " +
@@ -2396,20 +2525,20 @@ namespace SonicRealms.Core.Actors
                 OnPlatformSurfaceExit.Invoke(platform);
         }
 
-        public void NotifyActivateObject(ReactiveObject obj)
+        public void NotifyActivateObject(ReactiveEffect obj)
         {
             Reactives.Add(obj);
 
             if (!DisableEvents)
-                OnObjectActivate.Invoke(obj);
+                OnEffectActivate.Invoke(obj);
         }
 
-        public void NotifyDeactivateObject(ReactiveObject obj)
+        public void NotifyDeactivateObject(ReactiveEffect obj)
         {
             Reactives.Remove(obj);
 
             if (!DisableEvents)
-                OnObjectDeactivate.Invoke(obj);
+                OnEffectDeactivate.Invoke(obj);
         }
         #endregion
 

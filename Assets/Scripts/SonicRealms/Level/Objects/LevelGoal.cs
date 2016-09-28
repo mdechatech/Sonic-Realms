@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SonicRealms.Level.Objects
 {
-    public class LevelGoal : ReactiveObject
+    public class LevelGoal : ReactiveEffect
     {
         /// <summary>
         /// How many seconds to wait before ending the level.

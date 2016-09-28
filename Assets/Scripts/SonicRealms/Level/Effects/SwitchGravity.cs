@@ -9,7 +9,7 @@ namespace SonicRealms.Level.Effects
     /// Changes the direction and magnitude of a controller's gravity when activated.
     /// </summary>
     [AddComponentMenu("Hedgehog/Object Effects/Switch Gravity")]
-    public class SwitchGravity : ReactiveObject
+    public class SwitchGravity : ReactiveEffect
     {
         /// <summary>
         /// Whether to restore the controller's old gravity after leaving.

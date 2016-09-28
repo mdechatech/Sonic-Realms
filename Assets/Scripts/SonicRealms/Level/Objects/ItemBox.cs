@@ -11,16 +11,19 @@ namespace SonicRealms.Level.Objects
         /// <summary>
         /// How long to wait after being broken to activate, in seconds.
         /// </summary>
-        [SerializeField]
         [Tooltip("How long to wait after being broken to activate, in seconds.")]
         public float ActivateDelay;
+
+        [Foldout("Animation")]
+        public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when the item box is broken.
         /// </summary>
-        [SerializeField]
+        [Foldout("Animation")]
         [Tooltip("Name of an Animator trigger set when the item box is broken.")]
         public string BrokenTrigger;
+        protected int BrokenTriggerHash;
 
         /// <summary>
         /// Stores the controller that broke the item box.
@@ -35,24 +38,34 @@ namespace SonicRealms.Level.Objects
         public override void Reset()
         {
             base.Reset();
+
             ActivateDelay = 0.53333333f;
+
+            Animator = GetComponent<Animator>();
         }
 
         public override void Awake()
         {
             base.Awake();
+
             ActivationCountdown = ActivateDelay;
+
+            Animator = Animator ? Animator : GetComponent<Animator>();
+            BrokenTriggerHash = Animator.StringToHash(BrokenTrigger);
         }
 
         public void Update()
         {
-            if (Controller == null) return;
+            if (Controller == null)
+                return;
 
             ActivationCountdown -= Time.deltaTime;
-            if (ActivationCountdown >= 0.0f) return;
+
+            if (ActivationCountdown >= 0.0f)
+                return;
 
             ActivationCountdown = 0.0f;
-            TriggerObject(Controller);
+            BlinkEffectTrigger(Controller);
             enabled = false;
         }
 
@@ -114,9 +127,8 @@ namespace SonicRealms.Level.Objects
             GetComponent<Collider2D>().enabled = false;
             Controller = controller;
 
-            if (Animator == null || BrokenTrigger.Length <= 0)
-                return;
-            Animator.SetTrigger(BrokenTrigger);
+            if (Animator && BrokenTriggerHash != 0)
+                Animator.SetTrigger(BrokenTriggerHash);
         }
     }
 }

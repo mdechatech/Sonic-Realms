@@ -10,7 +10,7 @@ namespace SonicRealms.Level.Objects
     /// <summary>
     /// Moves the controller along a path when activated.
     /// </summary>
-    public class Pipe : ReactiveObject
+    public class Pipe : ReactiveEffect
     {
         /// <summary>
         /// How fast the controller moves through the pipe, in units per second.
@@ -28,7 +28,7 @@ namespace SonicRealms.Level.Objects
         /// An object trigger that, when activated, starts the controller on the path.
         /// </summary>
         [Tooltip("An object trigger that, when activated, starts the controller on the path.")]
-        public ObjectTrigger EntryPoint;
+        public EffectTrigger EntryPoint;
 
         /// <summary>
         /// The path as defined by the shape of the given collider.
@@ -92,8 +92,8 @@ namespace SonicRealms.Level.Objects
         {
             base.Start();
 
-            ObjectTrigger.TriggerFromChildren = false;
-            EntryPoint.OnActivate.AddListener(ObjectTrigger.Activate);
+            EffectTrigger.TriggerFromChildren = false;
+            EntryPoint.OnActivate.AddListener(EffectTrigger.Activate);
             ReconstructPath();
         }
 
@@ -148,7 +148,7 @@ namespace SonicRealms.Level.Objects
             controller.transform.position = new Vector3(walk.x, walk.y, controller.transform.position.z);
 
             if (ControllerProgress[index] > 1.0f)
-                ObjectTrigger.Deactivate(controller);
+                EffectTrigger.Deactivate(controller);
         }
 
         public override void OnDeactivate(HedgehogController controller)

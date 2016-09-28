@@ -12,24 +12,6 @@ namespace SonicRealms.Core.Utils
     public static class TerrainUtility
     {
         #region Terrain Utilities
-
-        private const int TerrainCastHitCount = 256;
-        private static readonly TerrainCastHit[] TerrainCastHitCache = new TerrainCastHit[TerrainCastHitCount];
-        private static int TerrainCastHitIndex = 0;
-
-        static TerrainUtility()
-        {
-            for (var i = 0; i < TerrainCastHitCache.Length; ++i)
-                TerrainCastHitCache[i] = new TerrainCastHit(default(RaycastHit2D));
-        }
-
-        private static TerrainCastHit GetTerrainCastHit()
-        {
-            var result = TerrainCastHitCache[TerrainCastHitIndex];
-            TerrainCastHitIndex = (TerrainCastHitIndex + 1)%TerrainCastHitCount;
-            return result;
-        }
-
         private const int MaxTerrainCastResults = 256;
         private static readonly RaycastHit2D[] LinecastResults =
             new RaycastHit2D[MaxTerrainCastResults];
@@ -50,7 +32,7 @@ namespace SonicRealms.Core.Utils
 
             for (var i = 0; i < amount; ++i)
             {
-                var hit = GetTerrainCastHit().Initialize(LinecastResults[i], fromSide, source, start, end);
+                var hit = TerrainCastHit.FromPool(LinecastResults[i], fromSide, source, start, end);
                 if (!TransformSelector(hit)) continue;
                 return hit;
             }

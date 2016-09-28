@@ -19,6 +19,19 @@ namespace SonicRealms.Level
     {
         [SerializeField]
         private Transform _target;
+
+        [SerializeField]
+        [Foldout("Debug")]
+        private Vector2 _basePosition;
+
+        [SerializeField]
+        [Foldout("Debug")]
+        private Vector2 _panOffset;
+
+        [SerializeField]
+        [Foldout("Debug")]
+        private Vector2 _extraOffset;
+
         public Transform Target
         {
             get { return _target; }
@@ -55,14 +68,35 @@ namespace SonicRealms.Level
         [Foldout("Debug")]
         public bool FollowTarget;
 
-        [Foldout("Debug")]
-        public Vector2 BasePosition;
-
-        [Foldout("Debug")]
-        public Vector2 PanOffset;
-
-        [Foldout("Debug")]
-        public Vector2 ExtraOffset;
+        public Vector2 BasePosition
+        {
+            get { return _basePosition; }
+            set
+            {
+                _basePosition = value;
+                UpdatePosition();
+            }
+        }
+        
+        public Vector2 PanOffset
+        {
+            get { return _panOffset; }
+            set
+            {
+                _panOffset = value;
+                UpdatePosition();
+            }
+        }
+        
+        public Vector2 ExtraOffset
+        {
+            get { return _extraOffset; }
+            set
+            {
+                _extraOffset = value;
+                UpdatePosition();
+            }
+        }
 
         [Space, Foldout("Debug")]
         public Vector2 PanStart;
@@ -142,7 +176,7 @@ namespace SonicRealms.Level
         public void FixedUpdate()
         {
             HandleState();
-            HandlePosition();
+            UpdatePosition();
         }
 
         /// <summary>
@@ -419,11 +453,15 @@ namespace SonicRealms.Level
             }
         }
 
-        protected void HandlePosition()
+        protected void UpdatePosition()
         {
             var result = BasePosition;
-            if (State != CameraControllerState.Focus) result += PanOffset + ExtraOffset;
+
+            if (State != CameraControllerState.Focus)
+                result += PanOffset + ExtraOffset;
+
             result = DoLevelBoundsCheck(result);
+
             To(result);
         }
     }

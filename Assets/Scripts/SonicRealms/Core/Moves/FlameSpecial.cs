@@ -24,7 +24,7 @@ namespace SonicRealms.Core.Moves
             base.OnActiveEnter();
 
             // Dash based on what direction we're facing
-            if (Controller.FacingForward)
+            if (Controller.IsFacingForward)
                 Controller.RelativeVelocity = DashVelocity;
             else
                 Controller.RelativeVelocity = new Vector2(-DashVelocity.x, DashVelocity.y);
@@ -35,8 +35,8 @@ namespace SonicRealms.Core.Moves
             if (Animator != null)
             {
                 var t = Animator.transform;
-                if ((!Controller.FacingForward && t.localScale.x > 0.0f) ||
-                    (Controller.FacingForward && t.localScale.x < 0.0f))
+                if ((!Controller.IsFacingForward && t.localScale.x > 0.0f) ||
+                    (Controller.IsFacingForward && t.localScale.x < 0.0f))
                     t.localScale -= new Vector3(t.localScale.x*2f, 0.0f);
             }
         }

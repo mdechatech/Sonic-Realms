@@ -158,7 +158,7 @@ namespace SonicRealms.UI
             {
                 var child = Items[i];
                 child.transform.position = transform.position -
-                                           (Vector3)(DMath.AngleToVector(directionRadians)*(i - scrollPosition)*Spacing*
+                                           (Vector3)(DMath.UnitVector(directionRadians)*(i - scrollPosition)*Spacing*
                                            Canvas.transform.localScale.x);
             }
         }

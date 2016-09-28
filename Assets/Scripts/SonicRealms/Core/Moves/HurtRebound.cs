@@ -73,6 +73,9 @@ namespace SonicRealms.Core.Moves
             Controller.Detach();
             Controller.RelativeVelocity = speed;
 
+            if (Controller.IsPreColliding)
+                Controller.IgnoreThisCollision();
+
             // Restrict control
             Manager.End<AirControl>();
 

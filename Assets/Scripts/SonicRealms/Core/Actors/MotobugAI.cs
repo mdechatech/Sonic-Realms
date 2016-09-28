@@ -98,7 +98,7 @@ namespace SonicRealms.Core.Actors
         public void Start()
         {
             SignalSearchArea.gameObject.AddComponent<TriggerCallback2D>().TriggerEnter2D.AddListener(OnTriggerEnter2D);
-            Controller.FacingForward = FacingRight;
+            Controller.IsFacingForward = FacingRight;
 
             if (Controller.Animator == null) return;
             FacingRightBoolHash = string.IsNullOrEmpty(FacingRightBool) ? 0 : Animator.StringToHash(FacingRightBool);
@@ -115,7 +115,7 @@ namespace SonicRealms.Core.Actors
                 {
                     TurnTimer = 0f;
                     FacingRight = !FacingRight;
-                    Controller.FacingForward = FacingRight;
+                    Controller.IsFacingForward = FacingRight;
                 }
             }
 

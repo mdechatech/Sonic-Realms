@@ -85,9 +85,11 @@ namespace SonicRealms.Level.Objects
                 }
 
                 _segmentCount = value;
+#if UNITY_EDITOR
                 UpdateSegmentCount(value);
                 UpdateSegmentLength();
                 UpdateSegmentPositions();
+#endif
             }
         }
 
@@ -184,9 +186,9 @@ namespace SonicRealms.Level.Objects
             UpdateSegmentLength();
             UpdateSegmentPositions();
 #else
-            _segments = 12;
+            _segmentCount = 12;
 #endif
-
+            
             _moveTime = new ScaledCurve
             {
                 Scale = 0.5f,

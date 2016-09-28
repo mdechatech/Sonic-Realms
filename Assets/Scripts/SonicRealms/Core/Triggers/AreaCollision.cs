@@ -113,6 +113,15 @@ namespace SonicRealms.Core.Triggers
             _contacts = contacts.ToArray();
         }
 
+        public override string ToString()
+        {
+            return
+                string.Format(
+                    "[AreaCollision Contacts=[{0}], Controller={1}, Latest={2}, Main={3}, Attack={4}, Other={5}]",
+                    string.Join(", ", _contacts.Select(c => c.ToString()).ToArray()), Controller, Latest, Main, Attack,
+                    Other);
+        }
+
         /// <summary>
         /// Returns true if the collision has any contacts, false otherwise.
         /// </summary>
@@ -140,6 +149,14 @@ namespace SonicRealms.Core.Triggers
             /// The owner of the hitbox that collided with the area trigger.
             /// </summary>
             public HedgehogController Controller { get { return Hitbox ? Hitbox.Controller : null; } }
+
+            /// <summary>
+            /// The collider of the area trigger that collided with the hitbox.
+            /// </summary>
+            public Collider2D AreaCollider
+            {
+                get { return AreaTrigger ? AreaTrigger.GetComponent<Collider2D>() : null; }
+            }
 
             /// <summary>
             /// The position of the hitbox at the time of collision with the area trigger.
@@ -194,6 +211,17 @@ namespace SonicRealms.Core.Triggers
                 GroundVelocity = hitbox.Controller.GroundVelocity;
                 SurfaceAngle = hitbox.Controller.SurfaceAngle;
                 RelativeSurfaceAngle = hitbox.Controller.RelativeSurfaceAngle;
+            }
+
+            public override string ToString()
+            {
+                return
+                    string.Format(
+                        "[Contact Hitbox={0}, AreaTrigger={1}, HitboxPosition={2}, AreaPosition={3}, Velocity={4}, " +
+                        "RelativeVelocity={5}, GroundVelocity={6}, SurfaceAngle={7}, RelativeSurfaceAngle={8}, " +
+                        "Controller={9}]",
+                        Hitbox, AreaTrigger, HitboxPosition, AreaPosition, Velocity, RelativeVelocity, GroundVelocity,
+                        SurfaceAngle, RelativeSurfaceAngle, Controller);
             }
 
             /// <summary>

@@ -31,7 +31,7 @@ namespace SonicRealms.Level.Platforms
             var controller = collision.Controller;
             if (collision.Controller == null) return;
 
-            controller.transform.Translate(DMath.AngleToVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
+            controller.transform.Translate(DMath.UnitVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
                                  Time.fixedDeltaTime);
 
             _lastSurfaceAngle = controller.SurfaceAngle;
@@ -47,7 +47,7 @@ namespace SonicRealms.Level.Platforms
             if (controller.Grounded)
                 controller.GroundVelocity += Velocity;
             else
-                controller.Velocity += DMath.AngleToVector(_lastSurfaceAngle*Mathf.Deg2Rad)*Velocity;
+                controller.Velocity += DMath.UnitVector(_lastSurfaceAngle*Mathf.Deg2Rad)*Velocity;
         }
     }
 }

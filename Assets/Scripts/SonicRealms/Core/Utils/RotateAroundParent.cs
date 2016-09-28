@@ -29,7 +29,7 @@ namespace SonicRealms.Core.Utils
             Time %= 1f;
 
             transform.position = transform.parent.position +
-                                 (Vector3) DMath.AngleToVector(Time*Mathf.PI*2f)*Radius;
+                                 (Vector3) DMath.UnitVector(Time*Mathf.PI*2f)*Radius;
         }
     }
 }

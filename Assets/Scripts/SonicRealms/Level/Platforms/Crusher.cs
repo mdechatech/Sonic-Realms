@@ -128,7 +128,7 @@ namespace SonicRealms.Level.Platforms
             if (collision.Controller == null) return;
 
             if (CheckCrush(collision.Controller))
-               TriggerObject(collision.Controller);
+               BlinkEffectTrigger(collision.Controller);
         }
     }
 }

@@ -424,7 +424,7 @@ namespace SonicRealms.Core.Moves
                 }
                 else if (!DisableAcceleration)
                 {
-                    Controller.FacingForward = false;
+                    Controller.IsFacingForward = false;
 
                     if(Controller.GroundVelocity > -TopSpeed)
                         Controller.GroundVelocity += Acceleration*magnitude*timestep;
@@ -444,7 +444,7 @@ namespace SonicRealms.Core.Moves
                 }
                 else if (!DisableAcceleration)
                 {
-                    Controller.FacingForward = true;
+                    Controller.IsFacingForward = true;
 
                     if (Controller.GroundVelocity < TopSpeed)
                         Controller.GroundVelocity += Acceleration*magnitude*timestep;

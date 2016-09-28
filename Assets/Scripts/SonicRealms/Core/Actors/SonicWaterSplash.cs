@@ -92,7 +92,7 @@ namespace SonicRealms.Core.Actors
             if (!hit || hit.fraction == 0f)
             {
                 hit = Physics2D.Linecast((Vector2) Player.transform.position -
-                                         DMath.AngleToVector(Player.GravityDirection*Mathf.Rad2Deg),
+                                         DMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg),
                     Player.transform.position, WaterLayer);
             }
 
@@ -112,7 +112,7 @@ namespace SonicRealms.Core.Actors
             {
                 hit = Physics2D.Linecast(Player.transform.position,
                     (Vector2) Player.transform.position +
-                    DMath.AngleToVector(Player.GravityDirection*Mathf.Rad2Deg)
+                    DMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg)
                     , WaterLayer);
             }
 
