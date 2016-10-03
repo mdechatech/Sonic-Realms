@@ -9,15 +9,15 @@ GameObject:
   m_Component:
   - 4: {fileID: 443564}
   - 61: {fileID: 6103026}
-  - 114: {fileID: 11408032}
-  - 114: {fileID: 11496190}
-  - 114: {fileID: 11406708}
-  - 114: {fileID: 11479540}
-  - 114: {fileID: 11476284}
   - 95: {fileID: 9590922}
   - 212: {fileID: 21258536}
-  - 114: {fileID: 11469214}
   - 114: {fileID: 11422014}
+  - 114: {fileID: 11408032}
+  - 114: {fileID: 11406708}
+  - 114: {fileID: 11479540}
+  - 114: {fileID: 11496190}
+  - 114: {fileID: 11476284}
+  - 114: {fileID: 11469214}
   m_Layer: 31
   m_Name: S3K Robotnik
   m_TagString: Untagged
@@ -124,7 +124,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.02, z: 0}
+  m_LocalPosition: {x: 0, y: -0.019999996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -163,7 +163,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 101966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2.84, y: 0.19999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -430,7 +430,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2076084747
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300068, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -463,7 +463,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2076084747
   m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -529,7 +529,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2076084747
   m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -562,7 +562,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2076084747
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300040, guid: 5b189e98aff2ed04facbb5276cda553e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

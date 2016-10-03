@@ -53,8 +53,18 @@ namespace SonicRealms.Level
             _foregroundColorTint = new Color(0, 0, 1, 0);
         }
 
+        protected void Awake()
+        {
+            SetShaderProperties();
+        }
+
 #if UNITY_EDITOR
         protected void Update()
+        {
+            SetShaderProperties();
+        }
+#endif
+        private void SetShaderProperties()
         {
             var sprite = GetComponent<SpriteRenderer>();
 
@@ -63,27 +73,26 @@ namespace SonicRealms.Level
 
             var block = new MaterialPropertyBlock();
 
-            if(_displacementTexture)
+            if (_displacementTexture)
                 block.SetTexture("_DisplaceTex", _displacementTexture);
 
-            if(_backgroundColorCurveTexture)
+            if (_backgroundColorCurveTexture)
                 block.SetTexture("_BGColorTex", _backgroundColorCurveTexture);
 
-            if(_foregroundColorCurveTexture)
+            if (_foregroundColorCurveTexture)
                 block.SetTexture("_FGColorTex", _foregroundColorCurveTexture);
 
             block.SetFloat("_Magnitude", _magnitude);
             block.SetFloat("_HorizSpeed", _speed.x);
             block.SetFloat("_VertSpeed", _speed.y);
 
-            block.SetFloat("_DisplaceScaleX", 1/sprite.bounds.size.x*_displacementScale);
-            block.SetFloat("_DisplaceScaleY", 1/sprite.bounds.size.y*_displacementScale);
+            block.SetFloat("_DisplaceScaleX", 1 / sprite.bounds.size.x * _displacementScale);
+            block.SetFloat("_DisplaceScaleY", 1 / sprite.bounds.size.y * _displacementScale);
 
             block.SetColor("_BGColorTint", _backgroundColorTint);
             block.SetColor("_FGColorTint", _foregroundColorTint);
 
             sprite.SetPropertyBlock(block);
         }
-#endif
     }
 }

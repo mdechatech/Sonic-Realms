@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SonicRealms.Core.Utils;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -32,6 +33,12 @@ namespace SonicRealms.Level
 
         [SerializeField, HideInInspector]
         private Vector3 _prevScale;
+
+        [SerializeField]
+        private Vector2 _snapInterval;
+
+        [SerializeField, HideInInspector]
+        private Vector2 _prevSnapInterval;
 
         [SerializeField, HideInInspector]
         private List<GameObject> _tiles;
@@ -126,12 +133,23 @@ namespace SonicRealms.Level
                 RearrangeTiles();
             }
 
+            if (_prevSnapInterval != _snapInterval)
+            {
+                _snapInterval = new Vector2(
+                    Mathf.Max(0, _snapInterval.x),
+                    Mathf.Max(0, _snapInterval.y));
+
+                _prevSnapInterval = _snapInterval;
+
+                RearrangeTiles();
+            }
+
             CheckCorruption();
         }
 
         private void CheckCorruption()
         {
-            if (_tiles.Count != transform.childCount)
+            if (_baseTile != null && _tiles.Count != transform.childCount)
                 RecreateTiles();
         }
 
@@ -211,11 +229,14 @@ namespace SonicRealms.Level
                 if (i >= count && i < _tiles.Count || (i < _tiles.Count && !_tiles[i]))
                 {
                     tile = _tiles[i];
+#if UNITY_EDITOR
                     EditorApplication.delayCall += () =>
                     {
                         DestroyImmediate(tile);
                     };
-
+#else
+                    Destroy(tile);
+#endif
                     _tiles.RemoveAt(i--);
 
                     continue;
@@ -232,9 +253,20 @@ namespace SonicRealms.Level
                     tile.name = i.ToString();
                 }
 
-                tile.transform.localPosition = new Vector3(
-                    (xMin + _tileSize.x * (i / rows)) / transform.lossyScale.x,
-                    (yMin + _tileSize.y * (i % rows)) / transform.lossyScale.y);
+                var x = (xMin + _tileSize.x*(i/rows))/transform.lossyScale.x;
+                var y = (yMin + _tileSize.y*(i%rows))/transform.lossyScale.y;
+
+                if (_snapInterval.x > 0)
+                {
+                    x = DMath.Round(x, _snapInterval.x);
+                }
+
+                if (_snapInterval.y > 0)
+                {
+                    y = DMath.Round(y, _snapInterval.y);
+                }
+
+                tile.transform.localPosition = new Vector3(x, y);
 
                 tile.transform.localScale = new Vector2(
                     1/transform.lossyScale.x,
