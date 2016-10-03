@@ -6,6 +6,7 @@ namespace SonicRealms.Core.Utils
     public class SnapPosition : MonoBehaviour
     {
         public Vector2 Interval;
+        public Vector2 Offset;
 
         private Vector3 _position;
         private Transform _transform;
@@ -26,7 +27,8 @@ namespace SonicRealms.Core.Utils
 
         public void OnEnable()
         {
-            if (_snapper == null) _snapper = StartCoroutine(SnapUpdate());
+            if (_snapper == null)
+                _snapper = StartCoroutine(SnapUpdate());
         }
 
         public void OnDisable()
@@ -52,8 +54,8 @@ namespace SonicRealms.Core.Utils
         {
             _position = _transform.position;
             _transform.position = new Vector3(
-                DMath.Round(_position.x, Interval.x),
-                DMath.Round(_position.y, Interval.y),
+                DMath.Round(_position.x, Interval.x, Offset.x),
+                DMath.Round(_position.y, Interval.y, Offset.y),
                 _position.z);
         }
     }
