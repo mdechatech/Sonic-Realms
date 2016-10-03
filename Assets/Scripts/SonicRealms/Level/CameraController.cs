@@ -1,6 +1,5 @@
 ﻿using System;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level.Effects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,23 +13,12 @@ namespace SonicRealms.Level
     /// of the 16 bit games.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Camera))]
     public class CameraController : MonoBehaviour
     {
+        public Camera Camera;
+
         [SerializeField]
         private Transform _target;
-
-        [SerializeField]
-        [Foldout("Debug")]
-        private Vector2 _basePosition;
-
-        [SerializeField]
-        [Foldout("Debug")]
-        private Vector2 _panOffset;
-
-        [SerializeField]
-        [Foldout("Debug")]
-        private Vector2 _extraOffset;
 
         public Transform Target
         {
@@ -55,9 +43,6 @@ namespace SonicRealms.Level
 
         [Foldout("Focus")]
         public Vector2 FocusSpeed;
-
-        [HideInInspector]
-        public Camera Camera;
 
         [Foldout("Bounds")]
         public Transform LevelBoundsMin;
@@ -97,6 +82,19 @@ namespace SonicRealms.Level
                 UpdatePosition();
             }
         }
+
+        [SerializeField]
+        [Foldout("Debug")]
+        private Vector2 _basePosition;
+
+        [SerializeField]
+        [Foldout("Debug")]
+        private Vector2 _panOffset;
+
+        [SerializeField]
+        [Foldout("Debug")]
+        private Vector2 _extraOffset;
+
 
         [Space, Foldout("Debug")]
         public Vector2 PanStart;

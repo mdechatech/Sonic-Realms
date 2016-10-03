@@ -36,9 +36,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Overlay Effects
+  - Background
+  - Foreground
   - Terrain Layer 7
   - Terrain Layer 6
   - Terrain Layer 5
@@ -71,6 +71,9 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 2218882549
+    locked: 0
+  - name: Overlay Effects
+    uniqueID: 3938109829
     locked: 0
   - name: Paletted UI
     uniqueID: 3595124367

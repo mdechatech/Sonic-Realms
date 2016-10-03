@@ -8,7 +8,7 @@
 		Category{
 		Tags{ "IgnoreProjector" = "True" "RenderType" = "TransparentCutout" "Queue" = "Transparent" }
 		Alphatest Greater[_Cutoff]
-		ColorMask RGB
+		ColorMask RGBA
 		Cull Off Lighting Off ZWrite Off Fog{ Color(0,0,0,0) }
 		BindChannels{
 		Bind "Color", color

@@ -340,8 +340,7 @@ namespace SonicRealms.Level.Objects
             
             if (info.EnteredAtStart)
             {
-                info.Progress += mediator.ProposedTranslation.magnitude/Length
-                                 *(mediator.IsFacingForward ? 1 : -1);
+                info.Progress += mediator.ProposedTranslation.magnitude/Length;
 
                 if (info.Progress >= 1 || info.Controller.GroundVelocity < MinSpeed)
                 {
@@ -351,8 +350,7 @@ namespace SonicRealms.Level.Objects
             }
             else
             {
-                info.Progress -= mediator.ProposedTranslation.magnitude/Length
-                                 *(mediator.IsFacingForward ? -1 : 1);
+                info.Progress -= mediator.ProposedTranslation.magnitude/Length;
 
                 if (info.Progress <= 0 || info.Controller.GroundVelocity > -MinSpeed)
                 {
@@ -408,6 +406,9 @@ namespace SonicRealms.Level.Objects
 
         private void AddPassenger(HedgehogController controller, bool enteredAtStart)
         {
+            if (GetPassengerInfo(controller) != null)
+                return;
+
             controller.UseCustomSurface(this);
 
             var info = new PassengerInfo(controller, this, EstimateProgress(controller.transform.position),

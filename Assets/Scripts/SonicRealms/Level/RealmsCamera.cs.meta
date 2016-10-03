@@ -1,0 +1,32 @@
+fileFormatVersion: 2
+guid: 43e6bcfb8c1f9994da6d028c773b7158
+timeCreated: 1475201701
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - _backgroundRenderTexture: {instanceID: 0}
+  - _foregroundRenderTexture: {instanceID: 0}
+  - _overlayRenderTexture: {instanceID: 0}
+  - _backgroundCamera: {instanceID: 0}
+  - _foregroundCamera: {instanceID: 0}
+  - _overlayCamera: {instanceID: 0}
+  - _rendererCamera: {instanceID: 0}
+  - _cameraQuad: {instanceID: 0}
+  - _baseBackgroundCamera: {fileID: 20000011021574078, guid: c4e9ccb6d2493724595e3a2578207b70,
+      type: 2}
+  - _baseForegroundCamera: {fileID: 20000012469540126, guid: 053781cf9ae72bc41881dda40b33a468,
+      type: 2}
+  - _baseOverlayCamera: {fileID: 20000011800571278, guid: 421e6feb684221347a8d1ec5f6252dd1,
+      type: 2}
+  - _baseRendererCamera: {fileID: 20000010553067048, guid: 811623c36a1323d4c96fe4514696affa,
+      type: 2}
+  - _baseRendererQuad: {fileID: 23000011278883032, guid: 3541856c092a7554783f7e45e4f3a1d2,
+      type: 2}
+  - _baseRendererMaterial: {fileID: 2100000, guid: 46203f1e0029e3e4b9dc4011316900b2,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

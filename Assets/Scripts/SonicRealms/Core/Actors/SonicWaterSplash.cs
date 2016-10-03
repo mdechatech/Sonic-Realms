@@ -79,14 +79,10 @@ namespace SonicRealms.Core.Actors
             OnExitSplash.Invoke();
         }
 
-        // Q: Why is there so much code just to find the water line?
-        // A: It is designed to work with surfaces of water in any orientation, in any direction of gravity.
-        // Try it out with slanted water, for example!
-
         public RaycastHit2D FindWaterEntry()
         {
             var hit = Physics2D.Linecast((Vector2)Player.transform.position - Player.Velocity,
-                    Player.transform.position,
+                    (Vector2)Player.transform.position + Player.Velocity,
                     WaterLayer);
 
             if (!hit || hit.fraction == 0f)
@@ -104,7 +100,7 @@ namespace SonicRealms.Core.Actors
 
         public RaycastHit2D FindWaterExit()
         {
-            var hit = Physics2D.Linecast(Player.transform.position,
+            var hit = Physics2D.Linecast((Vector2)Player.transform.position + Player.Velocity,
                 (Vector2) Player.transform.position - Player.Velocity,
                 WaterLayer);
 

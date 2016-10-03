@@ -128,14 +128,6 @@ namespace SonicRealms.Core.Triggers
 
             CurrentSurfaceContacts = new Dictionary<HedgehogController, List<SurfaceCollision.Contact>>();
             _pendingSurfaceContacts = new Dictionary<HedgehogController, List<SurfaceCollision.Contact>>();
-        }
-
-        public void Start()
-        {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                return;
-#endif
 
             Parents = new List<PlatformTrigger>();
             GetComponentsInParent(true, Parents);
@@ -148,7 +140,14 @@ namespace SonicRealms.Core.Triggers
                     break;
                 }
             }
+        }
 
+        public void Start()
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
             if (!TriggerFromChildren)
                 return;
 
