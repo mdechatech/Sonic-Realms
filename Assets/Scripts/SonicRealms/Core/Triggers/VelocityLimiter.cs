@@ -19,16 +19,16 @@ namespace SonicRealms.Core.Triggers
         ITriggerLimiter<HedgehogController>
     {
         /// <summary>
-        /// If true, the limiter will return false unless the player is airborne.
+        /// If checked, the limiter won't limit the player unless it's airborne.
         /// </summary>
-        [Tooltip("If true, the limiter will return false unless the player is airborne.")]
-        public bool MustBeAirborne;
+        [Tooltip("If checked, the limiter won't limit the player unless it's airborne.")]
+        public bool ApplyWhenAirborne;
 
         /// <summary>
-        /// If true, the limiter will return false unless the player is grounded.
+        /// If checked, the limiter won't limit the player unless it's grounded.
         /// </summary>
-        [Tooltip("If true, the limiter will return false unless the player is grounded.")]
-        public bool MustBeGrounded;
+        [Tooltip("If checked, the limiter won't limit the player unless it's grounded.")]
+        public bool ApplyWhenGrounded;
 
         /// <summary>
         /// If true, the values below will be compared to the player's velocity accounting for the object's rotation.
@@ -121,11 +121,8 @@ namespace SonicRealms.Core.Triggers
 
         public bool Allows(Vector2 velocity, Vector2 relativeVelocity, float rotation, bool grounded)
         {
-            if (MustBeAirborne && grounded)
-                return false;
-
-            if (MustBeGrounded && !grounded)
-                return false;
+            if (!(ApplyWhenAirborne && !grounded) && !(ApplyWhenGrounded && grounded))
+                return true;
 
             if (RelativeToGravity)
                 velocity = relativeVelocity;

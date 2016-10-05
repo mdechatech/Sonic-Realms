@@ -41,9 +41,8 @@ namespace SonicRealms.Core.Utils
         public void Reset()
         {
             Target = Camera.main;
-            SnapInterval = new Vector2(0.01f, 0.01f);
 
-            Center = Vector2.zero;
+            Center = transform.position;
             Factor = new Vector2(1f, 1f);
         }
 

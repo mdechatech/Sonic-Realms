@@ -7,6 +7,7 @@ namespace SonicRealms.Core.Utils
     /// </summary>
     public static class CollisionLayers
     {
+        public const int Water = 4;
         public const int Layer7 = 24;
         public const int Layer6 = 25;
         public const int Layer5 = 26;
@@ -16,6 +17,7 @@ namespace SonicRealms.Core.Utils
         public const int Layer1 = 30;
         public const int AlwaysCollide = 31;
 
+        public const string WaterName = "Water";
         public const string Layer7Name = "Terrain Layer 7";
         public const string Layer6Name = "Terrain Layer 6";
         public const string Layer5Name = "Terrain Layer 5";
@@ -25,6 +27,7 @@ namespace SonicRealms.Core.Utils
         public const string Layer1Name = "Terrain Layer 1";
         public const string AlwaysCollideName = "Terrain";
 
+        public const int WaterMask = 1 << Water;
         public const int Layer7Mask = 1 << Layer7;
         public const int Layer6Mask = 1 << Layer6;
         public const int Layer5Mask = 1 << Layer5;
@@ -38,18 +41,18 @@ namespace SonicRealms.Core.Utils
         /// Default layer mask for player collision. Collides with terrain in the "Always Collide" layer and
         /// the the first collision layer.
         /// </summary>
-        public const int DefaultMask = Layer1Mask | AlwaysCollideMask;
+        public const int DefaultMask = WaterMask | Layer1Mask | AlwaysCollideMask;
 
         /// <summary>
         /// Layer mask of all collision layers except Always Collide.
         /// </summary>
-        public const int LayersMask =  Layer7Mask | Layer6Mask | Layer5Mask | Layer4Mask
+        public const int LayersMask = WaterMask | Layer7Mask | Layer6Mask | Layer5Mask | Layer4Mask
             | Layer3Mask | Layer2Mask | Layer1Mask;
 
         /// <summary>
         /// Layer mask of all collision layers.
         /// </summary>
-        public const int AllMask = Layer7Mask | Layer6Mask | Layer5Mask | Layer4Mask | 
+        public const int AllMask = WaterMask | Layer7Mask | Layer6Mask | Layer5Mask | Layer4Mask | 
             Layer3Mask | Layer2Mask | Layer1Mask | AlwaysCollideMask;
 
         /// <summary>

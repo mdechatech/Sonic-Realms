@@ -138,7 +138,7 @@ namespace SonicRealms.Level.Objects
 
                 // Circlecast the change in position
                 var result = Physics2D.CircleCast(_previousPosition, Radius, transform.position - _previousPosition,
-                    (transform.position - _previousPosition).magnitude, CollisionLayers.AllMask);
+                    (transform.position - _previousPosition).magnitude, CollisionLayers.AllMask & ~CollisionLayers.WaterMask);
 
                 Vector2 velocity = Rigidbody2D.velocity;
 

@@ -11,167 +11,20 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1000013538628014}
   m_IsPrefabParent: 1
---- !u!1 &1000010041457338
+--- !u!1 &1000010784392024
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000011188869828}
-  - 212: {fileID: 212000010978673410}
-  - 61: {fileID: 61000012942411504}
-  - 114: {fileID: 114000013694584334}
-  - 114: {fileID: 114000010801877820}
-  - 114: {fileID: 114000013907592016}
-  - 114: {fileID: 114000010479031084}
-  m_Layer: 31
-  m_Name: Log 24
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000010201499852
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011416377414}
-  - 212: {fileID: 212000010215899748}
-  - 61: {fileID: 61000010739411560}
-  - 114: {fileID: 114000013644226536}
-  - 114: {fileID: 114000010516371616}
-  - 114: {fileID: 114000012447922582}
-  - 114: {fileID: 114000012928141772}
-  m_Layer: 31
-  m_Name: Log 9
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000010223893956
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011636613400}
-  - 212: {fileID: 212000011204016034}
-  - 61: {fileID: 61000012458570064}
-  - 114: {fileID: 114000014136460832}
-  - 114: {fileID: 114000012371741052}
-  - 114: {fileID: 114000013610047554}
-  - 114: {fileID: 114000010801944938}
-  m_Layer: 31
-  m_Name: Log 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000010264651814
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000012796556010}
-  - 212: {fileID: 212000014206828988}
-  - 61: {fileID: 61000013611620394}
-  - 114: {fileID: 114000013021653920}
-  - 114: {fileID: 114000011982231886}
-  - 114: {fileID: 114000012226132036}
-  - 114: {fileID: 114000012931800424}
-  m_Layer: 31
-  m_Name: Log 11
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000010283100676
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000010035983860}
-  - 212: {fileID: 212000010568002978}
-  - 61: {fileID: 61000013942476510}
-  - 114: {fileID: 114000011960738718}
-  - 114: {fileID: 114000013799043612}
-  - 114: {fileID: 114000010084209332}
-  - 114: {fileID: 114000013842291966}
-  m_Layer: 31
-  m_Name: Log 20
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000010522240502
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000013365459314}
-  - 212: {fileID: 212000012030134768}
-  - 61: {fileID: 61000011898634670}
-  - 114: {fileID: 114000011250210478}
-  - 114: {fileID: 114000013100908288}
-  - 114: {fileID: 114000013824595788}
-  - 114: {fileID: 114000013660362574}
-  m_Layer: 31
-  m_Name: Log 3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000010785682554
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000013885200932}
-  - 212: {fileID: 212000012254063894}
-  - 61: {fileID: 61000010497573884}
-  - 114: {fileID: 114000010831600940}
-  - 114: {fileID: 114000011332654400}
-  - 114: {fileID: 114000011876988170}
-  - 114: {fileID: 114000012705291528}
-  m_Layer: 31
-  m_Name: Log 19
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000011198508612
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000012871208094}
-  - 212: {fileID: 212000011643204200}
-  - 61: {fileID: 61000010080559746}
-  - 114: {fileID: 114000010675270938}
-  - 114: {fileID: 114000012740890262}
-  - 114: {fileID: 114000013451812442}
-  - 114: {fileID: 114000013165215292}
+  - 4: {fileID: 4000012395097894}
+  - 212: {fileID: 212000010281806270}
+  - 61: {fileID: 61000013838030686}
+  - 114: {fileID: 114000011547230976}
+  - 114: {fileID: 114000013739655936}
+  - 114: {fileID: 114000011289905960}
+  - 114: {fileID: 114000013468871460}
   m_Layer: 31
   m_Name: Log 7
   m_TagString: Untagged
@@ -179,146 +32,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000011365665726
+--- !u!1 &1000010865314008
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000013950177604}
-  - 212: {fileID: 212000010656981750}
-  - 61: {fileID: 61000010009766002}
-  - 114: {fileID: 114000011742885516}
-  - 114: {fileID: 114000010431138912}
-  - 114: {fileID: 114000012552223924}
-  - 114: {fileID: 114000013302441008}
-  m_Layer: 31
-  m_Name: Log 1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000011746598996
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000013470964128}
-  - 212: {fileID: 212000011945996678}
-  - 61: {fileID: 61000011796749222}
-  - 114: {fileID: 114000011809913800}
-  - 114: {fileID: 114000011379995014}
-  - 114: {fileID: 114000010057250962}
-  - 114: {fileID: 114000013462388608}
-  m_Layer: 31
-  m_Name: Log 4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000011844631496
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000010328809394}
-  - 212: {fileID: 212000010441450958}
-  - 61: {fileID: 61000013526204546}
-  - 114: {fileID: 114000011023245800}
-  - 114: {fileID: 114000011553190416}
-  - 114: {fileID: 114000012709452720}
-  - 114: {fileID: 114000012190014798}
-  m_Layer: 31
-  m_Name: Log 22
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000012017739198
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000012588810766}
-  - 212: {fileID: 212000012625279682}
-  - 61: {fileID: 61000013090407466}
-  - 114: {fileID: 114000013946566656}
-  - 114: {fileID: 114000011983235510}
-  - 114: {fileID: 114000013882202668}
-  - 114: {fileID: 114000010818785444}
-  m_Layer: 31
-  m_Name: Log 13
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000012035267622
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000013287037168}
-  - 212: {fileID: 212000013280839072}
-  - 61: {fileID: 61000012464691600}
-  - 114: {fileID: 114000010989747234}
-  - 114: {fileID: 114000013335060316}
-  - 114: {fileID: 114000011572624458}
-  - 114: {fileID: 114000012607224480}
-  m_Layer: 31
-  m_Name: Log 14
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000012061779752
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000014209500310}
-  - 212: {fileID: 212000010147768008}
-  - 61: {fileID: 61000013593526640}
-  - 114: {fileID: 114000012676498446}
-  - 114: {fileID: 114000010679870872}
-  - 114: {fileID: 114000012250583490}
-  - 114: {fileID: 114000012043029476}
-  m_Layer: 31
-  m_Name: Log 23
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000012252581798
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000013376235154}
-  - 212: {fileID: 212000013241774468}
-  - 61: {fileID: 61000012560422464}
-  - 114: {fileID: 114000013043839390}
-  - 114: {fileID: 114000013664257134}
-  - 114: {fileID: 114000011445829662}
-  - 114: {fileID: 114000014030021066}
+  - 4: {fileID: 4000011441737642}
+  - 212: {fileID: 212000013287245494}
+  - 61: {fileID: 61000011269154530}
+  - 114: {fileID: 114000013017742862}
+  - 114: {fileID: 114000010286216312}
+  - 114: {fileID: 114000012718446036}
+  - 114: {fileID: 114000010723776476}
   m_Layer: 31
   m_Name: Log 8
   m_TagString: Untagged
@@ -326,62 +53,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000012339385748
+--- !u!1 &1000010971140682
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000010603928070}
-  - 212: {fileID: 212000014289021576}
-  - 61: {fileID: 61000012995529480}
-  - 114: {fileID: 114000011862201940}
-  - 114: {fileID: 114000013457472508}
-  - 114: {fileID: 114000011415508004}
-  - 114: {fileID: 114000010254044734}
-  m_Layer: 31
-  m_Name: Log 5
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000012847520084
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011589108390}
-  - 212: {fileID: 212000012084209854}
-  - 61: {fileID: 61000012217388128}
-  - 114: {fileID: 114000013545673402}
-  - 114: {fileID: 114000012149811560}
-  - 114: {fileID: 114000010757926758}
-  - 114: {fileID: 114000011261947644}
-  m_Layer: 31
-  m_Name: Log 18
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000012963886110
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011520937680}
-  - 212: {fileID: 212000012416720828}
-  - 61: {fileID: 61000012957161356}
-  - 114: {fileID: 114000013479444000}
-  - 114: {fileID: 114000011076174334}
-  - 114: {fileID: 114000010990897834}
-  - 114: {fileID: 114000010519598084}
+  - 4: {fileID: 4000010483954684}
+  - 212: {fileID: 212000012464226770}
+  - 61: {fileID: 61000010817448368}
+  - 114: {fileID: 114000010057550728}
+  - 114: {fileID: 114000013181805124}
+  - 114: {fileID: 114000010961716876}
+  - 114: {fileID: 114000013893560864}
   m_Layer: 31
   m_Name: Log 10
   m_TagString: Untagged
@@ -389,41 +74,83 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000013009280988
+--- !u!1 &1000011895285816
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000014217261966}
-  - 212: {fileID: 212000013755145070}
-  - 61: {fileID: 61000012686234652}
-  - 114: {fileID: 114000014062602932}
-  - 114: {fileID: 114000012920837118}
-  - 114: {fileID: 114000014219446258}
-  - 114: {fileID: 114000013388301758}
+  - 4: {fileID: 4000013125842852}
+  - 212: {fileID: 212000011814806376}
+  - 61: {fileID: 61000011534684790}
+  - 114: {fileID: 114000011354498970}
+  - 114: {fileID: 114000011737099454}
+  - 114: {fileID: 114000011899717852}
+  - 114: {fileID: 114000011428956476}
   m_Layer: 31
-  m_Name: Log 15
+  m_Name: Log 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000013021012858
+  m_IsActive: 1
+--- !u!1 &1000011897238496
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000012534756312}
-  - 212: {fileID: 212000013025241532}
-  - 61: {fileID: 61000013521720014}
-  - 114: {fileID: 114000012514885974}
-  - 114: {fileID: 114000014294144108}
-  - 114: {fileID: 114000012672548858}
-  - 114: {fileID: 114000013154924234}
+  - 4: {fileID: 4000012040139392}
+  - 212: {fileID: 212000012980567536}
+  - 61: {fileID: 61000010336692036}
+  - 114: {fileID: 114000010191871686}
+  - 114: {fileID: 114000011549756468}
+  - 114: {fileID: 114000013350388042}
+  - 114: {fileID: 114000010552631922}
+  m_Layer: 31
+  m_Name: Log 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000012332439926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000011690727002}
+  - 212: {fileID: 212000010383682180}
+  - 61: {fileID: 61000013674927554}
+  - 114: {fileID: 114000011565007954}
+  - 114: {fileID: 114000012176935542}
+  - 114: {fileID: 114000013011885720}
+  - 114: {fileID: 114000012836114142}
+  m_Layer: 31
+  m_Name: Log 11
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000012704610060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000011008928154}
+  - 212: {fileID: 212000010452456044}
+  - 61: {fileID: 61000010530847946}
+  - 114: {fileID: 114000012747048590}
+  - 114: {fileID: 114000012925631524}
+  - 114: {fileID: 114000010868679100}
+  - 114: {fileID: 114000013611596124}
   m_Layer: 31
   m_Name: Log 0
   m_TagString: Untagged
@@ -431,41 +158,104 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000013253635490
+--- !u!1 &1000013191482466
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000013027871880}
-  - 212: {fileID: 212000011333383240}
-  - 61: {fileID: 61000012001080100}
-  - 114: {fileID: 114000011180722548}
-  - 114: {fileID: 114000011556669460}
-  - 114: {fileID: 114000013976510894}
-  - 114: {fileID: 114000012815004196}
+  - 4: {fileID: 4000011276130016}
+  - 212: {fileID: 212000013272635666}
+  - 61: {fileID: 61000011544433152}
+  - 114: {fileID: 114000013372669264}
+  - 114: {fileID: 114000011280050440}
+  - 114: {fileID: 114000013376629984}
+  - 114: {fileID: 114000011371344718}
   m_Layer: 31
-  m_Name: Log 17
+  m_Name: Log 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000013515486832
+  m_IsActive: 1
+--- !u!1 &1000013254966424
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000010102263190}
-  - 212: {fileID: 212000010254856010}
-  - 61: {fileID: 61000010586819306}
-  - 114: {fileID: 114000013290482288}
-  - 114: {fileID: 114000014025728556}
-  - 114: {fileID: 114000012544985580}
-  - 114: {fileID: 114000012638895214}
+  - 4: {fileID: 4000014160617502}
+  - 212: {fileID: 212000013741343632}
+  - 61: {fileID: 61000010087017586}
+  - 114: {fileID: 114000013796717690}
+  - 114: {fileID: 114000013152109370}
+  - 114: {fileID: 114000013556235284}
+  - 114: {fileID: 114000013061803812}
+  m_Layer: 31
+  m_Name: Log 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000013365624834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000014148651736}
+  - 212: {fileID: 212000013677422104}
+  - 61: {fileID: 61000014030987104}
+  - 114: {fileID: 114000010246263704}
+  - 114: {fileID: 114000010590339052}
+  - 114: {fileID: 114000010910545156}
+  - 114: {fileID: 114000014268003494}
+  m_Layer: 31
+  m_Name: Log 5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000013431134988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010915391390}
+  - 212: {fileID: 212000010332207034}
+  - 61: {fileID: 61000014215552196}
+  - 114: {fileID: 114000012753387858}
+  - 114: {fileID: 114000013928419394}
+  - 114: {fileID: 114000013354752592}
+  - 114: {fileID: 114000014117820272}
+  m_Layer: 31
+  m_Name: Log 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000013486713456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000012225358318}
+  - 212: {fileID: 212000012239342044}
+  - 61: {fileID: 61000012771218968}
+  - 114: {fileID: 114000011818061530}
+  - 114: {fileID: 114000012527834602}
+  - 114: {fileID: 114000013028860744}
+  - 114: {fileID: 114000012032708428}
   m_Layer: 31
   m_Name: Log 6
   m_TagString: Untagged
@@ -473,27 +263,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000013534422598
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011736737920}
-  - 212: {fileID: 212000011829276736}
-  - 61: {fileID: 61000010744604724}
-  - 114: {fileID: 114000013483869830}
-  - 114: {fileID: 114000012074300990}
-  - 114: {fileID: 114000012119689998}
-  - 114: {fileID: 114000011079461040}
-  m_Layer: 31
-  m_Name: Log 12
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &1000013538628014
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,145 +280,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1000013554758488
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000010520356452}
-  - 212: {fileID: 212000013191100306}
-  - 61: {fileID: 61000010856938758}
-  - 114: {fileID: 114000010665154522}
-  - 114: {fileID: 114000011302843814}
-  - 114: {fileID: 114000012879692758}
-  - 114: {fileID: 114000014055753500}
-  m_Layer: 31
-  m_Name: Log 21
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1000013719806616
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011711812450}
-  - 212: {fileID: 212000012931800534}
-  - 61: {fileID: 61000010733937136}
-  - 114: {fileID: 114000011303683028}
-  - 114: {fileID: 114000013443671456}
-  - 114: {fileID: 114000011158268584}
-  - 114: {fileID: 114000012620462526}
-  m_Layer: 31
-  m_Name: Log 16
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &4000010035983860
+--- !u!4 &4000010483954684
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.28, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 20
---- !u!4 &4000010102263190
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 6
---- !u!4 &4000010328809394
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5999999, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 22
---- !u!4 &4000010520356452
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.4399999, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 21
---- !u!4 &4000010603928070
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.16, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 5
---- !u!4 &4000011188869828
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8399999, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 24
---- !u!4 &4000011416377414
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 9
---- !u!4 &4000011520937680
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
+  m_GameObject: {fileID: 1000010971140682}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.64, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -657,64 +293,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000013642184122}
   m_RootOrder: 10
---- !u!4 &4000011589108390
+--- !u!4 &4000010915391390
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
+  m_GameObject: {fileID: 1000013431134988}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.96, y: 0, z: 0}
+  m_LocalPosition: {x: -0.79999995, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 18
---- !u!4 &4000011636613400
+  m_RootOrder: 1
+--- !u!4 &4000011008928154
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.64, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 2
---- !u!4 &4000011711812450
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 16
---- !u!4 &4000011736737920
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 12
---- !u!4 &4000012534756312
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
+  m_GameObject: {fileID: 1000012704610060}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.96, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -722,90 +319,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000013642184122}
   m_RootOrder: 0
---- !u!4 &4000012588810766
+--- !u!4 &4000011276130016
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
+  m_GameObject: {fileID: 1000013191482466}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.64, y: 0, z: 0}
+  m_LocalPosition: {x: 0.48, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 13
---- !u!4 &4000012796556010
+  m_RootOrder: 9
+--- !u!4 &4000011441737642
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.79999995, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 11
---- !u!4 &4000012871208094
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 7
---- !u!4 &4000013027871880
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.28, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 17
---- !u!4 &4000013287037168
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.79999995, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 14
---- !u!4 &4000013365459314
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.48, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 3
---- !u!4 &4000013376235154
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
+  m_GameObject: {fileID: 1000010865314008}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.32, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -813,12 +345,64 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000013642184122}
   m_RootOrder: 8
---- !u!4 &4000013470964128
+--- !u!4 &4000011690727002
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
+  m_GameObject: {fileID: 1000012332439926}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.79999995, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 11
+--- !u!4 &4000012040139392
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011897238496}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.48, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 3
+--- !u!4 &4000012225358318
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013486713456}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 6
+--- !u!4 &4000012395097894
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010784392024}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.16, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 7
+--- !u!4 &4000013125842852
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011895285816}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.32, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -833,95 +417,56 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013538628014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.41, y: 3.58, z: 0}
+  m_LocalPosition: {x: 3.55, y: 1.6999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 4000012534756312}
-  - {fileID: 4000013950177604}
-  - {fileID: 4000011636613400}
-  - {fileID: 4000013365459314}
-  - {fileID: 4000013470964128}
-  - {fileID: 4000010603928070}
-  - {fileID: 4000010102263190}
-  - {fileID: 4000012871208094}
-  - {fileID: 4000013376235154}
-  - {fileID: 4000011416377414}
-  - {fileID: 4000011520937680}
-  - {fileID: 4000012796556010}
-  - {fileID: 4000011736737920}
-  - {fileID: 4000012588810766}
-  - {fileID: 4000013287037168}
-  - {fileID: 4000014217261966}
-  - {fileID: 4000011711812450}
-  - {fileID: 4000013027871880}
-  - {fileID: 4000011589108390}
-  - {fileID: 4000013885200932}
-  - {fileID: 4000010035983860}
-  - {fileID: 4000010520356452}
-  - {fileID: 4000010328809394}
-  - {fileID: 4000014209500310}
-  - {fileID: 4000011188869828}
+  - {fileID: 4000011008928154}
+  - {fileID: 4000010915391390}
+  - {fileID: 4000014160617502}
+  - {fileID: 4000012040139392}
+  - {fileID: 4000013125842852}
+  - {fileID: 4000014148651736}
+  - {fileID: 4000012225358318}
+  - {fileID: 4000012395097894}
+  - {fileID: 4000011441737642}
+  - {fileID: 4000011276130016}
+  - {fileID: 4000010483954684}
+  - {fileID: 4000011690727002}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!4 &4000013885200932
+--- !u!4 &4000014148651736
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
+  m_GameObject: {fileID: 1000013365624834}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.12, y: 0, z: 0}
+  m_LocalPosition: {x: -0.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 19
---- !u!4 &4000013950177604
+  m_RootOrder: 5
+--- !u!4 &4000014160617502
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
+  m_GameObject: {fileID: 1000013254966424}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.79999995, y: 0, z: 0}
+  m_LocalPosition: {x: -0.64, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 1
---- !u!4 &4000014209500310
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.76, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 23
---- !u!4 &4000014217261966
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.96, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 15
---- !u!61 &61000010009766002
+  m_RootOrder: 2
+--- !u!61 &61000010087017586
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
+  m_GameObject: {fileID: 1000013254966424}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -930,12 +475,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010080559746
+--- !u!61 &61000010336692036
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
+  m_GameObject: {fileID: 1000011897238496}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -944,12 +489,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010497573884
+--- !u!61 &61000010530847946
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
+  m_GameObject: {fileID: 1000012704610060}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -958,12 +503,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010586819306
+--- !u!61 &61000010817448368
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
+  m_GameObject: {fileID: 1000010971140682}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -972,12 +517,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010733937136
+--- !u!61 &61000011269154530
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
+  m_GameObject: {fileID: 1000010865314008}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -986,12 +531,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010739411560
+--- !u!61 &61000011534684790
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
+  m_GameObject: {fileID: 1000011895285816}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1000,12 +545,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010744604724
+--- !u!61 &61000011544433152
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
+  m_GameObject: {fileID: 1000013191482466}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1014,12 +559,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010856938758
+--- !u!61 &61000012771218968
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
+  m_GameObject: {fileID: 1000013486713456}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1028,12 +573,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000011796749222
+--- !u!61 &61000013674927554
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
+  m_GameObject: {fileID: 1000012332439926}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1042,12 +587,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000011898634670
+--- !u!61 &61000013838030686
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
+  m_GameObject: {fileID: 1000010784392024}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1056,12 +601,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012001080100
+--- !u!61 &61000014030987104
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
+  m_GameObject: {fileID: 1000013365624834}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1070,12 +615,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012217388128
+--- !u!61 &61000014215552196
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
+  m_GameObject: {fileID: 1000013431134988}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1084,228 +629,160 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012458570064
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012464691600
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012560422464
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012686234652
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012942411504
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012957161356
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012995529480
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013090407466
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013521720014
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013526204546
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013593526640
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013611620394
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013942476510
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
---- !u!114 &114000010057250962
+--- !u!114 &114000010057550728
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
+  m_GameObject: {fileID: 1000010971140682}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000010191871686
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011897238496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000010246263704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013365624834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000010286216312
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010865314008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000010084209332
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114000010552631922
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000010254044734
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
+  m_GameObject: {fileID: 1000011897238496}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1317,12 +794,12 @@ MonoBehaviour:
   TransferMomentumY: 0
   TransferMomentumGround: 0
   Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010431138912
+--- !u!114 &114000010590339052
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
+  m_GameObject: {fileID: 1000013365624834}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -1333,12 +810,12 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000010479031084
+--- !u!114 &114000010723776476
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
+  m_GameObject: {fileID: 1000010865314008}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1350,12 +827,63 @@ MonoBehaviour:
   TransferMomentumY: 0
   TransferMomentumGround: 0
   Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010516371616
+--- !u!114 &114000010868679100
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
+  m_GameObject: {fileID: 1000012704610060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000010910545156
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013365624834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000010961716876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010971140682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000011280050440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013191482466}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -1366,12 +894,73 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000010519598084
+--- !u!114 &114000011289905960
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
+  m_GameObject: {fileID: 1000010784392024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000011354498970
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011895285816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000011371344718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013191482466}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1383,149 +972,12 @@ MonoBehaviour:
   TransferMomentumY: 0
   TransferMomentumGround: 0
   Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010665154522
+--- !u!114 &114000011428956476
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010675270938
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010679870872
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000010757926758
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000010801877820
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000010801944938
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
+  m_GameObject: {fileID: 1000011895285816}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1537,12 +989,193 @@ MonoBehaviour:
   TransferMomentumY: 0
   TransferMomentumGround: 0
   Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010818785444
+--- !u!114 &114000011547230976
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
+  m_GameObject: {fileID: 1000010784392024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000011549756468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011897238496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114000011565007954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012332439926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000011737099454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011895285816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114000011818061530
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013486713456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114000011899717852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011895285816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000012032708428
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013486713456}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1554,760 +1187,6 @@ MonoBehaviour:
   TransferMomentumY: 0
   TransferMomentumGround: 0
   Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010831600940
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010989747234
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010990897834
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011023245800
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011076174334
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011079461040
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000011158268584
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011180722548
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011250210478
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011261947644
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000011302843814
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011303683028
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011332654400
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011379995014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011415508004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011445829662
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011553190416
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011556669460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011572624458
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011742885516
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011809913800
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011862201940
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011876988170
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011960738718
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011982231886
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011983235510
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000012043029476
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012074300990
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000012119689998
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
 --- !u!114 &114000012125705362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2390,50 +1269,37 @@ MonoBehaviour:
   _useAbsoluteMidpoint: 0
   _rotateSegments: 0
   _segments:
-  - {fileID: 114000014294144108}
-  - {fileID: 114000010431138912}
-  - {fileID: 114000012371741052}
-  - {fileID: 114000013100908288}
-  - {fileID: 114000011379995014}
-  - {fileID: 114000013457472508}
-  - {fileID: 114000014025728556}
-  - {fileID: 114000012740890262}
-  - {fileID: 114000013664257134}
-  - {fileID: 114000010516371616}
-  - {fileID: 114000011076174334}
-  - {fileID: 114000011982231886}
+  - {fileID: 114000012925631524}
+  - {fileID: 114000013928419394}
+  - {fileID: 114000013152109370}
+  - {fileID: 114000011549756468}
+  - {fileID: 114000011737099454}
+  - {fileID: 114000010590339052}
+  - {fileID: 114000012527834602}
+  - {fileID: 114000013739655936}
+  - {fileID: 114000010286216312}
+  - {fileID: 114000011280050440}
+  - {fileID: 114000013181805124}
+  - {fileID: 114000012176935542}
   _allSegments:
-  - {fileID: 114000014294144108}
-  - {fileID: 114000010431138912}
-  - {fileID: 114000012371741052}
-  - {fileID: 114000013100908288}
-  - {fileID: 114000011379995014}
-  - {fileID: 114000013457472508}
-  - {fileID: 114000014025728556}
-  - {fileID: 114000012740890262}
-  - {fileID: 114000013664257134}
-  - {fileID: 114000010516371616}
-  - {fileID: 114000011076174334}
-  - {fileID: 114000011982231886}
-  - {fileID: 114000012074300990}
-  - {fileID: 114000011983235510}
-  - {fileID: 114000013335060316}
-  - {fileID: 114000012920837118}
-  - {fileID: 114000013443671456}
-  - {fileID: 114000011556669460}
-  - {fileID: 114000012149811560}
-  - {fileID: 114000011332654400}
-  - {fileID: 114000013799043612}
-  - {fileID: 114000011302843814}
-  - {fileID: 114000011553190416}
-  - {fileID: 114000010679870872}
-  - {fileID: 114000010801877820}
---- !u!114 &114000012149811560
+  - {fileID: 114000012925631524}
+  - {fileID: 114000013928419394}
+  - {fileID: 114000013152109370}
+  - {fileID: 114000011549756468}
+  - {fileID: 114000011737099454}
+  - {fileID: 114000010590339052}
+  - {fileID: 114000012527834602}
+  - {fileID: 114000013739655936}
+  - {fileID: 114000010286216312}
+  - {fileID: 114000011280050440}
+  - {fileID: 114000013181805124}
+  - {fileID: 114000012176935542}
+--- !u!114 &114000012176935542
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
+  m_GameObject: {fileID: 1000012332439926}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -2444,63 +1310,12 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000012190014798
+--- !u!114 &114000012527834602
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012226132036
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012250583490
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012371741052
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
+  m_GameObject: {fileID: 1000013486713456}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -2511,12 +1326,12 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000012447922582
+--- !u!114 &114000012718446036
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
+  m_GameObject: {fileID: 1000010865314008}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
@@ -2528,12 +1343,12 @@ MonoBehaviour:
   BottomSolid: 0
   LeftSolid: 0
   RightSolid: 0
---- !u!114 &114000012514885974
+--- !u!114 &114000012747048590
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
+  m_GameObject: {fileID: 1000012704610060}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
@@ -2572,114 +1387,12 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000012544985580
+--- !u!114 &114000012753387858
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012552223924
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012607224480
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012620462526
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012638895214
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012672548858
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012676498446
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
+  m_GameObject: {fileID: 1000013431134988}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
@@ -2718,12 +1431,12 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000012705291528
+--- !u!114 &114000012836114142
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
+  m_GameObject: {fileID: 1000012332439926}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -2735,29 +1448,12 @@ MonoBehaviour:
   TransferMomentumY: 0
   TransferMomentumGround: 0
   Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012709452720
+--- !u!114 &114000012925631524
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012740890262
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
+  m_GameObject: {fileID: 1000012704610060}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -2768,29 +1464,12 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000012815004196
+--- !u!114 &114000013011885720
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012879692758
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
+  m_GameObject: {fileID: 1000012332439926}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
@@ -2802,62 +1481,12 @@ MonoBehaviour:
   BottomSolid: 0
   LeftSolid: 0
   RightSolid: 0
---- !u!114 &114000012920837118
+--- !u!114 &114000013017742862
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000012928141772
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012931800424
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013021653920
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
+  m_GameObject: {fileID: 1000010865314008}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
@@ -2896,216 +1525,12 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000013043839390
+--- !u!114 &114000013028860744
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013100908288
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013154924234
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013165215292
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013290482288
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013302441008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013335060316
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013388301758
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013443671456
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013451812442
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
+  m_GameObject: {fileID: 1000013486713456}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
@@ -3117,12 +1542,29 @@ MonoBehaviour:
   BottomSolid: 0
   LeftSolid: 0
   RightSolid: 0
---- !u!114 &114000013457472508
+--- !u!114 &114000013061803812
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
+  m_GameObject: {fileID: 1000013254966424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TransferMomentumX: 0
+  TransferMomentumY: 0
+  TransferMomentumGround: 0
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &114000013152109370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013254966424}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -3133,239 +1575,12 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000013462388608
+--- !u!114 &114000013181805124
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013479444000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013483869830
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013545673402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013610047554
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013644226536
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013660362574
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013664257134
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
+  m_GameObject: {fileID: 1000010971140682}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -3376,12 +1591,46 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000013694584334
+--- !u!114 &114000013350388042
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
+  m_GameObject: {fileID: 1000011897238496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000013354752592
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013431134988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000013372669264
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013191482466}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
@@ -3420,12 +1669,80 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000013799043612
+--- !u!114 &114000013376629984
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
+  m_GameObject: {fileID: 1000013191482466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000013468871460
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010784392024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TransferMomentumX: 0
+  TransferMomentumY: 0
+  TransferMomentumGround: 0
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &114000013556235284
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013254966424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114000013611596124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012704610060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TransferMomentumX: 0
+  TransferMomentumY: 0
+  TransferMomentumGround: 0
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &114000013739655936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010784392024}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -3436,80 +1753,12 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000013824595788
+--- !u!114 &114000013796717690
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013842291966
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013882202668
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013907592016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013946566656
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
+  m_GameObject: {fileID: 1000013254966424}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
@@ -3548,29 +1797,29 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000013976510894
+--- !u!114 &114000013893560864
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
+  m_GameObject: {fileID: 1000010971140682}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000014025728556
+  TransferMomentumX: 0
+  TransferMomentumY: 0
+  TransferMomentumGround: 0
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &114000013928419394
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
+  m_GameObject: {fileID: 1000013431134988}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
@@ -3581,84 +1830,6 @@ MonoBehaviour:
   RotateToNeighbors: 0
   LeftSegment: {fileID: 0}
   RightSegment: {fileID: 0}
---- !u!114 &114000014030021066
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000014055753500
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000014062602932
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
 --- !u!114 &114000014104979548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3703,89 +1874,46 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000014136460832
+--- !u!114 &114000014117820272
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
+  m_GameObject: {fileID: 1000013431134988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000014219446258
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000014294144108
+  TransferMomentumX: 0
+  TransferMomentumY: 0
+  TransferMomentumGround: 0
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &114000014268003494
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
+  m_GameObject: {fileID: 1000013365624834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!212 &212000010147768008
+  TransferMomentumX: 0
+  TransferMomentumY: 0
+  TransferMomentumGround: 0
+  Velocity: {x: 0, y: 0, z: 0}
+--- !u!212 &212000010281806270
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012061779752}
+  m_GameObject: {fileID: 1000010784392024}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -3807,18 +1935,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010215899748
+--- !u!212 &212000010332207034
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010201499852}
+  m_GameObject: {fileID: 1000013431134988}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -3840,18 +1968,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010254856010
+--- !u!212 &212000010383682180
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013515486832}
+  m_GameObject: {fileID: 1000012332439926}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -3873,18 +2001,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010441450958
+--- !u!212 &212000010452456044
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011844631496}
+  m_GameObject: {fileID: 1000012704610060}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -3906,18 +2034,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010568002978
+--- !u!212 &212000011814806376
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010283100676}
+  m_GameObject: {fileID: 1000011895285816}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -3939,18 +2067,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010656981750
+--- !u!212 &212000012239342044
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011365665726}
+  m_GameObject: {fileID: 1000013486713456}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -3972,18 +2100,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010978673410
+--- !u!212 &212000012464226770
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010041457338}
+  m_GameObject: {fileID: 1000010971140682}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4005,18 +2133,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000011204016034
+--- !u!212 &212000012980567536
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010223893956}
+  m_GameObject: {fileID: 1000011897238496}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4038,18 +2166,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000011333383240
+--- !u!212 &212000013272635666
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013253635490}
+  m_GameObject: {fileID: 1000013191482466}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4071,18 +2199,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000011643204200
+--- !u!212 &212000013287245494
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011198508612}
+  m_GameObject: {fileID: 1000010865314008}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4104,18 +2232,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000011829276736
+--- !u!212 &212000013677422104
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013534422598}
+  m_GameObject: {fileID: 1000013365624834}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4137,18 +2265,18 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000011945996678
+--- !u!212 &212000013741343632
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011746598996}
+  m_GameObject: {fileID: 1000013254966424}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4170,436 +2298,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000012030134768
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010522240502}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000012084209854
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012847520084}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000012254063894
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010785682554}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000012416720828
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012963886110}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000012625279682
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012017739198}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000012931800534
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013719806616}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000013025241532
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013021012858}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000013191100306
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013554758488}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000013241774468
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012252581798}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000013280839072
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012035267622}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000013755145070
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013009280988}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000014206828988
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010264651814}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
-  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
---- !u!212 &212000014289021576
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012339385748}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1963575889
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 73e6c0c8cb8877a43bc7eecbb4892316, type: 3}
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}

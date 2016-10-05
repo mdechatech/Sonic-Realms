@@ -179,7 +179,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 194672}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 73.06, y: 5.7599998, z: 0}
+  m_LocalPosition: {x: 2.82, y: 1.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -356,42 +356,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RendererObject: {fileID: 194672}
   Animator: {fileID: 9576874}
-  CollisionMask:
-    serializedVersion: 2
-    m_Bits: 3221225472
-  Reactives: []
   Sensors: {fileID: 11469396}
-  GroundFriction: 0
-  AirDrag: 1
-  AirDragRequiredSpeed: {x: 0.075, y: 2.4}
-  AirGravity: 3
-  SlopeGravity: 0
-  GravityDirection: 270
-  MaxSpeed: 9001
-  LedgeClimbHeight: 0.1
-  LedgeDropHeight: 0.1
-  AntiTunnelingSpeed: 1000
-  SlopeGravityBeginAngle: 10
-  DetachSpeed: 9001
-  MaxClimbAngle: 180
-  WallModeRevertBufferTime: 0
-  RevertBufferMaxSpeed: 0
-  DisableNotifyPlatforms: 1
-  DisableEvents: 0
-  DisableCeilingCheck: 1
-  DisableGroundCheck: 0
-  DisableSideCheck: 1
-  DisableSolidObjectCheck: 1
   OnAttach:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  OnCollide:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   OnDetach:
     m_PersistentCalls:
       m_Calls: []
@@ -432,18 +402,40 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: SonicRealms.Core.Triggers.ReactivePlatformEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnObjectActivate:
+  OnEffectActivate:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.ReactiveObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.ReactiveEffectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  OnObjectDeactivate:
+  OnEffectDeactivate:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.ReactiveObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.ReactiveEffectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  Reactives: []
+  GroundFriction: 0
+  AirDrag: 1
+  AirDragRequiredSpeed: {x: 0.075, y: 2.4}
+  AirGravity: 3
+  SlopeGravity: 0
+  GravityDirection: 270
+  MaxSpeed: 9001
+  LedgeClimbHeight: 0.1
+  LedgeDropHeight: 0.1
+  AntiTunnelingSpeed: 1000
+  SlopeGravityBeginAngle: 10
+  DetachSpeed: 9001
+  MaxClimbAngle: 180
+  WallModeRevertBufferTime: 0
+  RevertBufferMaxSpeed: 0
   Interrupted: 0
   InterruptTimer: 0
+  DisableNotifyPlatforms: 1
+  DisableEvents: 0
+  DisableCeilingCheck: 1
+  DisableGroundCheck: 0
+  DisableSideCheck: 1
+  DisableSolidObjectCheck: 1
   DisableMovement: 0
   DisableForces: 0
   DisableSlopeGravity: 0
@@ -453,28 +445,28 @@ MonoBehaviour:
   DisableAttach: 0
   DisableAirGravity: 0
   DisableAirDrag: 0
-  _facingForward: 0
-  IgnoreCollision: 0
-  IgnoringThisCollision: 0
+  DisablePlatformCollisions: 0
+  _isFacingForward: 0
   Vx: 0
   Vy: 0
   GroundVelocity: 0
-  Grounded: 0
-  _surfaceAngle: 0
-  ForceSurfaceAngle: 0
-  Footing: 0
-  WallMode: 0
-  WallModeRevertBufferTimer: 0
-  WallModeRevertBuffer: 0
-  JustAttached: 0
-  JustDetached: 0
+  CollisionMask:
+    serializedVersion: 2
+    m_Bits: 3221225472
   PrimarySurface: {fileID: 0}
   SecondarySurface: {fileID: 0}
   LeftWall: {fileID: 0}
   RightWall: {fileID: 0}
   LeftCeiling: {fileID: 0}
   RightCeiling: {fileID: 0}
-  QueuedTranslation: {x: 0, y: 0, z: 0}
+  Grounded: 0
+  _surfaceAngle: 0
+  Side: 0
+  WallMode: 0
+  WallModeRevertBufferTimer: 0
+  WallModeRevertBuffer: 0
+  JustAttached: 0
+  JustDetached: 0
   DetachTrigger: 
   AttachTrigger: 
   FacingForwardBool: 
@@ -485,6 +477,7 @@ MonoBehaviour:
   AbsGroundSpeedFloat: 
   GroundSpeedBool: 
   SurfaceAngleFloat: 
+  ShowDebugGraphics: 0
 --- !u!114 &11405988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -542,6 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7406431d84d33e44b62e26a55c3d66c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
   BoxCollider: {fileID: 0}
   TopLeft: {fileID: 0}
   TopLeftStart: {fileID: 0}
@@ -561,6 +555,7 @@ MonoBehaviour:
   SolidLeft: {fileID: 0}
   SolidCenter: {fileID: 0}
   SolidRight: {fileID: 0}
+  OriginalSize: {x: 0, y: 0}
 --- !u!114 &11470270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -620,7 +615,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: -2076084747
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2204c96f7d3cc4146a65f1e41d90355d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
