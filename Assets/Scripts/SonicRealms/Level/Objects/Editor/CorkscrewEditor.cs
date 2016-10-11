@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SonicRealms.Level.Objects.Editor
 {
     [CustomEditor(typeof(Corkscrew))]
-    public class CorkscrewEditor : BaseFoldoutEditor
+    public class CorkscrewEditor : BaseRealmsEditor
     {
         protected void OnSceneGUI()
         {

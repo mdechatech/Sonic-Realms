@@ -2,7 +2,6 @@
 using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -12,7 +11,6 @@ namespace SonicRealms.Core.Triggers
     /// A generic trigger that gets activated by something external calling Activate().
     /// </summary>
     [DisallowMultipleComponent]
-    [AddComponentMenu("Hedgehog/Triggers/Object Trigger")]
     public class EffectTrigger : BaseTrigger
     {
         /// <summary>
@@ -138,6 +136,21 @@ namespace SonicRealms.Core.Triggers
                 }
 
                 OnActivatorStay.Invoke(activator);
+            }
+        }
+
+        public override bool IsAlone
+        {
+            get
+            {
+                return !GetComponent<ReactiveEffect>() &&
+                       GetComponentsInParent<EffectTrigger>().All(t => t == this || !t.TriggerFromChildren) &&
+                       OnActivate.GetPersistentEventCount() == 0 &&
+                       OnActivateStay.GetPersistentEventCount() == 0 &&
+                       OnDeactivate.GetPersistentEventCount() == 0 &&
+                       OnActivatorEnter.GetPersistentEventCount() == 0 &&
+                       OnActivatorStay.GetPersistentEventCount() == 0 &&
+                       OnActivatorExit.GetPersistentEventCount() == 0;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using SonicRealms.Core.Actors;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,6 +22,13 @@ namespace SonicRealms.Core.Triggers
     public abstract class BaseTrigger : MonoBehaviour, IComparable<Component>
     {
         /// <summary>
+        /// If false, the trigger will destroy itself when it has no reactives and no persistent event listeners.
+        /// </summary>
+        [Tooltip("If not checked, the trigger will destroy itself when it has no reactives and no " +
+                 "persistent event listeners.")]
+        public bool KeepWhenAlone;
+
+        /// <summary>
         /// Whether children of the trigger can set off events. Turning this on makes
         /// it easy to work with groups of colliders/objects.
         /// </summary>
@@ -31,6 +39,7 @@ namespace SonicRealms.Core.Triggers
         public virtual void Reset()
         {
             TriggerFromChildren = true;
+            KeepWhenAlone = true;
         }
 
         public virtual void Awake()
@@ -42,8 +51,18 @@ namespace SonicRealms.Core.Triggers
         {
 #if UNITY_EDITOR
             hideFlags = EditorPrefs.GetBool("ShowTriggers", false) ? HideFlags.None : HideFlags.HideInInspector;
+
+            if (!Application.isPlaying && !KeepWhenAlone)
+            {
+                if (IsAlone)
+                {
+                    DestroyImmediate(this);
+                }
+            }
 #endif
         }
+
+        public abstract bool IsAlone { get; }
 
         public abstract bool HasController(HedgehogController controller);
 

@@ -32,11 +32,20 @@ namespace SonicRealms.Core.Triggers
         #endregion
 
         #region Lifecycle Functions
+        public override void Reset()
+        {
+            base.Reset();
+
+            GetComponent<PlatformTrigger>().KeepWhenAlone = false;
+        }
+
         public override void Awake()
         {
             base.Awake();
 
             PlatformTrigger = GetComponent<PlatformTrigger>() ?? gameObject.AddComponent<PlatformTrigger>();
+            PlatformTrigger.KeepWhenAlone = false;
+
             RegisteredEvents = false;
         }
 

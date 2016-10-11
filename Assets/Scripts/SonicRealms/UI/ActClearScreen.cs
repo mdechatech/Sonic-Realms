@@ -107,9 +107,9 @@ namespace SonicRealms.UI
 
         public void UpdateBonusDisplays()
         {
-            TotalBonusView.Show(TotalBonusDrip);
-            RingBonusView.Show(RingBonusDrip);
-            TimeBonusView.Show(TimeBonusDrip);
+            TotalBonusView.Value = TotalBonusDrip;
+            RingBonusView.Value = RingBonusDrip;
+            TimeBonusView.Value = TimeBonusDrip;
         }
 
         protected IEnumerator WaitAfterDripComplete()

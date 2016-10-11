@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -112,6 +113,18 @@ namespace SonicRealms.Core.Triggers
 #endif
             HandleCurrentContacts();
             HandlePossibleContacts();
+        }
+
+        public override bool IsAlone
+        {
+            get
+            {
+                return !GetComponent<ReactiveArea>() &&
+                       GetComponentsInParent<AreaTrigger>().All(t => t == this || !t.TriggerFromChildren) &&
+                       OnAreaEnter.GetPersistentEventCount() == 0 &&
+                       OnAreaStay.GetPersistentEventCount() == 0 &&
+                       OnAreaExit.GetPersistentEventCount() == 0;
+            }
         }
 
         public override bool HasController(HedgehogController controller)

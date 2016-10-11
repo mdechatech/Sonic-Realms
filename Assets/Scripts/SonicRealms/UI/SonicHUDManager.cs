@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Actors;
+﻿using System.ComponentModel;
+using SonicRealms.Core.Actors;
 using SonicRealms.Level;
 using UnityEngine;
 
@@ -25,9 +26,14 @@ namespace SonicRealms.UI
                 return;
             }
 
-            if (Level.RingCounter != null) Level.RingCounter.OnValueChange.AddListener(UpdateRings);
-            if (Level.ScoreCounter != null) Level.ScoreCounter.OnValueChange.AddListener(UpdateScore);
-            if (Level.LifeCounter != null) Level.LifeCounter.OnValueChange.AddListener(UpdateLives);
+            if (Level.RingCounter != null)
+                Level.RingCounter.OnValueChange.AddListener(UpdateRings);
+
+            if (Level.ScoreCounter != null)
+                Level.ScoreCounter.PropertyChanged += (sender, e) => UpdateScore();
+
+            if (Level.LifeCounter != null)
+                Level.LifeCounter.OnValueChange.AddListener(UpdateLives);
 
             UpdateAll();
         }
@@ -39,7 +45,8 @@ namespace SonicRealms.UI
 
         public void UpdateAll()
         {
-            if (Hud == null) return;
+            if (Hud == null)
+                return;
 
             UpdateRings();
             UpdateScore();
@@ -55,8 +62,8 @@ namespace SonicRealms.UI
 
         public void UpdateScore()
         {
-            if(Hud != null && Hud.Score != null)
-                Hud.Score.Show(Level.Score);
+            if (Hud != null && Hud.Score != null)
+                Hud.Score.Value = Level.Score;
         }
 
         public void UpdateTimer()

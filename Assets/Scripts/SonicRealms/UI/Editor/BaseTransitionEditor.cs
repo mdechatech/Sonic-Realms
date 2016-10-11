@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SonicRealms.UI.Editor
 {
     [CustomEditor(typeof(BaseTransition), true)]
-    public class BaseTransitionEditor : BaseFoldoutEditor
+    public class BaseTransitionEditor : BaseRealmsEditor
     {
     }
 }

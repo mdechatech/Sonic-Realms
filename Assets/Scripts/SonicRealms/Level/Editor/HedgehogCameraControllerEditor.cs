@@ -5,7 +5,7 @@ namespace SonicRealms.Level.Editor
 {
     [CustomEditor(typeof(CameraController))]
     [CanEditMultipleObjects]
-    public class HedgehogCameraControllerEditor : BaseFoldoutEditor
+    public class HedgehogCameraControllerEditor : BaseRealmsEditor
     {
     }
 }

@@ -18,13 +18,21 @@ namespace SonicRealms.Core.Moves
         public string ActivateAxis;
 
         /// <summary>
+        /// Minimum axis input required to start rolling.
+        /// </summary>
+        [ControlFoldout]
+        [Range(0, 1)]
+        [Tooltip("Minimum axis input required to start rolling.")]
+        public float MinimumInput;
+
+        /// <summary>
         /// Whether to activate when the input is in the opposite direction (if ActivateButton is "Vertical" and this
         /// is true, activates when input moves down instead of up).
         /// </summary>
         [ControlFoldout]
         [Tooltip("Whether to activate when the input is in the opposite direction (if ActivateButton is \"Vertical\" " +
                  "and this is true, activates when input moves down instead of up.")]
-        public bool RequireNegative;
+        public bool InvertAxis;
 
         /// <summary>
         /// Minimum ground speed required to start rolling, in units per second.
@@ -117,7 +125,8 @@ namespace SonicRealms.Core.Moves
             UphillBool = "";
 
             ActivateAxis = "Vertical";
-            RequireNegative = true;
+            InvertAxis = true;
+            MinimumInput = 0.4f;
             MinActivateSpeed = 0.61875f;
 
             Hitbox = Controller.GetComponentInChildren<SonicHitbox>();
@@ -172,7 +181,19 @@ namespace SonicRealms.Core.Moves
 
         public override bool ShouldPerform
         {
-            get { return Input.GetAxisRaw(ActivateAxis) == (RequireNegative ? -1f : 1f); }
+            get
+            {
+                var axis = Input.GetAxis(ActivateAxis)*(InvertAxis ? -1 : 1);
+
+                if (axis <= -MinimumInput)
+                    axis = -1;
+                else if (axis >= MinimumInput)
+                    axis = 1;
+                else
+                    axis = 0;
+
+                return axis == 1;
+            }
         }
 
         public override void SetAnimatorParameters()

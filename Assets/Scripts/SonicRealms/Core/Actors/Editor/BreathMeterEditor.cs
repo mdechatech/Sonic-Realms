@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SonicRealms.Core.Actors.Editor
 {
     [CustomEditor(typeof(BreathMeter), true)]
-    public class BreathMeterEditor : BaseFoldoutEditor
+    public class BreathMeterEditor : BaseRealmsEditor
     {
     }
 }

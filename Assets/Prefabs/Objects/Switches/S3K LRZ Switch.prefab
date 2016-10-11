@@ -55,6 +55,7 @@ GameObject:
   - 95: {fileID: 95000010878033908}
   - 114: {fileID: 114000011815310772}
   - 114: {fileID: 114000014194724602}
+  - 114: {fileID: 114000010385193388}
   m_Layer: 0
   m_Name: S3K LRZ Switch
   m_TagString: Untagged
@@ -102,7 +103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013666282096}
   m_LocalRotation: {x: -0, y: -0, z: 0.00000046193603, w: 1}
-  m_LocalPosition: {x: 2.75, y: 0.12, z: 0}
+  m_LocalPosition: {x: 13.4, y: 0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -182,6 +183,25 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114000010385193388
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013666282096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713c0eb37d34ae14198c5a77fb9896c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 114000011815310772}
+  _activateSound: {fileID: 0}
+  _activateStayLoop: {fileID: 8300000, guid: a725473a3df460d4785f6ebcf5d3f75e, type: 3}
+  _deactivateSound: {fileID: 0}
+  _activatorEnterSound: {fileID: 0}
+  _activatorExitSound: {fileID: 0}
+  _baseLoopAudioSource: {fileID: 82000010566796684, guid: ef858595a3d31d94692c3f90e9e41548,
+    type: 2}
 --- !u!114 &114000011340257720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,8 +361,8 @@ MonoBehaviour:
     MustBeGrounded: 0
   LimitVelocity: 1
   VelocityLimiter:
-    MustBeAirborne: 0
-    MustBeGrounded: 0
+    ApplyWhenAirborne: 1
+    ApplyWhenGrounded: 0
     RelativeToRotation: 1
     RelativeToGravity: 0
     UseAbsoluteHorizontal: 0

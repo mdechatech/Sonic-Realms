@@ -50,7 +50,8 @@ namespace SonicRealms.Core.Actors
                 if (AddsToCombo)
                 {
                     var score = hitbox.Controller.GetComponent<ScoreCounter>();
-                    if (score != null) score.AddCombo(transform);
+                    if (score != null)
+                        score.AddCombo(transform.position);
                 }
             }
 

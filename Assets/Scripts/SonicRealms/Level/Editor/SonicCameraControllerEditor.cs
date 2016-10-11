@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SonicRealms.Level.Editor
 {
     [CustomEditor(typeof(SonicCameraController))]
-    public class SonicCameraControllerEditor : BaseFoldoutEditor
+    public class SonicCameraControllerEditor : BaseRealmsEditor
     {
     }
 }

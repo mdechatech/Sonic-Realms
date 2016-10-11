@@ -13,6 +13,13 @@ namespace SonicRealms.Core.Triggers
     {
         protected bool RegisteredEvents;
 
+        public override void Reset()
+        {
+            base.Reset();
+
+            GetComponent<EffectTrigger>().KeepWhenAlone = false;
+        }
+
         public override void Awake()
         {
             base.Awake();

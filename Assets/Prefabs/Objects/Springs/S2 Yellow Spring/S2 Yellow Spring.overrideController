@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: S2 Yellow Spring
+  m_Controller: {fileID: 9100000, guid: 5673e67119e0e2247afbfec93ecf1a55, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 8893b9e95de97e3488815688865fc2c5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 25a36764b87f58444987748a1b122262, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9cd4e7544206f1f45b2f92fa54620e76, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ee9d143b922446e4a915eb97d4b00397, type: 2}

@@ -5,5 +5,5 @@ namespace SonicRealms.Core.Actors.Editor
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(BuzzBomberAI))]
-    public class BuzzBomberAIEditor : BaseFoldoutEditor { }
+    public class BuzzBomberAIEditor : BaseRealmsEditor { }
 }

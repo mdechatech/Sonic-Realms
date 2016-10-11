@@ -5,11 +5,8 @@ namespace SonicRealms.Core.Actors.Editor
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(Hitbox), true)]
-    public class HitboxEditor : UnityEditor.Editor
+    public class HitboxEditor : BaseRealmsEditor
     {
-        public override void OnInspectorGUI()
-        {
-            FoldoutDrawer.DoFoldoutsLayout(serializedObject);
-        }
+
     }
 }

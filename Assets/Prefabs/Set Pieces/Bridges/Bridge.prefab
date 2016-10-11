@@ -640,6 +640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -684,6 +685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -728,6 +730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -922,6 +925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1000,6 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1060,6 +1065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1120,6 +1126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1354,6 +1361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1398,6 +1406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1492,6 +1501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1636,6 +1646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1764,6 +1775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -1841,6 +1853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:

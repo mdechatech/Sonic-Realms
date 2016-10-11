@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using SonicRealms.Core.Actors;
+﻿using SonicRealms.Core.Actors;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -63,6 +62,14 @@ namespace SonicRealms.Core.Moves
         [ControlFoldout]
         [Tooltip("The name of the input axis.")]
         public string MovementAxis;
+
+        /// <summary>
+        /// Minimum axis input required to move the player.
+        /// </summary>
+        [ControlFoldout]
+        [Range(0, 1)]
+        [Tooltip("Minimum axis input required to move the player.")]
+        public float MinimumInput;
 
         /// <summary>
         /// Whether to invert the axis input.
@@ -203,6 +210,7 @@ namespace SonicRealms.Core.Moves
             base.Reset();
 
             MovementAxis = "Horizontal";
+            MinimumInput = 0.4f;
             InvertAxis = false;
 
             InputAxisFloat = InputBool = AcceleratingBool =
@@ -254,7 +262,7 @@ namespace SonicRealms.Core.Moves
             Manager.End<AirControl>();
             Controller.AddCommandBuffer(ApplyForces, HedgehogController.BufferEvent.AfterForces);
 
-            _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
+            StoreMovementAxis();
         }
 
         protected void ApplyForces(HedgehogController controller)
@@ -267,7 +275,8 @@ namespace SonicRealms.Core.Moves
                 DMath.AngleInRange_d(controller.RelativeSurfaceAngle, ControlLockAngle, 360f - ControlLockAngle))
                 Lock();
 
-            if (!ControlLockTimerOn) Accelerate(_axis);
+            if (!ControlLockTimerOn)
+                Accelerate(_axis);
 
             // Disable slope gravity when we're not moving, so that Sonic can stand on slopes
             controller.DisableSlopeGravity = !(Accelerating || ControlLockTimerOn ||
@@ -283,8 +292,10 @@ namespace SonicRealms.Core.Moves
 
         public override void OnActiveUpdate()
         {
-            if (ControlLockTimerOn || DisableControl) return;
-            _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
+            if (ControlLockTimerOn || DisableControl)
+                return;
+
+            StoreMovementAxis();
         }
 
         public override void OnActiveExit()
@@ -454,6 +465,18 @@ namespace SonicRealms.Core.Moves
             }
 
             return false;
+        }
+
+        private void StoreMovementAxis()
+        {
+            _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+
+            if (_axis < -MinimumInput)
+                _axis = -1;
+            else if (_axis > MinimumInput)
+                _axis = 1;
+            else
+                _axis = 0;
         }
     }
 }

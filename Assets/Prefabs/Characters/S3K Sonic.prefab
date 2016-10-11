@@ -1590,7 +1590,8 @@ MonoBehaviour:
   PerformSound: {fileID: 8300000, guid: bb2cba8fd62577148972c89bd49ef141, type: 3}
   EndSound: {fileID: 0}
   ActivateAxis: Vertical
-  RequireNegative: 1
+  MinimumInput: 0.4
+  InvertAxis: 1
   MinActivateSpeed: 0.61875
   Hitbox: {fileID: 11475340}
   WidthChange: -0.04
@@ -2126,14 +2127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _score: 0
-  CurrentCombo: 0
-  ComboValues: 64000000c8000000f4010000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e803000010270000
-  FloatingScoreView: {fileID: 11453926, guid: 05a82bf2ab4662341adb116c82ae4972, type: 2}
-  OnValueChange:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  _currentCombo: 0
+  _comboValues: 64000000c8000000f4010000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e8030000e803000010270000
+  _floatingScoreView: {fileID: 11453926, guid: 05a82bf2ab4662341adb116c82ae4972, type: 2}
 --- !u!114 &11472608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2511,6 +2507,7 @@ MonoBehaviour:
   StandingBool: Standing
   TopSpeedPercentFloat: Top Speed %
   MovementAxis: Horizontal
+  MinimumInput: 0.4
   InvertAxis: 0
   Acceleration: 1.6875
   DisableAcceleration: 0
@@ -2795,6 +2792,7 @@ MonoBehaviour:
   PerformSound: {fileID: 0}
   EndSound: {fileID: 0}
   MovementAxis: Horizontal
+  MinimumInput: 0.4
   InvertAxis: 0
   Acceleration: 3.375
   Deceleration: 3.375

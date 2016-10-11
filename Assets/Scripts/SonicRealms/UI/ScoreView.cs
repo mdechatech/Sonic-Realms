@@ -4,6 +4,6 @@ namespace SonicRealms.UI
 {
     public abstract class ScoreView : MonoBehaviour
     {
-        public abstract void Show(int score);
+        public abstract int Value { get; set; }
     }
 }

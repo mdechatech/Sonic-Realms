@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SonicRealms.Core.Triggers.Editor
 {
     [CustomEditor(typeof(BaseTrigger), true), CanEditMultipleObjects]
-    public class BaseTriggerEditor : BaseFoldoutEditor
+    public class BaseTriggerEditor : BaseRealmsEditor
     {
         private const string ShowTriggersMenu = "Realms/Show Triggers";
 

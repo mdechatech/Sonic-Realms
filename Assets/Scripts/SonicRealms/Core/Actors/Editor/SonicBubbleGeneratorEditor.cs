@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SonicRealms.Core.Actors.Editor
 {
     [CustomEditor(typeof(SonicBubbleGenerator), true)]
-    public class SonicBubbleGeneratorEditor : BaseFoldoutEditor
+    public class SonicBubbleGeneratorEditor : BaseRealmsEditor
     {
     }
 }

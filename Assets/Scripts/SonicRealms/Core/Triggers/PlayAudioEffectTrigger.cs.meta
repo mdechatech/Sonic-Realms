@@ -1,10 +1,18 @@
 fileFormatVersion: 2
 guid: 713c0eb37d34ae14198c5a77fb9896c6
-timeCreated: 1474475140
+timeCreated: 1475896283
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - EffectTrigger: {instanceID: 0}
+  - _activateSound: {instanceID: 0}
+  - _activateStayLoop: {instanceID: 0}
+  - _deactivateSound: {instanceID: 0}
+  - _activatorEnterSound: {instanceID: 0}
+  - _activatorExitSound: {instanceID: 0}
+  - _baseLoopAudioSource: {fileID: 82000010566796684, guid: ef858595a3d31d94692c3f90e9e41548,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

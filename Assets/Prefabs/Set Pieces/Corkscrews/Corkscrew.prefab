@@ -51,7 +51,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000013592789046}
   - 61: {fileID: 61000012929610030}
-  - 114: {fileID: 114000013437696700}
+  - 114: {fileID: 114000010194985442}
   m_Layer: 0
   m_Name: Start
   m_TagString: Untagged
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000010152438118}
   - 61: {fileID: 61000010075220046}
-  - 114: {fileID: 114000011307212708}
+  - 114: {fileID: 114000013891474844}
   m_Layer: 0
   m_Name: End
   m_TagString: Untagged
@@ -130,7 +130,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000014153363596}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.9200001, y: -0.28999996, z: 0}
+  m_LocalPosition: {x: 1.9200001, y: -0.28999996, z: 0.85009766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -142,8 +142,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011705648986}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.83, y: 2.62, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.52, y: 1.6799998, z: -0.85009766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -201,7 +201,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010767187738}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.9200001, y: -0.28999996, z: 0}
+  m_LocalPosition: {x: -1.9200001, y: -0.28999996, z: 0.85009766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -248,17 +248,18 @@ BoxCollider2D:
   m_Offset: {x: 0.1, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.19999999, y: 0.4}
---- !u!114 &114000011307212708
+--- !u!114 &114000010194985442
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000014153363596}
+  m_GameObject: {fileID: 1000010767187738}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 1
   TriggerFromChildren: 1
   OnAreaEnter:
     m_PersistentCalls:
@@ -288,8 +289,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _autoPositionTriggers: 1
-  _entrance: {fileID: 114000013437696700}
-  _exit: {fileID: 114000011307212708}
+  _entrance: {fileID: 114000010194985442}
+  _exit: {fileID: 114000013891474844}
   _length: 3.84
   _period: 3.84
   _phaseShift: 0.75
@@ -301,17 +302,18 @@ MonoBehaviour:
   _onCorkscrewBool: On Corkscrew
   _corkscrewProgressFloat: 
   _periodProgressFloat: Corkscrew Progress
---- !u!114 &114000013437696700
+--- !u!114 &114000013891474844
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010767187738}
+  m_GameObject: {fileID: 1000014153363596}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 1
   TriggerFromChildren: 1
   OnAreaEnter:
     m_PersistentCalls:

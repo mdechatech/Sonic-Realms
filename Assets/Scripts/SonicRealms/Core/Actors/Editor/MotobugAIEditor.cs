@@ -5,5 +5,5 @@ namespace SonicRealms.Core.Actors.Editor
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(MotobugAI))]
-    public class MotobugAIEditor : BaseFoldoutEditor { }
+    public class MotobugAIEditor : BaseRealmsEditor { }
 }

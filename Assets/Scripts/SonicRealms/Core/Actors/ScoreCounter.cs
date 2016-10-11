@@ -1,20 +1,18 @@
-﻿using SonicRealms.UI;
+﻿using System.ComponentModel;
+using SonicRealms.Core.Utils;
+using SonicRealms.UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace SonicRealms.Core.Actors
 {
     /// <summary>
     /// Keeps track of score and score combos.
     /// </summary>
-    public class ScoreCounter : MonoBehaviour
+    public class ScoreCounter : MonoBehaviour, INotifyPropertyChanged
     {
-        /// <summary>
-        /// Current score.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Current score.")]
-        private int _score;
+        #region Public Fields & Properties
 
         /// <summary>
         /// Current score.
@@ -24,40 +22,161 @@ namespace SonicRealms.Core.Actors
             get { return _score; }
             set
             {
-                _score = value; 
-                OnValueChange.Invoke();
+                var old = _score;
+                _score = value;
+
+                NotifyPropertyChanged("Score", old, value);
             }
         }
 
         /// <summary>
         /// The combo number the score is currently on.
         /// </summary>
-        [Tooltip("The combo number the score is currently on.")]
-        public int CurrentCombo;
+        public int CurrentCombo
+        {
+            get { return _currentCombo; }
+            set
+            {
+                var old = _currentCombo;
+                _currentCombo = value;
+
+                NotifyPropertyChanged("CurrentCombo", old, value);
+            }
+        }
 
         /// <summary>
         /// Score values for each combo number. The 0th item maps to the 1st combo.
         /// </summary>
-        [Tooltip("Score values for each combo number. The 0th item maps to the 1st combo.")]
-        public int[] ComboValues;
+        public int[] ComboValues { get { return _comboValues; } set { _comboValues = value; } }
 
         /// <summary>
         /// Game object to make copies of when showing floating scores.
         /// </summary>
-        [Tooltip("Game object to make copies of when showing floating scores.")]
-        public ScoreView FloatingScoreView;
+        public ScoreView FloatingScoreView { get { return _floatingScoreView; } set { _floatingScoreView = value; } }
 
         /// <summary>
-        /// Invoked when the score changes.
+        /// <para>
+        /// Some event args may be downcast to PropertyChangedExtendedEventArgs&lt;T&gt; which contains the OldValue
+        /// and NewValue fields.
+        /// </para>
+        /// <para>
+        /// The following properties broadcast PropertyChangedExtendedEventArgs&lt;T&gt; when they are modified: 
+        /// <see cref="Score"/>, <see cref="CurrentCombo"/>
+        /// </para>
         /// </summary>
-        public UnityEvent OnValueChange;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        #region Private & Inspector Fields
+
+        [SerializeField]
+        [FormerlySerializedAs("Score")]
+        [Tooltip("Current score.")]
+        private int _score;
+
+        [SerializeField]
+        [FormerlySerializedAs("Combo")]
+        [Tooltip("The combo number the score is currently on.")]
+        private int _currentCombo;
+
+        [SerializeField]
+        [FormerlySerializedAs("ComboValues")]
+        [Tooltip("Score values for each combo number. The 0th item maps to the 1st combo.")]
+        private int[] _comboValues;
+
+        [SerializeField]
+        [FormerlySerializedAs("FloatingScoreView")]
+        [Tooltip("Game object to make copies of when showing floating scores.")]
+        private ScoreView _floatingScoreView;
+
+        #endregion
+
+        #region Public Helper Functions
+
+        /// <summary>
+        /// Adds to the current score combo.
+        /// </summary>
+        public void AddCombo()
+        {
+            AddCombo(null);
+        }
+
+        /// <summary>
+        /// Adds to the current score combo using the given source.
+        /// </summary>
+        /// <param name="source">Source of the combo increase, used to show floating score.</param>
+        public void AddCombo(Vector3? source)
+        {
+            var value = ComboValues[Mathf.Min(CurrentCombo++, ComboValues.Length - 1)];
+
+            AddScore(value, source);
+        }
+
+        /// <summary>
+        /// Ends the current score combo.
+        /// </summary>
+        public void EndCombo()
+        {
+            CurrentCombo = 0;
+        }
+
+        /// <summary>
+        /// Adds the given value to the score.
+        /// </summary>
+        public void AddScore(int value)
+        {
+            AddScore(value, null);
+        }
+
+        /// <summary>
+        /// Adds the given value to the score. If a source position is given, the counter will create a floating score there.
+        /// </summary>
+        public void AddScore(int value, Vector3? source)
+        {
+            Score += value;
+
+            if (source != null && FloatingScoreView)
+            {
+                ShowFloatingScore(value, source.Value);
+            }
+        }
+
+        /// <summary>
+        /// Creates a floating score without actually changing the counter's current score.
+        /// </summary>
+        public ScoreView ShowFloatingScore(int value, Vector3 position)
+        {
+            var view = Instantiate(FloatingScoreView);
+            view.transform.position = position;
+            view.Value = value;
+
+            return view;
+        }
+
+        #endregion
+
+        #region Event Functions
+
+        protected void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
+        }
+
+        #endregion
+
+        #region Lifecycle Functions
 
         public void Reset()
         {
-            _score = 0;
-
-            CurrentCombo = 0;
-            ComboValues = new []
+            ComboValues = new[]
             {
                 100,
                 200,
@@ -76,37 +195,8 @@ namespace SonicRealms.Core.Actors
                 1000,
                 10000,
             };
-
-            OnValueChange = new UnityEvent();
         }
 
-        public void Awake()
-        {
-            OnValueChange = OnValueChange ?? new UnityEvent();
-        }
-
-        /// <summary>
-        /// Adds to the current score combo using the given source.
-        /// </summary>
-        /// <param name="source">The source of the combo increase. This is usually a destroyed enemy.</param>
-        public void AddCombo(Transform source)
-        {
-            var value = ComboValues[Mathf.Min(CurrentCombo++, ComboValues.Length - 1)];
-            Score += value;
-
-            if (source == null || FloatingScoreView == null) return;
-
-            var score = Instantiate(FloatingScoreView);
-            score.transform.position = source.position;
-            score.Show(value);
-        }
-
-        /// <summary>
-        /// Ends the current score combo.
-        /// </summary>
-        public void EndCombo()
-        {
-            CurrentCombo = 0;
-        }
+        #endregion
     }
 }

@@ -287,15 +287,18 @@ namespace SonicRealms.Level.Objects
         {
             _passengers = new Dictionary<HedgehogController, PassengerInfo>();
 
+            _onCorkscrewBoolHash = Animator.StringToHash(_onCorkscrewBool);
+            _corkscrewProgressFloatHash = Animator.StringToHash(_corkscrewProgressFloat);
+            _periodProgressFloatHash = Animator.StringToHash(_periodProgressFloat);
+        }
+
+        protected virtual void Start()
+        {
             _entrance.OnAreaEnter.AddListener(OnEnterStart);
             _entrance.OnAreaStay.AddListener(OnEnterStart);
 
             _exit.OnAreaEnter.AddListener(OnEnterEnd);
             _exit.OnAreaStay.AddListener(OnEnterEnd);
-
-            _onCorkscrewBoolHash = Animator.StringToHash(_onCorkscrewBool);
-            _corkscrewProgressFloatHash = Animator.StringToHash(_corkscrewProgressFloat);
-            _periodProgressFloatHash = Animator.StringToHash(_periodProgressFloat);
         }
 
         protected virtual void FixedUpdate()
@@ -308,11 +311,17 @@ namespace SonicRealms.Level.Objects
 
         protected virtual void OnDestroy()
         {
-            _entrance.OnAreaEnter.RemoveListener(OnEnterStart);
-            _entrance.OnAreaStay.RemoveListener(OnEnterStart);
+            if (_entrance)
+            {
+                _entrance.OnAreaEnter.RemoveListener(OnEnterStart);
+                _entrance.OnAreaStay.RemoveListener(OnEnterStart);
+            }
 
-            _exit.OnAreaEnter.RemoveListener(OnEnterEnd);
-            _exit.OnAreaStay.RemoveListener(OnEnterEnd);
+            if (_exit)
+            {
+                _exit.OnAreaEnter.RemoveListener(OnEnterEnd);
+                _exit.OnAreaStay.RemoveListener(OnEnterEnd);
+            }
         }
 
         protected virtual void OnValidate()

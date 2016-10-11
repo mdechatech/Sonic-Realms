@@ -18,6 +18,7 @@ namespace SonicRealms.Core.Triggers
             base.Reset();
 
             AreaTrigger = GetComponent<AreaTrigger>();
+            AreaTrigger.KeepWhenAlone = false;
         }
 
         public virtual void OnEnable()

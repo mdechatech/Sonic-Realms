@@ -182,13 +182,13 @@ namespace SonicRealms.Core.Utils.Editor
         private static void SnapBoxCollider(BoxCollider2D collider, float interval = DefaultSnapInterval)
         {
             collider.size = RoundPoint(collider.size, interval);
-            collider.offset = RoundPoint(collider.offset, interval);
+            collider.offset = RoundPoint(collider.offset, interval*0.5f);
         }
 
         private static void SnapCircleCollider(CircleCollider2D collider, float interval = DefaultSnapInterval)
         {
             collider.radius = DMath.Round(collider.radius, interval);
-            collider.offset = RoundPoint(collider.offset, interval);
+            collider.offset = RoundPoint(collider.offset, interval*0.5f);
         }
 
         private static void SnapEdgeCollider(EdgeCollider2D collider, float interval = DefaultSnapInterval)

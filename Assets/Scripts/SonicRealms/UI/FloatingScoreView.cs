@@ -1,19 +1,38 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SonicRealms.UI
 {
     public class FloatingScoreView : ScoreView
     {
-        public TextMesh TextMesh;
+        public TextMesh TextMesh { get { return _textMesh; } set { _textMesh = value; } }
 
-        public void Reset()
+        public override int Value
         {
-            TextMesh = GetComponentInChildren<TextMesh>();
+            get { return _value; }
+            set
+            {
+                _value = value;
+                UpdateScore();
+            }
         }
 
-        public override void Show(int score)
+        [SerializeField]
+        [FormerlySerializedAs("TextMesh")]
+        [Tooltip("Text Mesh used to show the score value.")]
+        private TextMesh _textMesh;
+
+        private int _value;
+
+        protected void Reset()
         {
-            if(TextMesh != null) TextMesh.text = score.ToString();
+            _textMesh = GetComponentInChildren<TextMesh>();
+        }
+
+        private void UpdateScore()
+        {
+            if (_textMesh)
+                _textMesh.text = _value.ToString();
         }
     }
 }

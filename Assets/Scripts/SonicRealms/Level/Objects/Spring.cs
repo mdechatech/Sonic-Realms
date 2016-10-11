@@ -2,6 +2,7 @@
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
+using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Level.Objects

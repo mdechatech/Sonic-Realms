@@ -56,17 +56,24 @@
 			uniform sampler2D _GlobalBackgroundTex;
 			uniform sampler2D _GlobalOverlayTex;
 
+			float4 alpha_blend(float4 src, float4 dst)
+			{
+				float4 result;
+
+				result.rgb = src.rgb*src.a + dst.rgb*dst.a*(1 - src.a);
+				result.a = src.a + dst.a*(1.0 - src.a);
+
+				return result;
+			}
+
 			float4 frag(v2f i) : SV_Target
 			{
 				float4 bg = tex2D(_GlobalBackgroundTex, i.uv) * i.color;
 				float4 fg = tex2D(_GlobalForegroundTex, i.uv) * i.color;
 				float4 over = tex2D(_GlobalOverlayTex, i.uv) * i.color;
 
-				bg.rgb = bg.rgb*(1.0 - fg.a) + fg.rgb*fg.a;
-				bg.a = bg.a + fg.a*(1.0 - bg.a);
-
-				bg.rgb = bg.rgb*(1.0 - over.a) + over.rgb*over.a;
-				bg.a = bg.a + over.a*(1.0 - bg.a);
+				bg = alpha_blend(fg, bg);
+				bg = alpha_blend(over, bg);
 
 				return bg;
 			}

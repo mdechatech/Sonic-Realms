@@ -163,6 +163,21 @@ namespace SonicRealms.Core.Triggers
             }
         }
 
+        public override bool IsAlone
+        {
+            get
+            {
+                return !GetComponent<ReactivePlatform>() &&
+                       GetComponentsInParent<PlatformTrigger>().All(t => t == this || !t.TriggerFromChildren) &&
+                       OnPlatformEnter.GetPersistentEventCount() == 0 &&
+                       OnPlatformStay.GetPersistentEventCount() == 0 &&
+                       OnPlatformExit.GetPersistentEventCount() == 0 &&
+                       OnSurfaceEnter.GetPersistentEventCount() == 0 &&
+                       OnSurfaceStay.GetPersistentEventCount() == 0 &&
+                       OnSurfaceExit.GetPersistentEventCount() == 0;
+            }
+        }
+
         public override bool HasController(HedgehogController controller)
         {
             return HasControllerOnPlatform(controller) ||

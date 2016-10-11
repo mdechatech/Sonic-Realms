@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SonicRealms.Core.Moves.Editor
 {
     [CustomEditor(typeof(PowerupManager))]
-    public class PowerupManagerEditor : BaseFoldoutEditor
+    public class PowerupManagerEditor : BaseRealmsEditor
     {
     }
 }

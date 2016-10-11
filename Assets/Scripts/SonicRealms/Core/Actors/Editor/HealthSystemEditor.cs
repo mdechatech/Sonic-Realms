@@ -5,5 +5,5 @@ namespace SonicRealms.Core.Actors.Editor
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(HealthSystem), true)]
-    public class HealthSystemEditor : BaseFoldoutEditor { }
+    public class HealthSystemEditor : BaseRealmsEditor { }
 }

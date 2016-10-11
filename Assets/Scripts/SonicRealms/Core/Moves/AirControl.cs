@@ -6,12 +6,21 @@ namespace SonicRealms.Core.Moves
     public class AirControl : Move
     {
         #region Control Fields
+
         /// <summary>
         /// The name of the input axis.
         /// </summary>
         [ControlFoldout]
         [Tooltip("The name of the input axis.")]
         public string MovementAxis;
+
+        /// <summary>
+        /// Minimum axis input required to move the player.
+        /// </summary>
+        [ControlFoldout]
+        [Range(0, 1)]
+        [Tooltip("Minimum axis input required to move the player.")]
+        public float MinimumInput;
 
         /// <summary>
         /// Whether to invert the axis input.
@@ -21,7 +30,9 @@ namespace SonicRealms.Core.Moves
         public bool InvertAxis;
 
         #endregion
+
         #region Physics Fields
+
         /// <summary>
         /// Air acceleration in units per second squared.
         /// </summary>
@@ -42,6 +53,7 @@ namespace SonicRealms.Core.Moves
         [SerializeField, PhysicsFoldout]
         [Tooltip("Top air speed in units per second.")]
         public float TopSpeed;
+
         #endregion
 
         /// <summary>
@@ -63,16 +75,11 @@ namespace SonicRealms.Core.Moves
 
             MovementAxis = "Horizontal";
             InvertAxis = false;
+            MinimumInput = 0.4f;
 
             Acceleration = 3.375f;
             Deceleration = 3.375f;
             TopSpeed = 3.6f;
-        }
-
-        public override void Awake()
-        {
-            base.Awake();
-            _axis = 0.0f;
         }
 
         public override void OnManagerAdd()
@@ -93,11 +100,12 @@ namespace SonicRealms.Core.Moves
 
         public override void OnActiveUpdate()
         {
-            if (ControlLock) _axis = 0.0f;
-            else _axis = InvertAxis ? -Input.GetAxisRaw(MovementAxis) : Input.GetAxisRaw(MovementAxis);
+            StoreMovementAxis();
 
-            if (DMath.Equalsf(_axis)) return;
-            Controller.IsFacingForward = _axis > 0.0f;
+            if (!Mathf.Approximately(0, _axis))
+            {
+                Controller.IsFacingForward = _axis > 0.0f;
+            }
         }
 
         public override void OnActiveFixedUpdate()
@@ -175,6 +183,25 @@ namespace SonicRealms.Core.Moves
                 }
 
                 Controller.RelativeVelocity = new Vector2(xNew, Controller.RelativeVelocity.y);
+            }
+        }
+
+        private void StoreMovementAxis()
+        {
+            if (ControlLock)
+            {
+                _axis = 0;
+            }
+            else
+            {
+                _axis = InvertAxis ? -Input.GetAxis(MovementAxis) : Input.GetAxis(MovementAxis);
+
+                if (_axis < -MinimumInput)
+                    _axis = -1;
+                else if (_axis > MinimumInput)
+                    _axis = 1;
+                else
+                    _axis = 0;
             }
         }
     }

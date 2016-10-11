@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SonicRealms.Core.Triggers.Editor
 {
     [CustomEditor(typeof(BaseReactive), true), CanEditMultipleObjects]
-    public class BaseReactiveEditor : BaseFoldoutEditor
+    public class BaseReactiveEditor : BaseRealmsEditor
     {
     }
 }
