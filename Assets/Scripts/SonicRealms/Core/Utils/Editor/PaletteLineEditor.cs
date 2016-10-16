@@ -126,12 +126,13 @@ namespace SonicRealms.Core.Utils.Editor
             EditorGUILayout.LabelField("Select Indices");
 
             GUILayout.BeginHorizontal();
-
+            
             if (_indexButtonStates.Length != _instance.MaxColors)
                 Array.Resize(ref _indexButtonStates, _instance.MaxColors);
 
             for (var i = 0; i < _instance.MaxColors; ++i)
             {
+                /*
                 var partitionIndex = _instance.GetIndexOfPartitionFor(i);
                 if (partitionIndex >= 0)
                 {
@@ -146,21 +147,21 @@ namespace SonicRealms.Core.Utils.Editor
                 }
                 else
                 {
-                    var indexState = _indexButtonStates[i];
-                    if (!indexState)
+                */
+                var indexState = _indexButtonStates[i];
+                if (!indexState)
+                {
+                    if (GUILayout.Button(i.ToString(), new GUIStyle(EditorStyles.toolbarButton)))
                     {
-                        if (GUILayout.Button(i.ToString(), new GUIStyle(EditorStyles.toolbarButton)))
-                        {
-                            _indexButtonStates[i] = true;
-                        }
+                        _indexButtonStates[i] = true;
                     }
-                    else
+                }
+                else
+                {
+                    if (GUILayout.Button(i.ToString(),
+                        new GUIStyle(EditorStyles.toolbarButton) { normal = EditorStyles.toolbarButton.active }))
                     {
-                        if (GUILayout.Button(i.ToString(),
-                            new GUIStyle(EditorStyles.toolbarButton) { normal = EditorStyles.toolbarButton.active }))
-                        {
-                            _indexButtonStates[i] = false;
-                        }
+                        _indexButtonStates[i] = false;
                     }
                 }
             }
@@ -183,6 +184,9 @@ namespace SonicRealms.Core.Utils.Editor
 
                 _instance.AddBlankPartition(indices);
                 serializedObject.Update();
+
+                for (var i = 0; i < _indexButtonStates.Length; ++i)
+                    _indexButtonStates[i] = false;
 
                 InitializePartitionRLists();
             }
@@ -241,6 +245,11 @@ namespace SonicRealms.Core.Utils.Editor
             {
                 Undo.RecordObject(_instance, "Add Palette Line Entry");
                 partition.CopyAppendLastEntries();
+            };
+
+            rlist.onCanRemoveCallback = list =>
+            {
+                return list.count > 1;
             };
 
             // Remove

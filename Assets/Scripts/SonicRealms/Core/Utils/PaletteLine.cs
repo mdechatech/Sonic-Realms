@@ -137,7 +137,9 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         public void AddBlankPartition(HashSet<int> colorIndices)
         {
-            _partitions.Add(new Partition(colorIndices));
+            var partition = new Partition(colorIndices);
+
+            _partitions.Add(partition);
         }
 
         /// <summary>
@@ -146,7 +148,9 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         public void InsertBlankPartition(int index, HashSet<int> colorIndices)
         {
-            _partitions.Insert(index, new Partition(colorIndices));
+            var partition = new Partition(colorIndices);
+
+            _partitions.Insert(index, partition);
         }
 
         /// <summary>
@@ -165,7 +169,10 @@ namespace SonicRealms.Core.Utils
         protected void Reset()
         {
             _prevMaxColors = _maxColors = 16;
+
             _mainLine = new Partition(_maxColors);
+
+            _partitions = new List<Partition>();
         }
 
         #endregion
@@ -198,6 +205,8 @@ namespace SonicRealms.Core.Utils
                 _listLength = indices.Count;
                 _indices = indices.ToList();
                 _entries = new List<ColorList>();
+
+                AddBlankEntries();
             }
 
             public bool HasIndex(int index)
@@ -244,16 +253,24 @@ namespace SonicRealms.Core.Utils
 
             public void RemoveEntriesAt(int index)
             {
+                if (_entries.Count <= 1)
+                    throw new InvalidOperationException("Can't remove a partition entry if there's only one left.");
+
                 _entries.RemoveAt(index);
             }
 
             public void ClearEntries()
             {
                 _entries.Clear();
+
+                AddBlankEntries();
             }
 
             public void ResizeEntries(int count)
             {
+                if (count < 1)
+                    throw new ArgumentOutOfRangeException("count", "Count must be greater than 1.");
+
                 _listLength = count;
 
                 foreach (var entry in _entries)
