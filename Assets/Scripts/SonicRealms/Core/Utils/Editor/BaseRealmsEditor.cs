@@ -16,31 +16,46 @@ namespace SonicRealms.Core.Utils.Editor
         protected static readonly IComparer<PropertyData> DefaultPropertyComparer = new IdentityPropertyComparer();
         protected static readonly IComparer<FoldoutData> DefaultFoldoutComparer = new IdentityFoldoutComparer();
 
-        protected KeyValuePair<FoldoutData, PropertyData[]>[] FoldoutProperties;
-        protected PropertyData[] UnmarkedProperties;
+        protected virtual IComparer<PropertyData> PropertyComparer { get { return DefaultPropertyComparer; } }
+        protected virtual IComparer<FoldoutData> FoldoutComparer { get { return DefaultFoldoutComparer; } }
+
+        protected List<KeyValuePair<FoldoutData, List<PropertyData>>> FoldoutProperties;
+        protected List<PropertyData> UnmarkedProperties;
 
         protected virtual void OnEnable()
         {
             // Get comparers
-            var foldoutComparer = GetFoldoutComparer();
-            var propertyComparer = GetPropertyComparer();
+            var foldoutComparer = FoldoutComparer;
+            var propertyComparer = PropertyComparer;
             
             // Get and sort properties on the object
-            PropertyData[] unmarkedProperties;
+            List<PropertyData> unmarkedProperties;
             var foldoutProperties = GatherProperties(out unmarkedProperties);
 
-            Array.Sort(unmarkedProperties, propertyComparer);
+            unmarkedProperties.Sort(propertyComparer);
 
             foreach (var pair in foldoutProperties)
-                Array.Sort(pair.Value, propertyComparer);
+            {
+                pair.Key.PropertyCount = pair.Value.Count;
+
+                pair.Value.Sort(propertyComparer);
+
+                for (var i = 0; i < pair.Value.Count; ++i)
+                {
+                    var propertyData = pair.Value[i];
+
+                    propertyData.FoldoutOrder = i;
+                    propertyData.Foldout = pair.Key;
+                }
+            }
 
             var sortedFoldouts = foldoutProperties.Keys.ToArray();
             Array.Sort(sortedFoldouts, foldoutComparer);
 
             UnmarkedProperties = unmarkedProperties;
             FoldoutProperties = sortedFoldouts.Select(
-                foldout => new KeyValuePair<FoldoutData, PropertyData[]>(foldout, foldoutProperties[foldout]))
-                .ToArray();
+                foldout => new KeyValuePair<FoldoutData, List<PropertyData>>(foldout, foldoutProperties[foldout]))
+                .ToList();
         }
 
         public override void OnInspectorGUI()
@@ -68,6 +83,11 @@ namespace SonicRealms.Core.Utils.Editor
                     foreach (var property in pair.Value)
                     {
                         DoDrawProperty(property);
+
+                        if (property.IsLastInFoldout)
+                        {
+                            DrawAtFoldoutBottom(pair.Key);
+                        }
                     }
                 }
             }
@@ -82,24 +102,43 @@ namespace SonicRealms.Core.Utils.Editor
                 foldout.Name);
         }
 
+        protected void AddFoldout(string foldoutName)
+        {
+            AddFoldout(new FoldoutData(0, default(int?), 0, foldoutName));
+        }
+
+        protected void AddFoldout(FoldoutData foldout)
+        {
+            FoldoutProperties.Add(new KeyValuePair<FoldoutData, List<PropertyData>>(foldout, new List<PropertyData>()));
+            FoldoutProperties.Sort((a, b) => FoldoutComparer.Compare(a.Key, b.Key));
+
+            for (var i = 0; i < FoldoutProperties.Count; ++i)
+                FoldoutProperties[i].Key.DeclarationOrder = i;
+        }
+
         protected virtual bool DrawFoldout(bool state, FoldoutData foldout)
         {
-            return EditorGUILayout.Foldout(state, foldout.Name);
+            state = EditorGUILayout.Foldout(state, foldout.Name);
+
+            if (state)
+                DrawAtFoldoutTop(foldout);
+
+            return state;
+        }
+
+        protected virtual void DrawAtFoldoutTop(FoldoutData foldout)
+        {
+            EditorGUILayout.Separator();
+        }
+
+        protected virtual void DrawAtFoldoutBottom(FoldoutData foldout)
+        {
+            EditorGUILayout.Separator();
         }
 
         protected virtual void DrawProperty(PropertyData property, GUIContent label)
         {
             EditorGUILayout.PropertyField(property.Property, label);
-        }
-
-        protected virtual IComparer<FoldoutData> GetFoldoutComparer()
-        {
-            return DefaultFoldoutComparer;
-        }
-
-        protected virtual IComparer<PropertyData> GetPropertyComparer()
-        {
-            return DefaultPropertyComparer;
         }
 
         private void DoDrawProperty(PropertyData property)
@@ -113,7 +152,7 @@ namespace SonicRealms.Core.Utils.Editor
             DrawProperty(property, content);
         }
 
-        protected Dictionary<FoldoutData, PropertyData[]> GatherProperties(out PropertyData[] unmarkedProperties)
+        protected Dictionary<FoldoutData, List<PropertyData>> GatherProperties(out List<PropertyData> unmarkedProperties)
         {
             var results = new Dictionary<FoldoutData, List<PropertyData>>();
             var unmarked = new List<PropertyData>();
@@ -133,20 +172,20 @@ namespace SonicRealms.Core.Utils.Editor
 
                 if (attr == null)
                 {
-                    unmarked.Add(new PropertyData(it.Copy(), propertyDeclOrder++, null));
+                    unmarked.Add(new PropertyData(it.Copy(), null, 0, propertyDeclOrder++, null));
                     continue;
                 }
 
                 var foldoutName = attr.Name;
 
-                var data = new FoldoutData(foldoutDeclOrder++, attr.Order, foldoutName);
+                var data = new FoldoutData(foldoutDeclOrder++, attr.Order, 0, foldoutName);
 
                 (results.ContainsKey(data) ? results[data] : (results[data] = new List<PropertyData>()))
-                    .Add(new PropertyData(it.Copy(), propertyDeclOrder++, null));
+                    .Add(new PropertyData(it.Copy(), data, 0, propertyDeclOrder++, null));
             }
 
-            unmarkedProperties = unmarked.ToArray();
-            return results.ToDictionary(pair => pair.Key, pair => pair.Value.ToArray());
+            unmarkedProperties = unmarked.ToList();
+            return results.ToDictionary(pair => pair.Key, pair => pair.Value.ToList());
         }
 
         protected class IdentityPropertyComparer : IComparer<PropertyData>
@@ -197,15 +236,30 @@ namespace SonicRealms.Core.Utils.Editor
 
         public class PropertyData
         {
-            public readonly SerializedProperty Property;
-            public readonly int DeclarationOrder;
-            public readonly int? Order;
+            public SerializedProperty Property;
+            public FoldoutData Foldout;
+            public int FoldoutOrder;
+            public int DeclarationOrder;
+            public int? Order;
 
             public string Name { get { return Property.name; } }
 
-            public PropertyData(SerializedProperty property, int declarationOrder, int? order)
+            public bool IsFirstInFoldout
+            {
+                get { return Foldout != null && FoldoutOrder == 0; }
+            }
+
+            public bool IsLastInFoldout
+            {
+                get { return Foldout != null && FoldoutOrder == Foldout.PropertyCount - 1; }
+            }
+
+            public PropertyData(SerializedProperty property, FoldoutData foldout, int foldoutOrder, int declarationOrder,
+                int? order)
             {
                 Property = property;
+                Foldout = foldout;
+                FoldoutOrder = foldoutOrder;
                 DeclarationOrder = declarationOrder;
                 Order = order;
             }
@@ -213,14 +267,16 @@ namespace SonicRealms.Core.Utils.Editor
 
         public class FoldoutData : IEquatable<FoldoutData>
         {
-            public readonly int DeclarationOrder;
-            public readonly int? Order;
-            public readonly string Name;
+            public int DeclarationOrder;
+            public int? Order;
+            public int PropertyCount;
+            public string Name;
 
-            public FoldoutData(int declarationOrder, int? order, string name)
+            public FoldoutData(int declarationOrder, int? order, int propertyCount, string name)
             {
                 DeclarationOrder = declarationOrder;
                 Order = order;
+                PropertyCount = propertyCount;
                 Name = name;
             }
 
