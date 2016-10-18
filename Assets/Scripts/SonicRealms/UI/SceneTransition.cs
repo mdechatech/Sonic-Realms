@@ -35,38 +35,45 @@ namespace SonicRealms.UI
         public override void Awake()
         {
             base.Awake();
+
             OnNextScene = OnNextScene ?? new UnityEvent();
             DontDestroyOnLoad(gameObject);
         }
 
-        public void Go(Scene scene)
+        public void Begin(Scene scene)
         {
             TargetName = scene.name;
             TargetIndex = scene.buildIndex;
+
             Time.timeScale = 0f;
+
             Enter();
-            OnGo();
+            OnBegin();
         }
 
-        public void Go(string sceneName)
+        public void Begin(string sceneName)
         {
             TargetName = sceneName;
             TargetIndex = -1;
+
             Time.timeScale = 0f;
+
             Enter();
-            OnGo();
+            OnBegin();
         }
 
-        public void Go(int sceneIndex)
+        public void Begin(int sceneIndex)
         {
             TargetName = null;
             TargetIndex = sceneIndex;
+
             Time.timeScale = 0f;
+
             Enter();
-            OnGo();
+            OnBegin();
         }
 
-        protected virtual void OnGo()
+        protected virtual void OnBegin()
         {
 
         }
@@ -80,6 +87,7 @@ namespace SonicRealms.UI
         protected virtual void NextScene()
         {
             Exit();
+
             if (TargetIndex >= 0)
             {
                 SceneManager.LoadScene(TargetIndex);
@@ -97,6 +105,7 @@ namespace SonicRealms.UI
         public virtual void OnLevelWasLoaded(int level)
         {
             OnNextScene.Invoke();
+
             TargetIndex = -1;
             TargetName = null;
         }

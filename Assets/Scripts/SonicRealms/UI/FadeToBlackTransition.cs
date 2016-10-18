@@ -80,7 +80,7 @@ namespace SonicRealms.UI
             Time.timeScale = 1f;
         }
 
-        protected override void OnGo()
+        protected override void OnBegin()
         {
             FadeTimer = 0f;
         }

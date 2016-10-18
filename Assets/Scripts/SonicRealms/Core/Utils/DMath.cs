@@ -113,6 +113,14 @@ namespace SonicRealms.Core.Utils
         }
 
         /// <summary>
+        /// Returns the greatest common denominator of the two numbers;
+        /// </summary>
+        public static int GCD(int a, int b)
+        {
+            return b == 0 ? a : GCD(b, a%b);
+        }
+
+        /// <summary>
         /// Returns the angle of the specified vector in radians.
         /// </summary>
         /// <param name="a">The vector.</param>

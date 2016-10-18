@@ -138,7 +138,7 @@ namespace SonicRealms.Core.Utils.Editor
 
         protected virtual void DrawProperty(PropertyData property, GUIContent label)
         {
-            EditorGUILayout.PropertyField(property.Property, label);
+            EditorGUILayout.PropertyField(property.Property, label, true);
         }
 
         private void DoDrawProperty(PropertyData property)

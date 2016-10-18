@@ -111,7 +111,7 @@ namespace SonicRealms.Level
 
         public void ToMenu()
         {
-            LevelTransition.Go(MenuSceneName);
+            LevelTransition.Begin(MenuSceneName);
         }
 
         public void LoadLevel(string levelName)
@@ -127,7 +127,7 @@ namespace SonicRealms.Level
             SaveData.Level = levelData.name;
 
             LevelTransition.OnNextScene.AddListener(InitCurrentLevel);
-            LevelTransition.Go(levelData.Scene);
+            LevelTransition.Begin(levelData.Scene);
         }
 
         public void UnloadLevel()
