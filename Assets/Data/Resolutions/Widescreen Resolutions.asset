@@ -11,5 +11,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e123fcdb65f2b4480e9140eacbe16c, type: 3}
   m_Name: Widescreen Resolutions
   m_EditorClassIdentifier: 
+  _useResolutionDownscaling: 1
   _enableFullscreen: 1
-  _windowedEntries: []
+  _fullscreenEntries:
+  - _cameraOrthographicSize: 1.2
+    _downscaledResolution:
+      _width: 320
+      _height: 240
+    _resolution:
+      _width: 640
+      _height: 480
+  - _cameraOrthographicSize: 1.5
+    _downscaledResolution:
+      _width: 400
+      _height: 300
+    _resolution:
+      _width: 800
+      _height: 600
+  - _cameraOrthographicSize: 1.28
+    _downscaledResolution:
+      _width: 341
+      _height: 256
+    _resolution:
+      _width: 1024
+      _height: 768
+  - _cameraOrthographicSize: 1.28
+    _downscaledResolution:
+      _width: 455
+      _height: 256
+    _resolution:
+      _width: 1366
+      _height: 768
+  - _cameraOrthographicSize: 1.35
+    _downscaledResolution:
+      _width: 480
+      _height: 270
+    _resolution:
+      _width: 1920
+      _height: 1080
+  _windowedEntries:
+  - _cameraOrthographicSize: 1.125
+    _aspectRatio:
+      _horizontal: 16
+      _vertical: 9
+    _downscaledResolution:
+      _width: 400
+      _height: 225
+    _screenSizes:
+    - _width: 400
+      _height: 225
+    - _width: 800
+      _height: 450
+    - _width: 1024
+      _height: 576
+    - _width: 1152
+      _height: 648
+    - _width: 1280
+      _height: 720
+    - _width: 1366
+      _height: 768
+    - _width: 1600
+      _height: 900
+    - _width: 1920
+      _height: 1080
+    - _width: 2560
+      _height: 1440
+    - _width: 3840
+      _height: 2160
+  - _cameraOrthographicSize: 1.125
+    _aspectRatio:
+      _horizontal: 16
+      _vertical: 10
+    _downscaledResolution:
+      _width: 360
+      _height: 225
+    _screenSizes:
+    - _width: 360
+      _height: 225
+    - _width: 720
+      _height: 450
+    - _width: 1080
+      _height: 675
+    - _width: 1280
+      _height: 800
+    - _width: 1440
+      _height: 900
+    - _width: 1680
+      _height: 1050
+    - _width: 1920
+      _height: 1200
+    - _width: 2560
+      _height: 1600

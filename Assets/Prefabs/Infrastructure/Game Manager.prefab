@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -40,13 +41,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675281bd8b2ec5042af0688bf529789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResolutionChoices: {fileID: 11400000, guid: 1e55c27778af11544af1575653463f79, type: 2}
+  Resolution:
+    _cameraOrthographicSize: 1.12
+    _downscaledResolution:
+      _width: 320
+      _height: 224
+    _resolution:
+      _width: 640
+      _height: 448
   LevelTransition: {fileID: 11431978}
   MenuSceneName: Scenes/Menu
   Levels:
   - {fileID: 11400000, guid: 4861631379e5fc54db57c19bd8daf3c1, type: 2}
   Characters:
   - {fileID: 11400000, guid: 819344311bcc8a049bac258c77bd1211, type: 2}
-  CurrentSaveData:
+  SaveData:
     Name: 
     Character: 
     Lives: 0
@@ -55,14 +65,9 @@ MonoBehaviour:
     Score: 0
     Rings: 0
     Time: 0
-  CurrentCharacter: {fileID: 0}
-  CurrentLevel: {fileID: 0}
-  LevelManager: {fileID: 0}
-  Lives: 0
-  Score: 0
-  Rings: 0
-  Time: 0
-  Checkpoint: 
+  CharacterData: {fileID: 0}
+  LevelData: {fileID: 0}
+  Level: {fileID: 0}
 --- !u!114 &11431978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -75,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExitAfterEnter: 0
-  Playing: 0
+  IsPlaying: 0
   State: 0
   Animator: {fileID: 0}
   PlayingBool: 
@@ -123,12 +128,21 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  EnterWaitForAnimation: 
-  EnterWaitForSound: {fileID: 0}
-  EnterWaitForSeconds: 0
-  ExitWaitForAnimation: 
-  ExitWaitForSound: {fileID: 0}
-  ExitWaitForSeconds: 0
+  EnterToEnterComplete:
+    Time: 0
+    Animation: 
+    Transition: {fileID: 0}
+    Sound: {fileID: 0}
+  EnterCompleteToExit:
+    Time: 0
+    Animation: 
+    Transition: {fileID: 0}
+    Sound: {fileID: 0}
+  ExitToExitComplete:
+    Time: 0
+    Animation: 
+    Transition: {fileID: 0}
+    Sound: {fileID: 0}
   TargetIndex: 0
   TargetName: 
   OnNextScene:

@@ -27,7 +27,7 @@ namespace SonicRealms.Level
         /// </summary>
         [Foldout("UI")]
         [Tooltip("The level's UI manager.")]
-        public SonicHUDManager HudManager;
+        public SonicHudManager HudManager;
 
         /// <summary>
         /// The level's player camera.

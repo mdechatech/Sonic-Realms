@@ -1,4 +1,4 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Utils.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,58 +12,38 @@ namespace SonicRealms.UI.Editor
             var horizontal = property.FindPropertyRelative("_horizontal");
             var vertical = property.FindPropertyRelative("_vertical");
 
-            var newHorizontal = horizontal.intValue;
-            var newVertical = vertical.intValue;
+            var labelRect = new Rect(position)
+            {
+                height = RealmsEditorUtility.RowHeight
+            };
 
-            float rectX = position.x, rectY = position.y;
+            var bottomRow = new Rect(position)
+            {
+                xMin = position.xMin + RealmsEditorUtility.IndentWidth,
+                yMin = position.yMin + RealmsEditorUtility.RowHeight,
+                height = RealmsEditorUtility.RowHeight
+            };
 
-            var labelRect = new Rect(rectX, rectY, position.width, position.height*0.5f);
-            rectY += labelRect.height;
-            
-            var horizontalRect = new Rect(
-                rectX,
-                rectY, 
-                position.width*0.4f, 
-                position.height*0.5f);
+            var widthRect = new Rect(bottomRow)
+            {
+                xMin = bottomRow.xMin,
+                xMax = bottomRow.xMin + bottomRow.width * 0.5f,
+                height = bottomRow.height
+            };
 
-            rectX += horizontalRect.width;
-
-            var colonRect = new Rect(
-                rectX,
-                rectY,
-                50,
-                position.height * 0.5f);
-
-            rectX += colonRect.width;
-
-            var verticalRect = new Rect(
-                rectX,
-                rectY,
-                position.width*0.4f,
-                position.height * 0.5f);
-
-            Fix(ref newHorizontal, ref newVertical);
+            var heightRect = new Rect(bottomRow)
+            {
+                xMin = widthRect.xMax - RealmsEditorUtility.CurrentIndent + RealmsEditorUtility.IndentWidth,
+                width = widthRect.width,
+                height = bottomRow.height
+            };
 
             EditorGUI.LabelField(labelRect, label);
 
-            var labelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = 25;
+            EditorGUIUtility.labelWidth = 50 + EditorGUI.indentLevel*RealmsEditorUtility.IndentWidth;
 
-            var indentLevel = EditorGUI.indentLevel;
-            --EditorGUI.indentLevel;
-            
-            newHorizontal = EditorGUI.IntField(horizontalRect, "H", newHorizontal);
-
-            EditorGUI.LabelField(colonRect, ":");
-
-            newVertical = EditorGUI.IntField(verticalRect, "V", newVertical);
-
-            EditorGUIUtility.labelWidth = labelWidth;
-
-            horizontal.intValue = newHorizontal;
-            vertical.intValue = newVertical;
-
-            EditorGUI.indentLevel = indentLevel;
+            EditorGUI.PropertyField(widthRect, horizontal, new GUIContent("H"));
+            EditorGUI.PropertyField(heightRect, vertical, new GUIContent("V"));
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

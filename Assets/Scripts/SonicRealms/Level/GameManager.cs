@@ -3,13 +3,17 @@ using System.Linq;
 using SonicRealms.Core.Utils;
 using SonicRealms.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SonicRealms.Level
 {
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance;
+
+        [Header("Settings")]
+        public ResolutionSettings ResolutionChoices;
+
+        public ResolutionSettings.Entry Resolution;
 
         [Header("Data")]
         public SceneTransition LevelTransition;
@@ -64,10 +68,7 @@ namespace SonicRealms.Level
                 Destroy(gameObject);
 
             ActiveCharacters = new Dictionary<CharacterData, GameObject>();
-        }
 
-        public void Start()
-        {
             DontDestroyOnLoad(gameObject);
         }
 

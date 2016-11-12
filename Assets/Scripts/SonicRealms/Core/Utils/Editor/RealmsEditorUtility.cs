@@ -11,6 +11,11 @@ namespace SonicRealms.Core.Utils.Editor
 {
     public class RealmsEditorUtility
     {
+        public const float IndentWidth = 16;
+        public const float RowHeight = 16;
+
+        public static float CurrentIndent { get { return EditorGUI.indentLevel*IndentWidth; } }
+
         /// <summary>
         /// The name of the Script property that shows up on all unmodified component editors.
         /// </summary>

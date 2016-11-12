@@ -4,6 +4,66 @@ namespace SonicRealms.Level
 {
     public class RealmsCamera : MonoBehaviour
     {
+        public float OrthographicSize
+        {
+            get { return _orthographicSize; }
+            set
+            {
+                _orthographicSize = value;
+                UpdateOrthographicSize();
+            }
+        }
+
+        public int BaseWidth
+        {
+            get { return _baseWidth; }
+            set
+            {
+                _baseWidth = value;
+                UpdateRenderTextureSize();
+            }
+        }
+
+        public int BaseHeight
+        {
+            get { return _baseHeight; }
+            set
+            {
+                _baseHeight = value;
+                UpdateRenderTextureSize();
+            }
+        }
+
+        public string GlobalBackgroundTextureName
+        {
+            get { return _globalBackgroundTextureName; }
+            set
+            {
+                _globalBackgroundTextureName = value;
+                SetGlobalTextures();
+            }
+        }
+
+        public string GlobalForegroundTextureName
+        {
+            get { return _globalForegroundTextureName; }
+            set
+            {
+                _globalForegroundTextureName = value;
+                SetGlobalTextures();
+            }
+        }
+
+        public string GlobalOverlayTextureName
+        {
+            get { return _globalOverlayTextureName; }
+            set
+            {
+                _globalOverlayTextureName = value;
+                SetGlobalTextures();
+            }
+        }
+
         [SerializeField, HideInInspector]
         private RenderTexture _backgroundRenderTexture;
 
@@ -30,17 +90,26 @@ namespace SonicRealms.Level
 
         [Header("Dimensions")]
         [SerializeField]
+        [Tooltip("Orthographic size of all cameras used by the Realms Camera.")]
+        private float _orthographicSize;
+
+        private float _prevOrthographicSize;
+
+        [SerializeField]
+        [Tooltip("Width of the texture to which cameras render. The texture is then resized to fit the screen.")]
         private int _baseWidth;
 
         private int _prevBaseWidth;
 
         [SerializeField]
+        [Tooltip("Height of the texture to which cameras render. The texture is then resized to fit the screen.")]
         private int _baseHeight;
 
         private int _prevBaseHeight;
 
         [Header("Shaders")]
         [SerializeField]
+        [Tooltip("If not empty, ")]
         private string _globalBackgroundTextureName;
 
         [SerializeField]
@@ -95,16 +164,31 @@ namespace SonicRealms.Level
             SetGlobalTextures();
         }
 
+#if UNITY_EDITOR
+        protected void Update()
+        {
+            if (!Application.isPlaying)
+                SetGlobalTextures();
+        }
+#endif
+
         protected void OnValidate()
         {
+            if (_prevOrthographicSize != _orthographicSize)
+            {
+                UpdateOrthographicSize();
+
+                _prevOrthographicSize = _orthographicSize;
+            }
+
             if (_prevBaseHeight != _baseHeight)
             {
                 if (_baseHeight < 1)
                     _baseHeight = 1;
 
-                _prevBaseHeight = _baseHeight;
+                SetRenderTextureSize(_baseWidth, _baseHeight);
 
-                SetRTSize(_baseWidth, _baseHeight);
+                _prevBaseHeight = _baseHeight;
             }
 
             if (_prevBaseWidth != _baseWidth)
@@ -112,13 +196,30 @@ namespace SonicRealms.Level
                 if (_baseWidth < 1)
                     _baseWidth = 1;
 
-                _prevBaseWidth = _baseWidth;
+                SetRenderTextureSize(_baseWidth, _baseHeight);
 
-                SetRTSize(_baseWidth, _baseHeight);
+                _prevBaseWidth = _baseWidth;
             }
         }
 
-        private void SetRTSize(int width, int height)
+        private void UpdateOrthographicSize()
+        {
+            SetOrthographicSize(_orthographicSize);
+        }
+
+        private void SetOrthographicSize(float orthographicSize)
+        {
+            _backgroundCamera.orthographicSize = orthographicSize;
+            _foregroundCamera.orthographicSize = orthographicSize;
+            _overlayCamera.orthographicSize = orthographicSize;
+        }
+
+        private void UpdateRenderTextureSize()
+        {
+            SetRenderTextureSize(_baseWidth, _baseHeight);
+        }
+
+        private void SetRenderTextureSize(int width, int height)
         {
             if (_backgroundRenderTexture != null)
             {
@@ -245,9 +346,14 @@ namespace SonicRealms.Level
 
         private void SetGlobalTextures()
         {
-            Shader.SetGlobalTexture(_globalBackgroundTextureName, _backgroundRenderTexture);
-            Shader.SetGlobalTexture(_globalForegroundTextureName, _foregroundRenderTexture);
-            Shader.SetGlobalTexture(_globalOverlayTextureName, _overlayRenderTexture);
+            if (!string.IsNullOrEmpty(_globalBackgroundTextureName))
+                Shader.SetGlobalTexture(_globalBackgroundTextureName, _backgroundRenderTexture);
+
+            if (!string.IsNullOrEmpty(_globalForegroundTextureName))
+                Shader.SetGlobalTexture(_globalForegroundTextureName, _foregroundRenderTexture);
+
+            if (!string.IsNullOrEmpty(_globalOverlayTextureName))
+                Shader.SetGlobalTexture(_globalOverlayTextureName, _overlayRenderTexture);
         }
     }
 }

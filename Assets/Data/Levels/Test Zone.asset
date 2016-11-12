@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: Test Zone
   m_EditorClassIdentifier: 
   LevelSelectIcon: {fileID: 0}
-  Scene: Scenes/Test Zone
+  Scene: Scenes/Tileset Testing 2
   LevelManager: Level Manager

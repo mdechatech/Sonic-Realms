@@ -118,7 +118,7 @@ namespace SonicRealms.Core.Utils.Editor
 
         protected virtual bool DrawFoldout(bool state, FoldoutData foldout)
         {
-            state = EditorGUILayout.Foldout(state, foldout.Name);
+            state = EditorGUILayout.Foldout(state, foldout.Name, new GUIStyle(EditorStyles.foldout) {fontStyle = FontStyle.Bold});
 
             if (state)
                 DrawAtFoldoutTop(foldout);

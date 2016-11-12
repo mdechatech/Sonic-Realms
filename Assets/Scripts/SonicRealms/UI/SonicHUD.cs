@@ -2,7 +2,7 @@
 
 namespace SonicRealms.UI
 {
-    public class SonicHUD : MonoBehaviour
+    public class SonicHud : MonoBehaviour
     {
         public RingsView Rings;
         public ScoreView Score;

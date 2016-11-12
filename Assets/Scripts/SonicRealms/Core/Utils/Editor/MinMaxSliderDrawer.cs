@@ -11,17 +11,57 @@ namespace SonicRealms.Core.Utils.Editor
             if (property.propertyType != SerializedPropertyType.Vector2)
                 return;
 
+            var attr = (MinMaxSliderAttribute) attribute;
+
+            const float minMaxLabelWidth = 30;
+            var minMaxWidth = EditorGUIUtility.fieldWidth + minMaxLabelWidth;
+
+            var labelRect = new Rect(position)
+            {
+                width = EditorGUIUtility.labelWidth
+            };
+
+            var contentRect = new Rect(position)
+            {
+                xMin = labelRect.xMax,
+            };
+
+            var minRect = new Rect(contentRect)
+            {
+                height = RealmsEditorUtility.RowHeight,
+                width = minMaxWidth
+            };  
+
+            var maxRect = new Rect(contentRect)
+            {
+                height = RealmsEditorUtility.RowHeight,
+                xMin = Mathf.Max(minRect.xMax, position.xMax - minMaxWidth),
+                width = minMaxWidth
+            };
+
+            var sliderRect = new Rect(contentRect)
+            {
+                yMin = position.yMin + RealmsEditorUtility.RowHeight,
+                height = RealmsEditorUtility.RowHeight
+            };
+
+            label = EditorGUI.BeginProperty(position, label, property);
+
+            EditorGUI.BeginChangeCheck();
+
             var range = property.vector2Value;
 
             var min = range.x;
             var max = range.y;
 
-            var attr = (MinMaxSliderAttribute) attribute;
+            EditorGUI.LabelField(labelRect, label);
 
-            EditorGUI.BeginChangeCheck();
+            EditorGUIUtility.labelWidth = minMaxLabelWidth;
 
-            EditorGUI.MinMaxSlider(label, new Rect(position.x, position.y, position.width - attr.LabelWidth, position.height),
-                ref min, ref max, attr.Min, attr.Max);
+            min = Mathf.Clamp(EditorGUI.FloatField(minRect, "Min", min), attr.Min, max);
+            max = Mathf.Clamp(EditorGUI.FloatField(maxRect, "Max", max), min, attr.Max);
+
+            EditorGUI.MinMaxSlider(sliderRect, ref min, ref max, attr.Min, attr.Max);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -30,13 +70,12 @@ namespace SonicRealms.Core.Utils.Editor
                 property.vector2Value = range;
             }
 
-            if (attr.LabelWidth > 0)
-            {
-                EditorGUI.LabelField(
-                    new Rect(position.x + position.width - attr.LabelWidth, position.y, attr.LabelWidth, position.height),
-                    string.Format(attr.LabelFormat, range.x, range.y),
-                    new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleCenter });
-            }
+            EditorGUI.EndProperty();
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return RealmsEditorUtility.RowHeight*2;
         }
     }
 }

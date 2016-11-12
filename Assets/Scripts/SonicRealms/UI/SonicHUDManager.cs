@@ -8,14 +8,14 @@ namespace SonicRealms.UI
     /// <summary>
     /// Updates the Sonic UI with the player's information.
     /// </summary>
-    public class SonicHUDManager : MonoBehaviour
+    public class SonicHudManager : MonoBehaviour
     {
-        public SonicHUD Hud;
+        public SonicHud Hud;
         public GoalLevelManager Level;
 
         public void Reset()
         {
-            Hud = FindObjectOfType<SonicHUD>();
+            Hud = FindObjectOfType<SonicHud>();
         }
 
         public void Start()

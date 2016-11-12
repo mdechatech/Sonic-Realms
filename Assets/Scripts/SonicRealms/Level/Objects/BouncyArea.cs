@@ -193,7 +193,7 @@ namespace SonicRealms.Level.Objects
 
         [SerializeField]
         [Foldout("Bouncing")]
-        [MinMaxSlider(0, 360, 100, "{0:F1}° - {1:F1}°")]
+        [MinMaxSlider(0, 360)]
         [Tooltip("Range of bounce angles for which the area is bouncy.")]
         private Vector2 _bouncyAngles;
 

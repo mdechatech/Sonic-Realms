@@ -187,7 +187,7 @@ namespace SonicRealms.Level.Objects
         #region Inspector & Private Fields
         [SerializeField]
         [Foldout("Bouncing")]
-        [MinMaxSlider(0, 360, 100, "{0:F1}° - {1:F1}°")]
+        [MinMaxSlider(0, 360)]
         [Tooltip("Range of normal angles for which the platform is bouncy.")]
         private Vector2 _bouncyAngles;
 
