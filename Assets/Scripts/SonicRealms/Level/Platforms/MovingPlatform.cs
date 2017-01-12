@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SonicRealms.Level.Platforms
 {
@@ -13,48 +14,53 @@ namespace SonicRealms.Level.Platforms
     [RequireComponent(typeof(PlatformTrigger))]
     public class MovingPlatform : ReactivePlatform
     {
-        /// <summary>
-        /// Whether the controller gets the horizontal speed it had on the platform after leaving it.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Whether the controller gets the horizontal speed it had on the platform after leaving it.")]
-        public bool TransferMomentumX;
+        public enum MovementMode
+        {
+            FromAnimator, // Animator keyframes
+            NotFromAnimator // Everything else - unity events, scripts
+        }
 
         /// <summary>
-        /// Whether the controller gets the vertical speed it had on the platform after leaving it.
+        /// What causes the platform to move. One may use the Animator or a combination of other sources
+        /// (scripts, events, animator events) - but never both at the same time.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Whether the controller gets the vertical speed it had on the platform after leaving it.")]
-        public bool TransferMomentumY;
+        public MovementMode MovementSource { get { return _movementSource; } set { _movementSource = value; } }
 
         /// <summary>
-        /// Whether the controller gets the ground speed it had on the platform after leaving it.
+        /// If checked, the platform's momentum is transferred to the player when it falls off.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Whether the controller gets the speed it had on the platform after leaving it for another surface.")]
-        public bool TransferMomentumGround;
+        public bool TransferAirborneMomentum { get { return _transferAirborneMomentum; } }
 
-        [HideInInspector]
-        public Vector3 Velocity;
+        /// <summary>
+        /// If checked, the platform's momentum is transferred to the player if it moves to a new platform
+        /// without becoming airborne.
+        /// </summary>
+        public bool TransferGroundedMomentum { get { return _transferGroundedMomentum; } }
+        
+        [SerializeField, EnumSelectionGrid]
+        [Tooltip("What causes the platform to move. One may use either the Animator or a combination of " +
+                 "other sources (scripts, events) - but never both at the same " +
+                 "time.")]
+        private MovementMode _movementSource;
+
+        [SerializeField, FormerlySerializedAs("TransferMomentumX")]
+        [Tooltip("If checked, the platform's momentum is transferred to the player when it falls off.")]
+        private bool _transferAirborneMomentum;
+
+        [SerializeField, FormerlySerializedAs("TransferMomentumGround")]
+        [Tooltip("If checked, the platform's momentum is transferred to the player when it moves to a new platform " +
+                 "without becoming airborne.")]
+        private bool _transferGroundedMomentum;
 
         public Dictionary<HedgehogController, Anchor> Anchors;
 
         public override void Awake()
         {
             base.Awake();
+
             Anchors = new Dictionary<HedgehogController, Anchor>();
+            StartCoroutine(Coroutine_LateFixedUpdate());
         }
-        /*
-        public override bool IsSolid(TerrainCastHit hit)
-        {
-            // Prevent the player from sinking down onto moving platforms
-            if (hit.Side != ControllerSide.Bottom) return true;
-            if (!hit.Controller.Grounded) return true;
-            if (hit.Controller.StandingOn(transform, true)) return true;
-            return hit.Hit.fraction <
-                   hit.Controller.LedgeClimbHeight/(hit.Controller.LedgeClimbHeight + hit.Controller.LedgeDropHeight);
-        }
-        */
 
         public override bool IsOnSurface(SurfaceCollision.Contact contact)
         {
@@ -73,22 +79,27 @@ namespace SonicRealms.Level.Platforms
             return true;
         }
 
-        // Links the player to an object .
+        // Links the player to an object.
         public override void OnSurfaceEnter(SurfaceCollision collision)
         {
-            if (collision.Controller == null) return;
-            CreateAnchor(collision);
+            if (collision.Controller != null)
+                CreateAnchor(collision);
         }
 
-        protected void FixedUpdate()
+        protected void ApplyNonAnimatorPositionChanges()
+        {
+            ApplyAnimatorPositionChanges(); // Same behavior for now
+        }
+        
+        protected void ApplyAnimatorPositionChanges()
         {
             foreach (var pair in Anchors)
             {
                 var anchor = pair.Value;
                 var controller = pair.Key;
 
-                var delta = anchor.Transform.position - anchor.PreviousPosition;
-                anchor.PreviousPosition = anchor.Transform.position;
+                var delta = anchor.Transform.position - anchor.PreviousAnimatorPosition;
+                anchor.PreviousAnimatorPosition = anchor.Transform.position;
 
                 if (!anchor.CalculatingPlayerDelta && anchor.PlayerDelta != Vector2.zero)
                 {
@@ -99,9 +110,23 @@ namespace SonicRealms.Level.Platforms
                     return;
 
                 controller.transform.position += delta;
+                anchor.PreviousDelta = delta;
             }
         }
-        
+
+        private IEnumerator Coroutine_LateFixedUpdate()
+        {
+            var wait = new WaitForFixedUpdate();
+
+            while (true)
+            {
+                yield return wait;
+
+                if (_movementSource == MovementMode.FromAnimator)
+                    ApplyNonAnimatorPositionChanges();
+            }
+        }
+
         // Removes the anchor associated with the hit.Source
         public override void OnSurfaceExit(SurfaceCollision collision)
         {
@@ -109,13 +134,17 @@ namespace SonicRealms.Level.Platforms
             if (anchor == null)
                 return;
 
-            if (collision.Controller.Grounded && TransferMomentumGround)
+            if (_transferGroundedMomentum && collision.Controller.Grounded)
             {
                 collision.Controller.GroundVelocity += DMath.ScalarProjectionAbs(
-                    (anchor.Transform.position - anchor.PreviousPosition)/Time.fixedDeltaTime,
+                    anchor.PreviousDelta/Time.fixedDeltaTime,
                     collision.Latest.HitData.SurfaceAngle);
             }
-            
+            else if (_transferAirborneMomentum && !collision.Controller.Grounded)
+            {
+                collision.Controller.Velocity += anchor.PreviousDelta/Time.fixedDeltaTime;
+            }
+
             DestroyAnchor(collision);
         }
 
@@ -125,11 +154,12 @@ namespace SonicRealms.Level.Platforms
 
             var anchor = new Anchor {Transform = new GameObject().transform};
             anchor.Transform.position = info.Latest.HitData.Raycast.point;
-            anchor.PreviousPosition = anchor.Transform.position;
+            anchor.PreviousAnimatorPosition = anchor.Transform.position;
             anchor.Transform.SetParent(info.Latest.HitData.Transform);
 
             Anchors.Add(info.Controller, anchor);
 
+            // Account for player movement in order to separate it from platform movement
             info.Controller.AddCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
             info.Controller.AddCommandBuffer(ApplyDelta, HedgehogController.BufferEvent.AfterMovement);
 
@@ -144,6 +174,9 @@ namespace SonicRealms.Level.Platforms
                 player.RemoveCommandBuffer(StoreDelta, HedgehogController.BufferEvent.BeforeMovement);
                 return;
             }
+
+            if (_movementSource == MovementMode.NotFromAnimator)
+                ApplyNonAnimatorPositionChanges();
 
             anchor.PlayerDelta = player.transform.position;
             anchor.CalculatingPlayerDelta = true;
@@ -189,7 +222,8 @@ namespace SonicRealms.Level.Platforms
         public class Anchor
         {
             public Transform Transform;
-            public Vector3 PreviousPosition;
+            public Vector3 PreviousAnimatorPosition;
+            public Vector2 PreviousDelta;
             public Vector2 PlayerDelta;
             public bool CalculatingPlayerDelta;
         }

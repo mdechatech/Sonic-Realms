@@ -1,5 +1,4 @@
 ﻿using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 
 namespace SonicRealms.Core.Moves
@@ -13,14 +12,14 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Minimum speed at which skidding occurs, in units per second.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("Minimum speed at which skidding occurs, in units per second.")]
         public float MinimumSpeed;
 
         /// <summary>
         /// Maximum angle at which the player can skid, in degrees.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("Maximum angle at which the player can skid, in degrees.")]
         public float MaximumAngle;
 
@@ -80,7 +79,7 @@ namespace SonicRealms.Core.Moves
 
             if (SkidSound != null)
             {
-                SkidSoundSource = SoundManager.Instance.CreateAudioSource();
+                SkidSoundSource = SoundManager.CreateSoundEffectSource();
                 SkidSoundSource.clip = SkidSound;
                 SkidSoundSource.name = "Skid Sound";
                 SkidSoundSource.transform.SetParent(gameObject.transform);

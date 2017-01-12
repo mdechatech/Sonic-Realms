@@ -13,20 +13,27 @@ namespace SonicRealms.Level
         private Sprite _waterSprite;
 
         [SerializeField]
+        private bool _updateMaterial;
+
+        [Space]
+        [SerializeField]
         private Texture _displacementTexture;
 
+        [Space]
         [SerializeField]
         private Texture _backgroundColorCurveTexture;
 
         [SerializeField]
         private Color _backgroundColorTint;
 
+        [Space]
         [SerializeField]
         private Texture _foregroundColorCurveTexture;
 
         [SerializeField]
         private Color _foregroundColorTint;
 
+        [Space]
         [SerializeField]
         [Range(0, 0.1f)]
         private float _magnitude;
@@ -37,6 +44,23 @@ namespace SonicRealms.Level
         [SerializeField]
         [Range(0.5f, 4)]
         private float _displacementScale;
+
+        private SpriteRenderer _spriteRenderer;
+
+        private static bool _hasInitializedIds;
+
+        private static int _displaceTexId;
+        private static int _bgColorTexId;
+        private static int _fgColorTexId;
+        private static int _magnitudeId;
+        private static int _horizSpeedId;
+        private static int _vertSpeedId;
+        private static int _displaceScaleXId;
+        private static int _displaceScaleYId;
+        private static int _bgColorTintId;
+        private static int _fgColorTintId;
+
+        private MaterialPropertyBlock _block;
 
         protected void Reset()
         {
@@ -55,44 +79,80 @@ namespace SonicRealms.Level
 
         protected void Awake()
         {
-            SetShaderProperties();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            
+            if (!_hasInitializedIds)
+                InitializePropertyIds();
+
+            UpdateMaterialProperties();
         }
 
 #if UNITY_EDITOR
-        protected void Update()
+        protected void Start()
         {
-            SetShaderProperties();
+            if (!Application.isPlaying)
+                Awake();
         }
 #endif
-        private void SetShaderProperties()
+        protected void Update()
         {
-            var sprite = GetComponent<SpriteRenderer>();
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UpdateMaterialProperties();
+                return;
+            }
+#endif
+            if (_updateMaterial)
+            {
+                UpdateMaterialProperties();
+            }
+        }
 
-            if (!sprite.sharedMaterial)
-                sprite.sharedMaterial = _waterMaterial;
+        private static void InitializePropertyIds()
+        {
+            _hasInitializedIds = true;
 
-            var block = new MaterialPropertyBlock();
+            _displaceTexId = Shader.PropertyToID("_DisplaceTex");
+            _bgColorTexId = Shader.PropertyToID("_BGColorTex");
+            _fgColorTexId = Shader.PropertyToID("_FGColorTex");
+            _magnitudeId = Shader.PropertyToID("_Magnitude");
+            _horizSpeedId = Shader.PropertyToID("_HorizSpeed");
+            _vertSpeedId = Shader.PropertyToID("_VertSpeed");
+            _displaceScaleXId = Shader.PropertyToID("_DisplaceScaleX");
+            _displaceScaleYId = Shader.PropertyToID("_DisplaceScaleY");
+            _bgColorTintId = Shader.PropertyToID("_BGColorTint");
+            _fgColorTintId = Shader.PropertyToID("_FGColorTint");
+        }
+
+        public void UpdateMaterialProperties()
+        {
+            if (!_spriteRenderer.sharedMaterial)
+                _spriteRenderer.sharedMaterial = _waterMaterial;
+
+            if (_block == null)
+                _block = new MaterialPropertyBlock();
 
             if (_displacementTexture)
-                block.SetTexture("_DisplaceTex", _displacementTexture);
+                _block.SetTexture(_displaceTexId, _displacementTexture);
 
             if (_backgroundColorCurveTexture)
-                block.SetTexture("_BGColorTex", _backgroundColorCurveTexture);
+                _block.SetTexture(_bgColorTexId, _backgroundColorCurveTexture);
 
             if (_foregroundColorCurveTexture)
-                block.SetTexture("_FGColorTex", _foregroundColorCurveTexture);
+                _block.SetTexture(_fgColorTexId, _foregroundColorCurveTexture);
 
-            block.SetFloat("_Magnitude", _magnitude);
-            block.SetFloat("_HorizSpeed", _speed.x);
-            block.SetFloat("_VertSpeed", _speed.y);
+            _block.SetFloat(_magnitudeId, _magnitude);
+            _block.SetFloat(_horizSpeedId, _speed.x);
+            _block.SetFloat(_vertSpeedId, _speed.y);
 
-            block.SetFloat("_DisplaceScaleX", 1 / sprite.bounds.size.x * _displacementScale);
-            block.SetFloat("_DisplaceScaleY", 1 / sprite.bounds.size.y * _displacementScale);
+            _block.SetFloat(_displaceScaleXId, 1 / _spriteRenderer.bounds.size.x * _displacementScale);
+            _block.SetFloat(_displaceScaleYId, 1 / _spriteRenderer.bounds.size.y * _displacementScale);
 
-            block.SetColor("_BGColorTint", _backgroundColorTint);
-            block.SetColor("_FGColorTint", _foregroundColorTint);
+            _block.SetColor(_bgColorTintId, _backgroundColorTint);
+            _block.SetColor(_fgColorTintId, _foregroundColorTint);
 
-            sprite.SetPropertyBlock(block);
+            _spriteRenderer.SetPropertyBlock(_block);
         }
     }
 }

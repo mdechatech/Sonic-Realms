@@ -11,268 +11,16 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1000013538628014}
   m_IsPrefabParent: 1
---- !u!1 &1000010784392024
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000012395097894}
-  - 212: {fileID: 212000010281806270}
-  - 61: {fileID: 61000013838030686}
-  - 114: {fileID: 114000011547230976}
-  - 114: {fileID: 114000013739655936}
-  - 114: {fileID: 114000011289905960}
-  - 114: {fileID: 114000013468871460}
-  m_Layer: 31
-  m_Name: Log 7
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000010865314008
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011441737642}
-  - 212: {fileID: 212000013287245494}
-  - 61: {fileID: 61000011269154530}
-  - 114: {fileID: 114000013017742862}
-  - 114: {fileID: 114000010286216312}
-  - 114: {fileID: 114000012718446036}
-  - 114: {fileID: 114000010723776476}
-  m_Layer: 31
-  m_Name: Log 8
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000010971140682
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000010483954684}
-  - 212: {fileID: 212000012464226770}
-  - 61: {fileID: 61000010817448368}
-  - 114: {fileID: 114000010057550728}
-  - 114: {fileID: 114000013181805124}
-  - 114: {fileID: 114000010961716876}
-  - 114: {fileID: 114000013893560864}
-  m_Layer: 31
-  m_Name: Log 10
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000011895285816
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000013125842852}
-  - 212: {fileID: 212000011814806376}
-  - 61: {fileID: 61000011534684790}
-  - 114: {fileID: 114000011354498970}
-  - 114: {fileID: 114000011737099454}
-  - 114: {fileID: 114000011899717852}
-  - 114: {fileID: 114000011428956476}
-  m_Layer: 31
-  m_Name: Log 4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000011897238496
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000012040139392}
-  - 212: {fileID: 212000012980567536}
-  - 61: {fileID: 61000010336692036}
-  - 114: {fileID: 114000010191871686}
-  - 114: {fileID: 114000011549756468}
-  - 114: {fileID: 114000013350388042}
-  - 114: {fileID: 114000010552631922}
-  m_Layer: 31
-  m_Name: Log 3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000012332439926
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011690727002}
-  - 212: {fileID: 212000010383682180}
-  - 61: {fileID: 61000013674927554}
-  - 114: {fileID: 114000011565007954}
-  - 114: {fileID: 114000012176935542}
-  - 114: {fileID: 114000013011885720}
-  - 114: {fileID: 114000012836114142}
-  m_Layer: 31
-  m_Name: Log 11
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000012704610060
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011008928154}
-  - 212: {fileID: 212000010452456044}
-  - 61: {fileID: 61000010530847946}
-  - 114: {fileID: 114000012747048590}
-  - 114: {fileID: 114000012925631524}
-  - 114: {fileID: 114000010868679100}
-  - 114: {fileID: 114000013611596124}
-  m_Layer: 31
-  m_Name: Log 0
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000013191482466
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000011276130016}
-  - 212: {fileID: 212000013272635666}
-  - 61: {fileID: 61000011544433152}
-  - 114: {fileID: 114000013372669264}
-  - 114: {fileID: 114000011280050440}
-  - 114: {fileID: 114000013376629984}
-  - 114: {fileID: 114000011371344718}
-  m_Layer: 31
-  m_Name: Log 9
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000013254966424
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000014160617502}
-  - 212: {fileID: 212000013741343632}
-  - 61: {fileID: 61000010087017586}
-  - 114: {fileID: 114000013796717690}
-  - 114: {fileID: 114000013152109370}
-  - 114: {fileID: 114000013556235284}
-  - 114: {fileID: 114000013061803812}
-  m_Layer: 31
-  m_Name: Log 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000013365624834
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000014148651736}
-  - 212: {fileID: 212000013677422104}
-  - 61: {fileID: 61000014030987104}
-  - 114: {fileID: 114000010246263704}
-  - 114: {fileID: 114000010590339052}
-  - 114: {fileID: 114000010910545156}
-  - 114: {fileID: 114000014268003494}
-  m_Layer: 31
-  m_Name: Log 5
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000013431134988
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000010915391390}
-  - 212: {fileID: 212000010332207034}
-  - 61: {fileID: 61000014215552196}
-  - 114: {fileID: 114000012753387858}
-  - 114: {fileID: 114000013928419394}
-  - 114: {fileID: 114000013354752592}
-  - 114: {fileID: 114000014117820272}
-  m_Layer: 31
-  m_Name: Log 1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1000013486713456
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 4000012225358318}
-  - 212: {fileID: 212000012239342044}
-  - 61: {fileID: 61000012771218968}
-  - 114: {fileID: 114000011818061530}
-  - 114: {fileID: 114000012527834602}
-  - 114: {fileID: 114000013028860744}
-  - 114: {fileID: 114000012032708428}
-  m_Layer: 31
-  m_Name: Log 6
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1000013538628014
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013642184122}
-  - 114: {fileID: 114000014104979548}
-  - 114: {fileID: 114000012125705362}
+  - component: {fileID: 4000013642184122}
+  - component: {fileID: 114000014104979548}
+  - component: {fileID: 114000012125705362}
   m_Layer: 0
   m_Name: Bridge
   m_TagString: Untagged
@@ -280,136 +28,258 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000010483954684
-Transform:
-  m_ObjectHideFlags: 1
+--- !u!1 &1133999131810964
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.64, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 10
---- !u!4 &4000010915391390
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4126853795711838}
+  - component: {fileID: 212680720777685436}
+  - component: {fileID: 61172896497312522}
+  - component: {fileID: 114882954742558940}
+  - component: {fileID: 114000798164395558}
+  - component: {fileID: 114637302812919392}
+  - component: {fileID: 114440148562393422}
+  m_Layer: 31
+  m_Name: Log 4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1186899951771256
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.79999995, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 1
---- !u!4 &4000011008928154
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4920925723146912}
+  - component: {fileID: 212892048817804896}
+  - component: {fileID: 61632591395629256}
+  - component: {fileID: 114102750977277652}
+  - component: {fileID: 114267335898740552}
+  - component: {fileID: 114886706785230046}
+  - component: {fileID: 114578592144951252}
+  m_Layer: 31
+  m_Name: Log 8
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1245186738329356
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.96, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 0
---- !u!4 &4000011276130016
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4358724670358364}
+  - component: {fileID: 212867919037494754}
+  - component: {fileID: 61979001060825522}
+  - component: {fileID: 114988511532002922}
+  - component: {fileID: 114601026330741452}
+  - component: {fileID: 114884282240580876}
+  - component: {fileID: 114042637403671736}
+  m_Layer: 31
+  m_Name: Log 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1250228385408886
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 9
---- !u!4 &4000011441737642
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4959691855874790}
+  - component: {fileID: 212059288560563080}
+  - component: {fileID: 61140937479090070}
+  - component: {fileID: 114082440253665756}
+  - component: {fileID: 114782313710621736}
+  - component: {fileID: 114245847454381292}
+  - component: {fileID: 114348483698242140}
+  m_Layer: 31
+  m_Name: Log 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1278511479435788
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.32, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 8
---- !u!4 &4000011690727002
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4217555630062058}
+  - component: {fileID: 212064013006328626}
+  - component: {fileID: 61377593372109728}
+  - component: {fileID: 114272038246997278}
+  - component: {fileID: 114633469149027318}
+  - component: {fileID: 114900014902835748}
+  - component: {fileID: 114066559045811680}
+  m_Layer: 31
+  m_Name: Log 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1280716137611954
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.79999995, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 11
---- !u!4 &4000012040139392
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4426573467978856}
+  - component: {fileID: 212850554603219436}
+  - component: {fileID: 61151848523476190}
+  - component: {fileID: 114440870381640578}
+  - component: {fileID: 114015453992688318}
+  - component: {fileID: 114035630774375228}
+  - component: {fileID: 114343976203838012}
+  m_Layer: 31
+  m_Name: Log 6
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1293578269862238
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.48, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 3
---- !u!4 &4000012225358318
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4977318622791084}
+  - component: {fileID: 212100801259185336}
+  - component: {fileID: 61792297738891088}
+  - component: {fileID: 114541384924678828}
+  - component: {fileID: 114367598146339078}
+  - component: {fileID: 114580249720977068}
+  - component: {fileID: 114572806385403922}
+  m_Layer: 31
+  m_Name: Log 0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1364119152104040
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 6
---- !u!4 &4000012395097894
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4072782740726224}
+  - component: {fileID: 212453362439443118}
+  - component: {fileID: 61566747125250820}
+  - component: {fileID: 114310656747538450}
+  - component: {fileID: 114154270218680470}
+  - component: {fileID: 114536473737686536}
+  - component: {fileID: 114796334371429442}
+  m_Layer: 31
+  m_Name: Log 7
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1629741474946050
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 7
---- !u!4 &4000013125842852
-Transform:
-  m_ObjectHideFlags: 1
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4850247777872834}
+  - component: {fileID: 212464181975384382}
+  - component: {fileID: 61176350048864712}
+  - component: {fileID: 114676566210573286}
+  - component: {fileID: 114422339280215682}
+  - component: {fileID: 114477453920636650}
+  - component: {fileID: 114637360653494698}
+  m_Layer: 31
+  m_Name: Log 5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1692153131497542
+GameObject:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.32, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 4
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4681186132991774}
+  - component: {fileID: 212527837676024268}
+  - component: {fileID: 61965426149045534}
+  - component: {fileID: 114597251967702988}
+  - component: {fileID: 114830795131794522}
+  - component: {fileID: 114570779967762396}
+  - component: {fileID: 114641488987321624}
+  m_Layer: 31
+  m_Name: Log 9
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1809707503521328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4589103474164770}
+  - component: {fileID: 212388291042207542}
+  - component: {fileID: 61603063876271028}
+  - component: {fileID: 114299774952814508}
+  - component: {fileID: 114417312738837502}
+  - component: {fileID: 114187980666503322}
+  - component: {fileID: 114185257227216990}
+  m_Layer: 31
+  m_Name: Log 11
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1846321454906196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4401867073752816}
+  - component: {fileID: 212480258056677950}
+  - component: {fileID: 61458194060860866}
+  - component: {fileID: 114785275715119238}
+  - component: {fileID: 114685697909717770}
+  - component: {fileID: 114744234558444446}
+  - component: {fileID: 114486828787897028}
+  m_Layer: 31
+  m_Name: Log 10
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4000013642184122
 Transform:
   m_ObjectHideFlags: 1
@@ -419,54 +289,184 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.55, y: 1.6999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 4000011008928154}
-  - {fileID: 4000010915391390}
-  - {fileID: 4000014160617502}
-  - {fileID: 4000012040139392}
-  - {fileID: 4000013125842852}
-  - {fileID: 4000014148651736}
-  - {fileID: 4000012225358318}
-  - {fileID: 4000012395097894}
-  - {fileID: 4000011441737642}
-  - {fileID: 4000011276130016}
-  - {fileID: 4000010483954684}
-  - {fileID: 4000011690727002}
+  - {fileID: 4977318622791084}
+  - {fileID: 4959691855874790}
+  - {fileID: 4217555630062058}
+  - {fileID: 4358724670358364}
+  - {fileID: 4126853795711838}
+  - {fileID: 4850247777872834}
+  - {fileID: 4426573467978856}
+  - {fileID: 4072782740726224}
+  - {fileID: 4920925723146912}
+  - {fileID: 4681186132991774}
+  - {fileID: 4401867073752816}
+  - {fileID: 4589103474164770}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!4 &4000014148651736
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4072782740726224
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
+  m_GameObject: {fileID: 1364119152104040}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.16, y: 0, z: 0}
+  m_LocalPosition: {x: 0.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013642184122}
-  m_RootOrder: 5
---- !u!4 &4000014160617502
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4126853795711838
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
+  m_GameObject: {fileID: 1133999131810964}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.32, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4217555630062058
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1278511479435788}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.64, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013642184122}
   m_RootOrder: 2
---- !u!61 &61000010087017586
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4358724670358364
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1245186738329356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.48, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4401867073752816
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1846321454906196}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.64, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4426573467978856
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1280716137611954}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4589103474164770
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809707503521328}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.79999995, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4681186132991774
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692153131497542}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.48, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4850247777872834
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1629741474946050}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.16, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4920925723146912
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1186899951771256}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.32, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4959691855874790
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250228385408886}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.79999995, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4977318622791084
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1293578269862238}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.96, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013642184122}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &61140937479090070
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
+  m_GameObject: {fileID: 1250228385408886}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -475,12 +475,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010336692036
+--- !u!61 &61151848523476190
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
+  m_GameObject: {fileID: 1280716137611954}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -489,12 +489,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010530847946
+--- !u!61 &61172896497312522
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
+  m_GameObject: {fileID: 1133999131810964}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -503,12 +503,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000010817448368
+--- !u!61 &61176350048864712
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
+  m_GameObject: {fileID: 1629741474946050}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -517,12 +517,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000011269154530
+--- !u!61 &61377593372109728
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
+  m_GameObject: {fileID: 1278511479435788}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -531,12 +531,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000011534684790
+--- !u!61 &61458194060860866
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
+  m_GameObject: {fileID: 1846321454906196}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -545,12 +545,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000011544433152
+--- !u!61 &61566747125250820
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
+  m_GameObject: {fileID: 1364119152104040}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -559,12 +559,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000012771218968
+--- !u!61 &61603063876271028
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
+  m_GameObject: {fileID: 1809707503521328}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -573,12 +573,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013674927554
+--- !u!61 &61632591395629256
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
+  m_GameObject: {fileID: 1186899951771256}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -587,12 +587,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000013838030686
+--- !u!61 &61792297738891088
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
+  m_GameObject: {fileID: 1293578269862238}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -601,12 +601,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000014030987104
+--- !u!61 &61965426149045534
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
+  m_GameObject: {fileID: 1692153131497542}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -615,12 +615,12 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!61 &61000014215552196
+--- !u!61 &61979001060825522
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
+  m_GameObject: {fileID: 1245186738329356}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -629,571 +629,6 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
---- !u!114 &114000010057550728
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010191871686
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010246263704
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000010286216312
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000010552631922
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010590339052
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000010723776476
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000010868679100
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000010910545156
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000010961716876
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011280050440
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011289905960
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000011354498970
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011371344718
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000011428956476
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000011547230976
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011549756468
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011565007954
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011737099454
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000011818061530
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000011899717852
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012032708428
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &114000012125705362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1216,12 +651,14 @@ MonoBehaviour:
     Curve:
       serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 0
         outSlope: 2
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 1
         inSlope: 0
         outSlope: 0
@@ -1234,17 +671,20 @@ MonoBehaviour:
     Curve:
       serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 0
         outSlope: 2
         tangentMode: 0
-      - time: 0.5
+      - serializedVersion: 2
+        time: 0.5
         value: 1
         inSlope: 2
         outSlope: -2
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 0
         inSlope: -2
         outSlope: 0
@@ -1255,17 +695,20 @@ MonoBehaviour:
   _distanceFalloff:
     serializedVersion: 2
     m_Curve:
-    - time: 0
+    - serializedVersion: 2
+      time: 0
       value: 1
       inSlope: 0
       outSlope: -4
       tangentMode: 0
-    - time: 0.5
+    - serializedVersion: 2
+      time: 0.5
       value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 1
+    - serializedVersion: 2
+      time: 1
       value: 1
       inSlope: 4
       outSlope: 0
@@ -1276,572 +719,31 @@ MonoBehaviour:
   _useAbsoluteMidpoint: 0
   _rotateSegments: 0
   _segments:
-  - {fileID: 114000012925631524}
-  - {fileID: 114000013928419394}
-  - {fileID: 114000013152109370}
-  - {fileID: 114000011549756468}
-  - {fileID: 114000011737099454}
-  - {fileID: 114000010590339052}
-  - {fileID: 114000012527834602}
-  - {fileID: 114000013739655936}
-  - {fileID: 114000010286216312}
-  - {fileID: 114000011280050440}
-  - {fileID: 114000013181805124}
-  - {fileID: 114000012176935542}
+  - {fileID: 114367598146339078}
+  - {fileID: 114782313710621736}
+  - {fileID: 114633469149027318}
+  - {fileID: 114601026330741452}
+  - {fileID: 114000798164395558}
+  - {fileID: 114422339280215682}
+  - {fileID: 114015453992688318}
+  - {fileID: 114154270218680470}
+  - {fileID: 114267335898740552}
+  - {fileID: 114830795131794522}
+  - {fileID: 114685697909717770}
+  - {fileID: 114417312738837502}
   _allSegments:
-  - {fileID: 114000012925631524}
-  - {fileID: 114000013928419394}
-  - {fileID: 114000013152109370}
-  - {fileID: 114000011549756468}
-  - {fileID: 114000011737099454}
-  - {fileID: 114000010590339052}
-  - {fileID: 114000012527834602}
-  - {fileID: 114000013739655936}
-  - {fileID: 114000010286216312}
-  - {fileID: 114000011280050440}
-  - {fileID: 114000013181805124}
-  - {fileID: 114000012176935542}
---- !u!114 &114000012176935542
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000012527834602
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000012718446036
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000012747048590
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000012753387858
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000012836114142
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000012925631524
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013011885720
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013017742862
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013028860744
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013061803812
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013152109370
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013181805124
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013350388042
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013354752592
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013372669264
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013376629984
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013468871460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013556235284
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TopSolid: 1
-  BottomSolid: 0
-  LeftSolid: 0
-  RightSolid: 0
---- !u!114 &114000013611596124
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013739655936
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
---- !u!114 &114000013796717690
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  KeepWhenAlone: 0
-  TriggerFromChildren: 1
-  OnPlatformEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnPlatformExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ControllersOnPlatform: []
-  ControllersOnSurface: []
---- !u!114 &114000013893560864
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000013928419394
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectTrigger: {fileID: 0}
-  PlatformTrigger: {fileID: 0}
-  RotateToNeighbors: 0
-  LeftSegment: {fileID: 0}
-  RightSegment: {fileID: 0}
+  - {fileID: 114367598146339078}
+  - {fileID: 114782313710621736}
+  - {fileID: 114633469149027318}
+  - {fileID: 114601026330741452}
+  - {fileID: 114000798164395558}
+  - {fileID: 114422339280215682}
+  - {fileID: 114015453992688318}
+  - {fileID: 114154270218680470}
+  - {fileID: 114267335898740552}
+  - {fileID: 114830795131794522}
+  - {fileID: 114685697909717770}
+  - {fileID: 114417312738837502}
 --- !u!114 &114000014104979548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1887,12 +789,61 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ControllersOnPlatform: []
   ControllersOnSurface: []
---- !u!114 &114000014117820272
+--- !u!114 &114000798164395558
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
+  m_GameObject: {fileID: 1133999131810964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114015453992688318
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1280716137611954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114035630774375228
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1280716137611954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114042637403671736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1245186738329356}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1900,16 +851,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &114000014268003494
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114066559045811680
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
+  m_GameObject: {fileID: 1278511479435788}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
@@ -1917,16 +867,1062 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
-  TransferMomentumX: 0
-  TransferMomentumY: 0
-  TransferMomentumGround: 0
-  Velocity: {x: 0, y: 0, z: 0}
---- !u!212 &212000010281806270
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114082440253665756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250228385408886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114102750977277652
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1186899951771256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114154270218680470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1364119152104040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114185257227216990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809707503521328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114187980666503322
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809707503521328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114245847454381292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250228385408886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114267335898740552
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1186899951771256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114272038246997278
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1278511479435788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114299774952814508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809707503521328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114310656747538450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1364119152104040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114343976203838012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1280716137611954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114348483698242140
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250228385408886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114367598146339078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1293578269862238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114417312738837502
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809707503521328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114422339280215682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1629741474946050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114440148562393422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1133999131810964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114440870381640578
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1280716137611954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114477453920636650
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1629741474946050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114486828787897028
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1846321454906196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114536473737686536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1364119152104040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114541384924678828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1293578269862238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114570779967762396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692153131497542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114572806385403922
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1293578269862238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114578592144951252
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1186899951771256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114580249720977068
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1293578269862238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114597251967702988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692153131497542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114601026330741452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1245186738329356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114633469149027318
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1278511479435788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114637302812919392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1133999131810964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114637360653494698
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1629741474946050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114641488987321624
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692153131497542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114676566210573286
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1629741474946050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114685697909717770
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1846321454906196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114744234558444446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1846321454906196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114782313710621736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1250228385408886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114785275715119238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1846321454906196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114796334371429442
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1364119152104040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c936c50fb8cfd4a4cbdd41302f7f5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  _movementSource: 1
+  _transferAirborneMomentum: 0
+  _transferGroundedMomentum: 0
+--- !u!114 &114830795131794522
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692153131497542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ddaf24583262042b5e4d8576ab60f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  RotateToNeighbors: 0
+  LeftSegment: {fileID: 0}
+  RightSegment: {fileID: 0}
+--- !u!114 &114882954742558940
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1133999131810964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!114 &114884282240580876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1245186738329356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114886706785230046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1186899951771256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114900014902835748
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1278511479435788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b650201e3a9dc4e429e1f545b27ea3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 0}
+  PlatformTrigger: {fileID: 0}
+  TopSolid: 1
+  BottomSolid: 0
+  LeftSolid: 0
+  RightSolid: 0
+--- !u!114 &114988511532002922
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1245186738329356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
+  TriggerFromChildren: 1
+  OnPlatformEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnPlatformExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
+--- !u!212 &212059288560563080
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010784392024}
+  m_GameObject: {fileID: 1250228385408886}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -1935,7 +1931,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -1943,7 +1941,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -1954,12 +1952,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010332207034
+--- !u!212 &212064013006328626
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013431134988}
+  m_GameObject: {fileID: 1278511479435788}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -1968,7 +1966,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -1976,7 +1976,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -1987,12 +1987,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010383682180
+--- !u!212 &212100801259185336
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012332439926}
+  m_GameObject: {fileID: 1293578269862238}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2001,7 +2001,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2009,7 +2011,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2020,12 +2022,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000010452456044
+--- !u!212 &212388291042207542
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012704610060}
+  m_GameObject: {fileID: 1809707503521328}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2034,7 +2036,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2042,7 +2046,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2053,12 +2057,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000011814806376
+--- !u!212 &212453362439443118
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011895285816}
+  m_GameObject: {fileID: 1364119152104040}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2067,7 +2071,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2075,7 +2081,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2086,12 +2092,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000012239342044
+--- !u!212 &212464181975384382
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013486713456}
+  m_GameObject: {fileID: 1629741474946050}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2100,7 +2106,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2108,7 +2116,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2119,12 +2127,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000012464226770
+--- !u!212 &212480258056677950
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010971140682}
+  m_GameObject: {fileID: 1846321454906196}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2133,7 +2141,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2141,7 +2151,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2152,12 +2162,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000012980567536
+--- !u!212 &212527837676024268
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011897238496}
+  m_GameObject: {fileID: 1692153131497542}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2166,7 +2176,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2174,7 +2186,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2185,12 +2197,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000013272635666
+--- !u!212 &212680720777685436
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013191482466}
+  m_GameObject: {fileID: 1133999131810964}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2199,7 +2211,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2207,7 +2221,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2218,12 +2232,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000013287245494
+--- !u!212 &212850554603219436
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010865314008}
+  m_GameObject: {fileID: 1280716137611954}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2232,7 +2246,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2240,7 +2256,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2251,12 +2267,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000013677422104
+--- !u!212 &212867919037494754
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013365624834}
+  m_GameObject: {fileID: 1245186738329356}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2265,7 +2281,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2273,7 +2291,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2284,12 +2302,12 @@ SpriteRenderer:
   m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
---- !u!212 &212000013741343632
+--- !u!212 &212892048817804896
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013254966424}
+  m_GameObject: {fileID: 1186899951771256}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -2298,7 +2316,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -2306,7 +2326,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

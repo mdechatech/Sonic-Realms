@@ -13,8 +13,6 @@ namespace SonicRealms.Level
         [Header("Settings")]
         public ResolutionSettings ResolutionChoices;
 
-        public ResolutionSettings.Entry Resolution;
-
         [Header("Data")]
         public SceneTransition LevelTransition;
         public string MenuSceneName;
@@ -26,6 +24,8 @@ namespace SonicRealms.Level
         /// </summary>
         [Header("Game Status")]
         public SaveData SaveData;
+
+        public GlobalSaveData GlobalSaveData;
 
         /// <summary>
         /// The data for the character being played.
@@ -63,13 +63,41 @@ namespace SonicRealms.Level
         public void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this;
+            }
             else
+            {
                 Destroy(gameObject);
+                return;
+            }
 
             ActiveCharacters = new Dictionary<CharacterData, GameObject>();
+            LoadGlobalSave();
 
             DontDestroyOnLoad(gameObject);
+        }
+
+        public void SetResolutionFullscreen(int screenSizeIndex)
+        {
+            GlobalSaveData.Fullscreen = true;
+            GlobalSaveData.FullscreenScreenSize = screenSizeIndex;
+        }
+
+        public void SetResolutionWindowed(int aspectIndex, int screenSizeIndex)
+        {
+            GlobalSaveData.Fullscreen = false;
+            GlobalSaveData.WindowedAspect = aspectIndex;
+            GlobalSaveData.WindowedScreenSize = screenSizeIndex;
+        }
+
+        public void FlushSoundSettings()
+        {
+            GlobalSaveData.MasterVolume = (int)(SoundManager.MasterVolume*100);
+            GlobalSaveData.MusicVolume = (int)(SoundManager.MusicVolume*100);
+            GlobalSaveData.FxVolume = (int)(SoundManager.FxVolume*100);
+
+            GlobalSaveData.Flush();
         }
 
         public void StartNewGame(string fileName)
@@ -177,7 +205,8 @@ namespace SonicRealms.Level
         /// <param name="saveData"></param>
         public void UpdateSave(SaveData saveData)
         {
-            if (Level != null) Level.UpdateSave(saveData);
+            if (Level != null)
+                Level.UpdateSave(saveData);
         }
 
         /// <summary>
@@ -185,8 +214,8 @@ namespace SonicRealms.Level
         /// </summary>
         public void SaveProgress()
         {
-            if (SaveData == null) return;
-            SaveProgress(SaveData.Name);
+            if (SaveData != null)
+                SaveProgress(SaveData.Name);
         }
 
         /// <summary>
@@ -196,8 +225,10 @@ namespace SonicRealms.Level
         /// <param name="fileName">The name of the save file to write to.</param>
         public void SaveProgress(string fileName)
         {
-            if (SaveData == null) SaveData = SaveManager.Create(fileName);
-            else SaveData.Name = fileName;
+            if (SaveData == null)
+                SaveData = SaveManager.Create(fileName);
+            else
+                SaveData.Name = fileName;
 
             UpdateSave(SaveData);
             SaveData.Flush();
@@ -206,10 +237,10 @@ namespace SonicRealms.Level
         /// <summary>
         /// Writes the save without updating it with the newest level progress.
         /// </summary>
-        public void RewriteSave()
+        public void FlushSave()
         {
-            if (SaveData == null) return;
-            SaveData.Flush();
+            if (SaveData != null)
+                SaveData.Flush();
         }
 
         /// <summary>
@@ -223,7 +254,47 @@ namespace SonicRealms.Level
             SaveData.Time = 0f;
             SaveData.Rings = 0;
             SaveData.Score = 0;
-            RewriteSave();
+            FlushSave();
+        }
+
+        private void UpdateResolution()
+        {
+            if (GlobalSaveData.Fullscreen)
+            {
+                SetResolution(ResolutionChoices.GetFullscreenEntry(GlobalSaveData.FullscreenScreenSize).ToEntry());
+            }
+            else
+            {
+                SetResolution(
+                    ResolutionChoices.GetWindowedEntry(GlobalSaveData.WindowedAspect)
+                        .ToEntry(GlobalSaveData.WindowedScreenSize));
+            }
+        }
+
+        private void SetResolution(ResolutionSettings.Entry resolution)
+        {
+            Screen.SetResolution(resolution.Resolution.Width, resolution.Resolution.Height, resolution.Fullscreen);
+        }
+
+        private void LoadGlobalSave()
+        {
+            var globalSave = SaveManager.LoadGlobalSave();
+            if (globalSave == null)
+            {
+                globalSave = SaveManager.CreateGlobalSave();
+
+                globalSave.MasterVolume = 100;
+                globalSave.MusicVolume = 100;
+                globalSave.FxVolume = 100;
+
+                globalSave.Flush();
+            }
+
+            GlobalSaveData = globalSave;
+
+            SoundManager.MasterVolume = globalSave.MasterVolume/100f;
+            SoundManager.MusicVolume = globalSave.MusicVolume/100f;
+            SoundManager.FxVolume = globalSave.FxVolume/100f;
         }
 
         public void InitCurrentLevel()

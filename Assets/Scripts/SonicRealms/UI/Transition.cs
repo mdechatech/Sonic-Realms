@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -311,9 +310,8 @@ namespace SonicRealms.UI
             }
             else if (trigger.Sound != null)
             {
-                SoundManager.Instance.StopBGM();
-                SoundManager.Instance.PlayJingle(trigger.Sound);
-                yield return new WaitWhile(() => SoundManager.Instance.JingleSource.isPlaying);
+                SoundManager.PlayJingle(trigger.Sound);
+                yield return new WaitWhile(() => SoundManager.JingleSource.isPlaying);
             }
             else
             {

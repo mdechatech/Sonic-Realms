@@ -49,18 +49,9 @@ namespace SonicRealms.Core.Triggers
         {
             get
             {
-                if (_contacts == null)
-                    return default(Contact);
-
-                for (var i = _contacts.Length - 1; i >= 0; --i)
-                {
-                    var contact = _contacts[i];
-
-                    if (contact.Hitbox.IsMainHitbox)
-                        return contact;
-                }
-
-                return default(Contact);
+                return _contacts == null
+                    ? default(Contact)
+                    : _contacts.FirstOrDefault(contact => contact.Hitbox.IsMainHitbox);
             }
         }
 
@@ -71,18 +62,9 @@ namespace SonicRealms.Core.Triggers
         {
             get
             {
-                if (_contacts == null)
-                    return default(Contact);
-
-                for (var i = _contacts.Length - 1; i >= 0; --i)
-                {
-                    var contact = _contacts[i];
-
-                    if (contact.Hitbox.IsAttackHitbox)
-                        return contact;
-                }
-
-                return default(Contact);
+                return _contacts == null
+                    ? default(Contact)
+                    : _contacts.FirstOrDefault(contact => contact.Hitbox.IsAttackHitbox);
             }
         }
 
@@ -93,18 +75,10 @@ namespace SonicRealms.Core.Triggers
         {
             get
             {
-                if (_contacts == null)
-                    return default(Contact);
-
-                for (var i = _contacts.Length - 1; i >= 0; --i)
-                {
-                    var contact = _contacts[i];
-
-                    if (!contact.Hitbox.IsAttackHitbox && !contact.Hitbox.IsMainHitbox)
-                        return contact;
-                }
-
-                return default(Contact);
+                return _contacts == null
+                    ? default(Contact)
+                    : _contacts.FirstOrDefault(
+                        contact => !contact.Hitbox.IsAttackHitbox && !contact.Hitbox.IsMainHitbox);
             }
         }
 

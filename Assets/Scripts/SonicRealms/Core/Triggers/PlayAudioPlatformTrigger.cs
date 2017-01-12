@@ -1,4 +1,5 @@
-﻿using SonicRealms.Level;
+﻿using SonicRealms.Core.Utils;
+using SonicRealms.Level;
 using UnityEngine;
 
 namespace SonicRealms.Core.Triggers
@@ -94,7 +95,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (_platformEnterSound)
             {
-                SoundManager.Instance.PlayClipAtPoint(_platformEnterSound, collision.Latest.HitData.Point);
+                SoundManager.PlaySoundEffect(_platformEnterSound);
             }
 
             if (_platformStayLoopAudioSource && !_platformStayLoopAudioSource.isPlaying)
@@ -107,7 +108,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (_platformExitSound)
             {
-                SoundManager.Instance.PlayClipAtPoint(_platformExitSound, collision.Latest.HitData.Point);
+                SoundManager.PlaySoundEffect(_platformExitSound);
             }
 
             if (PlatformTrigger.ControllersOnPlatform.Count == 0 && _platformStayLoopAudioSource)
@@ -120,7 +121,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (_surfaceEnterSound)
             {
-                SoundManager.Instance.PlayClipAtPoint(_surfaceEnterSound, collision.Latest.HitData.Point);
+                SoundManager.PlaySoundEffect(_surfaceEnterSound);
             }
 
             if (_surfaceStayLoopAudioSource && !_surfaceStayLoopAudioSource.isPlaying)
@@ -133,7 +134,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (_surfaceExitSound)
             {
-                SoundManager.Instance.PlayClipAtPoint(_surfaceExitSound, collision.Latest.HitData.Point);
+                SoundManager.PlaySoundEffect(_surfaceExitSound);
             }
 
             if (PlatformTrigger.ControllersOnSurface.Count == 0 && _surfaceStayLoopAudioSource)
@@ -146,7 +147,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (_platformStayLoop)
             {
-                _platformStayLoopAudioSource = Instantiate(_baseLoopAudioSource);
+                _platformStayLoopAudioSource = SoundManager.CreateSoundEffectSource();
                 _platformStayLoopAudioSource.clip = _platformStayLoop;
 
                 _platformStayLoopAudioSource.transform.SetParent(transform);
@@ -155,7 +156,7 @@ namespace SonicRealms.Core.Triggers
 
             if (_surfaceStayLoop)
             {
-                _surfaceStayLoopAudioSource = Instantiate(_baseLoopAudioSource);
+                _surfaceStayLoopAudioSource = SoundManager.CreateSoundEffectSource();
                 _surfaceStayLoopAudioSource.clip = _surfaceStayLoop;
 
                 _surfaceStayLoopAudioSource.transform.SetParent(transform);

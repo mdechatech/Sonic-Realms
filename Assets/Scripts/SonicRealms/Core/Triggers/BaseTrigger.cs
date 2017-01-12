@@ -22,10 +22,9 @@ namespace SonicRealms.Core.Triggers
     public abstract class BaseTrigger : MonoBehaviour, IComparable<Component>
     {
         /// <summary>
-        /// If false, the trigger will destroy itself when it has no reactives and no persistent event listeners.
+        /// If not checked, the trigger will destroy itself when it can't find anything that needs it.
         /// </summary>
-        [Tooltip("If not checked, the trigger will destroy itself when it has no reactives and no " +
-                 "persistent event listeners.")]
+        [Tooltip("If not checked, the trigger will destroy itself when it can't find anything that needs it.")]
         public bool KeepWhenAlone;
 
         /// <summary>

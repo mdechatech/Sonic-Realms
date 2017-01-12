@@ -1,67 +1,98 @@
-﻿using UnityEngine;
+﻿using System;
 using SonicRealms.Core.Actors;
+using UnityEngine;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
+using UnityEngine.Events;
 
 namespace SonicRealms.Level.Objects
 {
+    [Serializable]
+    public class CheckpointEvent : UnityEvent<Checkpoint>
+    {
+
+    }
+
     public class Checkpoint : ReactiveEffect
     {
-        [Foldout("Animation")]
-        public Animator Animator;
+        [SerializeField]
+        private string _id;
 
-        /// <summary>
-        /// Name of an Animator trigger set when the checkpoint is immediately activated.
-        /// </summary>
-        [Foldout("Animation")]
-        public string ActivateImmediateTrigger;
-        protected int ActivateImmediateTriggerHash;
+        [SerializeField, Foldout("Animation")]
+        private Animator _animator;
 
-        [Foldout("Debug")]
-        public bool ActivatedImmediately;
+        [SerializeField, Foldout("Animation")]
+        [Tooltip("Name of an Animator trigger to set when the checkpoint is activated.")]
+        private string _activatedTrigger;
+
+        private int _activatedTriggerHash;
+
+        [SerializeField, Foldout("Animation")]
+        [Tooltip("Name of an Animator trigger to set when the checkpoint is pre-activated. " +
+                 "This might happen when a player resumes a game at a checkpoint.")]
+        private string _preActivatedTrigger;
+        private int _preActivatedTriggerHash;
+
+        [SerializeField, Foldout("Events")]
+        private CheckpointEvent _onCheckpointActivate;
+
+        [SerializeField, Foldout("Events")]
+        private CheckpointEvent _onCheckpointPreActivate;
+
+        private bool _isCheckpointActive;
+
+        public string Id { get { return _id; } }
+
+        public string ActivatedTrigger { get { return _activatedTrigger; } }
+
+        public string PreActivatedTrigger { get { return _preActivatedTrigger; } }
+
+        public CheckpointEvent OnCheckpointActivate { get { return _onCheckpointActivate; } }
+
+        public CheckpointEvent OnCheckpointPreActivate { get { return _onCheckpointPreActivate; } }
+
+        public bool IsCheckpointActive { get { return _isCheckpointActive; } }
 
         public override void Reset()
         {
             base.Reset();
 
-            Animator = GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
         }
 
         public override void Awake()
         {
             base.Awake();
 
-            Animator = Animator ?? GetComponent<Animator>();
-            ActivateImmediateTriggerHash = Animator.StringToHash(ActivateImmediateTrigger);
+            _onCheckpointActivate = _onCheckpointActivate ?? new CheckpointEvent();
+            _onCheckpointPreActivate = _onCheckpointPreActivate ?? new CheckpointEvent();
+
+            _animator = _animator ?? GetComponent<Animator>();
+            _activatedTriggerHash = Animator.StringToHash(_activatedTrigger);
+            _preActivatedTriggerHash = Animator.StringToHash(_preActivatedTrigger);
         }
+
+        public void PreActivate()
+        {
+            if (_isCheckpointActive)
+                return;
+
+            if (_animator && _preActivatedTriggerHash != 0)
+                _animator.SetTrigger(_preActivatedTriggerHash);
+
+            OnCheckpointPreActivate.Invoke(this);
+        }
+
 
         public override void OnActivate(HedgehogController controller)
         {
-            if (GameManager.Instance == null) return;
+            if (_isCheckpointActive)
+                return;
 
-            if (!ActivatedImmediately)
-            {
-                var level = GameManager.Instance.Level as GoalLevelManager;
-                if (level != null)
-                {
-                    level.Checkpoint = gameObject;
-                    GameManager.Instance.SaveProgress();
-                }
-            }
+            if (_animator && _activatedTriggerHash != 0)
+                _animator.SetTrigger(_activatedTriggerHash);
 
-            EffectTrigger.enabled = false;
-        }
-
-        /// <summary>
-        /// Use this to turn on the checkpoint when the level starts.
-        /// </summary>
-        public virtual void ActivateImmediate()
-        {
-            ActivatedImmediately = true;
-            EffectTrigger.enabled = false;
-
-            if (Animator && ActivateImmediateTriggerHash != 0)
-                Animator.SetTrigger(ActivateImmediateTriggerHash);
+            OnCheckpointActivate.Invoke(this);
         }
     }
 }

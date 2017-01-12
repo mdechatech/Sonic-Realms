@@ -78,6 +78,8 @@ namespace SonicRealms.UI
 
             public ScreenSize Resolution { get { return _resolution; } set { _resolution = value; } }
 
+            public bool Fullscreen { get { return _fullscreen; } set { _fullscreen = value; } }
+
             [SerializeField]
             private float _cameraOrthographicSize;
 
@@ -87,11 +89,16 @@ namespace SonicRealms.UI
             [SerializeField]
             private ScreenSize _resolution;
 
-            public Entry(float cameraOrthographicSize, ScreenSize downscaledResolution, ScreenSize resolution)
+            [SerializeField]
+            private bool _fullscreen;
+
+            public Entry(float cameraOrthographicSize, ScreenSize downscaledResolution, ScreenSize resolution,
+                bool fullscreen)
             {
                 _cameraOrthographicSize = cameraOrthographicSize;
                 _downscaledResolution = downscaledResolution;
                 _resolution = resolution;
+                _fullscreen = fullscreen;
             }
         }
 
@@ -131,14 +138,14 @@ namespace SonicRealms.UI
 
             public Entry ToEntry()
             {
-                return new Entry(_cameraOrthographicSize, _downscaledResolution, _resolution);
+                return new Entry(_cameraOrthographicSize, _downscaledResolution, _resolution, true);
             }
         }
 
         [Serializable]
         public class WindowedEntry
         {
-            public float AspectRatio { get { return _aspectRatio.Value; } }
+            public AspectRatio AspectRatio { get { return new AspectRatio(AspectHorizontal, AspectVertical); } }
 
             public int AspectHorizontal { get { return _aspectRatio.Horizontal; } }
             public int AspectVertical { get { return _aspectRatio.Vertical; } }
@@ -182,7 +189,7 @@ namespace SonicRealms.UI
 
             public Entry ToEntry(int index)
             {
-                return new Entry(_cameraOrthographicSize, _downscaledResolution, _screenSizes[index]);
+                return new Entry(_cameraOrthographicSize, _downscaledResolution, _screenSizes[index], false);
             }
         }
 

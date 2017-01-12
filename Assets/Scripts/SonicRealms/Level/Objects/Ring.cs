@@ -81,8 +81,9 @@ namespace SonicRealms.Level.Objects
 
             if (CollectedSound != null)
             {
-                var source = SoundManager.Instance.PlayClipAtPoint(CollectedSound, transform.position);
-                source.panStereo = (PanRight = !PanRight) ? 1f : -1f;
+                SoundManager.PlaySoundEffect(CollectedSound,
+                    s => s.panStereo = (PanRight = !PanRight) ? 1f : -1f,
+                    s => s.panStereo = 0);
             }
 
             BlinkEffectTrigger(controller);

@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 436986}
-  - 212: {fileID: 21202690}
+  - component: {fileID: 436986}
+  - component: {fileID: 21202690}
   m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
@@ -21,13 +21,13 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 407904}
-  - 114: {fileID: 11477686}
-  - 114: {fileID: 11487910}
-  - 114: {fileID: 11475252}
-  - 114: {fileID: 11482208}
+  - component: {fileID: 407904}
+  - component: {fileID: 11477686}
+  - component: {fileID: 11487910}
+  - component: {fileID: 11475252}
+  - component: {fileID: 11482208}
   m_Layer: 31
   m_Name: S1 Spikes
   m_TagString: Spikes
@@ -40,11 +40,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 422938}
-  - 61: {fileID: 6144724}
-  - 114: {fileID: 114000013432597436}
+  - component: {fileID: 422938}
+  - component: {fileID: 6144724}
+  - component: {fileID: 114000013432597436}
   m_Layer: 31
   m_Name: Collider
   m_TagString: Untagged
@@ -59,14 +59,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 170048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.26, y: 0.21, z: 0}
+  m_LocalPosition: {x: 8.639999, y: 1.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 436986}
   - {fileID: 422938}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &422938
 Transform:
   m_ObjectHideFlags: 1
@@ -76,10 +76,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 407904}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &436986
 Transform:
   m_ObjectHideFlags: 1
@@ -89,10 +89,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 407904}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6144724
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -129,8 +129,8 @@ MonoBehaviour:
     MustBeGrounded: 0
   LimitVelocity: 0
   VelocityLimiter:
-    MustBeAirborne: 0
-    MustBeGrounded: 0
+    ApplyWhenAirborne: 0
+    ApplyWhenGrounded: 0
     RelativeToRotation: 0
     RelativeToGravity: 0
     UseAbsoluteHorizontal: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -233,6 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   AllowMultiple: 1
   OnActivate:
@@ -281,7 +283,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -289,12 +293,12 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: 182623717
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: 5728483a6f5b2b84eb83f10670b11159, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

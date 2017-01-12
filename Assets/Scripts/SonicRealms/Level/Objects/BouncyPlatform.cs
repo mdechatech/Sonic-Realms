@@ -226,6 +226,7 @@ namespace SonicRealms.Level.Objects
         [SerializeField]
         [Foldout("Bouncing")]
         [ContextMenuItem("Reset", "ResetRemapBounceAnglesCurve")]
+        [CurveOptions(0x00ffffff, 0, 0, 360, 360)]
         [Tooltip("Maps the x-axis to inbound bounce angle (0-360 degree value) and the y-axis to the outbound " +
                  "bounce angle (0-360 degree value).")]
         private AnimationCurve _remapBounceAnglesCurve;
@@ -240,6 +241,7 @@ namespace SonicRealms.Level.Objects
         [SerializeField]
         [Foldout("Bouncing")]
         [ContextMenuItem("Reset", "ResetBounceAngleToVelocityCurve")]
+        [CurveOptions(0x00ffffff, 0, -2, 360, 2)]
         [Tooltip("Maps the x-axis to inbound bounce angle (0-360 degree value) and the y-axis to velocity " +
                  "multiplier (any value).")]
         private AnimationCurve _bounceAngleToVelocityCurve;

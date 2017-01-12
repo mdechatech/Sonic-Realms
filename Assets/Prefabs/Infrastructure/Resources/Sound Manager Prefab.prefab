@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000010209247954}
+  m_IsPrefabParent: 1
+--- !u!1 &1000010209247954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000013778787114}
+  - 114: {fileID: 114000014217325780}
+  m_Layer: 0
+  m_Name: Sound Manager Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000013778787114
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010209247954}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &114000014217325780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010209247954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ddb6b3ceb3dbe48ad20edfdd7bc8e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainMusicPrefab: {fileID: 0}
+  _powerupMusicPrefab: {fileID: 0}
+  _jinglePrefab: {fileID: 82000013714286394, guid: 150d489d70a591544b16660f5f84a1ab,
+    type: 2}
+  _effectPrefab: {fileID: 82000011787602508, guid: 0f38b170b27bff74e8305862ff8cb579,
+    type: 2}
+  _maxSoundEffects: 32
+  _fxGroup: {fileID: 243000011770156146, guid: 0ecae3df737d1244193d7f69b4dbc901, type: 2}
+  _musicGroup: {fileID: 243000013561917752, guid: 0ecae3df737d1244193d7f69b4dbc901,
+    type: 2}
+  _mainMusicGroup: {fileID: 243000010718625080, guid: 0ecae3df737d1244193d7f69b4dbc901,
+    type: 2}
+  _powerupMusicGroup: {fileID: 243000011213959578, guid: 0ecae3df737d1244193d7f69b4dbc901,
+    type: 2}
+  _jingleGroup: {fileID: 243000013941118406, guid: 0ecae3df737d1244193d7f69b4dbc901,
+    type: 2}

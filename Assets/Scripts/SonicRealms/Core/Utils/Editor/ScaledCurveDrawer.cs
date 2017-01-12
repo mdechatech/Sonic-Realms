@@ -17,7 +17,7 @@ namespace SonicRealms.Core.Utils.Editor
             EditorGUI.PropertyField(new Rect(pos.x, pos.y, pos.width - CurveWidth - Spacing, pos.height), scale, label);
             
             EditorGUI.CurveField(new Rect(pos.x + pos.width - CurveWidth + Spacing, pos.y, CurveWidth - Spacing, pos.height), curve,
-                Color.green, new Rect(0, 0, 1, 1));
+                Color.green, new Rect(0, 0, 1, 1), GUIContent.none);
         }
     }
 }

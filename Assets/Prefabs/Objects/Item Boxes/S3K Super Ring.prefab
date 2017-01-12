@@ -49,6 +49,7 @@ GameObject:
   - 114: {fileID: 11458378}
   - 114: {fileID: 11406682}
   - 114: {fileID: 11466702}
+  - 114: {fileID: 114000011809551058}
   m_Layer: 31
   m_Name: S3K Super Ring
   m_TagString: Untagged
@@ -229,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnAreaEnter:
     m_PersistentCalls:
@@ -257,6 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -330,6 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 0
   AllowMultiple: 1
   OnActivate:
@@ -598,3 +602,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 140868}
   m_IsPrefabParent: 1
+--- !u!114 &114000011809551058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 140868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713c0eb37d34ae14198c5a77fb9896c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 11415762}
+  _activateSound: {fileID: 8300000, guid: be6e80618227838408fc30693ee0acd3, type: 3}
+  _activateStayLoop: {fileID: 0}
+  _deactivateSound: {fileID: 0}
+  _activatorEnterSound: {fileID: 0}
+  _activatorExitSound: {fileID: 0}
+  _baseLoopAudioSource: {fileID: 82000010566796684, guid: ef858595a3d31d94692c3f90e9e41548,
+    type: 2}

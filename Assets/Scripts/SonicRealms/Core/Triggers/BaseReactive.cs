@@ -1,12 +1,11 @@
 ﻿using System;
 using SonicRealms.Core.Actors;
-using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Triggers
 {
     /// <summary>
-    /// Base class for creating things that react to controllers.
+    /// Base class for creating things that react to the player.
     /// </summary>
     public abstract class BaseReactive : MonoBehaviour, IComparable<Component>
     {

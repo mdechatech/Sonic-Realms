@@ -16,6 +16,27 @@ namespace SonicRealms.UI
     public class ItemCarousel : MonoBehaviour
     {
         #region Nested Types
+
+        public class SelectionChangedEvent : UnityEvent<SelectionChangedEvent.Args>
+        {
+            [Serializable]
+            public class Args
+            {
+                public readonly int OldIndex;
+                public readonly GameObject OldSelection;
+                public readonly int NewIndex;
+                public readonly GameObject NewSelection;
+
+                public Args(int oldIndex, GameObject oldSelection, int newIndex, GameObject newSelection)
+                {
+                    OldIndex = oldIndex;
+                    OldSelection = oldSelection;
+                    NewIndex = newIndex;
+                    NewSelection = newSelection;
+                }
+            }
+        }
+
         /// <summary>
         /// Decides when item carousel is focused and listens for input.
         /// </summary>
@@ -61,6 +82,30 @@ namespace SonicRealms.UI
         public int ItemCount { get { return _items == null ? 0 : _items.Count; } }
 
         /// <summary>
+        /// Whether the carousel can go forward and select the next item.
+        /// </summary>
+        public bool HasNext
+        {
+            get
+            {
+                return ItemCount > 1 &&
+                       (ClampMode == ClampBehavior.Loop || SelectedIndex < ItemCount - 1);
+            }
+        }
+
+        /// <summary>
+        /// Whether the carousel can go backward and select the previous item.
+        /// </summary>
+        public bool HasPrevious
+        {
+            get
+            {
+                return ItemCount > 1 &&
+                       (ClampMode == ClampBehavior.Loop || SelectedIndex > 0);
+            }
+        }
+
+        /// <summary>
         /// Whether the item carousel is listening to player input.
         /// </summary>
         public bool IsFocused { get { return _isFocused; } }
@@ -70,11 +115,15 @@ namespace SonicRealms.UI
         /// </summary>
         public int SelectedIndex { get { return _selectedIndex; } }
 
+        public GameObject SelectedItem { get { return Get(SelectedIndex); } }
+
         /// <summary>
         /// When this input axis is negative, the carousel will select the previous item. When positive, it will 
         /// select the next item.
         /// </summary>
         public string InputAxis { get { return _inputAxis; } set { _inputAxis = value; } }
+
+        public bool InvertAxis { get { return _invertAxis; } set { _invertAxis = value; } }
 
         /// <summary>
         /// The direction in which the item carousel scrolls through its items. This doesn't affect appearance, only 
@@ -102,11 +151,27 @@ namespace SonicRealms.UI
         /// The component that handles the position and orientation, and selection change of its items.
         /// </summary>
         public ItemCarouselArranger Arranger { get { return _arranger; } }
+        
+        public SelectionChangedEvent OnSelectionChange { get { return _onSelectionChange; } }
+
+        public UnityEvent OnSelectNext { get { return _onSelectNext; } }
+
+        public UnityEvent OnSelectPrevious { get { return _onSelectPrevious; } }
+
+        public UnityEvent OnFocusEnter { get { return _onFocusEnter; } }
+
+        public UnityEvent OnFocusExit { get { return _onFocusExit; } }
+
+        public UnityEvent OnItemsChanged { get { return _onItemsChanged; } }
+
         #endregion
 
         #region Private & Inspector Fields
         [SerializeField, Foldout("Input")]
         private string _inputAxis;
+
+        [SerializeField, Foldout("Input")]
+        private bool _invertAxis;
         
         [SerializeField, Foldout("Input")]
         [Tooltip("The direction in which the item carousel scrolls through its items. This doesn't affect appearance, only " +
@@ -132,11 +197,28 @@ namespace SonicRealms.UI
         [SerializeField, Foldout("Items")]
         private List<GameObject> _items;
 
+        [SerializeField, Foldout("Events")]
+        private SelectionChangedEvent _onSelectionChange;
+
+        [SerializeField, Foldout("Events")]
+        private UnityEvent _onSelectNext;
+
+        [SerializeField, Foldout("Events")]
+        private UnityEvent _onSelectPrevious;
+
+        [SerializeField, Foldout("Events")]
+        private UnityEvent _onFocusEnter;
+        
+        [SerializeField, Foldout("Events")]
+        private UnityEvent _onFocusExit;
+
+        [SerializeField, Foldout("Events")]
+        private UnityEvent _onItemsChanged;
+
         private bool _isFocused;
 
         private Selectable _selectable;
-
-        private Navigation _oldNavigation;
+        
         private Navigation _trueNavigation;
 
         private EventSystem _eventSystem;
@@ -159,44 +241,122 @@ namespace SonicRealms.UI
         /// Returns the item in the carousel at the given index. Use <see cref="ItemCount"/> when looping through
         /// the items.
         /// </summary>
-        public GameObject GetItem(int index)
+        public GameObject Get(int index)
         {
             return _items[index];
         }
 
         /// <summary>
-        /// Returns the item in the carousel at the given index. Same as <see cref="GetItem"/>. Use <see cref="ItemCount"/>
+        /// Returns the item in the carousel at the given index. Same as <see cref="Get"/>. Use <see cref="ItemCount"/>
         /// when looping through the items.
         /// </summary>
-        public GameObject this[int index] { get { return GetItem(index); } }
+        public GameObject this[int index] { get { return Get(index); } }
 
         /// <summary>
         /// Adds the given item to the end of the carousel.
         /// </summary>
-        public void AddItem(GameObject item)
+        public void Add(GameObject item)
         {
             _items.Add(item);
 
             ArrangeItem(item, ItemCount - 1);
+
+            if (ItemCount == 1)
+                SelectFirst();
+
+            OnItemsChanged.Invoke();
+        }
+
+        /// <summary>
+        /// Removes the item at the given index.
+        /// </summary>
+        public void RemoveAt(int itemIndex)
+        {
+            RemoveAt(itemIndex, true);
+        }
+
+        /// <summary>
+        /// Removes the item at the given index.
+        /// </summary>
+        /// <param name="itemIndex"></param>
+        /// <param name="destroyItem">If true, the removed item will also be destroyed in the scene.</param>
+        public void RemoveAt(int itemIndex, bool destroyItem)
+        {
+            if (itemIndex == ItemCount)
+                throw new InvalidOperationException("Can't call RemoveAt because there are no items in the carousel.");
+
+            if (itemIndex < 0 || itemIndex >= ItemCount)
+                throw new IndexOutOfRangeException(string.Format("itemIndex must be between 0 and ItemCount ({0}).",
+                    ItemCount));
+
+            var item = Get(itemIndex);
+            _items.RemoveAt(itemIndex);
+
+            if (SelectedIndex >= ItemCount)
+                Select(ItemCount - 1);
+
+            RearrangeAll();
+
+            if (destroyItem)
+                Destroy(item.gameObject);
+
+            OnItemsChanged.Invoke();
+        }
+
+        /// <summary>
+        /// Clears the carousel of all items.
+        /// </summary>
+        public void Clear()
+        {
+            Clear(true);
+        }
+
+        /// <summary>
+        /// Clears the carousel of all items.
+        /// </summary>
+        /// <param name="destroyItems">If true, all of the carousel's items will also be destoyed in the scene.</param>
+        public void Clear(bool destroyItems)
+        {
+            for (var i = ItemCount - 1; i >= 0; --i)
+            {
+                var item = Get(i);
+                _items.RemoveAt(i);
+
+                if (destroyItems)
+                    Destroy(item.gameObject);
+            }
+
+            _selectedIndex = 0;
+
+            RearrangeAll();
+
+            OnItemsChanged.Invoke();
         }
 
         /// <summary>
         /// If the given item is in the carousel, selects it. Otherwise does nothing.
         /// </summary>
-        public void SelectItem(GameObject item)
+        public void Select(GameObject item)
         {
             var index = _items.IndexOf(item);
             if (index >= 0)
             {
-                SelectItem(index);
+                Select(index);
             }
         }
 
         /// <summary>
         /// Selects the item in the carousel at the given index.
         /// </summary>
-        public void SelectItem(int itemIndex)
+        public void Select(int itemIndex)
         {
+            if (itemIndex == ItemCount)
+                throw new InvalidOperationException("Can't call Select because there are no items in the carousel.");
+
+            if (itemIndex < 0 || itemIndex >= ItemCount)
+                throw new IndexOutOfRangeException(string.Format("itemIndex must be between 0 and ItemCount ({0}).",
+                    ItemCount));
+
             if (_selectItemCoroutine != null)
                 StopCoroutine(_selectItemCoroutine);
 
@@ -204,63 +364,75 @@ namespace SonicRealms.UI
             _selectedIndex = itemIndex;
 
             _selectItemCoroutine = StartCoroutine(Coroutine_SelectItem(old, itemIndex));
+
+            OnSelectionChange.Invoke(new SelectionChangedEvent.Args(old, Get(old), itemIndex, Get(itemIndex)));
         }
 
         /// <summary>
         /// Selects the next item in the carousel. If the last item is currently selected, behavior is determined by 
         /// <see cref="ClampMode"/>.
         /// </summary>
-        public void SelectNextItem()
+        public void SelectNext()
         {
             if (ItemCount == 0)
                 return;
 
             if (SelectedIndex == ItemCount - 1)
+            {
                 HandleClampBehavior(ClampMode, Direction.Next);
+            }
             else
-                SelectItem(SelectedIndex + 1);
+            {
+                Select(SelectedIndex + 1);
+                OnSelectNext.Invoke();
+            }
         }
 
         /// <summary>
         /// Selects the previous item in the carousel. If the first item is currently selected, behavior is determined by 
         /// <see cref="ClampMode"/>
         /// </summary>
-        public void SelectPreviousItem()
+        public void SelectPrevious()
         {
             if (ItemCount == 0)
                 return;
 
             if (SelectedIndex == 0)
+            {
                 HandleClampBehavior(ClampMode, Direction.Previous);
+            }
             else
-                SelectItem(SelectedIndex - 1);
+            {
+                Select(SelectedIndex - 1);
+                OnSelectPrevious.Invoke();
+            }
         }
 
         /// <summary>
         /// Selects the first item in the carousel.
         /// </summary>
-        public void SelectFirstItem()
+        public void SelectFirst()
         {
             if (ItemCount > 0)
-                SelectItem(0);
+                Select(0);
         }
 
         /// <summary>
         /// Selects the last item in the carousel.
         /// </summary>
-        public void SelectLastItem()
+        public void SelectLast()
         {
             if (ItemCount > 0)
-                SelectItem(ItemCount - 1);
+                Select(ItemCount - 1);
         }
 
         /// <summary>
         /// Selects a random item in the carousel.
         /// </summary>
-        public void SelectRandomItem()
+        public void SelectRandom()
         {
             if (ItemCount > 0)
-                SelectItem(UnityEngine.Random.Range(0, ItemCount));
+                Select(UnityEngine.Random.Range(0, ItemCount));
         }
 
         /// <summary>
@@ -281,6 +453,8 @@ namespace SonicRealms.UI
 
             SetStateCoroutine(Coroutine_CheckFocusedInput);
             SetFocusExitCoroutine(Coroutine_CheckDeselection);
+
+            OnFocusEnter.Invoke();
         }
 
         /// <summary>
@@ -297,17 +471,23 @@ namespace SonicRealms.UI
 
             SetStateCoroutine(Coroutine_AwaitFocus);
             SetFocusExitCoroutine(null);
+
+            OnFocusExit.Invoke();
         }
         #endregion
 
         #region Nonpublic Functions
         protected void ArrangeItem(GameObject item, int index)
         {
-            _arranger.PlaceItem(item, index);
+            if (_arranger)
+                _arranger.PlaceItem(item, index);
         }
 
         protected void RearrangeAll()
         {
+            if (!_arranger)
+                return;
+
             for (var i = 0; i < ItemCount; ++i)
                 _arranger.PlaceItem(this[i], i);
         }
@@ -328,10 +508,19 @@ namespace SonicRealms.UI
 
             if (clampBehavior == ClampBehavior.Loop)
             {
+                if (ItemCount < 2)
+                    return;
+
                 if (direction == Direction.Next)
-                    SelectFirstItem();
+                {
+                    SelectFirst();
+                    OnSelectNext.Invoke();
+                }
                 else if (direction == Direction.Previous)
-                    SelectLastItem();
+                {
+                    SelectLast();
+                    OnSelectPrevious.Invoke();
+                }
             }
             else if (clampBehavior == ClampBehavior.Exit && FocusMode != FocusBehavior.Always)
             {
@@ -370,6 +559,9 @@ namespace SonicRealms.UI
         {
             var input = Input.GetAxis(_inputAxis);
 
+            if (InvertAxis)
+                input *= -1;
+
             if (input == 0)
                 return 0;
 
@@ -381,6 +573,9 @@ namespace SonicRealms.UI
         
         private void SetStateCoroutine(Func<IEnumerator> newStateCoroutine)
         {
+            if (!gameObject.activeInHierarchy)
+                return;
+
             if (_stateCoroutine != null)
                 StopCoroutine(_stateCoroutine);
 
@@ -392,6 +587,9 @@ namespace SonicRealms.UI
 
         private void SetFocusExitCoroutine(Func<IEnumerator> newCoroutine)
         {
+            if (!gameObject.activeInHierarchy)
+                return;
+
             if (_focusExitCoroutine != null)
                 StopCoroutine(_focusExitCoroutine);
 
@@ -417,11 +615,19 @@ namespace SonicRealms.UI
             _eventSystem = _eventSystem ?? FindObjectOfType<EventSystem>();
             _eventTrigger = _eventTrigger ?? GetComponent<EventTrigger>();
 
+            _onSelectionChange = _onSelectionChange ?? new SelectionChangedEvent();
+            _onSelectNext = _onSelectNext ?? new UnityEvent();
+            _onSelectPrevious = _onSelectPrevious ?? new UnityEvent();
+            _onFocusEnter = _onFocusEnter ?? new UnityEvent();
+            _onFocusExit = _onFocusExit ?? new UnityEvent();
+            _onItemsChanged = _onItemsChanged ?? new UnityEvent();
+
             _selected = new EventTrigger.TriggerEvent();
             _deselected = new EventTrigger.TriggerEvent();
             _submitted = new EventTrigger.TriggerEvent();
             _canceled = new EventTrigger.TriggerEvent();
-
+            
+            _eventTrigger.triggers.Clear();
             _eventTrigger.triggers.Add(new EventTrigger.Entry {callback = _selected, eventID = EventTriggerType.Select});
             _eventTrigger.triggers.Add(new EventTrigger.Entry {callback = _deselected, eventID = EventTriggerType.Deselect});
             _eventTrigger.triggers.Add(new EventTrigger.Entry {callback = _submitted, eventID = EventTriggerType.Submit});
@@ -430,7 +636,16 @@ namespace SonicRealms.UI
             _items = _items ?? new List<GameObject>();
 
             if (_arranger)
+            {
                 _arranger.Carousel = this;
+            }
+            else
+            {
+                if (Application.isPlaying)
+                    Debug.LogError(string.Format("Item Carousel '{0}' needs an Arranger to handle placement of its " +
+                                                 "items. Try using a 'Blink Item Carousel Arranger' for the least " +
+                                                 "amount of setup.", name));
+            }
 
             if (_setItemsToChildren)
                 CollectChildrenAsItems();
@@ -442,7 +657,6 @@ namespace SonicRealms.UI
             if (!Application.isPlaying)
                 return;
 #endif
-            _stateCoroutine = StartCoroutine(Coroutine_AwaitFocus());
         }
 
 #if UNITY_EDITOR
@@ -472,10 +686,27 @@ namespace SonicRealms.UI
                     RearrangeAll();
             }
         }
+
+        protected void OnEnable()
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
+            SetStateCoroutine(Coroutine_AwaitFocus);
+        }
+
+        protected void OnDisable()
+        {
+            if (IsFocused)
+                ExitFocus();
+        }
+
         #endregion
 
         #region Coroutines & Event Handlers
-        
+
         private IEnumerator Coroutine_AwaitFocus()
         {
             if (FocusMode == FocusBehavior.Always)
@@ -484,12 +715,16 @@ namespace SonicRealms.UI
             }
             else if (FocusMode == FocusBehavior.MustBeSelected)
             {
-                yield return new WaitForUnityEvent<BaseEventData>(_selected);
+                if (!IsFocused)
+                    yield return new WaitForUnityEvent<BaseEventData>(_selected);
+
                 EnterFocus();
             }
             else if (FocusMode == FocusBehavior.MustBeSubmitted)
             {
-                yield return new WaitForUnityEvent<BaseEventData>(_submitted);
+                if (!IsFocused)
+                    yield return new WaitForUnityEvent<BaseEventData>(_submitted);
+
                 EnterFocus();
             }
         }
@@ -568,9 +803,9 @@ namespace SonicRealms.UI
                     if (previousInput == 0)
                     {
                         if (input == 1)
-                            SelectNextItem();
+                            SelectNext();
                         else if (input == -1)
-                            SelectPreviousItem();
+                            SelectPrevious();
                     }
 
                     previousInput = input;

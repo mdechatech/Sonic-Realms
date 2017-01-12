@@ -12,6 +12,13 @@ namespace SonicRealms.Level.Objects
     /// </summary>
     public class Pipe : ReactiveEffect
     {
+        public enum UpdateType
+        {
+            IsStatic,
+            TransformChanges,
+            PathOrTransformChanges
+        }
+
         /// <summary>
         /// How fast the controller moves through the pipe, in units per second.
         /// </summary>
@@ -37,28 +44,10 @@ namespace SonicRealms.Level.Objects
         public Collider2D Path;
 
         /// <summary>
-        /// Whether to disable the collider so that it can't be collided with.
+        /// Indicates how the pipe's path changes in-game, if it does at all.
         /// </summary>
-        [Tooltip("Whether to disable the collider so that it can't be collided with.")]
-        public bool DisablePathCollider;
-
-        /// <summary>
-        /// Whether to save the path on initialization and never reconstruct it, even if the collider has
-        /// changed. Check this if your pipes never change in shape or position and you want a little less
-        /// lag.
-        /// </summary>
-        [Tooltip("Whether to save the path on initialization and never reconstruct it, even if the collider " +
-                 "has changed. Check this if your pipes never change in shape or position and you want a " +
-                 "performance boost.")]
-        public bool NeverUpdate;
-
-        /// <summary>
-        /// Whether to reconstruct the path on every update. Helpful if the path changes the points on its collider
-        /// since this is not detected automatically, but costly in terms of performance.
-        /// </summary>
-        [Tooltip("Whether to reconstruct the path on every frame. Helpful if the path changes the points on its " +
-                 "collider since this is not detected automatically, but costly in terms of performance.")]
-        public bool AlwaysUpdate;
+        [Tooltip("Indicates how the pipe's path changes in-game, if it does at all.")]
+        public UpdateType UpdateMode;
 
         protected List<HedgehogController> Controllers;
         protected List<float> ControllerProgress;
@@ -74,9 +63,7 @@ namespace SonicRealms.Level.Objects
             TravelSpeed = 4.2f;
             ExitSpeed = 4.2f;
             Path = GetComponentInChildren<Collider2D>();
-            DisablePathCollider = true;
-            NeverUpdate = false;
-            AlwaysUpdate = false;
+            UpdateMode = UpdateType.IsStatic;
         }
 
         public override void Awake()
@@ -99,7 +86,8 @@ namespace SonicRealms.Level.Objects
 
         public void Update()
         {
-            if(NeverUpdate) return;
+            if (UpdateMode == UpdateType.IsStatic)
+                return;
 
             var hasChanged = Path.transform.hasChanged;
             var check = Path.transform;
@@ -111,7 +99,7 @@ namespace SonicRealms.Level.Objects
 
             check.hasChanged = false;
 
-            if (AlwaysUpdate || Path != _previousPath || hasChanged)
+            if (UpdateMode == UpdateType.PathOrTransformChanges || Path != _previousPath || hasChanged)
                 ReconstructPath();
         }
 
@@ -172,7 +160,7 @@ namespace SonicRealms.Level.Objects
         public void ReconstructPath()
         {
             _previousPath = Path;
-            Path.enabled = !DisablePathCollider;
+            Path.enabled = false;
             _cachedPath = Physics2DUtility.GetPoints(Path);
             _cachedLength = Physics2DUtility.GetPathLength(_cachedPath);
         }

@@ -86,7 +86,7 @@ namespace SonicRealms.Core.Utils.Editor
 
                         if (property.IsLastInFoldout)
                         {
-                            DrawAtFoldoutBottom(pair.Key);
+                            DrawInFoldoutEnd(pair.Key);
                         }
                     }
                 }
@@ -104,7 +104,7 @@ namespace SonicRealms.Core.Utils.Editor
 
         protected void AddFoldout(string foldoutName)
         {
-            AddFoldout(new FoldoutData(0, default(int?), 0, foldoutName));
+            AddFoldout(new FoldoutData(FoldoutProperties.Count, default(int?), 0, foldoutName));
         }
 
         protected void AddFoldout(FoldoutData foldout)
@@ -121,17 +121,17 @@ namespace SonicRealms.Core.Utils.Editor
             state = EditorGUILayout.Foldout(state, foldout.Name, new GUIStyle(EditorStyles.foldout) {fontStyle = FontStyle.Bold});
 
             if (state)
-                DrawAtFoldoutTop(foldout);
+                DrawInFoldoutStart(foldout);
 
             return state;
         }
 
-        protected virtual void DrawAtFoldoutTop(FoldoutData foldout)
+        protected virtual void DrawInFoldoutStart(FoldoutData foldout)
         {
             EditorGUILayout.Separator();
         }
 
-        protected virtual void DrawAtFoldoutBottom(FoldoutData foldout)
+        protected virtual void DrawInFoldoutEnd(FoldoutData foldout)
         {
             EditorGUILayout.Separator();
         }

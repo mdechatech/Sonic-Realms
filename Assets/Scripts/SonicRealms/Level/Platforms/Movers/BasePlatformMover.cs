@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Triggers;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -25,7 +26,8 @@ namespace SonicRealms.Level.Platforms.Movers
         /// A plot of the platform's position vs. the current time normalized to a 1x1 graph.
         /// </summary>
         [SerializeField, Tooltip("Position vs. Time normalized to 1x1 graph.")]
-        public AnimationCurve PositionCurve;
+        [CurveOptions(0, 0, 1, 1)]
+        public AnimationCurve EasingCurve;
 
         /// <summary>
         /// If true, the object will move opposite to the way it usually does. Usually true means
@@ -57,7 +59,7 @@ namespace SonicRealms.Level.Platforms.Movers
             base.Reset();
             Duration = 1.0f;
             CurrentTime = 0.0f;
-            PositionCurve = AnimationCurve.EaseInOut(0.0f, 0.0f, 1.0f, 1.0f);
+            EasingCurve = AnimationCurve.EaseInOut(0.0f, 0.0f, 1.0f, 1.0f);
             ReverseDirection = false;
         }
 
@@ -71,7 +73,7 @@ namespace SonicRealms.Level.Platforms.Movers
         public virtual void FixedUpdate()
         {
             UpdateTimer(Time.fixedDeltaTime);
-            To(PositionCurve.Evaluate(CurrentTime/Duration));
+            To(EasingCurve.Evaluate(CurrentTime/Duration));
         }
 
         /// <summary>

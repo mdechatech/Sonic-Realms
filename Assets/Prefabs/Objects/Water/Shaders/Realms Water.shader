@@ -101,7 +101,7 @@ Shader "Unlit/Realms Water"
 
 			float4 frag(v2f i) : SV_Target
 			{
-				float3 wpos = mul(unity_ObjectToWorld, i.vertex);
+				//float3 wpos = mul(unity_ObjectToWorld, i.vertex);
 				
 				float2 bguv = float2(
 					(i.uv.x + _Time.x * _HorizSpeed),
@@ -122,7 +122,7 @@ Shader "Unlit/Realms Water"
 				fg = color_curve(fg, _FGColorTex);
 
 				bg = alpha_blend(_BGColorTint, bg);
-				fg = alpha_blend(_FGColorTint, fg);
+				fg = alpha_blend(_FGColorTint, fg)*fg.a;
 
 				//return tex2D(_DisplaceTex, bguv);
 

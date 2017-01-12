@@ -16,14 +16,14 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013049649138}
-  - 61: {fileID: 61000011698209186}
-  - 114: {fileID: 114000011037240108}
-  - 114: {fileID: 114000012938039002}
-  - 114: {fileID: 114000011122058056}
-  - 114: {fileID: 114000010396418524}
+  - component: {fileID: 4000013049649138}
+  - component: {fileID: 61000011698209186}
+  - component: {fileID: 114000011037240108}
+  - component: {fileID: 114000012938039002}
+  - component: {fileID: 114000011122058056}
+  - component: {fileID: 114000010396418524}
   m_Layer: 0
   m_Name: Area Trigger
   m_TagString: Untagged
@@ -36,11 +36,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011339027300}
-  - 61: {fileID: 61000014080014730}
-  - 114: {fileID: 114000010987519150}
+  - component: {fileID: 4000011339027300}
+  - component: {fileID: 61000014080014730}
+  - component: {fileID: 114000010987519150}
   m_Layer: 31
   m_Name: Collider
   m_TagString: Untagged
@@ -53,10 +53,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011510084788}
-  - 212: {fileID: 212000012134931576}
+  - component: {fileID: 4000011510084788}
+  - component: {fileID: 212000012134931576}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -69,12 +69,13 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013345047434}
-  - 95: {fileID: 95000013335547670}
-  - 114: {fileID: 114000013006561860}
-  - 114: {fileID: 114000011662077796}
+  - component: {fileID: 4000013345047434}
+  - component: {fileID: 95000013335547670}
+  - component: {fileID: 114000013006561860}
+  - component: {fileID: 114000011662077796}
+  - component: {fileID: 114802065276750216}
   m_Layer: 0
   m_Name: S3K Switch
   m_TagString: Untagged
@@ -91,10 +92,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013345047434}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000011510084788
 Transform:
   m_ObjectHideFlags: 1
@@ -104,10 +105,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013345047434}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000013049649138
 Transform:
   m_ObjectHideFlags: 1
@@ -117,10 +118,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013345047434}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000013345047434
 Transform:
   m_ObjectHideFlags: 1
@@ -128,15 +129,15 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012174638180}
   m_LocalRotation: {x: -0, y: -0, z: 0.00000046193603, w: 1}
-  m_LocalPosition: {x: 2.6499999, y: 0.12, z: 0}
+  m_LocalPosition: {x: 5.7799997, y: 0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011510084788}
   - {fileID: 4000013049649138}
   - {fileID: 4000011339027300}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &61000011698209186
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -201,8 +202,8 @@ MonoBehaviour:
     MustBeGrounded: 0
   LimitVelocity: 1
   VelocityLimiter:
-    MustBeAirborne: 0
-    MustBeGrounded: 0
+    ApplyWhenAirborne: 0
+    ApplyWhenGrounded: 0
     RelativeToRotation: 1
     RelativeToGravity: 0
     UseAbsoluteHorizontal: 0
@@ -271,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   AllowMultiple: 0
   OnActivate:
@@ -336,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnAreaEnter:
     m_PersistentCalls:
@@ -364,6 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   AllowMultiple: 0
   OnActivate:
@@ -398,6 +402,25 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   Activated: 0
   Activators: []
+--- !u!114 &114802065276750216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012174638180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713c0eb37d34ae14198c5a77fb9896c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 114000013006561860}
+  _activateSound: {fileID: 8300000, guid: e78507c984ea6314b8932ac7709a3698, type: 3}
+  _activateStayLoop: {fileID: 0}
+  _deactivateSound: {fileID: 0}
+  _activatorEnterSound: {fileID: 0}
+  _activatorExitSound: {fileID: 0}
+  _baseLoopAudioSource: {fileID: 82000010566796684, guid: ef858595a3d31d94692c3f90e9e41548,
+    type: 2}
 --- !u!212 &212000012134931576
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -412,7 +435,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -420,7 +445,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

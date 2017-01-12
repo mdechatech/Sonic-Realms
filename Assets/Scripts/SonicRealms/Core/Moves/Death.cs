@@ -17,7 +17,7 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// How long to wait before ending the move, causing the zone manager to restart the game.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         public float RestartDelay;
 
         [HideInInspector]

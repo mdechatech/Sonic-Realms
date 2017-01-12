@@ -11,7 +11,7 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Name of an Animator bool to set to true while the player has this powerup.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("Name of an Animator bool to set to true while the player has this powerup.")]
         public string Parameter;
         protected int ParameterHash;
@@ -19,7 +19,7 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// How long for the powerup to last.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("How long for the powerup to last.")]
         public float Time;
 

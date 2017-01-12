@@ -2,7 +2,9 @@
 
 namespace SonicRealms.Core.Moves
 {
-    public class ControlFoldoutAttribute : Attribute { }
+    // A bunch of foldout attributes specific to moves to ensure that they always appear in the same order
+
+    public class InputFoldoutAttribute : Attribute { }
     public class PhysicsFoldoutAttribute : Attribute { }
     public class EventsFoldoutAttribute : Attribute { }
     public class AnimationFoldoutAttribute : Attribute { }

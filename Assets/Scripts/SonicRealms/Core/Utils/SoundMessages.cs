@@ -14,7 +14,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip">The specified audio clip.</param>
         public void PlayAudioClip(AudioClip clip)
         {
-            SoundManager.Instance.PlayClipAtPoint(clip, transform.position);
+            SoundManager.PlaySoundEffect(clip);
         }
 
         /// <summary>
@@ -23,12 +23,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip">The specified audio clip.</param>
         public void PlayBGM(AudioClip clip)
         {
-            SoundManager.Instance.PlayBGM(clip);
-        }
-
-        public void PlayBGM(BGMLoopData data)
-        {
-            SoundManager.Instance.PlayBGM(data);
+            SoundManager.PlayMainMusic(clip);
         }
 
         /// <summary>
@@ -37,7 +32,8 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip"></param>
         public void StopBGM(AudioClip clip)
         {
-            SoundManager.Instance.StopBGM(clip);
+            if (SoundManager.MainMusicIs(clip))
+                SoundManager.StopMainMusic();
         }
 
         /// <summary>
@@ -45,7 +41,7 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         public void StopBGM()
         {
-            SoundManager.Instance.StopBGM();
+            SoundManager.StopMainMusic();
         }
 
         /// <summary>
@@ -54,12 +50,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip">The specified audio clip.</param>
         public void PlaySecondaryBGM(AudioClip clip)
         {
-            SoundManager.Instance.PlaySecondaryBGM(clip);
-        }
-
-        public void PlaySecondaryBGM(BGMLoopData data)
-        {
-            SoundManager.Instance.PlaySecondaryBGM(data);
+            SoundManager.PlayPowerupMusic(clip);
         }
 
         /// <summary>
@@ -68,7 +59,8 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip"></param>
         public void StopSecondaryBGM(AudioClip clip)
         {
-            SoundManager.Instance.StopSecondaryBGM(clip);
+            if (SoundManager.PowerupMusicIs(clip))
+                SoundManager.StopPowerupMusic();
         }
 
         /// <summary>
@@ -76,7 +68,7 @@ namespace SonicRealms.Core.Utils
         /// </summary>
         public void StopSecondaryBGM()
         {
-            SoundManager.Instance.StopSecondaryBGM();
+            SoundManager.StopPowerupMusic();
         }
 
         /// <summary>
@@ -85,7 +77,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip"></param>
         public void PlayJingle(AudioClip clip)
         {
-            SoundManager.Instance.PlayJingle(clip);
+            SoundManager.PlayJingle(clip);
         }
     }
 }

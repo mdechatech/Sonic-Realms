@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 436604}
-  - 212: {fileID: 21233706}
+  - component: {fileID: 436604}
+  - component: {fileID: 21233706}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -21,15 +21,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 498266}
-  - 95: {fileID: 9589834}
-  - 61: {fileID: 6161418}
-  - 114: {fileID: 11478764}
-  - 114: {fileID: 11463914}
-  - 114: {fileID: 11429822}
-  - 114: {fileID: 11444874}
+  - component: {fileID: 498266}
+  - component: {fileID: 9589834}
+  - component: {fileID: 6161418}
+  - component: {fileID: 11478764}
+  - component: {fileID: 11463914}
+  - component: {fileID: 11429822}
+  - component: {fileID: 11444874}
+  - component: {fileID: 114609980978722470}
   m_Layer: 0
   m_Name: S3K Checkpoint
   m_TagString: Untagged
@@ -42,10 +43,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 458192}
-  - 212: {fileID: 21264736}
+  - component: {fileID: 458192}
+  - component: {fileID: 21264736}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -62,10 +63,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 498266}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &458192
 Transform:
   m_ObjectHideFlags: 1
@@ -75,10 +76,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 498266}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &498266
 Transform:
   m_ObjectHideFlags: 1
@@ -86,14 +87,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 172596}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.809998, y: 5.7, z: 0}
+  m_LocalPosition: {x: 9.05, y: 1.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 458192}
   - {fileID: 436604}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6161418
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -193,9 +194,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EffectTrigger: {fileID: 0}
-  Animator: {fileID: 9589834}
-  ActivateImmediateTrigger: Triggered
-  ActivatedImmediately: 0
+  _id: 
+  _animator: {fileID: 9589834}
+  _activatedTrigger: Triggered
+  _preActivatedTrigger: Triggered
 --- !u!114 &11463914
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -296,7 +298,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -304,13 +308,13 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1963575889
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ce2e0e49e2caf1548b1d6d26841e738e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -329,7 +333,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -337,13 +343,13 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1963575889
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: ce2e0e49e2caf1548b1d6d26841e738e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -359,3 +365,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 172596}
   m_IsPrefabParent: 1
+--- !u!114 &114609980978722470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713c0eb37d34ae14198c5a77fb9896c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 11463914}
+  _activateSound: {fileID: 8300000, guid: 1e380e7ac594b2d408e6ae9124d3b60a, type: 3}
+  _activateStayLoop: {fileID: 0}
+  _deactivateSound: {fileID: 0}
+  _activatorEnterSound: {fileID: 0}
+  _activatorExitSound: {fileID: 0}
+  _baseLoopAudioSource: {fileID: 82000010566796684, guid: ef858595a3d31d94692c3f90e9e41548,
+    type: 2}

@@ -1,20 +1,26 @@
-﻿using SonicRealms.Core.Actors;
+﻿using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using UnityEngine;
 
 namespace SonicRealms.Level.Objects
 {
     /// <summary>
-    /// Adds to a controller's velocity when it enters the area.
+    /// The boost pad from Chemical Plant Zone. Boosts a player that is running on the ground.
     /// </summary>
     [AddComponentMenu("Hedgehog/Objects/Boost Pad")]
     public class BoostPad : ReactiveArea
     {
         /// <summary>
-        /// The velocity to add.
+        /// Boost speed in units per second.
         /// </summary>
-        [SerializeField, Tooltip("Boost velocity.")]
-        public float Velocity;
+        [SerializeField, Tooltip("Boost speed in units per second.")]
+        public float Speed;
+
+        /// <summary>
+        /// How long to lock up the player's control after boosting it in seconds.
+        /// </summary>
+        [SerializeField, Tooltip("How long to lock up the player's control after boosting it in seconds.")]
+        public float ControlLockTime;
 
         /// <summary>
         /// Whether to make the controller faster regardless of the direction it is facing.
@@ -25,7 +31,9 @@ namespace SonicRealms.Level.Objects
         public override void Reset()
         {
             base.Reset();
-            Velocity = 7.2f;
+
+            Speed = 7.2f;
+            ControlLockTime = 0.5f;
             BoostBothWays = false;
         }
 
@@ -39,11 +47,18 @@ namespace SonicRealms.Level.Objects
         {
             var controller = collision.Controller;
 
-            controller.GroundVelocity = Velocity * (BoostBothWays
+            controller.GroundVelocity = Speed * (BoostBothWays
                 ? Mathf.Sign(controller.GroundVelocity)
                 : 1.0f);
 
-            BlinkEffectTrigger();
+            if (ControlLockTime > 0)
+            {
+                var groundControl = controller.GetMove<GroundControl>();
+                if (groundControl)
+                    groundControl.Lock(ControlLockTime);
+            }
+
+            BlinkEffectTrigger(collision.Controller);
         }
     }
 }

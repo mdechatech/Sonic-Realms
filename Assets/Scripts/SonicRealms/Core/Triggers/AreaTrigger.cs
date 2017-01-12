@@ -121,9 +121,9 @@ namespace SonicRealms.Core.Triggers
             {
                 return !GetComponent<ReactiveArea>() &&
                        GetComponentsInParent<AreaTrigger>().All(t => t == this || !t.TriggerFromChildren) &&
-                       OnAreaEnter.GetPersistentEventCount() == 0 &&
-                       OnAreaStay.GetPersistentEventCount() == 0 &&
-                       OnAreaExit.GetPersistentEventCount() == 0;
+                       (OnAreaEnter == null || OnAreaEnter.GetPersistentEventCount() == 0) &&
+                       (OnAreaStay == null || OnAreaStay.GetPersistentEventCount() == 0) &&
+                       (OnAreaExit == null || OnAreaExit.GetPersistentEventCount() == 0);
             }
         }
 
@@ -347,7 +347,12 @@ namespace SonicRealms.Core.Triggers
                     var contact = contacts[j];
                     var updatedContact = new AreaCollision.Contact(contact.AreaTrigger, contact.Hitbox);
 
-                    if (CanTouch(updatedContact) && contact.Hitbox.CanTouch(updatedContact))
+                    // We won't get exit messages if a collider becomes disabled, so handle that manually
+                    if (!contact.Hitbox.Collider.isActiveAndEnabled)
+                    {
+                        NotifyContactExit(contact);
+                    }
+                    else if (CanTouch(updatedContact) && contact.Hitbox.CanTouch(updatedContact))
                     {
                         contacts[j] = updatedContact;
                     }

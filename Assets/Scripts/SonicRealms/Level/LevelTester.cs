@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +17,6 @@ namespace SonicRealms.Level
         [Header("Infrastructure")]
         public LevelManager LevelManager;
         public GameManager BaseGameManager;
-        public SoundManager BaseSoundManager;
 
         protected GameManager GameManager;
 
@@ -29,8 +29,6 @@ namespace SonicRealms.Level
 
             SceneManager.sceneLoaded += (a, b) => SetConditions();
 
-            Instantiate(BaseSoundManager).name = BaseSoundManager.name;
-
             var gameManager = Instantiate(BaseGameManager);
             gameManager.name = BaseGameManager.name;
             gameManager.CharacterData = Character;
@@ -39,7 +37,6 @@ namespace SonicRealms.Level
 
         private static void SetConditions()
         {
-
             var tester = FindObjectOfType<LevelTester>();
             if (!tester)
                 return;

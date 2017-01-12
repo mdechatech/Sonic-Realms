@@ -93,7 +93,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip">The specified audio clip.</param>
         public void PlayAudioClip(AudioClip clip)
         {
-            SoundManager.Instance.PlayClipAtPoint(clip, transform.position);
+            SoundManager.PlaySoundEffect(clip);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip">The specified audio clip.</param>
         public void PlayBGM(AudioClip clip)
         {
-            SoundManager.Instance.PlayBGM(clip);
+            SoundManager.PlayMainMusic(clip);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip">The specified audio clip.</param>
         public void PlaySecondaryBGM(AudioClip clip)
         {
-            SoundManager.Instance.PlaySecondaryBGM(clip);
+            SoundManager.PlayPowerupMusic(clip);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace SonicRealms.Core.Utils
         /// <param name="clip"></param>
         public void PlayJingle(AudioClip clip)
         {
-            SoundManager.Instance.PlayJingle(clip);
+            SoundManager.PlayJingle(clip);
         }
     }
 }

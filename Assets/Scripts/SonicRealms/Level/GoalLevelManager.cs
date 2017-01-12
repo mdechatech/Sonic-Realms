@@ -20,7 +20,14 @@ namespace SonicRealms.Level
         /// </summary>
         [Foldout("UI")]
         [Tooltip("The level's BGM.")]
-        public BGMLoopData BGM;
+        public AudioClip MusicIntro;
+
+        /// <summary>
+        /// The level's BGM.
+        /// </summary>
+        [Foldout("UI")]
+        [Tooltip("The level's BGM.")]
+        public AudioClip MusicLoop;
 
         /// <summary>
         /// The level's UI manager.
@@ -184,7 +191,7 @@ namespace SonicRealms.Level
         #region Level Lifecycle
         protected override void OnInitLevel()
         {
-            SoundManager.Instance.ResetAudio();
+            SoundManager.StopAllMusic();
 
             var game = GameManager.Instance;
             var save = GameManager.Instance.SaveData;
@@ -201,7 +208,7 @@ namespace SonicRealms.Level
             var player = Spawn.Spawn(game.CharacterData, Checkpoint);
 
             var checkpoint = Checkpoint.GetComponent<Checkpoint>();
-            if(checkpoint != null) checkpoint.ActivateImmediate();
+            if(checkpoint != null) checkpoint.PreActivate();
 
             // Add to the game's list of character objects
             game.ActiveCharacters.Add(game.CharacterData, player);
@@ -231,7 +238,8 @@ namespace SonicRealms.Level
             HudManager.Level = this;
             
             // Start the background music
-            if (BGM) SoundManager.Instance.PlayBGM(BGM);
+            if (MusicLoop)
+                SoundManager.PlayMainMusic(MusicIntro, MusicLoop);
             
             // Done! save, show the title card, and start the level when it's done
             game.SaveProgress();
@@ -296,7 +304,7 @@ namespace SonicRealms.Level
             if (LifeCounter.Lives > 0)
             {
                 GameManager.Instance.SaveData.Lives = LifeCounter.Lives;
-                GameManager.Instance.RewriteSave();
+                GameManager.Instance.FlushSave();
                 GameManager.Instance.ReloadLevel();
             }
             else
@@ -317,7 +325,7 @@ namespace SonicRealms.Level
             ShowTimeOverScreen(() =>
             {
                 GameManager.Instance.SaveData.Time = 0f;
-                GameManager.Instance.RewriteSave();
+                GameManager.Instance.FlushSave();
                 LoseLife();
             });
         }

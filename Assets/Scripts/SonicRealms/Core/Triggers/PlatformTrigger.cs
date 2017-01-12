@@ -169,12 +169,12 @@ namespace SonicRealms.Core.Triggers
             {
                 return !GetComponent<ReactivePlatform>() &&
                        GetComponentsInParent<PlatformTrigger>().All(t => t == this || !t.TriggerFromChildren) &&
-                       OnPlatformEnter.GetPersistentEventCount() == 0 &&
-                       OnPlatformStay.GetPersistentEventCount() == 0 &&
-                       OnPlatformExit.GetPersistentEventCount() == 0 &&
-                       OnSurfaceEnter.GetPersistentEventCount() == 0 &&
-                       OnSurfaceStay.GetPersistentEventCount() == 0 &&
-                       OnSurfaceExit.GetPersistentEventCount() == 0;
+                       (OnPlatformEnter == null || OnPlatformEnter.GetPersistentEventCount() == 0) &&
+                       (OnPlatformStay == null || OnPlatformStay.GetPersistentEventCount() == 0) &&
+                       (OnPlatformExit == null || OnPlatformExit.GetPersistentEventCount() == 0) &&
+                       (OnSurfaceEnter == null || OnSurfaceEnter.GetPersistentEventCount() == 0) &&
+                       (OnSurfaceStay == null || OnSurfaceStay.GetPersistentEventCount() == 0) &&
+                       (OnSurfaceExit == null || OnSurfaceExit.GetPersistentEventCount() == 0);
             }
         }
 

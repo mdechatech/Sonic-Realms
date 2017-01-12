@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: cbd8aebc1f6663b4e8a710c7535146d0
+timeCreated: 1479742052
+licenseType: Pro
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - _introSourcePrefab: {fileID: 82000010390387442, guid: 3d340c5eb3e13ba4aab60c348b68d66d,
+      type: 2}
+  - _loopSourcePrefab: {fileID: 82000014095545724, guid: 76c50957640dcd540a1cc60b193b512f,
+      type: 2}
+  - _introAudioSource: {instanceID: 0}
+  - _loopAudioSource: {instanceID: 0}
+  executionOrder: -9700
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

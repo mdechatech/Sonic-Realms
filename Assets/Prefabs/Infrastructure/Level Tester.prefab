@@ -40,11 +40,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f2a33067ec7c7479ebb05fe29c1d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Level: {fileID: 11400000, guid: 4861631379e5fc54db57c19bd8daf3c1, type: 2}
+  Level: {fileID: 11400000, guid: fc466bc681c449a49800edf87353e842, type: 2}
   Character: {fileID: 11400000, guid: 819344311bcc8a049bac258c77bd1211, type: 2}
   LevelManager: {fileID: 0}
   BaseGameManager: {fileID: 11407338, guid: 2408b886ba162e84eb4eafdc49295c5e, type: 2}
-  BaseSoundManager: {fileID: 11413506, guid: 80b94990b2cf5a0499eeadc4a0031409, type: 2}
+  BaseSoundManager: {fileID: 114000014217325780, guid: e5f6223770f778d418823ef1dce5fc55,
+    type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

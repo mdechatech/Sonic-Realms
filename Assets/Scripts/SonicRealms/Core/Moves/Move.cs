@@ -1,6 +1,5 @@
-﻿using System;
-using SonicRealms.Core.Actors;
-using SonicRealms.Level;
+﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -63,56 +62,76 @@ namespace SonicRealms.Core.Moves
         }
 
         /// <summary>
-        /// Whether the move can be used through the usual means (ShouldPerform).
+        /// Whether the move can be performed through the check on <see cref="ShouldPerform"/>.
         /// </summary>
-        [DebugFoldout]
-        [Tooltip("Whether the move can be used through the usual means (ShouldPerform).")]
-        public bool AllowShouldPerform;
+        public bool CheckShouldPerform { get { return _checkShouldPerform; } set { _checkShouldPerform = value; } }
 
         /// <summary>
-        /// Whether the move can be ended through the usual means (ShouldEnd).
+        /// Whether the move can be ended through the check on <see cref="ShouldEnd"/>.
         /// </summary>
-        [DebugFoldout]
-        [Tooltip("Whether the move can be ended through the usual means (ShouldEnd).")]
-        public bool AllowShouldEnd;
+        public bool CheckShouldEnd { get { return _checkShouldEnd; } set { _checkShouldEnd = value; } }
 
-        #region Events
+        /// <summary>
+        /// Whether to mute audio clips the move plays.
+        /// </summary>
+        public bool Mute { get { return _mute; } set { _mute = value; } }
+
+        /// <summary>
+        /// An audio clip to play when the move is performed.
+        /// </summary>
+        public AudioClip PerformSound { get { return _performSound; } set { _performSound = value; } }
+
+        /// <summary>
+        /// An audio clip to play when the move is ended.
+        /// </summary>
+        public AudioClip EndSound { get { return _endSound; } set { _endSound = value; } }
+
+        /// <summary>
+        /// Let the controller know your move can be triggered through input here.
+        /// </summary>
+        public virtual bool Available { get { return true; } }
+
+        /// <summary>
+        /// Let the controller know your move should be performed based on the current input here.
+        /// </summary>
+        public virtual bool ShouldPerform { get { return false; } }
+
+        /// <summary>
+        /// Let the controller know your move should be ended based on the current conditions here.
+        /// </summary>
+        public virtual bool ShouldEnd { get { return false; } }
+
         /// <summary>
         /// Invoked when the move is performed.
         /// </summary>
-        [EventsFoldout]
-        public UnityEvent OnActive;
+        public UnityEvent OnActive { get { return _onActive; } set { _onActive = value; } }
 
         /// <summary>
         /// Invoked when the move is ended.
         /// </summary>
-        [EventsFoldout]
-        public UnityEvent OnEnd;
+        public UnityEvent OnEnd { get { return _onEnd; } set { _onEnd = value; } }
 
         /// <summary>
         /// Invoked when the move becomes available.
         /// </summary>
-        [EventsFoldout]
-        public UnityEvent OnAvailable;
+        public UnityEvent OnAvailable { get { return _onAvailable; } set { _onAvailable = value; } }
 
         /// <summary>
         /// Invoked when the move becomes unavailable.
         /// </summary>
-        [EventsFoldout]
-        public UnityEvent OnUnavailable;
+        public UnityEvent OnUnavailable { get { return _onUnavailable; } set { _onUnavailable = value; } }
 
         /// <summary>
         /// Invoked when the move is added to a manager.
         /// </summary>
-        [EventsFoldout]
-        public UnityEvent OnAdd;
+        public UnityEvent OnAdd { get { return _onAdd; } set { _onAdd = value; } }
 
         /// <summary>
         /// Invoked when the move is removed from a manager.
         /// </summary>
-        [EventsFoldout]
-        public UnityEvent OnRemove;
-        #endregion
+        public UnityEvent OnRemove { get { return _onRemove; } set { _onRemove = value; } }
+        
+
         #region Animation
         /// <summary>
         /// Name of an Animator trigger set when the move is activated.
@@ -138,44 +157,52 @@ namespace SonicRealms.Core.Moves
         public string AvailableBool;
         protected int AvailableBoolHash;
         #endregion
-        #region Sound
-        /// <summary>
-        /// Whether to mute audio clips the move plays.
-        /// </summary>
-        [SoundFoldout]
+
+
+        [SerializeField, SoundFoldout, FormerlySerializedAs("Muted")]
         [Tooltip("Whether to mute audio clips the move plays.")]
-        public bool Muted;
+        private bool _mute;
 
-        /// <summary>
-        /// An audio clip to play when the move is performed.
-        /// </summary>
-        [SoundFoldout]
-        [FormerlySerializedAs("ActiveEnterSound")]
+        [SerializeField, SoundFoldout, FormerlySerializedAs("ActiveEnterSound")]
         [Tooltip("An audio clip to play when the move is performed.")]
-        public AudioClip PerformSound;
-
-        /// <summary>
-        /// An audio clip to play when the move is ended.
-        /// </summary>
-        [SoundFoldout]
-        [FormerlySerializedAs("ActiveExitSound")]
+        private AudioClip _performSound;
+        
+        [SerializeField, SoundFoldout, FormerlySerializedAs("ActiveExitSound")]
         [Tooltip("An audio clip to play when the move is ended.")]
-        public AudioClip EndSound;
-        #endregion
+        private AudioClip _endSound;
+
+
+        [SerializeField, EventsFoldout, FormerlySerializedAs("OnActive")]
+        private UnityEvent _onActive;
+
+        [SerializeField, EventsFoldout, FormerlySerializedAs("OnEnd")]
+        private UnityEvent _onEnd;
+
+        [SerializeField, EventsFoldout, FormerlySerializedAs("OnAvailable")]
+        private UnityEvent _onAvailable;
+
+        [SerializeField, EventsFoldout, FormerlySerializedAs("OnUnavailable")]
+        private UnityEvent _onUnavailable;
+
+        [EventsFoldout, FormerlySerializedAs("OnAdd")]
+        private UnityEvent _onAdd;
+
+        [EventsFoldout, FormerlySerializedAs("OnRemove")]
+        private UnityEvent _onRemove;
+
+        [SerializeField, DebugFoldout, FormerlySerializedAs("AllowShouldPerform")]
+        [Tooltip("Whether the move can be used through the usual means (ShouldPerform).")]
+        private bool _checkShouldPerform;
+
+        [SerializeField, DebugFoldout, FormerlySerializedAs("AllowShouldEnd")]
+        [Tooltip("Whether the move can be ended through the usual means (ShouldEnd).")]
+        private bool _checkShouldEnd;
 
         public virtual void Reset()
         {
             Controller = GetComponentInParent<HedgehogController>();
-            if(Controller) Animator = Controller.Animator;
-            ActiveTrigger = ActiveBool = AvailableBool = "";
-
-            OnActive = new UnityEvent();
-            OnEnd = new UnityEvent();
-            OnAvailable = new UnityEvent();
-            OnAdd = new UnityEvent();
-            OnRemove = new UnityEvent();
-
-            PerformSound = EndSound = null;
+            if (Controller)
+                Animator = Controller.Animator;
         }
 
         public virtual void Awake()
@@ -187,14 +214,15 @@ namespace SonicRealms.Core.Moves
             OnAdd = OnAdd ?? new UnityEvent();
             OnRemove = OnRemove ?? new UnityEvent();
 
-            ActiveTriggerHash = string.IsNullOrEmpty(ActiveTrigger) ? 0 : Animator.StringToHash(ActiveTrigger);
-            ActiveBoolHash = string.IsNullOrEmpty(ActiveBool) ? 0 : Animator.StringToHash(ActiveBool);
-            AvailableBoolHash = string.IsNullOrEmpty(AvailableBool) ? 0 : Animator.StringToHash(AvailableBool);
+            ActiveTriggerHash = Animator.StringToHash(ActiveTrigger);
+            ActiveBoolHash = Animator.StringToHash(ActiveBool);
+            AvailableBoolHash = Animator.StringToHash(AvailableBool);
 
             CurrentState = State.Unavailable;
-            AllowShouldPerform = AllowShouldEnd = true;
+            CheckShouldPerform = CheckShouldEnd = true;
 
-            if (Manager == null) enabled = false;
+            if (Manager == null)
+                enabled = false;
         }
 
         public virtual void OnEnable()
@@ -249,10 +277,11 @@ namespace SonicRealms.Core.Moves
         /// <returns>Whether the move's state is different from its previous.</returns>
         public bool ChangeState(State nextState, bool mute = false)
         {
-            if (nextState == CurrentState) return false;
+            if (nextState == CurrentState)
+                return false;
 
-            var muted = Muted;
-            Muted = mute;
+            var oldMuted = Mute;
+            Mute = mute;
 
             var prevState = CurrentState;
             CurrentState = nextState;
@@ -260,22 +289,24 @@ namespace SonicRealms.Core.Moves
 
             if (prevState == State.Active)
             {
-                if(!Muted && EndSound != null)
-                    SoundManager.Instance.PlayClipAtPoint(EndSound, transform.position);
+                if(!Mute && EndSound)
+                    SoundManager.PlaySoundEffect(EndSound);
+
                 OnActiveExit();
                 OnEnd.Invoke();
             }
             else if (CurrentState == State.Active)
             {
-                if(!Muted && PerformSound != null)
-                    SoundManager.Instance.PlayClipAtPoint(PerformSound, transform.position);
+                if (!Mute && PerformSound)
+                    SoundManager.PlaySoundEffect(PerformSound);
+
                 OnActiveEnter();
                 OnActiveEnter(prevState);
                 OnActive.Invoke();
 
                 if (Animator == null)
                 {
-                    Muted = muted;
+                    Mute = oldMuted;
                     return true;
                 }
 
@@ -291,7 +322,7 @@ namespace SonicRealms.Core.Moves
                 OnUnavailable.Invoke();
             }
 
-            Muted = muted;
+            Mute = oldMuted;
             return true;
         }
 
@@ -299,13 +330,12 @@ namespace SonicRealms.Core.Moves
         /// Tells the manager to perform this move.
         /// </summary>
         /// <param name="force">Whether to perform the move even if it's unavailable.</param>
-        /// <param name="mute">Whether to mute sounds the move would normally play.</param>
+        /// <param name="mute">Whether to mute sounds that come from performing the move.</param>
         /// <returns>Whether the move was performed.</returns>
         public bool Perform(bool force = false, bool mute = false)
         {
             return Manager && Manager.Perform(this, force, mute);
         }
-
         /// <summary>
         /// Tells the manager to end this move.
         /// </summary>
@@ -383,33 +413,6 @@ namespace SonicRealms.Core.Moves
         public virtual void OnManagerRemove()
         {
 
-        }
-
-        /// <summary>
-        /// Let the controller know your move can be triggered through input here.
-        /// </summary>
-        /// <value></value>
-        public virtual bool Available
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Let the controller know your move should be performed based on the current input here.
-        /// </summary>
-        /// <value></value>
-        public virtual bool ShouldPerform
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Let the controller know your move should be ended based on the current conditions here.
-        /// </summary>
-        /// <value></value>
-        public virtual bool ShouldEnd
-        {
-            get { return false; }
         }
 
         /// <summary>

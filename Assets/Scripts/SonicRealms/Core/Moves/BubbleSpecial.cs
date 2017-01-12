@@ -1,7 +1,6 @@
 ﻿using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using SonicRealms.Level.Areas;
 using UnityEngine;
 
@@ -82,6 +81,7 @@ namespace SonicRealms.Core.Moves
         public override void Reset()
         {
             base.Reset();
+
             DiveVelocity = new Vector2(0.0f, -4.8f);
             BounceSpeed = 4.5f;
             BounceReleaseSpeed = 2.4f;
@@ -107,7 +107,8 @@ namespace SonicRealms.Core.Moves
             base.OnActiveEnter();
             Controller.RelativeVelocity = DiveVelocity;
 
-            if (DiveSound != null) _diveAudioSource = SoundManager.Instance.PlayClipAtPoint(DiveSound, transform.position);
+            if (DiveSound != null)
+                _diveAudioSource = SoundManager.PlaySoundEffect(DiveSound);
 
             // Listen for collisions - need to bounce back up when we collide with the ground
             Controller.OnPreCollide.AddListener(OnPreCollide);
@@ -185,8 +186,10 @@ namespace SonicRealms.Core.Moves
             if (BounceSound != null)
             {
                 // Interrupt the diving sound
-                if(_diveAudioSource.clip == DiveSound) _diveAudioSource.Stop();
-                SoundManager.Instance.PlayClipAtPoint(BounceSound, transform.position);
+                if (_diveAudioSource.clip == DiveSound)
+                    _diveAudioSource.Stop();
+
+                SoundManager.PlaySoundEffect(BounceSound);
             }
 
             Bouncing = true;

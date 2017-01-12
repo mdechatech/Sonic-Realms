@@ -40,18 +40,9 @@ namespace SonicRealms.Core.Triggers
         {
             get
             {
-                if (_contacts == null)
-                    return default(Contact);
-
-                for (var i = _contacts.Length - 1; i >= 0; --i)
-                {
-                    var c = _contacts[i];
-
-                    if (sensor.Has(c.Sensor))
-                        return c;
-                }
-
-                return default(Contact);
+                return _contacts == null
+                    ? default(Contact)
+                    : _contacts.FirstOrDefault(contact => sensor.Has(contact.Sensor));
             }
         }
 

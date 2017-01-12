@@ -1,5 +1,4 @@
 ﻿using SonicRealms.Core.Triggers;
-using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Level.Platforms.Movers
@@ -7,7 +6,6 @@ namespace SonicRealms.Level.Platforms.Movers
     /// <summary>
     /// Moves down when a controller stands on it and back up when it leaves.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Movers/Weighted Platform")]
     public class WeightedPlatform : BasePlatformMover
     {
         /// <summary>
@@ -42,9 +40,13 @@ namespace SonicRealms.Level.Platforms.Movers
 
             Duration = 0.5f;
             DepressDelay = 0.0f;
-            DepressionAmount = Vector2.up;
+
+            EasingCurve = new AnimationCurve(
+                new Keyframe(0, 0, 0, 2),
+                new Keyframe(1, 1, 0, 0));
+
+            DepressionAmount = Vector2.up*0.1f;
             Return = true;
-            ReturnDelay = 0.5f;
         }
 
         public override void Awake()

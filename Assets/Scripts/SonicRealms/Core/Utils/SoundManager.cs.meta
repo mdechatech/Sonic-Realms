@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: c0ddb6b3ceb3dbe48ad20edfdd7bc8e8
+timeCreated: 1479747804
+licenseType: Pro
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - _mainMusicPrefab: {fileID: 114000010289145092, guid: 125c9c25630e713469c0ba5e41ebef0e,
+      type: 2}
+  - _powerupMusicPrefab: {fileID: 114000013288661394, guid: 658624ccce4df24419aeee3219583fa2,
+      type: 2}
+  - _jinglePrefab: {fileID: 82000013714286394, guid: 150d489d70a591544b16660f5f84a1ab,
+      type: 2}
+  - _effectPrefab: {fileID: 82000011787602508, guid: 0f38b170b27bff74e8305862ff8cb579,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

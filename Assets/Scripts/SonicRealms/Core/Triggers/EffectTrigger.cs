@@ -145,12 +145,12 @@ namespace SonicRealms.Core.Triggers
             {
                 return !GetComponent<ReactiveEffect>() &&
                        GetComponentsInParent<EffectTrigger>().All(t => t == this || !t.TriggerFromChildren) &&
-                       OnActivate.GetPersistentEventCount() == 0 &&
-                       OnActivateStay.GetPersistentEventCount() == 0 &&
-                       OnDeactivate.GetPersistentEventCount() == 0 &&
-                       OnActivatorEnter.GetPersistentEventCount() == 0 &&
-                       OnActivatorStay.GetPersistentEventCount() == 0 &&
-                       OnActivatorExit.GetPersistentEventCount() == 0;
+                       (OnActivate == null || OnActivate.GetPersistentEventCount() == 0) &&
+                       (OnActivateStay == null || OnActivateStay.GetPersistentEventCount() == 0) &&
+                       (OnDeactivate == null || OnDeactivate.GetPersistentEventCount() == 0) &&
+                       (OnActivatorEnter == null || OnActivatorEnter.GetPersistentEventCount() == 0) &&
+                       (OnActivatorStay == null || OnActivatorStay.GetPersistentEventCount() == 0) &&
+                       (OnActivatorExit == null || OnActivatorExit.GetPersistentEventCount() == 0);
             }
         }
 

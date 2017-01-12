@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Moves
@@ -8,14 +9,14 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Input for charging.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("Input for charging.")]
         public string ChargeButton;
 
         /// <summary>
         /// Input that must be released to execute the spindash.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("Input that must be released to execute the spindash.")]
         public string ReleaseAxis;
 
@@ -132,8 +133,10 @@ namespace SonicRealms.Core.Moves
 
             if (ChargeSound == null) return;
 
-            ChargeAudioSource = new GameObject {name = "Charge Audio Source"}.AddComponent<AudioSource>();
+            ChargeAudioSource = SoundManager.CreateSoundEffectSource();
+            ChargeAudioSource.name = "Charge Audio Source";
             ChargeAudioSource.clip = ChargeSound;
+
             ChargeAudioSource.transform.SetParent(transform);
         }
 

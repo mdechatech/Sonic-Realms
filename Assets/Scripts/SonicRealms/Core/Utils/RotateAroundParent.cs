@@ -23,13 +23,12 @@ namespace SonicRealms.Core.Utils
             Radius = 1f;
         }
 
-        public void Update()
+        public void FixedUpdate()
         {
-            Time += RevolutionsPerSecond*UnityEngine.Time.deltaTime;
+            Time += RevolutionsPerSecond*UnityEngine.Time.fixedDeltaTime;
             Time %= 1f;
 
-            transform.position = transform.parent.position +
-                                 (Vector3) DMath.UnitVector(Time*Mathf.PI*2f)*Radius;
+            transform.position = transform.parent.position + (Vector3) DMath.UnitVector(Time*Mathf.PI*2f)*Radius;
         }
     }
 }

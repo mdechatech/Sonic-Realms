@@ -1,8 +1,8 @@
 ﻿using SonicRealms.Core.Moves;
 using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 using UnityEngine.Events;
+using SoundManager = SonicRealms.Core.Utils.SoundManager;
 
 namespace SonicRealms.Core.Actors
 {
@@ -209,7 +209,7 @@ namespace SonicRealms.Core.Actors
             // Perform the rebound
             HurtReboundMove.ThreatPosition = source ? (Vector2)source.position : default(Vector2);
             HurtReboundMove.OnEnd.AddListener(OnHurtReboundEnd);
-            HurtReboundMove.Perform();
+            HurtReboundMove.Perform(false, true);
 
             // See if the player had a shield
             var shield = Controller.GetPowerup<Shield>();
@@ -226,7 +226,7 @@ namespace SonicRealms.Core.Actors
                 RingCounter.Spill(RingsLost);
 
                 if (RingLossSound != null)
-                    SoundManager.Instance.PlayClipAtPoint(RingLossSound, transform.position);
+                    SoundManager.PlaySoundEffect(RingLossSound);
             }
             else
             {
@@ -234,12 +234,12 @@ namespace SonicRealms.Core.Actors
                 if (spikes)
                 {
                     if (SpikeSound != null)
-                        SoundManager.Instance.PlayClipAtPoint(SpikeSound, transform.position);
+                        SoundManager.PlaySoundEffect(SpikeSound);
                 }
                 else
                 {
                     if (ReboundSound != null)
-                        SoundManager.Instance.PlayClipAtPoint(ReboundSound, transform.position);
+                        SoundManager.PlaySoundEffect(ReboundSound);
                 }
             }
 
@@ -280,7 +280,7 @@ namespace SonicRealms.Core.Actors
             DeathMove.OnEnd.AddListener(OnDeathEnd);
 
             if (DeathSound != null)
-                SoundManager.Instance.PlayClipAtPoint(DeathSound, transform.position);
+                SoundManager.PlaySoundEffect(DeathSound);
 
             base.Kill(source);
         }

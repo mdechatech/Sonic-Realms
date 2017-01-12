@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using SonicRealms.Core.Utils.Editor;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace SonicRealms.Core.Moves.Editor
     [CustomEditor(typeof(Move), true)]
     public class MoveEditor : UnityEditor.Editor
     {
-        protected bool ShowControlFoldout
+        protected bool ShowInputFoldout
         {
             get { return EditorPrefs.GetBool(target.GetType().Name + ".ShowControlFoldout", false); }
             set { EditorPrefs.SetBool(target.GetType().Name + ".ShowControlFoldout", value); }
@@ -62,7 +63,7 @@ namespace SonicRealms.Core.Moves.Editor
             serializedObject.Update();
 
             DrawControlFoldout();
-            if (ShowControlFoldout) DrawControlProperties();
+            if (ShowInputFoldout) DrawControlProperties();
 
             DrawPhysicsFoldout();
             if (ShowPhysicsFoldout) DrawPhysicsProperties();
@@ -98,13 +99,22 @@ namespace SonicRealms.Core.Moves.Editor
             var iterator = serializedObject.GetIterator();
             while(iterator.NextVisible(true))
             {
-                var field = type.GetField(iterator.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                if (field == null || field.Name == RealmsEditorUtility.ScriptPropertyName) continue;
+                FieldInfo field = null;
+                Type t = type;
+
+                while (field == null && t != null)
+                {
+                    field = t.GetField(iterator.name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    t = t.BaseType;
+                }
+
+                if (field == null || field.Name == RealmsEditorUtility.ScriptPropertyName)
+                    continue;
 
                 var found = false;
                 foreach (var attribute in field.GetCustomAttributes(true))
                 {
-                    if (attribute is ControlFoldoutAttribute)
+                    if (attribute is InputFoldoutAttribute)
                     {
                         ControlFoldoutProperties.Add(iterator.Copy());
                         found = true;
@@ -154,7 +164,7 @@ namespace SonicRealms.Core.Moves.Editor
 
         protected virtual void DrawControlFoldout()
         {
-            ShowControlFoldout = EditorGUILayout.Foldout(ShowControlFoldout, "Control");
+            ShowInputFoldout = EditorGUILayout.Foldout(ShowInputFoldout, "Input");
         }
 
         protected virtual void DrawControlProperties()

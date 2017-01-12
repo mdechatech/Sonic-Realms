@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 493880}
-  - 95: {fileID: 9549740}
+  - component: {fileID: 493880}
+  - component: {fileID: 9549740}
   m_Layer: 31
   m_Name: Boost Pad Right
   m_TagString: Untagged
@@ -21,13 +21,14 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 453990}
-  - 61: {fileID: 6163996}
-  - 114: {fileID: 11481662}
-  - 114: {fileID: 11449224}
-  - 114: {fileID: 11401546}
+  - component: {fileID: 453990}
+  - component: {fileID: 6163996}
+  - component: {fileID: 11481662}
+  - component: {fileID: 11449224}
+  - component: {fileID: 11401546}
+  - component: {fileID: 114459189834399858}
   m_Layer: 31
   m_Name: Boost Pad Collider
   m_TagString: Untagged
@@ -40,10 +41,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 478376}
-  - 212: {fileID: 21213454}
+  - component: {fileID: 478376}
+  - component: {fileID: 21213454}
   m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
@@ -56,11 +57,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 456696}
-  - 61: {fileID: 6128122}
-  - 114: {fileID: 11400714}
+  - component: {fileID: 456696}
+  - component: {fileID: 6128122}
+  - component: {fileID: 11400714}
   m_Layer: 31
   m_Name: Solid Base
   m_TagString: Untagged
@@ -80,6 +81,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 493880}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &456696
 Transform:
   m_ObjectHideFlags: 1
@@ -92,6 +94,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 493880}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &478376
 Transform:
   m_ObjectHideFlags: 1
@@ -104,6 +107,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 493880}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &493880
 Transform:
   m_ObjectHideFlags: 1
@@ -111,7 +115,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 107574}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.58, y: 1.936, z: 0}
+  m_LocalPosition: {x: 42.579998, y: 1.9399999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 478376}
@@ -119,6 +123,7 @@ Transform:
   - {fileID: 453990}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6128122
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -175,43 +180,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
-  OnSurfaceEnter:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.PlatformSurfaceEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnSurfaceStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.PlatformSurfaceEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  OnSurfaceExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.PlatformSurfaceEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   OnPlatformEnter:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   OnPlatformStay:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   OnPlatformExit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.PlatformCollisionEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  PlatformEnterSound: {fileID: 0}
-  PlatformLoopSound: {fileID: 0}
-  PlatformExitSound: {fileID: 0}
-  SurfaceEnterSound: {fileID: 0}
-  SurfaceLoopSound: {fileID: 0}
-  SurfaceExitSound: {fileID: 0}
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerCollisionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnSurfaceExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.PlatformTriggerSurfaceEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ControllersOnPlatform: []
+  ControllersOnSurface: []
 --- !u!114 &11401546
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,31 +225,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 0
-  Collisions: []
-  AllowReactivation: 1
-  OnActivateEnter:
+  AllowMultiple: 1
+  OnActivate:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.EffectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   OnActivateStay:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.EffectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  OnActivateExit:
+  OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.ObjectEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.EffectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnActivatorEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.EffectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnActivatorStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.EffectEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnActivatorExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: SonicRealms.Core.Triggers.EffectEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Activated: 0
-  Animator: {fileID: 0}
-  ActivatedTrigger: 
-  ActivatedBool: 
-  ActivateSound: {fileID: 8300000, guid: d2629e160604bbf4692c498e0d403d64, type: 3}
-  LoopSound: {fileID: 0}
-  DeactivateSound: {fileID: 0}
+  Activators: []
 --- !u!114 &11449224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -259,12 +271,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5346506b0f0ed674197f36d56e79d473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectTrigger: {fileID: 0}
-  Animator: {fileID: 0}
+  EffectTrigger: {fileID: 0}
   AreaTrigger: {fileID: 0}
-  InsideTrigger: 
-  InsideBool: 
-  Velocity: 7.2
+  Speed: 7.2
+  ControlLockTime: 0.5
   BoostBothWays: 0
 --- !u!114 &11481662
 MonoBehaviour:
@@ -277,26 +287,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01dbcc34cf2c5d45afd038db0e70191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
-  AlwaysCollide: 0
   OnAreaEnter:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.AreaTriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   OnAreaStay:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.AreaTriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   OnAreaExit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Hedgehog.Core.Triggers.AreaEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: SonicRealms.Core.Triggers.AreaTriggerEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  AreaEnterSound: {fileID: 0}
-  AreaLoopSound: {fileID: 0}
-  AreaExitSound: {fileID: 0}
+  ControllersInArea: []
 --- !u!212 &21213454
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -306,22 +314,27 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: 182623717
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1bd083611e8da814b8f63900563ecfab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -342,3 +355,23 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 107574}
   m_IsPrefabParent: 1
+--- !u!114 &114459189834399858
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 118596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713c0eb37d34ae14198c5a77fb9896c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectTrigger: {fileID: 11401546}
+  _activateSound: {fileID: 0}
+  _activateStayLoop: {fileID: 0}
+  _deactivateSound: {fileID: 0}
+  _activatorEnterSound: {fileID: 8300000, guid: d2629e160604bbf4692c498e0d403d64,
+    type: 3}
+  _activatorExitSound: {fileID: 0}
+  _baseLoopAudioSource: {fileID: 82000010566796684, guid: ef858595a3d31d94692c3f90e9e41548,
+    type: 2}

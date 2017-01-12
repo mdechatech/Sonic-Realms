@@ -170,14 +170,14 @@ namespace SonicRealms.Core.Moves
             {
                 var duck = Manager.Get<Duck>();
                 if (duck != null)
-                    duck.AllowShouldPerform = false;
+                    duck.CheckShouldPerform = false;
             }
 
             if (!AllowLookUp)
             {
                 var lookUp = Manager.Get<LookUp>();
                 if (lookUp != null)
-                    lookUp.AllowShouldPerform = false;
+                    lookUp.CheckShouldPerform = false;
             }
         }
 
@@ -193,14 +193,14 @@ namespace SonicRealms.Core.Moves
             {
                 var duck = Manager.Get<Duck>();
                 if (duck != null)
-                    duck.AllowShouldPerform = true;
+                    duck.CheckShouldPerform = true;
             }
 
             if (!AllowLookUp)
             {
                 var lookUp = Manager.Get<LookUp>();
                 if (lookUp != null)
-                    lookUp.AllowShouldPerform = true;
+                    lookUp.CheckShouldPerform = true;
             }
         }
     }

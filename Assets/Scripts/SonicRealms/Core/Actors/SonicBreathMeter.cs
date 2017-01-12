@@ -1,5 +1,4 @@
 ﻿using SonicRealms.Core.Utils;
-using SonicRealms.Level;
 using UnityEngine;
 
 namespace SonicRealms.Core.Actors
@@ -60,21 +59,17 @@ namespace SonicRealms.Core.Actors
 
             if (CanBreathe)
             {
-                if (DrowningBGM != null)
-                    SoundManager.Instance.StopSecondaryBGM(DrowningBGM);
+                if (DrowningBGM != null && SoundManager.PowerupMusicIs(DrowningBGM))
+                    SoundManager.StopPowerupMusic();
             }
 
             if (_previousAir > DrowningPoint && RemainingAir < DrowningPoint)
             {
                 if (DrowningBGM)
                 {
-                    if (SoundManager.Instance.PowerupSource.clip != DrowningBGM ||
-                        !SoundManager.Instance.PowerupSource.isPlaying)
+                    if (!SoundManager.PowerupMusicIs(DrowningBGM))
                     {
-                        SoundManager.Instance.PlaySecondaryBGM(DrowningBGM);
-
-                        // Don't let the drowning music loop - reproduce the moment of silence before drowning
-                        SoundManager.Instance.PowerupSource.loop = false;
+                        SoundManager.PlayPowerupMusic(DrowningBGM);
                     }
                 }
             }
@@ -85,7 +80,7 @@ namespace SonicRealms.Core.Actors
                 {
                     // See if we passed a warning point and play the sound
                     if (_previousAir > warningPoint && RemainingAir < warningPoint)
-                        SoundManager.Instance.PlayClipAtPoint(WarningSound, transform.position);
+                        SoundManager.PlaySoundEffect(WarningSound);
                 }
             }
 
@@ -105,8 +100,10 @@ namespace SonicRealms.Core.Actors
 
             base.Drown();
 
-            if (DrowningBGM)
-                SoundManager.Instance.PowerupSource.loop = true;
+            if (DrowningBGM && SoundManager.PowerupMusicIs(DrowningBGM))
+            {
+                SoundManager.StopPowerupMusic();
+            }
         }
     }
 }

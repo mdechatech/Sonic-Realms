@@ -89,7 +89,9 @@ namespace SonicRealms.Level.Effects
                     debrisData.Column = i;
                     debrisData.TotalColumns = iterX;
 
-                    if (!UseSprite) continue;
+                    if (!UseSprite)
+                        continue;
+
                     var rectOffset = new Vector2(rect.x + debrisSize.x * i, rect.y + debrisSize.y * j);
 
                     var debrisSprite = Sprite.Create(texture2D,
@@ -101,7 +103,9 @@ namespace SonicRealms.Level.Effects
                     var debrisSpriteRenderer = debrisObject.GetComponent<SpriteRenderer>();
                     if (debrisSpriteRenderer == null)
                         debrisSpriteRenderer = debrisObject.AddComponent<SpriteRenderer>();
+
                     debrisSpriteRenderer.sprite = debrisSprite;
+                    debrisSpriteRenderer.sortingLayerName = "Terrain";
                 }
             }
         }

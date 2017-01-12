@@ -125,13 +125,13 @@ namespace SonicRealms.Core.Moves
                     move.ChangeState(Move.State.Unavailable);
                     OnUnavailable.Invoke(move);
                 }
-                else if (move.AllowShouldPerform && move.ShouldPerform)
+                else if (move.CheckShouldPerform && move.ShouldPerform)
                 {
-                    Perform(move, false, false);
+                    Perform(move, false);
                 }
             } else if (move.CurrentState == Move.State.Active)
             {
-                if (move.AllowShouldEnd && move.ShouldEnd)
+                if (move.CheckShouldEnd && move.ShouldEnd)
                 {
                     End(move);
                     OnAvailable.Invoke(move);
@@ -353,7 +353,7 @@ namespace SonicRealms.Core.Moves
         /// </summary>
         /// <typeparam name="TMove">The specified type.</typeparam>
         /// <param name="force">Whether to perform the move even if it's unavailable.</param>
-        /// <param name="mute">Whether to mute sounds that would usually play from the move.</param>
+        /// <param name="mute">Whether to mute sounds that would usually play when the move is performed.</param>
         /// <returns>Whether the move was performed.</returns>
         public bool Perform<TMove>(bool force = false, bool mute = false) where TMove : Move
         {
@@ -391,19 +391,9 @@ namespace SonicRealms.Core.Moves
         /// </summary>
         /// <param name="move">The specified move.</param>
         /// <param name="force">Whether to perform the move even if it's unavailable.</param>
+        /// <param name="mute">If true, the move's <see cref="Move.PerformSound"/> will not be played.</param>
         /// <returns>Whether the move was performed.</returns>
-        public bool Perform(Move move, bool force)
-        {
-            return Perform(move, force, false);
-        }
-
-        /// <summary>
-        /// Performs the specified move, if it's available.
-        /// </summary>
-        /// <param name="move">The specified move.</param>
-        /// <param name="force">Whether to perform the move even if it's unavailable.</param>
-        /// <returns>Whether the move was performed.</returns>
-        public bool Perform(Move move, bool force, bool mute)
+        public bool Perform(Move move, bool force, bool mute = false)
         {
             if (move == null || move.CurrentState == Move.State.Active)
                 return false;

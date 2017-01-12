@@ -3,7 +3,7 @@
 namespace SonicRealms.Core.Triggers
 {
     /// <summary>
-    /// Helper class for creating areas that react to player events.
+    /// Base class for areas that do something when touched by the player.
     /// </summary>
     [RequireComponent(typeof(AreaTrigger))]
     public abstract class ReactiveArea : BaseReactive
@@ -93,7 +93,9 @@ namespace SonicRealms.Core.Triggers
 
         public void NotifyAreaExit(AreaCollision collision)
         {
-            collision.Controller.NotifyAreaExit(this);
+            if (collision.Controller)
+                collision.Controller.NotifyAreaExit(this);
+
             OnAreaExit(collision);
         }
         #endregion

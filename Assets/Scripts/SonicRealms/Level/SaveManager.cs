@@ -9,7 +9,9 @@ namespace SonicRealms.Level
     public static class SaveManager
     {
         public const string FilePrefix = "";
-        public const string FileSuffix = ".json";
+        public const string FileSuffix = ".save";
+
+        public const string GlobalFileName = "globalsave";
 
         /// <summary>
         /// Saves the data to the location from which it was opened.
@@ -17,9 +19,13 @@ namespace SonicRealms.Level
         /// <param name="saveData">The save data.</param>
         public static void Flush(this SaveData saveData)
         {
-            if (saveData.Name == null) return;
+            if (saveData.Name != null)
+                Flush(saveData, saveData.Name);
+        }
 
-            Flush(saveData, saveData.Name);
+        public static void Flush(this GlobalSaveData globalSaveData)
+        {
+            SetGlobalString(Serialize(globalSaveData));;
         }
 
         /// <summary>
@@ -45,6 +51,14 @@ namespace SonicRealms.Level
             return data;
         }
 
+        public static GlobalSaveData CreateGlobalSave()
+        {
+            var data = new GlobalSaveData();
+            data.Flush();
+
+            return data;
+        }
+
         /// <summary>
         /// Loads the save data with the specified file name.
         /// </summary>
@@ -59,10 +73,19 @@ namespace SonicRealms.Level
             }
             else
             {
-                var saveData = Deserialize(data);
+                var saveData = DeserializeSave(data);
                 saveData.Name = fileName;
                 return saveData;
             }
+        }
+
+        public static GlobalSaveData LoadGlobalSave()
+        {
+            var data = GetGlobalString();
+            if (data == null)
+                return null;
+
+            return DeserializeGlobalSave(data);
         }
 
         /// <summary>
@@ -76,37 +99,69 @@ namespace SonicRealms.Level
         }
 
         /// <summary>
+        /// Creates a string from the given save data.
+        /// </summary>
+        /// <param name="globalSaveData">The save data.</param>
+        /// <returns></returns>
+        public static string Serialize(GlobalSaveData globalSaveData)
+        {
+            return JsonUtility.ToJson(globalSaveData);
+        }
+
+        /// <summary>
         /// Creates a save data object from the given string.
         /// </summary>
         /// <param name="rawData">The given string.</param>
         /// <returns></returns>
-        public static SaveData Deserialize(string rawData)
+        public static SaveData DeserializeSave(string rawData)
         {
             return JsonUtility.FromJson<SaveData>(rawData);
         }
 
+        /// <summary>
+        /// Creates a save data object from the given string.
+        /// </summary>
+        /// <param name="rawData">The given string.</param>
+        /// <returns></returns>
+        public static GlobalSaveData DeserializeGlobalSave(string rawData)
+        {
+            return JsonUtility.FromJson<GlobalSaveData>(rawData);
+        }
+
         private static string GetString(string key)
         {
-#if UNITY_WEBPLAYER
-            return PlayerPrefs.GetString(key);
-#else
-            var path = ConstructPath(key);
+            var path = GetSavePath(key);
             return File.Exists(path) ? File.ReadAllText(path) : null;
-#endif
         }
 
+        private static string GetGlobalString()
+        {
+            var path = GetGlobalSavePath();
+            return File.Exists(path) ? File.ReadAllText(path) : null;
+        }
+        
         private static void SetString(string key, string value)
         {
-#if UNITY_WEBPLAYER
-            PlayerPrefs.SetString(key, value);
-#else
-            File.WriteAllText(ConstructPath(key), value);
-#endif
+            File.WriteAllText(GetSavePath(key), value);
         }
 
-        private static string ConstructPath(string fileName)
+        private static void SetGlobalString(string value)
         {
-            return Application.persistentDataPath + "/" + FilePrefix + fileName + FileSuffix;
-        }   
+            File.WriteAllText(GetGlobalSavePath(), value);
+        }
+
+        private static string GetSavePath(string fileName)
+        {
+            return string.Format("{0}/{1}{2}{3}",
+                Application.persistentDataPath,
+                FilePrefix,
+                fileName,
+                FileSuffix);
+        }
+
+        private static string GetGlobalSavePath()
+        {
+            return string.Format("{0}/{1}", Application.persistentDataPath, GlobalFileName);
+        }
     }
 }

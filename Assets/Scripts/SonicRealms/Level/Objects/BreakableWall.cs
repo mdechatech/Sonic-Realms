@@ -26,6 +26,7 @@ namespace SonicRealms.Level.Objects
         public override void Reset()
         {
             base.Reset();
+
             MinGroundSpeed = 2.7f;
             FreezeTime = 0.03333333f;
         }
@@ -38,7 +39,7 @@ namespace SonicRealms.Level.Objects
             if (contact.HitData.Side == ControllerSide.Bottom || contact.HitData.Side == ControllerSide.Top)
                 return;
 
-            if (contact.Controller.IsPerforming<Roll>() ||
+            if (!contact.Controller.IsPerforming<Roll>() ||
                 Mathf.Abs(contact.Controller.GroundVelocity) < MinGroundSpeed)
                 return;
             

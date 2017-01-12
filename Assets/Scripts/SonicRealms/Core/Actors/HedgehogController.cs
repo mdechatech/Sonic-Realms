@@ -1227,7 +1227,7 @@ namespace SonicRealms.Core.Actors
             }
 
             var relativeSurfaceAngle = RelativeSurfaceAngle;
-            const float wallModeTolerance = 3;
+            const float wallModeTolerance = 5;
             if (WallMode == WallMode.Floor)
             {
                 if (relativeSurfaceAngle < 45f + wallModeTolerance ||
@@ -1235,7 +1235,7 @@ namespace SonicRealms.Core.Actors
 
                 if (relativeSurfaceAngle < 135f)
                     TrySetGroundedWallMode(WallMode.Right);
-                else if (relativeSurfaceAngle > 225f )
+                else if (relativeSurfaceAngle > 225f)
                     TrySetGroundedWallMode(WallMode.Left);
             }
             else if(WallMode == WallMode.Right)
@@ -1599,6 +1599,8 @@ namespace SonicRealms.Core.Actors
 
                 UpdateGroundVelocity();
                 UpdateSensorRotation();
+
+                HandleDebugGraphics();
                     
                 NotifyPlatformCollision(SensorType.CenterRight, rightCheck);
 
@@ -2173,13 +2175,21 @@ namespace SonicRealms.Core.Actors
             var wasGrounded = Grounded;
 
             // Set the appropriate physics variables
-            var angleDegrees = DMath.Modp(angleRadians * Mathf.Rad2Deg, 360.0f);
+            var angleDegrees = DMath.PositiveAngle_d(angleRadians*Mathf.Rad2Deg);
             GroundVelocity = groundSpeed;
             SurfaceAngle = angleDegrees;
             JustAttached = true;
             Grounded = true;
+            
+            if (angleDegrees >= 310 || angleDegrees <= 50)
+                WallMode = WallMode.Floor;
+            else if(angleDegrees <= 130)
+                WallMode = WallMode.Right;
+            else if (angleDegrees <= 220)
+                WallMode = WallMode.Ceiling;
+            else
+                WallMode = WallMode.Left;
 
-            WallMode = WallModeUtility.FromSurface(angleRadians * Mathf.Rad2Deg);
             UpdateSensorRotation();
 
             // If we already were on the ground, that's all we needed to do
@@ -2458,7 +2468,7 @@ namespace SonicRealms.Core.Actors
         /// collision. This is useful for breakable and disappearing objects.
         /// </para>
         /// <para>
-        /// You can call this by subscribing to  the controller's OnPreCollide event, a PlatformTrigger's OnPreCollide event,
+        /// You can call this by subscribing to the controller's OnPreCollide event, a PlatformTrigger's OnPreCollide event,
         /// or you can override ReactivePlatform's OnPreCollide method.
         /// </para>
         /// </summary>

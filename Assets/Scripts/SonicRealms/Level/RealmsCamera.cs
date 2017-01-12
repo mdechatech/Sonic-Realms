@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace SonicRealms.Level
 {
@@ -92,24 +93,23 @@ namespace SonicRealms.Level
         [SerializeField]
         [Tooltip("Orthographic size of all cameras used by the Realms Camera.")]
         private float _orthographicSize;
-
+#if UNITY_EDITOR
         private float _prevOrthographicSize;
-
+#endif
         [SerializeField]
         [Tooltip("Width of the texture to which cameras render. The texture is then resized to fit the screen.")]
         private int _baseWidth;
-
+#if UNITY_EDITOR
         private int _prevBaseWidth;
-
+#endif
         [SerializeField]
         [Tooltip("Height of the texture to which cameras render. The texture is then resized to fit the screen.")]
         private int _baseHeight;
-
+#if UNITY_EDITOR
         private int _prevBaseHeight;
-
+#endif
         [Header("Shaders")]
         [SerializeField]
-        [Tooltip("If not empty, ")]
         private string _globalBackgroundTextureName;
 
         [SerializeField]
@@ -135,9 +135,26 @@ namespace SonicRealms.Level
 
         [SerializeField, HideInInspector]
         private Material _baseRendererMaterial;
-        
+
+        private static List<RealmsCamera> _cameras;
+
+        static RealmsCamera()
+        {
+            _cameras = new List<RealmsCamera>();
+        }
+
+        public static RealmsCamera Current { get { return _cameras.Count > 0 ? _cameras[0] : null; } }
+        public static RealmsCamera[] All { get { return _cameras.ToArray(); } }
+
         public RenderTexture BackgroundRenderTexture { get { return _backgroundRenderTexture; } }
         public RenderTexture ForegroundRenderTexture { get { return _foregroundRenderTexture; } }
+
+        public void SetBaseSize(int width, int height)
+        {
+            _baseWidth = width;
+            _baseHeight = height;
+            UpdateRenderTextureSize();
+        }
 
         protected void Reset()
         {
@@ -162,6 +179,8 @@ namespace SonicRealms.Level
         protected void Awake()
         {
             SetGlobalTextures();
+
+            _cameras.Add(this);
         }
 
 #if UNITY_EDITOR
@@ -171,7 +190,7 @@ namespace SonicRealms.Level
                 SetGlobalTextures();
         }
 #endif
-
+#if UNITY_EDITOR
         protected void OnValidate()
         {
             if (_prevOrthographicSize != _orthographicSize)
@@ -201,7 +220,7 @@ namespace SonicRealms.Level
                 _prevBaseWidth = _baseWidth;
             }
         }
-
+#endif
         private void UpdateOrthographicSize()
         {
             SetOrthographicSize(_orthographicSize);
@@ -222,19 +241,13 @@ namespace SonicRealms.Level
         private void SetRenderTextureSize(int width, int height)
         {
             if (_backgroundRenderTexture != null)
-            {
                 _backgroundRenderTexture.Release();
-            }
 
             if (_foregroundRenderTexture != null)
-            {
                 _foregroundRenderTexture.Release();
-            }
 
             if (_overlayRenderTexture != null)
-            {
                 _overlayRenderTexture.Release();
-            }
 
             _backgroundRenderTexture = _backgroundCamera.targetTexture = new RenderTexture(width, height, 16);
             _backgroundRenderTexture.filterMode = FilterMode.Point;
@@ -245,7 +258,7 @@ namespace SonicRealms.Level
             _overlayRenderTexture = _overlayCamera.targetTexture = new RenderTexture(width, height, 16);
             _overlayRenderTexture.filterMode = FilterMode.Point;
 
-            _cameraQuad.transform.localScale = new Vector3(_baseWidth / (float)_baseHeight,
+            _cameraQuad.transform.localScale = new Vector3(_baseWidth/(float) _baseHeight,
                 _cameraQuad.transform.localScale.y,
                 _cameraQuad.transform.localScale.z);
 
@@ -255,24 +268,16 @@ namespace SonicRealms.Level
         private void GenerateCameras()
         {
             if (_backgroundCamera)
-            {
                 DestroyImmediate(_backgroundCamera.gameObject);
-            }
 
             if (_foregroundCamera)
-            {
                 DestroyImmediate(_foregroundCamera.gameObject);
-            }
 
             if (_overlayCamera)
-            {
                 DestroyImmediate(_overlayCamera.gameObject);
-            }
 
             if (_rendererCamera)
-            {
                 DestroyImmediate(_rendererCamera.gameObject);
-            }
 
             _backgroundCamera = Instantiate(_baseBackgroundCamera);
             _backgroundCamera.transform.SetParent(transform);

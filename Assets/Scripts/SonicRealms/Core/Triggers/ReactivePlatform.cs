@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SonicRealms.Core.Triggers
 {
     /// <summary>
-    /// Helper class for creating platforms that react to controller events.
+    /// Base class for platforms that do something when touched by the player.
     /// </summary>
     [RequireComponent(typeof(PlatformTrigger))]
     public abstract class ReactivePlatform : BaseReactive
@@ -14,6 +14,86 @@ namespace SonicRealms.Core.Triggers
         public PlatformTrigger PlatformTrigger;
 
         protected bool RegisteredEvents;
+
+        #region Modifier Functions
+
+        // Override this to determine when the trigger should raise surface events for the given contact
+        public virtual bool IsOnSurface(SurfaceCollision.Contact contact)
+        {
+            return true;
+        }
+
+        // Override this to change when a terrain cast should register with the platform
+        // Return false if terrain casts should ignore this platform
+        public virtual bool IsSolid(TerrainCastHit data)
+        {
+            return true;
+        }
+
+        // Override this to react when a controller is about to collide with the platform
+        public virtual void OnPreCollide(PlatformCollision.Contact contact)
+        {
+            // Call contact.Controller.IgnoreThisCollision() here to prevent the collision from happening
+        }
+
+        #endregion
+
+        #region Platform Collision Functions
+
+        // Override these methods to react when a controller collides with the platform
+
+        /// <summary>
+        /// Override this to react when a player starts colliding with the platform.
+        /// </summary>
+        public virtual void OnPlatformEnter(PlatformCollision collision)
+        {
+
+        }
+
+        /// <summary>
+        /// Override this to react on every FixedUpdate for each player colliding with the player.
+        /// </summary>
+        public virtual void OnPlatformStay(PlatformCollision collision)
+        {
+
+        }
+
+        /// <summary>
+        /// Override this to react when a player stops colliding with the platform.
+        /// </summary>
+        public virtual void OnPlatformExit(PlatformCollision collision)
+        {
+
+        }
+        #endregion
+        #region Platform Surface Functions
+        // Override these methods to react when a controller stands on the platform
+
+        /// <summary>
+        /// Override this to react when a player starts standing on the platform.
+        /// </summary>
+        public virtual void OnSurfaceEnter(SurfaceCollision collision)
+        {
+
+        }
+
+        /// <summary>
+        /// Override this to react on every FixedUpdate for each player on the platform.
+        /// </summary>
+        public virtual void OnSurfaceStay(SurfaceCollision collision)
+        {
+
+        }
+
+        /// <summary>
+        /// Override this to react when a player stops standing on the platform.
+        /// </summary>
+        public virtual void OnSurfaceExit(SurfaceCollision collision)
+        {
+
+        }
+
+        #endregion
 
         #region Helper Functions
         protected void SetPlayerAnimatorParameters(TerrainCastHit hit, Action<TerrainCastHit> setter)
@@ -103,84 +183,6 @@ namespace SonicRealms.Core.Triggers
 
             foreach (var contacts in PlatformTrigger.CurrentPlatformContacts)
                 NotifyPlatformExit(new PlatformCollision(contacts.Value));
-        }
-        #endregion
-
-        #region Modifier Functions
-        /// <summary>
-        /// Default surface rule. Uses the trigger's default surface rule.
-        /// </summary>
-        public virtual bool IsOnSurface(SurfaceCollision.Contact contact)
-        {
-            return true;
-        }
-
-        // Override this to change when a terrain cast should register with the platform
-        // Return false if terrain casts should ignore this platform
-        public virtual bool IsSolid(TerrainCastHit data)
-        {
-            return true;
-        }
-
-        // Override this to react when a controller is about to collide with the platform
-        public virtual void OnPreCollide(PlatformCollision.Contact contact)
-        {
-            // Call contact.Controller.IgnoreThisCollision() here to prevent the collision from happening
-        }
-        #endregion
-
-        #region Platform Collision Functions
-        // Override these methods to react when a controller collides with the platform
-
-        /// <summary>
-        /// Override this to react when a player starts colliding with the platform.
-        /// </summary>
-        public virtual void OnPlatformEnter(PlatformCollision collision)
-        {
-
-        }
-
-        /// <summary>
-        /// Override this to react on every FixedUpdate for each player colliding with the player.
-        /// </summary>
-        public virtual void OnPlatformStay(PlatformCollision collision)
-        {
-
-        }
-
-        /// <summary>
-        /// Override this to react when a player stops colliding with the platform.
-        /// </summary>
-        public virtual void OnPlatformExit(PlatformCollision collision)
-        {
-
-        }
-        #endregion
-        #region Platform Surface Functions
-        // Override these methods to react when a controller stands on the platform
-
-        /// <summary>
-        /// Override this to react when a player starts standing on the platform.
-        /// </summary>
-        public virtual void OnSurfaceEnter(SurfaceCollision collision)
-        {
-            
-        }
-
-        /// <summary>
-        /// Override this to react on every FixedUpdate for each player on the platform.
-        /// </summary>
-        public virtual void OnSurfaceStay(SurfaceCollision collision)
-        {
-            
-        }
-
-        /// <summary>
-        /// Override this to react when a player stops standing on the platform.
-        /// </summary>
-        public virtual void OnSurfaceExit(SurfaceCollision collision)
-        {
-            
         }
         #endregion
 

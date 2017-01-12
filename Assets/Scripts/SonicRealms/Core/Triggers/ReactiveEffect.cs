@@ -113,7 +113,9 @@ namespace SonicRealms.Core.Triggers
         public void NotifyActivatorEnter(HedgehogController controller)
         {
             OnActivatorEnter(controller);
-            controller.NotifyActivateObject(this);
+
+            if (controller)
+                controller.NotifyActivateObject(this);
         }
 
         public void NotifyActivatorStay(HedgehogController controller)

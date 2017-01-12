@@ -59,14 +59,14 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// The name of the input axis.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("The name of the input axis.")]
         public string MovementAxis;
 
         /// <summary>
         /// Minimum axis input required to move the player.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Range(0, 1)]
         [Tooltip("Minimum axis input required to move the player.")]
         public float MinimumInput;
@@ -74,7 +74,7 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Whether to invert the axis input.
         /// </summary>
-        [ControlFoldout]
+        [InputFoldout]
         [Tooltip("Whether to invert the axis input.")]
         public bool InvertAxis;
         #endregion
@@ -121,10 +121,10 @@ namespace SonicRealms.Core.Moves
                  "steep slopes.")]
         public float MinSlopeGravitySpeed;
 
-        [Space, ControlFoldout]
+        [Space, InputFoldout]
         public float ControlLockDuration;
 
-        [ControlFoldout]
+        [InputFoldout]
         public float ControlLockAngle;
 
         protected bool ControlLockEndedThisFrame;

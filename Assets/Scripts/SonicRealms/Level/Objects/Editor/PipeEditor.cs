@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace SonicRealms.Level.Objects.Editor
 {
-    [CustomEditor(typeof(Pipe))]
+    // [CustomEditor(typeof(Pipe))]
     public class PipeEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
@@ -20,8 +20,8 @@ namespace SonicRealms.Level.Objects.Editor
                 RealmsEditorUtility.DrawProperties(serializedObject, "TravelSpeed", "ExitSpeed",
                     "EntryPoint", "Path", "DisablePathCollider", "NeverUpdate");
 
-                var neverUpdate = serializedObject.FindProperty("NeverUpdate");
-                if (!neverUpdate.boolValue)
+                var pathIsStatic = serializedObject.FindProperty("PathIsStatic");
+                if (!pathIsStatic.boolValue)
                 {
                     RealmsEditorUtility.DrawProperties(serializedObject, "AlwaysUpdate");
                 }

@@ -145,8 +145,7 @@ namespace SonicRealms.Core.Moves
             if (roll == null) return;
 
             if (roll.Active)
-                // Disable air control if jumping while rolling
-                Manager.End<AirControl>();
+                Manager.End<AirControl>(); // Disable air control if jumping while rolling
             else
                 Manager.Perform<Roll>(true, true);
         }

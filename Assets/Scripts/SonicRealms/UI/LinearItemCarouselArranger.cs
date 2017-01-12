@@ -18,6 +18,9 @@ namespace SonicRealms.UI
         [SerializeField, Foldout("Placement")]
         private float _spacing;
 
+        [SerializeField, Foldout("Placement")]
+        private bool _worldPositionStays;
+
         [SerializeField, Foldout("Animation")]
         private float _transitionLength;
 
@@ -30,7 +33,7 @@ namespace SonicRealms.UI
 
         public override void PlaceItem(GameObject item, int index)
         {
-            item.transform.SetParent(_itemContainer, true);
+            item.transform.SetParent(_itemContainer, _worldPositionStays);
             Move(item, index);
         }
 
@@ -70,7 +73,7 @@ namespace SonicRealms.UI
 
             for (var i = 0; i < Carousel.ItemCount; ++i)
             {
-                var t = i/(float)(Carousel.ItemCount - 1);
+                var t = i/(float)(Mathf.Max(1, Carousel.ItemCount - 1));
 
                 Carousel[i].transform.position = Vector3.Lerp(start, end, t);
             }
@@ -87,7 +90,8 @@ namespace SonicRealms.UI
                       (Vector3) DMath.UnitVector(_direction*Mathf.Deg2Rad)*_spacing*
                       (Carousel.ItemCount - _smoothSelectedIndex - 1);
 
-            gameObject.transform.position = Vector3.Lerp(start, end, index/(float)(Carousel.ItemCount - 1));
+            gameObject.transform.position = Vector3.Lerp(start, end,
+                index/(float) (Mathf.Max(1, Carousel.ItemCount - 1)));
         }
 
         protected virtual void Reset()
@@ -107,8 +111,10 @@ namespace SonicRealms.UI
             _selectionCenter = _selectionCenter ?? transform;
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
+            base.Start();
+
             _smoothSelectedIndex = Carousel.SelectedIndex;
         }
 
