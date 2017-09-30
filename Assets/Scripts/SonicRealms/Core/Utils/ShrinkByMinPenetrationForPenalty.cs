@@ -83,13 +83,13 @@ namespace SonicRealms.Core.Utils
         public static void Shrink(BoxCollider2D collider)
         {
             collider.size = new Vector2(
-                collider.size.x - Physics2D.minPenetrationForPenalty*4,
-                collider.size.y - Physics2D.minPenetrationForPenalty*4);
+                collider.size.x - Physics2D.defaultContactOffset*4,
+                collider.size.y - Physics2D.defaultContactOffset*4);
         }
 
         public static void Shrink(CircleCollider2D collider)
         {
-            collider.radius -= Physics2D.minPenetrationForPenalty*2;
+            collider.radius -= Physics2D.defaultContactOffset*2;
         }
 
         public static void Shrink(PolygonCollider2D collider)
@@ -100,7 +100,7 @@ namespace SonicRealms.Core.Utils
             for (var i = 0; i < newPoints.Length; ++i)
             {
                 var point = collider.points[i];
-                newPoints[i] = point - (point - center).normalized*Physics2D.minPenetrationForPenalty*2;
+                newPoints[i] = point - (point - center).normalized*Physics2D.defaultContactOffset*2;
             }
 
             collider.points = newPoints;
@@ -114,7 +114,7 @@ namespace SonicRealms.Core.Utils
             for (var i = 0; i < newPoints.Length; ++i)
             {
                 var point = collider.points[i];
-                newPoints[i] = point - (point - center).normalized * Physics2D.minPenetrationForPenalty*2;
+                newPoints[i] = point - (point - center).normalized * Physics2D.defaultContactOffset*2;
             }
             
             collider.points = newPoints;
