@@ -184,7 +184,7 @@ namespace SonicRealms.Level
         /// <returns></returns>
         public Vector2 DoPixelPerfectCheck(Vector2 position)
         {
-            return new Vector2(DMath.Round(position.x, 0.01f), DMath.Round(position.y, 0.01f));
+            return new Vector2(SrMath.Round(position.x, 0.01f), SrMath.Round(position.y, 0.01f));
         }
         
         /// <summary>
@@ -235,8 +235,8 @@ namespace SonicRealms.Level
 
             // temporary workaround to account for direction of gravity
             // rotates the boundaries but always follows in cardinal directions, making it look a bit ugly
-            var min = DMath.RotateBy(FollowBoundsMin.position, -Rotation*Mathf.Deg2Rad, transform.position);
-            var max = DMath.RotateBy(FollowBoundsMax.position, -Rotation*Mathf.Deg2Rad, transform.position);
+            var min = SrMath.RotateBy(FollowBoundsMin.position, -Rotation*Mathf.Deg2Rad, transform.position);
+            var max = SrMath.RotateBy(FollowBoundsMax.position, -Rotation*Mathf.Deg2Rad, transform.position);
 
             if (position.x > max.x)
                 x += Mathf.Min(FollowSpeed.x * deltaTime, position.x - max.x);

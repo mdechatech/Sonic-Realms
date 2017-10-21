@@ -56,12 +56,12 @@ namespace SonicRealms.Core.Triggers
         public bool Allows(float angle, float rotation, float gravity)
         {
             if (RelativeToRotation)
-                angle = DMath.PositiveAngle_d(angle - rotation);
+                angle = SrMath.PositiveAngle_d(angle - rotation);
 
             if (RelativeToGravity)
-                angle = DMath.PositiveAngle_d(rotation - gravity + 270.0f);
+                angle = SrMath.PositiveAngle_d(rotation - gravity + 270.0f);
 
-            return DMath.AngleInRange_d(angle, SurfaceAngleMin, SurfaceAngleMax);
+            return SrMath.AngleInRange_d(angle, SurfaceAngleMin, SurfaceAngleMax);
         }
     }
 }

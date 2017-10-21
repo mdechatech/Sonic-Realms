@@ -95,8 +95,8 @@ namespace SonicRealms.Core.Utils
 
             if (SnapInterval != default(Vector2))
             {
-                x = DMath.Round(x, SnapInterval.x);
-                y = DMath.Round(y, SnapInterval.y);
+                x = SrMath.Round(x, SnapInterval.x);
+                y = SrMath.Round(y, SnapInterval.y);
             }
 
             transform.position = new Vector2(x, y);

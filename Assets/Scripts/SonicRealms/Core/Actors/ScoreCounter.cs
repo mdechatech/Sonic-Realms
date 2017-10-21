@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using SonicRealms.Core.Utils;
-using SonicRealms.UI;
+using SonicRealms.Legacy.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;

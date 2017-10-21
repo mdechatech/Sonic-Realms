@@ -87,7 +87,7 @@ namespace SonicRealms.Core.Utils
         /// <returns></returns>
         public static ControllerSide NormalToControllerSide(float normal)
         {
-            normal = DMath.PositiveAngle_d(normal);
+            normal = SrMath.PositiveAngle_d(normal);
             if (normal >= 315.0f || normal < 45.0f)
             {
                 return ControllerSide.Right;

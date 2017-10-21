@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Utils;
-using SonicRealms.UI;
+using SonicRealms.Legacy.Game;
+using SonicRealms.Legacy.UI;
 using UnityEngine;
 
 namespace SonicRealms.Level

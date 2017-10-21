@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
+using SonicRealms.Legacy.Game;
 using UnityEngine;
 
 namespace SonicRealms.Level.Objects

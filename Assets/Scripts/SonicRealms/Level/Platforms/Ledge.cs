@@ -8,7 +8,6 @@ namespace SonicRealms.Level.Platforms
     /// <summary>
     /// Turns a platform into a ledge where a controller can only collide with its top side.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Ledge")]
     public class Ledge : ReactivePlatform
     {
         /// <summary>

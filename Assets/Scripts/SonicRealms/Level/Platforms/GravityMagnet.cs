@@ -9,7 +9,6 @@ namespace SonicRealms.Level.Platforms
     /// Functions the same as the trippy gravity surfaces in Death Egg mk ii. Sticks the controller
     /// onto the platform using gravity.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Gravity Magnet")]
     public class GravityMagnet : ReactivePlatform
     {
         /// <summary>
@@ -43,7 +42,7 @@ namespace SonicRealms.Level.Platforms
 
         public override void OnSurfaceStay(SurfaceCollision collision)
         {
-            collision.Controller.GravityDirection = DMath.PositiveAngle_d(collision.Controller.SurfaceAngle - 90.0f);
+            collision.Controller.GravityDirection = SrMath.PositiveAngle_d(collision.Controller.SurfaceAngle - 90.0f);
         }
 
         public override void OnSurfaceExit(SurfaceCollision collision)

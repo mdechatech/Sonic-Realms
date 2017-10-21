@@ -258,12 +258,12 @@ namespace SonicRealms.Level
 
                 if (_snapInterval.x > 0)
                 {
-                    x = DMath.Round(x, _snapInterval.x);
+                    x = SrMath.Round(x, _snapInterval.x);
                 }
 
                 if (_snapInterval.y > 0)
                 {
-                    y = DMath.Round(y, _snapInterval.y);
+                    y = SrMath.Round(y, _snapInterval.y);
                 }
 
                 tile.transform.localPosition = new Vector3(x, y);

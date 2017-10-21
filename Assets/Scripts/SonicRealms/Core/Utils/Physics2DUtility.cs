@@ -178,7 +178,7 @@ namespace SonicRealms.Core.Utils
         {
             var radius = path.radius * Mathf.Max(
                 Mathf.Abs(path.transform.lossyScale.x), Mathf.Abs(path.transform.lossyScale.y));
-            var radians = Mathf.Clamp01(t) * DMath.DoublePi;
+            var radians = Mathf.Clamp01(t) * SrMath.DoublePi;
 
             return (Vector2)path.transform.TransformPoint(path.offset) +
                    new Vector2(Mathf.Cos(radians) * radius, Mathf.Sin(radians) * radius);

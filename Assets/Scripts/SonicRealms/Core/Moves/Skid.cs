@@ -53,7 +53,7 @@ namespace SonicRealms.Core.Moves
         public override bool ShouldPerform
         {
             get { return GroundControl.Braking && 
-                    Mathf.Abs(DMath.ShortestArc_d(0f, Controller.RelativeSurfaceAngle)) < MaximumAngle && 
+                    Mathf.Abs(SrMath.ShortestArc_d(0f, Controller.RelativeSurfaceAngle)) < MaximumAngle && 
                     Manager[MoveLayer.Action] == null && Manager[MoveLayer.Roll] == null; }
         }
 

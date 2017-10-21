@@ -8,7 +8,6 @@ namespace SonicRealms.Level.Platforms
     /// <summary>
     /// Gives friction to a platform, allowing slippery surfaces.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Ice")]
     public class Ice : ReactivePlatform
     {
         /// <summary>
@@ -27,7 +26,7 @@ namespace SonicRealms.Level.Platforms
         public override void Awake()
         {
             base.Awake();
-            if (DMath.Equalsf(Friction)) Friction += DMath.Epsilon;
+            if (SrMath.Equalsf(Friction)) Friction += SrMath.Epsilon;
         }
 
         // Applies new physics values based on friction.

@@ -6,7 +6,6 @@ namespace SonicRealms.Level.Platforms.Movers
     /// <summary>
     /// Moves an object along the path defined by a collider2D.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Movers/Path Platform")]
     public class PathPlatform : BasePlatformMover
     {
         /// <summary>

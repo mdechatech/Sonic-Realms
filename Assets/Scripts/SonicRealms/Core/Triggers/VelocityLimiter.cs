@@ -128,7 +128,7 @@ namespace SonicRealms.Core.Triggers
                 velocity = relativeVelocity;
 
             if (RelativeToRotation)
-                velocity = DMath.RotateBy(velocity, -rotation * Mathf.Deg2Rad);
+                velocity = SrMath.RotateBy(velocity, -rotation * Mathf.Deg2Rad);
 
             var horizontal = UseAbsoluteHorizontal
                 ? Mathf.Abs(velocity.x)

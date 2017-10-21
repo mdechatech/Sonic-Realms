@@ -31,13 +31,13 @@ namespace SonicRealms.Core.Utils
             if (color == default(Color))
                 color = Color.white;
 
-            Debug.DrawLine(center, center + (Vector3)DMath.RotateBy(Vector2.up, angle*Mathf.Deg2Rad)*size/2,
+            Debug.DrawLine(center, center + (Vector3)SrMath.RotateBy(Vector2.up, angle*Mathf.Deg2Rad)*size/2,
                 color, duration, depthTest);
-            Debug.DrawLine(center, center + (Vector3) DMath.RotateBy(Vector2.down, angle*Mathf.Deg2Rad)*size/2,
+            Debug.DrawLine(center, center + (Vector3) SrMath.RotateBy(Vector2.down, angle*Mathf.Deg2Rad)*size/2,
                 color, duration, depthTest);
-            Debug.DrawLine(center, center + (Vector3) DMath.RotateBy(Vector2.left, angle*Mathf.Deg2Rad)*size/2,
+            Debug.DrawLine(center, center + (Vector3) SrMath.RotateBy(Vector2.left, angle*Mathf.Deg2Rad)*size/2,
                 color, duration, depthTest);
-            Debug.DrawLine(center, center + (Vector3) DMath.RotateBy(Vector2.right, angle*Mathf.Deg2Rad)*size/2,
+            Debug.DrawLine(center, center + (Vector3) SrMath.RotateBy(Vector2.right, angle*Mathf.Deg2Rad)*size/2,
                 color, duration, depthTest);
         }
     }

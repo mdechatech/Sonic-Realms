@@ -28,7 +28,7 @@ namespace SonicRealms.Core.Utils
             Time += RevolutionsPerSecond*UnityEngine.Time.fixedDeltaTime;
             Time %= 1f;
 
-            transform.position = transform.parent.position + (Vector3) DMath.UnitVector(Time*Mathf.PI*2f)*Radius;
+            transform.position = transform.parent.position + (Vector3) SrMath.UnitVector(Time*Mathf.PI*2f)*Radius;
         }
     }
 }

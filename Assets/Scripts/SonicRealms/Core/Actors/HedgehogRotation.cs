@@ -119,21 +119,21 @@ namespace SonicRealms.Core.Actors
                 var rotateToSensors = true;
                 rotateToSensors &= RotateDuringStand ||
                                    (GroundControl == null
-                                       ? !DMath.Equalsf(Controller.GroundVelocity)
+                                       ? !SrMath.Equalsf(Controller.GroundVelocity)
                                        : !GroundControl.Standing);
                 rotateToSensors &= Roll == null || RotateDuringRoll || !Roll.Active;
                 rotateToSensors &=
-                    Mathf.Abs(DMath.ShortestArc_d(Controller.SurfaceAngle, Controller.GravityRight)) >
+                    Mathf.Abs(SrMath.ShortestArc_d(Controller.SurfaceAngle, Controller.GravityRight)) >
                     MinimumAngle;
 
                 TrueRotation = rotateToSensors ? Controller.SurfaceAngle : Controller.GravityRight;
             }
             else
             {
-                if ((RotateDuringStand || !DMath.Equalsf(Controller.GroundVelocity)) &&
+                if ((RotateDuringStand || !SrMath.Equalsf(Controller.GroundVelocity)) &&
                     (Roll == null || RotateDuringRoll || !Roll.Active))
                 {
-                    var difference = DMath.ShortestArc_d(Rotation, Controller.GravityRight);
+                    var difference = SrMath.ShortestArc_d(Rotation, Controller.GravityRight);
                     difference = difference > 0.0f
                         ? Mathf.Min(AirRecoveryRate * Time.deltaTime, difference)
                         : Mathf.Max(-AirRecoveryRate * Time.deltaTime, difference);
@@ -155,7 +155,7 @@ namespace SonicRealms.Core.Actors
         public void FixRotation()
         {
             if (_previousGravity != Controller.GravityDirection || 
-                !DMath.AngleInRange_d(TrueRotation, IntervalMin, IntervalMax))
+                !SrMath.AngleInRange_d(TrueRotation, IntervalMin, IntervalMax))
             {
                 UpdateInterval();
             }
@@ -165,30 +165,30 @@ namespace SonicRealms.Core.Actors
 
         public void UpdateInterval()
         {
-            Interval = DMath.Round(TrueRotation, IntervalAngle, Controller.GravityRight);
+            Interval = SrMath.Round(TrueRotation, IntervalAngle, Controller.GravityRight);
             _previousGravity = Controller.GravityDirection;
 
-            if (DMath.AngleInRange_d(Interval, -MinimumAngle, MinimumAngle))
+            if (SrMath.AngleInRange_d(Interval, -MinimumAngle, MinimumAngle))
             {
                 IntervalMin = 360f - MinimumAngle;
                 IntervalMax = MinimumAngle;
             }
-            else if (DMath.AngleInRange_d(Interval, -MinimumAngle - IntervalAngle, -MinimumAngle))
+            else if (SrMath.AngleInRange_d(Interval, -MinimumAngle - IntervalAngle, -MinimumAngle))
             {
                 // When one interval below 0
-                IntervalMin = DMath.PositiveAngle_d(Interval - IntervalAngle*(0.5f + IntervalThreshold));
+                IntervalMin = SrMath.PositiveAngle_d(Interval - IntervalAngle*(0.5f + IntervalThreshold));
                 IntervalMax = 360f - MinimumAngle + IntervalAngle*IntervalThreshold;
             }
-            else if (DMath.AngleInRange_d(Interval, MinimumAngle, MinimumAngle + IntervalAngle))
+            else if (SrMath.AngleInRange_d(Interval, MinimumAngle, MinimumAngle + IntervalAngle))
             {
                 // When one interval above 0
                 IntervalMin = MinimumAngle - IntervalAngle*IntervalThreshold;
-                IntervalMax = DMath.PositiveAngle_d(Interval + IntervalAngle * (0.5f + IntervalThreshold));
+                IntervalMax = SrMath.PositiveAngle_d(Interval + IntervalAngle * (0.5f + IntervalThreshold));
             }
             else
             {
-                IntervalMin = DMath.PositiveAngle_d(Interval - IntervalAngle*(0.5f + IntervalThreshold));
-                IntervalMax = DMath.PositiveAngle_d(Interval + IntervalAngle*(0.5f + IntervalThreshold));
+                IntervalMin = SrMath.PositiveAngle_d(Interval - IntervalAngle*(0.5f + IntervalThreshold));
+                IntervalMax = SrMath.PositiveAngle_d(Interval + IntervalAngle*(0.5f + IntervalThreshold));
             }
         }
     }

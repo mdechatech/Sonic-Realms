@@ -153,7 +153,7 @@ namespace SonicRealms.Core.Moves
         /// <param name="timestep">The timestep, in seconds</param>
         public void Accelerate(float magnitude, float timestep)
         {
-            if(DMath.Equalsf(magnitude)) return;
+            if(SrMath.Equalsf(magnitude)) return;
             magnitude = Mathf.Clamp(magnitude, -1.0f, 1.0f);
 
             if (magnitude < 0.0f)

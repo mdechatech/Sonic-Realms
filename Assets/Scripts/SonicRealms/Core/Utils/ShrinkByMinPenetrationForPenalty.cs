@@ -16,7 +16,6 @@ namespace SonicRealms.Core.Utils
             if (!collider)
             {
                 UnityEditor.EditorApplication.delayCall += () => { DestroyImmediate(this); };
-
                 UnityEditor.EditorUtility.DisplayDialog("Invalid operation",
                     "This component can't be added unless the game object has a Collider2D component attached.",
                     "Ok");

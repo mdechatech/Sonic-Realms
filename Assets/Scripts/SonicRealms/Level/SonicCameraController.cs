@@ -324,7 +324,7 @@ namespace SonicRealms.Level
         {
             _forwardShifting = true;
             Camera.PanAtSpeed(
-                DMath.UnitVector(Player.RelativeAngle(forward ? 0 : 180)*Mathf.Deg2Rad)*ForwardShiftPanAmount,
+                SrMath.UnitVector(Player.RelativeAngle(forward ? 0 : 180)*Mathf.Deg2Rad)*ForwardShiftPanAmount,
                 ForwardShiftPanSpeed);
         }
 
@@ -334,7 +334,7 @@ namespace SonicRealms.Level
 
             if (RotateToGravity)
             {
-                if (DMath.Equalsf(RotateSmoothness))
+                if (SrMath.Equalsf(RotateSmoothness))
                 {
                     Camera.Rotate(Player.GravityDirection + 90.0f);
                 }
@@ -407,14 +407,14 @@ namespace SonicRealms.Level
             else if (move is LookUp)
             {
                 _looking = true;
-                Camera.PanAtSpeed(DMath.UnitVector(Player.RelativeAngle(90f) * Mathf.Deg2Rad) * LookUpPanAmount,
+                Camera.PanAtSpeed(SrMath.UnitVector(Player.RelativeAngle(90f) * Mathf.Deg2Rad) * LookUpPanAmount,
                     LookUpPanSpeed,
                     LookUpLag);
             }
             else if (move is Duck)
             {
                 _looking = true;
-                Camera.PanAtSpeed(DMath.UnitVector(Player.RelativeAngle(-90f) * Mathf.Deg2Rad) * LookDownPanAmount,
+                Camera.PanAtSpeed(SrMath.UnitVector(Player.RelativeAngle(-90f) * Mathf.Deg2Rad) * LookDownPanAmount,
                     LookDownPanSpeed, LookDownLag);
             }
             else if (move is Spindash)

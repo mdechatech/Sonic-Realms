@@ -173,7 +173,7 @@ namespace SonicRealms.Core.Actors
 
                 var ring = Instantiate(SpilledRingBase);
                 ring.transform.position = transform.position;
-                ring.Velocity = DMath.UnitVector(angle*Mathf.Deg2Rad)*speed;
+                ring.Velocity = SrMath.UnitVector(angle*Mathf.Deg2Rad)*speed;
 
                 if (flip)
                 {

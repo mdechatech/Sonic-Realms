@@ -5,7 +5,6 @@ namespace SonicRealms.Level.Platforms.Movers
     /// <summary>
     /// Moves an object between two points, with options for smoothness.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Movers/Platform Oscillator")]
     public class OscillatingPlatform : BasePlatformMover
     {
         /// <summary>

@@ -23,7 +23,7 @@ namespace SonicRealms.Core.Moves
         {
             get
             {
-                return Controller.Grounded && DMath.Equalsf(Controller.GroundVelocity) && !Manager[MoveLayer.Action] &&
+                return Controller.Grounded && SrMath.Equalsf(Controller.GroundVelocity) && !Manager[MoveLayer.Action] &&
                        (GroundControl == null || (!GroundControl.Braking && !GroundControl.Accelerating)) &&
                        !Manager[MoveLayer.Roll] && !Manager[MoveLayer.Action];
             }
@@ -38,7 +38,7 @@ namespace SonicRealms.Core.Moves
         {
             get
             {
-                return !Controller.Grounded || !DMath.Equalsf(Controller.GroundVelocity) ||
+                return !Controller.Grounded || !SrMath.Equalsf(Controller.GroundVelocity) ||
                        (GroundControl == null || !GroundControl.Standing) || Input.GetAxis(ActivateAxis) <= 0f;
             }
         }

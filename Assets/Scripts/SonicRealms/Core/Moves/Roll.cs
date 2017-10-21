@@ -305,10 +305,10 @@ namespace SonicRealms.Core.Moves
 
             if (Controller.GroundVelocity > 0.0f)
             {
-                IsGoingUphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0.0f, 180.0f);
+                IsGoingUphill = SrMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 0.0f, 180.0f);
             } else if (Controller.GroundVelocity < 0.0f)
             {
-                IsGoingUphill = DMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 180.0f, 360.0f);
+                IsGoingUphill = SrMath.AngleInRange_d(Controller.RelativeSurfaceAngle, 180.0f, 360.0f);
             }
 
             // If physics was set by something else, we should store those values to restore later
@@ -370,11 +370,11 @@ namespace SonicRealms.Core.Moves
         {
             if (Controller.WallMode != WallMode.None)
             {
-                return DMath.UnitVector(Controller.RelativeAngle(Controller.WallMode.ToNormal())*Mathf.Deg2Rad)*
+                return SrMath.UnitVector(Controller.RelativeAngle(Controller.WallMode.ToNormal())*Mathf.Deg2Rad)*
                        HeightChange/2;
             }
 
-            return DMath.UnitVector((Controller.GravityDirection + 180)*Mathf.Deg2Rad)*HeightChange/2;
+            return SrMath.UnitVector((Controller.GravityDirection + 180)*Mathf.Deg2Rad)*HeightChange/2;
         }
     }
 }

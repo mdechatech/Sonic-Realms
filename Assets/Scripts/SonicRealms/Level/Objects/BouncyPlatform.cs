@@ -27,7 +27,7 @@ namespace SonicRealms.Level.Objects
             get { return _bouncyAngles.x; }
             set
             {
-                value = DMath.PositiveAngle_d(value);
+                value = SrMath.PositiveAngle_d(value);
                 _bouncyAngles = new Vector2(value - BouncyArcLength*0.5f, value + BouncyArcLength*0.5f);
             }
         }
@@ -166,6 +166,12 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public bool EndRoll { get { return _endRoll; } set { _endRoll = value; } }
 
+
+        /// <summary>
+        /// Whether to snap the player out of being hurt, restoring player control.
+        /// </summary>
+        public bool EndHurtRebound { get { return _endHurtRebound; } set { _endHurtRebound = value; } }
+
         public Animator Animator { get { return _animator; } set { _animator = value; } }
 
         /// <summary>
@@ -262,6 +268,11 @@ namespace SonicRealms.Level.Objects
         private bool _endRoll;
 
         [SerializeField]
+        [Foldout("Player Stuff")]
+        [Tooltip("Whether to snap the player out of being hurt, restoring player control.")]
+        private bool _endHurtRebound;
+
+        [SerializeField]
         [Foldout("Animation")]
         private Animator _animator;
 
@@ -294,7 +305,7 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public float RelativeAngle(float angle)
         {
-            return DMath.PositiveAngle_d(angle - (RelativeToRotation ? transform.eulerAngles.z : 0));
+            return SrMath.PositiveAngle_d(angle - (RelativeToRotation ? transform.eulerAngles.z : 0));
         }
 
         /// <summary>
@@ -303,7 +314,7 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public float AbsoluteAngle(float angle)
         {
-            return DMath.PositiveAngle_d(angle + (RelativeToRotation ? transform.eulerAngles.z : 0));
+            return SrMath.PositiveAngle_d(angle + (RelativeToRotation ? transform.eulerAngles.z : 0));
         }
 
         /// <summary>
@@ -313,9 +324,9 @@ namespace SonicRealms.Level.Objects
         public float RemapBounceAngle(float relativeAngle)
         {
             if (RemapBounceAngles)
-                return RemapBounceAnglesCurve.Evaluate(DMath.PositiveAngle_d(relativeAngle));
+                return RemapBounceAnglesCurve.Evaluate(SrMath.PositiveAngle_d(relativeAngle));
 
-            return DMath.PositiveAngle_d(relativeAngle);
+            return SrMath.PositiveAngle_d(relativeAngle);
         }
 
         /// <summary>
@@ -325,7 +336,7 @@ namespace SonicRealms.Level.Objects
         public float GetVelocityMultiplier(float relativeAngle)
         {
             if (MapBounceAngleToVelocity)
-                return BounceAngleToVelocityCurve.Evaluate(DMath.PositiveAngle_d(relativeAngle));
+                return BounceAngleToVelocityCurve.Evaluate(SrMath.PositiveAngle_d(relativeAngle));
 
             return 1;
         }
@@ -345,8 +356,9 @@ namespace SonicRealms.Level.Objects
             ResetRemapBounceAnglesCurve();
             ResetBounceAngleToVelocityCurve();
 
-            _velocity = 9.6f;
-            _detachPlayer = true;
+            Velocity = 9.6f;
+            DetachPlayer = true;
+            EndHurtRebound = true;
 
             _animator = GetComponent<Animator>();
         }
@@ -421,7 +433,7 @@ namespace SonicRealms.Level.Objects
                 DrawArrow(transform.position, inbound, inboundColor, inboundLength, inboundTipLength);
 
                 var inboundPos = transform.position +
-                                 (Vector3)DMath.UnitVector(inbound * Mathf.Deg2Rad) * inboundLength;
+                                 (Vector3)SrMath.UnitVector(inbound * Mathf.Deg2Rad) * inboundLength;
 
                 DrawArrow(inboundPos, outbound, outboundColor,
                     outboundLength + (inboundLength + outboundLength) * (multiplier - 1),
@@ -431,7 +443,7 @@ namespace SonicRealms.Level.Objects
 
         private void DrawArrow(Vector3 position, float direction, Color color, float length = 0.3f, float tipLength = 0.1f)
         {
-            var tipPosition = position + (Vector3)DMath.UnitVector(direction * Mathf.Deg2Rad) * length;
+            var tipPosition = position + (Vector3)SrMath.UnitVector(direction * Mathf.Deg2Rad) * length;
 
             Gizmos.color = color;
 
@@ -441,9 +453,9 @@ namespace SonicRealms.Level.Objects
                 direction += 180;
 
             Gizmos.DrawLine(tipPosition,
-                tipPosition + (Vector3)DMath.UnitVector((direction - 135) * Mathf.Deg2Rad) * tipLength);
+                tipPosition + (Vector3)SrMath.UnitVector((direction - 135) * Mathf.Deg2Rad) * tipLength);
             Gizmos.DrawLine(tipPosition,
-                tipPosition + (Vector3)DMath.UnitVector((direction + 135) * Mathf.Deg2Rad) * tipLength);
+                tipPosition + (Vector3)SrMath.UnitVector((direction + 135) * Mathf.Deg2Rad) * tipLength);
         }
 #endif
 
@@ -475,11 +487,11 @@ namespace SonicRealms.Level.Objects
             }
             else if (BounceAngleBehavior == BouncyPlatformBounceAngleBehavior.UseLineFromCenter)
             {
-                hitNormal = RelativeAngle(DMath.Angle(player.transform.position - transform.position)*Mathf.Rad2Deg);
+                hitNormal = RelativeAngle(SrMath.Angle(player.transform.position - transform.position)*Mathf.Rad2Deg);
             }
 
             if (!(BouncyAngleMin == 0 && Mathf.Approximately(BouncyAngleMax, 360)) &&
-                !DMath.AngleInRange_d(hitNormal, BouncyAngleMin, BouncyAngleMax))
+                !SrMath.AngleInRange_d(hitNormal, BouncyAngleMin, BouncyAngleMax))
                 return;
 
             if (!CheckBounceTimer(player))
@@ -488,7 +500,6 @@ namespace SonicRealms.Level.Objects
             if (ControlLockTime > 0)
             {
                 var groundControl = player.GetMove<GroundControl>();
-
                 if (groundControl)
                     groundControl.Lock(ControlLockTime);
             }
@@ -500,24 +511,25 @@ namespace SonicRealms.Level.Objects
             }
 
             if (EndRoll)
-            {
                 player.EndMove<Roll>();
-            }
+
+            if (EndHurtRebound)
+                player.EndMove<HurtRebound>();
 
             var normalRadians = AbsoluteAngle(RemapBounceAngle(hitNormal))*Mathf.Deg2Rad;
             var velocityMultiplier = GetVelocityMultiplier(hitNormal);
 
             if (VelocityEffect == BouncyPlatformVelocityEffect.Set)
             {
-                player.Velocity = DMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
+                player.Velocity = SrMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
             }
-            else if (VelocityEffect == BouncyPlatformVelocityEffect.StopAndAdd)
+            else if (VelocityEffect == BouncyPlatformVelocityEffect.Reflect)
             {
                 player.Velocity = new Vector2(
                     player.Velocity.x*Mathf.Abs(Mathf.Sin(normalRadians)),
                     player.Velocity.y*Mathf.Abs(Mathf.Cos(normalRadians)));
 
-                player.Velocity += DMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
+                player.Velocity += SrMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
             }
 
             if (Animator)
@@ -529,7 +541,6 @@ namespace SonicRealms.Level.Objects
             RealmsAnimatorUtility.SilentSet(player, SetPlayerOnPreCollideParameters);
 
             BlinkEffectTrigger(player);
-
             StartBounceTimer(player);
         }
 
@@ -605,10 +616,10 @@ namespace SonicRealms.Level.Objects
         Set,
 
         /// <summary>
-        /// The bouncy thing will stop the component of the player's velocity traveling towards its normal then add
-        /// its desired value. Used in vertical and horizontal springs.
+        /// The bouncy thing will reflect the player's velocity based on its orientation, similar to the way light 
+        /// bounces off of a mirror. Used in vertical and horizontal springs.
         /// </summary>
-        StopAndAdd,
+        Reflect,
     }
 
     /// <summary>

@@ -136,7 +136,7 @@ namespace SonicRealms.Level.Platforms
 
             if (_transferGroundedMomentum && collision.Controller.Grounded)
             {
-                collision.Controller.GroundVelocity += DMath.ScalarProjectionAbs(
+                collision.Controller.GroundVelocity += SrMath.ScalarProjectionAbs(
                     anchor.PreviousDelta/Time.fixedDeltaTime,
                     collision.Latest.HitData.SurfaceAngle);
             }

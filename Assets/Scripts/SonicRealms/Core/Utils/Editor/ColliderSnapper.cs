@@ -141,8 +141,8 @@ namespace SonicRealms.Core.Utils.Editor
 
             var transform = Selection.activeGameObject.transform;
             transform.position = new Vector3(
-                DMath.Round(transform.position.x, _snapInterval),
-                DMath.Round(transform.position.y, _snapInterval),
+                SrMath.Round(transform.position.x, _snapInterval),
+                SrMath.Round(transform.position.y, _snapInterval),
                 transform.position.z);
         }
         
@@ -187,7 +187,7 @@ namespace SonicRealms.Core.Utils.Editor
 
         private static void SnapCircleCollider(CircleCollider2D collider, float interval = DefaultSnapInterval)
         {
-            collider.radius = DMath.Round(collider.radius, interval);
+            collider.radius = SrMath.Round(collider.radius, interval);
             collider.offset = RoundPoint(collider.offset, interval*0.5f);
         }
 
@@ -218,7 +218,7 @@ namespace SonicRealms.Core.Utils.Editor
 
         private static Vector2 RoundPoint(Vector2 point, float interval = DefaultSnapInterval)
         {
-            return new Vector2(DMath.Round(point.x, interval), DMath.Round(point.y, interval));
+            return new Vector2(SrMath.Round(point.x, interval), SrMath.Round(point.y, interval));
         }
     }
 }

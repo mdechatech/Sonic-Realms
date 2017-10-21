@@ -54,8 +54,8 @@ namespace SonicRealms.Core.Utils
         {
             _position = _transform.position;
             _transform.position = new Vector3(
-                DMath.Round(_position.x, Interval.x, Offset.x),
-                DMath.Round(_position.y, Interval.y, Offset.y),
+                SrMath.Round(_position.x, Interval.x, Offset.x),
+                SrMath.Round(_position.y, Interval.y, Offset.y),
                 _position.z);
         }
     }

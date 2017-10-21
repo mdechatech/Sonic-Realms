@@ -99,7 +99,7 @@ namespace SonicRealms.Level.Platforms
 
             // The average fraction must also be less than the one last frame - this makes the check false
             // if the object moved away from the player or stood still
-            result &= (DMath.Equalsf(averageFraction) || averageFraction < _previousVerticalFraction - DMath.Epsilon);
+            result &= (SrMath.Equalsf(averageFraction) || averageFraction < _previousVerticalFraction - SrMath.Epsilon);
 
             _previousVerticalFraction = averageFraction;
 

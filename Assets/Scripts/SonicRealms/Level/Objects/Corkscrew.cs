@@ -233,7 +233,7 @@ namespace SonicRealms.Level.Objects
             var y = transform.position.y +
                     Mathf.Sin(PhaseShift*Mathf.PI*2 + progress*(Length/Period)*Mathf.PI*2)*Amplitude;
 
-            return DMath.RotateBy(new Vector2(x, y), transform.eulerAngles.z*Mathf.Deg2Rad, transform.position);
+            return SrMath.RotateBy(new Vector2(x, y), transform.eulerAngles.z*Mathf.Deg2Rad, transform.position);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public float GetLocalHeight(float progress)
         {
-            return DMath.HeightDifference(GetPosition(progress), transform.position,
+            return SrMath.HeightDifference(GetPosition(progress), transform.position,
                 (transform.eulerAngles.z + 90)*Mathf.Deg2Rad);
         }
 
@@ -458,8 +458,8 @@ namespace SonicRealms.Level.Objects
         {
             var rotation = transform.eulerAngles.z*Mathf.Deg2Rad;
 
-            var projected = DMath.Projection(position, StartPosition, rotation);
-            var difference = DMath.HeightDifference(projected, StartPosition, rotation);
+            var projected = SrMath.Projection(position, StartPosition, rotation);
+            var difference = SrMath.HeightDifference(projected, StartPosition, rotation);
 
             return difference/Length;
         }
@@ -508,7 +508,7 @@ namespace SonicRealms.Level.Objects
             {
                 var normalizedHeight = Amplitude == 0 ? 0 : GetLocalHeight(info.Progress) / Amplitude;
 
-                var dir = DMath.UnitVector((info.Controller.SurfaceAngle - 90)*Mathf.Deg2Rad);
+                var dir = SrMath.UnitVector((info.Controller.SurfaceAngle - 90)*Mathf.Deg2Rad);
 
                 return GetPosition(info.Progress)
                        + dir*roll.HeightChange*normalizedHeight*0.5f;
@@ -539,7 +539,7 @@ namespace SonicRealms.Level.Objects
 
             public UnityAction UpdatePositionAction; 
 
-            public float PeriodProgress { get { return DMath.Modp(Progress*Corkscrew.Length/Corkscrew.Period, 1); } }
+            public float PeriodProgress { get { return SrMath.Modp(Progress*Corkscrew.Length/Corkscrew.Period, 1); } }
 
             public PassengerInfo(HedgehogController controller, Corkscrew corkscrew, float progress, bool enteredAtStart)
             {

@@ -66,7 +66,7 @@ namespace SonicRealms.Core.Triggers
 
         public void SetSurfaceAngle(float surfaceAngle)
         {
-            _surfaceAngle = DMath.PositiveAngle_d(surfaceAngle);
+            _surfaceAngle = SrMath.PositiveAngle_d(surfaceAngle);
         }
 
         public void Detach()

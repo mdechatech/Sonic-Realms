@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 400518}
-  - 212: {fileID: 21216906}
+  - component: {fileID: 400518}
+  - component: {fileID: 21216906}
   m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
@@ -21,11 +21,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 416260}
-  - 95: {fileID: 95000013462427444}
-  - 114: {fileID: 114000011248510098}
+  - component: {fileID: 416260}
+  - component: {fileID: 95000013462427444}
+  - component: {fileID: 114000011248510098}
   m_Layer: 31
   m_Name: S2 Horizontal Red Spring
   m_TagString: Untagged
@@ -42,10 +42,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 416260}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &416260
 Transform:
   m_ObjectHideFlags: 1
@@ -53,14 +53,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195270}
   m_LocalRotation: {x: -0, y: -0, z: -0.70710534, w: 0.70710826}
-  m_LocalPosition: {x: 14.17, y: 0.21, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.00001}
   m_Children:
   - {fileID: 4000011354497226}
   - {fileID: 400518}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.00001}
 --- !u!212 &21216906
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -75,7 +75,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -83,17 +85,24 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1963575889
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300014, guid: 33a7e6bd5ba0a6e4189f0922cfde2811, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -134,15 +143,15 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011354497226}
-  - 61: {fileID: 61000011309183842}
-  - 114: {fileID: 114000011477391072}
-  - 114: {fileID: 114000012365986250}
-  - 114: {fileID: 114000013689362996}
-  - 114: {fileID: 114000013247860982}
-  - 114: {fileID: 114000012045639866}
+  - component: {fileID: 4000011354497226}
+  - component: {fileID: 61000011309183842}
+  - component: {fileID: 114000012045639866}
+  - component: {fileID: 114000011477391072}
+  - component: {fileID: 114000012365986250}
+  - component: {fileID: 114000013689362996}
+  - component: {fileID: 114000013247860982}
   m_Layer: 31
   m_Name: Collider
   m_TagString: Untagged
@@ -159,10 +168,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: 0.0000005364418, w: 1}
   m_LocalPosition: {x: 0.00000032782555, y: 0.07999992, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 416260}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &61000011309183842
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -174,9 +183,20 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.32, y: 0.16}
+  m_EdgeRadius: 0
 --- !u!95 &95000013462427444
 Animator:
   serializedVersion: 3
@@ -216,6 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -271,6 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   AllowMultiple: 1
   OnActivate:
@@ -338,13 +360,29 @@ MonoBehaviour:
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
   _bouncyAngles: {x: 75, y: 105}
+  _bounceAngleBehavior: 0
   _relativeToRotation: 1
   _velocity: 9.6
   _velocityEffect: 1
   _maxBouncesPerPlayerPerSecond: 10
+  _remapBounceAngles: 0
+  _remapBounceAnglesCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mapBounceAngleToVelocity: 0
+  _bounceAngleToVelocityCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _controlLockTime: 0.26666668
   _detachPlayer: 0
   _endRoll: 0
+  _endHurtRebound: 1
   _animator: {fileID: 95000013462427444}
   _bounceTrigger: Triggered
   _playerBounceTrigger: 

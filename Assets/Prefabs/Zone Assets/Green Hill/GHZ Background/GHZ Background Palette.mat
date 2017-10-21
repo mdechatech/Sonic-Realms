@@ -8,123 +8,54 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: GHZ Background Palette
   m_Shader: {fileID: 4800000, guid: 0be29964c15b76543897644dc5e0daf5, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
+    - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - first:
-        name: _Threshold
-      second: 0.1
+    - _Threshold: 0.1
     m_Colors:
-    - first:
-        name: _ColorFrom0
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorFrom1
-      second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
-    - first:
-        name: _ColorFrom10
-      second: {r: 0.26666668, g: 0.26666668, b: 0, a: 1}
-    - first:
-        name: _ColorFrom11
-      second: {r: 0.53333336, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorFrom12
-      second: {r: 0.9333334, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorFrom13
-      second: {r: 0, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorFrom14
-      second: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
-    - first:
-        name: _ColorFrom15
-      second: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
-    - first:
-        name: _ColorFrom16
-      second: {r: 0.9333334, g: 0.9333334, b: 0.9333334, a: 1}
-    - first:
-        name: _ColorFrom2
-      second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
-    - first:
-        name: _ColorFrom3
-      second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
-    - first:
-        name: _ColorFrom4
-      second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
-    - first:
-        name: _ColorFrom5
-      second: {r: 0.9333334, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorFrom6
-      second: {r: 0, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorFrom7
-      second: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
-    - first:
-        name: _ColorFrom8
-      second: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
-    - first:
-        name: _ColorFrom9
-      second: {r: 0.9333334, g: 0.9333334, b: 0.9333334, a: 1}
-    - first:
-        name: _ColorTo0
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo1
-      second: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
-    - first:
-        name: _ColorTo10
-      second: {r: 0.9333334, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo11
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo12
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo13
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo14
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo15
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo16
-      second: {r: 0, g: 0, b: 0, a: 0}
-    - first:
-        name: _ColorTo2
-      second: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
-    - first:
-        name: _ColorTo3
-      second: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
-    - first:
-        name: _ColorTo4
-      second: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
-    - first:
-        name: _ColorTo5
-      second: {r: 0.26666668, g: 0.26666668, b: 0, a: 1}
-    - first:
-        name: _ColorTo6
-      second: {r: 0.53333336, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorTo7
-      second: {r: 0.9333334, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorTo8
-      second: {r: 0, g: 0, b: 0, a: 1}
-    - first:
-        name: _ColorTo9
-      second: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
+    - _ColorFrom0: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorFrom1: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
+    - _ColorFrom10: {r: 0.26666668, g: 0.26666668, b: 0, a: 1}
+    - _ColorFrom11: {r: 0.53333336, g: 0, b: 0, a: 1}
+    - _ColorFrom12: {r: 0.9333334, g: 0, b: 0, a: 1}
+    - _ColorFrom13: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorFrom14: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
+    - _ColorFrom15: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+    - _ColorFrom16: {r: 0.9333334, g: 0.9333334, b: 0.9333334, a: 1}
+    - _ColorFrom2: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
+    - _ColorFrom3: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
+    - _ColorFrom4: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
+    - _ColorFrom5: {r: 0.9333334, g: 0, b: 0, a: 1}
+    - _ColorFrom6: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorFrom7: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
+    - _ColorFrom8: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+    - _ColorFrom9: {r: 0.9333334, g: 0.9333334, b: 0.9333334, a: 1}
+    - _ColorTo0: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo1: {r: 0.427451, g: 0.57254905, b: 0.7137255, a: 1}
+    - _ColorTo10: {r: 0.9333334, g: 0, b: 0, a: 0}
+    - _ColorTo11: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo12: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo13: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo14: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo15: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo16: {r: 0, g: 0, b: 0, a: 0}
+    - _ColorTo2: {r: 0.427451, g: 0.57254905, b: 1, a: 1}
+    - _ColorTo3: {r: 0.57254905, g: 0.7137255, b: 1, a: 1}
+    - _ColorTo4: {r: 0.7137255, g: 0.8588236, b: 1, a: 1}
+    - _ColorTo5: {r: 0.26666668, g: 0.26666668, b: 0, a: 1}
+    - _ColorTo6: {r: 0.53333336, g: 0, b: 0, a: 1}
+    - _ColorTo7: {r: 0.9333334, g: 0, b: 0, a: 1}
+    - _ColorTo8: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorTo9: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}

@@ -37,12 +37,12 @@ namespace SonicRealms.Level.Platforms.Movers.Editor
         {
             Handles.color = Color.gray;
             Handles.DrawLine(_instance.Pivot,
-                _instance.Pivot + DMath.UnitVector(_instance.MidAngle * Mathf.Deg2Rad) * _instance.Radius);
+                _instance.Pivot + SrMath.UnitVector(_instance.MidAngle * Mathf.Deg2Rad) * _instance.Radius);
 
             Handles.color = Color.white;
             Handles.DrawWireArc(_instance.Pivot,
                 _instance.transform.forward,
-                DMath.UnitVector((_instance.MidAngle - _instance.Range/2.0f)*Mathf.Deg2Rad),
+                SrMath.UnitVector((_instance.MidAngle - _instance.Range/2.0f)*Mathf.Deg2Rad),
                 _instance.Range,
                 _instance.Radius);
         }

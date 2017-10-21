@@ -383,8 +383,8 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public Vector2 RelativeVelocity
         {
-            get { return DMath.RotateBy(Velocity, (DefaultGravityDirection - GravityDirection) * Mathf.Deg2Rad); }
-            set { Velocity = DMath.RotateBy(value, (GravityDirection - DefaultGravityDirection) * Mathf.Deg2Rad); }
+            get { return SrMath.RotateBy(Velocity, (DefaultGravityDirection - GravityDirection) * Mathf.Deg2Rad); }
+            set { Velocity = SrMath.RotateBy(value, (GravityDirection - DefaultGravityDirection) * Mathf.Deg2Rad); }
         }
 
         /// <summary>
@@ -401,8 +401,8 @@ namespace SonicRealms.Core.Actors
         /// </summary>
         public Vector2 GravityDownVector
         {
-            get { return DMath.UnitVector(GravityDirection * Mathf.Deg2Rad); }
-            set { GravityDirection = DMath.Modp(DMath.Angle(value) * Mathf.Rad2Deg, 360.0f); }
+            get { return SrMath.UnitVector(GravityDirection * Mathf.Deg2Rad); }
+            set { GravityDirection = SrMath.Modp(SrMath.Angle(value) * Mathf.Rad2Deg, 360.0f); }
         }
 
         /// <summary>
@@ -576,7 +576,7 @@ namespace SonicRealms.Core.Actors
         public float SurfaceAngle
         {
             get { return _surfaceAngle; }
-            set { _surfaceAngle = DMath.PositiveAngle_d(value); }
+            set { _surfaceAngle = SrMath.PositiveAngle_d(value); }
         }
 
         [SerializeField]
@@ -935,7 +935,7 @@ namespace SonicRealms.Core.Actors
                     transform.position += new Vector3(Vx * timestep, Vy * timestep);
                     UpdateGroundVelocity();
                 }
-                else if (DMath.Equalsf(vt))
+                else if (SrMath.Equalsf(vt))
                 {
                     HandleCollisions();
                     UpdateGroundVelocity();
@@ -973,7 +973,7 @@ namespace SonicRealms.Core.Actors
                         UpdateGroundVelocity();
 
                         // Leave early if we've hit the hard limit, come to a complete stop, or gotten interrupted
-                        if (++steps > CollisionStepLimit || DMath.Equalsf(Velocity.magnitude) || Interrupted)
+                        if (++steps > CollisionStepLimit || SrMath.Equalsf(Velocity.magnitude) || Interrupted)
                             break;
 
                         // If the player's speed changes while we're doing this (ex: the player hits a spring),
@@ -1011,7 +1011,7 @@ namespace SonicRealms.Core.Actors
 
                 // Slope gravity
                 if (!DisableSlopeGravity &&
-                    !DMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
+                    !SrMath.AngleInRange_d(RelativeSurfaceAngle, -SlopeGravityBeginAngle, SlopeGravityBeginAngle))
                 {
                     var previous = GroundVelocity;
                     GroundVelocity -= SlopeGravity*Mathf.Sin(RelativeSurfaceAngle*Mathf.Deg2Rad)*timestep;
@@ -1029,7 +1029,7 @@ namespace SonicRealms.Core.Actors
 
                 // Detachment if we're running on a wall and speed is too low
                 if (!DisableWallDetach && Mathf.Abs(GroundVelocity) < DetachSpeed &&
-                    DMath.AngleInRange_d(RelativeSurfaceAngle, 89.9f, 270.1f)
+                    SrMath.AngleInRange_d(RelativeSurfaceAngle, 89.9f, 270.1f)
                     )
                 {
                     var result = Detach();
@@ -1047,7 +1047,7 @@ namespace SonicRealms.Core.Actors
             {
                 // Air gravity
                 if (!DisableAirGravity)
-                    Velocity += DMath.UnitVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
+                    Velocity += SrMath.UnitVector(GravityDirection*Mathf.Deg2Rad)*AirGravity*timestep;
 
                 // Air drag
                 if (!DisableAirDrag &&
@@ -1127,7 +1127,7 @@ namespace SonicRealms.Core.Actors
             if (solver == null)
                 return false;
 
-            var translation = DMath.UnitVector(SurfaceAngle*Mathf.Deg2Rad)*GroundVelocity*timestep;
+            var translation = SrMath.UnitVector(SurfaceAngle*Mathf.Deg2Rad)*GroundVelocity*timestep;
             mediator.Reset(translation);
 
             solver.Solve(mediator);
@@ -1356,7 +1356,7 @@ namespace SonicRealms.Core.Actors
 
             if (leftCheck && rightCheck)
             {
-                if (DMath.HeightDifference(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
+                if (SrMath.HeightDifference(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) >= 0f)
                 {
                     firstCheck = leftCheck;
                     firstSensor = SensorType.TopLeft;
@@ -1451,7 +1451,7 @@ namespace SonicRealms.Core.Actors
 
             if (leftCheck && rightCheck)
             {
-                if (DMath.HeightDifference(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) <= 0)
+                if (SrMath.HeightDifference(leftCheck.Raycast.point, rightCheck.Raycast.point, GravityDirection * Mathf.Deg2Rad) <= 0)
                 {
                     firstCheck = leftCheck;
                     firstSensor = SensorType.BottomLeft;
@@ -1544,7 +1544,7 @@ namespace SonicRealms.Core.Actors
                 transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle*Mathf.Rad2Deg);
-                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+                var diff = Mathf.Abs(SrMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
 
                 if (diff < MaxClimbAngle)
                 {
@@ -1579,7 +1579,7 @@ namespace SonicRealms.Core.Actors
                 transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
-                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+                var diff = Mathf.Abs(SrMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
 
                 if (diff < MaxClimbAngle)
                 {
@@ -1667,11 +1667,11 @@ namespace SonicRealms.Core.Actors
             var rightAngle = right ? right.SurfaceAngle * Mathf.Rad2Deg : 0.0f;
 
             // Get the difference between the two surfaces
-            var diff = DMath.ShortestArc_d(leftAngle, rightAngle);
+            var diff = SrMath.ShortestArc_d(leftAngle, rightAngle);
 
             // Get the differences between the two surfaces and the angle of the last surface
-            var leftDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, leftAngle));
-            var rightDiff = Mathf.Abs(DMath.ShortestArc_d(SurfaceAngle, rightAngle));
+            var leftDiff = Mathf.Abs(SrMath.ShortestArc_d(SurfaceAngle, leftAngle));
+            var rightDiff = Mathf.Abs(SrMath.ShortestArc_d(SurfaceAngle, rightAngle));
 
             // Get easy checks out of the way
 
@@ -1707,7 +1707,7 @@ namespace SonicRealms.Core.Actors
             const float FlatSurfaceTolerance = 0.01f;
 
             // Choose the sensor to use based on which one found the "higher" floor (based on the wall mode)
-            if (DMath.HeightDifference(left.Raycast.point, right.Raycast.point, AbsoluteAngle(WallMode.ToNormal())*Mathf.Deg2Rad) >= 0f)
+            if (SrMath.HeightDifference(left.Raycast.point, right.Raycast.point, AbsoluteAngle(WallMode.ToNormal())*Mathf.Deg2Rad) >= 0f)
             {
                 goto orientLeftRight;
             }
@@ -1831,7 +1831,7 @@ namespace SonicRealms.Core.Actors
                 transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(leftCheck.SurfaceAngle * Mathf.Rad2Deg);
-                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+                var diff = Mathf.Abs(SrMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
 
                 if (diff < MaxClimbAngle)
                 {
@@ -1866,7 +1866,7 @@ namespace SonicRealms.Core.Actors
                 transform.position += push + push.normalized * 0.0002f;
 
                 var fixedAngle = RelativeAngle(rightCheck.SurfaceAngle * Mathf.Rad2Deg);
-                var diff = Mathf.Abs(DMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
+                var diff = Mathf.Abs(SrMath.ShortestArc_d(fixedAngle, RelativeSurfaceAngle));
 
                 if (diff < MaxClimbAngle)
                 {
@@ -1909,8 +1909,8 @@ namespace SonicRealms.Core.Actors
                     DebugUtility.DrawCircle(PrimarySurfaceHit.Raycast.point, 0.03f);
 
                     Debug.DrawLine(
-                        PrimarySurfaceHit.Raycast.point - DMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f,
-                        PrimarySurfaceHit.Raycast.point + DMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f);
+                        PrimarySurfaceHit.Raycast.point - SrMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f,
+                        PrimarySurfaceHit.Raycast.point + SrMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f);
                 }
 
                 if (SecondarySurfaceHit)
@@ -2044,9 +2044,9 @@ namespace SonicRealms.Core.Actors
             if (!Grounded)
                 return 0.0f;
 
-            GroundVelocity = DMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
+            GroundVelocity = SrMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
 
-            var v = DMath.UnitVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
+            var v = SrMath.UnitVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
             Vx = v.x;
             Vy = v.y;
 
@@ -2067,9 +2067,9 @@ namespace SonicRealms.Core.Actors
             if (!Grounded)
                 return 0.0f;
 
-            GroundVelocity += DMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
+            GroundVelocity += SrMath.ScalarProjectionAbs(velocity, SurfaceAngle * Mathf.Deg2Rad);
 
-            var v = DMath.UnitVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
+            var v = SrMath.UnitVector(SurfaceAngle * Mathf.Deg2Rad) * GroundVelocity;
             Vx = v.x;
             Vy = v.y;
 
@@ -2175,7 +2175,7 @@ namespace SonicRealms.Core.Actors
             var wasGrounded = Grounded;
 
             // Set the appropriate physics variables
-            var angleDegrees = DMath.PositiveAngle_d(angleRadians*Mathf.Rad2Deg);
+            var angleDegrees = SrMath.PositiveAngle_d(angleRadians*Mathf.Rad2Deg);
             GroundVelocity = groundSpeed;
             SurfaceAngle = angleDegrees;
             JustAttached = true;
@@ -2214,14 +2214,14 @@ namespace SonicRealms.Core.Actors
         {
             if (hit == null || hit.Raycast.fraction == 0) return default(ImpactResult);
 
-            var surfaceDegrees = DMath.PositiveAngle_d(hit.SurfaceAngle * Mathf.Rad2Deg);
+            var surfaceDegrees = SrMath.PositiveAngle_d(hit.SurfaceAngle * Mathf.Rad2Deg);
 
             // The player can't land on (static) platforms if he's traveling 90 degrees within their normal
-            var playerAngle = DMath.Angle(Velocity)*Mathf.Rad2Deg;
+            var playerAngle = SrMath.Angle(Velocity)*Mathf.Rad2Deg;
 
             const float normalTolerance = 90f;
 
-            if (!DMath.AngleInRange_d(playerAngle + 180f, 
+            if (!SrMath.AngleInRange_d(playerAngle + 180f, 
                 surfaceDegrees + 90f - normalTolerance, surfaceDegrees + 90f + normalTolerance))
                 return default(ImpactResult);
 
@@ -2344,7 +2344,7 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public float RelativeAngle(float absoluteAngle)
         {
-            return DMath.PositiveAngle_d(absoluteAngle - GravityDirection + 270.0f);
+            return SrMath.PositiveAngle_d(absoluteAngle - GravityDirection + 270.0f);
         }
 
         /// <summary>
@@ -2357,7 +2357,7 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public static float RelativeAngle(float absoluteAngle, float gravityDirection)
         {
-            return DMath.PositiveAngle_d(absoluteAngle - gravityDirection + 270.0f);
+            return SrMath.PositiveAngle_d(absoluteAngle - gravityDirection + 270.0f);
         }
 
         /// <summary>
@@ -2369,7 +2369,7 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public float AbsoluteAngle(float relativeAngle)
         {
-            return DMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
+            return SrMath.PositiveAngle_d(relativeAngle + GravityDirection - 270.0f);
         }
 
         /// <summary>
@@ -2382,7 +2382,7 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public static float AbsoluteAngle(float relativeAngle, float gravityDirection)
         {
-            return DMath.PositiveAngle_d(relativeAngle + gravityDirection - 270.0f);
+            return SrMath.PositiveAngle_d(relativeAngle + gravityDirection - 270.0f);
         }
         #endregion
 
@@ -2561,7 +2561,14 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public T GetReactive<T>() where T : BaseReactive
         {
-            return Reactives.FirstOrDefault(reactive => reactive is T) as T;
+            for (var i = 0; i < Reactives.Count; ++i)
+            {
+                var reactive = Reactives[i] as T;
+                if (reactive != null)
+                    return reactive;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -2571,7 +2578,13 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public bool IsInteractingWith<T>() where T : BaseReactive
         {
-            return Reactives.Any(reactive => reactive is T);
+            for (var i = 0; i < Reactives.Count; ++i)
+            {
+                if (Reactives[i] is T)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -2591,7 +2604,13 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public bool IsInside<T>() where T : ReactiveArea
         {
-            return Reactives.Any(reactive => reactive is T);
+            for (var i = 0; i < Reactives.Count; ++i)
+            {
+                if (Reactives[i] is T)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -2611,18 +2630,20 @@ namespace SonicRealms.Core.Actors
         /// <returns></returns>
         public bool IsStandingOn<T>() where T : ReactivePlatform
         {
-            return Reactives.Any(reactive =>
+            
+            for (var i = 0; i < Reactives.Count; ++i)
             {
-                var platform = reactive as T;
-
-                if (platform == null)
-                    return false;
+                var platform = Reactives[i] as T;
+                if (!platform)
+                    continue;
 
                 if (!platform.PlatformTrigger.HasControllerOnSurface(this))
-                    return false;
+                    continue;
 
                 return true;
-            });
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -2657,6 +2678,7 @@ namespace SonicRealms.Core.Actors
         {
             return IsStandingOn(platform.transform) || platform.PlatformTrigger.HasControllerOnSurface(this);
         }
+
         #endregion
     }
 }

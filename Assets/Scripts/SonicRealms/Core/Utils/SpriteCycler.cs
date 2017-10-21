@@ -61,7 +61,7 @@ namespace SonicRealms.Core.Utils
 
         public virtual void SetSprite(int index)
         {
-            SpriteRenderer.sprite = Sprites[CurrentIndex = DMath.Modp(index, SpriteCount)];
+            SpriteRenderer.sprite = Sprites[CurrentIndex = SrMath.Modp(index, SpriteCount)];
         }
 
         public virtual void SetSprite(float time)

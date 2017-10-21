@@ -10,7 +10,6 @@ namespace SonicRealms.Core.Triggers
     /// Hook up to these events to react when a controller enters the area.
     /// </summary>
     [DisallowMultipleComponent]
-    [AddComponentMenu("Hedgehog/Triggers/Area Trigger")]
     public class AreaTrigger : BaseTrigger
     {
         /// <summary>
