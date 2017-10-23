@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -423,7 +424,7 @@ namespace SonicRealms.Core.Actors
         protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue)
         {
             if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
+                PropertyChanged(this, new SrPropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
         }
     }
 }

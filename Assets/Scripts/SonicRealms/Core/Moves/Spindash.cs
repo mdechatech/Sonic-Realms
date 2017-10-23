@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -133,7 +134,7 @@ namespace SonicRealms.Core.Moves
 
             if (ChargeSound == null) return;
 
-            ChargeAudioSource = SoundManager.CreateSoundEffectSource();
+            ChargeAudioSource = SrSoundManager.CreateSoundEffectSource();
             ChargeAudioSource.name = "Charge Audio Source";
             ChargeAudioSource.clip = ChargeSound;
 

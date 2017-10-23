@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -11,10 +12,10 @@ namespace SonicRealms.Core.Moves
         public HedgehogController Controller;
         public MoveManager MoveManager;
         
-        [Foldout("Events")] public PowerupEvent OnAdd;
-        [Foldout("Events")] public PowerupEvent OnRemove;
+        [SrFoldout("Events")] public PowerupEvent OnAdd;
+        [SrFoldout("Events")] public PowerupEvent OnRemove;
 
-        [Foldout("Debug")] public List<Powerup> Powerups;
+        [SrFoldout("Debug")] public List<Powerup> Powerups;
 
         public void Reset()
         {

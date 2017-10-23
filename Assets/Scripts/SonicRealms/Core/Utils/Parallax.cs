@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿
+using SonicRealms.Core.Internal;
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -104,8 +106,9 @@ namespace SonicRealms.Core.Utils
 
         protected float GetRatio(float factor)
         {
-            if (factor == 0f) return 0f;
-            return -((1f - factor)/factor)-1f;
+            return factor == 0
+                ? 0
+                : -((1 - factor) / factor) - 1;
         }
     }
 }

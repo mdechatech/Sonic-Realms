@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level.Areas;
@@ -1906,7 +1907,7 @@ namespace SonicRealms.Core.Actors
                 {
                     Debug.DrawLine(PrimarySurfaceHit.Start, PrimarySurfaceHit.Raycast.point);
                     Debug.DrawLine(PrimarySurfaceHit.Raycast.point, PrimarySurfaceHit.End, Color.gray);
-                    DebugUtility.DrawCircle(PrimarySurfaceHit.Raycast.point, 0.03f);
+                    SrDebugUtility.DrawCircle(PrimarySurfaceHit.Raycast.point, 0.03f);
 
                     Debug.DrawLine(
                         PrimarySurfaceHit.Raycast.point - SrMath.RotateBy(Vector2.right, SurfaceAngle*Mathf.Deg2Rad)*0.1f,
@@ -1925,7 +1926,7 @@ namespace SonicRealms.Core.Actors
                         Debug.DrawLine(SecondarySurfaceHit.Start, SecondarySurfaceHit.End, Color.gray);
                     }
 
-                    DebugUtility.DrawCircle(SecondarySurfaceHit.Raycast.point, 0.03f,
+                    SrDebugUtility.DrawCircle(SecondarySurfaceHit.Raycast.point, 0.03f,
                         SecondarySurface ? Color.white : Color.gray);
                 }
                 else

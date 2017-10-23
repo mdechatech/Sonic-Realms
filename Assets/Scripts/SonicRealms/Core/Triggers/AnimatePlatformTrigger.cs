@@ -1,4 +1,5 @@
 ﻿using System;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -10,13 +11,13 @@ namespace SonicRealms.Core.Triggers
     public class AnimatePlatformTrigger : ReactivePlatform
     {
         #region Animation
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger to set when a player collides with the platform.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when a player collides with the platform.")]
         public string CollidingTrigger;
         protected int CollidingTriggerHash;
@@ -24,7 +25,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool to set to true while a player is colliding with the platform.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool to set to true while a player is colliding with the platform.")]
         public string CollidingBool;
         protected int CollidingBoolHash;
@@ -32,7 +33,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator trigger to set when a player stands on the platform.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when a player stands on the platform.")]
         public string SurfaceTrigger;
         protected int SurfaceTriggerHash;
@@ -40,7 +41,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool to set to true while a player is on the platform.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool to set to true while a player is on the platform.")]
         public string SurfaceBool;
         protected int SurfaceBoolHash;
@@ -49,7 +50,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator trigger on the player to set when it collides with the platform.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on the player to set when it collides with the platform.")]
         public string PlayerCollidingTrigger;
         protected int PlayerCollidingTriggerHash;
@@ -57,7 +58,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool on the player to set to true while it's colliding with the platform.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator bool on the player to set to true while it's colliding with the platform.")]
         public string PlayerCollidingBool;
         protected int PlayerCollidingBoolHash;
@@ -65,7 +66,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator trigger on the player to set when it stands on the platform.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on the player to set when it stands on the platform.")]
         public string PlayerSurfaceTrigger;
         protected int PlayerSurfaceTriggerHash;
@@ -73,7 +74,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool on the player to set to true while it's on the platform.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator bool on the player to set to true while it's on the platform.")]
         public string PlayerSurfaceBool;
         protected int PlayerSurfaceBoolHash;

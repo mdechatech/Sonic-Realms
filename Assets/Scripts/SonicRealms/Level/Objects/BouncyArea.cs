@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -197,98 +198,98 @@ namespace SonicRealms.Level.Objects
         #region Inspector & Private Fields
 
         [SerializeField]
-        [Foldout("Bouncing")]
-        [MinMaxSlider(0, 360)]
+        [SrFoldout("Bouncing")]
+        [SrMinMaxSlider(0, 360)]
         [Tooltip("Range of bounce angles for which the area is bouncy.")]
         private Vector2 _bouncyAngles;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("How the a player's bounce angle is determined.")]
         private BouncyAreaBounceAngleBehavior _bounceAngleBehavior;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("Whether the bouncy angles change with the object's current rotation.")]
         private bool _relativeToRotation;
 
         [Space]
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("Velocity at which the player bounces off the platform in units per second.")]
         private float _velocity;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("What the area should do to the player's velocity when it bounces.")]
         private BouncyAreaVelocityEffect _velocityEffect;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("How many times the same player can bounce off the area each second.")]
         private float _maxBouncesPerPlayerPerSecond;
 
         [Space]
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("If checked, allows modification of outbound bounce angles based on inbound bounce angles.")]
         private bool _remapBounceAngles;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [ContextMenuItem("Reset", "ResetRemapBounceAnglesCurve")]
-        [CurveOptions(0x00ffffff, 0, 0, 360, 360)]
+        [SrCurveOptions(0x00ffffff, 0, 0, 360, 360)]
         [Tooltip("Maps the x-axis to inbound bounce angle (0-360 degree value) and the y-axis to the outbound " +
                  "bounce angle (0-360 degree value).")]
         private AnimationCurve _remapBounceAnglesCurve;
 
         [Space]
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("If checked, allows modification of bounce speed based on inbound bounce angle (not affected by " +
                  "remapped bounce angles).")]
         private bool _mapBounceAngleToVelocity;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [ContextMenuItem("Reset", "ResetBounceAngleToVelocityCurve")]
-        [CurveOptions(0x00ffffff, 0, -2, 360, 2)]
+        [SrCurveOptions(0x00ffffff, 0, -2, 360, 2)]
         [Tooltip("Maps the x-axis to inbound bounce angle (0-360 degree value) and the y-axis to velocity " +
                  "multiplier (any value).")]
         private AnimationCurve _bounceAngleToVelocityCurve;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("If nonzero, what the player's horizontal control lock timer is set to in seconds when it bounces.")]
         private float _controlLockTime;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("Whether to detach the player from the ground when it bounces off the area.")]
         private bool _detachPlayer;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("Whether to end the player's rolling when it bounces off the area, like a vertical spring would.")]
         private bool _endRoll;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("Whether to snap the player out of being hurt, restoring player control.")]
         private bool _endHurtRebound;
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         private Animator _animator;
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when a player bounces off the area.")]
         private string _bounceTrigger;
         private int _bounceTriggerHash;
 
         [SerializeField]
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on the player to set when it bounces off the area.")]
         private string _playerBounceTrigger;
         private int _playerBounceTriggerHash;
@@ -534,7 +535,7 @@ namespace SonicRealms.Level.Objects
                     Animator.SetTrigger(BounceTriggerHash);
             }
 
-            RealmsAnimatorUtility.SilentSet(player, SetPlayerOnPreCollideParameters);
+            SrAnimatorUtility.SilentSet(player, SetPlayerOnPreCollideParameters);
 
             BlinkEffectTrigger(player);
 

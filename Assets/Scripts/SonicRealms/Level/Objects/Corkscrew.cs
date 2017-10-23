@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -114,17 +115,17 @@ namespace SonicRealms.Level.Objects
         #region Triggers
 
         [SerializeField]
-        [Foldout("Triggers")]
+        [SrFoldout("Triggers")]
         [Tooltip("Whether to auto-position the triggers below based on the dimensions of the corkscrew.")]
         private bool _autoPositionTriggers;
 
         [SerializeField]
-        [Foldout("Triggers")]
+        [SrFoldout("Triggers")]
         [Tooltip("Where the player would enter the corkscrew if it were moving forward.")]
         private AreaTrigger _entrance;
 
         [SerializeField]
-        [Foldout("Triggers")]
+        [SrFoldout("Triggers")]
         [Tooltip("Where the player would exit the corkscrew if it were moving forward.")]
         private AreaTrigger _exit;
 
@@ -134,25 +135,25 @@ namespace SonicRealms.Level.Objects
 
         [SerializeField]
         [Range(0.01f, 20)]
-        [Foldout("Waveform")]
+        [SrFoldout("Waveform")]
         [Tooltip("Length of the corkscrew in units.")]
         private float _length;
 
         [SerializeField]
         [Range(0.5f, 20)]
-        [Foldout("Waveform")]
+        [SrFoldout("Waveform")]
         [Tooltip("Length of one segment of the corkscrew in units.")]
         private float _period;
 
         [SerializeField]
         [Range(0, 1)]
-        [Foldout("Waveform")]
+        [SrFoldout("Waveform")]
         [Tooltip("Horizontal offset of the wave as a 0-1 value normalized from wavelength.")]
         private float _phaseShift;
 
         [SerializeField]
         [Range(0, 20)]
-        [Foldout("Waveform")]
+        [SrFoldout("Waveform")]
         [Tooltip("Height of the corkscrew measured from its midpoint in units.")]
         private float _amplitude;
 
@@ -162,23 +163,23 @@ namespace SonicRealms.Level.Objects
 
         [SerializeField]
         [Range(0.1f, 20)]
-        [Foldout("Surface")]
+        [SrFoldout("Surface")]
         [Tooltip("Minimum ground speed for the player to stay on the corkscrew.")]
         private float _minSpeed;
 
         [SerializeField]
-        [Foldout("Surface")]
+        [SrFoldout("Surface")]
         [Tooltip("If checked, a player on the corkscrew will always have the same surface angle like in Sonic 2.")]
         private bool _useConstantSurfaceAngle;
 
         [SerializeField]
         [Range(-180, 180)]
-        [Foldout("Surface")]
+        [SrFoldout("Surface")]
         [Tooltip("Surface angle of the entire corkscrew in degrees.")]
         private float _surfaceAngle;
 
         [SerializeField]
-        [Foldout("Surface")]
+        [SrFoldout("Surface")]
         [Tooltip("Whether the surface angle of the corkscrew is relative to the object's rotation.")]
         private bool _relativeToRotation;
 
@@ -187,20 +188,20 @@ namespace SonicRealms.Level.Objects
         #region Animation
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool on the player to set to whether it is on the corkscrew.")]
         private string _onCorkscrewBool;
         private int _onCorkscrewBoolHash;
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator float on the player to set to a 0-1 value showing player progress " +
                  "through the corkscrew.")]
         private string _corkscrewProgressFloat;
         private int _corkscrewProgressFloatHash;
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator float on the player to set to a 0-1 value showing player progress " +
                  "on a single period of the corkscrew. If the corkscrew is standard length, this is the " +
                  "same as Corkscrew Progress Float.")]
@@ -303,7 +304,7 @@ namespace SonicRealms.Level.Objects
         {
             foreach (var passenger in _passengers)
             {
-                RealmsAnimatorUtility.SilentSet(passenger.Key, passenger.Value, AnimatePassengerStay);
+                SrAnimatorUtility.SilentSet(passenger.Key, passenger.Value, AnimatePassengerStay);
             }
         }
 
@@ -430,7 +431,7 @@ namespace SonicRealms.Level.Objects
 
             _passengers[controller] = info;
 
-            RealmsAnimatorUtility.SilentSet(controller, info, AnimatePassengerEnter);
+            SrAnimatorUtility.SilentSet(controller, info, AnimatePassengerEnter);
         }
         
         private bool RemovePassenger(HedgehogController controller)
@@ -449,7 +450,7 @@ namespace SonicRealms.Level.Objects
 
             _passengers.Remove(controller);
 
-            RealmsAnimatorUtility.SilentSet(controller, info, AnimatePassengerExit);
+            SrAnimatorUtility.SilentSet(controller, info, AnimatePassengerExit);
 
             return true;
         }

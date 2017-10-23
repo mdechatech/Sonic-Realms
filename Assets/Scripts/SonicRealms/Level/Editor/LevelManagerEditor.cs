@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace SonicRealms.Level.Editor
 {
-    [CustomEditor(typeof(LevelManager), true)]
+    [CustomEditor(typeof(SrLegacyLevelManager), true)]
     public class LevelManagerEditor : BaseRealmsEditor
     {
     }

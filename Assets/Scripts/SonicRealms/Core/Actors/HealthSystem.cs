@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Actors
@@ -33,23 +34,23 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Invoked when hurt.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public HealthEvent OnHurt;
 
         /// <summary>
         /// Invoked when killed.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public HealthEvent OnDeath;
         #endregion
         #region Animation
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when hurt.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when hurt.")]
         public string HurtTrigger;
         protected int HurtTriggerHash;
@@ -57,7 +58,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Name of an Animator float, when hurt, set to the damage taken. HurtDamageFloat is set before HurtTrigger.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator float, when hurt, set to the damage taken. HurtDamageFloat is set before HurtTrigger.")]
         public string HurtDamageFloat;
         protected int HurtDamageFloatHash;
@@ -65,13 +66,13 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Name of an Animator trigger set when killed.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when killed.")]
         public string DeathTrigger;
         protected int DeathTriggerHash;
         #endregion
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public bool IsDead;
 
         public virtual void Reset()

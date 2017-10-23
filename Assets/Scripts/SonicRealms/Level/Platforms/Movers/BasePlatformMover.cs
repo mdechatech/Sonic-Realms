@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Triggers;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,7 +27,7 @@ namespace SonicRealms.Level.Platforms.Movers
         /// A plot of the platform's position vs. the current time normalized to a 1x1 graph.
         /// </summary>
         [SerializeField, Tooltip("Position vs. Time normalized to 1x1 graph.")]
-        [CurveOptions(0, 0, 1, 1)]
+        [SrCurveOptions(0, 0, 1, 1)]
         public AnimationCurve EasingCurve;
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using UnityEngine;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -18,25 +19,25 @@ namespace SonicRealms.Level.Objects
         [SerializeField]
         private string _id;
 
-        [SerializeField, Foldout("Animation")]
+        [SerializeField, SrFoldout("Animation")]
         private Animator _animator;
 
-        [SerializeField, Foldout("Animation")]
+        [SerializeField, SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when the checkpoint is activated.")]
         private string _activatedTrigger;
 
         private int _activatedTriggerHash;
 
-        [SerializeField, Foldout("Animation")]
+        [SerializeField, SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when the checkpoint is pre-activated. " +
                  "This might happen when a player resumes a game at a checkpoint.")]
         private string _preActivatedTrigger;
         private int _preActivatedTriggerHash;
 
-        [SerializeField, Foldout("Events")]
+        [SerializeField, SrFoldout("Events")]
         private CheckpointEvent _onCheckpointActivate;
 
-        [SerializeField, Foldout("Events")]
+        [SerializeField, SrFoldout("Events")]
         private CheckpointEvent _onCheckpointPreActivate;
 
         private bool _isCheckpointActive;

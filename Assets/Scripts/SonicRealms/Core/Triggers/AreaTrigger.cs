@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -15,25 +16,25 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Invoked when a controller enters the area.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public AreaTriggerEvent OnAreaEnter;
 
         /// <summary>
         /// Invoked when a controller stays in the area.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public AreaTriggerEvent OnAreaStay;
 
         /// <summary>
         /// Invoked when a controller exits the area.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public AreaTriggerEvent OnAreaExit;
 
         /// <summary>
         /// A list of controllers currently in the area trigger.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("A list of controllers currently in the area trigger.")]
         public List<HedgehogController> ControllersInArea;
 

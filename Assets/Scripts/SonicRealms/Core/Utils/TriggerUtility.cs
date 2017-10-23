@@ -38,7 +38,8 @@ namespace SonicRealms.Core.Utils
             while (check != null)
             {
                 var trigger = check.GetComponent<TTrigger>();
-                if (trigger.TriggerFromChildren) results.Add(trigger);
+                if (trigger.TriggerFromChildren)
+                    results.Add(trigger);
 
                 check = check.parent;
             }

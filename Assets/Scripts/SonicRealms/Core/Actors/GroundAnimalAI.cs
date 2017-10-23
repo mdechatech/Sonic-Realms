@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Triggers;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -15,38 +16,38 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether the controller is facing forward.
         /// </summary>
-        [Foldout("Physics")]
+        [SrFoldout("Physics")]
         [Tooltip("Whether the controller is facing forward.")]
         public bool FacingRight;
 
         /// <summary>
         /// Initial speed, in units per second. Usually straight vertical.
         /// </summary>
-        [Foldout("Physics")]
+        [SrFoldout("Physics")]
         [Tooltip("Initial speed, in units per second. Usually straight vertical.")]
         public Vector2 InitialSpeed;
 
         /// <summary>
         /// Run speed, in units per second.
         /// </summary>
-        [Foldout("Physics")]
+        [SrFoldout("Physics")]
         [Tooltip("Run speed, in units per second.")]
         public float RunSpeed;
 
         /// <summary>
         /// Jump speed, in units per second.
         /// </summary>
-        [Foldout("Physics")]
+        [SrFoldout("Physics")]
         [Tooltip("Jump speed, in units per second.")]
         public float JumpSpeed;
 
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when the controller hits the ground for the first time.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when the controller hits the ground for the first time.")]
         public string HitGroundTrigger;
         protected int HitGroundTriggerHash;

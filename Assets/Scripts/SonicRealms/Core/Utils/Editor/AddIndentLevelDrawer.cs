@@ -1,14 +1,15 @@
-﻿using UnityEditor;
+﻿using SonicRealms.Core.Internal;
+using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
-    [CustomPropertyDrawer(typeof(AddIndentLevelAttribute))]
+    [CustomPropertyDrawer(typeof(SrAddIndentLevelAttribute))]
     public class AddIndentLevelDrawer : DecoratorDrawer
     {
         public override void OnGUI(Rect position)
         {
-            var attr = (AddIndentLevelAttribute) attribute;
+            var attr = (SrAddIndentLevelAttribute) attribute;
             EditorGUI.indentLevel += attr.Amount;
         }
 

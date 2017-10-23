@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Actors
@@ -11,49 +12,49 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether the controller is facing right or left.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Whether the controller is facing right or left.")]
         public bool FacingRight;
 
         /// <summary>
         /// Walk speed, in units per second.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Walk speed, in units per second.")]
         public float Speed;
 
         /// <summary>
         /// Time it takes to turn around after hitting a turn signal.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Time it takes to turn around after hitting a turn signal.")]
         public float TurnTime;
 
         /// <summary>
         /// This collider will be used for checking against the turning signals.
         /// </summary>
-        [Foldout("Signals")]
+        [SrFoldout("Signals")]
         [Tooltip("This collider will be used for checking against the turning signals.")]
         public Collider2D SignalSearchArea;
 
         /// <summary>
         /// When a collider with this tag is hit, the AI will move left.
         /// </summary>
-        [Foldout("Signals"), Tag]
+        [SrFoldout("Signals"), SrTag]
         [Tooltip("When a collider with this tag is hit, the AI will move left.")]
         public string TurnLeftTag;
 
         /// <summary>
         /// When a collider with this tag is hit, the AI will move right.
         /// </summary>
-        [Foldout("Signals"), Tag]
+        [SrFoldout("Signals"), SrTag]
         [Tooltip("When a collider with this tag is hit, the AI will move right.")]
         public string TurnRightTag;
 
         /// <summary>
         /// Name of an Animator bool set to whether the motobug is facing right.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool set to whether the motobug is facing right.")]
         public string FacingRightBool;
         protected int FacingRightBoolHash;
@@ -61,7 +62,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Name of an Animator bool set to whether the motobug is turning.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool set to whether the motobug is turning.")]
         public string TurningBool;
         protected int TurningBoolHash;
@@ -69,7 +70,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// If turning, how much time until the turn completes.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("If turning, how much time until the turn completes.")]
         public float TurnTimer;
 
@@ -97,7 +98,7 @@ namespace SonicRealms.Core.Actors
 
         public void Start()
         {
-            SignalSearchArea.gameObject.AddComponent<TriggerCallback2D>().TriggerEnter2D.AddListener(OnTriggerEnter2D);
+            SignalSearchArea.gameObject.AddComponent<SrTriggerCallback2D>().TriggerEnter2D.AddListener(OnTriggerEnter2D);
             Controller.IsFacingForward = FacingRight;
 
             if (Controller.Animator == null) return;

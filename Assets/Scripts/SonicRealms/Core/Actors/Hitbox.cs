@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -56,14 +57,14 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// If not empty, the hitbox will only collide with objects of these tags.
         /// </summary>
-        [Foldout("Collision")]
+        [SrFoldout("Collision")]
         [Tooltip("If not empty, the hitbox will only collide with objects of these tags.")]
         public List<string> TriggerTags;
 
         /// <summary>
         /// The number of things a hitbox can hit every frame.
         /// </summary>
-        [Foldout("Collision")]
+        [SrFoldout("Collision")]
         [Tooltip("The number of things a hitbox can hit every frame.")]
         public int CollisionsPerFrame;
         protected int CollisionsThisFrame;
@@ -71,18 +72,18 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The hitbox can only register collisions this often, in seconds.
         /// </summary>
-        [Foldout("Collision")]
+        [SrFoldout("Collision")]
         [Tooltip("The hitbox can only register collisions this often, in seconds.")]
         public float TimeBetweenCollisions;
         protected float CollisionTimer;
 
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public HitboxEvent OnTriggerEnter;
 
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public HitboxEvent OnTriggerStay;
 
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public HitboxEvent OnTriggerExit;
 
         public virtual void Reset()

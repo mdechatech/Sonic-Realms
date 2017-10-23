@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Actors
@@ -12,35 +13,35 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Points at which to play the warning sound, in seconds of air remaining.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("Points at which to play the warning sound, in seconds of air remaining.")]
         public float[] WarningPoints;
 
         /// <summary>
         /// Warning sound to play when the breath meter is being depleted.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("Warning sound to play when the breath meter is being depleted.")]
         public AudioClip WarningSound;
 
         /// <summary>
         /// Once the player has this much air left, in seconds, the drowning BGM will play.
         /// </summary>
-        [Space, Foldout("Sound")]
+        [Space, SrFoldout("Sound")]
         [Tooltip("Once the player has this much air left, in seconds, the drowning BGM will play.")]
         public float DrowningPoint;
 
         /// <summary>
         /// The drowning music to play.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("The drowning music to play.")]
         public AudioClip DrowningBGM;
 
         /// <summary>
         /// The sound to play once drowned.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("The sound to play once drowned.")]
         public AudioClip DrownSound;
         #endregion
@@ -59,17 +60,17 @@ namespace SonicRealms.Core.Actors
 
             if (CanBreathe)
             {
-                if (DrowningBGM != null && SoundManager.PowerupMusicIs(DrowningBGM))
-                    SoundManager.StopPowerupMusic();
+                if (DrowningBGM != null && SrSoundManager.PowerupMusicIs(DrowningBGM))
+                    SrSoundManager.StopPowerupMusic();
             }
 
             if (_previousAir > DrowningPoint && RemainingAir < DrowningPoint)
             {
                 if (DrowningBGM)
                 {
-                    if (!SoundManager.PowerupMusicIs(DrowningBGM))
+                    if (!SrSoundManager.PowerupMusicIs(DrowningBGM))
                     {
-                        SoundManager.PlayPowerupMusic(DrowningBGM);
+                        SrSoundManager.PlayPowerupMusic(DrowningBGM);
                     }
                 }
             }
@@ -80,7 +81,7 @@ namespace SonicRealms.Core.Actors
                 {
                     // See if we passed a warning point and play the sound
                     if (_previousAir > warningPoint && RemainingAir < warningPoint)
-                        SoundManager.PlaySoundEffect(WarningSound);
+                        SrSoundManager.PlaySoundEffect(WarningSound);
                 }
             }
 
@@ -100,9 +101,9 @@ namespace SonicRealms.Core.Actors
 
             base.Drown();
 
-            if (DrowningBGM && SoundManager.PowerupMusicIs(DrowningBGM))
+            if (DrowningBGM && SrSoundManager.PowerupMusicIs(DrowningBGM))
             {
-                SoundManager.StopPowerupMusic();
+                SrSoundManager.StopPowerupMusic();
             }
         }
     }

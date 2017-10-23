@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level;
 using UnityEngine;
@@ -19,55 +20,55 @@ namespace SonicRealms.Core.Triggers
         /// Called right before a controller is going to collide with the platform. Listeners of this event
         /// may call IgnoreThisCollision() on the controller to prevent the collision from occurring.
         /// </summary>
-        [Foldout("Platform Events")]
+        [SrFoldout("Platform Events")]
         public PlatformTriggerPreCollisionEvent OnPreCollide;
 
         /// <summary>
         /// Called when a controller begins colliding with the platform.
         /// </summary>
-        [Foldout("Platform Events")]
+        [SrFoldout("Platform Events")]
         public PlatformTriggerCollisionEvent OnPlatformEnter;
 
         /// <summary>
         /// Called while a controller is colliding with the platform.
         /// </summary>
-        [Foldout("Platform Events")]
+        [SrFoldout("Platform Events")]
         public PlatformTriggerCollisionEvent OnPlatformStay;
 
         /// <summary>
         /// Called when a controller stops colliding with the platform.
         /// </summary>
-        [Foldout("Platform Events")]
+        [SrFoldout("Platform Events")]
         public PlatformTriggerCollisionEvent OnPlatformExit;
 
         /// <summary>
         /// Called when a controller lands on the surface of the platform.
         /// </summary>
-        [Foldout("Surface Events")]
+        [SrFoldout("Surface Events")]
         public PlatformTriggerSurfaceEvent OnSurfaceEnter;
 
         /// <summary>
         /// Called while a controller is on the surface of the platform.
         /// </summary>
-        [Foldout("Surface Events")]
+        [SrFoldout("Surface Events")]
         public PlatformTriggerSurfaceEvent OnSurfaceStay;
 
         /// <summary>
         /// Called when a controller exits the surface of the platform.
         /// </summary>
-        [Foldout("Surface Events")]
+        [SrFoldout("Surface Events")]
         public PlatformTriggerSurfaceEvent OnSurfaceExit;
         #endregion
         /// <summary>
         /// A list of controllers currently colliding with the platform.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public List<HedgehogController> ControllersOnPlatform;
 
         /// <summary>
         /// A list of controllers currently on the surface of the platform.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public List<HedgehogController> ControllersOnSurface;
 
         /// <summary>

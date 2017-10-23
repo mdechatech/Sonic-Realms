@@ -1,9 +1,10 @@
-﻿using UnityEditor;
+﻿using SonicRealms.Core.Internal;
+using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
-    [CustomPropertyDrawer(typeof (MinMaxSliderAttribute))]
+    [CustomPropertyDrawer(typeof (SrMinMaxSliderAttribute))]
     public class MinMaxSliderDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -11,7 +12,7 @@ namespace SonicRealms.Core.Utils.Editor
             if (property.propertyType != SerializedPropertyType.Vector2)
                 return;
 
-            var attr = (MinMaxSliderAttribute) attribute;
+            var attr = (SrMinMaxSliderAttribute) attribute;
 
             const float minMaxLabelWidth = 30;
             var minMaxWidth = EditorGUIUtility.fieldWidth + minMaxLabelWidth;

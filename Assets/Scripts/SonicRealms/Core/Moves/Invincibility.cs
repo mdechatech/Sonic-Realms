@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -19,14 +20,14 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// The player's health system.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("The player's health system.")]
         public HealthSystem Health;
 
         /// <summary>
         /// The player's non-attack hitboxes. Stored for the purpose of making them harmful.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("The player's non-attack hitboxes. Stored for the purpose of making them harmful.")]
         public SonicHitbox[] Hitboxes;
 

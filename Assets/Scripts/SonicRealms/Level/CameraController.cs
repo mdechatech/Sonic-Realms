@@ -1,4 +1,5 @@
 ﻿using System;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,25 +33,25 @@ namespace SonicRealms.Level
             }
         }
 
-        [Foldout("Follow")]
+        [SrFoldout("Follow")]
         public Vector2 FollowSpeed;
 
-        [Foldout("Follow")]
+        [SrFoldout("Follow")]
         public Transform FollowBoundsMin;
 
-        [Foldout("Follow")]
+        [SrFoldout("Follow")]
         public Transform FollowBoundsMax;
 
-        [Foldout("Focus")]
+        [SrFoldout("Focus")]
         public Vector2 FocusSpeed;
 
-        [Foldout("Bounds")]
+        [SrFoldout("Bounds")]
         public Transform LevelBoundsMin;
 
-        [Foldout("Bounds")]
+        [SrFoldout("Bounds")]
         public Transform LevelBoundsMax;
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public bool FollowTarget;
 
         public Vector2 BasePosition
@@ -84,34 +85,34 @@ namespace SonicRealms.Level
         }
 
         [SerializeField]
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         private Vector2 _basePosition;
 
         [SerializeField]
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         private Vector2 _panOffset;
 
         [SerializeField]
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         private Vector2 _extraOffset;
 
 
-        [Space, Foldout("Debug")]
+        [Space, SrFoldout("Debug")]
         public Vector2 PanStart;
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public Vector2 PanEnd;
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public float PanTimer;
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public float PanTime;
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public float PanDelayTimer;
 
-        [Space, Foldout("Debug")]
+        [Space, SrFoldout("Debug")]
         public float WaitTimer;
 
         /// <summary>

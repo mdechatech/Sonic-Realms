@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -40,12 +41,12 @@ namespace SonicRealms.Level.Objects
         [SerializeField]
         [Tooltip("The time it takes for the bridge to move to its desired state, in seconds, as well as a curve for easing " +
                  "the animation")]
-        private ScaledCurve _moveTime;
+        private SrScaledCurve _moveTime;
 
         [SerializeField]
         [Tooltip("The depression value that each segment can move to in units. This defines how much more the bridge will " +
                  "depress when a player is standing in the middle vs on an edge.")]
-        private ScaledCurve _maxDepression;
+        private SrScaledCurve _maxDepression;
 
         [SerializeField]
         [Tooltip("How much the depression of each segment falls off based on how far it is from the segment a player " +
@@ -111,7 +112,7 @@ namespace SonicRealms.Level.Objects
         /// The time it takes for the bridge to move to its desired state, in seconds, as well as a curve for easing
         /// the animation.
         /// </summary>
-        public ScaledCurve MoveTime
+        public SrScaledCurve MoveTime
         {
             get { return _moveTime; }
             set { _moveTime = value; }
@@ -121,7 +122,7 @@ namespace SonicRealms.Level.Objects
         /// The depression value that each segment can move to in units. This defines how much more the bridge will
         /// depress when a player is standing in the middle vs on an edge.
         /// </summary>
-        public ScaledCurve MaxDepression
+        public SrScaledCurve MaxDepression
         {
             get { return _maxDepression; }
             set
@@ -189,7 +190,7 @@ namespace SonicRealms.Level.Objects
             _segmentCount = 12;
 #endif
             
-            _moveTime = new ScaledCurve
+            _moveTime = new SrScaledCurve
             {
                 Scale = 0.5f,
 
@@ -199,7 +200,7 @@ namespace SonicRealms.Level.Objects
                     )
             };
 
-            _maxDepression = new ScaledCurve
+            _maxDepression = new SrScaledCurve
             {
                 Scale = 0.12f,
 
@@ -485,7 +486,7 @@ namespace SonicRealms.Level.Objects
                     StateChanged();
             }
 
-            public float[] GetDepressions(ScaledCurve maxDepressions, AnimationCurve distanceFalloff, bool useAbsoluteMidpoint)
+            public float[] GetDepressions(SrScaledCurve maxDepressions, AnimationCurve distanceFalloff, bool useAbsoluteMidpoint)
             {
                 var farLeftIndex = -1;
                 

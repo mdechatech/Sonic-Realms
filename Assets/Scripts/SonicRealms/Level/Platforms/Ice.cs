@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Moves;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -30,21 +31,21 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The bubble to spawn when drowned.
         /// </summary>
-        [Foldout("Drowned Bubbles")]
+        [SrFoldout("Drowned Bubbles")]
         [Tooltip("The bubble to spawn when drowned.")]
         public GameObject MediumBubble;
 
         /// <summary>
         /// How often to spawn bubbles while drowned.
         /// </summary>
-        [Foldout("Drowned Bubbles")]
+        [SrFoldout("Drowned Bubbles")]
         [Tooltip("How often to spawn bubbles while drowned.")]
         public float DrownedSpawnRate;
 
         /// <summary>
         /// How often to spawn medium bubbles while drowned.
         /// </summary>
-        [Foldout("Drowned Bubbles")]
+        [SrFoldout("Drowned Bubbles")]
         [Tooltip("How often to spawn medium bubbles while drowned.")]
         public float MediumBubbleSpawnRate;
 

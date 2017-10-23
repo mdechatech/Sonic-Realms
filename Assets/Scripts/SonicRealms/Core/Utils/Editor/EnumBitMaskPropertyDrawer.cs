@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using SonicRealms.Core.Internal;
+using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
@@ -49,12 +50,12 @@ namespace SonicRealms.Core.Utils.Editor
         }
     }
 
-    [CustomPropertyDrawer(typeof(BitMaskAttribute))]
+    [CustomPropertyDrawer(typeof(SrBitMaskAttribute))]
     public class EnumBitMaskPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
         {
-            var typeAttr = attribute as BitMaskAttribute;
+            var typeAttr = attribute as SrBitMaskAttribute;
             prop.intValue = EditorExtension.DrawBitMaskField(position, prop.intValue, typeAttr.propType, label);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -15,35 +16,35 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether the buzz bomber is facing right or left.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Whether the buzz bomber is facing right or left.")]
         public bool FacingRight;
 
         /// <summary>
         /// Movement speed, in units per second.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Movement speed, in units per second.")]
         public Vector2 MoveSpeed;
 
         /// <summary>
         /// Movement speed while shooting, in units per second.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Movement speed while shooting, in units per second.")]
         public Vector2 ShootMoveSpeed;
 
         /// <summary>
         /// Movement speed while turning, in units per second.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Movement speed while turning, in units per second.")]
         public Vector2 TurnMoveSpeed;
 
         /// <summary>
         /// Time it takes to turn around, in seconds.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("Time it takes to turn around, in seconds.")]
         public float TurnTime;
         #endregion
@@ -51,56 +52,56 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The buzz bomber shoots when a player enters this area.
         /// </summary>
-        [Foldout("Attack")]
+        [SrFoldout("Attack")]
         [Tooltip("The buzz bomber shoots when a player enters this area.")]
         public Collider2D PlayerSearchArea;
 
         /// <summary>
         /// When the field of view hits a collider with this tag, the buzz bomber will shoot.
         /// </summary>
-        [Foldout("Attack"), Tag]
+        [SrFoldout("Attack"), SrTag]
         [Tooltip("When the field of view hits a collider with this tag, the buzz bomber will shoot.")]
         public string PlayerTag;
 
         /// <summary>
         /// Time it takes to shoot, in seconds.
         /// </summary>
-        [Foldout("Attack"), Space]
+        [SrFoldout("Attack"), Space]
         [Tooltip("Time it takes to shoot, in seconds.")]
         public float ShotDuration;
 
         /// <summary>
         /// Time between shots, not including shot duration.
         /// </summary>
-        [Foldout("Attack")]
+        [SrFoldout("Attack")]
         [Tooltip("Time between shots, not including shot duration.")]
         public float TimeBetweenShots;
 
         /// <summary>
         /// The projectile to shoot.
         /// </summary>
-        [Foldout("Attack"), Space]
+        [SrFoldout("Attack"), Space]
         [Tooltip("The projectile to shoot.")]
         public GameObject Projectile;
 
         /// <summary>
         /// Where the projectile is shot.
         /// </summary>
-        [Foldout("Attack")]
+        [SrFoldout("Attack")]
         [Tooltip("Where the projectile is shot.")]
         public Transform ProjectilePosition;
 
         /// <summary>
         /// The speed the projectile is set to.
         /// </summary>
-        [Foldout("Attack")]
+        [SrFoldout("Attack")]
         [Tooltip("The speed the projectile is set to.")]
         public Vector2 ProjectileSpeed;
 
         /// <summary>
         /// Whether to flip the projectile's speed based on the direction the buzz bomber is facing.
         /// </summary>
-        [Foldout("Attack")]
+        [SrFoldout("Attack")]
         [Tooltip("Whether to flip the projectile's speed based on the direction the buzz bomber is firing.")]
         public bool FlipProjectileSpeed;
         #endregion
@@ -108,39 +109,39 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// This collider is used for picking up signals.
         /// </summary>
-        [Foldout("Signals")]
+        [SrFoldout("Signals")]
         [Tooltip("This collider is used for picking up signals.")]
         public Collider2D SignalSearchArea;
 
         /// <summary>
         /// When touching a collider with this tag, the buzz bomber will turn left.
         /// </summary>
-        [Foldout("Signals"), Tag]
+        [SrFoldout("Signals"), SrTag]
         [Tooltip("When touching a collider with this tag, the buzz bomber will turn left.")]
         public string TurnLeftTag;
         
         /// <summary>
         /// When touching a collider with this tag, the buzz bomber will turn right.
         /// </summary>
-        [Foldout("Signals"), Tag]
+        [SrFoldout("Signals"), SrTag]
         [Tooltip("When touching a collider with this tag, the buzz bomber will turn right.")]
         public string TurnRightTag;
 
         /// <summary>
         /// When touching a collider with this tag, the buzz bomber will shoot.
         /// </summary>
-        [Foldout("Signals"), Tag]
+        [SrFoldout("Signals"), SrTag]
         [Tooltip("When touching a collider with this tag, the buzz bomber will shoot.")]
         public string ShootTag;
         #endregion
         #region Animation
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator bool set to whether the buzz bomber is shooting.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool set to whether the buzz bomber is shooting.")]
         public string ShootingBool;
         protected int ShootingBoolHash;
@@ -148,7 +149,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Name of an Animator bool set to whther the buzz bomber is turning.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool set to whther the buzz bomber is turning.")]
         public string TurningBool;
         protected int TurningBoolHash;
@@ -157,14 +158,14 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether the buzz bomber is currently allowed to shoot.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Whether the buzz bomber is currently allowed to shoot.")]
         public bool CanShoot;
 
         /// <summary>
         /// Whether the buzz bomber currently sees an enemy.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Whether the buzz bomber currently sees an enemy.")]
         public bool EnemySighted;
 
@@ -176,7 +177,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Counts down the time until the buzz bomber is ready to shoot again, in seconds.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Counts down the time until the buzz bomber is ready to shoot again, in seconds.")]
         public float TimeBetweenShotsTimer;
 
@@ -184,7 +185,7 @@ namespace SonicRealms.Core.Actors
         /// Counts down the time during which the buzz bomber is shooting. Once zero, the buzz bomber goes back
         /// to moving.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Counts down the time during which the buzz bomber is shooting. Once zero, the buzz bomber goes back " +
                  "to moving.")]
         public float ShotTimer;
@@ -193,7 +194,7 @@ namespace SonicRealms.Core.Actors
         /// Counts down the time during which the buzz bomber is turning. Once zero, the buzz bomber moves in
         /// the opposite direction.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Counts down the time during which the buzz bomber is turning. Once zero, the buzz bomber moves in " +
                  "the opposite direction.")]
         public float TurnTimer;
@@ -201,7 +202,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The buzz bomber's current state.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("The buzz bomber's current state.")]
         public State CurrentState;
         public enum State
@@ -358,13 +359,13 @@ namespace SonicRealms.Core.Actors
             // Add callbacks so we know when our child colliders (like line of sight) find something
             if (PlayerSearchArea)
             {
-                var fov = PlayerSearchArea.gameObject.AddComponent<TriggerCallback2D>();
+                var fov = PlayerSearchArea.gameObject.AddComponent<SrTriggerCallback2D>();
                 fov.TriggerEnter2D.AddListener(OnPlayerEnter);
                 fov.TriggerExit2D.AddListener(OnPlayerExit);
             }
 
             if(SignalSearchArea)
-                SignalSearchArea.gameObject.AddComponent<TriggerCallback2D>().TriggerEnter2D.AddListener(OnSignalEnter);
+                SignalSearchArea.gameObject.AddComponent<SrTriggerCallback2D>().TriggerEnter2D.AddListener(OnSignalEnter);
 
             if (Animator == null) return;
             ShootingBoolHash = string.IsNullOrEmpty(ShootingBool) ? 0 : Animator.StringToHash(ShootingBool);

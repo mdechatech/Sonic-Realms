@@ -233,8 +233,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1360769844508388}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.0121, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.40000004, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.4, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013606319880}
   m_RootOrder: 0
@@ -512,7 +512,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 21e8c6b55b2dcc8469dc69fad7ab06e5, type: 3}
   - {fileID: 21300002, guid: 21e8c6b55b2dcc8469dc69fad7ab06e5, type: 3}
   - {fileID: 21300004, guid: 21e8c6b55b2dcc8469dc69fad7ab06e5, type: 3}
-  - {fileID: 21300002, guid: 21e8c6b55b2dcc8469dc69fad7ab06e5, type: 3}
+  - {fileID: 21300006, guid: 21e8c6b55b2dcc8469dc69fad7ab06e5, type: 3}
   PlayOnAwake: 1
   CurrentIndex: 0
   DestroyAfterCycles: 0
@@ -599,7 +599,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 5.12, y: 0.1}
+  m_Size: {x: 5.12, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
