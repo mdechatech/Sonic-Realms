@@ -936,7 +936,7 @@ namespace SonicRealms.Core.Actors
                     transform.position += new Vector3(Vx * timestep, Vy * timestep);
                     UpdateGroundVelocity();
                 }
-                else if (SrMath.Equalsf(vt))
+                else if (SrMath.EqualsZerof(vt))
                 {
                     HandleCollisions();
                     UpdateGroundVelocity();
@@ -974,7 +974,7 @@ namespace SonicRealms.Core.Actors
                         UpdateGroundVelocity();
 
                         // Leave early if we've hit the hard limit, come to a complete stop, or gotten interrupted
-                        if (++steps > CollisionStepLimit || SrMath.Equalsf(Velocity.magnitude) || Interrupted)
+                        if (++steps > CollisionStepLimit || SrMath.EqualsZerof(Velocity.magnitude) || Interrupted)
                             break;
 
                         // If the player's speed changes while we're doing this (ex: the player hits a spring),

@@ -335,7 +335,7 @@ namespace SonicRealms.Level
 
             if (RotateToGravity)
             {
-                if (SrMath.Equalsf(RotateSmoothness))
+                if (SrMath.EqualsZerof(RotateSmoothness))
                 {
                     Camera.Rotate(Player.GravityDirection + 90.0f);
                 }

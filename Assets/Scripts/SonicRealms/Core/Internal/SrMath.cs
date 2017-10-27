@@ -373,7 +373,7 @@ namespace SonicRealms.Core.Internal
         /// Checks for approximate equality to zero.
         /// </summary>
         /// <param name="a">The float a.</param>
-        public static bool Equalsf(float a)
+        public static bool EqualsZerof(float a)
         {
             return Equalsf(a, 0.0f);
         }

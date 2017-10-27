@@ -120,7 +120,7 @@ namespace SonicRealms.Core.Actors
                 var rotateToSensors = true;
                 rotateToSensors &= RotateDuringStand ||
                                    (GroundControl == null
-                                       ? !SrMath.Equalsf(Controller.GroundVelocity)
+                                       ? !SrMath.EqualsZerof(Controller.GroundVelocity)
                                        : !GroundControl.Standing);
                 rotateToSensors &= Roll == null || RotateDuringRoll || !Roll.Active;
                 rotateToSensors &=
@@ -131,7 +131,7 @@ namespace SonicRealms.Core.Actors
             }
             else
             {
-                if ((RotateDuringStand || !SrMath.Equalsf(Controller.GroundVelocity)) &&
+                if ((RotateDuringStand || !SrMath.EqualsZerof(Controller.GroundVelocity)) &&
                     (Roll == null || RotateDuringRoll || !Roll.Active))
                 {
                     var difference = SrMath.ShortestArc_d(Rotation, Controller.GravityRight);

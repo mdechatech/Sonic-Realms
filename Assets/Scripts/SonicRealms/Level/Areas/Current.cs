@@ -83,7 +83,7 @@ namespace SonicRealms.Level.Areas
                     return;
                 }
 
-                if (AccountForFriction && !SrMath.Equalsf(result))
+                if (AccountForFriction && !SrMath.EqualsZerof(result))
                     result += controller.GroundFriction*Mathf.Sign(result)*Time.fixedDeltaTime;
 
                 controller.GroundVelocity += result;

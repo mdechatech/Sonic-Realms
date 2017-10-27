@@ -165,7 +165,7 @@ namespace SonicRealms.Core.Moves
         {
             get
             {
-                return SrMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating &&
+                return SrMath.EqualsZerof(Controller.GroundVelocity) && !Braking && !Accelerating &&
                        Mathf.Abs(SrMath.ShortestArc_d(Controller.RelativeSurfaceAngle, 0f)) < ControlLockAngle;
             }
         }
@@ -318,7 +318,7 @@ namespace SonicRealms.Core.Moves
                 Animator.SetFloat(InputAxisFloatHash, _axis);
 
             if(InputBoolHash != 0)
-                Animator.SetBool(InputBoolHash, !SrMath.Equalsf(_axis));
+                Animator.SetBool(InputBoolHash, !SrMath.EqualsZerof(_axis));
 
             if(AcceleratingBoolHash != 0)
                 Animator.SetBool(AcceleratingBoolHash, Accelerating);
@@ -422,7 +422,7 @@ namespace SonicRealms.Core.Moves
         public bool Accelerate(float magnitude, float timestep)
         {
             magnitude = Mathf.Clamp(magnitude, -1.0f, 1.0f);
-            if (SrMath.Equalsf(magnitude)) return false;
+            if (SrMath.EqualsZerof(magnitude)) return false;
 
             if (magnitude < 0.0f)
             {

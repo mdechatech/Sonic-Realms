@@ -51,7 +51,7 @@ namespace SonicRealms.Level.Platforms
             if (data.Controller == null) return true;
             return base.IsSolid(data) && (!RequireGroundEntry ||
                                               (RequireGroundEntry && data.Controller.Grounded &&
-                                               !SrMath.Equalsf(data.Raycast.fraction)));
+                                               !SrMath.EqualsZerof(data.Raycast.fraction)));
         }
 
         public override void OnSurfaceEnter(SurfaceCollision collision)

@@ -27,7 +27,7 @@ namespace SonicRealms.Level.Platforms
         public override void Awake()
         {
             base.Awake();
-            if (SrMath.Equalsf(Friction)) Friction += SrMath.Epsilon;
+            if (SrMath.EqualsZerof(Friction)) Friction += SrMath.Epsilon;
         }
 
         // Applies new physics values based on friction.
