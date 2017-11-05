@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ namespace SonicRealms.Core.Moves
             {
                 for (var i = 0; i < Amount; ++i)
                 {
-                    var sparkle = Instantiate(Sparkles[DMath.Modp(i, Sparkles.Length)]);
+                    var sparkle = Instantiate(Sparkles[SrMath.Modp(i, Sparkles.Length)]);
                     sparkle.transform.position = transform.position;
                     Destroy(sparkle, Life);
                 }

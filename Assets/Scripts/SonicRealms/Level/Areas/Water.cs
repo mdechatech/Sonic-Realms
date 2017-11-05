@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -24,13 +25,13 @@ namespace SonicRealms.Level.Areas
         [SerializeField]
         public float Buoyancy;
 
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when the water is electrocuted.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when the water is electrocuted.")]
         public string ElectrocutedTrigger;
         protected int ElectrocutedTriggerHash;

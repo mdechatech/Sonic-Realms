@@ -1,5 +1,6 @@
 ﻿using System;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -11,13 +12,13 @@ namespace SonicRealms.Core.Triggers
     public class AnimateEffectTrigger : ReactiveEffect
     {
         #region Animation
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger to set when the object is activated.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when the object is activated.")]
         public string ActivateTrigger;
         protected int ActivateTriggerHash;
@@ -25,7 +26,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool to set to true while the object is activated.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool to set to true while the object is activated.")]
         public string ActivateBool;
         protected int ActivateBoolHash;
@@ -33,7 +34,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator trigger to set when an activator enters the object.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public string ActivatorTrigger;
         protected int ActivatorTriggerHash;
 
@@ -43,7 +44,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator trigger on a player to set when they activate the object.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on a player to set when they activate the object.")]
         public string PlayerActivateTrigger;
         protected int PlayerActivateTriggerHash;
@@ -51,7 +52,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool on a player to set while they are activating the object.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator bool on a player to set while they are activating the object.")]
         public string PlayerActivateBool;
         protected int PlayerActivateBoolHash;
@@ -60,7 +61,7 @@ namespace SonicRealms.Core.Triggers
         /// Name of an Animator trigger on a player to set when they become the activator of the object
         /// (check ObjectTrigger's comments to see the difference)
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on a player to set when they become the activator of the object " +
                  "(check ObjectTrigger's tooltips to see the difference")]
         public string PlayerActivatorTrigger;
@@ -70,7 +71,7 @@ namespace SonicRealms.Core.Triggers
         /// Name of an Animator bool on a player to set to true while they are the activator of the object
         /// (check ObjectTrigger's comments to see the difference)
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator bool on a player to set to true while they are the activator of the object " +
                  "(check EffectTrigger's tooltips to see the difference)")]
         public string PlayerActivatorBool;

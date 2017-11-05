@@ -1,5 +1,6 @@
 ﻿using System;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -11,13 +12,13 @@ namespace SonicRealms.Core.Triggers
     public class AnimateAreaTrigger : ReactiveArea
     {
         #region Animation
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger to set when a player enters the area.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when a player enters the area.")]
         public string InsideTrigger;
         protected int InsideTriggerHash;
@@ -25,7 +26,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool to set to true while a player is inside the area.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool to set to true while a player is inside the area.")]
         public string InsideBool;
         protected int InsideBoolHash;
@@ -34,7 +35,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator trigger on a player to set when it enters the area.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on the controller to set when it enters the area.")]
         public string PlayerInsideTrigger;
         protected int PlayerInsideTriggerHash;
@@ -42,7 +43,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Name of an Animator bool on a player to set to true while it's inside the area.
         /// </summary>
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator bool on the controller to set to true while it's inside the area.")]
         public string PlayerInsideBool;
         protected int PlayerInsideBoolHash;

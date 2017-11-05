@@ -7,7 +7,6 @@ namespace SonicRealms.Level.Objects
     /// <summary>
     /// The boost pad from Chemical Plant Zone. Boosts a player that is running on the ground.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Objects/Boost Pad")]
     public class BoostPad : ReactiveArea
     {
         /// <summary>

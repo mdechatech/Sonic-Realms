@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -16,13 +17,13 @@ namespace SonicRealms.Level.Effects
         [Tooltip("Number of rings to give.")]
         public int Amount;
 
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Animator trigger set when the rings are successfully given.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Animator trigger set when the rings are successfully given.")]
         public string GivenTrigger;
         protected int GivenTriggerHash;

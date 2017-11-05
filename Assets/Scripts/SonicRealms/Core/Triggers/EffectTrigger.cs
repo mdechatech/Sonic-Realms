@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -24,7 +25,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// Invoked when the object is activated. This will not occur if the object is already activated.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         [FormerlySerializedAs("OnActivateEnter")]
         public EffectEvent OnActivate;
 
@@ -32,14 +33,14 @@ namespace SonicRealms.Core.Triggers
         /// Invoked while the object is activated. This is invoked only once each FixedUpdate, for the
         /// first player that activated it.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public EffectEvent OnActivateStay;
 
         /// <summary>
         /// Invoked when the object is deactivated. This will not occur if the object still has something
         /// activating it.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         [FormerlySerializedAs("OnActivateExit")]
         public EffectEvent OnDeactivate;
 
@@ -47,20 +48,20 @@ namespace SonicRealms.Core.Triggers
         /// Invoked when a player becomes an activator of this trigger. This is invoked regardless of whether
         /// the player actually caused the trigger to activate, i.e. there are multiple players on the trigger.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public EffectEvent OnActivatorEnter;
 
         /// <summary>
         /// Invoked for every player that's activating the trigger, each FixedUpdate.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public EffectEvent OnActivatorStay;
 
         /// <summary>
         /// Invoked when a player is no longer an activator of this trigger. This is invoked regardless of whether
         /// the player actually caused the trigger to deactivate, i.e. there are multiple players on the trigger.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public EffectEvent OnActivatorExit;
 
         [HideInInspector]
@@ -69,7 +70,7 @@ namespace SonicRealms.Core.Triggers
         /// <summary>
         /// A list of things activating the object.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("A list of things activating the object.")]
         public List<HedgehogController> Activators;
 
@@ -82,8 +83,8 @@ namespace SonicRealms.Core.Triggers
             set { if (!Activators.Contains(value)) Activate(value); }
         }
 
-        [Foldout("Debug")] private PlatformTrigger _platformTrigger;
-        [Foldout("Debug")] private AreaTrigger _areaTrigger;
+        [SrFoldout("Debug")] private PlatformTrigger _platformTrigger;
+        [SrFoldout("Debug")] private AreaTrigger _areaTrigger;
 
         public override void Reset()
         {

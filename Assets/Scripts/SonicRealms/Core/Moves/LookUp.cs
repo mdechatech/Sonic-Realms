@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Moves
@@ -23,7 +24,7 @@ namespace SonicRealms.Core.Moves
         {
             get
             {
-                return Controller.Grounded && DMath.Equalsf(Controller.GroundVelocity) && !Manager[MoveLayer.Action] &&
+                return Controller.Grounded && SrMath.EqualsZerof(Controller.GroundVelocity) && !Manager[MoveLayer.Action] &&
                        (GroundControl == null || (!GroundControl.Braking && !GroundControl.Accelerating)) &&
                        !Manager[MoveLayer.Roll] && !Manager[MoveLayer.Action];
             }
@@ -38,7 +39,7 @@ namespace SonicRealms.Core.Moves
         {
             get
             {
-                return !Controller.Grounded || !DMath.Equalsf(Controller.GroundVelocity) ||
+                return !Controller.Grounded || !SrMath.EqualsZerof(Controller.GroundVelocity) ||
                        (GroundControl == null || !GroundControl.Standing) || Input.GetAxis(ActivateAxis) <= 0f;
             }
         }

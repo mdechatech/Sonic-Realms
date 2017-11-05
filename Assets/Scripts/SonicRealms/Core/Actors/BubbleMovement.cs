@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -9,28 +10,28 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// How quickly the bubble moves vertically in units per second.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("How quickly the bubble moves vertically in units per second.")]
         public float Buoyancy;
 
         /// <summary>
         /// How far to wiggle horizontally, in units.
         /// </summary>
-        [Space, Foldout("Movement")]
+        [Space, SrFoldout("Movement")]
         [Tooltip("How far to wiggle horizontally, in units.")]
         public float WiggleLength;
 
         /// <summary>
         /// How long it takes to wiggle once, in seconds.
         /// </summary>
-        [Foldout("Movement")]
+        [SrFoldout("Movement")]
         [Tooltip("How long it takes to wiggle once, in seconds.")]
         public float WiggleTime;
 
         /// <summary>
         /// The layers on which water are located.
         /// </summary>
-        [Foldout("Collision")]
+        [SrFoldout("Collision")]
         [Tooltip("The layers on which water are located.")]
         public LayerMask WaterLayer;
 
@@ -38,7 +39,7 @@ namespace SonicRealms.Core.Actors
         /// How long to wait between checking to see if the bubble is underwater. The bubble will
         /// pop once it leaves the water.
         /// </summary>
-        [Foldout("Collision")]
+        [SrFoldout("Collision")]
         [Tooltip("How long to wait between checking to see if the bubble is underwater. The bubble will " +
                  "pop once it leaves the water.")]
         public float WaterCheckInterval;
@@ -46,17 +47,17 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether to destroy the game object once the bubble pops.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Whether to destroy the game object once the bubble pops.")]
         public bool DestroyOnPop;
 
-        [Space, Foldout("Animation")]
+        [Space, SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when the bubble pops.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when the bubble pops.")]
         public string PopTrigger;
         protected int PopTriggerHash;

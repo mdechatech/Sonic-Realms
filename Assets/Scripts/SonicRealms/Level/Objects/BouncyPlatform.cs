@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -27,7 +28,7 @@ namespace SonicRealms.Level.Objects
             get { return _bouncyAngles.x; }
             set
             {
-                value = DMath.PositiveAngle_d(value);
+                value = SrMath.PositiveAngle_d(value);
                 _bouncyAngles = new Vector2(value - BouncyArcLength*0.5f, value + BouncyArcLength*0.5f);
             }
         }
@@ -166,6 +167,12 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public bool EndRoll { get { return _endRoll; } set { _endRoll = value; } }
 
+
+        /// <summary>
+        /// Whether to snap the player out of being hurt, restoring player control.
+        /// </summary>
+        public bool EndHurtRebound { get { return _endHurtRebound; } set { _endHurtRebound = value; } }
+
         public Animator Animator { get { return _animator; } set { _animator = value; } }
 
         /// <summary>
@@ -186,93 +193,98 @@ namespace SonicRealms.Level.Objects
 
         #region Inspector & Private Fields
         [SerializeField]
-        [Foldout("Bouncing")]
-        [MinMaxSlider(0, 360)]
+        [SrFoldout("Bouncing")]
+        [SrMinMaxSlider(0, 360)]
         [Tooltip("Range of normal angles for which the platform is bouncy.")]
         private Vector2 _bouncyAngles;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("How the a player's bounce angle is determined.")]
         private BouncyPlatformBounceAngleBehavior _bounceAngleBehavior;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("Whether the bouncy angles change with the object's current rotation.")]
         private bool _relativeToRotation;
 
         [Space]
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("Velocity at which the player bounces off the platform in units per second.")]
         private float _velocity;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("What the platform should do to the player's velocity when it bounces.")]
         private BouncyPlatformVelocityEffect _velocityEffect;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("How many times the same player can bounce off the platform each second.")]
         private float _maxBouncesPerPlayerPerSecond;
 
         [Space]
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("If checked, allows modification of outbound bounce angles based on inbound bounce angles.")]
         private bool _remapBounceAngles;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [ContextMenuItem("Reset", "ResetRemapBounceAnglesCurve")]
-        [CurveOptions(0x00ffffff, 0, 0, 360, 360)]
+        [SrCurveOptions(0x00ffffff, 0, 0, 360, 360)]
         [Tooltip("Maps the x-axis to inbound bounce angle (0-360 degree value) and the y-axis to the outbound " +
                  "bounce angle (0-360 degree value).")]
         private AnimationCurve _remapBounceAnglesCurve;
 
         [Space]
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [Tooltip("If checked, allows modification of bounce speed based on inbound bounce angle (not affected by " +
                  "remapped bounce angles).")]
         private bool _mapBounceAngleToVelocity;
 
         [SerializeField]
-        [Foldout("Bouncing")]
+        [SrFoldout("Bouncing")]
         [ContextMenuItem("Reset", "ResetBounceAngleToVelocityCurve")]
-        [CurveOptions(0x00ffffff, 0, -2, 360, 2)]
+        [SrCurveOptions(0x00ffffff, 0, -2, 360, 2)]
         [Tooltip("Maps the x-axis to inbound bounce angle (0-360 degree value) and the y-axis to velocity " +
                  "multiplier (any value).")]
         private AnimationCurve _bounceAngleToVelocityCurve;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("If nonzero, what the player's horizontal control lock timer is set to in seconds when it bounces.")]
         private float _controlLockTime;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("Whether to detach the player from the ground when it bounces off the platform.")]
         private bool _detachPlayer;
 
         [SerializeField]
-        [Foldout("Player Stuff")]
+        [SrFoldout("Player Stuff")]
         [Tooltip("Whether to end the player's rolling when it bounces off the platform, like a vertical spring would.")]
         private bool _endRoll;
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Player Stuff")]
+        [Tooltip("Whether to snap the player out of being hurt, restoring player control.")]
+        private bool _endHurtRebound;
+
+        [SerializeField]
+        [SrFoldout("Animation")]
         private Animator _animator;
 
         [SerializeField]
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger to set when a player bounces off the platform.")]
         private string _bounceTrigger;
         private int _bounceTriggerHash;
 
         [SerializeField]
-        [Foldout("Player Animation")]
+        [SrFoldout("Player Animation")]
         [Tooltip("Name of an Animator trigger on the player to set when it bounces off the platform.")]
         private string _playerBounceTrigger;
         private int _playerBounceTriggerHash;
@@ -294,7 +306,7 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public float RelativeAngle(float angle)
         {
-            return DMath.PositiveAngle_d(angle - (RelativeToRotation ? transform.eulerAngles.z : 0));
+            return SrMath.PositiveAngle_d(angle - (RelativeToRotation ? transform.eulerAngles.z : 0));
         }
 
         /// <summary>
@@ -303,7 +315,7 @@ namespace SonicRealms.Level.Objects
         /// </summary>
         public float AbsoluteAngle(float angle)
         {
-            return DMath.PositiveAngle_d(angle + (RelativeToRotation ? transform.eulerAngles.z : 0));
+            return SrMath.PositiveAngle_d(angle + (RelativeToRotation ? transform.eulerAngles.z : 0));
         }
 
         /// <summary>
@@ -313,9 +325,9 @@ namespace SonicRealms.Level.Objects
         public float RemapBounceAngle(float relativeAngle)
         {
             if (RemapBounceAngles)
-                return RemapBounceAnglesCurve.Evaluate(DMath.PositiveAngle_d(relativeAngle));
+                return RemapBounceAnglesCurve.Evaluate(SrMath.PositiveAngle_d(relativeAngle));
 
-            return DMath.PositiveAngle_d(relativeAngle);
+            return SrMath.PositiveAngle_d(relativeAngle);
         }
 
         /// <summary>
@@ -325,7 +337,7 @@ namespace SonicRealms.Level.Objects
         public float GetVelocityMultiplier(float relativeAngle)
         {
             if (MapBounceAngleToVelocity)
-                return BounceAngleToVelocityCurve.Evaluate(DMath.PositiveAngle_d(relativeAngle));
+                return BounceAngleToVelocityCurve.Evaluate(SrMath.PositiveAngle_d(relativeAngle));
 
             return 1;
         }
@@ -345,8 +357,9 @@ namespace SonicRealms.Level.Objects
             ResetRemapBounceAnglesCurve();
             ResetBounceAngleToVelocityCurve();
 
-            _velocity = 9.6f;
-            _detachPlayer = true;
+            Velocity = 9.6f;
+            DetachPlayer = true;
+            EndHurtRebound = true;
 
             _animator = GetComponent<Animator>();
         }
@@ -421,7 +434,7 @@ namespace SonicRealms.Level.Objects
                 DrawArrow(transform.position, inbound, inboundColor, inboundLength, inboundTipLength);
 
                 var inboundPos = transform.position +
-                                 (Vector3)DMath.UnitVector(inbound * Mathf.Deg2Rad) * inboundLength;
+                                 (Vector3)SrMath.UnitVector(inbound * Mathf.Deg2Rad) * inboundLength;
 
                 DrawArrow(inboundPos, outbound, outboundColor,
                     outboundLength + (inboundLength + outboundLength) * (multiplier - 1),
@@ -431,7 +444,7 @@ namespace SonicRealms.Level.Objects
 
         private void DrawArrow(Vector3 position, float direction, Color color, float length = 0.3f, float tipLength = 0.1f)
         {
-            var tipPosition = position + (Vector3)DMath.UnitVector(direction * Mathf.Deg2Rad) * length;
+            var tipPosition = position + (Vector3)SrMath.UnitVector(direction * Mathf.Deg2Rad) * length;
 
             Gizmos.color = color;
 
@@ -441,9 +454,9 @@ namespace SonicRealms.Level.Objects
                 direction += 180;
 
             Gizmos.DrawLine(tipPosition,
-                tipPosition + (Vector3)DMath.UnitVector((direction - 135) * Mathf.Deg2Rad) * tipLength);
+                tipPosition + (Vector3)SrMath.UnitVector((direction - 135) * Mathf.Deg2Rad) * tipLength);
             Gizmos.DrawLine(tipPosition,
-                tipPosition + (Vector3)DMath.UnitVector((direction + 135) * Mathf.Deg2Rad) * tipLength);
+                tipPosition + (Vector3)SrMath.UnitVector((direction + 135) * Mathf.Deg2Rad) * tipLength);
         }
 #endif
 
@@ -475,11 +488,11 @@ namespace SonicRealms.Level.Objects
             }
             else if (BounceAngleBehavior == BouncyPlatformBounceAngleBehavior.UseLineFromCenter)
             {
-                hitNormal = RelativeAngle(DMath.Angle(player.transform.position - transform.position)*Mathf.Rad2Deg);
+                hitNormal = RelativeAngle(SrMath.Angle(player.transform.position - transform.position)*Mathf.Rad2Deg);
             }
 
             if (!(BouncyAngleMin == 0 && Mathf.Approximately(BouncyAngleMax, 360)) &&
-                !DMath.AngleInRange_d(hitNormal, BouncyAngleMin, BouncyAngleMax))
+                !SrMath.AngleInRange_d(hitNormal, BouncyAngleMin, BouncyAngleMax))
                 return;
 
             if (!CheckBounceTimer(player))
@@ -488,7 +501,6 @@ namespace SonicRealms.Level.Objects
             if (ControlLockTime > 0)
             {
                 var groundControl = player.GetMove<GroundControl>();
-
                 if (groundControl)
                     groundControl.Lock(ControlLockTime);
             }
@@ -500,24 +512,25 @@ namespace SonicRealms.Level.Objects
             }
 
             if (EndRoll)
-            {
                 player.EndMove<Roll>();
-            }
+
+            if (EndHurtRebound)
+                player.EndMove<HurtRebound>();
 
             var normalRadians = AbsoluteAngle(RemapBounceAngle(hitNormal))*Mathf.Deg2Rad;
             var velocityMultiplier = GetVelocityMultiplier(hitNormal);
 
             if (VelocityEffect == BouncyPlatformVelocityEffect.Set)
             {
-                player.Velocity = DMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
+                player.Velocity = SrMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
             }
-            else if (VelocityEffect == BouncyPlatformVelocityEffect.StopAndAdd)
+            else if (VelocityEffect == BouncyPlatformVelocityEffect.Reflect)
             {
                 player.Velocity = new Vector2(
                     player.Velocity.x*Mathf.Abs(Mathf.Sin(normalRadians)),
                     player.Velocity.y*Mathf.Abs(Mathf.Cos(normalRadians)));
 
-                player.Velocity += DMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
+                player.Velocity += SrMath.UnitVector(normalRadians)*Velocity*velocityMultiplier;
             }
 
             if (Animator)
@@ -526,10 +539,9 @@ namespace SonicRealms.Level.Objects
                     Animator.SetTrigger(BounceTriggerHash);
             }
 
-            RealmsAnimatorUtility.SilentSet(player, SetPlayerOnPreCollideParameters);
+            SrAnimatorUtility.SilentSet(player, SetPlayerOnPreCollideParameters);
 
             BlinkEffectTrigger(player);
-
             StartBounceTimer(player);
         }
 
@@ -605,10 +617,10 @@ namespace SonicRealms.Level.Objects
         Set,
 
         /// <summary>
-        /// The bouncy thing will stop the component of the player's velocity traveling towards its normal then add
-        /// its desired value. Used in vertical and horizontal springs.
+        /// The bouncy thing will reflect the player's velocity based on its orientation, similar to the way light 
+        /// bounces off of a mirror. Used in vertical and horizontal springs.
         /// </summary>
-        StopAndAdd,
+        Reflect,
     }
 
     /// <summary>

@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Linq;
+using SonicRealms.Core.Internal;
 using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
-    [CustomPropertyDrawer(typeof(EnumSelectionGridAttribute))]
+    [CustomPropertyDrawer(typeof(SrEnumSelectionGridAttribute))]
     public class EnumSelectionGridDrawer : PropertyDrawer
     {
         private const float ButtonSpacing = 3;
 
         private string[] _options;
-        private EnumSelectionGridAttribute _attribute;
+        private SrEnumSelectionGridAttribute _attribute;
 
         private void Initialize()
         {
-            _attribute = (EnumSelectionGridAttribute)attribute;
+            _attribute = (SrEnumSelectionGridAttribute)attribute;
 
             if (typeof(Enum).IsAssignableFrom(fieldInfo.FieldType))
             {

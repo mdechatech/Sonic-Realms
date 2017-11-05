@@ -1,4 +1,5 @@
 ﻿using System;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -145,7 +146,7 @@ namespace SonicRealms.Level.Objects
                 if (result && result.fraction > 0f)
                 {
                     // Store positive angle in degrees
-                    var angle = DMath.PositiveAngle_d(DMath.Angle(result.normal) * Mathf.Rad2Deg);
+                    var angle = SrMath.PositiveAngle_d(SrMath.Angle(result.normal) * Mathf.Rad2Deg);
                     if (AccurateBounce)
                     {
                         // For an accurate bounce, just reflect off the normal

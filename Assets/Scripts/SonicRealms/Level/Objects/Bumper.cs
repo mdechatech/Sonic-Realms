@@ -8,7 +8,6 @@ namespace SonicRealms.Level.Objects
     /// <summary>
     /// Bumpers like the ones in Spring Yard and Carnival Night.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Objects/Bumper")]
     public class Bumper : ReactivePlatform
     {
         /// <summary>
@@ -58,11 +57,11 @@ namespace SonicRealms.Level.Objects
                 collision.Controller.Velocity = new Vector2(collision.Controller.Velocity.x * Mathf.Abs(Mathf.Sin(normal)),
                     collision.Controller.Velocity.y * Mathf.Abs(Mathf.Cos(normal)));
 
-                collision.Controller.Velocity += DMath.AngleToVector(normal) * Velocity;
+                collision.Controller.Velocity += SrMath.AngleToVector(normal) * Velocity;
             }
             else
             {
-                collision.Controller.Velocity = DMath.AngleToVector(normal) * Velocity;
+                collision.Controller.Velocity = SrMath.AngleToVector(normal) * Velocity;
             }
 
             TriggerObject();

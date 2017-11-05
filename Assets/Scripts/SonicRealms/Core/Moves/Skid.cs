@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Moves
@@ -53,7 +54,7 @@ namespace SonicRealms.Core.Moves
         public override bool ShouldPerform
         {
             get { return GroundControl.Braking && 
-                    Mathf.Abs(DMath.ShortestArc_d(0f, Controller.RelativeSurfaceAngle)) < MaximumAngle && 
+                    Mathf.Abs(SrMath.ShortestArc_d(0f, Controller.RelativeSurfaceAngle)) < MaximumAngle && 
                     Manager[MoveLayer.Action] == null && Manager[MoveLayer.Roll] == null; }
         }
 
@@ -79,7 +80,7 @@ namespace SonicRealms.Core.Moves
 
             if (SkidSound != null)
             {
-                SkidSoundSource = SoundManager.CreateSoundEffectSource();
+                SkidSoundSource = SrSoundManager.CreateSoundEffectSource();
                 SkidSoundSource.clip = SkidSound;
                 SkidSoundSource.name = "Skid Sound";
                 SkidSoundSource.transform.SetParent(gameObject.transform);

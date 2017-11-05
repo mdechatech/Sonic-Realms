@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using SonicRealms.Level;
 using UnityEngine;
 
@@ -78,7 +79,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (AreaEnterSound)
             {
-                SoundManager.PlaySoundEffect(AreaEnterSound);
+                SrSoundManager.PlaySoundEffect(AreaEnterSound);
             }
 
             if (_areaStayLoopAudioSource && !_areaStayLoopAudioSource.isPlaying)
@@ -91,7 +92,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (AreaExitSound)
             {
-                SoundManager.PlaySoundEffect(AreaExitSound);
+                SrSoundManager.PlaySoundEffect(AreaExitSound);
             }
 
             if (_areaStayLoopAudioSource && AreaTrigger.ControllersInArea.Count == 0)

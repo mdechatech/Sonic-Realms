@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using SonicRealms.Core.Utils.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -42,15 +43,15 @@ namespace SonicRealms.Level.Objects.Editor
                 var position = instance.GetPosition(i/(float) (pointCount - 1));
                 var angle = instance.GetSurfaceAngle(i/(float) (pointCount - 1));
 
-                var unit = DMath.UnitVector(angle*Mathf.Deg2Rad);
+                var unit = SrMath.UnitVector(angle*Mathf.Deg2Rad);
 
                 var arrowStart = position - unit*tangentLength;
                 var arrowEnd = position + unit*tangentLength;
 
                 Handles.DrawLine(arrowStart, arrowEnd);
 
-                Handles.DrawLine(arrowEnd, arrowEnd - DMath.UnitVector((angle - 45)*Mathf.Deg2Rad)*arrowtipLength);
-                Handles.DrawLine(arrowEnd, arrowEnd - DMath.UnitVector((angle + 45)*Mathf.Deg2Rad)*arrowtipLength);
+                Handles.DrawLine(arrowEnd, arrowEnd - SrMath.UnitVector((angle - 45)*Mathf.Deg2Rad)*arrowtipLength);
+                Handles.DrawLine(arrowEnd, arrowEnd - SrMath.UnitVector((angle + 45)*Mathf.Deg2Rad)*arrowtipLength);
             }
         }
     }

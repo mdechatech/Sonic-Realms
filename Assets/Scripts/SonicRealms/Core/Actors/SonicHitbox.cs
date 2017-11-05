@@ -1,4 +1,5 @@
 ﻿using System;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// If not Untagged, colliders with these tags will be harmful to the player.
         /// </summary>
-        [Tag, Foldout("Collision")]
+        [SrTag, SrFoldout("Collision")]
         [Tooltip("If not Untagged, colliders with these tags will be harmful to the player.")]
         public string HarmfulTag;
         protected bool CheckHarmfulTag;
@@ -31,7 +32,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// If not Untagged, colliders with these tags will be lethal to the player.
         /// </summary>
-        [Tag, Foldout("Collision")]
+        [SrTag, SrFoldout("Collision")]
         [Tooltip("If not Untagged, colliders with these tags will be lethal to the player.")]
         public string LethalTag;
         protected bool CheckLethalTag;
@@ -39,20 +40,20 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Invoked when this hitbox kills an enemy.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public EnemyEvent OnKillEnemy;
 
         /// <summary>
         /// Whether the hitbox is vulnerable to enemy attack.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Whether the hitbox is vulnerable to enemy attack.")]
         public bool Vulnerable;
 
         /// <summary>
         /// Whether the hitbox will hurt badniks when it comes into contact.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Whether the hitbox will hurt badniks when it comes into contact.")]
         public bool Harmful;
 

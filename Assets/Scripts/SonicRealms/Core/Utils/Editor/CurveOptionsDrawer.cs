@@ -1,9 +1,10 @@
-﻿using UnityEditor;
+﻿using SonicRealms.Core.Internal;
+using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
-    [CustomPropertyDrawer(typeof(CurveOptionsAttribute))]
+    [CustomPropertyDrawer(typeof(SrCurveOptionsAttribute))]
     public class CurveOptionsDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -18,7 +19,7 @@ namespace SonicRealms.Core.Utils.Editor
                 return;
             }
 
-            var attr = (CurveOptionsAttribute)attribute;
+            var attr = (SrCurveOptionsAttribute)attribute;
 
             var rect = default(Rect?);
             var color = default(Color?);

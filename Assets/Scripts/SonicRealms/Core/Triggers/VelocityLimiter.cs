@@ -1,5 +1,6 @@
 ﻿using System;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -128,7 +129,7 @@ namespace SonicRealms.Core.Triggers
                 velocity = relativeVelocity;
 
             if (RelativeToRotation)
-                velocity = DMath.RotateBy(velocity, -rotation * Mathf.Deg2Rad);
+                velocity = SrMath.RotateBy(velocity, -rotation * Mathf.Deg2Rad);
 
             var horizontal = UseAbsoluteHorizontal
                 ? Mathf.Abs(velocity.x)

@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -70,7 +71,7 @@ namespace SonicRealms.Level.Areas
                 var oldVelocity = controller.GroundVelocity;
 
                 var surfaceAngle = controller.SurfaceAngle*Mathf.Deg2Rad;
-                var targetAngle = surfaceAngle - DMath.Angle(TargetVelocity);
+                var targetAngle = surfaceAngle - SrMath.Angle(TargetVelocity);
                 var targetMagnitude = TargetVelocity.magnitude;
 
                 var result = Mathf.Cos(targetAngle)*Power*Time.fixedDeltaTime;
@@ -82,7 +83,7 @@ namespace SonicRealms.Level.Areas
                     return;
                 }
 
-                if (AccountForFriction && !DMath.Equalsf(result))
+                if (AccountForFriction && !SrMath.EqualsZerof(result))
                     result += controller.GroundFriction*Mathf.Sign(result)*Time.fixedDeltaTime;
 
                 controller.GroundVelocity += result;
@@ -94,14 +95,14 @@ namespace SonicRealms.Level.Areas
             {
                 var oldVelocity = controller.Velocity;
 
-                var targetAngle = DMath.Angle(TargetVelocity);
+                var targetAngle = SrMath.Angle(TargetVelocity);
                 var targetMagnitude = TargetVelocity.magnitude;
                 var normalized = (TargetVelocity - oldVelocity).normalized;
 
                 var result = normalized*Power*Time.fixedDeltaTime;
                 if (AccountForGravity) result += Vector2.up*controller.AirGravity*Time.fixedDeltaTime;
 
-                if (Mathf.Abs(DMath.ShortestArc(DMath.Angle(result), targetAngle)) > DMath.HalfPi)
+                if (Mathf.Abs(SrMath.ShortestArc(SrMath.Angle(result), targetAngle)) > SrMath.HalfPi)
                 {
                     controller.Velocity = TargetVelocity;
                     return;

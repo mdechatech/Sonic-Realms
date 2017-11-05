@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level.Areas;
@@ -108,7 +109,7 @@ namespace SonicRealms.Core.Moves
             Controller.RelativeVelocity = DiveVelocity;
 
             if (DiveSound != null)
-                _diveAudioSource = SoundManager.PlaySoundEffect(DiveSound);
+                _diveAudioSource = SrSoundManager.PlaySoundEffect(DiveSound);
 
             // Listen for collisions - need to bounce back up when we collide with the ground
             Controller.OnPreCollide.AddListener(OnPreCollide);
@@ -189,7 +190,7 @@ namespace SonicRealms.Core.Moves
                 if (_diveAudioSource.clip == DiveSound)
                     _diveAudioSource.Stop();
 
-                SoundManager.PlaySoundEffect(BounceSound);
+                SrSoundManager.PlaySoundEffect(BounceSound);
             }
 
             Bouncing = true;

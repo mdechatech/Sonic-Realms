@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Triggers;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level.Areas;
 using UnityEngine;
@@ -47,14 +48,14 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The target animator for air and air percentage parameters.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("The target animator for air and air percentage parameters.")]
         public Animator MeterAnimator;
 
         /// <summary>
         /// Name of an Animator float set to remaining air, in seconds.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator float set to remaining air, in seconds.")]
         public string AirFloat;
         protected int AirFloatHash;
@@ -62,7 +63,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Name of an Animator float set to remaining air as a fraction of total air.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator float set to remaining air as a fraction of total air.")]
         public string AirPercentFloat;
         protected int AirPercentFloatHash;
@@ -70,14 +71,14 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The target animator for underwater and drowning parameters.
         /// </summary>
-        [Space, Foldout("Animation")]
+        [Space, SrFoldout("Animation")]
         [Tooltip("The target animator for underwater and drowning parameters.")]
         public Animator StatusAnimator;
 
         /// <summary>
         /// Name of an Animator bool set to whether the controller is underwater.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool set to whether the controller is underwater.")]
         public string UnderwaterBool;
         protected int UnderwaterBoolHash;
@@ -85,7 +86,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Name of an Animator trigger set when the player drowns.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when the player drowns.")]
         public string DrownTrigger;
         protected int DrownTriggerHash;
@@ -94,57 +95,57 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Invoked when the player enters water.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnEnterWater;
 
         /// <summary>
         /// Invoked when the player exits water.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnExitWater;
 
         /// <summary>
         /// Invoked when the player finds an extra air source, by any means.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnGotExtraAirSource;
 
         /// <summary>
         /// Invoked when the player loses its extra air source.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnLostExtraAirSource;
 
         /// <summary>
         /// Invoked when the player gains the ability to breathe.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnCanBreathe;
 
         /// <summary>
         /// Invoked when the player loses the ability to breathe.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnCannotBreathe;
 
         /// <summary>
         /// Invoked when the player drowns.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnDrown;
         #endregion
 
         /// <summary>
         /// How much air the controller has left, in seconds.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("How much air the controller has left, in seconds.")]
         public float RemainingAir;
 
         /// <summary>
         /// Whether the controller is underwater.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Whether the controller is underwater.")]
         public bool Underwater;
 
@@ -152,7 +153,7 @@ namespace SonicRealms.Core.Actors
         /// Whether the controller has some residual source of air. This can be set by outside sources, such as
         /// the Bubble Shield.
         /// </summary>
-        [SerializeField, Foldout("Debug")]
+        [SerializeField, SrFoldout("Debug")]
         [Tooltip("Whether the controller has some residual source of air. This can be set by outside sources, such " +
                  "as the Bubble Shield.")]
         private bool _hasExtraAirSource;
@@ -175,7 +176,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether the player can breathe, based on being underwater and having an extra air source.
         /// </summary>
-        [SerializeField, Foldout("Debug")]
+        [SerializeField, SrFoldout("Debug")]
         [Tooltip("Whether the player can breathe, based on being underwater and having an extra air source.")]
         private bool _canBreathe;
         public bool CanBreathe
@@ -186,7 +187,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Whether the player has drowned.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("Whether the player has drowned.")]
         public bool Drowned;
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace SonicRealms.Core.Triggers
     [RequireComponent(typeof(AreaTrigger))]
     public class AttackTrigger : ReactiveArea
     {
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public AttackTriggerEvent OnAttack;
 
         protected List<Hitbox> Attacks;

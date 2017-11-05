@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -129,7 +130,7 @@ namespace SonicRealms.Level.Objects
 
             ControllerProgress[index] += TravelSpeed/_cachedLength*Time.fixedDeltaTime;
 
-            var walk = Physics2DUtility.Walk(_cachedPath, ControllerProgress[index], false) +
+            var walk = SrPhysics2DUtility.Walk(_cachedPath, ControllerProgress[index], false) +
                        (Vector2) (controller.transform.position - controller.Sensors.Center.position);
 
             Velocities[index] = (walk - (Vector2)controller.transform.position)/Time.fixedDeltaTime;
@@ -161,8 +162,8 @@ namespace SonicRealms.Level.Objects
         {
             _previousPath = Path;
             Path.enabled = false;
-            _cachedPath = Physics2DUtility.GetPoints(Path);
-            _cachedLength = Physics2DUtility.GetPathLength(_cachedPath);
+            _cachedPath = SrPhysics2DUtility.GetPoints(Path);
+            _cachedLength = SrPhysics2DUtility.GetPathLength(_cachedPath);
         }
     }
 }

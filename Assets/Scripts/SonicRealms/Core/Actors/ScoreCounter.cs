@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
-using SonicRealms.UI;
+using SonicRealms.Legacy.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -52,7 +53,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Game object to make copies of when showing floating scores.
         /// </summary>
-        public ScoreView FloatingScoreView { get { return _floatingScoreView; } set { _floatingScoreView = value; } }
+        public SrLegacyScoreView FloatingScoreView { get { return _floatingScoreView; } set { _floatingScoreView = value; } }
 
         /// <summary>
         /// <para>
@@ -88,7 +89,7 @@ namespace SonicRealms.Core.Actors
         [SerializeField]
         [FormerlySerializedAs("FloatingScoreView")]
         [Tooltip("Game object to make copies of when showing floating scores.")]
-        private ScoreView _floatingScoreView;
+        private SrLegacyScoreView _floatingScoreView;
 
         #endregion
 
@@ -145,7 +146,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Creates a floating score without actually changing the counter's current score.
         /// </summary>
-        public ScoreView ShowFloatingScore(int value, Vector3 position)
+        public SrLegacyScoreView ShowFloatingScore(int value, Vector3 position)
         {
             var view = Instantiate(FloatingScoreView);
             view.transform.position = position;
@@ -167,7 +168,7 @@ namespace SonicRealms.Core.Actors
         protected void NotifyPropertyChanged<T>(string propertyName, T oldvalue, T newvalue)
         {
             if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
+                PropertyChanged(this, new SrPropertyChangedExtendedEventArgs<T>(propertyName, oldvalue, newvalue));
         }
 
         #endregion

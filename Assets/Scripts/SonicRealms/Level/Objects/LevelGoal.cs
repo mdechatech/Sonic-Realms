@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using SonicRealms.Core.Actors;
 using SonicRealms.Core.Triggers;
+using SonicRealms.Legacy.Game;
 using UnityEngine;
 
 namespace SonicRealms.Level.Objects
@@ -41,7 +42,7 @@ namespace SonicRealms.Level.Objects
 
         public virtual void Finish()
         {
-            var level = GameManager.Instance.Level as GoalLevelManager;
+            var level = SrLegacyGameManager.Instance.Level as SrLegacyGoalLevelManager;
             if (level == null) return;
 
             level.FinishLevel();

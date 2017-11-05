@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace SonicRealms.Level.Platforms
         /// </summary>
         public bool TransferGroundedMomentum { get { return _transferGroundedMomentum; } }
         
-        [SerializeField, EnumSelectionGrid]
+        [SerializeField, SrEnumSelectionGrid]
         [Tooltip("What causes the platform to move. One may use either the Animator or a combination of " +
                  "other sources (scripts, events) - but never both at the same " +
                  "time.")]
@@ -136,7 +137,7 @@ namespace SonicRealms.Level.Platforms
 
             if (_transferGroundedMomentum && collision.Controller.Grounded)
             {
-                collision.Controller.GroundVelocity += DMath.ScalarProjectionAbs(
+                collision.Controller.GroundVelocity += SrMath.ScalarProjectionAbs(
                     anchor.PreviousDelta/Time.fixedDeltaTime,
                     collision.Latest.HitData.SurfaceAngle);
             }

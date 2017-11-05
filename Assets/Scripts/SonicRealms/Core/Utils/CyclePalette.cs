@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SonicRealms.Core.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -135,7 +136,7 @@ namespace SonicRealms.Core.Utils
         public void SetPalette(int index)
         {
             // If the number is out of bounds just mod it
-            index = DMath.Modp(index, PaletteCount);
+            index = SrMath.Modp(index, PaletteCount);
             
             for (var i = 0; i < ColorsPerPalette; ++i)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -31,35 +32,35 @@ namespace SonicRealms.Level
         /// <summary>
         /// How quickly the camera follows the player on the ground, in units per second.
         /// </summary>
-        [Foldout("Follow Ground")]
+        [SrFoldout("Follow Ground")]
         [Tooltip("How quickly the camera follows the player on the ground, in units per second.")]
         public Vector2 GroundFollowSpeed;
 
         /// <summary>
         /// The lower-left corner of the camera's follow boundaries when on the ground.
         /// </summary>
-        [Space, Foldout("Follow Ground")]
+        [Space, SrFoldout("Follow Ground")]
         [Tooltip("The lower-left corner of the camera's follow boundaries when on the ground.")]
         public Transform GroundFollowBoundsMin;
 
         /// <summary>
         /// The upper-right corner of the camera's follow boundaries when on the ground.
         /// </summary>
-        [Foldout("Follow Ground")]
+        [SrFoldout("Follow Ground")]
         [Tooltip("The upper-right corner of the camera's follow boundaries when on the ground.")]
         public Transform GroundFollowBoundsMax;
 
         /// <summary>
         /// How quickly the player must be moving to begin fast following.
         /// </summary>
-        [Space, Foldout("Follow Ground")]
+        [Space, SrFoldout("Follow Ground")]
         [Tooltip("How quickly the player must be moving to begin fast following.")]
         public Vector2 GroundFastFollowMinSpeed;
 
         /// <summary>
         /// How quickly the camera fast follows the player on the ground, in units per second.
         /// </summary>
-        [Foldout("Follow Ground")]
+        [SrFoldout("Follow Ground")]
         [Tooltip("How quickly the camera fast follows the player on the ground, in units per second.")]
         public Vector2 GroundFastFollowSpeed;
         #endregion
@@ -67,21 +68,21 @@ namespace SonicRealms.Level
         /// <summary>
         /// How quickly the camera follows the player in the air, in units per second.
         /// </summary>
-        [Foldout("Follow Air")]
+        [SrFoldout("Follow Air")]
         [Tooltip("How quickly the camera follows the player in the air, in units per second.")]
         public Vector2 AirFollowSpeed;
 
         /// <summary>
         /// The lower-left corner of the camera's follow boundaries when in the air.
         /// </summary>
-        [Space, Foldout("Follow Air")]
+        [Space, SrFoldout("Follow Air")]
         [Tooltip("The lower-left corner of the camera's follow boundaries when in the air.")]
         public Transform AirFollowBoundsMin;
 
         /// <summary>
         /// The upper-right corner of the camera's follow boundaries when in the air.
         /// </summary>
-        [Foldout("Follow Air")]
+        [SrFoldout("Follow Air")]
         [Tooltip("The upper-right corner of the camera's follow boundaries when in the air.")]
         public Transform AirFollowBoundsMax;
         #endregion
@@ -99,21 +100,21 @@ namespace SonicRealms.Level
         /// <summary>
         /// When looking up, how long to wait before panning upwards.
         /// </summary>
-        [Foldout("Look Up")]
+        [SrFoldout("Look Up")]
         [Tooltip("When looking up, how long to wait before panning upwards.")]
         public float LookUpLag;
 
         /// <summary>
         /// When looking up, how far up to scroll, in units.
         /// </summary>
-        [Foldout("Look Up")]
+        [SrFoldout("Look Up")]
         [Tooltip("When looking up, how far up to scroll, in units.")]
         public float LookUpPanAmount;
 
         /// <summary>
         /// When looking up, how quickly the camera scrolls, in units per second.
         /// </summary>
-        [Foldout("Look Up")]
+        [SrFoldout("Look Up")]
         [Tooltip("When looking up, how quickly the camera scrolls, in units per second.")]
         public float LookUpPanSpeed;
         #endregion
@@ -121,21 +122,21 @@ namespace SonicRealms.Level
         /// <summary>
         /// When looking down, how long to wait before panning downwards.
         /// </summary>
-        [Foldout("Look Down")]
+        [SrFoldout("Look Down")]
         [Tooltip("When looking down, how long to wait before panning downwards.")]
         public float LookDownLag;
 
         /// <summary>
         /// When looking down, how far down to scroll, in units.
         /// </summary>
-        [Foldout("Look Down")]
+        [SrFoldout("Look Down")]
         [Tooltip("When looking down, how far down to scroll, in units.")]
         public float LookDownPanAmount;
 
         /// <summary>
         /// When looking down, how quickly the camera scrolls, in units per second.
         /// </summary>
-        [Foldout("Look Down")]
+        [SrFoldout("Look Down")]
         [Tooltip("When looking down, how quickly the camera scrolls, in units per second.")]
         public float LookDownPanSpeed;
         #endregion
@@ -149,7 +150,7 @@ namespace SonicRealms.Level
         /// <summary>
         /// How long to lag after a spindash, in seconds.
         /// </summary>
-        [Foldout("Spindash")]
+        [SrFoldout("Spindash")]
         [Tooltip("How long to lag after a spindash, in seconds.")]
         public float SpindashLag;
         #endregion
@@ -158,7 +159,7 @@ namespace SonicRealms.Level
         /// If true, spindash lag will not occur.
         /// Whether to shift the camera forward when moving at a certain speed, as seen in Sonic CD.
         /// </summary>
-        [Foldout("Forward Shift (Sonic CD)")]
+        [SrFoldout("Forward Shift (Sonic CD)")]
         [Tooltip("If checked, spindash lag will not occur. " +
                  "Whether to shift the camera forward when moving at a certain speed, as seen in Sonic CD.")]
         public bool EnableForwardShift;
@@ -166,21 +167,21 @@ namespace SonicRealms.Level
         /// <summary>
         /// Minimum horizontal speed for the forward shift to occur.
         /// </summary>
-        [Space, Foldout("Forward Shift (Sonic CD)")]
+        [Space, SrFoldout("Forward Shift (Sonic CD)")]
         [Tooltip("Minimum horizontal speed for the forward shift to occur.")]
         public float ForwardShiftMinSpeed;
 
         /// <summary>
         /// How far the camera shifts forward, in units.
         /// </summary>
-        [Foldout("Forward Shift (Sonic CD)")]
+        [SrFoldout("Forward Shift (Sonic CD)")]
         [Tooltip("How far the camera shifts forward, in units.")]
         public float ForwardShiftPanAmount;
 
         /// <summary>
         /// How quickly the camera shifts forward, in units per second.
         /// </summary>
-        [Foldout("Forward Shift (Sonic CD)")]
+        [SrFoldout("Forward Shift (Sonic CD)")]
         [Tooltip("How quickly the camera shifts forward, in units per second.")]
         public float ForwardShiftPanSpeed;
         #endregion
@@ -324,7 +325,7 @@ namespace SonicRealms.Level
         {
             _forwardShifting = true;
             Camera.PanAtSpeed(
-                DMath.UnitVector(Player.RelativeAngle(forward ? 0 : 180)*Mathf.Deg2Rad)*ForwardShiftPanAmount,
+                SrMath.UnitVector(Player.RelativeAngle(forward ? 0 : 180)*Mathf.Deg2Rad)*ForwardShiftPanAmount,
                 ForwardShiftPanSpeed);
         }
 
@@ -334,7 +335,7 @@ namespace SonicRealms.Level
 
             if (RotateToGravity)
             {
-                if (DMath.Equalsf(RotateSmoothness))
+                if (SrMath.EqualsZerof(RotateSmoothness))
                 {
                     Camera.Rotate(Player.GravityDirection + 90.0f);
                 }
@@ -407,14 +408,14 @@ namespace SonicRealms.Level
             else if (move is LookUp)
             {
                 _looking = true;
-                Camera.PanAtSpeed(DMath.UnitVector(Player.RelativeAngle(90f) * Mathf.Deg2Rad) * LookUpPanAmount,
+                Camera.PanAtSpeed(SrMath.UnitVector(Player.RelativeAngle(90f) * Mathf.Deg2Rad) * LookUpPanAmount,
                     LookUpPanSpeed,
                     LookUpLag);
             }
             else if (move is Duck)
             {
                 _looking = true;
-                Camera.PanAtSpeed(DMath.UnitVector(Player.RelativeAngle(-90f) * Mathf.Deg2Rad) * LookDownPanAmount,
+                Camera.PanAtSpeed(SrMath.UnitVector(Player.RelativeAngle(-90f) * Mathf.Deg2Rad) * LookDownPanAmount,
                     LookDownPanSpeed, LookDownLag);
             }
             else if (move is Spindash)
@@ -456,7 +457,7 @@ namespace SonicRealms.Level
         {
             if (e.PropertyName == "TrueCenterOffset")
             {
-                var ext = (PropertyChangedExtendedEventArgs<Vector2>) e;
+                var ext = (SrPropertyChangedExtendedEventArgs<Vector2>) e;
 
                 Camera.BasePosition -= ext.NewValue - ext.OldValue;
                 Camera.ExtraOffset += ext.NewValue - ext.OldValue;

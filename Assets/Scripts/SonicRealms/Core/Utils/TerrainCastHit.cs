@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils
@@ -99,8 +100,8 @@ namespace SonicRealms.Core.Utils
             Raycast = hit;
             Side = fromSide;
             Controller = controller;
-            NormalAngle = DMath.Modp(DMath.Angle(hit.normal), DMath.DoublePi);
-            SurfaceAngle = DMath.Modp(NormalAngle - DMath.HalfPi, DMath.DoublePi);
+            NormalAngle = SrMath.Modp(SrMath.Angle(hit.normal), SrMath.DoublePi);
+            SurfaceAngle = SrMath.Modp(NormalAngle - SrMath.HalfPi, SrMath.DoublePi);
 
             if (!hit) return this;
 

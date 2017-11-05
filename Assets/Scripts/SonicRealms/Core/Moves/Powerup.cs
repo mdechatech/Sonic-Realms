@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,14 +30,14 @@ namespace SonicRealms.Core.Moves
             /// <summary>
         /// The animator to target. If left empty, it will be automatically set to the possessor's animator.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("The animator to target. If left empty, it will be automatically set to the possessor's animator.")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator bool to set to true when the powerup has an owner, false otherwise.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator bool to set to true when the powerup has an owner, false otherwise.")]
         public string AddedBool;
         protected int AddedBoolHash;
@@ -44,23 +45,23 @@ namespace SonicRealms.Core.Moves
         /// <summary>
         /// Invoked when the powerup is added to a player.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnAdd;
 
         /// <summary>
         /// Invoked when the powerup is added to a player.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnRemove;
 
-        [Foldout("Debug")] public HedgehogController Controller;
-        [Foldout("Debug")] public PowerupManager Manager;
-        [Foldout("Debug")] public MoveManager MoveManager;
+        [SrFoldout("Debug")] public HedgehogController Controller;
+        [SrFoldout("Debug")] public PowerupManager Manager;
+        [SrFoldout("Debug")] public MoveManager MoveManager;
 
         /// <summary>
         /// If the powerup has a duration, the time remaining until it is lost.
         /// </summary>
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         [Tooltip("If the powerup has a duration, the time remaining until it is lost.")]
         public float TimeRemaining;
 

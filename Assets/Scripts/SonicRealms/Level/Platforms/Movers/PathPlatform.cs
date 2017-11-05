@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Level.Platforms.Movers
@@ -6,7 +7,6 @@ namespace SonicRealms.Level.Platforms.Movers
     /// <summary>
     /// Moves an object along the path defined by a collider2D.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Movers/Path Platform")]
     public class PathPlatform : BasePlatformMover
     {
         /// <summary>
@@ -64,8 +64,8 @@ namespace SonicRealms.Level.Platforms.Movers
         public override void To(float t)
         {
             transform.position = _cachedPath == null
-                ? Physics2DUtility.Walk(Path, t)
-                : Physics2DUtility.Walk(_cachedPath, t);
+                ? SrPhysics2DUtility.Walk(Path, t)
+                : SrPhysics2DUtility.Walk(_cachedPath, t);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace SonicRealms.Level.Platforms.Movers
         {
             _previousPath = Path;
             Path.enabled = !DisablePathCollider;
-            _cachedPath = Physics2DUtility.GetPoints(Path);
+            _cachedPath = SrPhysics2DUtility.GetPoints(Path);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -290,7 +291,7 @@ namespace SonicRealms.Core.Moves
             if (prevState == State.Active)
             {
                 if(!Mute && EndSound)
-                    SoundManager.PlaySoundEffect(EndSound);
+                    SrSoundManager.PlaySoundEffect(EndSound);
 
                 OnActiveExit();
                 OnEnd.Invoke();
@@ -298,7 +299,7 @@ namespace SonicRealms.Core.Moves
             else if (CurrentState == State.Active)
             {
                 if (!Mute && PerformSound)
-                    SoundManager.PlaySoundEffect(PerformSound);
+                    SrSoundManager.PlaySoundEffect(PerformSound);
 
                 OnActiveEnter();
                 OnActiveEnter(prevState);

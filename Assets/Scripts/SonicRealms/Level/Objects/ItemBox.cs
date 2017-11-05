@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -14,13 +15,13 @@ namespace SonicRealms.Level.Objects
         [Tooltip("How long to wait after being broken to activate, in seconds.")]
         public float ActivateDelay;
 
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when the item box is broken.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when the item box is broken.")]
         public string BrokenTrigger;
         protected int BrokenTriggerHash;

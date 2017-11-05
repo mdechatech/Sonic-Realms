@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level;
 using UnityEngine;
@@ -108,7 +109,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (ActivateSound)
             {
-                SoundManager.PlaySoundEffect(ActivateSound);
+                SrSoundManager.PlaySoundEffect(ActivateSound);
             }
 
             if (_activateStayLoopAudioSource && !_activateStayLoopAudioSource.isPlaying)
@@ -121,7 +122,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (DeactivateSound)
             {
-                SoundManager.PlaySoundEffect(DeactivateSound);
+                SrSoundManager.PlaySoundEffect(DeactivateSound);
             }
 
             if (_activateStayLoopAudioSource && _activateStayLoopAudioSource.isPlaying)
@@ -134,7 +135,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (ActivatorEnterSound)
             {
-                SoundManager.PlaySoundEffect(ActivatorEnterSound);
+                SrSoundManager.PlaySoundEffect(ActivatorEnterSound);
             }
         }
 
@@ -142,7 +143,7 @@ namespace SonicRealms.Core.Triggers
         {
             if (ActivatorExitSound)
             {
-                SoundManager.PlaySoundEffect(ActivatorExitSound);
+                SrSoundManager.PlaySoundEffect(ActivatorExitSound);
             }
         }
 

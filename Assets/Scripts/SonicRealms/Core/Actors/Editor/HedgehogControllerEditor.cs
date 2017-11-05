@@ -123,7 +123,7 @@ namespace SonicRealms.Core.Actors.Editor
                 GUI.enabled = _fromRenderer != null && _fromRenderer.bounds != default(Bounds);
                 if (GUILayout.Button("Create"))
                 {
-                    HedgehogUtility.GenerateSensors(_instance, _fromRenderer.bounds);
+                    SensorUtility.GenerateSensors(_instance, _fromRenderer.bounds);
                 }
                 GUI.enabled = true;
                 EditorGUILayout.EndHorizontal();
@@ -134,7 +134,7 @@ namespace SonicRealms.Core.Actors.Editor
                 GUI.enabled = _fromCollider2D != null;
                 if (GUILayout.Button("Create"))
                 {
-                    HedgehogUtility.GenerateSensors(_instance, _fromCollider2D.bounds);
+                    SensorUtility.GenerateSensors(_instance, _fromCollider2D.bounds);
                 }
                 GUI.enabled = true;
                 EditorGUILayout.EndHorizontal();
@@ -143,7 +143,7 @@ namespace SonicRealms.Core.Actors.Editor
                 GUI.enabled = _fromBounds != default(Bounds);
                 if (GUILayout.Button("Create from Bounds"))
                 {
-                    HedgehogUtility.GenerateSensors(_instance, _fromBounds, true);
+                    SensorUtility.GenerateSensors(_instance, _fromBounds, true);
                 }
                 GUI.enabled = true;
 

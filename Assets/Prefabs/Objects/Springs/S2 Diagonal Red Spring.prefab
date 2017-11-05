@@ -16,11 +16,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010952756564}
-  - 95: {fileID: 95000010383354574}
-  - 114: {fileID: 114000011596212736}
+  - component: {fileID: 4000010952756564}
+  - component: {fileID: 95000010383354574}
+  - component: {fileID: 114000011596212736}
   m_Layer: 0
   m_Name: S2 Diagonal Red Spring
   m_TagString: Untagged
@@ -33,11 +33,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014066894606}
-  - 61: {fileID: 61000014166042862}
-  - 114: {fileID: 114000011391551358}
+  - component: {fileID: 4000014066894606}
+  - component: {fileID: 61000014166042862}
+  - component: {fileID: 114000011391551358}
   m_Layer: 31
   m_Name: Right Wall
   m_TagString: Untagged
@@ -50,14 +50,14 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012962054050}
-  - 60: {fileID: 60000010625769146}
-  - 114: {fileID: 114000011449153748}
-  - 114: {fileID: 114000013348388472}
-  - 114: {fileID: 114000013791155158}
-  - 114: {fileID: 114000013069446184}
+  - component: {fileID: 4000012962054050}
+  - component: {fileID: 60000010625769146}
+  - component: {fileID: 114000011449153748}
+  - component: {fileID: 114000013348388472}
+  - component: {fileID: 114000013791155158}
+  - component: {fileID: 114000013069446184}
   m_Layer: 31
   m_Name: Bouncy Part
   m_TagString: Untagged
@@ -70,11 +70,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012380139054}
-  - 61: {fileID: 61000010597189732}
-  - 114: {fileID: 114000012443934454}
+  - component: {fileID: 4000012380139054}
+  - component: {fileID: 61000010597189732}
+  - component: {fileID: 114000012443934454}
   m_Layer: 31
   m_Name: Left Wall
   m_TagString: Untagged
@@ -87,10 +87,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012314423480}
-  - 212: {fileID: 212000013172526126}
+  - component: {fileID: 4000012314423480}
+  - component: {fileID: 212000013172526126}
   m_Layer: 31
   m_Name: Sprite
   m_TagString: Untagged
@@ -105,9 +105,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011807336686}
   m_LocalRotation: {x: -0, y: -0, z: 0.000000014901161, w: 1}
-  m_LocalPosition: {x: 10.32, y: 0.049999997, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000012314423480}
   - {fileID: 4000012962054050}
@@ -115,6 +114,7 @@ Transform:
   - {fileID: 4000014066894606}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000012314423480
 Transform:
   m_ObjectHideFlags: 1
@@ -124,10 +124,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: -0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
   m_Children: []
   m_Father: {fileID: 4000010952756564}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
 --- !u!4 &4000012380139054
 Transform:
   m_ObjectHideFlags: 1
@@ -137,23 +137,23 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.05999978, y: 0.16000089, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010952756564}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000012962054050
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013195167242}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.19000053, y: 0.19, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.19, y: 0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010952756564}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000014066894606
 Transform:
   m_ObjectHideFlags: 1
@@ -163,10 +163,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.15999994, y: 0.040000185, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010952756564}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &60000010625769146
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -178,7 +178,17 @@ PolygonCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   m_Points:
     m_Paths:
     - - {x: 0.13, y: -0.08}
@@ -195,9 +205,20 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
+  m_UsedByComposite: 0
   m_Offset: {x: -0.005, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.11, y: 0.32}
+  m_EdgeRadius: 0
 --- !u!61 &61000014166042862
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -209,9 +230,20 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.015}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.32, y: 0.11}
+  m_EdgeRadius: 0
 --- !u!95 &95000010383354574
 Animator:
   serializedVersion: 3
@@ -251,6 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b4c07f75e2a40449585367aa1bb30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   OnPlatformEnter:
     m_PersistentCalls:
@@ -336,6 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3049f730761aaaf4d962d6508f24b499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KeepWhenAlone: 0
   TriggerFromChildren: 1
   AllowMultiple: 1
   OnActivate:
@@ -384,13 +418,29 @@ MonoBehaviour:
   EffectTrigger: {fileID: 0}
   PlatformTrigger: {fileID: 0}
   _bouncyAngles: {x: 30.911446, y: 59.215763}
+  _bounceAngleBehavior: 0
   _relativeToRotation: 1
   _velocity: 13.58
   _velocityEffect: 0
   _maxBouncesPerPlayerPerSecond: 10
+  _remapBounceAngles: 0
+  _remapBounceAnglesCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mapBounceAngleToVelocity: 0
+  _bounceAngleToVelocityCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _controlLockTime: 0
   _detachPlayer: 1
   _endRoll: 1
+  _endHurtRebound: 1
   _animator: {fileID: 95000010383354574}
   _bounceTrigger: Triggered
   _playerBounceTrigger: Hit Spring
@@ -408,7 +458,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -416,14 +468,21 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1963575889
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300008, guid: 33a7e6bd5ba0a6e4189f0922cfde2811, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0

@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Moves;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -73,7 +74,7 @@ namespace SonicRealms.Core.Actors
 
                     // If the controller is traveling upwards or is "lower" than the badnik relative to the direction of
                     // gravity, don't bounce and instead just apply speed reduction
-                    if (vy > 0f && DMath.HeightDifference(collision.Controller.transform.position, transform.position,
+                    if (vy > 0f && SrMath.HeightDifference(collision.Controller.transform.position, transform.position,
                         collision.Controller.GravityDirection * Mathf.Deg2Rad) > 0f)
                     {
                         vy -= BottomSpeedReduction * Mathf.Sign(vy);

@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -28,13 +29,13 @@ namespace SonicRealms.Level.Objects
         [Tooltip("An audio clip to play when the ring is collected.")]
         public AudioClip CollectedSound;
 
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         public Animator Animator;
 
         /// <summary>
         /// Name of an Animator trigger set when collected.
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Name of an Animator trigger set when collected.")]
         public string CollectedTrigger;
         protected int CollectedTriggerHash;
@@ -81,7 +82,7 @@ namespace SonicRealms.Level.Objects
 
             if (CollectedSound != null)
             {
-                SoundManager.PlaySoundEffect(CollectedSound,
+                SrSoundManager.PlaySoundEffect(CollectedSound,
                     s => s.panStereo = (PanRight = !PanRight) ? 1f : -1f,
                     s => s.panStereo = 0);
             }

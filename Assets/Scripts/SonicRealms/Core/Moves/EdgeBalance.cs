@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -85,8 +86,8 @@ namespace SonicRealms.Core.Moves
             EdgeSensorLeft.SetParent(Controller.Sensors.transform);
             EdgeSensorRight.SetParent(Controller.Sensors.transform);
 
-            EdgeSensorLeft.position = Controller.Sensors.BottomLeft.position + Vector3.down*DMath.Epsilon;
-            EdgeSensorRight.position = Controller.Sensors.BottomRight.position + Vector3.down*DMath.Epsilon;
+            EdgeSensorLeft.position = Controller.Sensors.BottomLeft.position + Vector3.down*SrMath.Epsilon;
+            EdgeSensorRight.position = Controller.Sensors.BottomRight.position + Vector3.down*SrMath.Epsilon;
         }
 
         public override void SetAnimatorParameters()
@@ -163,7 +164,7 @@ namespace SonicRealms.Core.Moves
 
         public override void OnActiveEnter(State previousState)
         {
-            if (DMath.Equalsf(Controller.GroundVelocity))
+            if (SrMath.EqualsZerof(Controller.GroundVelocity))
                 Controller.IsFacingForward = Controller.Side == GroundSensorType.Left;
 
             if (!AllowDuck)
@@ -183,7 +184,7 @@ namespace SonicRealms.Core.Moves
 
         public override void OnActiveUpdate()
         {
-            if(DMath.Equalsf(Controller.GroundVelocity))
+            if(SrMath.EqualsZerof(Controller.GroundVelocity))
                 Controller.IsFacingForward = Controller.Side == GroundSensorType.Left;
         }
 

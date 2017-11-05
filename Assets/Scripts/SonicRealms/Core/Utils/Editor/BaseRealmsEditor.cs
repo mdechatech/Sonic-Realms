@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SonicRealms.Core.Internal;
 using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
     /// <summary>
-    /// Allows easy creation of custom editors using special attributes such as <see cref="FoldoutAttribute"/>
+    /// Allows easy creation of custom editors using special attributes such as <see cref="SrFoldoutAttribute"/>
     /// and overriden methods such as <see cref="DrawProperty"/>.
     /// </summary>
     [CanEditMultipleObjects]
@@ -168,7 +169,7 @@ namespace SonicRealms.Core.Utils.Editor
                 if (it.name == RealmsEditorUtility.ScriptPropertyName)
                     continue;
 
-                var attr = RealmsEditorUtility.GetAttribute<FoldoutAttribute>(it);
+                var attr = RealmsEditorUtility.GetAttribute<SrFoldoutAttribute>(it);
 
                 if (attr == null)
                 {

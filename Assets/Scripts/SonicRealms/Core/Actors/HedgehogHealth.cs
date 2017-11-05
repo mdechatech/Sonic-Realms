@@ -1,8 +1,8 @@
-﻿using SonicRealms.Core.Moves;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Moves;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
-using SoundManager = SonicRealms.Core.Utils.SoundManager;
 
 namespace SonicRealms.Core.Actors
 {
@@ -48,21 +48,21 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// The controller's ring collector.
         /// </summary>
-        [Foldout("Injury")]
+        [SrFoldout("Injury")]
         [Tooltip("The controller's ring collector.")]
         public RingCounter RingCounter;
 
         /// <summary>
         /// The max number of rings lost when hurt.
         /// </summary>
-        [Foldout("Injury")]
+        [SrFoldout("Injury")]
         [Tooltip("The max number of rings lost when hurt.")]
         public int RingsLost;
 
         /// <summary>
         /// Duration of invincibility after getting hurt (and after the rebound ends), in seconds.
         /// </summary>
-        [Foldout("Injury")]
+        [SrFoldout("Injury")]
         [Tooltip("Duration of invincibility after getting hurt (and after the rebound ends), in seconds.")]
         public float HurtInvinciblilityTime;
         #endregion
@@ -70,7 +70,7 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Animator bool set to whether invicibility after getting hurt is on
         /// </summary>
-        [Foldout("Animation")]
+        [SrFoldout("Animation")]
         [Tooltip("Animator bool set to whether invicibility after getting hurt is on")]
         public string HurtInvincibleBool;
         protected int HurtInvincibleBoolHash;
@@ -79,35 +79,35 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Audio clip to play when losing rings as the result of getting hurt.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("Audio clip to play when losing rings as the result of getting hurt.")]
         public AudioClip RingLossSound;
 
         /// <summary>
         /// Audio clip to play when losing a shield or rebounding.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("Audio clip to play when losing a shield or rebounding.")]
         public AudioClip ReboundSound;
 
         /// <summary>
         /// Audio clip to play on death.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("Audio clip to play on death.")]
         public AudioClip DeathSound;
 
         /// <summary>
         /// Any hit object that has this tag will be considered spikes.
         /// </summary>
-        [Foldout("Sound"), Space, Tag]
+        [SrFoldout("Sound"), Space, SrTag]
         [Tooltip("Any hit object that has this tag will be considered spikes.")]
         public string SpikeTag;
 
         /// <summary>
         /// Audio clip to play when hitting spikes with a shield on.
         /// </summary>
-        [Foldout("Sound")]
+        [SrFoldout("Sound")]
         [Tooltip("Audio clip to play when hitting spikes with a shield on.")]
         public AudioClip SpikeSound;
         #endregion
@@ -115,17 +115,17 @@ namespace SonicRealms.Core.Actors
         /// <summary>
         /// Called when the controller's death animation is complete.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public UnityEvent OnDeathComplete;
 
         /// <summary>
         /// Called when the controller kills a badnik.
         /// </summary>
-        [Foldout("Events")]
+        [SrFoldout("Events")]
         public EnemyEvent OnEnemyKilled;
         #endregion
 
-        [Foldout("Debug")]
+        [SrFoldout("Debug")]
         public bool DeathComplete;
 
         public override void Reset()
@@ -226,7 +226,7 @@ namespace SonicRealms.Core.Actors
                 RingCounter.Spill(RingsLost);
 
                 if (RingLossSound != null)
-                    SoundManager.PlaySoundEffect(RingLossSound);
+                    SrSoundManager.PlaySoundEffect(RingLossSound);
             }
             else
             {
@@ -234,12 +234,12 @@ namespace SonicRealms.Core.Actors
                 if (spikes)
                 {
                     if (SpikeSound != null)
-                        SoundManager.PlaySoundEffect(SpikeSound);
+                        SrSoundManager.PlaySoundEffect(SpikeSound);
                 }
                 else
                 {
                     if (ReboundSound != null)
-                        SoundManager.PlaySoundEffect(ReboundSound);
+                        SrSoundManager.PlaySoundEffect(ReboundSound);
                 }
             }
 
@@ -280,7 +280,7 @@ namespace SonicRealms.Core.Actors
             DeathMove.OnEnd.AddListener(OnDeathEnd);
 
             if (DeathSound != null)
-                SoundManager.PlaySoundEffect(DeathSound);
+                SrSoundManager.PlaySoundEffect(DeathSound);
 
             base.Kill(source);
         }

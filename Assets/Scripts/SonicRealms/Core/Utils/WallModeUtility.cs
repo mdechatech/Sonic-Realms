@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 
 namespace SonicRealms.Core.Utils
 {
@@ -6,7 +7,7 @@ namespace SonicRealms.Core.Utils
     {
         public static WallMode FromSurface(float surfaceAngleDegrees)
         {
-            var fixedAngle = DMath.PositiveAngle_d(surfaceAngleDegrees);
+            var fixedAngle = SrMath.PositiveAngle_d(surfaceAngleDegrees);
             if(fixedAngle >= 315 || fixedAngle <= 45)
                 return WallMode.Floor;
 

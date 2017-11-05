@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -139,7 +140,7 @@ namespace SonicRealms.Core.Moves
             Used = true;
 
             Controller.Detach();
-            Controller.Velocity += DMath.UnitVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
+            Controller.Velocity += SrMath.UnitVector((Controller.SurfaceAngle + 90.0f)*Mathf.Deg2Rad)*ActivateSpeed;
 
             var roll = Manager.Get<Roll>();
             if (roll == null) return;

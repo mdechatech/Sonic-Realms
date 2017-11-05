@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -52,22 +53,22 @@ namespace SonicRealms.Level.Areas
             switch (PushDirection)
             {
                 case Direction.Left:
-                    x = Collider2D.bounds.min.x - collider2D.bounds.extents.x - DMath.Epsilon;
+                    x = Collider2D.bounds.min.x - collider2D.bounds.extents.x - SrMath.Epsilon;
                     if (collision.Controller.Vx > 0f) collision.Controller.Vx = collision.Controller.GroundVelocity = 0f;
                     break;
 
                 case Direction.Right:
-                    x = Collider2D.bounds.max.x + collider2D.bounds.extents.x + DMath.Epsilon;
+                    x = Collider2D.bounds.max.x + collider2D.bounds.extents.x + SrMath.Epsilon;
                     if (collision.Controller.Vx < 0f) collision.Controller.Vx = collision.Controller.GroundVelocity = 0f;
                     break;
 
                 case Direction.Up:
-                    y = Collider2D.bounds.max.y + collider2D.bounds.extents.y + DMath.Epsilon;
+                    y = Collider2D.bounds.max.y + collider2D.bounds.extents.y + SrMath.Epsilon;
                     if (collision.Controller.Vy < 0f) collision.Controller.Vy = collision.Controller.GroundVelocity = 0f;
                     break;
 
                 case Direction.Down:
-                    y = Collider2D.bounds.min.y - collider2D.bounds.extents.y - DMath.Epsilon;
+                    y = Collider2D.bounds.min.y - collider2D.bounds.extents.y - SrMath.Epsilon;
                     if (collision.Controller.Vy > 0f) collision.Controller.Vy = collision.Controller.GroundVelocity = 0f;
                     break;
             }

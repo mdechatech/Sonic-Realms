@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿
+using SonicRealms.Core.Internal;
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -95,8 +97,8 @@ namespace SonicRealms.Core.Utils
 
             if (SnapInterval != default(Vector2))
             {
-                x = DMath.Round(x, SnapInterval.x);
-                y = DMath.Round(y, SnapInterval.y);
+                x = SrMath.Round(x, SnapInterval.x);
+                y = SrMath.Round(y, SnapInterval.y);
             }
 
             transform.position = new Vector2(x, y);
@@ -104,8 +106,9 @@ namespace SonicRealms.Core.Utils
 
         protected float GetRatio(float factor)
         {
-            if (factor == 0f) return 0f;
-            return -((1f - factor)/factor)-1f;
+            return factor == 0
+                ? 0
+                : -((1 - factor) / factor) - 1;
         }
     }
 }

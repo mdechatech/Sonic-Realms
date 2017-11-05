@@ -1,9 +1,10 @@
-﻿using UnityEditor;
+﻿using SonicRealms.Core.Internal;
+using UnityEditor;
 using UnityEngine;
 
 namespace SonicRealms.Core.Utils.Editor
 {
-    [CustomPropertyDrawer(typeof(ScaledCurve))]
+    [CustomPropertyDrawer(typeof(SrScaledCurve))]
     public class ScaledCurveDrawer : PropertyDrawer
     {
         private const int CurveWidth = 50;

@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -164,8 +165,8 @@ namespace SonicRealms.Core.Moves
         {
             get
             {
-                return DMath.Equalsf(Controller.GroundVelocity) && !Braking && !Accelerating &&
-                       Mathf.Abs(DMath.ShortestArc_d(Controller.RelativeSurfaceAngle, 0f)) < ControlLockAngle;
+                return SrMath.EqualsZerof(Controller.GroundVelocity) && !Braking && !Accelerating &&
+                       Mathf.Abs(SrMath.ShortestArc_d(Controller.RelativeSurfaceAngle, 0f)) < ControlLockAngle;
             }
         }
 
@@ -272,7 +273,7 @@ namespace SonicRealms.Core.Moves
             // If we're too steep and not moving quickly enough, start the control lock
             if (!ControlLockTimerOn && 
                 Mathf.Abs(controller.GroundVelocity) < controller.DetachSpeed &&
-                DMath.AngleInRange_d(controller.RelativeSurfaceAngle, ControlLockAngle, 360f - ControlLockAngle))
+                SrMath.AngleInRange_d(controller.RelativeSurfaceAngle, ControlLockAngle, 360f - ControlLockAngle))
                 Lock();
 
             if (!ControlLockTimerOn)
@@ -317,7 +318,7 @@ namespace SonicRealms.Core.Moves
                 Animator.SetFloat(InputAxisFloatHash, _axis);
 
             if(InputBoolHash != 0)
-                Animator.SetBool(InputBoolHash, !DMath.Equalsf(_axis));
+                Animator.SetBool(InputBoolHash, !SrMath.EqualsZerof(_axis));
 
             if(AcceleratingBoolHash != 0)
                 Animator.SetBool(AcceleratingBoolHash, Accelerating);
@@ -421,7 +422,7 @@ namespace SonicRealms.Core.Moves
         public bool Accelerate(float magnitude, float timestep)
         {
             magnitude = Mathf.Clamp(magnitude, -1.0f, 1.0f);
-            if (DMath.Equalsf(magnitude)) return false;
+            if (SrMath.EqualsZerof(magnitude)) return false;
 
             if (magnitude < 0.0f)
             {

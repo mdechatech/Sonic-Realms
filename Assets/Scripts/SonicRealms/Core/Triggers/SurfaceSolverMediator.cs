@@ -1,5 +1,6 @@
 ﻿using System;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -66,7 +67,7 @@ namespace SonicRealms.Core.Triggers
 
         public void SetSurfaceAngle(float surfaceAngle)
         {
-            _surfaceAngle = DMath.PositiveAngle_d(surfaceAngle);
+            _surfaceAngle = SrMath.PositiveAngle_d(surfaceAngle);
         }
 
         public void Detach()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Moves;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
@@ -43,37 +44,37 @@ namespace SonicRealms.Level.Objects
 
         public float Acceleration { get { return _acceleration; } set { _acceleration = value; } }
 
-        [SerializeField, Foldout("Triggers")]
+        [SerializeField, SrFoldout("Triggers")]
         [Tooltip("Where the player would enter the tunnel if it were moving forward.")]
         private List<AreaTrigger> _forwardEntrances;
 
-        [SerializeField, Foldout("Triggers")]
+        [SerializeField, SrFoldout("Triggers")]
         [Tooltip("Where the player would enter the tunnel if it were moving backward.")]
         private List<AreaTrigger> _backwardEntrances;
         
-        [SerializeField, Foldout("Triggers")]
+        [SerializeField, SrFoldout("Triggers")]
         [Tooltip("Where the player would exit the tunnel if it were moving forward.")]
         private List<AreaTrigger> _forwardExits;
 
-        [SerializeField, Foldout("Triggers")]
+        [SerializeField, SrFoldout("Triggers")]
         [Tooltip("Where the player would exit the tunnel if it were moving backward.")]
         private List<AreaTrigger> _backwardExits;
         
 
-        [SerializeField, Foldout("Physics")]
+        [SerializeField, SrFoldout("Physics")]
         [Tooltip("For the ceilings of the tunnel - pushes the player in the opposite direction to account for " +
                  "the player running upside down.")]
         private List<Transform> _ceilings;
             
-        [SerializeField, Foldout("Physics")]
+        [SerializeField, SrFoldout("Physics")]
         [Tooltip("Direction in which the tunnel pushes the player.")]
         private DirectionMode _pushDirection;
 
-        [SerializeField, Foldout("Physics")]
+        [SerializeField, SrFoldout("Physics")]
         [Tooltip("Amount to push the player by when it comes to a standstill in units per second.")]
         private float _pushAmount;
 
-        [SerializeField, Foldout("Physics")]
+        [SerializeField, SrFoldout("Physics")]
         [Tooltip("Constant acceleration on the player in units per seconds squared.")]
         private float _acceleration;
 

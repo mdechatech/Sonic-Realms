@@ -1,4 +1,5 @@
 ﻿using SonicRealms.Core.Actors;
+using SonicRealms.Core.Internal;
 using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace SonicRealms.Level.Effects
         /// Score amount to give to the player. Comes with an optional curve to change this amount based
         /// on how many times the effect has been activated.
         /// </summary>
-        public ScaledCurve Amount { get { return _amount; } set { _amount = value; } }
+        public SrScaledCurve Amount { get { return _amount; } set { _amount = value; } }
 
         /// <summary>
         /// Maximum number of times this effect can be activated.
@@ -36,7 +37,7 @@ namespace SonicRealms.Level.Effects
         [SerializeField]
         [Tooltip("Score amount to give to the player. Comes with an optional curve to change this amount " +
                  "based on how many times the effect has been activated.")]
-        private ScaledCurve _amount;
+        private SrScaledCurve _amount;
 
         [SerializeField]
         [Tooltip("Maximum number of times this effect can be activated.")]
@@ -53,7 +54,7 @@ namespace SonicRealms.Level.Effects
         {
             base.Reset();
 
-            _amount = new ScaledCurve {Curve = AnimationCurve.Linear(0, 1, 1, 1), Scale = 10};
+            _amount = new SrScaledCurve {Curve = AnimationCurve.Linear(0, 1, 1, 1), Scale = 10};
             _maxTimes = 10;
             _source = transform;
         }

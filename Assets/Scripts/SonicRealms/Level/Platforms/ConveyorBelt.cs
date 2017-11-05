@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Triggers;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using UnityEngine;
 
@@ -7,7 +8,6 @@ namespace SonicRealms.Level.Platforms
     /// <summary>
     /// Moves the player forward or backward on the platform.
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Conveyor Belt")]
     public class ConveyorBelt : ReactivePlatform
     {
         /// <summary>
@@ -31,7 +31,7 @@ namespace SonicRealms.Level.Platforms
             var controller = collision.Controller;
             if (collision.Controller == null) return;
 
-            controller.transform.Translate(DMath.UnitVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
+            controller.transform.Translate(SrMath.UnitVector(controller.SurfaceAngle*Mathf.Deg2Rad)*Velocity*
                                  Time.fixedDeltaTime);
 
             _lastSurfaceAngle = controller.SurfaceAngle;
@@ -47,7 +47,7 @@ namespace SonicRealms.Level.Platforms
             if (controller.Grounded)
                 controller.GroundVelocity += Velocity;
             else
-                controller.Velocity += DMath.UnitVector(_lastSurfaceAngle*Mathf.Deg2Rad)*Velocity;
+                controller.Velocity += SrMath.UnitVector(_lastSurfaceAngle*Mathf.Deg2Rad)*Velocity;
         }
     }
 }

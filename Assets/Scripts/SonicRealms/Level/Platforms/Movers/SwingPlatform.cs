@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Level.Platforms.Movers
@@ -6,7 +7,6 @@ namespace SonicRealms.Level.Platforms.Movers
     /// <summary>
     /// Swings back and forth (or all around).
     /// </summary>
-    [AddComponentMenu("Hedgehog/Platforms/Movers/Swing Platform")]
     public class SwingPlatform : BasePlatformMover
     {
         /// <summary>
@@ -52,7 +52,7 @@ namespace SonicRealms.Level.Platforms.Movers
         public override void To(float t)
         {
             var angle = Mathf.Lerp(MidAngle - Range/2.0f, MidAngle + Range/2.0f, t)*Mathf.Deg2Rad;
-            transform.position = Pivot + DMath.UnitVector(angle)*Radius;
+            transform.position = Pivot + SrMath.UnitVector(angle)*Radius;
         }
     }
 }

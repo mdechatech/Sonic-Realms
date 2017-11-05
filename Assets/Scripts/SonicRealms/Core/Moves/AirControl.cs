@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Utils;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Utils;
 using UnityEngine;
 
 namespace SonicRealms.Core.Moves
@@ -153,7 +154,7 @@ namespace SonicRealms.Core.Moves
         /// <param name="timestep">The timestep, in seconds</param>
         public void Accelerate(float magnitude, float timestep)
         {
-            if(DMath.Equalsf(magnitude)) return;
+            if(SrMath.EqualsZerof(magnitude)) return;
             magnitude = Mathf.Clamp(magnitude, -1.0f, 1.0f);
 
             if (magnitude < 0.0f)

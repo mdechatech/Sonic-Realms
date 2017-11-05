@@ -1,4 +1,5 @@
-﻿using SonicRealms.Core.Triggers;
+﻿using SonicRealms.Core.Internal;
+using SonicRealms.Core.Triggers;
 using SonicRealms.Core.Utils;
 using SonicRealms.Level.Areas;
 using UnityEngine;
@@ -57,7 +58,7 @@ namespace SonicRealms.Core.Actors
             splash.transform.eulerAngles = new Vector3(
                 splash.transform.eulerAngles.x,
                 splash.transform.eulerAngles.y,
-                DMath.Angle(entry.normal)*Mathf.Rad2Deg - 90f);
+                SrMath.Angle(entry.normal)*Mathf.Rad2Deg - 90f);
 
             OnEntrySplash.Invoke();
         }
@@ -74,7 +75,7 @@ namespace SonicRealms.Core.Actors
             splash.transform.eulerAngles = new Vector3(
                 splash.transform.eulerAngles.x,
                 splash.transform.eulerAngles.y,
-                DMath.Angle(exit.normal)*Mathf.Rad2Deg - 90f);
+                SrMath.Angle(exit.normal)*Mathf.Rad2Deg - 90f);
 
             OnExitSplash.Invoke();
         }
@@ -88,7 +89,7 @@ namespace SonicRealms.Core.Actors
             if (!hit || hit.fraction == 0f)
             {
                 hit = Physics2D.Linecast((Vector2) Player.transform.position -
-                                         DMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg),
+                                         SrMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg),
                     Player.transform.position, WaterLayer);
             }
 
@@ -108,7 +109,7 @@ namespace SonicRealms.Core.Actors
             {
                 hit = Physics2D.Linecast(Player.transform.position,
                     (Vector2) Player.transform.position +
-                    DMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg)
+                    SrMath.UnitVector(Player.GravityDirection*Mathf.Rad2Deg)
                     , WaterLayer);
             }
 
