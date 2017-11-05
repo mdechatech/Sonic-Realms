@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace SonicRealms.Core.Internal
 {
+    // Most of the use cases for this component have been made obsolete by 
+    // Unity 2017.1's sprite tiled draw mode.
     [SelectionBase]
     [ExecuteInEditMode]
     [RequireComponent(typeof(BoxCollider2D))]
